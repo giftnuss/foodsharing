@@ -9,9 +9,9 @@ use Foodsharing\Utility\ImageHelper;
 
 class ActivityXhr extends Control
 {
-	private $imageService;
-	private $mailboxGateway;
-	private $activityGateway;
+	private ImageHelper $imageService;
+	private MailboxGateway $mailboxGateway;
+	private ActivityGateway $activityGateway;
 
 	public function __construct(
 		ImageHelper $imageService,

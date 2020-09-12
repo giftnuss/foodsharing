@@ -41,10 +41,7 @@ class ActivityTransactions
 	public function getOptions(): array
 	{
 		// list of currently unchecked options
-		$uncheckedOptions = [];
-		if ($list = $this->session->getOption('activity-listings')) {
-			$uncheckedOptions = $list;
-		}
+		$uncheckedOptions = $this->session->getOption('activity-listings') ?: [];
 
 		// regions and groups
 		$regionOptions = [];
@@ -114,6 +111,6 @@ class ActivityTransactions
 			}
 		}
 
-		$this->session->setOption('activity-listings', empty($list) ? false : $list);
+		$this->session->setOption('activity-listings', $list);
 	}
 }
