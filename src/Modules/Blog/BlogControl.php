@@ -11,11 +11,11 @@ use Foodsharing\Utility\TimeHelper;
 
 class BlogControl extends Control
 {
-	private $blogGateway;
-	private $blogPermissions;
-	private $dataHelper;
-	private $identificationHelper;
-	private $timeHelper;
+	private BlogGateway $blogGateway;
+	private BlogPermissions $blogPermissions;
+	private DataHelper $dataHelper;
+	private IdentificationHelper $identificationHelper;
+	private TimeHelper $timeHelper;
 
 	public function __construct(
 		BlogView $view,
@@ -49,14 +49,14 @@ class BlogControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('blog.bread'));
 	}
 
-	public function index()
+	public function index(): void
 	{
 		if (!isset($_GET['sub'])) {
 			$this->listNews();
 		}
 	}
 
-	public function listNews()
+	public function listNews(): void
 	{
 		$page = 1;
 		if (isset($_GET['p'])) {
@@ -78,7 +78,7 @@ class BlogControl extends Control
 		}
 	}
 
-	public function read()
+	public function read(): void
 	{
 		if ($news = $this->blogGateway->getPost($_GET['id'])) {
 			$this->pageHelper->addBread($news['name']);
@@ -86,7 +86,7 @@ class BlogControl extends Control
 		}
 	}
 
-	public function manage()
+	public function manage(): void
 	{
 		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->pageHelper->addBread($this->translator->trans('blog.manage'));
@@ -129,7 +129,7 @@ class BlogControl extends Control
 		]));
 	}
 
-	public function add()
+	public function add(): void
 	{
 		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->handle_add();
@@ -157,7 +157,7 @@ class BlogControl extends Control
 		}
 	}
 
-	private function handle_add()
+	private function handle_add(): void
 	{
 		global $g_data;
 
@@ -175,7 +175,7 @@ class BlogControl extends Control
 		}
 	}
 
-	public function edit()
+	public function edit(): void
 	{
 		if ($this->blogPermissions->mayAdministrateBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
@@ -197,7 +197,7 @@ class BlogControl extends Control
 		}
 	}
 
-	private function handle_edit()
+	private function handle_edit(): void
 	{
 		global $g_data;
 		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
