@@ -78,7 +78,9 @@ class ProfileView extends View
 				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning', [
 					'{email}' => $this->foodsaver['email'],
 				]) . '</h1>';
-				$warningContainer = '<div>' . $this->v_utils->v_info($warningMessage, false, false) . '</div>';
+				$warningContainer = '<div>'
+					. $this->v_utils->v_info($warningMessage, false, '<i class="fas fa-exclamation-triangle"></i>')
+					. '</div>';
 				$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
 			}
 		}
