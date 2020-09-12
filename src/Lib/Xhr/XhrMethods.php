@@ -555,19 +555,32 @@ class XhrMethods
 			foreach ($ratio as $i => $r) {
 				$i = preg_replace('/%/', '', $i);
 				$i = preg_replace('/\.+/', '.', $i);
-				$this->cropImg(ROOT_DIR . 'images/' . $data['id'], $data['img'], $i, $r['x'], $r['y'], $r['w'], $r['h']);
+				// @phpstan-ignore-next-line ($i = expects int, string|null given)
+				$this->cropImg(
+					ROOT_DIR . 'images/' . $data['id'],
+					$data['img'],
+					$i,
+					$r['x'], $r['y'],
+					$r['w'], $r['h']
+				);
+
 				foreach ($resize as $r) {
 					if ($r < 1000) {
-						copy(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
-						$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img']);
+						$oldPath = ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'];
+						$newPath = ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img'];
+						copy($oldPath, $newPath);
+						$image = new fImage($newPath);
 						$image->resize($r, 0);
 						$image->saveChanges();
 					}
 				}
 			}
 
-			copy(ROOT_DIR . 'images/' . $data['id'] . '/' . $data['img'], ROOT_DIR . 'images/' . $data['id'] . '/thumb_' . $data['img']);
-			$image = new fImage(ROOT_DIR . 'images/' . $data['id'] . '/thumb_' . $data['img']);
+			$oldPath = ROOT_DIR . 'images/' . $data['id'] . '/' . $data['img'];
+			$newPath = ROOT_DIR . 'images/' . $data['id'] . '/thumb_' . $data['img'];
+			copy($oldPath, $newPath);
+
+			$image = new fImage($newPath);
 			$image->resize(150, 0);
 			$image->saveChanges();
 
