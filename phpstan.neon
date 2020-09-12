@@ -1,5 +1,5 @@
 parameters:
-  level: 3
+  level: 4
   paths:
     - src
   excludes_analyse:
@@ -9,12 +9,12 @@ parameters:
     - config.inc.php
   ignoreErrors:
     - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
-    # For level 4 we will also need these:
-    # -
-    #   message: '#If condition is always true#'
-    #   paths:
-    #     - src/Lib/Db/Mem.php
-    # -
-    #   message: '#Unreachable statement - code above always terminates#'
-    #   paths:
-    #     - src/Lib/Db/Mem.php
+    # We include constant values for MEM_ENABLED from config.inc.*.php:
+    -
+      message: '#If condition is always true#'
+      paths:
+        - src/Lib/Db/Mem.php
+    -
+      message: '#Unreachable statement - code above always terminates#'
+      paths:
+        - src/Lib/Db/Mem.php
