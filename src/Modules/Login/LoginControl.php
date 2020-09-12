@@ -12,14 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginControl extends Control
 {
-	/**
-	 * @var FormFactoryInterface
-	 */
-	private $formFactory;
-
-	private $loginGateway;
-	private $settingsGateway;
-	private $contentGateway;
+	private FormFactoryInterface $formFactory;
+	private LoginGateway $loginGateway;
+	private SettingsGateway $settingsGateway;
+	private ContentGateway $contentGateway;
 
 	public function __construct(
 		LoginView $view,
