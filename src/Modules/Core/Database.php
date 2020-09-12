@@ -623,7 +623,7 @@ class Database
 		$statement->execute();
 
 		$timing_stop = hrtime(true);
-		$this->influxMetrics->addDbQuery(intdiv($timing_stop - $timing_start, 1e+6));
+		$this->influxMetrics->addDbQuery(intdiv($timing_stop - $timing_start, 1000 * 1000));
 
 		return $statement;
 	}

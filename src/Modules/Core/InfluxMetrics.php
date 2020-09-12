@@ -6,13 +6,13 @@ use InfluxDB\Point;
 
 class InfluxMetrics
 {
-	private $influxdb;
-	private $points;
-	private $pageStatTags;
-	private $pageStatFields;
-	private $mailStat;
-	private $dbStat;
-	private $scriptStartTime;
+	private \InfluxDB\Database $influxdb;
+	private array $points;
+	private array $pageStatTags;
+	private array $pageStatFields;
+	private array $mailStat;
+	private array $dbStat;
+	private int $scriptStartTime;
 
 	public function __construct(\InfluxDB\Database $influxdb)
 	{
@@ -50,7 +50,7 @@ class InfluxMetrics
 	/**
 	 * adds a point.
 	 */
-	public function addPoint(string $measurement, array $tags = [], array $fields = [])
+	public function addPoint(string $measurement, array $tags = [], array $fields = []): void
 	{
 		$this->points[] = new Point($measurement,
 			null,
@@ -61,7 +61,7 @@ class InfluxMetrics
 	/**
 	 * writes all collected points to influxDb.
 	 */
-	public function flush()
+	public function flush(): void
 	{
 		try {
 			@$this->influxdb->writePoints($this->points);
@@ -73,22 +73,19 @@ class InfluxMetrics
 	/**
 	 * adds tags and fields used for per-execution statistics.
 	 * Also enables generation of execution statistics as soon as this is called the first time.
-	 *
-	 * @param array $tags
-	 * @param array $fields
 	 */
-	public function addPageStatData($tags = [], $fields = [])
+	public function addPageStatData(array $tags = [], array $fields = []): void
 	{
 		$this->pageStatTags += $tags;
 		$this->pageStatFields += $fields;
 	}
 
-	private function generatePageStatistics()
+	private function generatePageStatistics(): void
 	{
 		$now = hrtime(true);
 		$executionTime = $now - $this->scriptStartTime;
 		$this->addPageStatData([], [
-			'execution_time' => intdiv($executionTime, 1e6),
+			'execution_time' => intdiv($executionTime, 1000 * 1000),
 			'db_execution_time' => array_sum($this->dbStat),
 			'db_queries' => count($this->dbStat),
 			'db_execution_times' => implode(';', $this->dbStat)
@@ -96,7 +93,7 @@ class InfluxMetrics
 		$this->addPoint('page', $this->pageStatTags, $this->pageStatFields);
 	}
 
-	private function generateMailStatistics()
+	private function generateMailStatistics(): void
 	{
 		foreach ($this->mailStat as $k => $v) {
 			$this->addPoint('outgoing_email', ['template' => $k], ['count' => $v]);

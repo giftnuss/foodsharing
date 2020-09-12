@@ -88,7 +88,7 @@ class Db
 	{
 		$start = hrtime(true);
 		$res = $this->mysqli->query($query);
-		$duration = intdiv(hrtime(true) - $start, 1e6);
+		$duration = intdiv(hrtime(true) - $start, 1000 * 1000);
 
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
