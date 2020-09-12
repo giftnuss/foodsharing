@@ -517,7 +517,7 @@ class Database
 	 */
 	public function date($date): string
 	{
-		return (clone $date)->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
+		return (clone $date)->setTimezone(new \DateTimeZone('Europe/Berlin'))->format('Y-m-d H:i:s');
 	}
 
 	public function parseDate(string $date): Carbon
