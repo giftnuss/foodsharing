@@ -8,7 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 
 class BasketControl extends Control
 {
-	private $basketGateway;
+	private BasketGateway $basketGateway;
 
 	public function __construct(BasketView $view, BasketGateway $basketGateway)
 	{
@@ -49,7 +49,7 @@ class BasketControl extends Control
 		$this->view->find($baskets, $loc);
 	}
 
-	private function basket($basket): void
+	private function basket(array $basket): void
 	{
 		$requests = false;
 
