@@ -207,9 +207,11 @@ class MessageRestController extends AbstractFOSRestController
 	 */
 	public function removeMemberFromConversationAction(int $conversationId, int $userId): Response
 	{
-		if (true || !$this->session->may() || $userId !== $this->session->id()) {
-			/* disable functionality for now */
-			/* only allow users to remove themselves from conversations */
+		/* disable functionality for now */
+		/* only allow users to remove themselves from conversations */
+		throw new HttpException(403);
+		/*
+		if (!$this->session->may() || $userId !== $this->session->id()) {
 			throw new HttpException(403);
 		}
 		if (!$this->messageTransactions->deleteUserFromConversation($conversationId, $userId)) {
@@ -217,6 +219,7 @@ class MessageRestController extends AbstractFOSRestController
 		}
 
 		return $this->handleView($this->view([], 200));
+		*/
 	}
 
 	/**
