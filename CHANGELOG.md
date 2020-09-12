@@ -42,6 +42,7 @@
 - Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 - Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
 - Prepare event invitations for REST !1627 @ChrisOelmueller
+- Clarify and extract some permission handling !1671 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 !1654 @ChrisOelmueller
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 

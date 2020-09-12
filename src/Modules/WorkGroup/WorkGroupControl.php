@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\WorkGroupPermissions;
 use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,18 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WorkGroupControl extends Control
 {
-	private FormFactoryInterface $formFactory;
-	private ImageHelper $imageService;
 	private WorkGroupGateway $workGroupGateway;
+	private WorkGroupPermissions $workGroupPermissions;
+	private ImageHelper $imageService;
+	private FormFactoryInterface $formFactory;
 
 	public function __construct(
 		WorkGroupView $view,
-		ImageHelper $imageService,
-		WorkGroupGateway $workGroupGateway
+		WorkGroupGateway $workGroupGateway,
+		WorkGroupPermissions $workGroupPermissions,
+		ImageHelper $imageService
 	) {
 		$this->view = $view;
-		$this->imageService = $imageService;
 		$this->workGroupGateway = $workGroupGateway;
+		$this->workGroupPermissions = $workGroupPermissions;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 	}
@@ -52,53 +55,7 @@ class WorkGroupControl extends Control
 		}
 	}
 
-	private function fulfillApplicationRequirements(array $group, array $stats): bool
-	{
-		return
-			$stats['bananacount'] >= $group['banana_count']
-			&& $stats['fetchcount'] >= $group['fetch_count']
-			&& $stats['weeks'] >= $group['week_num'];
-	}
-
-	private function mayEdit(array $group): bool
-	{
-		// this actually only implements access for bots for _direct parents_, not all hierarchical parents
-		return $this->session->isOrgaTeam() || $this->session->isAdminFor($group['id']) || $this->session->isAdminFor($group['parent_id']);
-	}
-
-	private function mayAccess(array $group): bool
-	{
-		return $this->session->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
-	}
-
-	private function mayApply(array $group, array $applications, array $stats): bool
-	{
-		if ($this->session->mayBezirk($group['id'])) {
-			return false; // may not apply if already a member
-		}
-		if (in_array($group['id'], $applications)) {
-			return false; // may not apply if already applied
-		}
-		if ($group['apply_type'] == ApplyType::EVERYBODY) {
-			return true;
-		}
-		if ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) {
-			return $this->fulfillApplicationRequirements($group, $stats);
-		}
-
-		return false;
-	}
-
-	private function mayJoin(array $group): bool
-	{
-		if ($this->session->mayBezirk($group['id'])) {
-			return false; // may not join if already a member
-		}
-
-		return $group['apply_type'] == ApplyType::OPEN;
-	}
-
-	private function getSideMenuData($activeUrlPartial = null)
+	private function getSideMenuData(?string $activeUrlPartial = null): array
 	{
 		$countries = $this->workGroupGateway->getCountryGroups();
 		$bezirke = $this->session->getRegions();
@@ -139,13 +96,14 @@ class WorkGroupControl extends Control
 		];
 	}
 
-	private function list(Request $request, Response $response)
+	private function list(Request $request, Response $response): void
 	{
 		$this->pageHelper->addTitle($this->translator->trans('terminology.groups'));
 
+		$sessionId = $this->session->id();
 		$parent = $request->query->getInt('p', RegionIDs::GLOBAL_WORKING_GROUPS);
-		$myApplications = $this->workGroupGateway->getApplications($this->session->id());
-		$myStats = $this->workGroupGateway->getStats($this->session->id());
+		$myApplications = $this->workGroupGateway->getApplications($sessionId);
+		$myStats = $this->workGroupGateway->getStats($sessionId);
 		$groups = $this->getGroups($parent, $myApplications, $myStats);
 
 		$response->setContent(
@@ -160,26 +118,26 @@ class WorkGroupControl extends Control
 	{
 		return array_map(
 			function ($group) use ($applications, $stats) {
+				$leaders = array_map(function ($leader) {
+					return array_merge($leader, ['image' => $this->imageService->img($leader['photo'])]);
+				}, $group['leaders']);
+
+				$satisfied = $this->workGroupPermissions->fulfillApplicationRequirements($group, $stats);
+
 				return array_merge(
 					$group,
 					[
-						'leaders' => array_map(
-							function ($leader) {
-								return array_merge($leader, ['image' => $this->imageService->img($leader['photo'])]);
-							},
-							$group['leaders']
-						),
+						'leaders' => $leaders,
 						'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
 						'appliedFor' => in_array($group['id'], $applications),
 						'applyMinBananaCount' => $group['banana_count'],
 						'applyMinFetchCount' => $group['fetch_count'],
 						'applyMinFoodsaverWeeks' => $group['week_num'],
-						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES)
-																	&& !$this->fulfillApplicationRequirements($group, $stats),
-						'mayEdit' => $this->mayEdit($group),
-						'mayAccess' => $this->mayAccess($group),
-						'mayApply' => $this->mayApply($group, $applications, $stats),
-						'mayJoin' => $this->mayJoin($group),
+						'applicationRequirementsNotFulfilled' => !$satisfied,
+						'mayEdit' => $this->workGroupPermissions->mayEdit($group),
+						'mayAccess' => $this->workGroupPermissions->mayAccess($group),
+						'mayApply' => $this->workGroupPermissions->mayApply($group, $applications, $stats),
+						'mayJoin' => $this->workGroupPermissions->mayJoin($group),
 					]
 				);
 			},
@@ -187,13 +145,13 @@ class WorkGroupControl extends Control
 		);
 	}
 
-	private function edit(Request $request, Response $response)
+	private function edit(Request $request, Response $response): void
 	{
 		$groupId = $request->query->getInt('id');
 		$group = $this->workGroupGateway->getGroup($groupId);
 		if (!$group) {
 			$this->routeHelper->go('/?page=groups');
-		} elseif ($group['type'] != Type::WORKING_GROUP || !$this->mayEdit($group)) {
+		} elseif ($group['type'] != Type::WORKING_GROUP || !$this->workGroupPermissions->mayEdit($group)) {
 			$this->routeHelper->go('/?page=dashboard');
 		}
 

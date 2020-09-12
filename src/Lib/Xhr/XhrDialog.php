@@ -165,7 +165,7 @@ class XhrDialog
 			});');
 	}
 
-	public function xhrout()
+	public function xhrout(): array
 	{
 		$buttons = [];
 		foreach ($this->buttons as $b) {

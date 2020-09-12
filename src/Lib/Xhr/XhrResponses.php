@@ -15,11 +15,4 @@ class XhrResponses
 	{
 		return ['status' => 0];
 	}
-
-	public function success()
-	{
-		return [
-			'status' => 1
-		];
-	}
 }

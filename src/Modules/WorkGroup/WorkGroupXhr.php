@@ -23,7 +23,7 @@ class WorkGroupXhr extends Control
 		parent::__construct();
 	}
 
-	public function apply()
+	public function apply(): array
 	{
 		$group = $this->workGroupGateway->getGroup($_GET['id']);
 		if (!$group) {
@@ -49,7 +49,7 @@ class WorkGroupXhr extends Control
 		return $dialog->xhrout();
 	}
 
-	public function addtogroup()
+	public function addtogroup(): array
 	{
 		if (!$this->session->may('fs')) {
 			return $this->responses->fail_generic();
@@ -70,7 +70,7 @@ class WorkGroupXhr extends Control
 		];
 	}
 
-	public function applysend()
+	public function applysend(): array
 	{
 		if (!isset($_GET['f'])) {
 			return $this->responses->fail_generic();
@@ -127,7 +127,9 @@ class WorkGroupXhr extends Control
 		];
 	}
 
-	// Contact group via email
+	/** Contact group via email.
+	 * @return array|string
+	 */
 	public function sendtogroup()
 	{
 		if (!$this->session->may()) {
@@ -160,7 +162,7 @@ class WorkGroupXhr extends Control
 		];
 	}
 
-	public function contactgroup()
+	public function contactgroup(): array
 	{
 		$group = $this->workGroupGateway->getGroup($_GET['id']);
 		if (!$group || empty($group['email'])) {
