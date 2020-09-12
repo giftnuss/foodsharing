@@ -7,7 +7,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 
 class BusinessCardControl extends Control
 {
-	private $gateway;
+	private BusinessCardGateway $gateway;
 
 	public function __construct(BusinessCardView $view, BusinessCardGateway $gateway)
 	{
@@ -17,7 +17,7 @@ class BusinessCardControl extends Control
 		parent::__construct();
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->pageHelper->addBread($this->translator->trans('bcard.title'));
 
@@ -108,10 +108,12 @@ class BusinessCardControl extends Control
 		}
 		$data['subtitle'] = $this->displayedRole($role, $data['geschlecht'], $mailbox['name']);
 
-		return $this->generatePdf($data, $role);
+		$this->generatePdf($data, $role);
+
+		return;
 	}
 
-	private function displayedRole($role, $gender, $regionName)
+	private function displayedRole(string $role, int $gender, string $regionName): string
 	{
 		$modifier = 'dmfd'[$gender]; // 0=d 1=m 2=f 3=d
 		switch ($role) {
@@ -130,7 +132,7 @@ class BusinessCardControl extends Control
 		return $this->translator->trans('bcard.for', ['{role}' => $roleName, '{region}' => $regionName]);
 	}
 
-	private function generatePdf($data, $role = 'fs')
+	private function generatePdf(array $data, string $role = 'fs'): void
 	{
 		$pdf = new Fpdi();
 		$pdf->AddPage();
