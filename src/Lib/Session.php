@@ -156,7 +156,7 @@ class Session
 		return false;
 	}
 
-	public function getLocation()
+	public function getLocation(): ?array
 	{
 		if (!$this->initialized || !$this->id()) {
 			return null;
