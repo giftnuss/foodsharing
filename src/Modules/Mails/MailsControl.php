@@ -11,19 +11,19 @@ use Foodsharing\Utility\RouteHelper;
 
 class MailsControl extends ConsoleControl
 {
-	private $mailsGateway;
-	private $database;
-	private $mailer;
-	private $metrics;
-	private $routeHelper;
-	private $emailHelper;
+	private MailsGateway $mailsGateway;
+	private Database $database;
+	private \Swift_Mailer $mailer;
+	private InfluxMetrics $metrics;
+	private RouteHelper $routeHelper;
+	private EmailHelper $emailHelper;
 
 	/*
 	 * todo move this to config file as a constant if this becomes a permanent solution
 	 * until then we need to be able to configure this rather flexible in here
 	 * 45,11 mails/minute = 1330 milli seconds between mails
 	 * */
-	private $DELAY_MICRO_SECONDS_BETWEEN_MAILS = 1330000;
+	private int $DELAY_MICRO_SECONDS_BETWEEN_MAILS = 1330000;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
