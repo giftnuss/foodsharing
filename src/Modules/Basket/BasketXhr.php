@@ -440,15 +440,16 @@ class BasketXhr extends Control
 
 		parse_str($_GET['data'], $data);
 
-		$id = strip_tags($_GET['basket_id']);
-		if (empty($id)) {
+		$basketId = strip_tags($_GET['basket_id']);
+		if (empty($basketId)) {
 			return [
 				'status' => 1,
 				'script' => 'pulseInfo("' . $this->translator->trans('basket.publish_error') . '");',
 			];
 		}
+		$basketId = intval($basketId);
 
-		$basket = $this->basketGateway->getBasket($id);
+		$basket = $this->basketGateway->getBasket($basketId);
 		if ($basket['fs_id'] != $this->session->id()) {
 			return [
 				'status' => 1,
@@ -470,7 +471,7 @@ class BasketXhr extends Control
 			$pic = $this->preparePicture($data['filename']);
 		}
 
-		if ($this->basketGateway->editBasket($id, $desc, $pic, $basket['lat'], $basket['lon'], $this->session->id())) {
+		if ($this->basketGateway->editBasket($basketId, $desc, $pic, $basket['lat'], $basket['lon'], $this->session->id())) {
 			return [
 				'status' => 1,
 				'script' => '
