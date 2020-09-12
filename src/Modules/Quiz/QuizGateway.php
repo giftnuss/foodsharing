@@ -50,7 +50,7 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function updateQuiz(int $id, string $name, string $desc, string $maxFailurePoints, string $questionCount): int
+	public function updateQuiz(int $id, string $name, string $desc, int $maxFailurePoints, int $questionCount): int
 	{
 		return $this->db->update(
 			'fs_quiz',
