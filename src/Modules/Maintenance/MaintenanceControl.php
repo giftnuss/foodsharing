@@ -15,15 +15,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MaintenanceControl extends ConsoleControl
 {
-	private $bellGateway;
-	private $storeGateway;
-	private $foodsaverGateway;
-	private $emailHelper;
-	private $maintenanceGateway;
-	private $quizHelper;
-	private $bellUpdateTrigger;
-	private $groupGateway;
-	private $translator;
+	private BellGateway $bellGateway;
+	private StoreGateway $storeGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private EmailHelper $emailHelper;
+	private MaintenanceGateway $maintenanceGateway;
+	private QuizHelper $quizHelper;
+	private BellUpdateTrigger $bellUpdateTrigger;
+	private GroupGateway $groupGateway;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		BellGateway $bellGateway,
