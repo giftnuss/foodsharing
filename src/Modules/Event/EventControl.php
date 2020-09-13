@@ -29,55 +29,76 @@ class EventControl extends Control
 
 	public function index()
 	{
-		if (!isset($_GET['sub'])
-			&& isset($_GET['id'])
-			&& ($event = $this->gateway->getEvent($_GET['id'], true))
-			&& $this->eventPermissions->maySeeEvent($event)
-		) {
-			$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
-			$this->pageHelper->addBread($event['name']);
-
-			$status = $this->gateway->getInviteStatus($event['id'], $this->session->id());
-
-			$this->pageHelper->addContent($this->view->eventTop($event), CNT_TOP);
-			$this->pageHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
-			$this->pageHelper->addContent($this->view->event($event));
-
-			if ($event['online'] == 0 && $event['location'] != false) {
-				$this->pageHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
-			} elseif ($event['online'] == 1) {
-				$this->pageHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
-			}
-
-			if ($event['invites']) {
-				$this->pageHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
-			}
-			$this->pageHelper->addContent($this->v_utils->v_field(
-				$this->wallposts('event', $event['id']),
-				$this->translator->trans('wall.name')
-			));
-		} elseif (!isset($_GET['sub'])) {
-			$this->flashMessageHelper->info($this->translator->trans('events.notFound'));
-			$this->routeHelper->go('/?page=dashboard');
+		if (isset($_GET['sub'])) {
+			// edit / creation are handled in the other EventControl functions
+			return;
 		}
+		$eventId = $_GET['id'] ?? null;
+		$regionId = $_GET['bid'] ?? null;
+
+		if ($eventId === null) {
+			if ($regionId === null) {
+				// this never worked...
+				$link = '/?page=dashboard';
+			} else {
+				// overview page: events in one region
+				$link = '/?page=bezirk&sub=events&bid=' . $regionId;
+			}
+
+			return $this->routeHelper->go($link);
+		}
+
+		$eventId = intval($eventId);
+		$event = $this->gateway->getEvent($eventId, true);
+
+		if (!$event || !$this->eventPermissions->maySeeEvent($event)) {
+			$this->flashMessageHelper->info($this->translator->trans('events.notFound'));
+
+			return $this->routeHelper->go('/?page=dashboard');
+		}
+
+		$regionEventsLink = '?page=bezirk&sub=events&bid=' . $event['bezirk_id'];
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), $regionEventsLink);
+		$this->pageHelper->addBread($event['name']);
+
+		$status = $this->gateway->getInviteStatus($eventId, $this->session->id());
+
+		$this->pageHelper->addContent($this->view->eventTop($event), CNT_TOP);
+		$this->pageHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
+		$this->pageHelper->addContent($this->view->event($event));
+
+		if ($event['online'] == 0 && $event['location'] != false) {
+			$this->pageHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
+		} elseif ($event['online'] == 1) {
+			$this->pageHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
+		}
+
+		if ($event['invites']) {
+			$this->pageHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
+		}
+		$this->pageHelper->addContent($this->v_utils->v_field(
+			$this->wallposts('event', $eventId),
+			$this->translator->trans('wall.name')
+		));
 	}
 
 	public function edit()
 	{
-		$event = $this->gateway->getEvent($_GET['id'], true);
+		$eventId = $_GET['id'] ?? null;
+		$event = $this->gateway->getEvent($eventId, true);
 
-		if (!$event || !$this->eventPermissions->mayEditEvent($event)) {
-			return false;
+		if (!$event) {
+			return $this->routeHelper->go('/?page=dashboard');
 		}
 
 		if (!$this->eventPermissions->mayEditEvent($event)) {
-			$this->routeHelper->go('/?page=event');
-
-			return;
+			return $this->routeHelper->go('/?page=event&id=' . $eventId);
 		}
 
-		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
-		$this->pageHelper->addBread($this->translator->trans('events.add_event'));
+		$regionEventsLink = '?page=bezirk&sub=events&bid=' . $event['bezirk_id'];
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), $regionEventsLink);
+		$this->pageHelper->addBread($event['name'], '/?page=event&id=' . $eventId);
+		$this->pageHelper->addBread($this->translator->trans('events.menu.edit'));
 
 		if ($this->isSubmitted() && $data = $this->validateEvent()) {
 			if ($this->gateway->updateEvent($_GET['id'], $data)) {
@@ -111,7 +132,7 @@ class EventControl extends Control
 	public function add(): void
 	{
 		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
-		$this->pageHelper->addBread($this->translator->trans('events.add_event'));
+		$this->pageHelper->addBread($this->translator->trans('events.create.title'));
 
 		if ($this->isSubmitted()) {
 			if (($data = $this->validateEvent()) && $id = $this->gateway->addEvent($this->session->id(), $data)) {

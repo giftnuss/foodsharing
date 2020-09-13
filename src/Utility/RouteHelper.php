@@ -23,7 +23,7 @@ final class RouteHelper
 		$this->legalGateway = $legalGateway;
 	}
 
-	public function go(string $url): void
+	public function go(string $url)
 	{
 		header('Location: ' . $url);
 		exit();
