@@ -21,16 +21,17 @@ json_escape () {
 send_to_slack () {
   local title="$1"
   local content="$2"
-  text="$(printf "*%s*\n\n``$(\n%s'\n')``\n" "$title" "$content")"
   local text
-  escaped=$(json_escape "$text")
+  # shellcheck disable=SC2016
+  text="$(printf '*%s*\n\n```\n%s\n```\n' "$title" "$content")"
   local escaped
+  escaped=$(json_escape "$text")
+  local payload
   payload=$(printf '{
     "username": "Outdated Bot",
     "channel": "#fs-outdated",
     "text": %s
   }' "$escaped")
-  local payload
   echo "Posting: $title"
   curl \
     -X POST \
