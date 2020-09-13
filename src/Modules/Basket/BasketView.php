@@ -37,7 +37,6 @@ class BasketView extends View
 		TranslationHelper $translationHelper,
 		TranslatorInterface $translator,
 		BasketPermissions $basketPermissions
-
 	) {
 		$this->basketPermissions = $basketPermissions;
 		parent::__construct(
