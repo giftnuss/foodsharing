@@ -38,3 +38,7 @@ Any relevant screenshots if this is a design / frontend change
      *  Describe in a few sentences, what should be tested from a **user perspective**.   
      *  Also mention different settings (e.g. **different browsers**, roles, ...).   how this change can be tested.   
      *  Be aware, that also **non technical** people should understand.  
+
+## Release notes text
+
+(A short text that will appear in the release notes and describes the change for non-technical people. Not always necessary, e.g. not for refactoring.)
