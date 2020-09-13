@@ -256,7 +256,7 @@ class BasketView extends View
 					</a>
 				</div>';
 		}
-		if ($this->basketPermissions->mayDelete($basket['fs_id'])) {
+		if ($this->basketPermissions->mayDelete($basket)) {
 			$request = $request . '
 
 				<div>

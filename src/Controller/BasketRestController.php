@@ -335,8 +335,11 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 		$basket = $this->gateway->getBasket($basketId);
+		if (empty($basket)) {
+			throw new HttpException(404, 'Basket was not found or cannot be deleted.');
+		}
 
-		if (!$this->basketPermissions->mayDelete($basket['fs_id'])) {
+		if (!$this->basketPermissions->mayDelete($basket)) {
 			throw new HttpException(401, 'you are not allowed to delete this basket.');
 		}
 

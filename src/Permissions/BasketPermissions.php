@@ -37,13 +37,13 @@ class BasketPermissions
 		return false;
 	}
 
-	public function mayDelete(int $basket_fs_id): bool
+	public function mayDelete(array $basket): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
 
-		if ($basket_fs_id == $this->session->id()) {
+		if ($basket['foodsaver_id'] === $this->session->id()) {
 			return true;
 		}
 

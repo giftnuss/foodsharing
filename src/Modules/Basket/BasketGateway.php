@@ -99,13 +99,13 @@ class BasketGateway extends BaseGateway
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				fs.sleep_status,
-				COUNT(a.foodsaver_id) AS request_count
+				COUNT(a.foodsaver_id) AS request_count				
 			FROM
 				fs_basket b
 			INNER JOIN
 				fs_foodsaver fs
 			ON
-				b.foodsaver_id = fs.id
+				b.foodsaver_id = fs.id			
 			AND
 				b.id = :id
 			LEFT OUTER JOIN
@@ -114,7 +114,7 @@ class BasketGateway extends BaseGateway
 				a.`status` IN(:status_unread,:status_read)
 			AND
 				a.basket_id = b.id
-			' . $status_sql . '
+			' . $status_sql . '				
 		';
 		$basket = $this->db->fetch($stm, [
 			':id' => $id,
@@ -128,14 +128,14 @@ class BasketGateway extends BaseGateway
 		}
 
 		$stm = '
-				SELECT
+				SELECT 
 					fs.name AS fs_name,
 					fs.photo AS fs_photo,
 					fs.id AS fs_id
-
+					
 				FROM
 					fs_foodsaver fs
-
+					
 				WHERE
 					fs.id = :foodsaver_id
 			';
@@ -151,7 +151,7 @@ class BasketGateway extends BaseGateway
 
 	public function listRequests(int $basket_id, $foodsaver_id): array
 	{
-		$stm = '
+		$stm = '		
 				SELECT
 					UNIX_TIMESTAMP(a.time) AS time_ts,
 					fs.name AS fs_name,
@@ -159,27 +159,27 @@ class BasketGateway extends BaseGateway
 					fs.id AS fs_id,
 					fs.geschlecht AS fs_gender,
 					fs.sleep_status,
-					b.id
-
+					b.id		
+		
 				FROM
 					fs_basket_anfrage a,
 					fs_basket b,
 					fs_foodsaver fs
-
+		
 				WHERE
 					a.basket_id = b.id
-
+		
 				AND
 					a.`status` IN(:status_unread,:status_read)
-
+		
 				AND
 					a.foodsaver_id = fs.id
-
+		
 				AND
 					b.foodsaver_id = :foodsaver_id
-
+		
 				AND
-					a.basket_id = :basket_id
+					a.basket_id = :basket_id		
 				';
 
 		return $this->db->fetchAll(
@@ -195,30 +195,30 @@ class BasketGateway extends BaseGateway
 
 	public function getRequest(int $basket_id, int $foodsaver_id_requester, $foodsaver_id_offerer): array
 	{
-		$stm = '
+		$stm = '		
 				SELECT
 					UNIX_TIMESTAMP(a.time) AS time_ts,
 					fs.name AS fs_name,
 					fs.photo AS fs_photo,
 					fs.id AS fs_id,
 					fs.geschlecht AS fs_gender,
-					b.id
+					b.id		
 				FROM
 					fs_basket_anfrage a,
 					fs_basket b,
-					fs_foodsaver fs
+					fs_foodsaver fs		
 				WHERE
-					a.basket_id = b.id
+					a.basket_id = b.id		
 				AND
-					a.`status` IN(:status_unread,:status_read)
+					a.`status` IN(:status_unread,:status_read)		
 				AND
-					a.foodsaver_id = fs.id
+					a.foodsaver_id = fs.id		
 				AND
-					b.foodsaver_id = :foodsaver_id_offerer
+					b.foodsaver_id = :foodsaver_id_offerer				
 				AND
-					a.foodsaver_id = :foodsaver_id_requester
+					a.foodsaver_id = :foodsaver_id_requester				
 				AND
-					a.basket_id = :basket_id
+					a.basket_id = :basket_id		
 				';
 
 		return $this->db->fetch(
@@ -235,20 +235,20 @@ class BasketGateway extends BaseGateway
 
 	public function getRequestStatus(int $basket_id, int $foodsaver_id_requester, int $foodsaver_id_offerer): array
 	{
-		$stm = '
+		$stm = '		
 				SELECT
-					a.`status`
+					a.`status`			
 				FROM
 					fs_basket_anfrage a,
-					fs_basket b
+					fs_basket b		
 				WHERE
-					a.basket_id = b.id
+					a.basket_id = b.id		
 				AND
 					b.foodsaver_id = :foodsaver_id_offerer
 				AND
 					a.foodsaver_id = :foodsaver_id_requester
 				AND
-					a.basket_id = :basket_id
+					a.basket_id = :basket_id		
 				';
 
 		return $this->db->fetch(
@@ -264,34 +264,34 @@ class BasketGateway extends BaseGateway
 	public function listUpdates(int $foodsaverId): array
 	{
 		$stm = '
-			SELECT
+			SELECT 
 				UNIX_TIMESTAMP(a.time) AS time_ts,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				fs.id AS fs_id,
 				fs.sleep_status,
 				b.id,
-				b.description
-
-			FROM
-				fs_basket_anfrage a,
+				b.description				
+				
+			FROM 
+				fs_basket_anfrage a, 
 				fs_basket b,
 				fs_foodsaver fs
-
-			WHERE
-				a.basket_id = b.id
-
-			AND
+				
+			WHERE 
+				a.basket_id = b.id 
+				
+			AND 
 				a.`status` IN(:status_unread,:status_read)
-
+				
 			AND
 				a.foodsaver_id = fs.id
-
+				
 			AND
 				b.foodsaver_id = :foodsaver_id
-
+				
 			ORDER BY
-				a.`time` DESC
+				a.`time` DESC				
 		';
 
 		return $this->db->fetchAll(
@@ -374,19 +374,19 @@ class BasketGateway extends BaseGateway
 	public function listMyBaskets(int $foodsaverId): array
 	{
 		$stm = '
-			SELECT
+			SELECT 
 				`id`,
 				`description`,
 				`picture`,
 				UNIX_TIMESTAMP(`time`) AS time_ts
-
-			FROM
+				
+			FROM 
 				fs_basket
-
+				
 			WHERE
 				`foodsaver_id` = :foodsaver_id
-
-			AND
+				
+			AND 
 				`status` = :status
 			AND
 				`until` > NOW()
@@ -453,14 +453,14 @@ class BasketGateway extends BaseGateway
 				fs.name AS fs_name
 			FROM
 				fs_basket b,
-				fs_foodsaver fs
+				fs_foodsaver fs	
 			WHERE
-				b.foodsaver_id = fs.id
+				b.foodsaver_id = fs.id	
 			AND
 				b.status = :status
 			AND
 				foodsaver_id != :fs_id
-			AND
+			AND 
 			    b.until > NOW()
 			HAVING
 				distance <= :distance
@@ -481,7 +481,7 @@ class BasketGateway extends BaseGateway
 
 	public function listNewestBaskets(): array
 	{
-		return $this->db->fetchAll('
+		return $this->db->fetchAll('	
 			SELECT
 				b.id,
 				b.`time`,
@@ -495,20 +495,20 @@ class BasketGateway extends BaseGateway
 			    b.until,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
-				fs.photo AS fs_photo
+				fs.photo AS fs_photo	
 			FROM
 				fs_basket b,
-				fs_foodsaver fs
+				fs_foodsaver fs	
 			WHERE
 				b.foodsaver_id = fs.id
 			AND
 				b.status = :status
-			AND
+			AND 
 			    b.until > NOW()
 			ORDER BY
-				id DESC
+				id DESC	
 			LIMIT
-				0, 10
+				0, 10	
 		', [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
 	}
 }
