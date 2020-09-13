@@ -2,13 +2,60 @@
 
 namespace Foodsharing\Modules\Basket;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\BasketPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BasketView extends View
 {
+	private $basketPermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator,
+		BasketPermissions $basketPermissions
+
+	) {
+		$this->basketPermissions = $basketPermissions;
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+	}
+
 	public function find(array $baskets, $location): void
 	{
 		$page = new vPage($this->translator->trans('terminology.baskets'), $this->findMap($location));
@@ -179,7 +226,7 @@ class BasketView extends View
 	{
 		$request = '';
 
-		if ($basket['fs_id'] != $this->session->id()) {
+		if ($this->basketPermissions->mayRequest($basket['fs_id'])) {
 			$hasRequested = $requests && count($requests) > 0;
 
 			if (!empty($basket['contact_type'])) {
@@ -200,7 +247,7 @@ class BasketView extends View
 				'allowRequestByMessage' => $allowContactByMessage
 			]);
 		}
-		if ($basket['fs_id'] == $this->session->id()) {
+		if ($this->basketPermissions->mayEdit($basket['fs_id'])) {
 			$request = '
 				<div class="ui-padding-bottom">
 					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\','
@@ -210,7 +257,7 @@ class BasketView extends View
 					</a>
 				</div>';
 		}
-		if ($basket['fs_id'] == $this->session->id() || $this->session->may('orga')) {
+		if ($this->basketPermissions->mayDelete($basket['fs_id'])) {
 			$request = $request . '
 
 				<div>

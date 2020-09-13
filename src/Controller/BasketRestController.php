@@ -8,6 +8,7 @@ use Foodsharing\Modules\Basket\BasketTransactions;
 use Foodsharing\Modules\Core\DBConstants\Basket\Status as BasketStatus;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Message\MessageTransactions;
+use Foodsharing\Permissions\BasketPermissions;
 use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -26,6 +27,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private ImageHelper $imageHelper;
 	private MessageTransactions $messageTransactions;
 	private Session $session;
+	private BasketPermissions $basketPermissions;
 
 	// literal constants
 	private const TIME_TS = 'time_ts';
@@ -54,13 +56,15 @@ final class BasketRestController extends AbstractFOSRestController
 		BasketTransactions $basketTransactions,
 		ImageHelper $imageHelper,
 		MessageTransactions $messageTransactions,
-		Session $session
+		Session $session,
+		BasketPermissions $basketPermissions
 	) {
 		$this->gateway = $gateway;
 		$this->basketTransactions = $basketTransactions;
 		$this->imageHelper = $imageHelper;
 		$this->messageTransactions = $messageTransactions;
 		$this->session = $session;
+		$this->basketPermissions = $basketPermissions;
 	}
 
 	/**
@@ -329,6 +333,11 @@ final class BasketRestController extends AbstractFOSRestController
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+		$basket = $this->gateway->getBasket($basketId);
+
+		if (!$this->basketPermissions->mayDelete($basket['fs_id'])) {
+			throw new HttpException(401, 'you are not allowed to delete this basket.');
 		}
 
 		$status = $this->gateway->removeBasket($basketId);
