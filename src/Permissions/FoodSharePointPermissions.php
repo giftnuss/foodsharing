@@ -41,7 +41,7 @@ class FoodSharePointPermissions
 			if ($this->session->isAdminFor($regionId)) {
 				return true;
 			}
-		} else if ($this->session->isAdminFor($fspGroup)) {
+		} elseif ($this->session->isAdminFor($fspGroup)) {
 			return true;
 		}
 
