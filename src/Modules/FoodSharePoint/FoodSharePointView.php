@@ -2,8 +2,21 @@
 
 namespace Foodsharing\Modules\FoodSharePoint;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\FoodSharePointPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class FoodSharePointView extends View
 {
@@ -12,6 +25,40 @@ class FoodSharePointView extends View
 
 	private array $foodSharePoint;
 	private array $follower;
+
+	private $fspPermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator,
+		FoodSharePointPermissions $fspPermissions
+	) {
+		$this->fspPermissions = $fspPermissions;
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+	}
 
 	public function setRegions(array $regions): void
 	{
@@ -257,8 +304,7 @@ class FoodSharePointView extends View
 
 	public function foodSharePointOptions(int $regionId): string
 	{
-		// TODO instead, use FoodSharePointPermissions:mayAdd($regionId)
-		$mayCreateFSP = $this->session->isAdminFor($regionId) || $this->session->isOrgaTeam();
+		$mayCreateFSP = $this->fspPermissions->mayAdd($regionId);
 
 		$item = [
 			'name' => $this->translator->trans($mayCreateFSP ? 'fsp.add' : 'fsp.suggest'),
