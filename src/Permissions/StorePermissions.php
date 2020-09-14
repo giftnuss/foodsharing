@@ -91,10 +91,17 @@ class StorePermissions
 		return $this->mayReadStoreWall($storeId);
 	}
 
-	public function mayDeleteStoreWallPost(int $postId): bool
+	public function mayDeleteStoreWallPost(int $storeId, int $postId): bool
 	{
-		return $this->session->may('orga')
-			|| $this->storeGateway->getStoreComment($postId)['foodsaver_id'] === $this->session->id();
+		if (!$this->session->may()) {
+			return false;
+		}
+		if ($this->session->may('orga')) {
+			return true;
+		}
+		$post = $this->storeGateway->getStoreWallpost($storeId, $postId);
+
+		return $this->session->id() === $post['foodsaver_id'];
 	}
 
 	public function mayCreateStore(): bool

@@ -73,7 +73,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$result['kette'] = $kette;
 		}
 
-		$result['notizen'] = $this->getBetriebNotiz($storeId);
+		$result['notizen'] = $this->getStorePosts($storeId);
 
 		return $result;
 	}
@@ -769,9 +769,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function deleteBPost($id): int
+	public function deleteStoreWallpost(int $storeId, int $postId): int
 	{
-		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
+		return $this->db->delete('fs_betrieb_notiz', ['id' => $postId, 'betrieb_id' => $storeId]);
 	}
 
 	/**
@@ -1010,33 +1010,24 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	/**
 	 * Returns the store comment with the specified ID.
 	 */
-	public function getStoreComment(int $commentId): array
+	public function getStoreWallpost(int $storeId, int $postId): array
 	{
 		return $this->db->fetchByCriteria('fs_betrieb_notiz',
 			['id', 'foodsaver_id', 'betrieb_id', 'text', 'zeit'],
-			['id' => $commentId]
+			['id' => $postId, 'betrieb_id' => $storeId]
 		);
 	}
 
 	/**
 	 * Returns all comments for a given store.
 	 */
-	private function getBetriebNotiz(int $storeId): array
+	public function getStorePosts(int $storeId, int $offset = 0, int $limit = 50): array
 	{
-		return $this->db->fetchAll('
-			SELECT   `id`,
-			         `foodsaver_id`,
-			         `betrieb_id`,
-			         `text`,
-			         `zeit`,
-			         UNIX_TIMESTAMP(`zeit`) AS zeit_ts
-
-			FROM 	 `fs_betrieb_notiz`
-
-			WHERE    `betrieb_id` = :storeId
-        ', [
-			':storeId' => $storeId
-		]);
+		return $this->db->fetchAllByCriteria('fs_betrieb_notiz',
+			['id', 'foodsaver_id', 'betrieb_id', 'text', 'zeit'],
+			['betrieb_id' => $storeId]
+		);
+		// TODO we probably want to rebuild this so we can implement offset+limit?
 	}
 
 	/**
@@ -1105,23 +1096,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'content' => strip_tags($content),
 			'reason' => strip_tags($reason),
 		]);
-	}
-
-	public function getSingleStoreNote($id): array
-	{
-		return $this->db->fetch('
-			SELECT
-			`id`,
-			`foodsaver_id`,
-			`betrieb_id`,
-			`text`,
-			`zeit`,
-			UNIX_TIMESTAMP(`zeit`) AS zeit_ts
-
-			FROM 		`fs_betrieb_notiz`
-
-			WHERE `id` = :id',
-			[':id' => $id]);
 	}
 
 	/**

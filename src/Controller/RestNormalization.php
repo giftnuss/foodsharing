@@ -173,7 +173,7 @@ class RestNormalization
 			'id' => (int)$data['id'],
 			'foodsaverId' => (int)$data['foodsaver_id'],
 			'text' => $data['text'],
-			'createdAt' => self::normalizeDate($data['zeit_ts'])
+			'createdAt' => self::normalizeDate(strtotime($data['zeit'])),
 		];
 	}
 }

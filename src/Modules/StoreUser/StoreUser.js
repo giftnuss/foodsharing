@@ -137,10 +137,11 @@ $(document).ready(() => {
         text: $('#delete_shure .sure').text(),
         click: async function () {
           showLoader()
-          const pid = $(this).data('pid')
+          const storeId = GET('id')
+          const postId = $(this).data('pid')
           try {
-            await deleteStorePost(pid)
-            $(`.bpost-${pid}`).remove()
+            await deleteStorePost(storeId, postId)
+            $(`.bpost-${postId}`).remove()
             $('#delete_shure').dialog('close')
           } catch (e) {
             pulseError(i18n('error_unexpected'))
