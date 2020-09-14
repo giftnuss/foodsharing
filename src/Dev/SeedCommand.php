@@ -117,15 +117,15 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=0;', []);
 		$regionOne = $I->createRegion('Göttingen');
 		$region1 = $regionOne['id'];
+		$regionTwo = $I->createRegion('Entenhausen');
+		$region2 = $regionTwo['id'];
 		$regionOneWorkGroup = $I->createWorkingGroup('Schnippelparty Göttingen', ['parent_id' => $regionOne['id']]);
 		$region_vorstand = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_aktive = RegionIDs::TEAM_ADMINISTRATION_MEMBER;
 		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$ag_startpage = RegionIDs::PR_START_PAGE;
-		$I->createWorkingGroup('AG Startseite', ['id' => $ag_startpage]);
 		$ag_partnerandteam = RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP;
-		$I->createWorkingGroup('AG Team und Partnerseite', ['id' => $ag_partnerandteam]);
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
@@ -152,6 +152,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 			'about_me_intern' => 'hello!'
 		]);
 		$this->writeUser($userbot, $password, 'ambassador');
+
+		$userbotregion2 = $I->createAmbassador($password, [
+			'email' => 'userbotreg2@example.com',
+			'name' => 'Bot Entenhausen',
+			'bezirk_id' => $region2,
+			'about_me_intern' => 'hello!'
+		]);
+		$this->writeUser($userbotregion2, $password, 'ambassador');
 
 		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $region1]);
 		$this->writeUser($userorga, $password, 'orga');
