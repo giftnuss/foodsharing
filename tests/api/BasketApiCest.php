@@ -61,9 +61,9 @@ class BasketApiCest
 		$basket2 = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->userOrga[self::EMAIL]);
-		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID]);
+		$I->sendDELETE(self::API_BASKETS . '/' . $basket2[self::ID]);
 		$I->seeResponseCodeIs(Http::OK);
-		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket2[self::ID]);
 		$I->seeResponseCodeIs(Http::NOT_FOUND);
 	}
 
