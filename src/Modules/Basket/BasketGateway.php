@@ -338,7 +338,7 @@ class BasketGateway extends BaseGateway
 		}
 	}
 
-	public function removeBasket(int $basketId, int $foodsaverId): int
+	public function removeBasket(int $basketId): int
 	{
 		return $this->db->update(
 			'fs_basket',
@@ -346,7 +346,7 @@ class BasketGateway extends BaseGateway
 				'status' => BasketStatus::DELETED_OTHER_REASON,
 				'update' => date('Y-m-d H:i:s')
 			],
-			['id' => $basketId, 'foodsaver_id' => $foodsaverId]
+			['id' => $basketId]
 		);
 	}
 

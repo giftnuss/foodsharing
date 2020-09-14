@@ -2,13 +2,59 @@
 
 namespace Foodsharing\Modules\Basket;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\BasketPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BasketView extends View
 {
+	private $basketPermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator,
+		BasketPermissions $basketPermissions
+	) {
+		$this->basketPermissions = $basketPermissions;
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+	}
+
 	public function find(array $baskets, $location): void
 	{
 		$page = new vPage($this->translator->trans('terminology.baskets'), $this->findMap($location));
@@ -87,7 +133,7 @@ class BasketView extends View
 		$page = new vPage($label,
 			'<div class="fbasket-wrap">
 				<div class="fbasket-pic">
-					' . $this->pageImg($basket['picture'] ?? '') . '	
+					' . $this->pageImg($basket['picture'] ?? '') . '
 				</div>
 				<div class="fbasket-desc">
 					<p>' . nl2br($basket['description']) . '</p>
@@ -177,7 +223,9 @@ class BasketView extends View
 
 	private function userBox(array $basket, array $requests): string
 	{
-		if ($basket['fs_id'] != $this->session->id()) {
+		$request = '';
+
+		if ($this->basketPermissions->mayRequest($basket['fs_id'])) {
 			$hasRequested = $requests && count($requests) > 0;
 
 			if (!empty($basket['contact_type'])) {
@@ -197,7 +245,8 @@ class BasketView extends View
 				'landlineNumber' => ($allowContactByPhone && !empty($basket['tel'])) ? $basket['tel'] : null,
 				'allowRequestByMessage' => $allowContactByMessage
 			]);
-		} else {
+		}
+		if ($this->basketPermissions->mayEdit($basket['fs_id'])) {
 			$request = '
 				<div class="ui-padding-bottom">
 					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\','
@@ -205,7 +254,12 @@ class BasketView extends View
 					. ',id:' . (int)$basket['id']
 					. '});">' . $this->translator->trans('basket.edit') . '
 					</a>
-				</div><div>
+				</div>';
+		}
+		if ($this->basketPermissions->mayDelete($basket)) {
+			$request = $request . '
+
+				<div>
 					<a class="button button-big" href="#" onclick="tryRemoveBasket(' . (int)$basket['id'] . ');">'
 					. $this->translator->trans('basket.delete') . '
 					</a>

@@ -11,6 +11,7 @@ use Faker;
 class BasketApiCest
 {
 	private $user;
+	private $userOrga;
 	private $faker;
 
 	private const EMAIL = 'email';
@@ -21,6 +22,7 @@ class BasketApiCest
 	public function _before(\ApiTester $I)
 	{
 		$this->user = $I->createFoodsaver();
+		$this->userOrga = $I->createOrga();
 		$this->faker = Faker\Factory::create('de_DE');
 	}
 
@@ -54,6 +56,14 @@ class BasketApiCest
 		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
+		$I->seeResponseCodeIs(Http::NOT_FOUND);
+
+		$basket2 = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->userOrga[self::EMAIL]);
+		$I->sendDELETE(self::API_BASKETS . '/' . $basket2[self::ID]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->sendGET(self::API_BASKETS . '/' . $basket2[self::ID]);
 		$I->seeResponseCodeIs(Http::NOT_FOUND);
 	}
 
