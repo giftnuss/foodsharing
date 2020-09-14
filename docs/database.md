@@ -33,12 +33,13 @@ Information in Redis include session IDs (Who is loged in?), and email queues.
 
 # Database Migration
 
-If your code change requires customization of the database, create a file migrations/incremental...sql with the SQL statements without the "commit" command.
+We are using phinx for database migrations. If your code change requires customization of the database, 
+migration templates can be created with ```./scripts/docker-compose exec app vendor/bin/phinx create MyNewMigration```
 
-*For example: migrations/incremental-20161101-remove-autokennzeichen.sql*
-```DROP TABLE fs_autokennzeichen;
-ALTER TABLE fs_foodsaver
-  DROP COLUMN autokennzeichen_id;
-ALTER TABLE fs_foodsaver_archive
-  DROP COLUMN autokennzeichen_id;
-```
+### Workaround (Here we should look for a better solution)
+
+> Run the command ```sudo chmod 775 migrations/yourfile``` before your first edit.
+
+You can test the migration with ```./scripts/docker-compose exec app vendor/bin/phinx migrate --dry-run``` (which "runs" all not yet applied migrations which in that case should be just your new one).
+
+For examples you can have a look at migrations/ folder and https://book.cakephp.org/phinx/0/en/migrations.html.

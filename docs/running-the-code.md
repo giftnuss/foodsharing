@@ -38,16 +38,29 @@ After a restart the services firewalld and docker it should work.
 
 If you cannot connect to Docker with your local user, then you may want to add yourself to the Docker group:
 
+### Fedora 32
+
+Download docker from: https://download.docker.com/linux/fedora/31/x86_64/stable/Packages/
+```
+sudo dnf -y install /path/to/package.rpm
+sudo systemctl start docker
+```
+> Error response from daemon: cgroups: cgroup mountpoint does not exist: unknown
+
+```
+sudo mkdir /sys/fs/cgroup/systemd
+sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+```
+# General on Linux
 ```
 sudo usermod -aG docker $USER
-
-# then either log in again to reload the groups
-# or run (for each shell...)
-su - $USER
-
-# should now be able to connect without errors
-docker info
 ```
+Then either log in again to reload the groups or run (for each shell...)
+`su - $USER`
+
+Should now be able to connect without errors
+
+`docker info`
 
 Then:
 
@@ -70,6 +83,31 @@ cd foodsharing
 ```
 
 ## Windows 
+
+### New approach on WSL2
+
+* Install Ubuntu 20.xx via Windows AppStore (WSL2) (you need to start it once for step 3)
+* Install windowsTerminal via Appstore
+* Open a new tab in WinTerminal with Ubuntu
+* Change to your target directory
+* Execute git download (you may need to add an ssh key from this environment)
+```
+`git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+```
+
+* Add the following to ~/.bashrc with editor (e.g. nano)
+```
+export DOCKER_HOST=tcp://localhost:2375
+export DOCKER_BUILDKIT=1
+```
+* Check in docker settings - Resources - WSL Integration your environment is active
+```
+cd /foodsharing
+sudo./scripts/start
+sudo./scripts/seed
+```
+
+## On WSL1
 
 If you are using Windows 10 Pro or higher go with this link:
 
@@ -109,6 +147,15 @@ The first time you run the start script, which takes a lot of time, you probably
 
 If something is wrong, please check in your task manager under "performance" if the virtualisation is activated and troubleshoot if necessary.
 
+ - git trouble (on WSL1)
+ 
+ If git does not working well, please do:
+ ```
+ cd foodsharing/bin
+ tr -d '\15' < console > console
+``` 
+Make sure not to commit the `console` file and maybe discuss further steps with the team. 
+ 
  - ```[RuntimeException]```
 
 If you get a ```[RuntimeException]```, let ```./scripts/start``` run again and again and maybe even again until it's done.

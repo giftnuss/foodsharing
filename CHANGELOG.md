@@ -48,6 +48,7 @@
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm
+- Update devdocs for database migrations in phinx, fedora 32 and WSL2 !1675 @chriswalg
 
 # Release "Birne" (pear), 2020-08-09
 
