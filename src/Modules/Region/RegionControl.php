@@ -288,7 +288,6 @@ final class RegionControl extends Control
 				$ambassadorForum, $postActiveWithoutModeration, $data->sendMail
 			);
 
-			$this->forumFollowerGateway->followThreadByEmail($this->session->id(), $threadId);
 			$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);
 
 			if (!$postActiveWithoutModeration) {

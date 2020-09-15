@@ -121,7 +121,6 @@ class ForumGateway extends BaseGateway
 			'active' => $isActive,
 		]);
 
-		$this->forumFollowerGateway->followThreadByEmail($foodsaverId, $threadId);
 		$this->forumFollowerGateway->followThreadByBell($foodsaverId, $threadId);
 
 		$this->db->insert('fs_bezirk_has_theme', [
