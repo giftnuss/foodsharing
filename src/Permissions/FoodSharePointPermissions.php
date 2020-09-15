@@ -67,20 +67,19 @@ class FoodSharePointPermissions
 		return $this->mayAdd($regionId);
 	}
 
-	public function mayDeleteFoodSharePointWallPost(int $regionId) {
+	public function mayDeleteFoodSharePointWallPostofRegion(int $regionId) {
+
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-/*
+
 		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
-;
 		if (!empty($fspGroup)) {
 			if ($this->session->isAdminFor($fspGroup)) {
 				return true;
 			}
 		}
-*/
-		return false;
 
+		return false;
 	}
 }

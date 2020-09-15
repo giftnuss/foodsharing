@@ -14,21 +14,21 @@ class WallPostPermissions
 	private EventGateway $eventGateway;
 	private EventPermissions $eventPermission;
 	private FoodSharePointGateway $fspGateway;
-	private FoodSharePointPermission $fspPermission;
+	private FoodSharePointPermissions $fspPermission;
 	private Session $session;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
 		EventPermissions $eventPermissions,
-		FoodSharePointPermissions $fsPermissinos,
+		FoodSharePointPermissions $fspPermission,
 		FoodSharePointGateway $fspGateway,
 		Session $session
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->eventPermission = $eventPermissions;
-		$this->fspPermission = $fsPermissinos;
+		$this->fspPermission = $fspPermission;
 		$this->fspGateway = $fspGateway;
 		$this->session = $session;
 	}
@@ -100,7 +100,7 @@ class WallPostPermissions
 				break;
 			case 'fairteiler':
 				$fsp = $this->fspGateway->getFoodSharePoint($targetId);
-				$result = $this->fspPermission->mayDeleteFoodSharePointWallPost($fsp['bezirk_id']);
+				$result = $this->fspPermission->mayDeleteFoodSharePointWallPostofRegion($fsp['bezirk_id']);
 				break;
 			default:
 				$result = false;
