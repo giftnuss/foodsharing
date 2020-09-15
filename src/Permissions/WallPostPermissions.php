@@ -6,23 +6,30 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
 class WallPostPermissions
 {
 	private RegionGateway $regionGateway;
 	private EventGateway $eventGateway;
 	private EventPermissions $eventPermission;
+	private FoodSharePointGateway $fspGateway;
+	private FoodSharePointPermission $fspPermission;
 	private Session $session;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
 		EventPermissions $eventPermissions,
+		FoodSharePointPermissions $fsPermissinos,
+		FoodSharePointGateway $fspGateway,
 		Session $session
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->eventPermission = $eventPermissions;
+		$this->fspPermission = $fsPermissinos;
+		$this->fspGateway = $fspGateway;
 		$this->session = $session;
 	}
 
@@ -92,7 +99,8 @@ class WallPostPermissions
 				$result = $this->mayReadWall($fsId, $target, $targetId);
 				break;
 			case 'fairteiler':
-				$result = $this->session->may('orga');
+				$fsp = $this->fspGateway->getFoodSharePoint($targetId);
+				$result = $this->fspPermission->mayDeleteFoodSharePointWallPost($fsp['bezirk_id']);
 				break;
 			default:
 				$result = false;
