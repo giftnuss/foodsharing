@@ -7,11 +7,13 @@ use Carbon\CarbonInterval;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Message\MessageTransactions;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
 use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -23,19 +25,22 @@ final class PickupRestController extends AbstractFOSRestController
 	private StoreGateway $storeGateway;
 	private StorePermissions $storePermissions;
 	private StoreTransactions $storeTransactions;
+	private MessageTransactions $messageTransactions;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
 		Session $session,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
-		StoreTransactions $storeTransactions
+		StoreTransactions $storeTransactions,
+		MessageTransactions $messageTransactions
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
 		$this->storeTransactions = $storeTransactions;
+		$this->messageTransactions = $messageTransactions;
 	}
 
 	private function parsePickupDate(string $pickupDate): Carbon
@@ -84,8 +89,9 @@ final class PickupRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
+	 * @RequestParam(name="message", nullable=true)
 	 */
-	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId): Response
+	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->storePermissions->mayRemovePickupUser($storeId, $fsId)) {
 			throw new HttpException(403);
@@ -116,6 +122,11 @@ final class PickupRestController extends AbstractFOSRestController
 				$date,
 				StoreLogAction::REMOVED_FROM_SLOT
 			);
+
+			// send direct message to the user
+			$message = $paramFetcher->get('message');
+			$formattedMessage = $this->storeTransactions->createKickMessage($fsId, $storeId, $date, $message);
+			$this->messageTransactions->sendMessageToUser($fsId, $this->session->id(), $formattedMessage);
 		}
 
 		return $this->handleView($this->view([], 200));

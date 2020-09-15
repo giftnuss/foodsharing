@@ -100,9 +100,14 @@
       modal-class="bootstrap"
       header-class="d-flex"
       content-class="pr-3 pt-3"
-      @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id })"
+      @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id, 'message': kickMessage })"
     >
       <p>{{ $i18n('pickup.really_kick_user_date', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name}) }}</p>
+      <p>{{ $i18n('pickup.really_kick_user_info', {'name': activeSlot.profile.name}) }}</p>
+      <b-form-textarea
+        v-model="kickMessage"
+        rows="4"
+      />
     </b-modal>
     <b-modal
       ref="modal_team_message"
@@ -171,7 +176,8 @@ export default {
           name: '',
           id: null
         }
-      }
+      },
+      kickMessage: ''
     }
   },
   computed: {

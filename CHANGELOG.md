@@ -5,6 +5,8 @@
 - New store status "permanently closed" #786 !1655 @ChrisOelmueller
 - Add voting tool #309 #975 !1633 !1668 @alex.simm
 - Add FairSharePoint Function Workgroup #974 !1667 !1679 @fs_k
+- Add FairSharePoint Function Workgroup #974 !1667 @fs_k
+- Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg

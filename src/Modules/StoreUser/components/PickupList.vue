@@ -138,7 +138,7 @@ export default {
     async kick (data) {
       this.isLoading = true
       try {
-        await leavePickup(this.storeId, data.date, data.fsId)
+        await leavePickup(this.storeId, data.date, data.fsId, data.message)
       } catch (e) {
         pulseError(i18n('pickuplist.error_kick') + e)
       }

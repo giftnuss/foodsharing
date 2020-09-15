@@ -3,9 +3,11 @@
 namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
+use DateTime;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -16,6 +18,7 @@ class StoreTransactions
 	private StoreGateway $storeGateway;
 	private TranslatorInterface $translator;
 	private BellGateway $bellGateway;
+	private FoodsaverGateway $foodsaverGateway;
 	private Session $session;
 	const MAX_SLOTS_PER_PICKUP = 10;
 	// status constants for getAvailablePickupStatus
@@ -29,12 +32,14 @@ class StoreTransactions
 		StoreGateway $storeGateway,
 		TranslatorInterface $translator,
 		BellGateway $bellGateway,
+		FoodsaverGateway $foodsaverGateway,
 		Session $session
 	) {
 		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
 		$this->translator = $translator;
 		$this->bellGateway = $bellGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->session = $session;
 	}
 
@@ -202,5 +207,24 @@ class StoreTransactions
 		$this->bellGateway->addBell($userId, $bellData);
 
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
+	}
+
+	public function createKickMessage(int $foodsaverId, int $storeId, DateTime $pickupDate, ?string $message = null): string
+	{
+		$fs = $this->foodsaverGateway->getFoodsaver($foodsaverId);
+		$store = $this->storeGateway->getBetrieb($storeId);
+
+		$salutation = $this->translator->trans('salutation.' . $fs['geschlecht']) . ' ' . $fs['name'];
+		$mandatoryMessage = $this->translator->trans('pickup.kick_message', [
+			'{storeName}' => $store['name'],
+			'{date}' => date('d.m.Y H:i', $pickupDate->getTimestamp())
+		]);
+
+		$optionalMessage = '';
+		if (!empty($message)) {
+			$optionalMessage = "\n\n" . $this->translator->trans('pickup.kick_message_info') . ":\n" . $message;
+		}
+
+		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage;
 	}
 }

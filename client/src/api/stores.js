@@ -29,9 +29,11 @@ export async function joinPickup (storeId, pickupDate, fsId) {
   return post(`/stores/${storeId}/pickups/${date}/${fsId}`)
 }
 
-export async function leavePickup (storeId, pickupDate, fsId) {
+export async function leavePickup (storeId, pickupDate, fsId, message) {
   const date = pickupDate.toISOString()
-  return remove(`/stores/${storeId}/pickups/${date}/${fsId}`)
+  return remove(`/stores/${storeId}/pickups/${date}/${fsId}`, {
+    message: message
+  })
 }
 
 export async function confirmPickup (storeId, pickupDate, fsId) {
