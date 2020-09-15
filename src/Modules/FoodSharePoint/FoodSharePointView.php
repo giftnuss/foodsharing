@@ -17,7 +17,6 @@ use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 class FoodSharePointView extends View
 {
 	private ?array $region;
