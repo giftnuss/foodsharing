@@ -381,7 +381,7 @@ fsp:
   addError: Fairteiler konnte nicht eingetragen werden. Hast du alles richtig ausgefüllt?
   addSuccess: Fairteiler wurde erfolgreich eingetragen
   suggest: Fairteiler vorschlagen
-  suggestSuccess: Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter bestätigt werden.
+  suggestSuccess: Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter / Fairteilerverantwortlichen bestätigt werden.
   accept: Fairteiler freischalten
   acceptName: '{name} freischalten'
   acceptSuccess: Fairteiler ist jetzt aktiv

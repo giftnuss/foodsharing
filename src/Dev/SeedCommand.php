@@ -153,6 +153,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 		]);
 		$this->writeUser($userbot, $password, 'ambassador');
 
+		$userbot2 = $I->createAmbassador($password, [
+			'email' => 'userbot2@example.com',
+			'name' => 'Bot2',
+			'bezirk_id' => $region1,
+			'about_me_intern' => 'hello!'
+		]);
+		$this->writeUser($userbot2, $password, 'ambassador');
+
 		$userbotregion2 = $I->createAmbassador($password, [
 			'email' => 'userbotreg2@example.com',
 			'name' => 'Bot Entenhausen',
@@ -174,6 +182,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		// Add users to region
 		$this->output->writeln('- add users to region');
 		$I->addRegionAdmin($region1, $userbot['id']);
+		$I->addRegionAdmin($region1, $userbot2['id']);
 		$I->addRegionMember($ag_quiz, $userbot['id']);
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
 		$I->addRegionMember($ag_startpage, $userStoreManager['id']);
