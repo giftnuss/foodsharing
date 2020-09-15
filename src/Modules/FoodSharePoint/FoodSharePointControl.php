@@ -324,7 +324,7 @@ class FoodSharePointControl extends Control
 	public function add(Request $request): void
 	{
 		$this->pageHelper->addBread($this->translator->trans('fsp.add'));
-
+//dump($request);
 		if ($request->request->get('form_submit') === 'fairteiler') {
 			if ($this->handleAdd($request)) {
 				if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
@@ -404,6 +404,7 @@ class FoodSharePointControl extends Control
 		}
 
 		$userId = $this->session->id();
+
 		if ($userId === null || !$this->foodSharePointPermissions->mayAdd($this->regionId)) {
 			return 0;
 		}

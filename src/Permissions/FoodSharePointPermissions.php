@@ -37,6 +37,7 @@ class FoodSharePointPermissions
 		}
 
 		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
+
 		if (empty($fspGroup)) {
 			if ($this->session->isAdminFor($regionId)) {
 				return true;

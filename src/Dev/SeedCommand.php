@@ -159,6 +159,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 			'bezirk_id' => $region2,
 			'about_me_intern' => 'hello!'
 		]);
+		$I->addRegionAdmin($region2, $userbotregion2['id']);
+
 		$this->writeUser($userbotregion2, $password, 'ambassador');
 
 		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $region1]);
