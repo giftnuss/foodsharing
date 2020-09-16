@@ -1,6 +1,6 @@
 <template>
   <div class="activity-container">
-    <div class="head ui-widget-header ui-rectangular-bottom activities">
+    <div class="head ui-widget-header corner-top activities">
       <span v-if="currentFilterDescription">
         {{ $i18n('dashboard.updates_title_some', [$i18n(currentFilterDescription)]) }}
       </span>
