@@ -89,7 +89,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
-	 * @RequestParam(name="message", nullable=true)
+	 * @RequestParam(name="message", nullable=true, default="")
 	 */
 	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher): Response
 	{
@@ -115,16 +115,18 @@ final class PickupRestController extends AbstractFOSRestController
 				StoreLogAction::SIGN_OUT_SLOT
 			);
 		} else {
+			$message = trim($paramFetcher->get('message'));
 			$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied
 				$storeId,
 				$this->session->id(),
 				$fsId,
 				$date,
-				StoreLogAction::REMOVED_FROM_SLOT
+				StoreLogAction::REMOVED_FROM_SLOT,
+				null,
+				empty($message) ? null : $message
 			);
 
 			// send direct message to the user
-			$message = $paramFetcher->get('message');
 			$formattedMessage = $this->storeTransactions->createKickMessage($fsId, $storeId, $date, $message);
 			$this->messageTransactions->sendMessageToUser($fsId, $this->session->id(), $formattedMessage);
 		}
