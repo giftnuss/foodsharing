@@ -27,6 +27,6 @@ In `client/src/vue.js` we define the `$i18n` prototype and attach it to all Vue 
 The [`trans` filter](https://symfony.com/doc/current/translation/templates.html#using-twig-filters) allows passing translation keys to the translation engine from Twig files. Examples:
 ```
 {% raw %}{% embed 'components/field.twig' with {'title': 'events.bread'|trans} %}{% endraw %}
-<h4>{{ 'dashboard.push.title'|trans }}</h4>
+{% raw %}<h4>{{ 'dashboard.push.title'|trans }}</h4>{% endraw %}
 ```
-Do not create more of these unless you really know what you're doing! You will need to be very careful with the syntax for replacing variables (`|trans({'%name%': name})`).
+Do not create more of these unless you really know what you're doing! You will need to be very careful with the syntax for replacing variables (`{% raw %}|trans({'%name%': name}{% endraw %})`).
