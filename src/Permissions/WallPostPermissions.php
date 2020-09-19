@@ -100,7 +100,11 @@ class WallPostPermissions
 				break;
 			case 'fairteiler':
 				$fsp = $this->fspGateway->getFoodSharePoint($targetId);
-				$result = $this->fspPermission->mayDeleteFoodSharePointWallPostofRegion($fsp['bezirk_id']);
+				if (empty($fsp) || empty($fsp['bezirk_id'])) {
+					$result = false;
+				} else {
+					$result = $this->fspPermission->mayDeleteFoodSharePointWallPostOfRegion($fsp['bezirk_id']);
+				}
 				break;
 			default:
 				$result = false;
