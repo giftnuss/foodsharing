@@ -125,7 +125,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * Checks if the number is a valid value in the given range.
 	 * TODO Duplicated in BasketRestController.php.
 	 */
-	private function isValidNumber($value, $lowerBound, $upperBound): bool
+	private function isValidNumber($value, float $lowerBound, float $upperBound): bool
 	{
 		return !is_null($value) && !is_nan($value)
 			&& ($lowerBound <= $value) && ($upperBound >= $value);
