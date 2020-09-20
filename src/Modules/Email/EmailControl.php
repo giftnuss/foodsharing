@@ -106,10 +106,10 @@ class EmailControl extends Control
 				if ($data['recip_choose'] == 'bezirk') {
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 					$foodsaver = $this->foodsaverGateway->getEmailAddressesFromMainRegions($region_ids);
-				} elseif ($data['recip_choose'] == 'botschafter') {
+				} elseif ($data['recip_choose'] == 'active_ambassadors') {
 					$foodsaver = $this->foodsaverGateway->getActiveAmbassadors();
-				} elseif ($data['recip_choose'] == 'orgateam') {
-					$foodsaver = $this->foodsaverGateway->getOrgateam();
+				} elseif ($data['recip_choose'] == 'orga_team') {
+					$foodsaver = $this->foodsaverGateway->getOrgaTeam();
 				}
 			}
 			if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {

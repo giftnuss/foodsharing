@@ -925,8 +925,8 @@ recipients:
   prepare: Vorbereiten zum Versand
   recipients: Empfänger
   all: Alle Foodsaver weltweit
-  botschafter: Alle Botschafter bundesweit
-  orgateam: Orgateam bundesweit
+  active_ambassadors: Alle Botschafter bundesweit
+  orga_team: Orgateam bundesweit
   newsletter: Alle Newsletter-Abonnenten (mindestens Foodsaver)
   newsletter_all: Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)
   newsletter_only_foodsharer: NUR die Foodsharer unter allen Newsletter-Abonnenten

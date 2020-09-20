@@ -312,7 +312,7 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]) > 0;
 	}
 
-	public function getOrgateam(): array
+	public function getOrgaTeam(): array
 	{
 		return $this->db->fetchAllByCriteria('fs_foodsaver', [
 			'id',

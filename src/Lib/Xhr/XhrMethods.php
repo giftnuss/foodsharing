@@ -1141,7 +1141,7 @@ class XhrMethods
 				}
 				$msg .= ' ' . $this->translator->trans('store.request.amb-instead');
 			} else {
-				$bellRecipients = $this->foodsaverGateway->getOrgateam();
+				$bellRecipients = $this->foodsaverGateway->getOrgaTeam();
 				$msg .= ' ' . $this->translator->trans('store.request.orga-instead');
 			}
 		}

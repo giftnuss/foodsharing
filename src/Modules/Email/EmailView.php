@@ -189,14 +189,8 @@ class EmailView extends View
 			<option value="all">' . $this->translator->trans('recipients.all') . '</option>
 			<option value="newsletter">' . $this->translator->trans('recipients.newsletter') . '</option>
 			<option value="newsletter_all">' . $this->translator->trans('recipients.newsletter_all') . '</option>
-		';
-
-		$out .= '
-			<option value="orgateam">' . $this->translator->trans('recipients.orgateam') . '</option>
-			<option value="botschafter">' . $this->translator->trans('recipients.botschafter') . '</option>
-		';
-
-		$out .= '
+			<option value="orga_team">' . $this->translator->trans('recipients.orga_team') . '</option>
+			<option value="active_ambassadors">' . $this->translator->trans('recipients.active_ambassadors') . '</option>
 			<option value="storemanagers">' . $this->translator->trans('recipients.storemanagers') . '</option>
 			<option value="storemanagers_and_ambs">' . $this->translator->trans('recipients.storemanagers_and_ambs') . '</option>
 			<option value="all_no_botschafter">' . $this->translator->trans('recipients.all_no_botschafter') . '</option>
@@ -204,7 +198,6 @@ class EmailView extends View
 			<option value="choose">' . $this->translator->trans('recipients.choose') . '</option>
 			<option value="manual">' . $this->translator->trans('recipients.manual') . '</option>
 		';
-
 		$out .= '</select>';
 
 		$out .= '
