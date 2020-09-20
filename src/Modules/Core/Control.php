@@ -16,8 +16,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class Control
 {
-	protected $isControl = false;
-	protected $isXhrControl = false;
+	protected bool $isControl = false;
+	protected bool $isXhrControl = false;
 	protected $view;
 	private $sub;
 	private $sub_func;
@@ -99,7 +99,7 @@ abstract class Control
 	/**
 	 * @required
 	 */
-	public function setTwig(\Twig\Environment $twig)
+	public function setTwig(\Twig\Environment $twig): void
 	{
 		$this->twig = $twig;
 	}

@@ -10,7 +10,7 @@ use UnexpectedValueException;
 
 final class ImageHelper
 {
-	private $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
+	private array $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
 
 	/**
 	 * Guesses a filename extension for a file.

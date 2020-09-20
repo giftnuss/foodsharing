@@ -52,7 +52,7 @@ class BlogView extends View
 		$this->blogPermissions = $blogPermissions;
 	}
 
-	public function listArticle($data)
+	public function listArticle(array $data): string
 	{
 		$rows = [];
 		foreach ($data as $article) {
@@ -98,7 +98,7 @@ class BlogView extends View
 		return $this->v_utils->v_field($table, $this->translator->trans('blog.article'));
 	}
 
-	public function newsPost($news)
+	public function newsPost(array $news): string
 	{
 		return $this->v_utils->v_field(
 			'<div class="news-post full"><h2><a href="/?page=blog&sub=read&id='
@@ -115,7 +115,7 @@ class BlogView extends View
 		);
 	}
 
-	public function newsListItem($news)
+	public function newsListItem(array $news): string
 	{
 		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate(
 				$news['time_ts']
@@ -126,16 +126,19 @@ class BlogView extends View
 			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
 	}
 
-	private function getImage($news, $prefix = 'crop_1_528_')
+	private function getImage(array $news, string $prefix = 'crop_1_528_'): string
 	{
-		if (!empty($news['picture'])) {
-			return '<a href="/?page=blog&sub=read&id=' . $news['id'] . '"><img class="corner-all" src="/images/' . str_replace('/', '/' . $prefix, $news['picture']) . '" /></a>';
+		if (empty($news['picture'])) {
+			return '';
 		}
+		$src = '/images/' . str_replace('/', '/' . $prefix, $news['picture']);
 
-		return '';
+		return '<a href="/?page=blog&sub=read&id=' . $news['id'] . '">'
+			. '<img class="corner-all" src="' . $src . '" />'
+			. '</a>';
 	}
 
-	public function pager($page)
+	public function pager(int $page): string
 	{
 		$links = '';
 		if ($page > 1) {
@@ -147,8 +150,13 @@ class BlogView extends View
 		return '<p class="pager">' . $links . '</p>';
 	}
 
-	public function blog_entry_form($bezirke, $add = false)
+	public function blog_entry_form(array $regions, bool $add = false): string
 	{
+		if (count($regions) < 1) {
+			// TODO this is not supposed to happen, handle better
+			return '';
+		}
+
 		if ($add) {
 			$title = $this->translator->trans('blog.new');
 		} else {
@@ -163,15 +171,13 @@ class BlogView extends View
 		}
 
 		$bezirkchoose = '';
-		if (is_array($bezirke)) {
-			if (count($bezirke) > 1) {
-				$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $bezirke]);
-			} else {
-				// Automatically select this region
-				$bezirk = end($bezirke);
-				$title = $this->translator->trans('blog.newTitle', ['{region}' => $bezirk['name']]);
-				$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
-			}
+		if (count($regions) === 1) {
+			// Automatically select this region
+			$bezirk = end($regions);
+			$title = $this->translator->trans('blog.newTitle', ['{region}' => $bezirk['name']]);
+			$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
+		} else {
+			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $regions]);
 		}
 
 		return $this->v_utils->v_form('test', [
