@@ -32,7 +32,7 @@ class FoodSharePointPermissions
 
 	public function mayAdd(int $regionId): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 
@@ -69,7 +69,7 @@ class FoodSharePointPermissions
 
 	public function mayDeleteFoodSharePointWallPostOfRegion(?int $regionId)
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 

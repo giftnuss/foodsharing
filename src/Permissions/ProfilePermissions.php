@@ -47,7 +47,11 @@ class ProfilePermissions
 
 	public function maySeeEmailAddress(int $fsId): bool
 	{
-		return $this->session->id() == $fsId || $this->session->isOrgaTeam();
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return $this->session->id() == $fsId;
 	}
 
 	public function maySeePrivateEmail(int $userId): bool

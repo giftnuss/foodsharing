@@ -34,7 +34,7 @@ class ForumPermissions
 
 	public function mayPostToRegion(int $regionId, $ambassadorForum): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 		if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
@@ -58,7 +58,7 @@ class ForumPermissions
 
 	public function mayPostToThread(int $threadId): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 		$forums = $this->forumGateway->getForumsForThread($threadId);
@@ -73,7 +73,7 @@ class ForumPermissions
 
 	public function mayModerate(int $threadId): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 		$forums = $this->forumGateway->getForumsForThread($threadId);
@@ -108,7 +108,7 @@ class ForumPermissions
 
 	public function mayDeletePost(array $post): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 		if ($post['author_id'] == $this->session->id()) {

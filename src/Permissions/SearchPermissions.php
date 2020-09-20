@@ -15,7 +15,11 @@ class SearchPermissions
 
 	public function maySearchAllRegions(): bool
 	{
-		return $this->session->isAmbassador() || $this->session->isOrgaTeam();
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return $this->session->isAmbassador();
 	}
 
 	public function maySeeUserAddress(): bool

@@ -15,6 +15,10 @@ final class UserPermissions
 
 	public function maySeeUserDetails(int $userId): bool
 	{
-		return $userId === $this->session->id() || $this->session->isOrgaTeam();
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return $userId === $this->session->id();
 	}
 }

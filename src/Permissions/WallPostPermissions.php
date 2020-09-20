@@ -54,7 +54,7 @@ class WallPostPermissions
 				break;
 			case 'usernotes':
 			case 'fsreport':
-				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
+				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->may('orga'));
 				break;
 			case 'application':
 				// Uses Session::isAdminForAWorkGroup() instead of the more appropriate and specific Session::isAdminFor() since

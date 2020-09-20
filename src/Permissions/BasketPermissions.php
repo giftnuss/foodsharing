@@ -39,7 +39,7 @@ class BasketPermissions
 
 	public function mayDelete(array $basket): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 

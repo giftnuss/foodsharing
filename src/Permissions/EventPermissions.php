@@ -15,7 +15,7 @@ final class EventPermissions
 
 	public function mayEditEvent(array $event): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 		if ($this->session->isAdminFor($event['bezirk_id'])) {

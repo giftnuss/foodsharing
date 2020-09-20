@@ -14,20 +14,23 @@ class ReportPermissions
 		$this->session = $session;
 	}
 
+	/** Reports list on region level: accessible for orga and for the AMBs of that exact region
+	 * The reports team has access to the Europe-Region list.
+	 *
+	 * from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
+	 * and https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
+	 */
 	public function mayAccessReportsForRegion(int $regionId): bool
 	{
-		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
-		 * and https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
-		 * reports list on region level is accessible for orga and for the AMBs of that exact region
-		 * The reports team is having access to the Europe-Region list.
-		 *
-		 */
-		return
-			$this->session->isAdminFor($regionId) ||
-			/* ToDo: Need to check that regionId is a subgroup of europe. implied for now. */
-			$this->session->isOrgaTeam() ||
-			$this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM)
-		;
+		if ($this->session->may('orga')) {
+			return true;
+		}
+		if ($this->session->isAdminFor($regionId)) {
+			return true;
+		}
+
+		// ToDo: Need to check that regionId is a subgroup of europe. implied for now.
+		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
 	public function mayAccessReportsForSubRegions(): bool
