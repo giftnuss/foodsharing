@@ -10,36 +10,47 @@ final class ContentPermissions
 {
 	private Session $session;
 
-	private $PR_PARTNER_AND_TEAM_CONTENT_IDS = ['id' => [ContentId::PARTNER_PAGE_10,
-														 ContentId::TEAM_HEADER_PAGE_39,
-														 ContentId::TEAM_ACTIVE_PAGE_53,
-														 ContentId::TEAM_FORMER_ACTIVE_PAGE_54
-														]];
+	private array $PR_PARTNER_AND_TEAM_CONTENT_IDS = [
+		'id' => [
+			ContentId::PARTNER_PAGE_10,
+			ContentId::TEAM_HEADER_PAGE_39,
+			ContentId::TEAM_ACTIVE_PAGE_53,
+			ContentId::TEAM_FORMER_ACTIVE_PAGE_54,
+		]
+	];
 
-	private $QUIZ_CONTENT_IDS = ['id' => [ContentId::QUIZ_DESCRIPTION_PAGE_12,
-											ContentId::QUIZ_FAILED_PAGE_13,
-											ContentId::QUIZ_CONFIRM_FS_PAGE_14,
-											ContentId::QUIZ_CONFIRM_SM_PAGE_15,
-											ContentId::QUIZ_CONFIRM_AMB_PAGE_16,
-											ContentId::QUIZ_START_PAGE_17,
-											ContentId::QUIZ_POPUP_PAGE_18,
-											ContentId::QUIZ_FAILED_FS_TRY_1_PAGE_19,
-											ContentId::QUIZ_FAILED_FS_TRY_2_PAGE_20,
-											ContentId::QUIZ_FAILED_FS_TRY_3_PAGE_21,
-											ContentId::QUIZ_FAILED_SM_TRY_1_PAGE_22,
-											ContentId::QUIZ_FAILED_SM_TRY_2_PAGE_23,
-											ContentId::QUIZ_FAILED_SM_TRY_3_PAGE_24,
-											ContentId::QUIZ_FAILED_AMB_TRY_1_PAGE_25,
-											ContentId::QUIZ_FAILED_AMB_TRY_2_PAGE_26,
-											ContentId::QUIZ_FAILED_AMB_TRY_3_PAGE_27,
-											ContentId::QUIZ_REMARK_PAGE_33,
-											ContentId::QUIZ_POPUP_SM_PAGE_34,
-											ContentId::QUIZ_POPUP_AMB_PAGE_35,
-											ContentId::QUIZ_POPUP_AMB_LAST_PAGE_36]];
+	private array $QUIZ_CONTENT_IDS = [
+		'id' => [
+			ContentId::QUIZ_DESCRIPTION_PAGE_12,
+			ContentId::QUIZ_FAILED_PAGE_13,
+			ContentId::QUIZ_CONFIRM_FS_PAGE_14,
+			ContentId::QUIZ_CONFIRM_SM_PAGE_15,
+			ContentId::QUIZ_CONFIRM_AMB_PAGE_16,
+			ContentId::QUIZ_START_PAGE_17,
+			ContentId::QUIZ_POPUP_PAGE_18,
+			ContentId::QUIZ_FAILED_FS_TRY_1_PAGE_19,
+			ContentId::QUIZ_FAILED_FS_TRY_2_PAGE_20,
+			ContentId::QUIZ_FAILED_FS_TRY_3_PAGE_21,
+			ContentId::QUIZ_FAILED_SM_TRY_1_PAGE_22,
+			ContentId::QUIZ_FAILED_SM_TRY_2_PAGE_23,
+			ContentId::QUIZ_FAILED_SM_TRY_3_PAGE_24,
+			ContentId::QUIZ_FAILED_AMB_TRY_1_PAGE_25,
+			ContentId::QUIZ_FAILED_AMB_TRY_2_PAGE_26,
+			ContentId::QUIZ_FAILED_AMB_TRY_3_PAGE_27,
+			ContentId::QUIZ_REMARK_PAGE_33,
+			ContentId::QUIZ_POPUP_SM_PAGE_34,
+			ContentId::QUIZ_POPUP_AMB_PAGE_35,
+			ContentId::QUIZ_POPUP_AMB_LAST_PAGE_36,
+		]
+	];
 
-	private $START_CONTENT_IDS = ['id' => [ContentId::START_MAIN_AU_PAGE_37,
-										   ContentId::START_MAIN_DE_PAGE_38,
-										   ContentId::START_BETA_PAGE_48]];
+	private array $START_CONTENT_IDS = [
+		'id' => [
+			ContentId::START_MAIN_AU_PAGE_37,
+			ContentId::START_MAIN_DE_PAGE_38,
+			ContentId::START_BETA_PAGE_48,
+		]
+	];
 
 	public function __construct(Session $session)
 	{
@@ -54,7 +65,7 @@ final class ContentPermissions
 			|| $this->session->isAdminFor(RegionIDs::PR_START_PAGE);
 	}
 
-	public function mayEditContentListIDs()
+	public function mayEditContentListIDs(): array
 	{
 		if ($this->session->may('orga')) {
 			return [];
@@ -69,9 +80,11 @@ final class ContentPermissions
 		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)) {
 			return $this->START_CONTENT_IDS;
 		}
+
+		return ['id' => []];
 	}
 
-	public function mayEditContentId($id)
+	public function mayEditContentId(int $id): bool
 	{
 		if ($this->session->may('orga')) {
 			return true;
@@ -85,9 +98,11 @@ final class ContentPermissions
 		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)) {
 			return in_array($id, $this->START_CONTENT_IDS['id']);
 		}
+
+		return false;
 	}
 
-	public function mayCreateContent()
+	public function mayCreateContent(): bool
 	{
 		return $this->session->may('orga');
 	}
