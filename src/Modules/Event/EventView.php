@@ -210,7 +210,7 @@ class EventView extends View
 
 		$public_el = '';
 
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';

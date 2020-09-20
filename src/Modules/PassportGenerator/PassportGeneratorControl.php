@@ -45,7 +45,7 @@ final class PassportGeneratorControl extends Control
 			$this->regionId = $this->session->getCurrentRegionId();
 		}
 
-		if ($this->session->isAmbassadorForRegion([$this->regionId], false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAmbassadorForRegion([$this->regionId], false, true) || $this->session->may('orga')) {
 			$this->region = false;
 			if ($region = $this->regionGateway->getRegion($this->regionId)) {
 				$this->region = $region;

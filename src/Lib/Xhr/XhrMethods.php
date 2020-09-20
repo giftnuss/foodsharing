@@ -135,7 +135,7 @@ class XhrMethods
 	public function xhr_childBezirke($data)
 	{
 		if (isset($data['parent'])) {
-			if ($children = $this->regionGateway->getBezirkByParent((int)$data['parent'], $this->session->isOrgaTeam())) {
+			if ($children = $this->regionGateway->getBezirkByParent((int)$data['parent'], $this->session->may('orga'))) {
 				return json_encode([
 					'status' => 1,
 					'html' => $this->xhrViewUtils->childBezirke($children, $data['parent'])
@@ -888,7 +888,7 @@ class XhrMethods
 
 	public function xhr_bezirkTree($data)
 	{
-		$region = $this->regionGateway->getBezirkByParent($data['p'], $this->session->isOrgaTeam());
+		$region = $this->regionGateway->getBezirkByParent($data['p'], $this->session->may('orga'));
 		if (!$region) {
 			$out = ['status' => 0];
 		} else {

@@ -71,7 +71,7 @@ class StoreControl extends Control
 			$regionId = $this->session->getCurrentRegionId();
 		}
 
-		if (!$this->session->isOrgaTeam() && $regionId == 0) {
+		if (!$this->session->may('orga') && $regionId == 0) {
 			$regionId = $this->session->getCurrentRegionId();
 		}
 		if ($regionId > 0) {
@@ -91,7 +91,15 @@ class StoreControl extends Control
 				}
 
 				$chosenRegion = ($regionId > 0 && Type::isAccessibleRegion($this->regionGateway->getType($regionId))) ? $region : null;
-				$this->pageHelper->addContent($this->view->betrieb_form($chosenRegion, 'betrieb', $this->storeGateway->getBasics_groceries(), $this->storeGateway->getBasics_chain(), $this->storeGateway->getStoreCategories(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$this->pageHelper->addContent($this->view->betrieb_form(
+					$chosenRegion,
+					'betrieb',
+					$this->storeGateway->getBasics_groceries(),
+					$this->storeGateway->getBasics_chain(),
+					$this->storeGateway->getStoreCategories(),
+					$this->storeGateway->getStoreStateList(),
+					$this->weightHelper->getWeightListEntries()
+				));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					['name' => $this->translator->trans('bread.backToOverview'), 'href' => '/?page=fsbetrieb&bid=' . $regionId]
@@ -119,7 +127,15 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->storeGateway->getStoreManagers($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($region, '', $this->storeGateway->getBasics_groceries(), $this->storeGateway->getBasics_chain(), $this->storeGateway->getStoreCategories(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$this->pageHelper->addContent($this->view->betrieb_form(
+					$region,
+					'',
+					$this->storeGateway->getBasics_groceries(),
+					$this->storeGateway->getBasics_chain(),
+					$this->storeGateway->getStoreCategories(),
+					$this->storeGateway->getStoreStateList(),
+					$this->weightHelper->getWeightListEntries()
+				));
 			} else {
 				$this->flashMessageHelper->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}

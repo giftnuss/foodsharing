@@ -300,11 +300,6 @@ class Session
 		return false;
 	}
 
-	public function isOrgaTeam()
-	{
-		return $this->isInUserGroup('orgateam');
-	}
-
 	public function isAmbassador(): bool
 	{
 		if (isset($_SESSION['client']['botschafter'])) {
@@ -457,7 +452,7 @@ class Session
 
 	public function mayBezirk($regionId): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
+		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->may('orga');
 	}
 
 	public function isAdminForAWorkGroup()
@@ -471,7 +466,7 @@ class Session
 
 	public function isVerified()
 	{
-		if ($this->isOrgaTeam()) {
+		if ($this->may('orga')) {
 			return true;
 		}
 

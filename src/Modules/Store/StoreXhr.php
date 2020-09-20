@@ -245,7 +245,7 @@ class StoreXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($store['name']);
 		$dia->addContent($this->view->bubble($store));
-		if (($store['inTeam']) || $this->session->isOrgaTeam()) {
+		if (($store['inTeam']) || $this->session->may('orga')) {
 			$dia->addButton($this->translator->trans('store.go'), 'goTo(\'/?page=fsbetrieb&id=' . (int)$store['id'] . '\');');
 		}
 		if ($store['team_status'] != 0 && (!$store['inTeam'] && (!$store['pendingRequest']))) {

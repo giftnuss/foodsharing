@@ -121,9 +121,11 @@ final class BlogGateway extends BaseGateway
 
 	public function listArticle(): array
 	{
-		$not = '';
-		if (!$this->session->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', array_map('intval', $this->session->listRegionIDs())) . ')';
+		if ($this->session->may('orga')) {
+			$filter = '';
+		} else {
+			$ownRegionIds = implode(',', array_map('intval', $this->session->listRegionIDs()));
+			$filter = 'WHERE `bezirk_id` IN (' . $ownRegionIds . ')';
 		}
 
 		return $this->db->fetchAll('
@@ -134,7 +136,7 @@ final class BlogGateway extends BaseGateway
 						`active`,
 						`bezirk_id`
 			FROM 		`fs_blog_entry`
-			' . $not . '
+			' . $filter . '
 			ORDER BY `id` DESC');
 	}
 
@@ -167,7 +169,7 @@ final class BlogGateway extends BaseGateway
 	public function add_blog_entry(array $data): int
 	{
 		$regionId = intval($data['bezirk_id']);
-		$active = intval($this->session->isOrgaTeam() || $this->session->isAdminFor($regionId));
+		$active = intval($this->session->may('orga') || $this->session->isAdminFor($regionId));
 
 		$id = $this->db->insert(
 			'fs_blog_entry',

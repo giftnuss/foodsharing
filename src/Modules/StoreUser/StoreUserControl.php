@@ -114,7 +114,7 @@ class StoreUserControl extends Control
 						'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
 						. $this->translator->trans('storeedit.team.amb')
 					);
-				} elseif (!$store['verantwortlich'] && $this->session->isOrgaTeam()) {
+				} elseif (!$store['verantwortlich'] && $this->session->may('orga')) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info(
 						'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
@@ -245,7 +245,7 @@ class StoreUserControl extends Control
 					];
 				}
 
-				if (!$store['verantwortlich'] || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
+				if (!$store['verantwortlich'] || $this->session->isAmbassador() || $this->session->may('orga')) {
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.team.leave'),
 						'click' => 'u_betrieb_sign_out(' . $storeId . '); return false;',

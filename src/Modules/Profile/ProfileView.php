@@ -133,7 +133,7 @@ class ProfileView extends View
 	{
 		$out = '<div class="bootstrap">';
 
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			$out .= '<a class="btn btn-sm btn-danger cancel-all-button" href="#" onclick="'
 				. 'if(confirm(\''
 					. $this->translator->trans('profile.signoutAllConfirmation', ['{name}' => $this->foodsaver['name']])
@@ -166,7 +166,7 @@ class ProfileView extends View
 			</a>
 		</div>';
 
-			if ($this->session->isAdminFor($date['bezirk_id']) || $this->session->isOrgaTeam()) {
+			if ($this->session->isAdminFor($date['bezirk_id']) || $this->session->may('orga')) {
 				$out .= '
 		<div class="col flex-grow-0 flex-shrink-1">
 			<a class="btn btn-sm btn-secondary" href="#" onclick="'
@@ -709,7 +709,7 @@ class ProfileView extends View
 		if ($this->foodsaver['orga']) {
 			$ambassador = [];
 			foreach ($this->foodsaver['orga'] as $foodsaver) {
-				if ($this->session->isOrgaTeam()) {
+				if ($this->session->may('orga')) {
 					$ambassador[$foodsaver['id']] = '<a class="light" href="/?page=bezirk&bid=' . $foodsaver['id'] . '&sub=forum">' . $foodsaver['name'] . '</a>';
 				} else {
 					$ambassador[$foodsaver['id']] = $foodsaver['name'];

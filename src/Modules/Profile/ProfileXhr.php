@@ -90,7 +90,7 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteAllDatesFromFoodsaver(): array
 	{
-		if ($this->session->isOrgaTeam() && $this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
+		if ($this->session->may('orga') && $this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -113,7 +113,7 @@ class ProfileXhr extends Control
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
 		$pickupDate = Carbon::createFromTimestamp($_GET['date']);
 
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($storeRegion)) {
+		if ($this->session->may('orga') || $this->session->isAdminFor($storeRegion)) {
 			if ($this->storeGateway->removeFetcher($userId, $storeId, $pickupDate)) {
 				return [
 					'status' => 1,
