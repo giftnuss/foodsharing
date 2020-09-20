@@ -291,15 +291,6 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	private function isInUserGroup(string $group): bool
-	{
-		if (isset($_SESSION['client']['group'][$group])) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public function isAmbassador(): bool
 	{
 		if (isset($_SESSION['client']['botschafter'])) {
@@ -408,17 +399,10 @@ class Session
 			'rolle' => (int)$fs['rolle'],
 			'verified' => (int)$fs['verified']
 		];
-		if ($fs['admin'] == 1) {
-			$_SESSION['client']['group']['admin'] = true;
-		}
-		if ($fs['orgateam'] == 1) {
-			$_SESSION['client']['group']['orgateam'] = true;
-		}
 		if ((int)$fs['rolle'] > 0) {
 			if ($r = $this->regionGateway->listRegionsForBotschafter($fs['id'])
 			) {
 				$_SESSION['client']['botschafter'] = $r;
-				$_SESSION['client']['group']['botschafter'] = true;
 				$mailbox = true;
 				foreach ($r as $rr) {
 					$this->regionGateway->addOrUpdateMember($fs['id'], $rr['id']);
@@ -439,7 +423,6 @@ class Session
 
 		if ($r = $this->storeGateway->listStoreIdsForBieb($fs['id'])) {
 			$_SESSION['client']['verantwortlich'] = $r;
-			$_SESSION['client']['group']['verantwortlich'] = true;
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);
