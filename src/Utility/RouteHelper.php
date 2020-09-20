@@ -39,9 +39,9 @@ final class RouteHelper
 		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 	}
 
-	public function goPage($page = false): void
+	public function goPage(?string $page = null): void
 	{
-		if (!$page) {
+		if ($page === null) {
 			$page = $this->getPage();
 			if (isset($_GET['bid'])) {
 				$page .= '&bid=' . (int)$_GET['bid'];
@@ -55,37 +55,27 @@ final class RouteHelper
 		return $_SERVER['REQUEST_URI'];
 	}
 
-	public function getPage()
+	public function getPage(): string
 	{
-		$page = $this->getGet('page');
-		if (!$page) {
-			$page = 'index';
-		}
-
-		return $page;
+		return $this->getGet('page') ?: 'index';
 	}
 
-	public function getSubPage()
+	public function getSubPage(): string
 	{
-		$sub_page = $this->getGet('sub');
-		if (!$sub_page) {
-			$sub_page = 'index';
-		}
-
-		return $sub_page;
+		return $this->getGet('sub') ?: 'index';
 	}
 
-	private function getGet(string $name)
+	private function getGet(string $name): string
 	{
 		return $_GET[$name] ?? false;
 	}
 
-	public function pageLink(string $page, ?string $title = null)
+	public function pageLink(string $page, ?string $title = null): array
 	{
 		return ['href' => '/?page=' . $page, 'name' => $title ?? $this->translator->trans('bread.backToOverview')];
 	}
 
-	public function autolink(string $str, array $attributes = [])
+	public function autolink(string $str, array $attributes = []): string
 	{
 		$attributes['target'] = '_blank';
 		$attrs = '';
