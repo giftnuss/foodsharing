@@ -8,6 +8,7 @@ use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
@@ -23,6 +24,15 @@ class Session
 	private $regionGateway;
 	private $storeGateway;
 	private $initialized = false;
+
+	private const roles = [
+		Role::FOODSHARER => 'user',
+		Role::FOODSAVER => 'fs',
+		Role::STORE_MANAGER => 'bieb',
+		Role::AMBASSADOR => 'bot',
+		Role::ORGA => 'orga',
+		Role::SITE_ADMIN => 'admin',
+	];
 
 	public function __construct(
 		Mem $mem,
@@ -218,15 +228,6 @@ class Session
 		$this->set('useroption_' . $key, $val);
 	}
 
-	/**
-	 * static method for disable session writing
-	 * this is important if more than one ajax request is sended to the server, if session writing is enabled php is waiting for finish and the requests cant live together.
-	 */
-	public function noWrite()
-	{
-		session_write_close();
-	}
-
 	public function getRegions(): array
 	{
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
@@ -297,11 +298,6 @@ class Session
 		}
 
 		return false;
-	}
-
-	public function isSiteAdmin()
-	{
-		return $this->isInUserGroup('admin');
 	}
 
 	public function isOrgaTeam()
@@ -456,16 +452,7 @@ class Session
 
 	private function rolleWrapInt($roleInt)
 	{
-		$roles = [
-			0 => 'user',
-			1 => 'fs',
-			2 => 'bieb',
-			3 => 'bot',
-			4 => 'orga',
-			5 => 'admin'
-		];
-
-		return $roles[$roleInt];
+		return self::roles[$roleInt];
 	}
 
 	public function mayBezirk($regionId): bool

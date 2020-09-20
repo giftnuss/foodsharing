@@ -294,11 +294,6 @@ class EmailControl extends Control
 
 			return $html;
 		} catch (Exception $e) {
-			if ($this->session->isSiteAdmin()) {
-				echo $e->getMessage();
-				die();
-			}
-
 			return $body;
 		}
 	}
