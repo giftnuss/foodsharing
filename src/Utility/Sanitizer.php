@@ -3,13 +3,15 @@
 namespace Foodsharing\Utility;
 
 use Html2Text\Html2Text;
+use HTMLPurifier;
+use Parsedown;
 
 class Sanitizer
 {
-	private $parseDown;
-	private $htmlPurifier;
+	private Parsedown $parseDown;
+	private HTMLPurifier $htmlPurifier;
 
-	public function __construct(\Parsedown $parseDown, \HTMLPurifier $HTMLPurifier)
+	public function __construct(Parsedown $parseDown, HTMLPurifier $HTMLPurifier)
 	{
 		$this->parseDown = $parseDown;
 		$this->htmlPurifier = $HTMLPurifier;
@@ -65,7 +67,7 @@ class Sanitizer
 		$g_data[$identifier] = $recip;
 	}
 
-	public function jsSafe($str, string $quote = "'")
+	public function jsSafe(string $str, string $quote = "'"): string
 	{
 		return str_replace([$quote, "\n", "\r"], ['\\' . $quote . '', '\\n', ''], $str);
 	}
