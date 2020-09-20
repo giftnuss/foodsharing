@@ -51,7 +51,7 @@ final class TimeHelper
 		]);
 	}
 
-	public function niceDateShort($ts)
+	public function niceDateShort(int $ts): string
 	{
 		if (date('Y-m-d', $ts) === date('Y-m-d')) {
 			return $this->translator->trans('date.Today') . ' ' . date('H:i', $ts);
@@ -60,7 +60,7 @@ final class TimeHelper
 		return date('j.m.Y. H:i', $ts);
 	}
 
-	public function month($ts)
+	public function month(int $ts): string
 	{
 		return $this->translator->trans('month.' . intval(date('m', $ts)));
 	}
