@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Application;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Utility\IdentificationHelper;
 
 class ApplicationControl extends Control
@@ -32,12 +31,6 @@ class ApplicationControl extends Control
 
 		$this->bezirk = false;
 		if ($bezirk = $this->gateway->getRegion($this->bezirk_id)) {
-			$big = [Type::BIG_CITY => 1, Type::FEDERAL_STATE => 1, Type::COUNTRY => 1];
-			if (isset($big[$bezirk['type']])) {
-				$this->mode = 'big';
-			} elseif ($bezirk['type'] == Type::WORKING_GROUP) {
-				$this->mode = 'orgateam';
-			}
 			$this->bezirk = $bezirk;
 		}
 
