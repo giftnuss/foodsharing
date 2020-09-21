@@ -195,7 +195,7 @@ class MailboxView extends View
 
 			$out .= '
 				<tr id="message-' . $m['id'] . '" class="message ' . $status . '">
-					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
+					<td class="subject"><span id="message-' . $m['id'] . '-status" class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
 					<td class="from"><a href="#" onclick="return false;" title="' . $fromToText . '">' . $fromToText . '</a></td>
 
 					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
@@ -261,6 +261,9 @@ class MailboxView extends View
 						. '</a> '
 						. '<a href="#" onclick="mb_answer();return false;" class="button">'
 						. $this->translator->trans('mailbox.reply')
+						. '</a> '
+						. '<a href="#" onclick="trySetEmailStatus(' . $mail['id'] . ', false);return false;" class="button">'
+						. $this->translator->trans('mailbox.mark_as_unread')
 						. '</a>
 					</div>
 					<table class="header">

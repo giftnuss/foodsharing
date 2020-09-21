@@ -16,6 +16,7 @@ import {
 } from '@/script'
 import './Mailbox.css'
 import i18n from '@/i18n'
+import { setEmailStatus } from '@/api/mailbox'
 
 expose({
   mb_finishFile,
@@ -35,7 +36,8 @@ expose({
   u_handleNewEmail,
   u_addTypeHead,
   setAutocompleteAddresses,
-  mb_foldRecipients
+  mb_foldRecipients,
+  trySetEmailStatus
 })
 
 function mb_finishFile (newname) {
@@ -303,4 +305,15 @@ function mb_foldRecipients (fullString, shortString) {
   button.toggleClass('fa-sort-down')
   button.toggleClass('fa-sort-up')
   label.data('folded', !label.data('folded'))
+}
+
+function trySetEmailStatus (emailId, read) {
+  try {
+    setEmailStatus(emailId, read)
+    $('#message-body').dialog('close')
+    $('tr#message-' + emailId).removeClass('read-1').addClass('read-0')
+    $('span#message-' + emailId + '-status').removeClass('read-1').addClass('read-0')
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
 }

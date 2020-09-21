@@ -1248,6 +1248,7 @@ mailbox:
   ratelimit: 'Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...'
   filetype: Dieser Dateityp ist nicht erlaubt
   filesize: 'Sorry! Die Datei ist zu groß.'
+  mark_as_unread: Als ungelesen markieren
 
 settings:
   title: Einstellungen

@@ -1,6 +1,7 @@
 # Release "Dragonfruit", unreleased
 
 ## Features
+- Add button that marks emails as unread !1681 @alex.simm
 
 ## Changes
 
