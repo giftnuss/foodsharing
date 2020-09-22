@@ -721,8 +721,8 @@ pickup:
   really_kick_user_date_title: '{name} für {date} austragen?'
   really_leave_date_title: Für {date} austragen?
   really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
-  really_kick_user_info: '{name} wird eine automatisch generierte Nachricht bekommen. Du kannst einen Text eingeben, der zu der Nachricht hinzugefügt wird:'
-  kick_message: 'als BIEB in {storeName} habe ich dich aus der Abholung am {date} entfernt. Dies ist eine automatisch generierte Nachricht.'
+  really_kick_user_info: '{name} wird eine automatisch generierte Nachricht bekommen, dass du ihn/sie ausgetragen hast. Du kannst eine Erklärung angeben, die zu der Nachricht hinzugefügt wird:'
+  kick_message: 'als Betriebsverantwortlicher in {storeName} habe ich dich aus der Abholung am {date} entfernt. Dies ist eine automatisch generierte Nachricht.'
   kick_message_info: Bitte beachte auch meine folgende Erklärung
   really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere Dich eigenständig um Ersatz.
   leave_pickup_ok: Ich habe bereits Ersatz
