@@ -36,7 +36,7 @@
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
 - Rewrite forum thread list in Vue #86 #764 #962 !1650 !1652 @ChrisOelmueller
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
-- Move removal of store requests to new REST endpoint !1648 @alex.simm
+- Move removal of store requests to new REST endpoint !1648 !1683 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Use TranslatorInterface for many old translations !1637 !1655 !1659 !1662 !1663 !1666 @ChrisOelmueller
 - Prepare event invitations for REST !1627 !1657 @ChrisOelmueller

@@ -196,15 +196,18 @@ class StoreTransactions
 	 */
 	public function removeStoreRequest(int $storeId, int $userId): void
 	{
-		$betrieb = $this->storeGateway->getBetrieb($storeId);
+		// don't add a bell notification if the request was withdrawn by the user
+		if ($userId !== $this->session->id()) {
+			$betrieb = $this->storeGateway->getBetrieb($storeId);
 
-		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
-			'href' => '/?page=fsbetrieb&id=' . $storeId
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $betrieb['name']
-		], 'store-drequest-' . $userId);
-		$this->bellGateway->addBell($userId, $bellData);
+			$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
+				'href' => '/?page=fsbetrieb&id=' . $storeId
+			], [
+				'user' => $this->session->user('name'),
+				'name' => $betrieb['name']
+			], 'store-drequest-' . $userId);
+			$this->bellGateway->addBell($userId, $bellData);
+		}
 
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
 	}
