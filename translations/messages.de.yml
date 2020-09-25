@@ -1118,6 +1118,13 @@ pickuplist:
   error_whileSending: Fehler während dem Senden der Nachricht
   unclear: Status unklar
 
+ageBandList:
+  header_for_district: "Altersgruppen in {bezirk} "
+  district_tab: "Bezirk"
+  home_district_tab: "Stammbezirk"
+  ageBand: "Altersgruppe"
+  NumberOfAgeband: "Anzahl"
+
 foodsaver:
   bread: Alle Foodsaver
   title: Foodsaver

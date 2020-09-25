@@ -667,4 +667,61 @@ class RegionGateway extends BaseGateway
 			[':format' => $dateFormat, ':groupFormat' => $dateFormat]
 		);
 	}
+
+	public function ageBandHomeDistrict(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'SELECT
+				CASE
+				WHEN age >=18 AND age <=25 THEN \'18-25\'
+				WHEN age >=26 AND age <=33 THEN \'26-33\'
+				WHEN age >=34 AND age <=41 THEN \'34-41\'
+				WHEN age >=42 AND age <=49 THEN \'42-49\'
+				WHEN age >=50 AND age <=57 THEN \'50-57\'
+				WHEN age >=58 AND age <=65 THEN \'58-65\'
+				WHEN age >=66 AND age <=73 THEN \'66-73\'
+				WHEN age >=74 AND age < 100 THEN \'74+\'
+				WHEN age >= 100 or age < 18 THEN \'invalid\'
+				WHEN age IS NULL THEN \'unknown\'
+				END AS Altersgruppe,
+				COUNT(*) AS Anzahl
+				FROM
+				(
+				 SELECT DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(geb_datum, \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(geb_datum, \'00-%m-%d\')) AS age,
+				 id FROM fs_foodsaver WHERE rolle >= 1 AND bezirk_id = :id and deleted_at is null
+				) AS tbl
+				GROUP BY Altersgruppe',
+			[':id' => $districtId]
+		);
+	}
+
+	public function ageBandDistrict(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'SELECT
+				CASE
+				WHEN age >=18 AND age <=25 THEN \'18-25\'
+				WHEN age >=26 AND age <=33 THEN \'26-33\'
+				WHEN age >=34 AND age <=41 THEN \'34-41\'
+				WHEN age >=42 AND age <=49 THEN \'42-49\'
+				WHEN age >=50 AND age <=57 THEN \'50-57\'
+				WHEN age >=58 AND age <=65 THEN \'58-65\'
+				WHEN age >=66 AND age <=73 THEN \'66-73\'
+				WHEN age >=74 AND age < 100 THEN \'74+\'
+				WHEN age >= 100 or age < 18 THEN \'invalid\'
+				WHEN age IS NULL THEN \'unknown\'
+				END AS Altersgruppe,
+				COUNT(*) AS Anzahl
+				FROM
+				(
+				 SELECT DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(geb_datum, \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(geb_datum, \'00-%m-%d\')) AS age,
+				 		fs.id
+				 FROM fs_foodsaver_has_bezirk fb
+					 left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+					 WHERE fs.rolle >= 1 AND fb.bezirk_id = :id and fs.deleted_at is null
+				) AS tbl
+				GROUP BY Altersgruppe',
+			[':id' => $districtId]
+		);
+	}
 }

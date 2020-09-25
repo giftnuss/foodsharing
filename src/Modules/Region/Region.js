@@ -15,6 +15,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
+import AgeBandList from './components/AgeBandList'
 import ThreadList from './components/ThreadList'
 import PollList from './components/PollList'
 import { leaveRegion } from '@/api/regions'
@@ -61,9 +62,11 @@ $(document).ready(() => {
   } else if (GET('sub') == 'statistic') {
     vueRegister({
       GenderList,
-      PickupList
+      PickupList,
+      AgeBandList
     })
     vueApply('#vue-genderlist')
+    vueApply('#vue-ageBandlist')
     vueApply('#vue-pickuplist', true)
   } else if (['botforum', 'forum'].includes(GET('sub'))) {
     if (GET('tid') !== undefined) {

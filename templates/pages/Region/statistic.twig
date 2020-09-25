@@ -11,6 +11,15 @@
         }
     } %}
     {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-ageBandlist',
+        component: 'ageBand-list',
+        props: {
+            regionName: region.name,
+            ageBandDataTab: ageBand.district,
+            ageBandDataHomeDistrictTab: ageBand.homeDistrict,
+        }
+    } %}
+    {% include 'partials/vue-wrapper.twig' with {
         id: 'vue-pickuplist',
         component: 'pickup-list',
         props: {
