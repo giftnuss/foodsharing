@@ -8,6 +8,7 @@
 - Add FairSharePoint Function Workgroup #974 !1667 @fs_k
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 - Add agepand to statistic page !1685 @fs_k
+- Add ageband to statistic page !1685 @fs_k
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
