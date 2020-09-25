@@ -30,6 +30,7 @@
 - Allow adding workgroup admins or members if none exist currently #896 !1637 @ChrisOelmueller
 - Fix server error when activating new email address that has already been activated #966 !1664 @alex.simm
 - Fix disappearing store traffic light when store name is long !1682 #984 @ChrisOelmueller
+- Fix last creation date in pass generation table when creating multiple passes !1684 #686 @alex.simm 
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
