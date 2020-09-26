@@ -83,7 +83,7 @@ final class VotingPermissions
 		} else {
 			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
 
-			return $this->session->isAdminFor($votingGroup);
+			return !empty($votingGroup) && $this->session->isAdminFor($votingGroup);
 		}
 	}
 
