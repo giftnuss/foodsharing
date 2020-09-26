@@ -596,7 +596,7 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function addForumTheme($region_id, $fs_id, $bot_theme = false, $extra_params = [])
+	public function addForumTheme($region_id, $fs_id, $isAmbassadorThread = false, $extra_params = [])
 	{
 		$params = array_merge([
 			'foodsaver_id' => $fs_id,
@@ -606,28 +606,28 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params['time'] = $this->toDateTime($params['time']);
 
-		$theme_id = $this->haveInDatabase('fs_theme', $params);
+		$threadId = $this->haveInDatabase('fs_theme', $params);
 
 		$this->haveInDatabase('fs_bezirk_has_theme', [
-			'theme_id' => $theme_id,
+			'theme_id' => $threadId,
 			'bezirk_id' => $region_id,
-			'bot_theme' => ($bot_theme ? 1 : 0),
+			'bot_theme' => ($isAmbassadorThread ? 1 : 0),
 		]);
 
 		$post_params = [
 			'body' => $this->faker->realText(500),
 			'time' => $params['time'],
 		];
-		$params['post'] = $this->addForumThemePost($theme_id, $fs_id, $post_params);
-		$params['id'] = $theme_id;
+		$params['post'] = $this->addForumThemePost($threadId, $fs_id, $post_params);
+		$params['id'] = $threadId;
 
 		return $params;
 	}
 
-	public function addForumThemePost($theme_id, $fs_id, $extra_params = [])
+	public function addForumThemePost($threadId, $fs_id, $extra_params = [])
 	{
 		$params = array_merge([
-			'theme_id' => $theme_id,
+			'theme_id' => $threadId,
 			'foodsaver_id' => $fs_id,
 			'body' => $this->faker->realText(200),
 			'time' => $this->faker->dateTime(),
@@ -636,7 +636,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$params['id'] = $this->haveInDatabase('fs_theme_post', $params);
 
-		$this->updateForumThemeWithPost($theme_id, $params);
+		$this->updateForumThemeWithPost($threadId, $params);
 
 		return $params;
 	}
@@ -950,13 +950,13 @@ class Foodsharing extends \Codeception\Module\Db
 	// private methods
 	// =================================================================================================================
 
-	private function updateForumThemeWithPost($theme_id, $post)
+	private function updateForumThemeWithPost($threadId, $post)
 	{
-		$last_post_id = $this->grabFromDatabase('fs_theme', 'last_post_id', ['id' => $theme_id]);
+		$last_post_id = $this->grabFromDatabase('fs_theme', 'last_post_id', ['id' => $threadId]);
 		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));
 		$this_post_date = new DateTime($post['time']);
 		if ($last_post_date >= $this_post_date) {
-			$this->_getDriver()->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
+			$this->_getDriver()->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $threadId]);
 		}
 	}
 
