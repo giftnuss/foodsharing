@@ -5,9 +5,7 @@
 - New store status "permanently closed" #786 !1655 @ChrisOelmueller
 - Add voting tool #309 #975 !1633 !1668 !1687 @alex.simm
 - Add FairSharePoint Function Workgroup #974 !1667 !1679 @fs_k
-- Add FairSharePoint Function Workgroup #974 !1667 @fs_k
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
-- Add agepand to statistic page !1685 @fs_k
 - Add ageband to statistic page !1685 @fs_k
 
 ## Changes
@@ -33,6 +31,7 @@
 - Fix server error when activating new email address that has already been activated #966 !1664 @alex.simm
 - Fix disappearing store traffic light when store name is long !1682 #984 @ChrisOelmueller
 - Fix last creation date in pass generation table when creating multiple passes !1684 #686 @alex.simm 
+- Fix a page crash with unexpected URL parameters !1686 @ChrisOelmueller
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
@@ -51,6 +50,7 @@
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 - Move bell XHR requests to REST !1659 @alex.simm
 - Increase phpstan analysis level to 4 and fix all issues !1672 @ChrisOelmueller
+- Introduce some more specific store gateway functionality !1686 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

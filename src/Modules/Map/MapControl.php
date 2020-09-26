@@ -38,8 +38,9 @@ class MapControl extends Control
 		);
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
-			$center = $this->mapGateway->getStoreLocation($_GET['bid']);
-			$this->pageHelper->addJs('ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' });');
+			$storeId = intval($_GET['bid']);
+			$center = $this->mapGateway->getStoreLocation($storeId);
+			$this->pageHelper->addJs('ajreq(\'bubble\', { app: \'store\', id: ' . $storeId . ' });');
 		}
 
 		$this->pageHelper->addJs('u_init_map();');
