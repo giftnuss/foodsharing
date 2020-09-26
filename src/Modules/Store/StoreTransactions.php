@@ -196,20 +196,26 @@ class StoreTransactions
 	 */
 	public function removeStoreRequest(int $storeId, int $userId): void
 	{
-		// don't add a bell notification if the request was withdrawn by the user
+		// userId = affected user, sessionId = active user
+		// => don't add a bell notification if the request was withdrawn by the user
 		if ($userId !== $this->session->id()) {
-			$betrieb = $this->storeGateway->getBetrieb($storeId);
-
-			$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
-				'href' => '/?page=fsbetrieb&id=' . $storeId
-			], [
-				'user' => $this->session->user('name'),
-				'name' => $betrieb['name']
-			], 'store-drequest-' . $userId);
-			$this->bellGateway->addBell($userId, $bellData);
+			$this->createBellNotificationForRejectedApplication($storeId, $userId);
 		}
 
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
+	}
+
+	private function createBellNotificationForRejectedApplication(int $storeId, int $userId): void
+	{
+		$storeName = $this->storeGateway->getStoreName($storeId);
+
+		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
+			'href' => '/?page=fsbetrieb&id=' . $storeId
+		], [
+			'name' => $storeName,
+		], 'store-drequest-' . $userId);
+
+		$this->bellGateway->addBell($userId, $bellData);
 	}
 
 	public function createKickMessage(int $foodsaverId, int $storeId, DateTime $pickupDate, ?string $message = null): string
