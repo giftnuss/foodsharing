@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
@@ -688,10 +689,10 @@ class RegionGateway extends BaseGateway
 				FROM
 				(
 				 SELECT DATE_FORMAT(NOW(), \'%Y\') - DATE_FORMAT(geb_datum, \'%Y\') - (DATE_FORMAT(NOW(), \'00-%m-%d\') < DATE_FORMAT(geb_datum, \'00-%m-%d\')) AS age,
-				 id FROM fs_foodsaver WHERE rolle >= 1 AND bezirk_id = :id and deleted_at is null
+				 id FROM fs_foodsaver WHERE rolle >= :rolle AND bezirk_id = :id and deleted_at is null
 				) AS tbl
 				GROUP BY Altersgruppe',
-			[':id' => $districtId]
+			['rolle' => Role::FOODSAVER, ':id' => $districtId]
 		);
 	}
 
@@ -718,10 +719,10 @@ class RegionGateway extends BaseGateway
 				 		fs.id
 				 FROM fs_foodsaver_has_bezirk fb
 					 left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
-					 WHERE fs.rolle >= 1 AND fb.bezirk_id = :id and fs.deleted_at is null
+					 WHERE fs.rolle >= :rolle AND fb.bezirk_id = :id and fs.deleted_at is null
 				) AS tbl
 				GROUP BY Altersgruppe',
-			[':id' => $districtId]
+			['rolle' => Role::FOODSAVER, ':id' => $districtId]
 		);
 	}
 }
