@@ -62,41 +62,42 @@ class StoreUserControl extends Control
 	public function index()
 	{
 		if (isset($_GET['id'])) {
+			$storeId = intval($_GET['id']);
 			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
 			$this->pageHelper->addTitle($this->translator->trans('store.bread'));
 			$this->pageHelper->addStyle('.button{margin-right: 8px;} #right .tagedit-list{width: 256px;} #foodsaver-wrapper{padding-top: 0px;}');
 			global $g_data;
 
-			$store = $this->storeGateway->getMyStore($this->session->id(), $_GET['id']);
+			$store = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 
 			if (!$store) {
 				$this->routeHelper->goPage();
 			}
 
 			$this->pageHelper->jsData['store'] = [
-				'id' => (int)$store['id'],
+				'id' => $storeId,
 				'name' => $store['name'],
 				'bezirk_id' => (int)$store['bezirk_id'],
 				'verantwortlich' => $store['verantwortlich'],
 				'prefetchtime' => $store['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($store['id'])) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($storeId)) {
 				$this->sanitizerService->handleTagSelect('storemanagers');
 				if (!empty($g_data['storemanagers'])) {
 					if (count($g_data['storemanagers']) > 3) {
 						$this->flashMessageHelper->error($this->translator->trans('storeedit.team.max-sm'));
 					} else {
 						foreach ($g_data['storemanagers'] as $fsId) {
-							$addedStoremanager = $this->storeGateway->addStoreManager($store['id'], $fsId);
-							$this->storeGateway->addStoreLog($store['id'], $this->session->id(), $fsId, null, StoreLogAction::APPOINT_STORE_MANAGER);
+							$addedStoremanager = $this->storeGateway->addStoreManager($storeId, $fsId);
+							$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsId, null, StoreLogAction::APPOINT_STORE_MANAGER);
 						}
 					}
 				}
 
 				$this->sanitizerService->handleTagSelect('foodsaver');
 				if (!empty($g_data['foodsaver'])) {
-					$addedTeam = $this->storeModel->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
+					$addedTeam = $this->storeModel->addBetriebTeam($storeId, $g_data['foodsaver'], $g_data['verantwortlicher']);
 				} elseif (empty($g_data['storemanagers'])) {
 					$this->flashMessageHelper->info($this->translator->trans('storeedit.team.empty'));
 				}
@@ -108,7 +109,7 @@ class StoreUserControl extends Control
 
 			$this->pageHelper->addTitle($store['name']);
 
-			if ($this->storePermissions->mayAccessStore($store['id'])) {
+			if ($this->storePermissions->mayAccessStore($storeId)) {
 				if ((!$store['verantwortlich'] && $this->session->isAdminFor($store['bezirk_id']))) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info(
@@ -217,18 +218,18 @@ class StoreUserControl extends Control
 					];
 				}
 
-				if ($this->storePermissions->maySeePickupHistory($store['id'])) {
+				if ($this->storePermissions->maySeePickupHistory($storeId)) {
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-pickup-history', 'PickupHistory', [
-							'storeId' => $store['id'],
+							'storeId' => $storeId,
 							'coopStart' => $store['begin'],
 						])
 					);
 				}
-				if ($this->storePermissions->mayEditStore($store['id'])) {
+				if ($this->storePermissions->mayEditStore($storeId)) {
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.bread'),
-						'href' => '/?page=betrieb&a=edit&id=' . $store['id'],
+						'href' => '/?page=betrieb&a=edit&id=' . $storeId,
 					];
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.team.bread'),
@@ -240,7 +241,7 @@ class StoreUserControl extends Control
 					];
 					$menu[] = [
 						'name' => $this->translator->trans('pickup.edit.bread'),
-						'click' => '$(\'#bid\').val(' . (int)$store['id'] . ');'
+						'click' => '$(\'#bid\').val(' . $storeId . ');'
 							. '$(\'#dialog_abholen\').dialog(\'open\');'
 							. 'return false;',
 					];
@@ -249,7 +250,7 @@ class StoreUserControl extends Control
 				if (!$store['verantwortlich'] || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.team.leave'),
-						'click' => 'u_betrieb_sign_out(' . (int)$store['id'] . '); return false;',
+						'click' => 'u_betrieb_sign_out(' . $storeId . '); return false;',
 					];
 				}
 
@@ -266,14 +267,14 @@ class StoreUserControl extends Control
 					// team-related info
 					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
 				];
-				if ($this->storePermissions->maySeePhoneNumbers($store['id'])) {
+				if ($this->storePermissions->maySeePhoneNumbers($storeId)) {
 					array_push($allowedFields, 'handy', 'telefon', 'last_fetch');
 				}
 
 				$this->pageHelper->addContent(
 					$this->view->vueComponent('vue-storeteam', 'store-team', [
 						'fsId' => $this->session->id(),
-						'mayEditStore' => $this->storePermissions->mayEditStore($store['id']),
+						'mayEditStore' => $this->storePermissions->mayEditStore($storeId),
 						'team' => array_map(
 							function ($a) use ($allowedFields) {
 								return array_filter($a, function ($key) use ($allowedFields) {
@@ -282,14 +283,14 @@ class StoreUserControl extends Control
 							},
 							array_merge($store['foodsaver'], $store['springer']),
 						),
-						'storeId' => $store['id'],
+						'storeId' => $storeId,
 						'storeTitle' => $store['name'],
 					]),
 					CNT_LEFT
 				);
 
 				/* team status */
-				if ($this->storePermissions->mayEditStore($store['id'])) {
+				if ($this->storePermissions->mayEditStore($storeId)) {
 					$this->pageHelper->addContent(
 						$this->v_utils->v_field(
 							$this->view->u_legacyStoreTeamStatus($store),
@@ -300,7 +301,7 @@ class StoreUserControl extends Control
 					);
 				}
 
-				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
+				if ($this->storePermissions->mayReadStoreWall($storeId)) {
 					$this->pageHelper->addJs('u_updatePosts();');
 					$this->pageHelper->addContent($this->v_utils->v_field('
 						<div id="pinnwand">
@@ -337,10 +338,10 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
+				if ($this->storePermissions->maySeePickups($storeId) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-pickuplist', 'pickup-list', [
-							'storeId' => $store['id'],
+							'storeId' => $storeId,
 							'isCoordinator' => $store['verantwortlich'],
 							'teamConversationId' => $store['team_conversation_id'],
 						]),
@@ -348,9 +349,9 @@ class StoreUserControl extends Control
 				}
 
 				/* change regular fetchdates */
-				if ($this->storePermissions->mayEditPickups($store['id'])) {
+				if ($this->storePermissions->mayEditPickups($storeId)) {
 					$width = $this->session->isMob() ? '$(window).width() * 0.96' : '$(window).width() / 2';
-					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
+					$pickup_dates = $this->storeGateway->getAbholzeiten($storeId);
 
 					$this->pageHelper->hiddenDialog('abholen',
 						[$this->view->u_form_abhol_table($pickup_dates),
@@ -373,16 +374,16 @@ class StoreUserControl extends Control
 					}
 				}
 			} else {
-				if ($store = $this->storeGateway->getBetrieb($_GET['id'])) {
+				if ($store = $this->storeGateway->getBetrieb($storeId)) {
 					$this->pageHelper->addBread($store['name']);
 					$this->flashMessageHelper->info($this->translator->trans('store.not-in-team'));
-					$this->routeHelper->go('/?page=map&bid=' . $_GET['id']);
+					$this->routeHelper->go('/?page=map&bid=' . $storeId);
 				} else {
 					$this->routeHelper->go('/karte');
 				}
 			}
 		} else {
-			$this->pageHelper->addBread('Deine Betriebe');
+			$this->pageHelper->addBread($this->translator->trans('menu.entry.your_stores'));
 
 			if ($this->storePermissions->mayCreateStore()) {
 				$this->pageHelper->addContent($this->v_utils->v_menu(
@@ -394,12 +395,21 @@ class StoreUserControl extends Control
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
 			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
-			$this->pageHelper->addContent($this->view->u_storeList($stores['verantwortlich'], $this->translator->trans('storelist.managing')));
-			$this->pageHelper->addContent($this->view->u_storeList($stores['team'], $this->translator->trans('storelist.fetching')));
+			$this->pageHelper->addContent($this->view->u_storeList(
+				$stores['verantwortlich'],
+				$this->translator->trans('storelist.managing')
+			));
+			$this->pageHelper->addContent($this->view->u_storeList(
+				$stores['team'],
+				$this->translator->trans('storelist.fetching')
+			));
+
 			if (!is_null($region)) {
-				$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translator->trans('storelist.others', [
-					'{region}' => $region['name'],
-				])));
+				$regionName = $region['name'];
+				$this->pageHelper->addContent($this->view->u_storeList(
+					$stores['sonstige'],
+					$this->translator->trans('storelist.others', ['{region}' => $regionName])
+				));
 			}
 		}
 	}
