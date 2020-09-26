@@ -8,7 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
 {
-	public function getThreadEmailFollower($fs_id, $thread_id)
+	public function getThreadEmailFollower(int $fsId, int $threadId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.name,
@@ -18,11 +18,15 @@ class ForumFollowerGateway extends BaseGateway
 			FROM 	fs_foodsaver fs,
 					fs_theme_follower tf
 			WHERE 	tf.foodsaver_id = fs.id
-			AND 	tf.theme_id = :theme_id
-			AND 	tf.foodsaver_id != :fs_id
+			AND 	tf.theme_id = :threadId
+			AND 	tf.foodsaver_id != :fsId
 			AND		fs.deleted_at IS NULL
 			AND		tf.infotype = :infotype_email
-		', [':theme_id' => $thread_id, ':fs_id' => $fs_id, ':infotype_email' => InfoType::EMAIL]);
+		', [
+			':threadId' => $threadId,
+			':fsId' => $fsId,
+			':infotype_email' => InfoType::EMAIL,
+		]);
 	}
 
 	public function getEmailSubscribedThreadsForUser(int $fsId): array
@@ -45,7 +49,7 @@ class ForumFollowerGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function getThreadBellFollower($thread_id, $fs_id)
+	public function getThreadBellFollower(int $threadId, int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	DISTINCT fs.id AS id
@@ -53,12 +57,16 @@ class ForumFollowerGateway extends BaseGateway
 			FROM 	fs_foodsaver fs,
 					fs_theme_follower tf
 			WHERE 	tf.foodsaver_id = fs.id
-			AND 	tf.theme_id = :theme_id
+			AND 	tf.theme_id = :threadId
 			AND		fs.deleted_at IS NULL
 			AND		tf.bell_notification = :followstatus_enabled
 			AND		fs.deleted_at IS NULL
 			AND		fs.id != :fsId
-		', [':theme_id' => $thread_id, ':fsId' => $fs_id, ':followstatus_enabled' => FollowStatus::ENABLED]);
+		', [
+			':threadId' => $threadId,
+			':fsId' => $fsId,
+			':followstatus_enabled' => FollowStatus::ENABLED,
+		]);
 	}
 
 	public function isFollowingEmail($fsId, $threadId)
@@ -85,14 +93,14 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function updateInfoType(int $fsId, int $themeId, int $infoType): int
+	public function updateInfoType(int $fsId, int $threadId, int $infoType): int
 	{
 		return $this->db->update(
 			'fs_theme_follower',
 			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
-				'theme_id' => $themeId
+				'theme_id' => $threadId,
 			]
 		);
 	}
@@ -145,9 +153,9 @@ class ForumFollowerGateway extends BaseGateway
 	public function deleteForumSubscriptions(int $regionId, array $remainingMemberIds, bool $useAmbassadors): void
 	{
 		$foodsaverTableName = $useAmbassadors ? 'fs_botschafter' : 'fs_foodsaver_has_bezirk';
-		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $regionId]);
+		$threadIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $regionId]);
 
-		if ($themeIds && !empty($themeIds)) {
+		if ($threadIds && !empty($threadIds)) {
 			$query = '
 				DELETE	tf.*
 				FROM		`fs_theme_follower` tf
@@ -156,7 +164,7 @@ class ForumFollowerGateway extends BaseGateway
 				LEFT JOIN	`' . $foodsaverTableName . '` b
 				ON			b.`bezirk_id` = ht.`bezirk_id`
 				AND			b.`foodsaver_id` = tf.`foodsaver_id`
-				WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')
+				WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $threadIds)) . ')
 			';
 			if ($remainingMemberIds && !empty($remainingMemberIds)) {
 				$query .= 'AND	tf.`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $remainingMemberIds)) . ')';
