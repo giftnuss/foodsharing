@@ -17,7 +17,7 @@
       </div>
 
       <h3 class="dropdown-header">
-        <i class="fas fa-comment" /> {{ $i18n('terminology.themes') }}
+        <i class="fas fa-comment" /> {{ $i18n('terminology.threads') }}
       </h3>
 
       <search-result-entry
