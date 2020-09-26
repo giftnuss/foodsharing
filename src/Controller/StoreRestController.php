@@ -104,7 +104,7 @@ class StoreRestController extends AbstractFOSRestController
 			'last' => 1
 		]);
 
-		$storeName = $this->storeGateway->getBetrieb($storeId)['name'];
+		$storeName = $this->storeGateway->getStoreName($storeId);
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
 		$bellData = Bell::create(

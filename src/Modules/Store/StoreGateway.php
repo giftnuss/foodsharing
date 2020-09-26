@@ -361,6 +361,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
+	public function getStoreName(int $storeId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+	}
+
 	public function getStoreRegionId(int $storeId): array
 	{
 		return $this->db->fetchByCriteria(
@@ -628,7 +633,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 */
 	public function updateBellNotificationForStoreManagers(int $storeId, bool $markNotificationAsUnread = false): void
 	{
-		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
+		$storeName = $this->getStoreName($storeId);
 		$messageIdentifier = 'store-fetch-unconfirmed-' . $storeId;
 		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
 		$messageVars = ['betrieb' => $storeName, 'count' => $messageCount];
