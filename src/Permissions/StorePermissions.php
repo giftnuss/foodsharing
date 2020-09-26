@@ -55,8 +55,8 @@ class StorePermissions
 			return true;
 		}
 
-		$store = $this->storeGateway->getBetrieb($storeId);
-		if ($this->session->isAdminFor($store['bezirk_id'])) {
+		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+		if ($this->session->isAdminFor($storeRegion)) {
 			return true;
 		}
 
@@ -77,8 +77,8 @@ class StorePermissions
 			return true;
 		}
 
-		$store = $this->storeGateway->getBetrieb($storeId);
-		if ($this->session->isAdminFor($store['bezirk_id'])) {
+		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+		if ($this->session->isAdminFor($storeRegion)) {
 			return true;
 		}
 
@@ -118,8 +118,8 @@ class StorePermissions
 		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) === \Foodsharing\Modules\Store\TeamStatus::Coordinator) {
 			return true;
 		}
-		$store = $this->storeGateway->getBetrieb($storeId);
-		if ($this->session->isAdminFor($store['bezirk_id'])) {
+		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+		if ($this->session->isAdminFor($storeRegion)) {
 			return true;
 		}
 

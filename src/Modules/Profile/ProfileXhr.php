@@ -108,14 +108,13 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
-		$store = $this->storeGateway->getStoreRegionId($_GET['storeId']);
+		$userId = $_GET['fsid'];
+		$storeId = $_GET['storeId'];
+		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+		$pickupDate = Carbon::createFromTimestamp($_GET['date']);
 
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
-			if ($this->storeGateway->removeFetcher(
-				$_GET['fsid'],
-				$_GET['storeId'],
-				Carbon::createFromTimestamp($_GET['date'])
-			)) {
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($storeRegion)) {
+			if ($this->storeGateway->removeFetcher($userId, $storeId, $pickupDate)) {
 				return [
 					'status' => 1,
 					'script' => '
