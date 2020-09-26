@@ -543,6 +543,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->count('fs_betrieb_team', ['foodsaver_id' => $fs_id, 'verantwortlich' => 1]);
 	}
 
+	public function getStoreTeamStatus(int $storeId): int
+	{
+		return $this->db->fetchValueByCriteria('fs_betrieb', 'team_status', ['id' => $storeId]);
+	}
+
 	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
 		$result = $this->db->fetchByCriteria('fs_betrieb_team', [

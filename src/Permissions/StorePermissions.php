@@ -26,10 +26,10 @@ class StorePermissions
 			return false;
 		}
 
-		$store = $this->storeGateway->getBetrieb($storeId);
+		$storeTeamStatus = $this->storeGateway->getStoreTeamStatus($storeId);
 
 		// store open?
-		if (!in_array($store['team_status'], [TeamStatus::OPEN, TeamStatus::OPEN_SEARCHING])) {
+		if (!in_array($storeTeamStatus, [TeamStatus::OPEN, TeamStatus::OPEN_SEARCHING])) {
 			return false;
 		}
 
