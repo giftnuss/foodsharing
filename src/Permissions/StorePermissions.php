@@ -3,8 +3,9 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
+use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus as StoreTeamStatus;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Store\TeamStatus as UserTeamStatus;
 
 class StorePermissions
 {
@@ -29,12 +30,12 @@ class StorePermissions
 		$storeTeamStatus = $this->storeGateway->getStoreTeamStatus($storeId);
 
 		// store open?
-		if (!in_array($storeTeamStatus, [TeamStatus::OPEN, TeamStatus::OPEN_SEARCHING])) {
+		if (!in_array($storeTeamStatus, [StoreTeamStatus::OPEN, StoreTeamStatus::OPEN_SEARCHING])) {
 			return false;
 		}
 
 		// already in team?
-		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) !== \Foodsharing\Modules\Store\TeamStatus::NoMember) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) !== UserTeamStatus::NoMember) {
 			return false;
 		}
 
@@ -51,7 +52,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::WaitingList) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= UserTeamStatus::WaitingList) {
 			return true;
 		}
 
@@ -73,7 +74,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::Member) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= UserTeamStatus::Member) {
 			return true;
 		}
 
@@ -115,7 +116,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) === \Foodsharing\Modules\Store\TeamStatus::Coordinator) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) === UserTeamStatus::Coordinator) {
 			return true;
 		}
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
