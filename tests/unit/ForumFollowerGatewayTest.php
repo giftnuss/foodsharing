@@ -20,9 +20,9 @@ class ForumFollowerGatewayTest extends \Codeception\Test\Unit
 		$region = $this->tester->createRegion();
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
-		$thread1 = $this->tester->addForumTheme($region['id'], $user1['id']);
-		$thread2 = $this->tester->addForumTheme($region['id'], $user1['id']);
-		$post1 = $this->tester->addForumThemePost($thread1['id'], $user2['id']);
+		$thread1 = $this->tester->addForumThread($region['id'], $user1['id']);
+		$thread2 = $this->tester->addForumThread($region['id'], $user1['id']);
+		$post1 = $this->tester->addForumThreadPost($thread1['id'], $user2['id']);
 		/* Initially, both users have no notifications (as our test helper only creaetes the actual thread; if that changes, this test needs to be changed */
 		$this->tester->dontSeeInDatabase('fs_theme_follower', ['foodsaver_id' => $user1['id']]);
 		$this->tester->dontSeeInDatabase('fs_theme_follower', ['foodsaver_id' => $user2['id']]);

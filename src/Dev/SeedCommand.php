@@ -261,12 +261,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		// Forum theads and posts
 		$this->output->writeln('- create forum threads and posts');
-		$thread = $I->addForumTheme($region1, $userbot['id']);
-		$I->addForumThemePost($thread['id'], $user2['id']);
-		$thread = $I->addForumTheme($region1, $user2['id']);
-		$I->addForumThemePost($thread['id'], $user1['id']);
-		$thread = $I->addForumTheme($region1, $user1['id']);
-		$I->addForumThemePost($thread['id'], $userorga['id']);
+		$thread = $I->addForumThread($region1, $userbot['id']);
+		$I->addForumThreadPost($thread['id'], $user2['id']);
+		$thread = $I->addForumThread($region1, $user2['id']);
+		$I->addForumThreadPost($thread['id'], $user1['id']);
+		$thread = $I->addForumThread($region1, $user1['id']);
+		$I->addForumThreadPost($thread['id'], $userorga['id']);
 
 		$this->output->writeln('- follow a food share point');
 		$foodSharePoint = $I->createFoodSharePoint($userbot['id'], $region1);
@@ -283,7 +283,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addStoreTeam($store['id'], $user['id']);
 			$I->addCollector($user['id'], $store['id']);
 			$I->addStoreNotiz($user['id'], $store['id']);
-			$I->addForumThemePost($thread['id'], $user['id']);
+			$I->addForumThreadPost($thread['id'], $user['id']);
 			$this->output->write('.');
 		}
 		$this->output->writeln(' done');
@@ -307,7 +307,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
 		foreach ($this->getRandomIDOfArray($randomFsList, 30) as $random_user) {
 			foreach (range(0, 5) as $_) {
-				$I->addForumTheme($region1, $random_user);
+				$I->addForumThread($region1, $random_user);
 			}
 			$this->output->write('.');
 		}

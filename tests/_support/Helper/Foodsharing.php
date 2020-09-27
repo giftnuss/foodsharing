@@ -596,7 +596,7 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function addForumTheme($region_id, $fs_id, $isAmbassadorThread = false, $extra_params = [])
+	public function addForumThread($region_id, $fs_id, $isAmbassadorThread = false, $extra_params = [])
 	{
 		$params = array_merge([
 			'foodsaver_id' => $fs_id,
@@ -618,13 +618,13 @@ class Foodsharing extends \Codeception\Module\Db
 			'body' => $this->faker->realText(500),
 			'time' => $params['time'],
 		];
-		$params['post'] = $this->addForumThemePost($threadId, $fs_id, $post_params);
+		$params['post'] = $this->addForumThreadPost($threadId, $fs_id, $post_params);
 		$params['id'] = $threadId;
 
 		return $params;
 	}
 
-	public function addForumThemePost($threadId, $fs_id, $extra_params = [])
+	public function addForumThreadPost($threadId, $fs_id, $extra_params = [])
 	{
 		$params = array_merge([
 			'theme_id' => $threadId,
@@ -636,7 +636,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$params['id'] = $this->haveInDatabase('fs_theme_post', $params);
 
-		$this->updateForumThemeWithPost($threadId, $params);
+		$this->updateForumThreadWithPost($threadId, $params);
 
 		return $params;
 	}
@@ -950,7 +950,7 @@ class Foodsharing extends \Codeception\Module\Db
 	// private methods
 	// =================================================================================================================
 
-	private function updateForumThemeWithPost($threadId, $post)
+	private function updateForumThreadWithPost($threadId, $post)
 	{
 		$last_post_id = $this->grabFromDatabase('fs_theme', 'last_post_id', ['id' => $threadId]);
 		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));

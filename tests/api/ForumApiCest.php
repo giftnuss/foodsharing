@@ -21,12 +21,12 @@ class ForumApiCest
 
 		$this->region = $I->createRegion();
 		$I->addRegionMember($this->region['id'], $this->user['id']);
-		$this->thread = $I->addForumTheme($this->region['id'], $this->user['id']);
+		$this->thread = $I->addForumThread($this->region['id'], $this->user['id']);
 
 		$this->moderatedRegion = $I->createRegion(null, ['type' => Type::CITY, 'moderated' => true]);
 		$I->addRegionMember($this->moderatedRegion['id'], $this->user['id']);
 		$I->addRegionAdmin($this->moderatedRegion['id'], $this->ambassador['id']);
-		$this->inactiveThread = $I->addForumTheme($this->moderatedRegion['id'], $this->user['id'], null, ['active' => false]);
+		$this->inactiveThread = $I->addForumThread($this->moderatedRegion['id'], $this->user['id'], null, ['active' => false]);
 
 		$this->faker = Faker\Factory::create('de_DE');
 	}

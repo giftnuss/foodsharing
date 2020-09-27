@@ -38,10 +38,10 @@ class ForumPostCest
 
 	private function createPosts(AcceptanceTester $I)
 	{
-		$this->thread_user_ambassador = $I->addForumTheme($this->testBezirk['id'], $this->foodsaver['id'], false, ['time' => '2 hours ago']);
-		$I->addForumThemePost($this->thread_user_ambassador['id'], $this->ambassador['id'], ['time' => '1 hour 45 minutes ago']);
-		$this->thread_ambassador_user = $I->addForumTheme($this->testBezirk['id'], $this->ambassador['id'], false, ['time' => '1 hour ago']);
-		$I->addForumThemePost($this->thread_ambassador_user['id'], $this->foodsaver['id'], ['time' => '45 minutes ago']);
+		$this->thread_user_ambassador = $I->addForumThread($this->testBezirk['id'], $this->foodsaver['id'], false, ['time' => '2 hours ago']);
+		$I->addForumThreadPost($this->thread_user_ambassador['id'], $this->ambassador['id'], ['time' => '1 hour 45 minutes ago']);
+		$this->thread_ambassador_user = $I->addForumThread($this->testBezirk['id'], $this->ambassador['id'], false, ['time' => '1 hour ago']);
+		$I->addForumThreadPost($this->thread_ambassador_user['id'], $this->foodsaver['id'], ['time' => '45 minutes ago']);
 	}
 
 	// tests
@@ -60,7 +60,7 @@ class ForumPostCest
 		$I->login($this->{$example[0]}['email']);
 
 		// FOLLOW FORUM THREAD BY MAIL
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->amOnPage($I->forumThreadUrl($this->{$example[1]}['id'], null));
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
 		$I->waitForElement($followMailSwitch);
@@ -73,7 +73,7 @@ class ForumPostCest
 
 		// Simulate page reload
 		$I->waitForActiveAPICalls();
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->amOnPage($I->forumThreadUrl($this->{$example[1]}['id'], null));
 		$this->waitForPostButtons($I, true, true, $example[2]);
 
 		$I->waitForElement($followMailSwitch);
@@ -86,7 +86,7 @@ class ForumPostCest
 
 		// Simulate page reload
 		$I->waitForActiveAPICalls();
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->amOnPage($I->forumThreadUrl($this->{$example[1]}['id'], null));
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
 		$I->waitForElement($followBellSwitch);
@@ -95,7 +95,7 @@ class ForumPostCest
 
 		// Simulate page reload
 		$I->waitForActiveAPICalls();
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->amOnPage($I->forumThreadUrl($this->{$example[1]}['id'], null));
 		$this->waitForPostButtons($I, false, true, $example[2]);
 	}
 
@@ -142,7 +142,7 @@ class ForumPostCest
 		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
 
 		$I->login($this->ambassador['email']);
-		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador['id'], null));
+		$I->amOnPage($I->forumThreadUrl($this->thread_user_ambassador['id'], null));
 		$I->waitForActiveAPICalls();
 
 		$nick = $I->haveFriend('nick');

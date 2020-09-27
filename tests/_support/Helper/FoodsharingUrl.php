@@ -39,7 +39,7 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=groups';
 	}
 
-	public function forumThemeUrl($id, $regionId = null)
+	public function forumThreadUrl($id, $regionId = null)
 	{
 		if (!isset($regionId)) {
 			$regionId = $this->grabFromDatabase('fs_bezirk_has_theme', 'bezirk_id', ['theme_id' => $id]);
