@@ -55,7 +55,7 @@ class StoreView extends View
 	public function dateForm()
 	{
 		return '<div id="datepicker" style="height: 220px;"></div>'
-			. $this->v_utils->v_input_wrapper('time', $this->v_utils->v_form_time('time'))
+			. $this->v_utils->v_input_wrapper($this->translator->trans('time'), $this->v_utils->v_form_time('time'))
 			. $this->v_utils->v_form_select('fetchercount', ['selected' => 1, 'values' => [
 				['id' => 1, 'name' => $this->translator->trans('pickup.edit.slotcount')],
 				['id' => 2, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 2])],

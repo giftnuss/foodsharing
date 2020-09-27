@@ -83,7 +83,7 @@ final class MessageView extends View
 
 		$content .= $this->v_utils->v_form_textarea('compose_body');
 
-		$content .= $this->v_utils->v_input_wrapper(false,
+		$content .= $this->v_utils->v_input_wrapper('',
 			'<a class="button" id="compose_submit" href="#">' . $this->translator->trans('button.send') . '</a>');
 
 		return '<div id="compose">' . $this->v_utils->v_field(

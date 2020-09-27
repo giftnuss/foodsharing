@@ -197,7 +197,7 @@ class StoreXhr extends Control
 						});
 					');
 					$dia->addContent($cnt);
-					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translator->trans('button.save') . '</a>'));
+					$dia->addContent($this->v_utils->v_input_wrapper('', '<a class="button" id="savebetriebetoselect" href="#">' . $this->translator->trans('button.save') . '</a>'));
 
 					return $dia->xhrout();
 				}
