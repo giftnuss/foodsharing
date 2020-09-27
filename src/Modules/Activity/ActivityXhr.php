@@ -275,7 +275,7 @@ class ActivityXhr extends Control
 						'fs_name' => $u['foodsaver_name'],
 						'forum_name' => $u['name'],
 						'forum_post' => (int)$u['last_post_id'],
-						'forum_topic' => (int)$u['id'],
+						'forum_thread' => (int)$u['id'],
 						'forum_type' => $forumTypeString,
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'is_bot' => $is_bot ? '_bot' : null,

@@ -217,7 +217,7 @@
 - Improve Metrics collection: Log execution timing including database execution timings for all controllers now. !1480 @NerdyProjects
 - Release notes introduced and replaced with the changelog !1474 @chriswalg
 - Extend the lifetime of persistent sessions after every request !1496 @dthulke
-- Include topic title in bell notification for forum posts #869 !1487 @ChrisOelmueller
+- Include thread title in bell notification for forum posts #869 !1487 @ChrisOelmueller
 - Load store menu in the top bar only when the menu is opened in order to make the slot markers release ready !1502 @janopae
 - Update all package dependencies to current as of 2020-05-11 !1503 @NerdyProjects
 - Allow changing the language for all translation capable texts !1485 @NerdyProjects
@@ -249,7 +249,7 @@
 - Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
 - Fix missing region id bug for food share points !1375 @alex.simm
 - Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
-- Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
+- Fixed bug in email template rendering during when quickreplying to forum threads !1403 @alex.simm
 - Links in shortened dashboard updates no longer invalid due to cut-off #691 !735 @D0nPiano @ChrisOelmueller
 - Now possible to have many disabled sources of dashboard updates #365 !735 @D0nPiano @ChrisOelmueller
 - Fixes the marker loading in the region admin tool !1415 @dthulke
@@ -588,7 +588,7 @@ And we have even included some new features for you.
 - Verify quiz session status without having a second learning break !1018 #673 @svenpascal
 - Show message and redirect page after deleting an account !1028 #533 @alex.simm
 - Fixed the createThread call inside the ForumRestController !1031 @ctwx_ok
-- Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
+- Remove forum thread subscriptions when leaving group !1020 #593 @alex.simm
 - Fixed sorting of dashboard entries on initial loading !1035 #681 @ctwx_ok
 - When logging in, referenced redirects work now. !1034 #563 @peter.toennies
 - Open link to markdown description in a new window !1050 #698 @chriswalg

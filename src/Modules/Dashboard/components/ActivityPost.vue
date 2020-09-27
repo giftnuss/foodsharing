@@ -167,7 +167,7 @@ export default {
         case 'friendWall':
           return url('profile', this.data.fs_id)
         case 'forum':
-          return url('forum', this.data.region_id, (this.data.forum_type === 'botforum'), this.data.forum_topic, this.data.forum_post)
+          return url('forum', this.data.region_id, (this.data.forum_type === 'botforum'), this.data.forum_thread, this.data.forum_post)
         default:
           return '#'
       }

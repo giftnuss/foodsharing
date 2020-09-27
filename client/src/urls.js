@@ -3,10 +3,10 @@
 
 const urls = {
   profile: (id) => `/profile/${id}`,
-  forum: (regionId, subforumId = 0, topicId = null, postId = null, newThread = false) => {
+  forum: (regionId, subforumId = 0, threadId = null, postId = null, newThread = false) => {
     return (`/?page=bezirk&bid=${regionId}` +
       `&sub=${(subforumId === 1) ? 'botforum' : 'forum'}` +
-      (topicId === null ? '' : `&tid=${topicId}`) +
+      (threadId === null ? '' : `&tid=${threadId}`) +
       (postId === null ? '' : `&pid=${postId}#post-${postId}`) +
       (newThread ? '&newthread=1' : '')
     )
