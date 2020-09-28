@@ -12,10 +12,6 @@ Vue.use(Vuelidate)
 Vue.filter('dateFormat', dateFormat)
 Vue.filter('dateDistanceInWords', dateDistanceInWords)
 
-Vue.filter('i18n', (key, variables = {}) => {
-  console.warn('i18n as a vue filter is deprecated. use i18n() as a vue functions')
-  return i18n(key, variables)
-})
 Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
 }
