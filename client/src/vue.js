@@ -9,15 +9,12 @@ import Vuelidate from 'vuelidate'
 Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 
-Vue.filter('dateFormat', dateFormat)
-
 Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
 }
+Vue.prototype.$url = url
 Vue.prototype.$dateFormat = dateFormat
 Vue.prototype.$dateDistanceInWords = dateDistanceInWords
-
-Vue.prototype.$url = url
 
 export function vueRegister (components) {
   for (const key in components) {

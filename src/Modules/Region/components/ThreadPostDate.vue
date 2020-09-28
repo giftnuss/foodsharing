@@ -5,7 +5,7 @@
       @click.prevent="$emit('scroll')"
     >
       <small>
-        {{ date | dateFormat('full-long') }}
+        {{ $dateFormat(date, 'full-long') }}
       </small>
     </a>
   </div>

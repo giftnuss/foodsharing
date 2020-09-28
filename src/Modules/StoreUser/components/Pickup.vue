@@ -7,7 +7,7 @@
           :class="{'today': isToday, 'past': isInPast, 'soon': isSoon, 'empty': emptySlots > 0, 'coord': isCoordinator}"
         >
           <span>
-            {{ date | dateFormat('full-long') }}
+            {{ $dateFormat(date, 'full-long') }}
           </span>
           <span
             v-if="showRelativeDate"
