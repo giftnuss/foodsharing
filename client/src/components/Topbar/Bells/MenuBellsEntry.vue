@@ -32,7 +32,7 @@
                       </div> -->
       </div>
       <small class="bell-date text-muted">
-        {{ bell.createdAt | dateDistanceInWords }}
+        {{ $dateDistanceInWords(bell.createdAt) }}
       </small>
       <div class="bell-body mt-1">
         <h5 class="bell-title mb-1">

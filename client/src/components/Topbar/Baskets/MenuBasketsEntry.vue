@@ -39,8 +39,12 @@
               :sleep-status="req.user.sleepStatus"
             />
             <div class="d-flex flex-column basket-entry-request">
-              <span>{{ req.user.name }}</span>
-              <small>{{ req.time | dateDistanceInWords }}</small>
+              <span>
+                {{ req.user.name }}
+              </span>
+              <small>
+                {{ $dateDistanceInWords(req.time) }}
+              </small>
             </div>
             <b-button
               v-b-tooltip

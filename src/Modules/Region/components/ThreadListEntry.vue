@@ -26,7 +26,7 @@
             {{ $i18n('forum.from', { name: thread.lastPost.author.name || '' }) }}
           </span>
           <span class="time d-inline d-sm-block">
-            {{ lastPostDate | dateDistanceInWords }}
+            {{ $dateDistanceInWords(lastPostDate) }}
           </span>
         </div>
       </div>

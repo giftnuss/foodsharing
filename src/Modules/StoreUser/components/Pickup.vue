@@ -13,7 +13,7 @@
             v-if="showRelativeDate"
             class="text-muted"
           >
-            ({{ date | dateDistanceInWords }})
+            ({{ $dateDistanceInWords(date) }})
           </span>
           <div
             v-if="isCoordinator && !isInPast"

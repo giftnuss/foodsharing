@@ -121,7 +121,7 @@
       </span>
     </span>
     <span class="time">
-      <i class="far fa-clock" /> {{ when | dateDistanceInWords }}
+      <i class="far fa-clock" /> {{ $dateDistanceInWords(when) }}
       <i class="fas fa-angle-right" /> {{ when | dateFormat('full-short') }}
     </span>
     <span class="c" />

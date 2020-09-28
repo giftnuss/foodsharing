@@ -20,7 +20,7 @@
             {{ title }}
           </h5>
           <small class="text-muted text-right nowrap">
-            {{ conversation.lastMessage.sentAt | dateDistanceInWords }}
+            {{ $dateDistanceInWords(conversation.lastMessage.sentAt) }}
           </small>
         </div>
         <p class="mb-1 text-truncate">

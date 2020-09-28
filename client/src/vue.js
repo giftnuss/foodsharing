@@ -10,7 +10,6 @@ Vue.use(BootstrapVue)
 Vue.use(Vuelidate)
 
 Vue.filter('dateFormat', dateFormat)
-Vue.filter('dateDistanceInWords', dateDistanceInWords)
 
 Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
