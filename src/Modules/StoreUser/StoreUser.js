@@ -13,16 +13,15 @@ import './StoreUser.css'
 
 import {
   ajax,
-  pulseError, pulseInfo,
+  pulseError,
+  pulseInfo,
   showLoader,
-  hideLoader,
   GET,
 } from '@/script'
 import '@/tablesorter' // Remove after replacing u_storeList
 
 import {
   u_betrieb_sign_out,
-  u_delPost,
   acceptRequest,
   warteRequest,
   denyRequest,
@@ -33,11 +32,9 @@ import PickupList from './components/PickupList'
 import Store from './components/Store'
 import StoreInfos from './components/StoreInfos'
 import StoreTeam from './components/StoreTeam'
-import { deleteStorePost } from '@/api/stores'
 
 expose({
   u_betrieb_sign_out,
-  u_delPost,
   acceptRequest,
   warteRequest,
   denyRequest,
@@ -83,35 +80,6 @@ $(document).ready(() => {
         text: $('#signout_shure .abort').text(),
         click: function () {
           $('#signout_shure').dialog('close')
-        },
-      },
-    ],
-  })
-
-  $('#delete_shure').dialog({
-    autoOpen: false,
-    modal: true,
-    buttons: [
-      {
-        text: $('#delete_shure .sure').text(),
-        click: async function () {
-          showLoader()
-          const storeId = GET('id')
-          const postId = $(this).data('pid')
-          try {
-            await deleteStorePost(storeId, postId)
-            $(`.bpost-${postId}`).remove()
-            $('#delete_shure').dialog('close')
-          } catch (e) {
-            pulseError(i18n('error_unexpected'))
-          }
-          hideLoader()
-        },
-      },
-      {
-        text: $('#delete_shure .abort').text(),
-        click: function () {
-          $('#delete_shure').dialog('close')
         },
       },
     ],

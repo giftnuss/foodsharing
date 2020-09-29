@@ -312,12 +312,6 @@ class StoreUserControl extends Control
 				/* end of pinboard */
 
 				/* fetchdates */
-				$this->pageHelper->addHidden('
-					<div id="delete_shure" title="' . $this->translator->trans('really_delete') . '">
-						' . $this->v_utils->v_info($this->translator->trans('wall.confirm-deletion')) . '
-						<span class="sure" style="display: none;">' . $this->translator->trans('wall.delete') . '</span>
-						<span class="abort" style="display: none;">' . $this->translator->trans('button.cancel') . '</span>
-					</div>
 					<div id="signout_shure" title="' . $this->translator->trans('pickup.signout_confirm') . '">
 						' . $this->v_utils->v_info('
 							<strong>' . $this->translator->trans('pickup.signout_sure') . '</strong>

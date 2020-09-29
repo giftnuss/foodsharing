@@ -35,10 +35,65 @@
         <Markdown :source="post.body" />
       </div>
     </div>
+
+    <span
+      v-if="canDelete"
+      class="moderation"
+    >
+      <b-button
+        v-b-tooltip="$i18n('wall.delete')"
+        v-b-modal="`confirmDeletion-${post.id}`"
+        href="#delete"
+        class="delete text-muted text-decoration-none"
+        variant="link"
+        size="sm"
+      >
+        <i class="fas fa-fw fa-trash-alt" />
+      </b-button>
+    </span>
+
+    <b-modal
+      v-if="canDelete"
+      :id="`confirmDeletion-${post.id}`"
+      modal-class="bootstrap"
+      :hide-header="isOwn(post)"
+      hide-footer
+      centered
+      hide-header-close
+      @ok="$emit('deletePost', post.id)"
+    >
+      <template v-slot:modal-header>
+        <div v-if="!isOwn(post)" class="alert alert-warning" role="alert">
+          <i class="fas fa-fw fa-info-circle" />
+          {{ $i18n('wall.info-somebody-else') }}
+          <hr>
+          <i class="fas fa-fw fa-archive" />
+          {{ $i18n('wall.info-logging') }}
+        </div>
+      </template>
+
+      <template v-slot:default="{ cancel, ok }">
+        <strong>
+          {{ $i18n('wall.confirm-deletion', { name: post.author.name }) }}
+        </strong>
+        <blockquote>
+          <div class="msg ml-1">
+            <Markdown :source="post.body" />
+          </div>
+        </blockquote>
+        <b-button class="float-left my-1" variant="primary" @click="cancel()">
+          {{ $i18n('button.cancel') }}
+        </b-button>
+        <b-button class="float-right my-1" variant="outline-danger" @click="ok()">
+          {{ $i18n('button.yes_i_am_sure') }}
+        </b-button>
+      </template>
+    </b-modal>
   </li>
 </template>
 
 <script>
+import serverData from '@/server-data'
 import Avatar from '@/components/Avatar'
 import Markdown from '@/components/Markdown/Markdown'
 
@@ -47,6 +102,20 @@ export default {
   props: {
     post: { type: Object, default: () => {} },
     mayDeleteEverything: { type: Boolean, default: false }
+  },
+  computed: {
+    canDelete () {
+      // orga can remove problematic content, see WallPostPermissions:mayDeleteFromWall
+      if (this.mayDeleteEverything) return true
+      if (!serverData.user.id) return false
+      // own posts can always be removed, see WallPostPermissions:mayDeleteFromWall
+      return this.isOwn(this.post)
+    }
+  },
+  methods: {
+    isOwn (post) {
+      return (post.foodsaverId === serverData.user.id)
+    }
   }
 }
 </script>
@@ -68,9 +137,33 @@ export default {
       color: var(--secondary);
     }
   }
+
+  .moderation {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    .delete:hover {
+      color: var(--danger) !important;
+    }
+  }
 }
 
-.content .msg {
+.modal {
+  .alert {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+  }
+  blockquote {
+    margin: 0.5rem;
+    margin-left: 0;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--border);
+  }
+}
+
+.content .msg,
+.modal .msg {
   overflow: hidden;
   overflow-wrap: break-word;
   word-break: break-word;

@@ -6,10 +6,6 @@ import { hideLoader, showLoader, reload, pulseError } from '@/script'
 import { removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
 
-export function u_delPost (id) {
-  $('#delete_shure').data('pid', id).dialog('open')
-}
-
 export function u_betrieb_sign_out (bid) {
   $('#signout_shure').dialog('open')
 }

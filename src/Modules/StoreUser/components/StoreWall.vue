@@ -32,14 +32,16 @@
         v-for="p in posts"
         :key="p.id"
         :post="p"
+        :may-delete-everything="false"
         class="wallpost"
+        @deletePost="deletePost"
       />
     </ul>
   </div>
 </template>
 
 <script>
-import { getStoreWall, writeStorePost } from '@/api/stores'
+import { getStoreWall, deleteStorePost, writeStorePost } from '@/api/stores'
 import WallPost from '../../WallPost/components/WallPost'
 import { showLoader, hideLoader, pulseError } from '@/script'
 import i18n from '@/i18n'
@@ -85,6 +87,25 @@ export default {
         console.error(e)
         pulseError(i18n('wall.error-create'))
         this.newPostText = text
+      } finally {
+        hideLoader()
+      }
+    },
+    async deletePost (postId) {
+      try {
+        showLoader()
+        await deleteStorePost(this.storeId, postId)
+        const index = this.posts.findIndex(post => post.id === postId)
+        if (index >= 0) {
+          this.posts.splice(index, 1)
+        }
+      } catch (e) {
+        if (e.code === 403) {
+          pulseError(i18n('wall.error-delete'))
+        } else {
+          pulseError(i18n('error_unexpected'))
+          console.error(e.code)
+        }
       } finally {
         hideLoader()
       }
