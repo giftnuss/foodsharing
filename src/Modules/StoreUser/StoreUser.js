@@ -21,7 +21,6 @@ import {
 import '@/tablesorter' // Remove after replacing u_storeList
 
 import {
-  u_updatePosts,
   u_betrieb_sign_out,
   u_delPost,
   acceptRequest,
@@ -37,7 +36,6 @@ import StoreTeam from './components/StoreTeam'
 import { deleteStorePost } from '@/api/stores'
 
 expose({
-  u_updatePosts,
   u_betrieb_sign_out,
   u_delPost,
   acceptRequest,

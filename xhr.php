@@ -18,7 +18,6 @@ require_once 'config.inc.php';
 	NEVER ADD SOMETING TO THIS LIST!
 */
 $csrf_whitelist = [
-	// 'getPinPost',
 	// 'activeSwitch',
 	// 'childBezirke',
 	// 'bBubble',

@@ -852,7 +852,6 @@ chat:
 wall:
   name: Pinnwand
   message_placeholder: Nachricht schreiben...
-  by: '{when} von {name}'
   delete: Eintrag löschen
   confirm-deletion: Soll der Pinnwand-Eintrag wirklich gelöscht werden?
   created: 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'

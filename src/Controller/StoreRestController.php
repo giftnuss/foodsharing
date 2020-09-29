@@ -85,6 +85,29 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Get "wallposts" for store with given ID. Returns 200 and the comments,
+	 * 401 if not logged in, or 403 if you may not view this store.
+	 *
+	 * @Rest\Get("stores/{storeId}/posts", requirements={"storeId" = "\d+"})
+	 */
+	public function getStorePosts(int $storeId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayReadStoreWall($storeId)) {
+			throw new HttpException(403);
+		}
+
+		$notes = $this->storeGateway->getStorePosts($storeId) ?? [];
+		$notes = array_map(function ($n) {
+			return RestNormalization::normalizeStoreNote($n);
+		}, $notes);
+
+		return $this->handleView($this->view($notes, 200));
+	}
+
+	/**
 	 * @Rest\Post("stores/{storeId}/posts")
 	 * @Rest\RequestParam(name="text")
 	 */
@@ -123,7 +146,11 @@ class StoreRestController extends AbstractFOSRestController
 
 		$this->bellGateway->addBell($team, $bellData);
 
-		return $this->handleView($this->view([], 200));
+		$note = $this->storeGateway->getStoreWallpost($storeId, $postId);
+		$note['name'] = $userName;
+		$post = RestNormalization::normalizeStoreNote($note);
+
+		return $this->handleView($this->view(['post' => $post], 200));
 	}
 
 	/**

@@ -2,22 +2,9 @@
 
 import $ from 'jquery'
 
-import { hideLoader, showLoader, reload, GET, pulseError } from '@/script'
+import { hideLoader, showLoader, reload, pulseError } from '@/script'
 import { removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
-
-export function u_updatePosts () {
-  $.ajax({
-    dataType: 'json',
-    data: { bid: GET('id') },
-    url: '/xhr.php?f=getPinPost',
-    success: function (data) {
-      if (data.status == 1) {
-        $('#pinnwand .posts').html(data.html)
-      }
-    },
-  })
-}
 
 export function u_delPost (id) {
   $('#delete_shure').data('pid', id).dialog('open')

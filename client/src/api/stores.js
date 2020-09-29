@@ -46,8 +46,21 @@ export async function setPickupSlots (storeId, pickupDate, totalSlots) {
   return patch(`/stores/${storeId}/pickups/${date}`, { totalSlots: totalSlots })
 }
 
+function normalizeStoreWallPost (post) {
+  post.createdAt = dateFnsParseISO(post.createdAt)
+  post.body = post.text
+  delete post.text
+  return post
+}
+
+export async function getStoreWall (storeId) {
+  const posts = (await get(`/stores/${storeId}/posts`))
+  return posts.map(normalizeStoreWallPost)
+}
+
 export async function writeStorePost (storeId, text) {
-  return post(`/stores/${storeId}/posts`, { text })
+  const newPost = (await post(`/stores/${storeId}/posts`, { text })).post
+  return normalizeStoreWallPost(newPost)
 }
 
 export async function deleteStorePost (storeId, postId) {

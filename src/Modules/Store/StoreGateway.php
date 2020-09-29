@@ -1029,11 +1029,31 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 */
 	public function getStorePosts(int $storeId, int $offset = 0, int $limit = 50): array
 	{
-		return $this->db->fetchAllByCriteria('fs_betrieb_notiz',
-			['id', 'foodsaver_id', 'betrieb_id', 'text', 'zeit'],
-			['betrieb_id' => $storeId]
-		);
-		// TODO we probably want to rebuild this so we can implement offset+limit?
+		return $this->db->fetchAll('
+			SELECT sn.`id`,
+			       sn.`foodsaver_id`,
+				   fs.`photo`,
+				   CONCAT(fs.`name`," ",fs.`nachname`) AS name,
+			       sn.`betrieb_id`,
+			       sn.`text`,
+			       sn.`milestone`,
+			       sn.`zeit`
+
+			FROM `fs_betrieb_notiz` sn
+				INNER JOIN fs_foodsaver fs
+				ON         fs.id = sn.foodsaver_id
+
+			WHERE  sn.`betrieb_id` = :storeId
+			AND    sn.`milestone` = :noMilestone
+
+			ORDER BY sn.`zeit` DESC
+			LIMIT :offset, :limit
+		', [
+			':storeId' => $storeId,
+			':noMilestone' => Milestone::NONE,
+			':offset' => $offset,
+			':limit' => $limit,
+		]);
 	}
 
 	/**

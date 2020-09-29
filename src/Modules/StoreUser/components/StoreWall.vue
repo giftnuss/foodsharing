@@ -26,21 +26,34 @@
         </b-button>
       </div>
     </div>
+
+    <ul class="posts list-unstyled">
+      <WallPost
+        v-for="p in posts"
+        :key="p.id"
+        :post="p"
+        class="wallpost"
+      />
+    </ul>
   </div>
 </template>
 
 <script>
-import { writeStorePost } from '@/api/stores'
+import { getStoreWall, writeStorePost } from '@/api/stores'
+import WallPost from '../../WallPost/components/WallPost'
 import { showLoader, hideLoader, pulseError } from '@/script'
 import i18n from '@/i18n'
 
 export default {
+  components: { WallPost },
   props: {
     storeId: { type: Number, required: true },
     mayWritePost: { type: Boolean, required: true }
   },
   data () {
     return {
+      loaded: {},
+      posts: [],
       newPostText: ''
     }
   },
@@ -49,7 +62,17 @@ export default {
       return this.newPostText.trim().length > 0
     }
   },
+  async created () {
+    this.loadPosts()
+  },
   methods: {
+    async loadPosts () {
+      if (this.loaded.posts) return
+      if (!this.posts.length) {
+        this.posts = (await getStoreWall(this.storeId))
+      }
+      this.loaded.posts = true
+    },
     async writePost () {
       const text = this.newPostText.trim()
       if (!text) return
@@ -73,5 +96,9 @@ export default {
 <style lang="scss" scoped>
 .newpost textarea#newpost {
   overflow-y: auto !important;
+}
+
+ul.posts {
+  margin: 0;
 }
 </style>

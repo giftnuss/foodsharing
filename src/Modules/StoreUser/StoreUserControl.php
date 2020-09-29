@@ -306,12 +306,6 @@ class StoreUserControl extends Control
 							'mayWritePost' => $this->storePermissions->mayWriteStoreWall($storeId),
 						])
 					);
-					$this->pageHelper->addJs('u_updatePosts();');
-					$this->pageHelper->addContent($this->v_utils->v_field('
-						<div id="pinnwand">
-
-							<div class="posts"></div>
-						</div>', 'Pinnwand', ['class' => 'truncate-content truncate-height-280 collapse-mobile force-collapse']));
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
