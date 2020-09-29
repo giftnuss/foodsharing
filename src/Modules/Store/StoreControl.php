@@ -205,7 +205,7 @@ class StoreControl extends Control
 				$this->storeGateway->add_betrieb_notiz([
 					'foodsaver_id' => $this->session->id(),
 					'betrieb_id' => $id,
-					'text' => '{BETRIEB_ADDED}',
+					'text' => '{BETRIEB_ADDED}', // TODO Do we want to keep this?
 					'zeit' => date('Y-m-d H:i:s', (time() - 10)),
 					'milestone' => Milestone::CREATED,
 				]);

@@ -1719,17 +1719,6 @@ storestatus:
   6: Spendet an Tafel etc. und wirft nichts weg
   7: Betrieb existiert nicht mehr
 
-# TODO
-# these old messages should be converted to their `storestatus` equivalent
-# (see XhrMethods:xhr_getPinPost)
-status_msg_1: Es besteht noch kein Kontakt
-status_msg_2: Verhandlungen laufen
-status_msg_3: Betrieb ist bereit zu kooperieren
-status_msg_4: Will nicht kooperieren
-status_msg_5: Betrieb kooperiert bereits
-status_msg_6: Spendet an Tafel etc. und wirft nichts weg
-#/TODO
-
 storelist:
  entered: "Eingetragen:"
  status: Status
