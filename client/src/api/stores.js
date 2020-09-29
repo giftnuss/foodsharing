@@ -46,6 +46,10 @@ export async function setPickupSlots (storeId, pickupDate, totalSlots) {
   return patch(`/stores/${storeId}/pickups/${date}`, { totalSlots: totalSlots })
 }
 
+export async function writeStorePost (storeId, text) {
+  return post(`/stores/${storeId}/posts`, { text })
+}
+
 export async function deleteStorePost (storeId, postId) {
   return remove(`/stores/${storeId}/posts/${postId}`)
 }

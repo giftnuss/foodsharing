@@ -300,24 +300,22 @@ class StoreUserControl extends Control
 				}
 
 				if ($this->storePermissions->mayReadStoreWall($storeId)) {
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-storeview', 'Store', [
+							'storeId' => $storeId,
+							'mayWritePost' => $this->storePermissions->mayWriteStoreWall($storeId),
+						])
+					);
 					$this->pageHelper->addJs('u_updatePosts();');
 					$this->pageHelper->addContent($this->v_utils->v_field('
 						<div id="pinnwand">
-							<div class="tools ui-padding">
-								<form method="get" action="' . $this->routeHelper->getSelf() . '">
-									<textarea class="comment textarea" placeholder="' . $this->translator->trans('wall.message_placeholder') . '" name="text"></textarea>
-									<div align="right">
-										<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->translator->trans('button.send') . '" />
-									</div>
-								</form>
-							</div>
 
 							<div class="posts"></div>
 						</div>', 'Pinnwand', ['class' => 'truncate-content truncate-height-280 collapse-mobile force-collapse']));
-				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
+				/* end of pinboard */
 
 				/* fetchdates */
 				$this->pageHelper->addHidden('

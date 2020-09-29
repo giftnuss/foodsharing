@@ -31,6 +31,7 @@ import {
 import { vueApply, vueRegister } from '@/vue'
 import PickupHistory from './components/PickupHistory'
 import PickupList from './components/PickupList'
+import Store from './components/Store'
 import StoreInfos from './components/StoreInfos'
 import StoreTeam from './components/StoreTeam'
 import { deleteStorePost } from '@/api/stores'
@@ -60,46 +61,6 @@ $(document).ready(() => {
     } else if ($('#set_new_store_manager').val() == 'true' && $('.tagedit-listelement-old').length > 3) {
       pulseError(i18n('storeedit.team.max-sm'))
       return false
-    }
-  })
-
-  $('#comment-post').hide()
-
-  $('div#pinnwand form textarea').on('focus', function () {
-    $('#comment-post').show()
-  })
-
-  $('div#pinnwand form input.submit').button().on('keydown', function (event) {
-    $('div#pinnwand form').trigger('submit')
-  })
-
-  $('div#pinnwand form').on('submit', function (e) {
-    e.preventDefault()
-    const postTextArea = $('div#pinnwand form textarea')
-    if (postTextArea.val() !== postTextArea.attr('title')) {
-      const submitButton = $('#comment-post')
-      submitButton.prop('disabled', true)
-      const storeId = GET('id')
-      $.ajax({
-        dataType: 'json',
-        data: $('div#pinnwand form').serialize(),
-        method: 'POST',
-        url: `/api/stores/${storeId}/posts`,
-        success: function () {
-          // update posts list
-          u_updatePosts()
-          // Reset input field
-          postTextArea.val(postTextArea.attr('title'))
-          // enable disabled submit button again
-          submitButton.prop('disabled', false)
-        },
-        error: function (error) {
-          // enable disabled submit button again also in case of error
-          submitButton.prop('disabled', false)
-          // handle error
-          pulseError(error.responseJSON.message)
-        },
-      })
     }
   })
 
@@ -200,11 +161,13 @@ $(document).ready(() => {
   vueRegister({
     PickupHistory,
     PickupList,
+    Store,
     StoreInfos,
     StoreTeam,
   })
   vueApply('#vue-pickup-history', true)
   vueApply('#vue-pickuplist', true)
+  vueApply('#vue-storeview', true) // Store
   vueApply('#vue-storeinfos', true)
   vueApply('#vue-storeteam', true)
 })

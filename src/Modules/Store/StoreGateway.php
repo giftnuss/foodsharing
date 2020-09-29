@@ -11,6 +11,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
+use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
@@ -747,25 +748,30 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchValueByCriteria('fs_betrieb', $chatType, ['id' => $storeId]);
 	}
 
-	public function add_betrieb_notiz($data): int
+	// TODO clean up data handling (use a DTO)
+	// TODO eventually, switch to wallpost system
+	public function addStoreWallpost(array $data): int
 	{
-		$last = 0;
-		if (isset($data['last']) && $data['last'] == 1) {
-			$this->db->update(
-				'fs_betrieb_notiz',
-				['last' => 0],
-				['betrieb_id' => $data['betrieb_id'], 'last' => 1]
-			);
-			$last = 1;
-		}
+		return $this->db->insert('fs_betrieb_notiz', [
+			'foodsaver_id' => $data['foodsaver_id'],
+			'betrieb_id' => $data['betrieb_id'],
+			'milestone' => Milestone::NONE,
+			'text' => $data['text'],
+			'zeit' => $data['zeit'],
+			'last' => 0, // TODO remove this column entirely
+		]);
+	}
 
+	// TODO rename to addStoreMilestone and clean up data handling
+	public function add_betrieb_notiz(array $data): int
+	{
 		return $this->db->insert('fs_betrieb_notiz', [
 			'foodsaver_id' => $data['foodsaver_id'],
 			'betrieb_id' => $data['betrieb_id'],
 			'milestone' => $data['milestone'],
 			'text' => strip_tags($data['text']),
 			'zeit' => $data['zeit'],
-			'last' => $last
+			'last' => 0, // TODO remove this column entirely
 		]);
 	}
 

@@ -95,16 +95,18 @@ class StoreRestController extends AbstractFOSRestController
 		}
 
 		$text = $paramFetcher->get('text');
-		$this->storeGateway->add_betrieb_notiz([
+		$note = [
 			'foodsaver_id' => $this->session->id(),
 			'betrieb_id' => $storeId,
 			'text' => $text,
 			'zeit' => date('Y-m-d H:i:s'),
 			'milestone' => Milestone::NONE,
 			'last' => 1
-		]);
+		];
+		$postId = $this->storeGateway->addStoreWallpost($note);
 
 		$storeName = $this->storeGateway->getStoreName($storeId);
+		$userName = $this->session->user('name');
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
 		$bellData = Bell::create(
@@ -113,7 +115,7 @@ class StoreRestController extends AbstractFOSRestController
 			'fas fa-thumbtack',
 			['href' => '/?page=fsbetrieb&id=' . $storeId],
 			[
-				'user' => $this->session->user('name'),
+				'user' => $userName,
 				'name' => $storeName
 			],
 			'store-wallpost-' . $storeId

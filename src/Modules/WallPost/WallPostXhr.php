@@ -118,7 +118,7 @@ class WallPostXhr extends Control
 
 		echo json_encode([
 			'status' => 0,
-			'message' => $this->translator->trans('wall.error'),
+			'message' => $this->translator->trans('wall.error-create'),
 		]);
 		exit();
 	}
