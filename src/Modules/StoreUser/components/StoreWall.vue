@@ -33,7 +33,7 @@
         :key="p.id"
         :post="p"
         :managers="managers"
-        :may-delete-everything="false"
+        :may-delete-everything="mayDeleteEverything"
         class="wallpost"
         @deletePost="deletePost"
       />
@@ -52,7 +52,8 @@ export default {
   props: {
     storeId: { type: Number, required: true },
     managers: { type: Array, default: () => [] },
-    mayWritePost: { type: Boolean, required: true }
+    mayWritePost: { type: Boolean, required: true },
+    mayDeleteEverything: { type: Boolean, required: true }
   },
   data () {
     return {

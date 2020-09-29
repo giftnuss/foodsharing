@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import differenceInDays from 'date-fns/differenceInDays'
 import serverData from '@/server-data'
 import Avatar from '@/components/Avatar'
 import Markdown from '@/components/Markdown/Markdown'
@@ -113,14 +114,18 @@ export default {
   },
   computed: {
     canDelete () {
-      // orga can remove problematic content, see WallPostPermissions:mayDeleteFromWall
-      if (this.mayDeleteEverything) return true
-      // managers can clean up older posts, see WallPostPermissions:mayDeleteFromWall
-      // TODO adjust backend permissions
       if (!serverData.user.id) return false
-      if (this.isManager(serverData.user.id)) return true
-      // own posts can always be removed, see WallPostPermissions:mayDeleteFromWall
-      return this.isOwn(this.post)
+      // orga can remove problematic content, see StorePermissions:mayDeleteStoreWallPost
+      if (this.mayDeleteEverything) return true
+      // own posts can always be removed, see StorePermissions:mayDeleteStoreWallPost
+      if (this.isOwn(this.post)) return true
+
+      // managers can clean up posts older than 3 weeks, see StorePermissions:mayDeleteStoreWallPost
+      if (this.isManager(serverData.user.id)) {
+        return differenceInDays(new Date(), this.post.createdAt) >= 3 * 7
+      } else {
+        return false
+      }
     }
   },
   methods: {

@@ -4,6 +4,7 @@
 - Add button that marks emails as unread !1681 @alex.simm
 - Implement a Webcal URI for iCal export !1716 @chriswalg @ChrisOelmueller
 - Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 !1673 !1725 TheSoulT
+- Store managers can remove old store posts #92 !1690 @ChrisOelmueller
 
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
@@ -13,6 +14,7 @@
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
+- Markdown support for store posts #921 !1690 @ChrisOelmueller
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
@@ -26,6 +28,7 @@
 - Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
 - Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
 - Deprecate both `v_form_recip_chooser` variants !1699 @ChrisOelmueller
+- Rewrite store wall with REST and Vue !1690 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg

@@ -11,6 +11,7 @@
           :store-id="storeId"
           :managers="storeManagers"
           :may-write-post="mayWritePost"
+          :may-delete-everything="mayDeleteEverything"
         />
       </div>
     </div>
@@ -25,7 +26,8 @@ export default {
   props: {
     storeId: { type: Number, required: true },
     storeManagers: { type: Array, default: () => [] },
-    mayWritePost: { type: Boolean, required: true }
+    mayWritePost: { type: Boolean, required: true },
+    mayDeleteEverything: { type: Boolean, required: true }
   }
 }
 </script>
