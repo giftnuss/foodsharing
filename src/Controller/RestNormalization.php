@@ -25,13 +25,13 @@ class RestNormalization
 	 * @param array $data the foodsaver data from the database
 	 * @param string $prefix a prefix for the entries in the data array
 	 */
-	public static function normalizeUser(array $data, string $prefix = ''): array
+	public static function normalizeUser(array $data, string $prefix = '', string $idPrefix = ''): array
 	{
 		//sleep_status is used with and without prefix
 		$sleepStatus = self::getSleepStatus($data, $prefix);
 
 		return [
-			'id' => (int)$data[$prefix . 'id'],
+			'id' => (int)$data[$prefix . $idPrefix . 'id'],
 			'name' => $data[$prefix . 'name'],
 			'avatar' => $data[$prefix . 'photo'] ?? null,
 			'sleepStatus' => $sleepStatus,
@@ -163,7 +163,7 @@ class RestNormalization
 	}
 
 	/**
-	 * Returns the response data for a note on a store's wall (milestone).
+	 * Returns the response data for a note on a store's wall.
 	 *
 	 * @param array $data the note data from the database
 	 */
@@ -173,6 +173,7 @@ class RestNormalization
 			'id' => (int)$data['id'],
 			'foodsaverId' => (int)$data['foodsaver_id'],
 			'text' => $data['text'],
+			'author' => self::normalizeUser($data, '', 'foodsaver_'),
 			'createdAt' => self::normalizeDate(strtotime($data['zeit'])),
 		];
 	}
