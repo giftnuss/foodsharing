@@ -149,19 +149,6 @@ abstract class Control
 	public function wallposts($table, $id): string
 	{
 		$this->pageHelper->addJsFunc('
-			function u_delPost (id, module, wallId) {
-				var id = id;
-				$.ajax({
-					url: "/xhrapp.php?app=wallpost&m=delpost&table=' . $table . '&id=' . $id . '&post=" + id,
-					dataType: "JSON",
-					success: function (data) {
-						if (data.status == 1) {
-							$(".wallpost-" + id).remove();
-						}
-					}
-				});
-			}
-
 			function mb_finishImage (file) {
 				$("#wallpost-attach").append(\'<input type="hidden" name="attach[]" value="image-\'+file+\'" />\');
 				$("#attach-preview div:last").remove();
