@@ -9,6 +9,7 @@
       <div class="card-body p-0">
         <StoreWall
           :store-id="storeId"
+          :managers="storeManagers"
           :may-write-post="mayWritePost"
         />
       </div>
@@ -23,6 +24,7 @@ export default {
   components: { StoreWall },
   props: {
     storeId: { type: Number, required: true },
+    storeManagers: { type: Array, default: () => [] },
     mayWritePost: { type: Boolean, required: true }
   }
 }

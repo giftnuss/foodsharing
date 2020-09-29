@@ -32,6 +32,7 @@
         v-for="p in posts"
         :key="p.id"
         :post="p"
+        :managers="managers"
         :may-delete-everything="false"
         class="wallpost"
         @deletePost="deletePost"
@@ -50,6 +51,7 @@ export default {
   components: { WallPost },
   props: {
     storeId: { type: Number, required: true },
+    managers: { type: Array, default: () => [] },
     mayWritePost: { type: Boolean, required: true }
   },
   data () {

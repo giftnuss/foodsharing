@@ -287,6 +287,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-storeview', 'Store', [
 							'storeId' => $storeId,
+							'storeManagers' => $this->storeGateway->getStoreManagers($storeId),
 							'mayWritePost' => $this->storePermissions->mayWriteStoreWall($storeId),
 						])
 					);

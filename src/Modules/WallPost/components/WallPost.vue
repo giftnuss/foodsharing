@@ -2,13 +2,20 @@
 <template>
   <li
     class="post d-flex flex-column justify-content-between align-items-center"
-    :class="[`wallpost-${post.id}`]"
+    :class="[`wallpost-${post.id}`, {'important': isImportant(post)}]"
   >
     <div class="metadata text-muted w-100 mx-1 d-inline-flex">
       <span class="author flex-grow-1 flex-shrink-1 mr-1">
         <a :href="$url('profile', post.author.id)">
           {{ post.author.name }}
         </a>
+        <span
+          v-if="isManager(post.author.id)"
+          v-b-tooltip="$i18n('store.isManager')"
+          class="is-manager"
+        >
+          <i class="fab fa-fw fa-redhat" />
+        </span>
       </span>
 
       <span
@@ -101,20 +108,32 @@ export default {
   components: { Avatar, Markdown },
   props: {
     post: { type: Object, default: () => {} },
+    managers: { type: Array, default: () => [] },
     mayDeleteEverything: { type: Boolean, default: false }
   },
   computed: {
     canDelete () {
       // orga can remove problematic content, see WallPostPermissions:mayDeleteFromWall
       if (this.mayDeleteEverything) return true
+      // managers can clean up older posts, see WallPostPermissions:mayDeleteFromWall
+      // TODO adjust backend permissions
       if (!serverData.user.id) return false
+      if (this.isManager(serverData.user.id)) return true
       // own posts can always be removed, see WallPostPermissions:mayDeleteFromWall
       return this.isOwn(this.post)
     }
   },
   methods: {
+    isManager (userId) {
+      if (!userId) return false
+      return (this.managers.indexOf(userId) > -1) // no IE: this.managers.includes(userId)
+    },
     isOwn (post) {
       return (post.foodsaverId === serverData.user.id)
+    },
+    isImportant (post) {
+      if (!post || !post.author || !post.author.id) return false
+      return this.isManager(post.author.id)
     }
   }
 }
@@ -126,6 +145,7 @@ export default {
   padding: 0.75rem 0.5rem;
   position: relative;
   border-top: 1px solid var(--border);
+  border-left: 3px solid transparent;
 
   .metadata {
     margin-top: -0.25rem;
@@ -146,6 +166,10 @@ export default {
     .delete:hover {
       color: var(--danger) !important;
     }
+  }
+
+  &.important {
+    border-left-color: rgba(var(--warning-rgb), 0.75);
   }
 }
 
