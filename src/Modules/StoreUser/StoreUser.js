@@ -15,7 +15,6 @@ import {
   ajax,
   pulseError,
   pulseInfo,
-  showLoader,
   GET,
 } from '@/script'
 import '@/tablesorter' // Remove after replacing u_storeList
@@ -62,27 +61,17 @@ $(document).ready(() => {
   $('#signout_shure').dialog({
     autoOpen: false,
     modal: true,
-    buttons: [
-      {
-        text: $('#signout_shure .sure').text(),
-        click: function () {
-          showLoader()
-
-          ajax.req('betrieb', 'signout', {
-            data: { id: GET('id') },
-            success: function () {
-
-            },
-          })
-        },
+    buttons: {
+      [i18n('storeedit.team.leave')]: function () {
+        ajax.req('betrieb', 'signout', {
+          data: { id: GET('id') },
+          success: function () {},
+        })
       },
-      {
-        text: $('#signout_shure .abort').text(),
-        click: function () {
-          $('#signout_shure').dialog('close')
-        },
+      [i18n('button.cancel')]: function () {
+        $('#signout_shure').dialog('close')
       },
-    ],
+    },
   })
 
   $('.nft-remove').button({
@@ -131,9 +120,9 @@ $(document).ready(() => {
     StoreInfos,
     StoreTeam,
   })
-  vueApply('#vue-pickup-history', true)
-  vueApply('#vue-pickuplist', true)
+  vueApply('#vue-pickup-history', true) // PickupHistory
+  vueApply('#vue-pickuplist', true) // PickupList
   vueApply('#vue-storeview', true) // Store
-  vueApply('#vue-storeinfos', true)
-  vueApply('#vue-storeteam', true)
+  vueApply('#vue-storeinfos', true) // StoreInfos
+  vueApply('#vue-storeteam', true) // StoreTeam
 })

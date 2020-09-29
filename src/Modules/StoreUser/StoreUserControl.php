@@ -250,6 +250,7 @@ class StoreUserControl extends Control
 						'name' => $this->translator->trans('storeedit.team.leave'),
 						'click' => 'u_betrieb_sign_out(' . $storeId . '); return false;',
 					];
+					$this->addStoreLeaveModal();
 				}
 
 				if (!empty($menu)) {
@@ -259,28 +260,11 @@ class StoreUserControl extends Control
 				}
 
 				/* team list */
-				$allowedFields = [
-					// personal info
-					'id', 'name', 'photo', 'quiz_rolle', 'sleep_status', 'verified',
-					// team-related info
-					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
-				];
-				if ($this->storePermissions->maySeePhoneNumbers($storeId)) {
-					array_push($allowedFields, 'handy', 'telefon', 'last_fetch');
-				}
-
 				$this->pageHelper->addContent(
 					$this->view->vueComponent('vue-storeteam', 'store-team', [
 						'fsId' => $this->session->id(),
 						'mayEditStore' => $this->storePermissions->mayEditStore($storeId),
-						'team' => array_map(
-							function ($a) use ($allowedFields) {
-								return array_filter($a, function ($key) use ($allowedFields) {
-									return in_array($key, $allowedFields);
-								}, ARRAY_FILTER_USE_KEY);
-							},
-							array_merge($store['foodsaver'], $store['springer']),
-						),
+						'team' => $this->getDisplayedStoreTeam($store),
 						'storeId' => $storeId,
 						'storeTitle' => $store['name'],
 					]),
@@ -312,16 +296,6 @@ class StoreUserControl extends Control
 				/* end of pinboard */
 
 				/* fetchdates */
-					<div id="signout_shure" title="' . $this->translator->trans('pickup.signout_confirm') . '">
-						' . $this->v_utils->v_info('
-							<strong>' . $this->translator->trans('pickup.signout_sure') . '</strong>
-							<p>' . $this->translator->trans('pickup.signout_info') . '</p>'
-						) . '
-						<span class="sure" style="display: none;">' . $this->translator->trans('storeedit.team.leave') . '</span>
-						<span class="abort" style="display: none;">' . $this->translator->trans('button.cancel') . '</span>
-					</div>
-');
-
 				if ($this->storePermissions->maySeePickups($storeId) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-pickuplist', 'pickup-list', [
@@ -401,5 +375,39 @@ class StoreUserControl extends Control
 				));
 			}
 		}
+	}
+
+	private function getDisplayedStoreTeam(array $store): array
+	{
+		$allowedFields = [
+			// personal info
+			'id', 'name', 'photo', 'quiz_rolle', 'sleep_status', 'verified',
+			// team-related info
+			'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
+		];
+		if ($this->storePermissions->maySeePhoneNumbers($store['id'])) {
+			array_push($allowedFields, 'handy', 'telefon', 'last_fetch');
+		}
+
+		return array_map(
+			function ($a) use ($allowedFields) {
+				return array_filter($a, function ($key) use ($allowedFields) {
+					return in_array($key, $allowedFields);
+				}, ARRAY_FILTER_USE_KEY);
+			},
+			array_merge($store['foodsaver'], $store['springer']),
+		);
+	}
+
+	private function addStoreLeaveModal(): void
+	{
+		$this->pageHelper->addHidden('
+		<div id="signout_shure" title="' . $this->translator->trans('pickup.signout_confirm') . '">
+			' . $this->v_utils->v_info('
+				<strong>' . $this->translator->trans('pickup.signout_sure') . '</strong>
+				<p>' . $this->translator->trans('pickup.signout_info') . '</p>'
+			) . '
+		</div>'
+		);
 	}
 }
