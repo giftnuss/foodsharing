@@ -365,6 +365,10 @@ export default {
   width: 120px;
 }
 
+.bootstrap .form-control.b-form-spinbutton.flex-column {
+  height: 12px;
+}
+
 .invalid-feedback {
   font-size: 100%;
   display: unset;
