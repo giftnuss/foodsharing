@@ -26,13 +26,6 @@
           <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
         </div>
 
-        <VoteForm
-          v-if="!isPollInPast"
-          :poll="poll"
-          :may-vote="mayVote"
-          class="mt-5"
-          @disableVoteForm="disableVoteForm"
-        />
         <div
           v-if="userVoteDate !== null"
           class="my-1 mt-3"
@@ -51,6 +44,14 @@
         >
           {{ $i18n('poll.may_not_vote') }}
         </div>
+
+        <VoteForm
+          v-if="!isPollInPast"
+          :poll="poll"
+          :may-vote="mayVote"
+          class="mt-5"
+          @disableVoteForm="disableVoteForm"
+        />
 
         <ResultsTable
           v-if="isPollInPast"

@@ -74,6 +74,13 @@
             <i class="fas fa-users" /> {{ $i18n('menu.entry.conference') }}
           </a>
           <a
+            :href="$url('polls', group.id)"
+            role="menuitem"
+            class="dropdown-item dropdown-item-sub"
+          >
+            <i class="fas fa-poll-h" /> {{ $i18n('terminology.polls') }}
+          </a>
+          <a
             v-if="group.isBot"
             :href="$url('workingGroupEdit', group.id)"
             role="menuitem"
