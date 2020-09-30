@@ -5,10 +5,9 @@
         {{ poll.name }}
       </div>
       <div class="card-body">
-        <div class="prestyled mb-3">
-          {{ poll.description }}
-        </div>
-        <div>
+        <Markdown :source="poll.description" />
+        <hr>
+        <div class="mt-4">
           <b>{{ $i18n('poll.time_period') }}:</b> {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
           <span v-if="isPollInPast">
             ({{ $i18n('poll.in_past') }})
@@ -69,9 +68,10 @@ import { isBefore, isAfter } from 'date-fns'
 import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
+import Markdown from '@/components/Markdown/Markdown'
 
 export default {
-  components: { ResultsTable, VoteForm },
+  components: { ResultsTable, VoteForm, Markdown },
   props: {
     poll: {
       type: Object,

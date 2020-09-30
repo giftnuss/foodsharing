@@ -137,6 +137,10 @@
           :label="$i18n('poll.new_poll.description')"
           class="mb-4"
         >
+          <div
+            class="mb-2 ml-2"
+            v-html="$i18n('forum.markdown_description')"
+          />
           <b-form-textarea
             id="input-description"
             v-model="$v.description.$model"
