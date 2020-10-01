@@ -961,7 +961,7 @@ class XhrMethods
 		}
 	}
 
-	public function xhr_update_newbezirk($data)
+	public function xhr_newregion($data)
 	{
 		if (!$this->regionPermissions->mayAdministrateRegions()) {
 			return;
@@ -994,7 +994,7 @@ class XhrMethods
 		]);
 	}
 
-	public function xhr_update_abholen($data)
+	public function xhr_editpickups($data)
 	{
 		if (!$this->storePermissions->mayEditPickups($data['bid'])) {
 			return XhrResponses::PERMISSION_DENIED;

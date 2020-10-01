@@ -47,7 +47,7 @@ class RegionAdminControl extends Control
 			'name' => $this->translator->trans('region.noParent'),
 		]);
 
-		$this->pageHelper->hiddenDialog('newbezirk', [
+		$this->pageHelper->hiddenDialog('newregion', [
 			$this->v_utils->v_form_text('Name'),
 			$this->v_utils->v_form_text('email'),
 			$this->v_utils->v_form_select('parent_id', ['values' => $regions])
@@ -83,11 +83,11 @@ class RegionAdminControl extends Control
 
 	private function newregion_button(): string
 	{
-		$id = 'newbezirk';
+		$id = 'newregion';
 		$label = $this->translator->trans('region.new');
 
 		$this->pageHelper->addJs('$("#' . $id . '-button").button({}).on("click", function () {
-			$("#dialog_' . $id . '").dialog("open");
+			$("#' . $id . '").dialog("open");
 		});');
 
 		return '<span id="' . $id . '-button">' . $label . '</span>';

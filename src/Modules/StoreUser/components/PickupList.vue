@@ -187,7 +187,7 @@ export default {
     },
     loadEditRecurringPickupModal () {
       $('#bid').val(this.storeId)
-      $('#dialog_abholen').dialog('open')
+      $('#editpickups').dialog('open')
     }
   }
 }

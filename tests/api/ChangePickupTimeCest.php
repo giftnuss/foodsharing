@@ -21,7 +21,7 @@ class ChangePickupTimeCest
 
 		$I->login($user['email']);
 		$request = [
-			'f' => 'update_abholen',
+			'f' => 'editpickups',
 			'newfetchtime[]' => 0,
 			'nfttime[hour][]' => 20,
 			'nfttime[min][]' => 0,

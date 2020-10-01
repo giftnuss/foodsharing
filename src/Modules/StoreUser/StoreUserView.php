@@ -83,9 +83,9 @@ class StoreUserView extends View
 		$out .= '</table>';
 
 		$this->pageHelper->hiddenDialog('requests', [$out]);
-		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
-		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
-		$this->pageHelper->addJs('$("#dialog_requests").dialog("open");');
+		$this->pageHelper->addJs('$("#requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
+		$this->pageHelper->addJs('$("#requests").dialog("option","buttons",{});');
+		$this->pageHelper->addJs('$("#requests").dialog("open");');
 	}
 
 	public function u_legacyStoreTeamStatus(array $storeData): string

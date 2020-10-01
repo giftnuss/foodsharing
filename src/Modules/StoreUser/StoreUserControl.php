@@ -241,7 +241,7 @@ class StoreUserControl extends Control
 					$menu[] = [
 						'name' => $this->translator->trans('pickup.edit.bread'),
 						'click' => '$(\'#bid\').val(' . $storeId . ');'
-							. '$(\'#dialog_abholen\').dialog(\'open\');'
+							. '$(\'#editpickups\').dialog(\'open\');'
 							. 'return false;',
 					];
 				}
@@ -353,7 +353,7 @@ class StoreUserControl extends Control
 					$width = $this->session->isMob() ? '$(window).width() * 0.96' : '$(window).width() / 2';
 					$pickup_dates = $this->storeGateway->getAbholzeiten($storeId);
 
-					$this->pageHelper->hiddenDialog('abholen',
+					$this->pageHelper->hiddenDialog('editpickups',
 						[$this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0)
 						],

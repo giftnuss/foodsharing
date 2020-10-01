@@ -422,13 +422,12 @@ final class PageHelper
 		$this->hidden .= $html;
 	}
 
-	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = []): void
+	public function hiddenDialog(string $id, array $fields, string $title = '', array $option = []): void
 	{
 		$width = '';
 		if (isset($option['width'])) {
 			$width = 'width:' . $option['width'] . ',';
 		}
-		$id = $this->identificationHelper->id('dialog_' . $table);
 
 		$form = '';
 		foreach ($fields as $f) {
@@ -454,27 +453,23 @@ final class PageHelper
 		$this->addJs('
 		$("#' . $id . '").dialog({
 		' . $width . '
-		autoOpen:false,
-		modal:true,
-		title:"' . $title . '",
-		buttons:
-		{
-			"Speichern":function()
-			{
+		autoOpen: false,
+		modal: true,
+		title: "' . $title . '",
+		buttons: {
+			"Speichern": function () {
 				showLoader();
 				$.ajax({
-
-					dataType:"json",
-					url:"/xhr.php?f=update_' . $table . '&" + $("#' . $id . ' form").serialize(),
-					success : function(data){
+					dataType: "json",
+					url: "/xhr.php?f=' . $id . '&" + $("#' . $id . ' form").serialize(),
+					success: function (data) {
 						$("#' . $id . '").dialog(\'close\');
 						' . $success . '
-						if(data.script != undefined)
-						{
+						if (data.script != undefined) {
 							$.globalEval(data.script);
 						}
 					},
-					complete : function(){
+					complete: function () {
 						hideLoader();
 					}
 				});
