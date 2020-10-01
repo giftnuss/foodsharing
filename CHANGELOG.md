@@ -7,6 +7,7 @@
 - Add FairSharePoint Function Workgroup #974 !1667 !1679 @fs_k
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 - Add ageband to statistic page !1685 @fs_k
+- Activity page shows only last entry to buddywall, eventwall, fairsharepointwall !1694 @fs_k
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
