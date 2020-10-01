@@ -303,19 +303,19 @@ final class PageHelper
 			}
 			$this->addJs('pulseError("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
-		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
+		if (isset($_SESSION['msg']['success']) && !empty($_SESSION['msg']['success'])) {
 			$msg = '';
-			foreach ($_SESSION['msg']['info'] as $i) {
+			foreach ($_SESSION['msg']['success'] as $i) {
 				$msg .= '<p>' . $i . '</p>';
 			}
-			$this->addJs('pulseInfo("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
+			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
 		if (isset($_SESSION['msg']['info']) && !empty($_SESSION['msg']['info'])) {
 			$msg = '';
 			foreach ($_SESSION['msg']['info'] as $i) {
 				$msg .= '<p>' . $i . '</p>';
 			}
-			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
+			$this->addJs('pulseInfo("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
 		$_SESSION['msg']['info'] = [];
 		$_SESSION['msg']['success'] = [];
