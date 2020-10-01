@@ -87,6 +87,7 @@
 - Introduce some more specific store gateway functionality !1686 @ChrisOelmueller
 - Replace Vue filters with prototypes !1689 @ChrisOelmueller
 - Remove unused Xhr methods for region applications !1707 @alex.simm
+- Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

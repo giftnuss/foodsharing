@@ -209,17 +209,6 @@ class Utils
 		return $out;
 	}
 
-	public function v_dialog_button(string $id, string $label): string
-	{
-		$new_id = $this->identificationHelper->id($id);
-
-		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function () {
-			$("#dialog_' . $id . '").dialog("open");
-		});');
-
-		return '<span id="' . $new_id . '-button">' . $label . '</span>';
-	}
-
 	public function v_form_tinymce(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);

@@ -61,12 +61,35 @@ class RegionAdminControl extends Control
 		$this->pageHelper->addContent($this->v_utils->v_field(
 			$this->view->v_bezirk_tree($id) . '
 				<div id="bezirk-buttons" class="bootstrap">
-					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility: hidden;" onclick="deleteActiveGroup()">' . $this->translator->trans('region.delete') . '</button>
-					' . $this->v_utils->v_dialog_button('newbezirk', $this->translator->trans('region.new')) . '
+					' . $this->deleteregion_button() . '
+					' . $this->newregion_button() . '
 				</div>',
 			$this->translator->trans('terminology.regions')
 		), CNT_RIGHT);
 
 		$this->view->i_map($id);
+	}
+
+	private function deleteregion_button(): string
+	{
+		return '<button
+			id="deletebezirk"
+			class="btn btn-secondary btn-sm"
+			style="visibility: hidden;"
+			onclick="deleteActiveGroup()">'
+				. $this->translator->trans('region.delete') .
+			'</button>';
+	}
+
+	private function newregion_button(): string
+	{
+		$id = 'newbezirk';
+		$label = $this->translator->trans('region.new');
+
+		$this->pageHelper->addJs('$("#' . $id . '-button").button({}).on("click", function () {
+			$("#dialog_' . $id . '").dialog("open");
+		});');
+
+		return '<span id="' . $id . '-button">' . $label . '</span>';
 	}
 }
