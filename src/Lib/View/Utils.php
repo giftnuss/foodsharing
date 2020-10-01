@@ -131,42 +131,44 @@ class Utils
 		);
 	}
 
-	public function v_success(string $msg, string $title = ''): string
+	private function v_statusMessage(string $type, string $msg, string $title, string $icon): string
 	{
-		if ($title) {
-			$title = '<strong>' . $title . '</strong> ';
-		}
+		$title = $title ? '<strong>' . $title . '</strong> ' : '';
 
-		return '
-		<div class="msg-inside success">
-				<i class="fas fa-check-circle"></i> ' . $title . $msg . '
-		</div>';
+		return '<div class="msg-inside ' . $type . '">' . $icon . ' ' . $title . $msg . '</div>';
 	}
 
-	// TODO convert $title to string param
-	public function v_info(string $msg, $title = false, string $icon = '<i class="fas fa-info-circle"></i>'): string
+	/**
+	 * @deprecated Before using this in new code, please consider bootstrap-vue alerts instead:
+	 * https://bootstrap-vue.org/docs/components/alert
+	 */
+	public function v_success(string $msg, string $title = '', string $icon = ''): string
 	{
-		if ($title !== false) {
-			$title = '<strong>' . $title . '</strong> ';
-		}
+		$icon = $icon ? $icon : '<i class="fas fa-check-circle"></i>';
 
-		return '
-		<div class="msg-inside info">
-				' . $icon . ' ' . $title . $msg . '
-		</div>';
+		return $this->v_statusMessage('success', $msg, $title, $icon);
 	}
 
-	// TODO convert $title to string param
-	public function v_error(string $msg, $title = false): string
+	/**
+	 * @deprecated Before using this in new code, please consider bootstrap-vue alerts instead:
+	 * https://bootstrap-vue.org/docs/components/alert
+	 */
+	public function v_info(string $msg, string $title = '', string $icon = ''): string
 	{
-		if ($title !== false) {
-			$title = '<strong>' . $title . '</strong> ';
-		}
+		$icon = $icon ? $icon : '<i class="fas fa-info-circle"></i>';
 
-		return '
-		<div class="msg-inside error">
-				<i class="fas fa-exclamation-triangle"></i> ' . $title . $msg . '
-		</div>';
+		return $this->v_statusMessage('info', $msg, $title, $icon);
+	}
+
+	/**
+	 * @deprecated Before using this in new code, please consider bootstrap-vue alerts instead:
+	 * https://bootstrap-vue.org/docs/components/alert
+	 */
+	public function v_error(string $msg, string $title = '', string $icon = ''): string
+	{
+		$icon = $icon ? $icon : '<i class="fas fa-exclamation-triangle"></i>';
+
+		return $this->v_statusMessage('error', $msg, $title, $icon);
 	}
 
 	// TODO clean up $value type handling
