@@ -57,7 +57,7 @@ class StoreXhr extends Control
 			}
 
 			if ($this->storeTransactions->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
-				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
+				$this->flashMessageHelper->success($this->translator->trans('pickup.edit.added'));
 
 				return [
 					'status' => 1,

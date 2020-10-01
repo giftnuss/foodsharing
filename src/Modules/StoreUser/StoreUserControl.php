@@ -101,7 +101,7 @@ class StoreUserControl extends Control
 					$this->flashMessageHelper->info($this->translator->trans('storeedit.team.empty'));
 				}
 				if (isset($addedStoremanager) || isset($addedTeam)) {
-					$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
+					$this->flashMessageHelper->success($this->translator->trans('settings.saved'));
 				}
 				$this->routeHelper->goSelf();
 			}

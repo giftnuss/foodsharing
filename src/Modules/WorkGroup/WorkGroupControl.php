@@ -160,7 +160,7 @@ class WorkGroupControl extends Control
 				$data = $editWorkGroupRequest->toGroup();
 				$this->workGroupGateway->updateGroup($group['id'], $data);
 				$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
-				$this->flashMessageHelper->info('Änderungen gespeichert!');
+				$this->flashMessageHelper->success($this->translator->trans('groups.saved'));
 				$this->routeHelper->goSelf();
 			}
 		}

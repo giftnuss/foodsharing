@@ -36,9 +36,9 @@ class BlogControl extends Control
 		if ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($id))) {
 				if ($this->blogGateway->del_blog_entry($id)) {
-					$this->flashMessageHelper->info($this->translator->trans('blog.success.delete'));
+					$this->flashMessageHelper->success($this->translator->trans('blog.success.delete'));
 				} else {
-					$this->flashMessageHelper->info($this->translator->trans('blog.failure.delete'));
+					$this->flashMessageHelper->error($this->translator->trans('blog.failure.delete'));
 				}
 			} else {
 				$this->flashMessageHelper->info($this->translator->trans('blog.permissions.delete'));
@@ -167,7 +167,7 @@ class BlogControl extends Control
 			$regionId = intval($g_data['bezirk_id']);
 
 			if ($this->blogGateway->add_blog_entry($g_data) && $this->blogPermissions->mayAdd($regionId)) {
-				$this->flashMessageHelper->info($this->translator->trans('blog.success.new'));
+				$this->flashMessageHelper->success($this->translator->trans('blog.success.new'));
 				$this->routeHelper->goPage();
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('blog.failure.new'));
@@ -207,7 +207,7 @@ class BlogControl extends Control
 			$g_data['time'] = $data['time'];
 
 			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
-				$this->flashMessageHelper->info($this->translator->trans('blog.success.edit'));
+				$this->flashMessageHelper->success($this->translator->trans('blog.success.edit'));
 				$this->routeHelper->goPage();
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('blog.failure.edit'));

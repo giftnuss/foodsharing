@@ -173,7 +173,7 @@ class FoodsaverControl extends Control
 				}
 
 				if ($this->updateFoodsaver($oldFs, $g_data)) {
-					$this->flashMessageHelper->info($this->translator->trans('foodsaver.edit_success'));
+					$this->flashMessageHelper->success($this->translator->trans('foodsaver.edit_success'));
 				} else {
 					$this->flashMessageHelper->error($this->translator->trans('foodsaver.edit_failure'));
 				}

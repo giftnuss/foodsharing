@@ -99,7 +99,7 @@ class MailboxControl extends Control
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->mailboxGateway->filterName($_POST['name'])) {
 					if ($this->mailboxGateway->addMailbox($mailbox, 1)) {
-						$this->flashMessageHelper->info($this->translator->trans('mailbox.add_success'));
+						$this->flashMessageHelper->success($this->translator->trans('mailbox.add_success'));
 						$this->routeHelper->go('/?page=mailbox&a=manage');
 					} else {
 						$this->flashMessageHelper->error($this->translator->trans('mailbox.already_exists'));
@@ -123,7 +123,7 @@ class MailboxControl extends Control
 				$this->sanitizerService->handleTagSelect($index);
 
 				if ($this->mailboxGateway->updateMember($_POST['mbid'], $g_data[$index])) {
-					$this->flashMessageHelper->info($this->translator->trans('mailbox.saved'));
+					$this->flashMessageHelper->success($this->translator->trans('mailbox.saved'));
 					$this->routeHelper->go('/?page=mailbox&a=manage');
 				}
 			}

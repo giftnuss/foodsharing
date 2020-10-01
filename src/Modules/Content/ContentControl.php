@@ -52,7 +52,7 @@ class ContentControl extends Control
 				]), $this->translator->trans('content.actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
-					$this->flashMessageHelper->info($this->translator->trans('content.delete_success'));
+					$this->flashMessageHelper->success($this->translator->trans('content.delete_success'));
 					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -381,7 +381,7 @@ class ContentControl extends Control
 		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
-				$this->flashMessageHelper->info($this->translator->trans('content.edit_success'));
+				$this->flashMessageHelper->success($this->translator->trans('content.edit_success'));
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
@@ -395,7 +395,7 @@ class ContentControl extends Control
 		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
-				$this->flashMessageHelper->info($this->translator->trans('content.new_success'));
+				$this->flashMessageHelper->success($this->translator->trans('content.new_success'));
 				$this->routeHelper->goPage();
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));

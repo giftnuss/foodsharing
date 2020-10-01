@@ -139,7 +139,7 @@ class QuizControl extends Control
 					$questionCount = (int)$_POST['questcount'];
 
 					if ($updatedQuizId = $this->quizGateway->updateQuiz($quizId, $name, $desc, $maxFailurePoints, $questionCount)) {
-						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
+						$this->flashMessageHelper->success('Quiz wurde erfolgreich geändert!');
 						$this->routeHelper->go('/?page=quiz&id=' . (int)$updatedQuizId);
 					}
 				}
@@ -160,7 +160,7 @@ class QuizControl extends Control
 				$questionCount = (int)$_POST['questcount'];
 
 				if ($quizId = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
-					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
+					$this->flashMessageHelper->success('Quiz wurde erfolgreich angelegt!');
 					$this->routeHelper->go('/?page=quiz&id=' . (int)$quizId);
 				}
 			}

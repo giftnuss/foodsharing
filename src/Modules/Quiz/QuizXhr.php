@@ -63,7 +63,7 @@ class QuizXhr extends Control
 				if (!empty($text)) {
 					$id = $this->quizGateway->addQuestion($_GET['qid'], $text, $failurePoints, $duration);
 					if ($id > 0) {
-						$this->flashMessageHelper->info('Frage wurde angelegt');
+						$this->flashMessageHelper->success('Frage wurde angelegt');
 
 						return [
 							'status' => 1,
@@ -1163,7 +1163,7 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					$this->quizGateway->updateQuestion($_GET['id'], $_GET['qid'], $text, $failurePoints, $duration, $wikiLink);
-					$this->flashMessageHelper->info('Frage wurde geändert');
+					$this->flashMessageHelper->success('Frage wurde geändert');
 
 					return [
 						'status' => 1,

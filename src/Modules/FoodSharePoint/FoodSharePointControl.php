@@ -183,7 +183,7 @@ class FoodSharePointControl extends Control
 		$this->pageHelper->addBread($this->translator->trans('fsp.edit'));
 		if ($request->request->get('form_submit') === 'fairteiler') {
 			if ($this->handleEditFsp($request)) {
-				$this->flashMessageHelper->info($this->translator->trans('fsp.editSuccess'));
+				$this->flashMessageHelper->success($this->translator->trans('fsp.editSuccess'));
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
@@ -259,7 +259,7 @@ class FoodSharePointControl extends Control
 	private function accept(): void
 	{
 		$this->foodSharePointGateway->acceptFoodSharePoint($this->foodSharePoint['id']);
-		$this->flashMessageHelper->info($this->translator->trans('fsp.acceptSuccess'));
+		$this->flashMessageHelper->success($this->translator->trans('fsp.acceptSuccess'));
 		$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->foodSharePoint['id']);
 	}
 
@@ -328,9 +328,9 @@ class FoodSharePointControl extends Control
 		if ($request->request->get('form_submit') === 'fairteiler') {
 			if ($this->handleAdd($request)) {
 				if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
-					$this->flashMessageHelper->info($this->translator->trans('fsp.addSuccess'));
+					$this->flashMessageHelper->success($this->translator->trans('fsp.addSuccess'));
 				} else {
-					$this->flashMessageHelper->info($this->translator->trans('fsp.suggestSuccess'));
+					$this->flashMessageHelper->success($this->translator->trans('fsp.suggestSuccess'));
 				}
 				$this->routeHelper->go('/?page=fairteiler&bid=' . (int)$this->regionId);
 			} else {

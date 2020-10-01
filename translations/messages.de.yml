@@ -265,6 +265,7 @@ group:
   photo: Foto
   applications: Bewerbungen
   applications_for: Bewerbungen für %name%
+  saved: Änderungen wurden gespeichert
   mail_link_title:
     workgroup: AG-Postfach
     region: Bezirks-Postfach
@@ -767,6 +768,7 @@ pickup:
       Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab!
       Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
       außer Sichtweite des Betriebes warten.
+    added: Abholtermin wurde eingetragen!
 
 calendar:
   locale: de

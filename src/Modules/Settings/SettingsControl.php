@@ -258,7 +258,7 @@ class SettingsControl extends Control
 					if (!$this->session->may('fs')) {
 						$this->foodsaverGateway->riseRole($fsId, Role::FOODSAVER);
 					}
-					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.fs_success'));
+					$this->flashMessageHelper->success($this->translator->trans('foodsaver.upgrade.fs_success'));
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
@@ -279,7 +279,7 @@ class SettingsControl extends Control
 				} else {
 					$this->foodsaverGateway->riseRole($fsId, Role::STORE_MANAGER);
 					$this->session->refreshFromDatabase();
-					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.sm_success'));
+					$this->flashMessageHelper->success($this->translator->trans('foodsaver.upgrade.sm_success'));
 					$this->routeHelper->go('/?page=dashboard');
 				}
 			}
@@ -421,7 +421,7 @@ class SettingsControl extends Control
 			}
 
 			if ($this->settingsGateway->saveInfoSettings($fsId, $newsletter, $infomail)) {
-				$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
+				$this->flashMessageHelper->success($this->translator->trans('settings.saved'));
 			}
 		}
 		$this->pageHelper->addBread($this->translator->trans('settings.notifications'));
@@ -464,7 +464,7 @@ class SettingsControl extends Control
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					try {
 						$this->session->refreshFromDatabase();
-						$this->flashMessageHelper->info($this->translator->trans('foodsaver.edit_success'));
+						$this->flashMessageHelper->success($this->translator->trans('foodsaver.edit_success'));
 					} catch (\Exception $e) {
 						$this->routeHelper->goPage('logout');
 					}

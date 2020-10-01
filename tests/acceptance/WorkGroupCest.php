@@ -88,12 +88,12 @@ class WorkGroupCest
 		$I->addInTagSelect($admin['id'], '#work_group_form_administrators');
 		$I->addInTagSelect($user['id'], '#work_group_form_members');
 		$I->click('Änderungen speichern');
-		$I->waitForText('Änderungen gespeichert');
+		$I->waitForText('Änderungen wurden gespeichert');
 		$I->see($user['name'], '#work_group_form_members');
 		$I->see($admin['name'], '#work_group_form_administrators');
 		$I->removeFromTagSelect($user['name'], 'work_group_form_members');
 		$I->click('Änderungen speichern');
-		$I->see('Änderungen gespeichert');
+		$I->see('Änderungen wurden gespeichert');
 		$I->dontSee($user['name'], '#work_group_form_members');
 		$I->see($admin['name'], '#work_group_form_administrators');
 	}

@@ -106,7 +106,7 @@ class ReportXhr extends Control
 	{
 		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->success('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,

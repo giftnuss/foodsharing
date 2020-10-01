@@ -95,7 +95,7 @@ class LoginControl extends Control
 	public function activate()
 	{
 		if ($this->loginGateway->activate($_GET['e'], $_GET['t'])) {
-			$this->flashMessageHelper->info($this->translator->trans('register.activation_success'));
+			$this->flashMessageHelper->success($this->translator->trans('register.activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {
 			$this->flashMessageHelper->error($this->translator->trans('register.activation_failed'));
@@ -152,18 +152,12 @@ class LoginControl extends Control
 				$mail = $_POST['email'];
 			}
 			if (!$this->emailHelper->validEmail($mail)) {
-				$this->flashMessageHelper->error(
-					$this->translator->trans('login.pwreset.wrongMail')
-				);
+				$this->flashMessageHelper->error($this->translator->trans('login.pwreset.wrongMail'));
 			} else {
 				if ($this->loginGateway->addPassRequest($mail)) {
-					$this->flashMessageHelper->info(
-						$this->translator->trans('login.pwreset.mailSent')
-					);
+					$this->flashMessageHelper->info($this->translator->trans('login.pwreset.mailSent'));
 				} else {
-					$this->flashMessageHelper->error(
-						$this->translator->trans('login.pwreset.wrongMail')
-					);
+					$this->flashMessageHelper->error($this->translator->trans('login.pwreset.wrongMail'));
 				}
 			}
 		}
@@ -179,36 +173,26 @@ class LoginControl extends Control
 							);
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
-							$this->flashMessageHelper->error(
-								$this->translator->trans('login.pwreset.tooShort')
-							);
+							$this->flashMessageHelper->error($this->translator->trans('login.pwreset.tooShort'));
 						} elseif (!$this->loginGateway->checkResetKey($_POST['k'])) {
 							$check = false;
-							$this->flashMessageHelper->error(
-								$this->translator->trans('login.pwreset.expired')
-							);
+							$this->flashMessageHelper->error($this->translator->trans('login.pwreset.expired'));
 						} else {
 							$check = false;
-							$this->flashMessageHelper->error(
-								$this->translator->trans('login.pwreset.error')
-							);
+							$this->flashMessageHelper->error($this->translator->trans('login.pwreset.error'));
 						}
 
 						if ($check) {
 							$this->routeHelper->go('/?page=login');
 						}
 					} else {
-						$this->flashMessageHelper->error(
-							$this->translator->trans('login.pwreset.mismatch')
-						);
+						$this->flashMessageHelper->error($this->translator->trans('login.pwreset.mismatch'));
 					}
 				}
 				$this->pageHelper->addJs('$("#pass1").val("");');
 				$this->pageHelper->addContent($this->view->newPasswordForm($k));
 			} else {
-				$this->flashMessageHelper->error(
-					$this->translator->trans('login.pwreset.expired')
-				);
+				$this->flashMessageHelper->error($this->translator->trans('login.pwreset.expired'));
 				$this->pageHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {

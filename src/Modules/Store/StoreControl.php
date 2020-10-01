@@ -169,7 +169,7 @@ class StoreControl extends Control
 
 			if ($this->storeModel->update_betrieb($id, $g_data)) {
 				$this->storeTransactions->setStoreNameInConversations($id, $g_data['name']);
-				$this->flashMessageHelper->info($this->translator->trans('storeedit.edit_success'));
+				$this->flashMessageHelper->success($this->translator->trans('storeedit.edit_success'));
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
@@ -230,7 +230,7 @@ class StoreControl extends Control
 				], 'store-new-' . (int)$id);
 				$this->bellGateway->addBell($foodsaver, $bellData);
 
-				$this->flashMessageHelper->info($this->translator->trans('storeedit.add_success'));
+				$this->flashMessageHelper->success($this->translator->trans('storeedit.add_success'));
 
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
