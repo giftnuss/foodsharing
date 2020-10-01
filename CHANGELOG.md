@@ -21,6 +21,8 @@
 - Deprecate `v_scroller` !1698 @ChrisOelmueller
 - Deprecate and remove most of v_activeSwitcher !1697 @ChrisOelmueller
 - Deprecate `v_form_submit` !1700 @ChrisOelmueller
+- Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
+- Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 
@@ -87,7 +89,6 @@
 - Introduce some more specific store gateway functionality !1686 @ChrisOelmueller
 - Replace Vue filters with prototypes !1689 @ChrisOelmueller
 - Remove unused Xhr methods for region applications !1707 @alex.simm
-- Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

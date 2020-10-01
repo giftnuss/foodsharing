@@ -83,8 +83,8 @@ class StoreUserView extends View
 		$out .= '</table>';
 
 		$this->pageHelper->hiddenDialog('requests', [$out]);
-		$this->pageHelper->addJs('$("#requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
-		$this->pageHelper->addJs('$("#requests").dialog("option","buttons",{});');
+		$this->pageHelper->addJs('$("#requests").dialog("option", "title", "Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
+		$this->pageHelper->addJs('$("#requests").dialog("option", "buttons", {});');
 		$this->pageHelper->addJs('$("#requests").dialog("open");');
 	}
 
@@ -153,7 +153,7 @@ class StoreUserView extends View
 		return $this->v_utils->v_field($table, $title);
 	}
 
-	public function u_form_abhol_table(array $allDates): string
+	public function u_editPickups(array $allDates): string
 	{
 		$out = '<table class="timetable">
 		<thead>

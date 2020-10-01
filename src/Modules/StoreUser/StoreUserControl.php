@@ -354,10 +354,14 @@ class StoreUserControl extends Control
 					$pickup_dates = $this->storeGateway->getAbholzeiten($storeId);
 
 					$this->pageHelper->hiddenDialog('editpickups',
-						[$this->view->u_form_abhol_table($pickup_dates),
+						[
+							$this->view->u_editPickups($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0)
 						],
-						$this->translator->trans('pickup.edit.add'), ['reload' => true, 'width' => $width]);
+						$this->translator->trans('pickup.edit.add'),
+						true,
+						$width
+					);
 				}
 
 				if (!$store['jumper']) {

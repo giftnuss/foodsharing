@@ -422,13 +422,11 @@ final class PageHelper
 		$this->hidden .= $html;
 	}
 
-	public function hiddenDialog(string $id, array $fields, string $title = '', array $option = []): void
+	/**
+	 * @deprecated - use modern frontend code instead
+	 */
+	public function hiddenDialog(string $id, array $fields, string $title = '', bool $reload = false, string $width = ''): void
 	{
-		$width = '';
-		if (isset($option['width'])) {
-			$width = 'width:' . $option['width'] . ',';
-		}
-
 		$form = '';
 		foreach ($fields as $f) {
 			$form .= $f;
@@ -441,14 +439,8 @@ final class PageHelper
 
 		$this->addHidden('<div id="' . $id . '"><form>' . $form . $get . '</form></div>');
 
-		$success = '';
-		if (isset($option['success'])) {
-			$success = $option['success'];
-		}
-
-		if (isset($option['reload'])) {
-			$success .= 'reload();';
-		}
+		$width = $width ? "width: {$width}," : '';
+		$success = $reload ? 'reload();' : '';
 
 		$this->addJs('
 		$("#' . $id . '").dialog({

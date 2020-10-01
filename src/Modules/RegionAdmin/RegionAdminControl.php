@@ -47,11 +47,14 @@ class RegionAdminControl extends Control
 			'name' => $this->translator->trans('region.noParent'),
 		]);
 
-		$this->pageHelper->hiddenDialog('newregion', [
-			$this->v_utils->v_form_text('Name'),
-			$this->v_utils->v_form_text('email'),
-			$this->v_utils->v_form_select('parent_id', ['values' => $regions])
-		], $this->translator->trans('region.new'));
+		$this->pageHelper->hiddenDialog('newregion',
+			[
+				$this->v_utils->v_form_text('Name'),
+				$this->v_utils->v_form_text('email'),
+				$this->v_utils->v_form_select('parent_id', ['values' => $regions])
+			],
+			$this->translator->trans('region.new')
+		);
 
 		$this->pageHelper->addContent($this->v_utils->v_field(
 			'<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>',
