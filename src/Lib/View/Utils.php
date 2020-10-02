@@ -500,9 +500,9 @@ class Utils
 		$out .= join('', $elements);
 
 		if (!isset($option['submit'])) {
-			$out .= $this->v_form_submit($this->translator->trans('button.send'), $option);
+			$out .= $this->v_form_submit($this->translator->trans('button.send'));
 		} elseif ($option['submit'] !== false) {
-			$out .= $this->v_form_submit($option['submit'], $option);
+			$out .= $this->v_form_submit($option['submit']);
 		}
 
 		$out .= '
@@ -645,21 +645,6 @@ class Utils
 		];
 
 		return $this->twig->render('partials/tablesorter.twig', $params);
-	}
-
-	public function v_form_submit($val, array $option = []): string
-	{
-		$out = '';
-		if (isset($option['buttons'])) {
-			foreach ($option['buttons'] as $b) {
-				$out .= $b;
-			}
-		}
-
-		return '
-		<div class="input-wrapper">
-			<p><input class="button" type="submit" value="' . $val . '" />' . $out . '</p>
-		</div>';
 	}
 
 	public function v_form_textarea(string $id, array $option = []): string
@@ -1146,5 +1131,16 @@ class Utils
 			. $this->translator->trans('storestatus.' . $status)
 			. '" class="trafficlight store-trafficlight color-'
 			. $color . '"><span>&nbsp;</span></a>';
+	}
+
+	/**
+	 * @deprecated Use modern frontend code instead
+	 */
+	private function v_form_submit(string $submitTitle): string
+	{
+		return '
+		<div class="input-wrapper">
+			<p><input class="button" type="submit" value="' . $submitTitle . '" /></p>
+		</div>';
 	}
 }
