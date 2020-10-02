@@ -180,10 +180,7 @@ class BlogView extends View
 				. $this->v_utils->v_form_textarea('teaser', [
 					'style' => 'height:75px;',
 				])
-				. $this->v_utils->v_form_picture('picture', [
-					'resize' => [250, 528],
-					'crop' => [(250 / 135), (528 / 170)],
-				]),
+				. $this->v_form_picture('picture', [250, 528], [(250 / 135), (528 / 170)]),
 				$title,
 				['class' => 'ui-padding']
 			),
@@ -193,5 +190,70 @@ class BlogView extends View
 				'label' => $this->translator->trans('blog.content'),
 			]), $this->translator->trans('blog.content'))
 		]);
+	}
+
+	/**
+	 * @deprecated Use modern frontend code instead
+	 */
+	private function v_form_picture(string $id, array $resize, array $crop): string
+	{
+		$id = $this->identificationHelper->id($id);
+
+		$this->pageHelper->addJs('
+			$("#' . $id . '-link").fancybox({
+				minWidth: 600,
+				scrolling: "auto",
+				closeClick: false,
+				helpers: {
+					overlay: {closeClick: false}
+				}
+			});
+
+			$("#' . $id . '-opener").button().on("click", function () {
+				$("#' . $id . '-link").trigger("click");
+			});
+		');
+
+		$this->pageHelper->addHidden('
+		<div id="' . $id . '-fancy">
+			<div class="popbox">
+				<h3>' . $this->translator->trans('picture_upload_widget.picture_upload') . '</h3>
+				<p class="subtitle">' . $this->translator->trans('picture_upload_widget.choose_picture') . '</p>
+
+				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=1">
+
+					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
+
+					<input type="hidden" id="' . $id . '-action" name="action" value="uploadPicture" />
+					<input type="hidden" id="' . $id . '-id" name="id" value="' . $id . '" />
+
+					<input type="hidden" id="' . $id . '-x" name="x" value="0" />
+					<input type="hidden" id="' . $id . '-y" name="y" value="0" />
+					<input type="hidden" id="' . $id . '-w" name="w" value="0" />
+					<input type="hidden" id="' . $id . '-h" name="h" value="0" />
+
+					<input type="hidden" id="' . $id . '-ratio" name="ratio" value="' . json_encode($crop) . '" />
+					<input type="hidden" id="' . $id . '-ratio-i" name="ratio-i" value="0" />
+					<input type="hidden" id="' . $id . '-ratio-val" name="ratio-val" value="[]" />
+					<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($resize) . '" />
+				</form>
+
+				<div id="' . $id . '-crop"></div>
+
+				<iframe src="" id="' . $id . '-iframe" name="' . $id . '-iframe" style="width: 1px; height: 1px; visibility: hidden;"></iframe>
+			</div>
+		</div>');
+
+		$thumb = '';
+
+		$pic = $this->dataHelper->getValue($id);
+		if (!empty($pic)) {
+			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
+		}
+		$out = '
+			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
+			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
+
+		return $this->v_utils->v_input_wrapper($this->translator->trans($id), $out);
 	}
 }
