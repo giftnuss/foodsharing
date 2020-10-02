@@ -6,8 +6,16 @@ use Foodsharing\Modules\Core\View;
 
 class EmailView extends View
 {
-	public function v_email_compose(array $possibleSenders, string $recipientSelect): string
+	public function v_email_compose(array $possibleSenders, bool $offerAllOptions, bool $offerSomeOptions): string
 	{
+		if ($offerAllOptions) {
+			$recipientSelect = $this->v_form_recip_chooser(true);
+		} elseif ($offerSomeOptions) {
+			$recipientSelect = $this->v_form_recip_chooser(false);
+		} else {
+			$recipientSelect = '';
+		}
+
 		$metadata = $recipientSelect
 			. $this->v_utils->v_form_select('mailbox_id', ['values' => $possibleSenders, 'required' => true])
 			. $this->v_utils->v_form_text('subject', ['required' => true])
@@ -177,7 +185,10 @@ class EmailView extends View
 		return $out;
 	}
 
-	public function v_form_recip_chooser(bool $allOptions): string
+	/**
+	 * @deprecated This former view helper should not be used in any new code
+	 */
+	private function v_form_recip_chooser(bool $allOptions): string
 	{
 		$id = 'recip_choose';
 

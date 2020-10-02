@@ -68,14 +68,6 @@ class EmailControl extends Control
 			$this->pageHelper->addContent($this->view->v_email_statusbox($recipients, $emailstosend));
 		}
 
-		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
-			$recip = $this->view->v_form_recip_chooser(true);
-		} elseif ($this->session->isAmbassador()) {
-			$recip = $this->view->v_form_recip_chooser(false);
-		} else {
-			$recip = '';
-		}
-
 		global $g_data;
 		if (!isset($g_data['message'])) {
 			$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
@@ -85,8 +77,9 @@ class EmailControl extends Control
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
-
-		$this->pageHelper->addContent($this->view->v_email_compose($boxes, $recip));
+		$offerAllOptions = $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail();
+		$offerSomeOptions = $this->session->isAmbassador();
+		$this->pageHelper->addContent($this->view->v_email_compose($boxes, $offerAllOptions, $offerSomeOptions));
 
 		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 
