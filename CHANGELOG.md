@@ -8,6 +8,7 @@
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
+- Remove some long-unused grabInfo code !1695 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 

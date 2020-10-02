@@ -20,7 +20,6 @@ require_once 'config.inc.php';
 $csrf_whitelist = [
 	// 'getPinPost',
 	// 'activeSwitch',
-	// 'grabInfo',
 	// 'childBezirke',
 	// 'bBubble',
 	// 'loadMarker',

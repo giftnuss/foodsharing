@@ -1160,12 +1160,6 @@ foodsaver:
   about_me_intern: |
     Diese Kurzbeschreibung wird auf deiner Profilseite angezeigt
     und ist dort für alle in der foodsharing-Community sichtbar.
-  data:
-    request: 'Bitte noch ein paar Daten vervollständigen bzw. überprüfen!'
-    explain: |
-      Damit dein Profil voll funktionsfähig ist, benötigen wir noch folgende Angaben von dir.
-      Herzlichen Dank!
-    thanks: Danke dir!
   upgrade:
     ad_fs: 'Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver*in werden!'
     to_fs: Werde Foodsaver*in

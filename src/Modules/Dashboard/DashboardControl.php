@@ -212,84 +212,11 @@ class DashboardControl extends Control
 	 */
 	private function dashFoodsaver()
 	{
-		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
+		$address = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
-		if (empty($val['lat']) || empty($val['lon'])) {
+		if (empty($address['lat']) || empty($address['lon'])) {
 			$this->flashMessageHelper->info($this->translator->trans('dashboard.checkAddress'));
 			$this->routeHelper->go('/?page=settings&sub=general&');
-		}
-
-		global $g_data;
-		$g_data = $val;
-		$elements = [];
-
-		if (empty($val['lat']) || empty($val['lon'])) {
-			$this->pageHelper->addJs('
-                $("#plz, #stadt, #anschrift, #hsnr").on("blur", function () {
-                    if ($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "") {
-                        u_loadCoords({
-                            plz: $("#plz").val(),
-                            stadt: $("#stadt").val(),
-                            anschrift: $("#anschrift").val(),
-                            complete: function () {
-                                hideLoader();
-                            }
-						},
-						function (lat, lon) {
-							$("#lat").val(lat);
-							$("#lon").val(lon);
-						});
-                    }
-                });
-
-                $("#lat-wrapper").hide();
-                $("#lon-wrapper").hide();
-            ');
-			$elements[] = $this->v_utils->v_form_text('anschrift');
-			$elements[] = $this->v_utils->v_form_text('plz');
-			$elements[] = $this->v_utils->v_form_text('stadt');
-			$elements[] = $this->v_utils->v_form_text('lat');
-			$elements[] = $this->v_utils->v_form_text('lon');
-		}
-
-		if (!empty($elements)) {
-			$out = $this->v_utils->v_form('grabInfo', $elements, [
-				'submit' => $this->translator->trans('button.save'),
-			]);
-
-			$this->pageHelper->addJs('
-                $("#grab-info-link").fancybox({
-                    closeClick: false,
-                    closeBtn: true,
-                });
-                $("#grab-info-link").trigger("click");
-
-                $("#grabinfo-form").on("submit", function (e) {
-                    e.preventDefault();
-					showLoader();
-					$.ajax({
-						url:"/xhr.php?f=grabInfo",
-						data: $("#grabinfo-form").serialize(),
-						dataType: "json",
-						complete: function () {
-							hideLoader();
-						},
-						success: function () {
-							pulseInfo("' . $this->translator->trans('foodsaver.data.thanks') . '");
-							$.fancybox.close();
-						}
-					});
-                });
-            ');
-
-			$this->pageHelper->addHidden('
-			<div id="grab-info">
-				<div class="popbox">
-					<h3>' . $this->translator->trans('foodsaver.data.request') . '!</h3>
-					<p class="subtitle">' . $this->translator->trans('foodsaver.data.explain') . '!</p>
-					' . $out . '
-				</div>
-			</div><a id="grab-info-link" href="#grab-info">&nbsp;</a>');
 		}
 
 		/*
