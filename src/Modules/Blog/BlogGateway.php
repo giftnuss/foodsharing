@@ -166,28 +166,26 @@ final class BlogGateway extends BaseGateway
 
 	public function add_blog_entry(array $data): int
 	{
-		$active = 0;
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($data['bezirk_id'])) {
-			$active = 1;
-		}
+		$regionId = intval($data['bezirk_id']);
+		$active = intval($this->session->isOrgaTeam() || $this->session->isAdminFor($regionId));
 
 		$id = $this->db->insert(
 			'fs_blog_entry',
 			[
-				'bezirk_id' => (int)$data['bezirk_id'],
+				'bezirk_id' => $regionId,
 				'foodsaver_id' => (int)$data['foodsaver_id'],
 				'name' => strip_tags($data['name']),
 				'teaser' => strip_tags($data['teaser']),
 				'body' => $data['body'],
 				'time' => strip_tags($data['time']),
 				'picture' => strip_tags($data['picture']),
-				'active' => $active
+				'active' => $active,
 			]
 		);
 
 		$foodsaver = [];
 		$orgateam = $this->foodsaverGateway->getOrgateam();
-		$botschafter = $this->foodsaverGateway->getAdminsOrAmbassadors($data['bezirk_id']);
+		$botschafter = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 
 		foreach ($orgateam as $o) {
 			$foodsaver[$o['id']] = $o;
