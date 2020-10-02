@@ -25,6 +25,7 @@
 - Deprecate `v_form_submit` !1700 @ChrisOelmueller
 - Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
 - Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
+- Deprecate both `v_form_recip_chooser` variants !1699 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg

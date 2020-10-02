@@ -29,6 +29,7 @@ class EmailControl extends Control
 	private NewsletterEmailPermissions $newsletterEmailPermissions;
 
 	public function __construct(
+		EmailView $view,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
@@ -39,6 +40,7 @@ class EmailControl extends Control
 		DataHelper $dataHelper,
 		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
+		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
@@ -65,12 +67,14 @@ class EmailControl extends Control
 			$this->pageHelper->addContent($this->v_email_statusbox($emailstosend));
 		}
 
-		$recip = '';
 		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
-			$recip = $this->v_utils->v_form_recip_chooser();
+			$recip = $this->view->v_form_recip_chooser(true);
 		} elseif ($this->session->isAmbassador()) {
-			$recip = $this->v_utils->v_form_recip_chooser_mini();
+			$recip = $this->view->v_form_recip_chooser(false);
+		} else {
+			$recip = '';
 		}
+
 		global $g_data;
 		if (!isset($g_data['message'])) {
 			$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
