@@ -252,7 +252,7 @@ class FoodSharePointView extends View
 		}
 		if (!empty($this->follower['follow'])) {
 			$out .= $this->v_utils->v_field(
-				$this->fsAvatarList($this->follower['follow'], ['height' => 700, 'scroller' => true]),
+				$this->fsAvatarList($this->follower['follow'], 700, true),
 				$this->translator->trans('fsp.followers')
 			);
 		}

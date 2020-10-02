@@ -273,7 +273,7 @@ class BasketView extends View
 			'sleep_status' => $basket['sleep_status'],
 		];
 
-		return $this->fsAvatarList([$basketUser], ['height' => 600]) . $request;
+		return $this->fsAvatarList([$basketUser], 600) . $request;
 	}
 
 	private function pageImg(string $img): string

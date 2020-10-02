@@ -84,7 +84,7 @@ class FoodsaverView extends View
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
 	{
-		$avatars = $this->fsAvatarList($foodsaver, ['id' => 'fslist', 'noshuffle' => true, 'height' => 600, 'scroller' => true]);
+		$avatars = $this->fsAvatarList($foodsaver, 600, true, ['id' => 'fslist', 'noshuffle' => true]);
 		$name = $inactive ? 'inactive' : '';
 
 		return '<div id="' . $name . 'foodsaverlist">' .

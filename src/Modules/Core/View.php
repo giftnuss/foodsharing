@@ -143,14 +143,9 @@ class View
 		</div>';
 	}
 
-	public function fsAvatarList($foodsaver, $option = [])
+	public function fsAvatarList(array $foodsaver, int $maxHeight = 185, bool $useScroller = false, array $option = []): string
 	{
-		if (!is_array($foodsaver)) {
-			return '';
-		}
 		$id = $option['id'] ?? $this->identificationHelper->id('team');
-		$useScroller = $option['scroller'] ?? false;
-		$maxHeight = $option['height'] ?? 185;
 
 		$out = '
 		<div>
