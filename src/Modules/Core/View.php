@@ -148,19 +148,12 @@ class View
 		if (!is_array($foodsaver)) {
 			return '';
 		}
-
-		if (!isset($option['scroller'])) {
-			$option['scroller'] = true;
-		}
+		$useScroller = $option['scroller'] ?? true;
+		$maxHeight = $option['height'] ?? 185;
 
 		$id = $this->identificationHelper->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
-		}
-
-		$maxHeight = 185;
-		if (isset($option['height'])) {
-			$maxHeight = $option['height'];
 		}
 
 		$out = '
@@ -194,9 +187,8 @@ class View
 			<div style="clear:both"></div>
 		</div>';
 
-		if ($option['scroller']) {
-			$out = $this->v_utils->v_scroller($out, $maxHeight);
-			$this->pageHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+		if ($useScroller) {
+			$out = $this->v_scroller($out, $maxHeight);
 		}
 
 		return $out;
@@ -316,5 +308,23 @@ class View
 			'props' => $props,
 			'initialData' => $data,
 		]);
+	}
+
+	/**
+	 * @deprecated Use modern frontend code instead
+	 */
+	private function v_scroller(string $content, int $maxHeight): string
+	{
+		if ($this->session->isMob()) {
+			return $content;
+		}
+		$id = $this->identificationHelper->id('scroller');
+		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: "auto"});');
+		$this->pageHelper->addStyle('
+			.scroller { margin: 0; max-height:' . $maxHeight . 'px; }
+			.scroller .overview { left: 0; }'
+		);
+
+		return '<div id="' . $id . '" class="scroller">' . $content . '</div>';
 	}
 }

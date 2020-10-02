@@ -60,21 +60,6 @@ class Utils
 		return $this->v_field('<div class="v-form">' . $this->v_form($title, $elements, $option) . '</div>', $title);
 	}
 
-	public function v_scroller(string $content, int $maxHeight): string
-	{
-		if ($this->session->isMob()) {
-			return $content;
-		}
-
-		$id = $this->identificationHelper->id('scroller');
-		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: "auto"});');
-
-		return '
-			<div style="max-height:' . $maxHeight . 'px;" id="' . $id . '" class="scroller">
-				' . $content . '
-			</div>';
-	}
-
 	public function v_activeSwitcher($table, int $field_id, bool $active): string
 	{
 		$id = $this->identificationHelper->id('activeSwitch');
