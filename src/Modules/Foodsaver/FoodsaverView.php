@@ -84,17 +84,15 @@ class FoodsaverView extends View
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
 	{
-		$avatars = $this->fsAvatarList($foodsaver, 600, true, ['id' => 'fslist', 'noshuffle' => true]);
+		$avatars = $this->fsAvatarList($foodsaver, 600, true, false, 'fslist');
 		$name = $inactive ? 'inactive' : '';
+		$label = $this->translator->trans('foodsaver.list.summary', [
+			'{count}' => count($foodsaver),
+			'{region}' => $bezirk['name'],
+		]) . ($inactive ? $this->translator->trans('foodsaver.list.inactive') : '');
 
 		return '<div id="' . $name . 'foodsaverlist">' .
-			$this->v_utils->v_field($avatars,
-				$this->translator->trans('foodsaver.list.summary', [
-					'{count}' => count($foodsaver),
-					'{region}' => $bezirk['name'],
-				])
-				. ($inactive ? $this->translator->trans('foodsaver.list.inactive') : '')
-			) . '</div>';
+			$this->v_utils->v_field($avatars, $label) . '</div>';
 	}
 
 	public function foodsaver_form($title, $regionDetails)

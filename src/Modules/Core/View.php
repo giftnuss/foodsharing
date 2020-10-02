@@ -143,20 +143,20 @@ class View
 		</div>';
 	}
 
-	public function fsAvatarList(array $foodsaver, int $maxHeight = 185, bool $useScroller = false, array $option = []): string
+	public function fsAvatarList(array $foodsaver, int $maxHeight = 185, bool $useScroller = false, bool $shuffle = true, ?string $id = null): string
 	{
-		$id = $option['id'] ?? $this->identificationHelper->id('team');
+		$id ??= $this->identificationHelper->id('team');
+		if ($shuffle) {
+			shuffle($foodsaver);
+		}
 
 		$out = '
 		<div>
 			<ul id="' . $id . '" class="linklist">';
-		if (!isset($option['noshuffle'])) {
-			shuffle($foodsaver);
-		}
 		foreach ($foodsaver as $fs) {
 			$photo = $this->imageService->avatar($fs);
 
-			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
+			$click = ' onclick="profile(' . (int)$fs['id'] . '); return false;"';
 
 			$href = '#';
 			if (isset($fs['href'])) {
