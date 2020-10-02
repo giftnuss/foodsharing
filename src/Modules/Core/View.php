@@ -148,13 +148,9 @@ class View
 		if (!is_array($foodsaver)) {
 			return '';
 		}
-		$useScroller = $option['scroller'] ?? true;
+		$id = $option['id'] ?? $this->identificationHelper->id('team');
+		$useScroller = $option['scroller'] ?? false;
 		$maxHeight = $option['height'] ?? 185;
-
-		$id = $this->identificationHelper->id('team');
-		if (isset($option['id'])) {
-			$id = $option['id'];
-		}
 
 		$out = '
 		<div>

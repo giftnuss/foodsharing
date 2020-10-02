@@ -266,16 +266,14 @@ class BasketView extends View
 				</div>';
 		}
 
-		return $this->fsAvatarList(
-			[
-				[
-					'id' => $basket['fs_id'],
-					'name' => $basket['fs_name'],
-					'photo' => $basket['fs_photo'],
-					'sleep_status' => $basket['sleep_status'],
-				],
-			], ['height' => 600, 'scroller' => false]
-		) . $request;
+		$basketUser = [
+			'id' => $basket['fs_id'],
+			'name' => $basket['fs_name'],
+			'photo' => $basket['fs_photo'],
+			'sleep_status' => $basket['sleep_status'],
+		];
+
+		return $this->fsAvatarList([$basketUser], ['height' => 600]) . $request;
 	}
 
 	private function pageImg(string $img): string
