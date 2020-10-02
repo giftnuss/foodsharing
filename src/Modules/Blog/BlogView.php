@@ -59,7 +59,7 @@ class BlogView extends View
 			$blogId = intval($article['id']);
 
 			if ($this->blogPermissions->mayPublish($article['bezirk_id'])) {
-				$active = $this->v_utils->v_activeSwitcher('blog_entry', $blogId, boolval($article['active']));
+				$active = $this->v_activeSwitcher($blogId, boolval($article['active']));
 			} else {
 				$active = $this->translator->trans('blog.status.' . $article['active']);
 			}
@@ -154,8 +154,9 @@ class BlogView extends View
 		} else {
 			$title = $this->translator->trans('blog.edit');
 			global $g_data;
+			$blogId = intval($_GET['id']);
 			$this->pageHelper->addContent($this->v_utils->v_field(
-				$this->v_utils->v_activeSwitcher('blog_entry', intval($_GET['id']), boolval($g_data['active'])),
+				$this->v_activeSwitcher($blogId, boolval($g_data['active'])),
 				$this->translator->trans('blog.table.status'),
 				['class' => 'ui-padding']
 			), CNT_LEFT);
@@ -255,5 +256,51 @@ class BlogView extends View
 			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
 		return $this->v_utils->v_input_wrapper($this->translator->trans($id), $out);
+	}
+
+	/**
+	 * @deprecated Use modern frontend code instead
+	 */
+	private function v_activeSwitcher(int $blogId, bool $active): string
+	{
+		$id = $this->identificationHelper->id('activeSwitch');
+		$table = 'blog_entry';
+
+		$this->pageHelper->addJs('
+			$("#' . $id . ' input").switchButton({
+				labels_placement: "right",
+				on_label: "' . $this->translator->trans('ui.switch.on') . '",
+				off_label: "' . $this->translator->trans('ui.switch.off') . '",
+				on_callback: function () {
+					showLoader();
+					$.ajax({
+						url: "/xhr.php?f=activeSwitch",
+						data: {t: "' . $table . '", id: "' . $blogId . '", value: 1},
+						method: "get",
+						complete: function () {
+							hideLoader();
+						}
+					});
+				},
+				off_callback: function () {
+					showLoader();
+					$.ajax({
+						url: "/xhr.php?f=activeSwitch",
+						data: {t: "' . $table . '", id: "' . $blogId . '", value: 0},
+						method: "get",
+						complete: function () {
+							hideLoader();
+						}
+					});
+				}
+			});
+		');
+
+		$checkedStatus = $active ? ' checked="checked"' : '';
+
+		return '
+			<div id="' . $id . '">
+				<input' . $checkedStatus . ' type="checkbox" name="' . $id . '" id="' . $id . '-on" value="1" />
+			</div>';
 	}
 }

@@ -60,48 +60,6 @@ class Utils
 		return $this->v_field('<div class="v-form">' . $this->v_form($title, $elements, $option) . '</div>', $title);
 	}
 
-	public function v_activeSwitcher($table, int $field_id, bool $active): string
-	{
-		$id = $this->identificationHelper->id('activeSwitch');
-
-		$this->pageHelper->addJs('
-			$("#' . $id . ' input").switchButton({
-				labels_placement: "right",
-				on_label: "' . $this->translator->trans('ui.switch.on') . '",
-				off_label: "' . $this->translator->trans('ui.switch.off') . '",
-				on_callback: function () {
-					showLoader();
-					$.ajax({
-						url: "/xhr.php?f=activeSwitch",
-						data: {t: "' . $table . '", id: "' . $field_id . '", value: 1},
-						method: "get",
-						complete: function () {
-							hideLoader();
-						}
-					});
-				},
-				off_callback: function () {
-					showLoader();
-					$.ajax({
-						url: "/xhr.php?f=activeSwitch",
-						data: {t: "' . $table . '", id: "' . $field_id . '", value: 0},
-						method: "get",
-						complete: function () {
-							hideLoader();
-						}
-					});
-				}
-			});
-		');
-
-		$checkedStatus = $active ? ' checked="checked"' : '';
-
-		return '
-			<div id="' . $id . '">
-				<input' . $checkedStatus . ' type="checkbox" name="' . $id . '" id="' . $id . '-on" value="1" />
-			</div>';
-	}
-
 	public function v_regionPicker(array $region, string $label): string
 	{
 		$id = $this->identificationHelper->id('bezirk_id');
