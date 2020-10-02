@@ -76,6 +76,7 @@
 - Deprecate `v_form_picture` !1701 @ChrisOelmueller
 - Rename `theme` variables to `thread` !1645 #840 @Caluera @ChrisOelmueller
 - Deprecate `v_scroller` !1698 @ChrisOelmueller
+- Deprecate and remove most of v_activeSwitcher !1697 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

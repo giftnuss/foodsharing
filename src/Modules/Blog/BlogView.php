@@ -263,12 +263,11 @@ class BlogView extends View
 	 */
 	private function v_activeSwitcher(int $blogId, bool $active): string
 	{
-		$id = $this->identificationHelper->id('activeSwitch');
+		$id = $this->identificationHelper->id('activeswitch');
 		$table = 'blog_entry';
 
 		$this->pageHelper->addJs('
 			$("#' . $id . ' input").switchButton({
-				labels_placement: "right",
 				on_label: "' . $this->translator->trans('ui.switch.on') . '",
 				off_label: "' . $this->translator->trans('ui.switch.off') . '",
 				on_callback: function () {
@@ -292,7 +291,7 @@ class BlogView extends View
 							hideLoader();
 						}
 					});
-				}
+				},
 			});
 		');
 
