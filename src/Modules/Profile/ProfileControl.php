@@ -50,15 +50,15 @@ final class ProfileControl extends Control
 		$data = $this->profileGateway->getData($profileId, $viewerId, $this->reportPermissions->mayHandleReports());
 		$isRemoved = (!$data) || isset($data['deleted_at']);
 
-		if ($isRemoved) {
-			$this->flashMessageHelper->error($this->translator->trans('profile.notFound'));
-			$this->routeHelper->goPage('dashboard');
-		}
-
 		if (!$this->session->may()) {
 			$this->profilePublic($data);
 
 			return;
+		}
+
+		if ($isRemoved) {
+			$this->flashMessageHelper->error($this->translator->trans('profile.notFound'));
+			$this->routeHelper->goPage('dashboard');
 		}
 
 		$this->foodsaver = $data;
@@ -122,13 +122,14 @@ final class ProfileControl extends Control
 	private function profilePublic(array $profileData): void
 	{
 		$isVerified = $profileData['verified'] ?? 0;
-		$regionName = $this->regionGateway->getRegionName($profileData['bezirk_id']) ?? '';
+		$regionId = $profileData['bezirk_id'] ?? null;
+		$regionName = ($regionId === null) ? '?' : $this->regionGateway->getRegionName($regionId);
 		$this->pageHelper->addContent(
 			$this->view->vueComponent('profile-public', 'PublicProfile', [
 				'canPickUp' => $isVerified > 0,
 				'firstName' => $profileData['name'] ?? '?',
 				'fromRegion' => $regionName,
-				'fsId' => $profileData['id'],
+				'fsId' => $profileData['id'] ?? '',
 			])
 		);
 	}
