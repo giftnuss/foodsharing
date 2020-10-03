@@ -11,5 +11,5 @@ class Role
 	public const STORE_MANAGER = 2;
 	public const AMBASSADOR = 3;
 	public const ORGA = 4;
-	public const SITE_ADMIN = 5;
+	public const SITE_ADMIN = 5; // this role is not used currently
 }

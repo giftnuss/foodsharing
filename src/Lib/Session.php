@@ -25,7 +25,7 @@ class Session
 	private $storeGateway;
 	private $initialized = false;
 
-	private const roles = [
+	private const ROLE_KEYS = [
 		Role::FOODSHARER => 'user',
 		Role::FOODSAVER => 'fs',
 		Role::STORE_MANAGER => 'bieb',
@@ -430,7 +430,7 @@ class Session
 
 	private function rolleWrapInt($roleInt)
 	{
-		return self::roles[$roleInt];
+		return self::ROLE_KEYS[$roleInt];
 	}
 
 	public function mayBezirk($regionId): bool

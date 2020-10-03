@@ -32,6 +32,7 @@
 - Reimplement user verification as REST endpoints !1696 @ChrisOelmueller
 - Rewrite store wall with REST and Vue !1690 @ChrisOelmueller
 - Move xhr functions for store requests to REST !1755 @alex.simm
+- Replace isOrgaTeam checks with may(orga) #883 !1680 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
