@@ -265,6 +265,7 @@ group:
   photo: Foto
   applications: Bewerbungen
   applications_for: Bewerbungen für %name%
+  edit: '{group} bearbeiten'
   saved: Änderungen wurden gespeichert
   mail_link_title:
     workgroup: AG-Postfach
@@ -342,6 +343,7 @@ group:
     duplicate_welcome_team: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
     duplicate_voting_team: 'Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben.'
     duplicate_fsp_team: 'Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben.'
+  show-all: Alle anzeigen
 
 legal:
   pp: Datenschutzerklärung

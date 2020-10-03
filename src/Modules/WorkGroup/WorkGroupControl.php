@@ -46,7 +46,7 @@ class WorkGroupControl extends Control
 			$this->routeHelper->goLogin();
 		}
 
-		$this->pageHelper->addBread('Arbeitsgruppen', '/?page=groups');
+		$this->pageHelper->addBread($this->translator->trans('terminology.groups'), '/?page=groups');
 
 		if (!$request->query->has('sub')) {
 			$this->list($request, $response);
@@ -71,11 +71,12 @@ class WorkGroupControl extends Control
 			];
 		};
 
-		$menuGlobal = [['name' => 'Alle anzeigen', 'href' => '/?page=groups']];
+		$menuGlobal = [['name' => $this->translator->trans('group.show-all'), 'href' => '/?page=groups']];
 		$menuLocalRegions = array_map($regionToMenuItem, $localRegions);
 		$menuCountries = array_map($regionToMenuItem, $countries);
 
-		$myGroups = array_filter(isset($_SESSION['client']['bezirke']) ? $_SESSION['client']['bezirke'] : [], function ($group) {
+		$myRegions = $_SESSION['client']['bezirke'] ?? [];
+		$myGroups = array_filter($myRegions, function ($group) {
 			return $group['type'] == Type::WORKING_GROUP;
 		});
 		$menuMyGroups = array_map(
@@ -106,12 +107,12 @@ class WorkGroupControl extends Control
 		$myStats = $this->workGroupGateway->getStats($sessionId);
 		$groups = $this->getGroups($parent, $myApplications, $myStats);
 
-		$response->setContent(
-			$this->render(
-				'pages/WorkGroup/list.twig',
-				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
-			)
-		);
+		$list = $this->render('pages/WorkGroup/list.twig', [
+			'nav' => $this->getSideMenuData('=' . $parent),
+			'groups' => $groups,
+		]);
+
+		$response->setContent($list);
 	}
 
 	private function getGroups(int $parent, array $applications, array $stats): array
@@ -151,7 +152,9 @@ class WorkGroupControl extends Control
 			$this->routeHelper->go('/?page=dashboard');
 		}
 
-		$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+		$bread = $this->translator->trans('group.edit', ['{name}' => $group['name']]);
+		$this->pageHelper->addBread($bread, '/?page=groups&sub=edit&id=' . (int)$group['id']);
+
 		$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 		$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
 		$form->handleRequest($request);
@@ -160,7 +163,7 @@ class WorkGroupControl extends Control
 				$data = $editWorkGroupRequest->toGroup();
 				$this->workGroupGateway->updateGroup($group['id'], $data);
 				$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
-				$this->flashMessageHelper->success($this->translator->trans('groups.saved'));
+				$this->flashMessageHelper->success($this->translator->trans('group.saved'));
 				$this->routeHelper->goSelf();
 			}
 		}
