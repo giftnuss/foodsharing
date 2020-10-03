@@ -26,7 +26,7 @@
       </template>
 
       <span class="fs-name text-muted">
-        {{ $i18n('profile.public.who', { name: initials, from: fromRegion }) }}
+        {{ $i18n('profile.public.who', { name: firstName, from: fromRegion }) }}
       </span>
       <span class="fs-id text-muted text-monospace bg-light">
         #{{ fsId }}
@@ -35,7 +35,7 @@
       <hr class="my-3">
 
       <p>
-        {{ $i18n('profile.public.cta', { name: initials }) }}
+        {{ $i18n('profile.public.cta', { name: firstName }) }}
       </p>
 
       <b-button-group vertical size="lg">
@@ -58,7 +58,7 @@ export default {
     canPickUp: { type: Boolean, default: false },
     fromRegion: { type: String, default: '' },
     fsId: { type: Number, default: 0 },
-    initials: { type: String, required: true }
+    firstName: { type: String, required: true }
   }
 }
 </script>

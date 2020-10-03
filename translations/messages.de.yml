@@ -1409,7 +1409,7 @@ profile:
   public:
     who: '{name} aus {from}'
     may: aktiv
-    mayNot: nicht verifiziert
+    mayNot: nicht aktiv
     textMay: 'und darf daher Lebensmittel im Namen von foodsharing entgegennehmen.'
     textMayNot: 'und daher zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen.'
     cta: 'Das vollständige Profil von {name} ist nach Anmeldung zugänglich:'
