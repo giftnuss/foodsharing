@@ -13,6 +13,10 @@
       v-if="teaser"
       class="text-truncate"
     >
+      <i
+        v-if="teaserIcon"
+        :class="`fa-fw ${teaserIcon}`"
+      />
       {{ teaser }}
     </small>
   </a>
@@ -29,6 +33,10 @@ export default {
       default: ''
     },
     teaser: {
+      type: String,
+      default: ''
+    },
+    teaserIcon: {
       type: String,
       default: ''
     },

@@ -1420,6 +1420,7 @@ search:
   title: Suche
   placeholder: Suche...
   forum: Nach Titel suchen...
+  thread-title-only: Es werden nur Titel durchsucht, nicht der Text von Beiträgen.
   noresults: Es konnten keine Ergebnisse gefunden werden
   mybuddies: Meine Buddies
   mygroups: Meine Gruppen

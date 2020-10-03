@@ -146,17 +146,19 @@ class SearchGateway extends BaseGateway
 	{
 		$searchString = $this->prepareSearchString($q);
 		$results = $this->db->fetchAll(
-			'SELECT t.id, t.name
-				   FROM fs_theme t, fs_bezirk_has_theme ht
+			'SELECT t.id, t.name, p.time
+				   FROM fs_theme t, fs_bezirk_has_theme ht, fs_theme_post p
 				   WHERE MATCH (t.name) AGAINST (? IN BOOLEAN MODE)
 				   AND t.id = ht.theme_id AND ht.bezirk_id = ?
 				   AND t.active = 1 AND ht.bot_theme = ?
-				   GROUP BY t.id',
-			[$searchString, $groupId, $subforumId]
+				   AND p.id = t.last_post_id
+				   GROUP BY t.id
+				   ORDER BY p.time DESC
+			', [$searchString, $groupId, $subforumId]
 		);
 
 		return array_map(function ($x) {
-			return SearchResult::create($x['id'], $x['name'], '');
+			return SearchResult::create($x['id'], $x['name'], $x['time']);
 		}, $results);
 	}
 

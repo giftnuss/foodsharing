@@ -22,6 +22,8 @@
 - Orga may 'delete' foodbaskets #51 !1670 @fsk_k
 - fetchrate is not shown as long as reporting system is down !1706 @fs_k
 
+- Sort forum search results by last update !1704 @ChrisOelmueller
+ 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm

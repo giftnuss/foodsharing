@@ -7,24 +7,35 @@
       {{ $i18n('search.noresults') }}
     </div>
 
-    <div v-if="filtered.threads.length">
+    <div
+      v-if="!isEmpty"
+      class="found-threads"
+    >
+      <div class="m-1 text-center text-muted">
+        <i class="fas fa-info-circle" />
+        <span> {{ $i18n('search.thread-title-only') }} </span>
+      </div>
+
       <h3 class="dropdown-header">
         <i class="fas fa-comment" /> {{ $i18n('terminology.themes') }}
       </h3>
+
       <search-result-entry
-        v-for="thread in filtered.threads"
+        v-for="thread in filteredThreads"
         :key="thread.id"
         :href="$url('forum', groupId, subforumId, thread.id)"
         :title="thread.name"
+        :teaser="getThreadDate(thread)"
+        teaser-icon="far fa-clock"
       />
     </div>
   </div>
 </template>
 
 <script>
-
 import SearchResultEntry from '@/components/Topbar/Search/SearchResultEntry'
-import { VBTooltip } from 'bootstrap-vue'
+import differenceInCalendarYears from 'date-fns/differenceInCalendarYears'
+import parseISO from 'date-fns/parseISO'
 
 function match (word, e) {
   if (e.name && e.name.toLowerCase().indexOf(word) !== -1) return true
@@ -35,7 +46,6 @@ export default {
   components: {
     SearchResultEntry
   },
-  directives: { VBTooltip },
   props: {
     threads: {
       type: Array,
@@ -43,7 +53,7 @@ export default {
     },
     groupId: {
       type: Number,
-      default: -1
+      required: true
     },
     subforumId: {
       type: Number,
@@ -59,7 +69,7 @@ export default {
     }
   },
   computed: {
-    filtered () {
+    filteredThreads () {
       const query = this.query.toLowerCase().trim()
       const words = query.match(/[^ ,;+.]+/g)
 
@@ -71,12 +81,20 @@ export default {
         }
         return true
       }
-      return {
-        threads: this.threads.filter(filterFunction)
-      }
+      return this.threads.filter(filterFunction)
     },
     isEmpty () {
-      return !this.filtered.threads.length
+      return !this.filteredThreads.length
+    }
+  },
+  methods: {
+    getThreadDate (thread) {
+      const lastUpdated = parseISO(thread.teaser)
+      if (differenceInCalendarYears(new Date(), lastUpdated) >= 1) {
+        return this.$dateFormat(lastUpdated, 'full-long')
+      } else {
+        return this.$dateDistanceInWords(lastUpdated) + ` (${this.$dateFormat(lastUpdated, 'full-short')})`
+      }
     }
   }
 }
@@ -86,5 +104,16 @@ export default {
 .dropdown-header {
     white-space: normal;
     margin-bottom: 0;
+}
+
+.found-threads ::v-deep a {
+  font-size: 0.9rem;
+
+  // teaser == date of last thread update
+  & > small {
+    float: right;
+    margin: 0.1rem 0;
+    color: var(--gray);
+  }
 }
 </style>
