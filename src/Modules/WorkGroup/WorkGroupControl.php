@@ -116,33 +116,29 @@ class WorkGroupControl extends Control
 
 	private function getGroups(int $parent, array $applications, array $stats): array
 	{
-		return array_map(
-			function ($group) use ($applications, $stats) {
-				$leaders = array_map(function ($leader) {
-					return array_merge($leader, ['image' => $this->imageService->img($leader['photo'])]);
-				}, $group['leaders']);
+		$insertLeaderImage = function (array $leader): array {
+			return array_merge($leader, ['image' => $this->imageService->img($leader['photo'])]);
+		};
+		$enrichGroupData = function (array $group) use ($insertLeaderImage, $applications, $stats): array {
+			$leaders = array_map($insertLeaderImage, $group['leaders']);
+			$satisfied = $this->workGroupPermissions->fulfillApplicationRequirements($group, $stats);
 
-				$satisfied = $this->workGroupPermissions->fulfillApplicationRequirements($group, $stats);
+			return array_merge($group, [
+				'leaders' => $leaders,
+				'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
+				'appliedFor' => in_array($group['id'], $applications),
+				'applyMinBananaCount' => $group['banana_count'],
+				'applyMinFetchCount' => $group['fetch_count'],
+				'applyMinFoodsaverWeeks' => $group['week_num'],
+				'applicationRequirementsNotFulfilled' => !$satisfied,
+				'mayEdit' => $this->workGroupPermissions->mayEdit($group),
+				'mayAccess' => $this->workGroupPermissions->mayAccess($group),
+				'mayApply' => $this->workGroupPermissions->mayApply($group, $applications, $stats),
+				'mayJoin' => $this->workGroupPermissions->mayJoin($group),
+			]);
+		};
 
-				return array_merge(
-					$group,
-					[
-						'leaders' => $leaders,
-						'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
-						'appliedFor' => in_array($group['id'], $applications),
-						'applyMinBananaCount' => $group['banana_count'],
-						'applyMinFetchCount' => $group['fetch_count'],
-						'applyMinFoodsaverWeeks' => $group['week_num'],
-						'applicationRequirementsNotFulfilled' => !$satisfied,
-						'mayEdit' => $this->workGroupPermissions->mayEdit($group),
-						'mayAccess' => $this->workGroupPermissions->mayAccess($group),
-						'mayApply' => $this->workGroupPermissions->mayApply($group, $applications, $stats),
-						'mayJoin' => $this->workGroupPermissions->mayJoin($group),
-					]
-				);
-			},
-			$this->workGroupGateway->listGroups($parent)
-		);
+		return array_map($enrichGroupData, $this->workGroupGateway->listGroups($parent));
 	}
 
 	private function edit(Request $request, Response $response): void

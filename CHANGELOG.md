@@ -1,3 +1,17 @@
+# Release "Dragonfruit", unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+- Flatten some workgroup function calls !1702 @ChrisOelmueller
+
+## Dev/Test/CI stuff
+
+
 # Release "Cranberry", 2020-10-11
 
 ## Features
