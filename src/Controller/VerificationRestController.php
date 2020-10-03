@@ -45,7 +45,7 @@ class VerificationRestController extends AbstractFOSRestController
 	 * @SWG\Response(response="404", description="User not found.")
 	 * @SWG\Response(response="422", description="Already verified.")
 	 *
-	 * @Rest\Patch("user/{userId}/verify", requirements={"userId" = "\d+"})
+	 * @Rest\Patch("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */
 	public function verifyUserAction(int $userId): Response
 	{
@@ -63,7 +63,6 @@ class VerificationRestController extends AbstractFOSRestController
 		}
 
 		$this->foodsaverGateway->changeUserVerification($userId, $sessionId, true);
-		// TODO perhaps move this into a separate transaction?
 		$this->bellGateway->delBellsByIdentifier('new-fs-' . $userId);
 
 		return $this->handleView($this->view([], 200));
@@ -80,7 +79,7 @@ class VerificationRestController extends AbstractFOSRestController
 	 * @SWG\Response(response="404", description="User not found.")
 	 * @SWG\Response(response="422", description="Already deverified.")
 	 *
-	 * @Rest\Delete("user/{userId}/verify", requirements={"userId" = "\d+"})
+	 * @Rest\Delete("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */
 	public function deverifyUserAction(int $userId): Response
 	{

@@ -4,9 +4,11 @@ import '@/core'
 import '@/globals'
 import '@/tablesorter'
 import i18n from '@/i18n'
+import { verifyUser, deverifyUser } from '@/api/verification'
 import {
   showLoader,
   hideLoader,
+  pulseError,
   goTo,
   checkAllCb,
 } from '@/script'
@@ -25,21 +27,19 @@ $('#verifyconfirm-dialog').dialog({
   autoOpen: false,
   modal: true,
   buttons: {
-    [i18n('pass.button.verify')]: function () {
+    [i18n('pass.button.verify')]: async function () {
       showLoader()
-      $.ajax({
-        url: `/api/user/${verify_fid}/verify`,
-        dataType: 'json',
-        type: 'PATCH',
-        success: function (data) {
-          verify_el.removeClass('verify-do')
-          verify_el.addClass('verify-undo')
-        },
-        complete: () => {
-          hideLoader()
-          $(this).dialog('close')
-        },
-      })
+      try {
+        await verifyUser(verify_fid)
+        verify_el.removeClass('verify-do')
+        verify_el.addClass('verify-undo')
+      } catch (err) {
+        console.error(err)
+        pulseError(i18n('error_unexpected'))
+      } finally {
+        hideLoader()
+        $(this).dialog('close')
+      }
     },
     [i18n('button.cancel')]: function () {
       $(this).dialog('close')
@@ -69,7 +69,7 @@ $('.checker').on('click', function (el) {
   }
 })
 
-$('.verify').on('click', function () {
+$('.verify').on('click', async function () {
   const $this = $(this)
 
   verify_el = $this
@@ -79,23 +79,20 @@ $('.verify').on('click', function () {
     $('#verifyconfirm-dialog').dialog('open')
   } else {
     showLoader()
-    $.ajax({
-      url: `/api/user/${verify_fid}/verify`,
-      dataType: 'json',
-      type: 'DELETE',
-      success: function (data) {
-        $this.removeClass('verify-undo')
-        $this.addClass('verify-do')
-      },
-      error: function (req) {
-        if (req.status === 400) {
-          $('#unverifyconfirm-dialog').dialog('open')
-        }
-      },
-      complete: function () {
-        hideLoader()
-      },
-    })
+    try {
+      await deverifyUser(verify_fid)
+      $this.removeClass('verify-undo')
+      $this.addClass('verify-do')
+    } catch (err) {
+      if (err.code === 400) {
+        $('#unverifyconfirm-dialog').dialog('open')
+      } else {
+        console.error(err)
+        pulseError(i18n('error_unexpected'))
+      }
+    } finally {
+      hideLoader()
+    }
   }
 
   return false
