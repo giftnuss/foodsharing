@@ -721,13 +721,14 @@ pickup:
   signout_sure: Möchtest du dieses Team verlassen?
   signout_info: Sämtliche deiner Abholtermine werden gelöscht.
   signout_confirm: Bist du dir sicher?
-  really_kick_user_date_title: '{name} für {date} austragen?'
   really_leave_date_title: Für {date} austragen?
-  really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
-  really_kick_user_info: '{name} wird eine automatisch generierte Nachricht bekommen, dass du ihn/sie ausgetragen hast. Du kannst eine Erklärung angeben, die zu der Nachricht hinzugefügt wird:'
-  kick_message: 'als Betriebsverantwortlicher in {storeName} habe ich dich aus der Abholung am {date} entfernt. Dies ist eine automatisch generierte Nachricht.'
-  kick_message_info: Bitte beachte auch meine folgende Erklärung
-  really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere Dich eigenständig um Ersatz.
+  really_kick_user_info: |
+    Möchtest du {name} wirklich aus der Abholung am {date} austragen?
+    {name} wird die folgende Nachricht dazu erhalten:
+  kick_message: 'wir haben dich aus der {storeName}-Abholung am {date} ausgetragen.'
+  kick_message_placeholder: 'Optional hier Informationen ergänzen...'
+  kick_message_footer: 'Liebe Grüße, deine Betriebsverantwortlichen'
+  really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere dich eigenständig um Ersatz.
   leave_pickup_ok: Ich habe bereits Ersatz
   leave_pickup_message_team: Team benachrichtigen
   leave_team_message_title: Nachricht ans Team

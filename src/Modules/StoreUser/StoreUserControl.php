@@ -342,6 +342,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-pickuplist', 'pickup-list', [
 							'storeId' => $storeId,
+							'storeTitle' => $store['name'],
 							'isCoordinator' => $store['verantwortlich'],
 							'teamConversationId' => $store['team_conversation_id'],
 						]),

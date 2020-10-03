@@ -42,6 +42,7 @@
           :key="pickup.date.valueOf()"
           v-bind="pickup"
           :store-id="storeId"
+          :store-title="storeTitle"
           :is-coordinator="isCoordinator"
           :user="user"
           class="pickup-block"
@@ -75,7 +76,11 @@ export default {
   props: {
     storeId: {
       type: Number,
-      default: null
+      required: true
+    },
+    storeTitle: {
+      type: String,
+      default: ''
     },
     isCoordinator: {
       type: Boolean,

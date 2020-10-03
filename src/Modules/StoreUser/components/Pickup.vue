@@ -69,45 +69,52 @@
     <b-modal
       ref="modal_join"
       v-model="showJoinModal"
-      :title="$i18n('pickup.join_title_date', {'date': $dateFormat(date, 'full-long')})"
+      :title="$i18n('pickup.join_title_date', slotDate)"
       :cancel-title="$i18n('pickup.join_cancel')"
       :ok-title="$i18n('pickup.join_agree')"
+      :hide-header-close="true"
       modal-class="bootstrap"
       header-class="d-flex"
-      content-class="pr-3 pt-3"
       @ok="$emit('join', date)"
     >
-      {{ $i18n('pickup.really_join_date', {'date': $dateFormat(date, 'full-long')}) }}
+      {{ $i18n('pickup.really_join_date', slotDate) }}
     </b-modal>
     <b-modal
       ref="modal_leave"
-      :title="$i18n('pickup.really_leave_date_title', {'date': $dateFormat(date, 'full-long')})"
+      :title="$i18n('pickup.really_leave_date_title', slotDate)"
       :cancel-title="$i18n('pickup.leave_pickup_message_team')"
       :ok-title="$i18n('pickup.leave_pickup_ok')"
+      :hide-header-close="true"
       modal-class="bootstrap"
       header-class="d-flex"
-      content-class="pr-3 pt-3"
       @ok="$emit('leave', date)"
       @cancel="$refs.modal_team_message.show()"
     >
-      <p>{{ $i18n('pickup.really_leave_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
+      <p>{{ $i18n('pickup.really_leave_date', slotDate) }}</p>
     </b-modal>
     <b-modal
       ref="modal_kick"
-      :title="$i18n('pickup.really_kick_user_date_title', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name})"
+      :title="$i18n('pickup.signout_confirm')"
       :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
+      :hide-header-close="true"
       modal-class="bootstrap"
       header-class="d-flex"
-      content-class="pr-3 pt-3"
       @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id, 'message': kickMessage })"
     >
-      <p>{{ $i18n('pickup.really_kick_user_date', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name}) }}</p>
-      <p>{{ $i18n('pickup.really_kick_user_info', {'name': activeSlot.profile.name}) }}</p>
-      <b-form-textarea
-        v-model="kickMessage"
-        rows="4"
-      />
+      <p>
+        {{ $i18n('pickup.really_kick_user_info', slotInfo ) }}
+      </p>
+      <blockquote>
+        <div>{{ $i18n('salutation.3') }} {{ slotInfo['name'] }},</div>
+        <div>{{ $i18n('pickup.kick_message', slotInfo) }}</div>
+        <b-form-textarea
+          v-model="kickMessage"
+          :placeholder="$i18n('pickup.kick_message_placeholder')"
+          max-rows="4"
+        />
+        <div>{{ $i18n('pickup.kick_message_footer') }}</div>
+      </blockquote>
     </b-modal>
     <b-modal
       ref="modal_team_message"
@@ -116,7 +123,6 @@
       :ok-title="$i18n('pickup.team_message_send_and_leave')"
       modal-class="bootstrap"
       header-class="d-flex"
-      content-class="pr-3 pt-3"
       @ok="$emit('team-message', teamMessage); $emit('leave', date)"
     >
       <b-form-textarea
@@ -130,7 +136,7 @@
       ok-only
       modal-class="bootstrap"
     >
-      <p>{{ $i18n('pickup.delete_not_empty', {'date': $dateFormat(date, 'full-long')}) }}</p>
+      <p>{{ $i18n('pickup.delete_not_empty', slotDate) }}</p>
     </b-modal>
     <b-modal
       ref="modal_delete"
@@ -140,7 +146,7 @@
       modal-class="bootstrap"
       @ok="$emit('delete', date)"
     >
-      <p>{{ $i18n('pickup.really_delete_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
+      <p>{{ $i18n('pickup.really_delete_date', slotDate) }}</p>
     </b-modal>
   </div>
 </template>
@@ -158,7 +164,8 @@ export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
   directives: { VBTooltip },
   props: {
-    storeId: { type: Number, default: null },
+    storeId: { type: Number, required: true },
+    storeTitle: { type: String, default: '' },
     date: { type: Date, required: true },
     showRelativeDate: { type: Boolean, default: false },
     isAvailable: { type: Boolean, default: false },
@@ -170,17 +177,30 @@ export default {
   data () {
     return {
       showJoinModal: false,
-      teamMessage: this.$i18n('pickup.leave_team_message_template', { date: this.$dateFormat(this.date, 'full-long') }),
       activeSlot: {
         profile: {
           name: '',
           id: null
         }
       },
+      // cannot use slotDate here since it's computed and needs to avoid circular data references:
+      teamMessage: this.$i18n('pickup.leave_team_message_template', { date: this.$dateFormat(this.date, 'full-long') }),
       kickMessage: ''
     }
   },
   computed: {
+    slotDate () {
+      return {
+        date: this.$dateFormat(this.date, 'full-long')
+      }
+    },
+    slotInfo () {
+      return {
+        date: this.$dateFormat(this.date, 'full-long'),
+        storeName: this.storeTitle,
+        name: this.activeSlot.profile.name
+      }
+    },
     isUserParticipant () {
       return this.occupiedSlots.findIndex((e) => {
         return e.profile.id === this.user.id
@@ -319,6 +339,22 @@ export default {
 
   .soon .delete-pickup {
     right: 1px;
+  }
+}
+
+.modal-dialog {
+  blockquote {
+    margin: 0;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--border);
+
+    div {
+      margin: 0.25rem;
+    }
+
+    textarea[wrap="soft"] {
+      overflow-y: auto !important;
+    }
   }
 }
 </style>

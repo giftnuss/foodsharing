@@ -228,12 +228,9 @@ class StoreTransactions
 			'{storeName}' => $store['name'],
 			'{date}' => date('d.m.Y H:i', $pickupDate->getTimestamp())
 		]);
+		$optionalMessage = empty($message) ? '' : ("\n\n" . $message);
+		$footer = $this->translator->trans('pickup.kick_message_footer');
 
-		$optionalMessage = '';
-		if (!empty($message)) {
-			$optionalMessage = "\n\n" . $this->translator->trans('pickup.kick_message_info') . ":\n" . $message;
-		}
-
-		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage;
+		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage . "\n\n" . $footer;
 	}
 }
