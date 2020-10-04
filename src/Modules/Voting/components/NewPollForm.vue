@@ -55,7 +55,7 @@
           </b-form-radio>
         </b-form-group>
 
-        <b-form-group class="mb-3">
+        <b-form-group class="mb-3 datepicker">
           <b-form-row>
             <b-col>
               <label for="input-startdate">{{ $i18n('poll.new_poll.start_date') }}</label>
@@ -99,7 +99,7 @@
         </b-form-group>
         <b-form-group
           :label="$i18n('poll.new_poll.end_date')"
-          class="mb-3"
+          class="mb-3 datepicker"
         >
           <b-form-row class="ml-2">
             <b-col>
@@ -365,8 +365,10 @@ export default {
   width: 120px;
 }
 
-.bootstrap .form-control.b-form-spinbutton.flex-column {
-  height: 12px;
+// Override weird .form-control height styling from bootstrap-theme
+// See https://gitlab.com/foodsharing-dev/foodsharing/-/issues/975
+.datepicker ::v-deep .b-form-time-control .form-control.b-form-spinbutton.flex-column {
+  height: auto;
 }
 
 .invalid-feedback {

@@ -3,7 +3,7 @@
 ## Features
 - Display deep link to forum posts, better responsive layout #937 !1650 !1652 @ChrisOelmueller
 - New store status "permanently closed" #786 !1655 @ChrisOelmueller
-- Add voting tool #309 #975 !1633 !1668 !1687 @alex.simm
+- Add voting tool #309 #975 !1633 !1668 !1687 !1691 @alex.simm
 - Add FairSharePoint Function Workgroup #974 !1667 !1679 @fs_k
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 - Add ageband to statistic page !1685 @fs_k
