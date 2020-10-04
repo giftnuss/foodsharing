@@ -260,11 +260,18 @@ class ProfileView extends View
 		');
 
 		$this->pageHelper->addHidden('
-			<div id="disabledreports">
-				<div class="popbox bootstrap">
-					<h3>Regelverletzung melden</h3>
-					<p>Aktuell ist es nicht möglich, Regelverletzungen über das System zu melden. Mehr Infos dazu findet ihr <a href="https://foodsharing.de/?page=blog&sub=read&id=255">in diesem Blogeintrag</a>.</p>
-				</div>
+			<div id="disabledreports" class="popbox bootstrap">
+				<h3>Regelverletzung melden</h3>
+				<hr>
+				<p>
+					Aktuell werden Regelverletzungen nicht an dieser Stelle gemeldet.
+					<br>
+					Wendet euch bei Bedarf an die lokale Meldegruppe in eurem Bezirk.
+				</p>
+				<p>
+					Mehr Infos zum Meldesystem findet ihr
+					<a href="https://foodsharing.de/?page=blog&sub=read&id=255">in diesem Blogeintrag</a>.
+				</p>
 			</div>
 		');
 

@@ -122,3 +122,11 @@ div.statdisplay a.item:hover {
   pointer-events: none;
   background-color: #858789;
 }
+
+#disabledreports-link {
+  opacity: 0.6;
+}
+#disabledreports a {
+  font-weight: bolder;
+  color: var(--fs-green);
+}
