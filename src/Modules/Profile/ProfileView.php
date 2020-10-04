@@ -263,7 +263,7 @@ class ProfileView extends View
 			<div id="disabledreports">
 				<div class="popbox bootstrap">
 					<h3>Regelverletzung melden</h3>
-					<p>Bis zum 30. September ist es nicht möglich, Regelverletzungen über das System zu melden. Mehr Infos dazu findet ihr <a href="https://foodsharing.de/?page=blog&sub=read&id=254">in diesem Blogeintrag</a>.</p>
+					<p>Aktuell ist es nicht möglich, Regelverletzungen über das System zu melden. Mehr Infos dazu findet ihr <a href="https://foodsharing.de/?page=blog&sub=read&id=255">in diesem Blogeintrag</a>.</p>
 				</div>
 			</div>
 		');
@@ -596,7 +596,7 @@ class ProfileView extends View
 					<span class="msg">' . $text . '</span>
 					<div class="foot">
 						<span class="time">' . $when . $this->translator->trans('profile.banana.by') . $fsName . '</span>
-						
+
 					</div>
 				</td>
 			</tr>
