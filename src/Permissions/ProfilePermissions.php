@@ -62,7 +62,7 @@ class ProfilePermissions
 
 	public function maySeeFetchRate(int $fsId): bool
 	{
-		return $this->session->may();
+		return false;
 	}
 
 	public function mayDeleteUser(int $userId): bool
