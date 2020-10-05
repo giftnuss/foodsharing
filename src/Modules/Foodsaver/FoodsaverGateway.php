@@ -737,10 +737,31 @@ final class FoodsaverGateway extends BaseGateway
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $fsId]);
 		if ($mainRegion_id === $regionId) {
 			$this->db->update('fs_foodsaver', [
-				'bezirk_id' => 0
+				'bezirk_id' => 0,
+				'verified' => 0
 			], [
 				'id' => $fsId
 			]);
+			$this->db->insert(
+				'fs_foodsaver_change_history',
+				[
+					'date' => $this->db->now(),
+					'fs_id' => $fsId,
+					'changer_id' => $fsId,
+					'object_name' => 'bezirk_id',
+					'old_value' => $mainRegion_id,
+					'new_value' => 0
+				]
+			);
+			$this->db->insert(
+				'fs_verify_history',
+				[
+					'fs_id' => $fsId,
+					'date' => $this->db->now(),
+					'bot_id' => $fsId,
+					'change_status' => 0
+				]
+			);
 		}
 	}
 

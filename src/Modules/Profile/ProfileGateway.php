@@ -150,6 +150,24 @@ final class ProfileGateway extends BaseGateway
 			];
 		}
 
+		$stm = '
+			SELECT his.date,
+			       his.changer_id,
+			       concat(ch.name," " ,ch.nachname) as changer_full_name,
+			       his.old_value as old_region,
+			       bez.name as  old_region_name
+			FROM `fs_foodsaver_change_history` his
+				left outer join fs_foodsaver ch on his.changer_id  = ch.id
+				left outer join fs_bezirk bez on his.old_value = bez.id
+			where
+				fs_id = :fs_id and
+				object_name = \'bezirk_id\'
+			order by date desc
+			limit 1';
+		if ($home_district_history = $this->db->fetch($stm, [':fs_id' => $fsId])) {
+			$data['home_district_history'] = $home_district_history;
+		}
+
 		return $data;
 	}
 

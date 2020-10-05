@@ -34,8 +34,8 @@
 {% endif %}
 
 <div id="signout_sure" title="{{ 'are_you_sure'|trans }}">
-    {% include 'partials/info.twig' with {'msg': 'group.really_quit_name'|trans({'%name%': region.name})} %}
+    {% include 'partials/info.twig' with {'msg': (region.isWorkGroup ? 'group.really_quit_workgroup' : (region.isHomeDistrict ? 'group.quitting_home_district_warning': 'group.really_quit_district')) |trans({'%name%': region.name})} %}
     <input type="hidden" name="bid" class="bid" value="{{ region.id }}" />
 </div>
 
-{{ sidenav.menu_tree({'items': {'href': '#signout', 'name': 'group.quit_name'|trans({'%name%': region.name}) }}, 'group.quit'|trans) }}
+{{ sidenav.menu_tree({'items': {'href': '#signout', 'name': (region.isWorkGroup ? 'group.quit_name_workgroup' : 'group.quit_name_district')|trans({'%name%': region.name}) }}, 'group.quit'|trans) }}

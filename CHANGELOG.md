@@ -8,6 +8,7 @@
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 - Add ageband to statistic page !1685 @fs_k
 - Activity page shows only last entry to buddywall, eventwall, fairsharepointwall !1694 @fs_k
+- Leaving a district is captured in history. Leaving a home district removes verification. !!1358 @fs_k
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
@@ -209,7 +210,8 @@
 - Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
 - Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
 - Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
-- Fix small bug in sending quickreply messages without personal field !1321 !1347 @alex.simm
+- Fix small bug in sending quickreply messages without personal field !1321 !1367 @alex.simm
+- Leaving a district is captured in history. Leaving a home district removes verification. !!1358 @fs_k
 - Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 - Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
 - Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer

@@ -324,9 +324,12 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
-  quit_name: Bezirk/Team %name% verlassen
+  quit_name_workgroup: Team %name% verlassen
+  quit_name_district: Bezirk %name% verlassen
   quit: Verlassen
-  really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
+  really_quit_workgroup: Möchtest Du wirklich die Arbeitsgruppe %name% verlassen?
+  really_quit_district: Möchtest Du wirklich den Bezirk %name% verlassen?
+  quitting_home_district_warning: Möchtest du wirklich deinen Stammbezirk %name% Verlassen ? Du verlierst deine Verifizierung und musst dich nach Neuauswahl beim neuen Botschafter melden!
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
   function:
     title: Arbeitsgruppenfunktion
