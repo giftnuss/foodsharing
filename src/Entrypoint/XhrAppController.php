@@ -36,7 +36,6 @@ class XhrAppController extends AbstractController
 		// 'Basket::basketCoordinates',
 		// 'Basket::newBasket',
 		// 'Basket::publish',
-		// 'Basket::resizePic',
 		// 'Basket::nearbyBaskets',
 		// 'Basket::bubble',
 		// 'Basket::fsBubble',
@@ -157,9 +156,6 @@ class XhrAppController extends AbstractController
 
 		$app = str_replace('/', '', $_GET['app']);
 		$meth = str_replace('/', '', $_GET['m']);
-
-		global $g_lang;
-		require_once 'lang/DE/de.php';
 
 		$session->initIfCookieExists();
 

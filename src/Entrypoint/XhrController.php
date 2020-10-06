@@ -80,9 +80,6 @@ class XhrController extends AbstractController
 			$cache->lookup();
 		}
 
-		global $g_lang;
-		require_once 'lang/DE/de.php';
-
 		$action = $request->query->get('f');
 
 		if ($action === null) {

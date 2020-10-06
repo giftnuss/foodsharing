@@ -74,8 +74,8 @@ class IndexController extends AbstractController
 			$cache->lookup();
 		}
 
-		global $g_lang;
-		require_once 'lang/DE/de.php';
+		$translator = $this->fullServiceContainer->get('translator');
+		$translator->setLocale($session->getLocale());
 
 		error_reporting(E_ALL);
 
