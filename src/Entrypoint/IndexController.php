@@ -94,14 +94,11 @@ class IndexController extends AbstractController
 		global $g_data;
 		$g_data = $dataHelper->getPostData();
 
-		$pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
-		$pageHelper->addHidden('<div id="' . $identificationHelper->id('fancy') . '"></div>');
-
 		$pageHelper->addHidden('<div id="u-profile"></div>');
 		$pageHelper->addHidden('<ul id="hidden-info"></ul>');
 		$pageHelper->addHidden('<ul id="hidden-error"></ul>');
 		$pageHelper->addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
-		$pageHelper->addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="/xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /> <input type="hidden" id="uploadPhoto-fs_id" name="fs_id" value="" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
+		$pageHelper->addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="/xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
 
 		// lib/inc.php END
 
