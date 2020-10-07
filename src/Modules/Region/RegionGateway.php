@@ -358,15 +358,6 @@ class RegionGateway extends BaseGateway
 		', ['regionId' => $regionId]);
 	}
 
-	public function acceptBezirkRequest(int $foodsaverId, int $regionId): bool
-	{
-		return $this->db->update(
-			'fs_foodsaver_has_bezirk',
-					['active' => 1, 'add' => date('Y-m-d H:i:s')],
-					['bezirk_id' => $regionId, 'foodsaver_id' => $foodsaverId]
-		) > 0;
-	}
-
 	public function linkBezirk(int $foodsaverId, int $regionId, int $active = 1)
 	{
 		$this->db->insertOrUpdate('fs_foodsaver_has_bezirk', [
@@ -421,14 +412,6 @@ class RegionGateway extends BaseGateway
 		$this->db->execute('DELETE a FROM `fs_bezirk_closure` AS a JOIN `fs_bezirk_closure` AS d ON a.bezirk_id = d.bezirk_id LEFT JOIN `fs_bezirk_closure` AS x ON x.ancestor_id = d.ancestor_id AND x.bezirk_id = a.ancestor_id WHERE d.ancestor_id = ' . $regionId . ' AND x.ancestor_id IS NULL');
 		$this->db->execute('INSERT INTO `fs_bezirk_closure` (ancestor_id, bezirk_id, depth) SELECT supertree.ancestor_id, subtree.bezirk_id, supertree.depth+subtree.depth+1 FROM `fs_bezirk_closure` AS supertree JOIN `fs_bezirk_closure` AS subtree WHERE subtree.ancestor_id = ' . $regionId . ' AND supertree.bezirk_id = ' . (int)(int)$data['parent_id']);
 		$this->db->commit();
-	}
-
-	public function denyRegionRequest(int $foodsaverId, int $regionId)
-	{
-		$this->db->delete('fs_foodsaver_has_bezirk', [
-			'bezirk_id' => $regionId,
-			'foodsaver_id' => $foodsaverId,
-		]);
 	}
 
 	public function addRegion(array $data): int

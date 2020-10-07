@@ -38,8 +38,6 @@ $csrf_whitelist = [
 	// 'bezirkTree',
 	// 'bteamstatus',
 	// 'getBezirk',
-	// 'acceptBezirkRequest',
-	// 'denyBezirkRequest',
 	// 'acceptRequest',
 	// 'warteRequest',
 	// 'betriebRequest',

@@ -1277,24 +1277,6 @@ class XhrMethods
 		return false;
 	}
 
-	public function xhr_acceptBezirkRequest($data)
-	{
-		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
-			$this->regionGateway->acceptBezirkRequest($data['fsid'], $data['bid']);
-
-			return json_encode(['status' => 1]);
-		}
-	}
-
-	public function xhr_denyBezirkRequest($data)
-	{
-		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
-			$this->regionGateway->denyRegionRequest($data['fsid'], $data['bid']);
-
-			return json_encode(['status' => 1]);
-		}
-	}
-
 	public function xhr_acceptRequest($data)
 	{
 		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
