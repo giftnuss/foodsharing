@@ -4,6 +4,7 @@
 - Add button that marks emails as unread !1681 @alex.simm
 
 ## Changes
+- Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
 
 ## Bugfixes
 

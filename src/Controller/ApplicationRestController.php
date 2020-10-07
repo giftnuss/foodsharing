@@ -4,7 +4,7 @@ namespace Foodsharing\Controller;
 
 use Exception;
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Application\ApplicationGateway;
+use Foodsharing\Modules\Application\ApplicationTransactions;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\WorkGroupPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -15,20 +15,20 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ApplicationRestController extends AbstractFOSRestController
 {
-	private ApplicationGateway $applicationGateway;
 	private RegionGateway $regionGateway;
 	private WorkGroupPermissions $workGroupPermissions;
+	private ApplicationTransactions $applicationTransactions;
 	private Session $session;
 
 	public function __construct(
-		ApplicationGateway $applicationGateway,
 		WorkGroupPermissions $workGroupPermissions,
 		RegionGateway $regionGateway,
+		ApplicationTransactions $applicationTransactions,
 		Session $session
 	) {
-		$this->applicationGateway = $applicationGateway;
 		$this->workGroupPermissions = $workGroupPermissions;
 		$this->regionGateway = $regionGateway;
+		$this->applicationTransactions = $applicationTransactions;
 		$this->session = $session;
 	}
 
@@ -55,7 +55,7 @@ class ApplicationRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$this->applicationGateway->acceptApplication($groupId, $userId);
+		$this->applicationTransactions->acceptApplication($group, $userId);
 
 		return $this->handleView($this->view([], 200));
 	}
