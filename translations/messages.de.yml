@@ -295,6 +295,7 @@ group:
       5: 5 oder mehr Stunden
     send: Bewerbung absenden
     sent: Bewerbung wurde abgeschickt!
+    accepted: Bewerbung angenommen
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
