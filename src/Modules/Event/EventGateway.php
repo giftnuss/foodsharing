@@ -267,9 +267,9 @@ class EventGateway extends BaseGateway
 	 */
 	public function setInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
 	{
-		$data = [];
 		$parts = array_chunk($foodsaverIds, 100);
 		foreach ($parts as $part) {
+			$data = [];
 			foreach ($part as $userId) {
 				$data[] = [
 					'status' => $status,
