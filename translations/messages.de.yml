@@ -167,7 +167,7 @@ quizusercomment: |
 image: Bild
 picture_upload_widget:
   picture_upload: Foto-Upload
-  choose_picture: Wähle ein Bild von Deinem Rechner!
+  choose_picture: Wähle ein Bild von deinem Rechner!
 
 upload:
   no_image: 'Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!'
@@ -307,7 +307,7 @@ group:
       min: Niemand kann weniger als {{ limit }} Vertrauensbananen haben!
       max: Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen!
     member_since_weeks: Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?
-    not_fulfilled: Um Dich für diese Arbeitsgruppe zu bewerben, musst Du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben.
+    not_fulfilled: Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben.
   members: Mitglieder
   administrators: Gruppen-Admins
   title: foodsharing-Arbeitsgruppen
@@ -315,7 +315,7 @@ group:
   member_count: '{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende'
   admin_count: '{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren'
   image: Titelbild für %name%
-  already_applied: Für diese Gruppe hast Du Dich bereits beworben
+  already_applied: Für diese Gruppe hast du dich bereits beworben
   actions:
     contact: Gruppe kontaktieren
     edit: Gruppe bearbeiten
@@ -327,9 +327,9 @@ group:
   quit_name_workgroup: Team %name% verlassen
   quit_name_district: Bezirk %name% verlassen
   quit: Verlassen
-  really_quit_workgroup: Möchtest Du wirklich die Arbeitsgruppe %name% verlassen?
-  really_quit_district: Möchtest Du wirklich den Bezirk %name% verlassen?
-  quitting_home_district_warning: Möchtest du wirklich deinen Stammbezirk %name% Verlassen ? Du verlierst deine Verifizierung und musst dich nach Neuauswahl beim neuen Botschafter melden!
+  really_quit_workgroup: Möchtest du wirklich die Arbeitsgruppe %name% verlassen?
+  really_quit_district: Möchtest du wirklich den Bezirk %name% verlassen?
+  quitting_home_district_warning: Möchtest du wirklich deinen Stammbezirk %name% verlassen? Du verlierst deine Verifizierung und musst dich später beim Botschafter-Team deines neuen Stammbezirks melden!
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
   function:
     title: Arbeitsgruppenfunktion
@@ -344,7 +344,7 @@ group:
 legal:
   pp: Datenschutzerklärung
   acknowledge: Nimmst du die Vereinbarung zur Kenntnis?
-  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebene Datenschutzerklärung zur Kenntnis nehmen.
+  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst du die beschriebene Datenschutzerklärung zur Kenntnis nehmen.
   dont_agree: Ich bin nicht einverstanden mit der Verarbeitung meiner Daten und
   agree_privacy_policy: Ich habe die Datenschutzvereinbarung zur Kenntnis genommen.
   delete_account: Ich möchte meinen Account löschen.
@@ -357,7 +357,7 @@ legal:
     select: Bitte auswählen
     acknowledge: Ich stimme zu
     not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
-  not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
+  not_acknowledge_pn_description: Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*in von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
   legal_agreement: Rechtsvereinbarung
   are_you_sure_to_downgrade: 'Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?'
 
@@ -381,14 +381,14 @@ login:
   login_button_label: Anmelden
   save_password: Passwort speichern
   steady_login: Eingeloggt bleiben (verwendet Cookies)
-  error_no_email: Bitte gib Deine E-Mail-Adresse an!
-  error_no_password: Bitte gib Dein Passwort an!
+  error_no_email: Bitte gib deine E-Mail-Adresse an!
+  error_no_password: Bitte gib dein Passwort an!
   error_no_auth: E-Mail-Adresse oder Passwort sind falsch
   success: <b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.
   logout: Logout
   pwreset:
     bread: Password zurücksetzen
-    wrongMail: Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?
+    wrongMail: Sorry! Hast du dich vielleicht bei deiner E-Mail-Adresse vertippt?
     mailSent: Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.
     success: Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt einloggen.
     tooShort: Sorry, Dein gewähltes Passwort ist zu kurz.
@@ -421,7 +421,7 @@ register:
   firstname_minLength: Der Vorname muss aus mindestens 2 Zeichen bestehen.
   lastname_required: Bitte gib deinen Nachnamen ein.
   lastname_minLength: Der Nachname muss aus mindestens 2 Zeichen bestehen.
-  login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
+  login_phone_info: Es kann hilfreich sein, deine Telefonnummer mit anderen Foodsharern zu teilen
   phone_example: Beispiel +4917912345678
   phone_not_valid: Die eingegebene Telefonnummer ist nicht gültig.
   forgotten_password: Passwort vergessen?
@@ -433,7 +433,7 @@ register:
   join_success: Deine Registrierung war erfolgreich.
   join_success_message: Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner Email und deinem Passwort einloggen.
   join_error: Deine Registrierung war nicht erfolgreich.
-  check_mail: Schau jetzt in Dein E-Mail-Postfach, um die Anmeldung abzuschließen!
+  check_mail: Schau jetzt in dein E-Mail-Postfach, um die Anmeldung abzuschließen!
   select_your_gender: Für die Anrede...
   woman: weiblich
   man: männlich
@@ -441,8 +441,8 @@ register:
   error: Es ist ein Fehler aufgetreten
   error_email_exist: Deine E-Mail-Adresse existiert bereits.
   error_birthdate: Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
-  account-exists: 'Du bist bereits registriert. Bitte logge Dich aus, wenn du dich erneut registrieren möchtest.'
-  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
+  account-exists: 'Du bist bereits registriert. Bitte logge dich aus, wenn du dich erneut registrieren möchtest.'
+  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge dich jetzt mit deiner E-Mail-Adresse und deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
   change-password: 'Jetzt kannst du dein Passwort ändern.'
   pass1: Dein neues gewünschtes Passwort
@@ -513,7 +513,7 @@ statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
   num_fetches: 'Bei einem Rettungseinsatz|Bei %count% Rettungseinsätzen'
 
-are_you_sure: Bist Du sicher?
+are_you_sure: Bist du sicher?
 really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
@@ -609,7 +609,7 @@ store:
     team: Nachricht ans Team
     jumper: Nachricht an Springer
   not-in-team: 'Du bist noch nicht im Team dieses Betriebes.'
-  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
+  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von deinen BIEBs vorgesehen ist. Versuche es also bitte zu einem späteren Zeitpunkt erneut.
   all_of_my_stores: Alle meine Betriebe
   tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
   tooltip_orange: Offene Abholungen in den nächsten drei Tagen
@@ -658,7 +658,7 @@ store:
     filterJumper: Springer
     filterQuizSM: BV-Quiz bestanden
     removeFromTeam: Aus dem Team entfernen
-    reallyRemove: Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?
+    reallyRemove: Möchtest du wirklich {name} aus diesem Betriebs-Team entfernen?
     makeJumper: Auf die Springerliste
     makeRegularTeamMember: In das Team aufnehmen
   request:
@@ -674,7 +674,7 @@ store:
 storeedit:
   bread: Betrieb bearbeiten
   add-new: Neuen Betrieb anlegen
-  not-in-region: 'Du kannst Betriebe nur in Regionen anlegen, in denen Du Mitglied bist.'
+  not-in-region: 'Du kannst Betriebe nur in Regionen anlegen, in denen du Mitglied bist.'
   actions: Optionen
   team:
     bread: Team bearbeiten
@@ -735,7 +735,7 @@ pickup:
   team_message_send_and_leave: Senden und austragen
   team_message_success: Nachricht ans Team wurde erfolgreich versendet
   join_title_date: Sicher?
-  really_join_date: Möchtest Du Dich verbindlich für die Abholung am {date} eintragen?
+  really_join_date: Möchtest du dich verbindlich für die Abholung am {date} eintragen?
   join_cancel: Doch nicht
   join_agree: Ja, verbindlich eintragen
   take_empty_slot: Hier eintragen
@@ -925,7 +925,7 @@ recipients:
   manual: Manuelle Eingabe
   region-hint: |
     <strong>Hinweis:</strong>
-    Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen!
+    Um untergeordnete Bezirke zu markieren, musst du den Ordner erst öffnen!
     In alle nicht sichtbaren Bezirke werden keine Mails versendet.
   empty-region: In den ausgewählten Bezirken gibt es noch keine Foodsaver
   body: Nachricht
@@ -937,7 +937,7 @@ recipients:
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
   variables: Persönliche Anrede
   variable-info: |
-    Um die Mail persönlicher zu gestalten, kannst Du <strong>{NAME}</strong> anstelle des Namens einfügen
+    Um die Mail persönlicher zu gestalten, kannst du <strong>{NAME}</strong> anstelle des Namens einfügen
     und <strong>{ANREDE}</strong> für die Anrede verwenden.
     <p>{ANREDE} {NAME} ergibt beispielsweise: Lieber Peter
   doublecheck: Alles gechecked? Soll die E-Mail an die gewählte Zielgruppe gesendet werden?
@@ -1340,7 +1340,7 @@ profile:
   title: Profil
   notFound: Dieses Nutzerprofil gibt es nicht oder nicht mehr
   warning: Warnung
-  mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing Mails und Kommunikation gesperrt. Durch das ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
+  mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das Ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
   banana:
     title: '{count} Vertrauensbananen'
     by: ' von '
@@ -1354,7 +1354,7 @@ profile:
       und für deren Zuverlässigkeit und Engagement du einstehen kannst.
     placeholder: 'min. 100 Zeichen...'
     sent: Banane wurde gesendet!
-    messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
+    messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein.
   nav:
     edit: Profil bearbeiten
     buddy: 'Ich kenne {name}'
@@ -1443,7 +1443,7 @@ dashboard:
   no_more_updates_friendWall: "Keine weiteren Status-Meldungen"
   no_more_updates_mailbox: "Keine weiteren Mailbox-Nachrichten"
   no_more_updates_store: "Keine weiteren Betriebs-Infos"
-  activity_filter_info: Hier kannst Du einstellen, welche Updates auf Deiner Startseite angezeigt werden sollen.
+  activity_filter_info: Hier kannst du einstellen, welche Updates auf deiner Startseite angezeigt werden sollen.
   empty_section: "Du hast noch keine {type}"
   event_title: "Termin: {title}"
   save_selection: Einstellungen speichern
@@ -1454,7 +1454,7 @@ dashboard:
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
   source_store: "Betriebe {0}"
-  checkAddress: 'Bitte überprüfe Deine Adresse! Die Koordinaten konnten nicht ermittelt werden.'
+  checkAddress: 'Bitte überprüfe deine Adresse! Die Koordinaten konnten nicht ermittelt werden.'
   homeRegion: 'Dein Stammbezirk ist {region}.'
   chooseHomeRegion: 'Bitte wähle einen Stammbezirk aus.'
   greeting: Hallo {name}! Schön, dass du hier bist.
@@ -1505,8 +1505,8 @@ basket:
   all: Alle Essenskörbe
   all_map: Alle Körbe auf der Karte
   recent: Neueste Essenskörbe
-  nearby: Essenskörbe in Deiner Nähe
-  nearby-short: In Deiner Nähe
+  nearby: Essenskörbe in deiner Nähe
+  nearby-short: In deiner Nähe
   mapsearch: 'Adresssuche...'
   go: zum Essenskorb
   by: 'Essenskorb von {name}'
@@ -1883,10 +1883,10 @@ becomeregion:
   save: Speichern
 
 base:
-  whatfor: Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben
+  whatfor: Auf foodsharing.de kannst du deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben
   keywords: foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch
   slogan: Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland
-  jsrequired: Ohne JavaScript l&auml;uft hier leider nichts.
+  jsrequired: Ohne JavaScript läuft hier leider nichts.
 
 buddy:
   request_sent: Anfrage versendet!
