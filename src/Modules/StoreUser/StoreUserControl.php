@@ -64,7 +64,6 @@ class StoreUserControl extends Control
 		if (isset($_GET['id'])) {
 			$storeId = intval($_GET['id']);
 			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
-			$this->pageHelper->addTitle($this->translator->trans('store.bread'));
 			$this->pageHelper->addStyle('.button{margin-right: 8px;} #right .tagedit-list{width: 256px;} #foodsaver-wrapper{padding-top: 0px;}');
 			global $g_data;
 
