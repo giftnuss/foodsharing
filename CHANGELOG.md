@@ -8,7 +8,7 @@
 - Send a message with optional custom text when rejecting or kicking someone from a pickup slot !1677 #595 @alex.simm
 - Add ageband to statistic page !1685 @fs_k
 - Activity page shows only last entry to buddywall, eventwall, fairsharepointwall !1694 @fs_k
-- Leaving a district is captured in history. Leaving a home district removes verification. !!1358 @fs_k
+- Leaving a district is captured in history. Leaving a home district removes verification. !1358 @fs_k
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
@@ -48,9 +48,7 @@
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Use TranslatorInterface for many old translations !1637 !1655 !1659 !1662 !1663 !1666 !1688 @ChrisOelmueller
 - Prepare event invitations for REST !1627 !1657 @ChrisOelmueller
-- Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 - Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
-- Prepare event invitations for REST !1627 @ChrisOelmueller
 - Clarify and extract some permission handling !1671 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 !1654 @ChrisOelmueller
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
@@ -216,7 +214,6 @@
 - Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
 - Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
 - Fix small bug in sending quickreply messages without personal field !1321 !1367 @alex.simm
-- Leaving a district is captured in history. Leaving a home district removes verification. !!1358 @fs_k
 - Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 - Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
 - Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
@@ -267,7 +264,6 @@
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 - redirected hardcoded German strings from topbar to lang.de.yml !1410 #824 @jonathan_b
-- Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - recreate Dashboard update-overview with vue components !735 !1424 @D0nPiano @ChrisOelmueller
 - changed ActivityModel to return data without HTML or JS !735 !1424 @D0nPiano @ChrisOelmueller
 - New function for deleting store wall posts via rest !1390 #9 @alex.simm
@@ -285,7 +281,6 @@
 - Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
 - CSS adjustments for foodbasket page, mobile dashboard view with columns !1494 @ChrisOelmueller
 - Port WebSocket server ("chat") to TypeScript and refactor it in an object oriented way !1470 @janopae
-- Port WebSocket server ("chat") to TypeScript and refactor it in an object oriented way !1470 @janopae 
 - Leaving regions is done by new Rest endpoint !1459 @alex.simm
 - Replaces hard coded Links in AdminMenu !1510 @mr-kenhoff
 - Moved database request for the maintenance script from model to gateway !1394 #9 @alex.simm
