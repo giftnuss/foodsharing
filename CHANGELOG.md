@@ -1,10 +1,4 @@
-# 2020-08-11 Hotfix
-
-## Bugfixes
-- Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
-- Allow seeing basket markers on map without being logged in !1636 @alex.simm
-
-# Release "Birne" (pear), 2020-08-09
+# Release "Cranberry", 2020-10-11
 
 ## Features
 - Display deep link to forum posts, better responsive layout #937 !1650 !1652 @ChrisOelmueller
@@ -32,8 +26,6 @@
  
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
-- Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
-- Allow seeing basket markers on map without being logged in !1636 @alex.simm
 - Removed form for new amb's #821 !1619 @chriswalg
 - Fix default center value for leaflet map !1644 @alex.simm
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
@@ -67,6 +59,12 @@
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm
 - Update devdocs for database migrations in phinx, fedora 32 and WSL2 !1675 @chriswalg
+
+# 2020-08-11 Hotfix
+
+## Bugfixes
+- Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
+- Allow seeing basket markers on map without being logged in !1636 @alex.simm
 
 # Release "Birne" (pear), 2020-08-09
 
