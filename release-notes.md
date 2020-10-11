@@ -29,7 +29,7 @@ Zu Events sowie Posts auf Pinnwänden von Fairteilern und Bekannten wird jetzt a
 Die farbige Ampel-Anzeige in der Betriebsliste wurde in manchen Browsern bei langen Betriebsnamen ausgeblendet. Das führte dazu, dass in manchen Betrieben der Eindruck entstand, als wären die Slots gefüllt, weil keine Ampel zu sehen war. Sie wird jetzt angezeigt. (Referenz: !1682)
 
 <img class="pageImage left clear" src="./img/releasenotes/oktober-2020-statistic-ageband.png">
-Auf der Statistikseite eines Bezirkes oder Bundeslandes gibt es nun eine Übersicht der Altersgruppen. Es kann zwischen Stammbezirk und Bezirk umgeschaltet werden. Ein "ungültiges(Invalid)" Alter liegt dabei vor ,wenn das Alter unter 18 oder über 100 Jahre ist. Ein "unbekanntes (unkown)" Alter liegt vor, wenn kein Geburtsdatum hinterlegt ist. (Referenz: !958 !1685) 
+Auf der Statistikseite eines Bezirkes oder Bundeslandes gibt es nun eine Übersicht der Altersgruppen. Es kann zwischen Stammbezirk und Bezirk umgeschaltet werden. Ein "ungültiges (invalid)" Alter liegt dabei vor, wenn das Alter unter 18 oder über 100 Jahre ist. Ein "unbekanntes (unknown)" Alter liegt vor, wenn kein Geburtsdatum hinterlegt ist. (Referenz: !958 !1685) 
 
 Die Anzeige der Forenliste wurde modernisiert und hat dabei auch ein paar Verbesserungen erhalten. Unter anderem gibt es in Forenthemen nun Direktlinks auf einzelne Beiträge. (Das kannst du probieren, indem du auf das Datum des Beitrags klickst.) 
 Außerdem lässt sich das Forum nun auf kleinen Bildschirmen bzw. mobil besser nutzen. Auch das Nachladen von neuen Themen beim Scrollen an den unteren Bildschirmrand funktioniert nun besser. (Referenz: !1650 !1652)
