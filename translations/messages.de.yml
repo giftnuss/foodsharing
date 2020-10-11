@@ -1894,6 +1894,7 @@ buddy:
   request_accepted: Jetzt kennt Ihr Euch!
 
 polls:
+  beta: Das Abstimmungstool befindet sich noch in der Testphase. Damit dies zur Einführung fehlerfrei funktioniert, brauchen wir noch Menschen, die es testen. Kontaktiere dafür bitte unsere AG "Abstimmungen - Betatest".
   title: Titel
   start_date: von
   end_date: bis

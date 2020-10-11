@@ -1,5 +1,10 @@
 <template>
   <div class="container bootstrap">
+    <div class="msg-inside info mb-3">
+      <i class="fas fa-info-circle" />
+      {{ $i18n('polls.beta') }}
+    </div>
+
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
         {{ $i18n('polls.ongoing') }}
