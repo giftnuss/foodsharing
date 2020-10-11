@@ -20,8 +20,8 @@
 - Moved guide page (ratgeber) to wiki page #776 !1567 !1664 @chriswalg
 - Add store log for different user activities in store #553 !1658 @fs_k
 - Orga may 'delete' foodbaskets #51 !1670 @fsk_k
+- Display public profile for deleted users as well !1703 @ChrisOelmueller
 - fetchrate is not shown as long as reporting system is down !1706 @fs_k
-
 - Sort forum search results by last update !1704 @ChrisOelmueller
  
 ## Bugfixes
