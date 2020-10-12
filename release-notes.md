@@ -26,21 +26,23 @@ Schreib uns bei Interesse einfach eine Nachricht über das [Support-Portal](http
 
 Zu Events sowie Posts auf Pinnwänden von Fairteilern und Bekannten wird jetzt auf dem Dashboard nur das jeweils aktuellste Update angezeigt (so wie auch für Themen im Forum). (Referenz: !1694)
 
-Die farbige Ampel-Anzeige in der Betriebsliste wurde in manchen Browsern bei langen Betriebsnamen ausgeblendet. Das führte dazu, dass in manchen Betrieben der Eindruck entstand, als wären die Slots gefüllt, weil keine Ampel zu sehen war. Sie wird jetzt angezeigt. (Referenz: !1682)
-
 <img class="pageImage left clear" src="./img/releasenotes/oktober-2020-statistic-ageband.png">
 Auf der Statistikseite eines Bezirkes oder Bundeslandes gibt es nun eine Übersicht der Altersgruppen. Es kann zwischen Stammbezirk und Bezirk umgeschaltet werden. Ein "ungültiges (invalid)" Alter liegt dabei vor, wenn das Alter unter 18 oder über 100 Jahre ist. Ein "unbekanntes (unknown)" Alter liegt vor, wenn kein Geburtsdatum hinterlegt ist. (Referenz: !958 !1685) 
+
+Die farbige Ampel-Anzeige in der Betriebsliste wurde in manchen Browsern bei langen Betriebsnamen ausgeblendet. Das führte dazu, dass in manchen Betrieben der Eindruck entstand, als wären die Slots gefüllt, weil keine Ampel zu sehen war. Sie wird jetzt angezeigt. (Referenz: !1682)
 
 Die Anzeige der Forenliste wurde modernisiert und hat dabei auch ein paar Verbesserungen erhalten. Unter anderem gibt es in Forenthemen nun Direktlinks auf einzelne Beiträge. (Das kannst du probieren, indem du auf das Datum des Beitrags klickst.) 
 Außerdem lässt sich das Forum nun auf kleinen Bildschirmen bzw. mobil besser nutzen. Auch das Nachladen von neuen Themen beim Scrollen an den unteren Bildschirmrand funktioniert nun besser. (Referenz: !1650 !1652)
 
 Wenn du einen Post auf der Pinnwand eines Fairteilers schreibst, wirst du nicht mehr selbst per E-Mail benachrichtigt. (Referenz: !1638)
 
-## Betriebsverantwortliche 
-Dauerhaft geschlossene Betriebe können nun mit dem Status "Betrieb existiert nicht mehr" versehen werden. Sie werden dann auf der Karte nicht mehr angezeigt.  (Referenz: !1655)
-
 <img class="pageImage right clear" src="./img/releasenotes/oktober-2020-send-message-kick-slot.png">
+## Betriebsverantwortliche
 Wenn du als betriebsverantwortliche Person Foodsaver\*innen aus einem Abholtermin austrägst, versendest du jetzt automatisch eine Chatnachricht an diese Person. Du kannst direkt einen individuellen Text ergänzen und dort erklären, weshalb das Austragen erfolgt ist. (Referenz: !1677 !1703)
+
+Die Anzeige der Abholhistorie wurde modernisiert und den Abholslots angeglichen. Dabei hat sie auch einen neuen Platz erhalten: wenn ihr verantwortlich für einen Betrieb seid, findet ihr die Historie nun oberhalb der Pinnwand. Sie kann mit Klick auf den Pfeil ausgeklappt werden. (Referenz: !1611)
+
+Dauerhaft geschlossene Betriebe können nun mit dem Status "Betrieb existiert nicht mehr" versehen werden. Sie werden dann auf der Karte nicht mehr angezeigt.  (Referenz: !1655)
 
 
 ## Arbeitsgruppen und AG-Admins
