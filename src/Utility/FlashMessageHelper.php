@@ -6,20 +6,20 @@ class FlashMessageHelper
 {
 	public function info(string $msg, string $title = ''): void
 	{
-		$this->storeMessage('info', $msg, $title);
+		$this->saveMessageInSession('info', $msg, $title);
 	}
 
 	public function success(string $msg, string $title = ''): void
 	{
-		$this->storeMessage('success', $msg, $title);
+		$this->saveMessageInSession('success', $msg, $title);
 	}
 
 	public function error(string $msg, string $title = ''): void
 	{
-		$this->storeMessage('error', $msg, $title);
+		$this->saveMessageInSession('error', $msg, $title);
 	}
 
-	private function storeMessage(string $type, string $msg, string $title): void
+	private function saveMessageInSession(string $type, string $msg, string $title): void
 	{
 		$title = $title ? '<strong>' . $title . '</strong> ' : '';
 		$_SESSION['msg'][$type][] = $title . $msg;
