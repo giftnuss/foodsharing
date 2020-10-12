@@ -246,6 +246,7 @@ export default {
         { value: 3, text: i18n('storestatus.3') }, // CooperationStatus::COOPERATION_STARTING or COOPERATION_ESTABLISHED
         { value: 4, text: i18n('storestatus.4') }, // CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US
         { value: 6, text: i18n('storestatus.6') }, // CooperationStatus::GIVES_TO_OTHER_CHARITY
+        { value: 7, text: i18n('storestatus.7') }, // CooperationStatus::PERMANENTLY_CLOSED
       ],
     }
   },

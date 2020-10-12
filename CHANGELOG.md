@@ -12,6 +12,9 @@
 
 ## Bugfixes
 
+## Bugfixes
+- Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
+
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
 - Remove some long-unused grabInfo code !1695 @ChrisOelmueller
