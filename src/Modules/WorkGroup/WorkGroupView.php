@@ -31,7 +31,7 @@ class WorkGroupView extends View
 					['id' => '5', 'name' => $this->translator->trans('group.apply.time.5')],
 				],
 			]),
-		], ['submit' => false]);
+		], ['submit' => null]);
 	}
 
 	public function contactgroup(array $group): string
