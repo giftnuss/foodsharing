@@ -493,21 +493,30 @@ class Utils
 		}
 
 		$out = '
-	<div id="' . $id . '">
-		<form method="post" id="' . $id . '-form" class="validate" enctype="multipart/form-data" action="' . $action . '">
-			<input type="hidden" name="form_submit" value="' . $id . '" />';
+		<div id="' . $id . '">
+			<form method="post" id="' . $id . '-form" class="validate" enctype="multipart/form-data" action="' . $action . '">
+				<input type="hidden" name="form_submit" value="' . $id . '" />';
 
 		$out .= join('', $elements);
 
 		if (!isset($option['submit'])) {
-			$out .= $this->v_form_submit($this->translator->trans('button.send'));
+			$submitTitle = $this->translator->trans('button.send');
 		} elseif ($option['submit'] !== false) {
-			$out .= $this->v_form_submit($option['submit']);
+			$submitTitle = strval($option['submit']);
+		} else {
+			$submitTitle = null;
+		}
+
+		if ($submitTitle !== null) {
+			$out .= '
+				<div class="input-wrapper">
+					<p><input class="button" type="submit" value="' . $submitTitle . '" /></p>
+				</div>';
 		}
 
 		$out .= '
-		</form>
-	</div>';
+			</form>
+		</div>';
 
 		$this->pageHelper->addJs('$("#' . $id . '-form").on("submit", function (ev) {
 			check = true;
@@ -1131,16 +1140,5 @@ class Utils
 			. $this->translator->trans('storestatus.' . $status)
 			. '" class="trafficlight store-trafficlight color-'
 			. $color . '"><span>&nbsp;</span></a>';
-	}
-
-	/**
-	 * @deprecated Use modern frontend code instead
-	 */
-	private function v_form_submit(string $submitTitle): string
-	{
-		return '
-		<div class="input-wrapper">
-			<p><input class="button" type="submit" value="' . $submitTitle . '" /></p>
-		</div>';
 	}
 }
