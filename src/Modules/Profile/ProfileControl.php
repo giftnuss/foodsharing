@@ -89,13 +89,10 @@ final class ProfileControl extends Control
 	{
 		$fsId = $this->foodsaver['id'];
 		$this->pageHelper->addBread($this->foodsaver['name'], '/profile/' . $fsId);
-		if ($this->session->may('orga')) {
-			$this->view->userNotes(
-				$this->wallposts('usernotes', $fsId),
-				true,
-				$this->profilePermissions->maySeeHistory($fsId),
-				$this->profileGateway->listStoresOfFoodsaver($fsId),
-			);
+		if ($this->profilePermissions->maySeeUserNotes($fsId)) {
+			$userNotes = $this->wallposts('usernotes', $fsId);
+			$storeList = $this->profileGateway->listStoresOfFoodsaver($fsId);
+			$this->view->userNotes($userNotes, $storeList);
 		} else {
 			$this->routeHelper->go('/profile/' . $fsId);
 		}
@@ -107,14 +104,13 @@ final class ProfileControl extends Control
 		$regionId = $this->foodsaver['bezirk_id'];
 
 		$mayAdmin = $this->profilePermissions->mayAdministrateUserProfile($fsId, $regionId);
-		$maySeeHistory = $this->profilePermissions->maySeeHistory($fsId);
 		$maySeePickups = $this->profilePermissions->maySeePickups($fsId);
 
 		$wallPosts = $this->wallposts('foodsaver', $fsId);
 		$userStores = $mayAdmin ? $this->profileGateway->listStoresOfFoodsaver($fsId) : [];
 		$fetchDates = $maySeePickups ? $this->profileGateway->getNextDates($fsId, 50) : [];
 
-		$this->view->profile($wallPosts, $mayAdmin, $maySeeHistory, $userStores, $fetchDates);
+		$this->view->profile($wallPosts, $userStores, $fetchDates);
 	}
 
 	private function profilePublic(array $profileData): void

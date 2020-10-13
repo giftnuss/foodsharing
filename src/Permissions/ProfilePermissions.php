@@ -45,6 +45,11 @@ class ProfilePermissions
 		return $this->mayAdministrateUserProfile($fsId);
 	}
 
+	public function maySeeUserNotes(int $userId): bool
+	{
+		return $this->session->may('orga');
+	}
+
 	public function maySeePickups(int $fsId): bool
 	{
 		return $this->session->id() == $fsId || $this->mayAdministrateUserProfile($fsId);

@@ -63,17 +63,19 @@ class ProfileView extends View
 		$this->reportPermissions = $reportPermissions;
 	}
 
-	public function profile(
-		string $wallPosts,
-		bool $profileVisitorMayAdminThisFoodsharer,
-		bool $profileVisitorMaySeeHistory,
-		array $userStores = [],
-		array $fetchDates = []
-	): void {
+	public function profile(string $wallPosts, array $userStores = [], array $fetchDates = []): void
+	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$fsId = $this->foodsaver['id'];
+		$regionId = $this->foodsaver['bezirk_id'];
 
-		if ($this->profilePermissions->maySeeBounceWarning($fsId)) {
+		// what is the viewer allowed to do in this profile?
+		$maySeeHistory = $this->profilePermissions->maySeeHistory($fsId);
+		$mayAdmin = $this->profilePermissions->mayAdministrateUserProfile($fsId, $regionId);
+		$maySeeBounceWarning = $this->profilePermissions->maySeeBounceWarning($fsId);
+		$maySeePickups = $this->profilePermissions->maySeePickups($fsId);
+
+		if ($maySeeBounceWarning) {
 			if ($this->foodsaver['emailIsBouncing']) {
 				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning', [
 					'{email}' => $this->foodsaver['email'],
@@ -85,9 +87,8 @@ class ProfileView extends View
 			}
 		}
 
-		$page->addSection($wallPosts, $this->translator->trans('profile.pinboard', [
-			'{name}' => $this->foodsaver['name'],
-		]));
+		$wallTitle = $this->translator->trans('profile.pinboard', ['{name}' => $this->foodsaver['name']]);
+		$page->addSection($wallPosts, $wallTitle);
 
 		if ($this->session->id() != $fsId) {
 			$this->pageHelper->addStyle('#wallposts .tools {display:none;}');
@@ -102,12 +103,12 @@ class ProfileView extends View
 		}
 
 		$page->addSectionLeft(
-			$this->photo($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory)
+			$this->photo($mayAdmin, $maySeeHistory)
 		);
 
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
 
-		if ($profileVisitorMayAdminThisFoodsharer && $userStores) { // AMB functionality
+		if ($mayAdmin && $userStores) {
 			$page->addSectionLeft(
 				$this->sideInfosStores($userStores),
 				$this->translator->trans('profile.nav.storelist', ['{count}' => count($userStores)])
@@ -411,22 +412,25 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function userNotes(
-		string $notes,
-		bool $profileVisitorMayAdminThisFoodsharer,
-		bool $profileVisitorMaySeeHistory,
-		array $userStores
-	): void {
+	public function userNotes(string $notes, array $userStores): void
+	{
+		$fsId = $this->foodsaver['id'];
+		$fsName = $this->foodsaver['name'];
+		$regionId = $this->foodsaver['bezirk_id'];
+
 		$page = new vPage(
-			$this->translator->trans('profile.notes.title', ['{name}' => $this->foodsaver['name']]),
+			$this->translator->trans('profile.notes.title', ['{name}' => $fsName]),
 			$this->v_utils->v_info($this->translator->trans('profile.notes.info')) . $notes
 		);
 		$page->setBread($this->translator->trans('profile.notes.bread'));
 
-		$page->addSectionLeft($this->photo($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory));
+		$mayAdmin = $this->profilePermissions->mayAdministrateUserProfile($fsId, $regionId);
+		$maySeeHistory = $this->profilePermissions->maySeeHistory($fsId);
+
+		$page->addSectionLeft($this->photo($mayAdmin, $maySeeHistory));
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
 
-		if ($this->session->may('orga')) {
+		if ($this->profilePermissions->maySeeUserNotes($fsId)) {
 			$page->addSectionLeft(
 				$this->sideInfosStores($userStores),
 				$this->translator->trans('profile.storelist', ['{count}' => count($userStores)])
