@@ -97,6 +97,10 @@ class ProfileView extends View
 			$page->addSection($this->fetchDates($fetchDates), $this->translator->trans('dashboard.pickupdates'));
 		}
 
+		if ($this->profilePermissions->maySeePickups($fsId)) {
+			$page->addSection($this->pastPickups(), $this->translator->trans('pickup.history.title'));
+		}
+
 		$page->addSectionLeft(
 			$this->photo($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory)
 		);
@@ -784,5 +788,14 @@ class ProfileView extends View
 		}
 
 		return $out;
+	}
+
+	// widget to query history of recent pickups
+	private function pastPickups(): string
+	{
+		return $this->vueComponent('vue-pickup-history', 'PickupHistory', [
+			'fsId' => $this->foodsaver['id'],
+			'collapsedAtFirst' => false,
+		]);
 	}
 }

@@ -5,6 +5,7 @@
 - Implement a Webcal URI for iCal export !1716 @chriswalg @ChrisOelmueller
 - Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 !1673 !1725 TheSoulT
 - Store managers can remove old store posts #92 !1690 @ChrisOelmueller
+- Allow displaying recent pickup history in profiles !1715 #989 @ChrisOelmueller
 
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm

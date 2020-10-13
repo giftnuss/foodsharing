@@ -9,6 +9,7 @@ import { pulseError, pulseInfo, profile } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
 import PublicProfile from './components/PublicProfile'
+import PickupHistory from '../StoreUser/components/PickupHistory'
 
 expose({ trySendBanana, trySendBuddyRequest })
 
@@ -37,7 +38,9 @@ async function trySendBuddyRequest (userId) {
 }
 
 vueRegister({
+  PickupHistory,
   PublicProfile,
 })
 
 vueApply('#profile-public', true)
+vueApply('#vue-pickup-history', true)

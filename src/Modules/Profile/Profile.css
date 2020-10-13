@@ -112,6 +112,11 @@ div.statdisplay a.item:hover {
   font-weight: bolder;
 }
 
+/* Make sure the usually-hidden store titles are displayed in past pickup list */
+div.pickup > div.pickup-title > div.store-title {
+  display: block;
+}
+
 .cancel-all-button {
   position: absolute;
   top: 10px;
