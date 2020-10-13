@@ -43,7 +43,7 @@ final class PickupRestController extends AbstractFOSRestController
 		$this->messageTransactions = $messageTransactions;
 	}
 
-	private function parsePickupDate(string $pickupDate): Carbon
+	public function parsePickupDate(string $pickupDate): Carbon
 	{
 		$date = null;
 		try {
@@ -238,11 +238,13 @@ final class PickupRestController extends AbstractFOSRestController
 		]));
 	}
 
-	private function enrichPickupSlots(array $pickups, int $storeId): array
+	public function enrichPickupSlots(array $pickups, ?int $storeId = null): array
 	{
 		$team = [];
-		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$team[$user['id']] = RestNormalization::normalizeStoreUser($user);
+		if ($storeId !== null) {
+			foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
+				$team[$user['id']] = RestNormalization::normalizeStoreUser($user);
+			}
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {

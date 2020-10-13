@@ -1,7 +1,11 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div>
     <div class="pickup">
       <div class="pickup-title">
+        <div v-if="storeTitle" class="store-title">
+          <strong>{{ storeTitle }}</strong>
+        </div>
         <div
           class="pickup-date"
           :class="{'today': isToday, 'past': isInPast, 'soon': isSoon, 'empty': emptySlots > 0, 'coord': isCoordinator}"
@@ -264,6 +268,10 @@ export default {
 
 // The container for one pickup
 .pickup {
+  .store-title {
+    display: none;
+  }
+
   .pickup-text {
     margin-left: -10px;
     margin-right: -10px;

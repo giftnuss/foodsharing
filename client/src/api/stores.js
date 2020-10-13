@@ -19,6 +19,7 @@ export async function listPickupHistory (storeId, fromDate, toDate) {
 
   return _.groupBy(slots.map(s => ({
     ...s,
+    storeId,
     isConfirmed: !!s.confirmed,
     date: dateFnsParseISO(s.date),
   })), 'date_ts')

@@ -74,10 +74,11 @@
         <div class="p-1 pickup-table">
           <Pickup
             v-for="pickupDate in pickupList"
-            :key="pickupDate[0].date_ts"
+            :key="`${pickupDate[0].storeId}-${pickupDate[0].date_ts}`"
             v-bind="pickupDate"
             :date="pickupDate[0].date"
-            :store-id="storeId"
+            :store-id="pickupDate[0].storeId"
+            :store-title="pickupDate[0].storeTitle"
             :occupied-slots="pickupDate"
             :show-relative-date="true"
             class="pickup-block"
@@ -117,12 +118,14 @@ const calendarLabels = {
 export default {
   components: { Pickup },
   props: {
-    storeId: { type: Number, required: true },
+    collapsedAtFirst: { type: Boolean, default: true },
+    fsId: { type: Number, default: null },
+    storeId: { type: Number, default: null },
     coopStart: { type: String, default: '' },
   },
   data () {
     const maxDate = new Date()
-    const minDate = sub(new Date(), { years: 10, months: 1, days: 1 })
+    const minDate = sub(new Date(), this.fsId ? { months: 1 } : { years: 10, months: 1, days: 1 })
 
     const dateFormatOptions = {
       year: 'numeric',
@@ -132,7 +135,7 @@ export default {
     }
 
     return {
-      display: false,
+      display: !this.collapsedAtFirst,
       isLoading: false,
       fromDate: null,
       toDate: maxDate,
@@ -162,13 +165,18 @@ export default {
       if (!this.searchable) {
         return
       }
+      if (this.storeId === null && !this.fsId) {
+        return
+      }
       this.isLoading = true
       try {
-        this.pickupList = await listPickupHistory(
-          this.storeId,
-          startOfDay(this.fromDate),
-          min([new Date(), endOfDay(this.toDate)]),
-        )
+        if (this.storeId !== null) {
+          this.pickupList = await listPickupHistory(
+            this.storeId,
+            startOfDay(this.fromDate),
+            min([new Date(), endOfDay(this.toDate)]),
+          )
+        }
       } catch (e) {
         pulseError(i18n('error_unexpected') + e)
       }
