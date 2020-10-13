@@ -280,6 +280,37 @@ final class ProfileGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId, ':limit' => $limit]);
 	}
 
+	public function getRecentPickups(int $fsId, \DateTime $from, \DateTime $to): array
+	{
+		$stm = '
+			SELECT 	p1.id,
+			        p1.date,
+			        UNIX_TIMESTAMP(p1.date) AS date_ts,
+			        p1.foodsaver_id as foodsaverId,
+			        p1.betrieb_id AS storeId,
+			        b.name AS storeTitle
+
+			FROM   fs_abholer p1,
+			       fs_abholer p2,
+			       fs_betrieb b
+
+			WHERE p1.betrieb_id = p2.betrieb_id
+			  AND p1.date = p2.date
+			  AND p1.betrieb_id = b.id
+			  AND p2.foodsaver_id = :fs_id
+			  AND p2.date > :date_from
+			  AND p2.date < :date_to
+
+			ORDER BY p1.date DESC
+		';
+
+		return $this->db->fetchAll($stm, [
+			':fs_id' => $fsId,
+			':date_from' => $this->db->date($from),
+			':date_to' => $this->db->date($to),
+		]);
+	}
+
 	public function getPassHistory(int $fsId): array
 	{
 		$stm = '
