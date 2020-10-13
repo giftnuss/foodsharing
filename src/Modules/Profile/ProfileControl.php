@@ -66,9 +66,7 @@ final class ProfileControl extends Control
 		if ($this->profilePermissions->maySeeBounceWarning($profileId)) {
 			$this->foodsaver['emailIsBouncing'] = $this->mailsGateway->emailIsBouncing($this->foodsaver['email']);
 		}
-		$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
-				$this->foodsaver['id']
-			);
+		$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets($this->foodsaver['id']);
 		if ((int)$this->foodsaver['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($profileId)) {
 			$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($this->foodsaver['mailbox_id'])
 				. '@' . PLATFORM_MAILBOX_HOST;
