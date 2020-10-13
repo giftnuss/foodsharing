@@ -46,14 +46,20 @@ class RestNormalization
 	 */
 	public static function normalizeStoreUser(array $data): array
 	{
+		if (!isset($data['id'])) {
+			// the user can no longer be found
+			$data['id'] = -1;
+			$data['name'] = '?';
+		}
+
 		return [
 			/* user-related data: */
 			'id' => (int)$data['id'],
 			'name' => $data['name'],
 			'avatar' => $data['photo'] ?? null,
 			'sleepStatus' => self::getSleepStatus($data),
-			'mobile' => $data['handy'],
-			'landline' => $data['telefon'],
+			'mobile' => $data['handy'] ?? '',
+			'landline' => $data['telefon'] ?? '',
 			// 'isVerified' => boolval($data['verified']),
 			// 'roleLevel' => $data['quiz_rolle'], // should be added to FS:getFoodsaverDetails
 			/* team-related data: */
