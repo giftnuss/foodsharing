@@ -423,20 +423,9 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = WEBCAL_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token;
-
-		return $this->v_utils->v_field('
-<p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
-<p>Hinweis: Halte den Link unbedingt geheim! Er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
-<p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
-
-<h3>ICS/ICAL/WebCal:</h3>
-<p class="webcal">
-<strong><a href="' . $url . '&opts=s' . '">' . $url . '&opts=s' . '</strong></p>
-<p class="webcal">
-<strong><a href="' . $url . '&opts=se' . '">' . $url . '&opts=se (inkl. Events)' . '</strong></p>
-
-				', 'Dein Abholkalender', ['class' => 'ui-padding']);
+		return $this->vueComponent('calendar', 'Calendar', [
+			'url' => WEBCAL_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token
+		]);
 	}
 
 	public function delete_account(int $fsId)

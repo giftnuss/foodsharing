@@ -459,9 +459,3 @@ i {
     max-width: 100%;
   }
 }
-
-@media (max-width: 396px) {
-  .webcal {
-    word-break: break-all;
-  }
-}

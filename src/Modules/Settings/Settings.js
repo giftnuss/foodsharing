@@ -17,6 +17,15 @@ import { expose } from '@/utils'
 import i18n from '@/i18n'
 import { subscribeForPushNotifications, unsubscribeFromPushNotifications } from '@/pushNotifications'
 import { confirmDeleteUser } from '../Foodsaver/Foodsaver'
+import { vueApply, vueRegister } from '@/vue'
+import Calendar from './components/Calendar'
+
+if (GET('sub') === 'calendar') {
+  vueRegister({
+    Calendar
+  })
+  vueApply('#calendar')
+}
 
 expose({
   fotoupload,
