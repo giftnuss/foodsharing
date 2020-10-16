@@ -23,7 +23,8 @@ class VotingView extends View
 	public function newPollForm(array $region)
 	{
 		return $this->vueComponent('new-poll-form', 'newPollForm', [
-			'region' => $region
+			'region' => $region,
+			'isWorkGroup' => $region['type'] == Type::WORKING_GROUP
 		]);
 	}
 }

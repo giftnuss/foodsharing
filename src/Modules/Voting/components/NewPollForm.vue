@@ -32,7 +32,7 @@
           class="mb-3"
         >
           <b-form-radio
-            v-for="index in 5"
+            v-for="index in possibleScopes"
             :key="index"
             v-model="scope"
             :value="index - 1"
@@ -263,7 +263,11 @@ export default {
   props: {
     region: {
       type: Object,
-      required: true,
+      required: true
+    },
+    isWorkGroup: {
+      type: Boolean,
+      required: true
     },
   },
   data () {
@@ -330,6 +334,15 @@ export default {
     },
     endDateTime () {
       return parse(this.endDate + ' ' + this.endTime, 'yyyy-MM-dd HH:mm:ss', new Date())
+    },
+    possibleScopes () {
+      const indices = [1, 2, 3, 4, 5]
+      if (this.isWorkGroup) {
+        /* remove 'only store managers' scope when in a work group because work groups don't have
+           active store managers */
+        indices.splice(2, 1)
+      }
+      return indices
     },
   },
   methods: {

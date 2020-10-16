@@ -223,14 +223,15 @@ class VotingTransactions
 	 */
 	public function vote(Poll $poll, array $values): bool
 	{
-		if(!$this->isValidVote($poll, $values)) {
+		if (!$this->isValidVote($poll, $values)) {
 			return false;
 		}
 
 		$this->votingGateway->vote($poll->id, $this->session->id(), $values);
 
 		// remove the 'new poll' bell for this user
-		$this->bellGateway->delBellForFoodsaver('new-poll-' . $poll->id, $this->session->id());
+		$bellId = $this->bellGateway->getOneByIdentifier('new-poll-' . $poll->id);
+		$this->bellGateway->delBellForFoodsaver($bellId, $this->session->id());
 
 		return true;
 	}
