@@ -17,6 +17,7 @@ define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://localhost:18080');
+define('WEBCAL_URL', 'webcal' . '://localhost:18080');
 
 define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 

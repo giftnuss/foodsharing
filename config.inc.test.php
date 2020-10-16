@@ -24,6 +24,7 @@ define('DB_DB', 'foodsharing');
 define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://lmr.local/');
+define('WEBCAL_URL', 'webcal' . '://lmr.local/');
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
 define('SUPPORT_EMAIL', 'it@foodsharing.network');
 define('DEFAULT_EMAIL_NAME', 'foodsharing-Freiwillige');

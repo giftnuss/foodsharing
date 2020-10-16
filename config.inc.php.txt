@@ -13,6 +13,7 @@ define('DB_PASS','pw');
 define('DB_DB','lmr2');
 define('ERROR_REPORT',E_ALL);
 define('BASE_URL', $protocol . '//lmr.local/');
+define('WEBCAL_URL', 'webcal' . '://lmr.local/');
 define('DEFAULT_EMAIL','noreply@foodsharing.network');
 define('DEFAULT_EMAIL_NAME','foodsharing Freiwillige');
 define('VERSION','0.8.1');

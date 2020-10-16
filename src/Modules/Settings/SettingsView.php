@@ -423,19 +423,18 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token . '&opts=s';
+		$url = WEBCAL_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token;
 
 		return $this->v_utils->v_field('
 <p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
 <p>Hinweis: Halte den Link unbedingt geheim! Er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
 <p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
 
-				<table style="border-spacing: 10px;border-collapse: separate;">
-				<tr>
-					<td style="width:75px;">ICS/ICAL/WebCal:</td>
-					<td><strong><a href="' . $url . '">' . $url . '</strong></td>
-				</tr>
-				</table>
+<h3>ICS/ICAL/WebCal:</h3>
+<p class="webcal">
+<strong><a href="' . $url . '&opts=s' . '">' . $url . '&opts=s' . '</strong></p>
+<p class="webcal">
+<strong><a href="' . $url . '&opts=se' . '">' . $url . '&opts=se (inkl. Events)' . '</strong></p>
 
 				', 'Dein Abholkalender', ['class' => 'ui-padding']);
 	}
