@@ -1,0 +1,72 @@
+<template>
+  <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+  <div class="datebox corner-all" :class="classes">
+    <div class="px-1 month">
+      {{ displayedMonth }}
+    </div>
+    <div class="px-1 day">
+      {{ displayedDay }}
+    </div>
+  </div>
+</template>
+
+<script>
+import formatDate from 'date-fns/format'
+
+export default {
+  props: {
+    dateObject: { type: Date, required: true },
+    classes: { type: String, default: '' },
+  },
+  computed: {
+    displayedDay () {
+      return formatDate(this.dateObject, 'dd')
+    },
+    displayedMonth () {
+      return this.$i18n('month.' + formatDate(this.dateObject, 'M'))
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.datebox {
+  --calendar-highlight-bg: #ff8746; // new orange
+  --calendar-highlight-text: #45a045; // modified kale
+  --calendar-font-size: 1rem;
+  --calendar-line-height: 1.5;
+  --calendar-border-radius: 6px;
+
+  text-align: center;
+
+  .month {
+    min-width: calc(5 * var(--calendar-font-size));
+    border-top-left-radius: var(--calendar-border-radius);
+    border-top-right-radius: var(--calendar-border-radius);
+    font-size: var(--calendar-font-size);
+    letter-spacing: -.5px;
+    line-height: var(--calendar-line-height);
+    font-weight: bold;
+    background-color: var(--calendar-highlight-bg);
+    color: var(--white);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.75);
+  }
+
+  .day {
+    border: 2px solid var(--border);
+    border-radius: var(--calendar-border-radius);
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    color: var(--calendar-highlight-text);
+    font-family: 'Alfa Slab One', serif;
+    font-size: calc(2 * var(--calendar-font-size));
+    line-height: var(--calendar-line-height);
+
+    // letter-spacing has alignment problems
+    &::first-letter {
+      margin-right: calc(0.1 * var(--calendar-font-size));
+    }
+  }
+}
+</style>
