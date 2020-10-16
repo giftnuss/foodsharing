@@ -113,12 +113,9 @@ class VotingRestController extends AbstractFOSRestController
 			array_map('intval', array_values($options)));
 
 		// check if voting options are valid
-		if (!$this->votingTransactions->isValidVote($poll, $options)) {
+		if (!$this->votingTransactions->vote($poll, $options)) {
 			throw new HttpException(400);
 		}
-
-		// store the vote
-		$this->votingGateway->vote($pollId, $this->session->id(), $options);
 
 		return $this->handleView($this->view([], 200));
 	}

@@ -178,7 +178,7 @@ class VotingTransactions
 	 *
 	 * @return bool if the vote is valid
 	 */
-	public function isValidVote(Poll $poll, array $values): bool
+	private function isValidVote(Poll $poll, array $values): bool
 	{
 		// make sure the option indices fit the poll's options and all voted value are valid
 		foreach ($values as $index => $value) {
@@ -209,6 +209,28 @@ class VotingTransactions
 				}
 				break;
 		}
+
+		return true;
+	}
+
+	/**
+	 * Casts a vote in a poll. Returns whether the selection was valid and the vote was accepted.
+	 *
+	 * @param Poll $poll an ongoing poll
+	 * @param array $values a map from option index to the voted value for that option
+	 *
+	 * @return bool if the vote is valid
+	 */
+	public function vote(Poll $poll, array $values): bool
+	{
+		if(!$this->isValidVote($poll, $values)) {
+			return false;
+		}
+
+		$this->votingGateway->vote($poll->id, $this->session->id(), $values);
+
+		// remove the 'new poll' bell for this user
+		$this->bellGateway->delBellForFoodsaver('new-poll-' . $poll->id, $this->session->id());
 
 		return true;
 	}
