@@ -98,7 +98,7 @@ class EventControl extends Control
 		$regionEventsLink = '?page=bezirk&sub=events&bid=' . $event['bezirk_id'];
 		$this->pageHelper->addBread($this->translator->trans('events.bread'), $regionEventsLink);
 		$this->pageHelper->addBread($event['name'], '/?page=event&id=' . $eventId);
-		$this->pageHelper->addBread($this->translator->trans('events.menu.edit'));
+		$this->pageHelper->addBread($this->translator->trans('events.edit'));
 
 		if ($this->isSubmitted() && $data = $this->validateEvent()) {
 			if ($this->gateway->updateEvent($_GET['id'], $data)) {

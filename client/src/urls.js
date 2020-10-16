@@ -31,6 +31,7 @@ const urls = {
   donate: () => '/unterstuetzung',
   email: () => '/?page=email',
   event: (eventId) => `/?page=event&id=${eventId}`,
+  eventEdit: (eventId) => `/?page=event&id=${eventId}&sub=edit`,
   events: (regionId) => `/?page=bezirk&bid=${regionId}&sub=events`,
   fairteiler: (regionId) => `/?page=bezirk&bid=${regionId}&sub=fairteiler`,
   support: () => 'https://foodsharing.freshdesk.com/support/home',

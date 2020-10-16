@@ -912,6 +912,9 @@ events:
   bread: "Termine"
   add_new_event: "Jetzt neuen Termin eintragen"
   add_event: "Neuer Termin"
+  created: "Event wurde erfolgreich eingetragen!"
+  edit: "Event bearbeiten"
+  edited: "Event wurde erfolgreich geändert!"
   create:
     date: "Datum"
     title: "Neue Veranstaltung eintragen"
@@ -938,8 +941,9 @@ events:
       <br>
       Um den Termin auch zwischenzeitlichen Neuzugängen auf dem Dashboard anzuzeigen,
       speichere ihn zu einem späteren Zeitpunkt erneut ab.
-  duration: "{from} bis {until}"
   description: "Beschreibung"
+  span: "{from} bis {until}"
+  duration: "Dauer: {duration}"
   mumble:
     title: "Online-Termin (Mumble)"
     text: "Online-Sprachkonferenzen führen wir mit <em>Mumble</em> durch."
@@ -953,13 +957,17 @@ events:
   maybeCount: "{count} kommen vielleicht"
   invitedCount: "{count} Einladungen"
   morePeople: "… und {count} weitere"
+  goto: "Zum Termin"
+  notFound: 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.'
+  acceptedCount: '{count} sind dabei'
+  maybeCount: '{count} kommen vielleicht'
+  invitedCount: '{count} Einladungen'
+  morePeople: '… und {count} weitere'
   button:
-    yes: "Annehmen"
+    yes: "Bin dabei"
     maybe: "Vielleicht"
     no: "Kann nicht"
   menu:
-    options: "Eventoptionen"
-    edit: "Event bearbeiten"
     yes: "Einladung annehmen"
     maybe: "Ich kann vielleicht"
     no: "Ich kann nicht"
