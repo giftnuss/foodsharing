@@ -4,23 +4,27 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Event\EventType;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\EventPermissions;
 use Foodsharing\Utility\DataHelper;
 
 class EventControl extends Control
 {
-	private EventGateway $gateway;
+	private EventGateway $eventGateway;
+	private RegionGateway $regionGateway;
 	private DataHelper $dataHelper;
 	private EventPermissions $eventPermissions;
 
 	public function __construct(
 		EventView $view,
-		EventGateway $gateway,
+		EventGateway $eventGateway,
+		RegionGateway $regionGateway,
 		DataHelper $dataHelper,
 		EventPermissions $eventPermissions
 	) {
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->eventGateway = $eventGateway;
+		$this->regionGateway = $regionGateway;
 		$this->dataHelper = $dataHelper;
 		$this->eventPermissions = $eventPermissions;
 
@@ -49,7 +53,7 @@ class EventControl extends Control
 		}
 
 		$eventId = intval($eventId);
-		$event = $this->gateway->getEvent($eventId, true);
+		$event = $this->eventGateway->getEvent($eventId, true);
 
 		if (!$event || !$this->eventPermissions->maySeeEvent($event)) {
 			$this->flashMessageHelper->info($this->translator->trans('events.notFound'));
@@ -57,11 +61,18 @@ class EventControl extends Control
 			return $this->routeHelper->go('/?page=dashboard');
 		}
 
-		$regionEventsLink = '?page=bezirk&sub=events&bid=' . $event['bezirk_id'];
+		$regionId = $event['bezirk_id'];
+		$regionLink = '?page=bezirk&bid=' . $regionId;
+		$regionEventsLink = $regionLink . '&sub=events';
+		$regionName = $this->regionGateway->getRegionName($regionId) ?? '';
+
+		$this->pageHelper->addBread($regionName, $regionLink);
 		$this->pageHelper->addBread($this->translator->trans('events.bread'), $regionEventsLink);
 		$this->pageHelper->addBread($event['name']);
 
-		$status = $this->gateway->getInviteStatus($eventId, $this->session->id());
+		$status = $this->eventGateway->getInviteStatus($eventId, $this->session->id());
+		$event['status'] = $status;
+		$event['regionName'] = $regionName;
 
 		$this->pageHelper->addContent($this->view->eventTop($event), CNT_TOP);
 		$this->pageHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
@@ -85,7 +96,7 @@ class EventControl extends Control
 	public function edit()
 	{
 		$eventId = $_GET['id'] ?? null;
-		$event = $this->gateway->getEvent($eventId, true);
+		$event = $this->eventGateway->getEvent($eventId, true);
 
 		if (!$event) {
 			return $this->routeHelper->go('/?page=dashboard');
@@ -101,12 +112,12 @@ class EventControl extends Control
 		$this->pageHelper->addBread($this->translator->trans('events.edit'));
 
 		if ($this->isSubmitted() && $data = $this->validateEvent()) {
-			if ($this->gateway->updateEvent($_GET['id'], $data)) {
+			if ($this->eventGateway->updateEvent($_GET['id'], $data)) {
 				if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
-					$this->gateway->deleteInvites($_GET['id']);
+					$this->eventGateway->deleteInvites($_GET['id']);
 				}
 				if ($data['invite']) {
-					$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
+					$this->eventGateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 				}
 				$this->flashMessageHelper->success($this->translator->trans('events.edited'));
 				$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
@@ -115,7 +126,7 @@ class EventControl extends Control
 
 		$regions = $this->session->getRegions();
 
-		if (($event['location_id'] !== null) && $loc = $this->gateway->getLocation($event['location_id'])) {
+		if (($event['location_id'] !== null) && $loc = $this->eventGateway->getLocation($event['location_id'])) {
 			$event['location_name'] = $loc['name'];
 			$event['lat'] = $loc['lat'];
 			$event['lon'] = $loc['lon'];
@@ -135,9 +146,9 @@ class EventControl extends Control
 		$this->pageHelper->addBread($this->translator->trans('events.create.title'));
 
 		if ($this->isSubmitted()) {
-			if (($data = $this->validateEvent()) && $id = $this->gateway->addEvent($this->session->id(), $data)) {
+			if (($data = $this->validateEvent()) && $id = $this->eventGateway->addEvent($this->session->id(), $data)) {
 				if ($data['invite']) {
-					$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
+					$this->eventGateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 				}
 				$this->flashMessageHelper->success($this->translator->trans('events.created'));
 				$this->routeHelper->go('/?page=event&id=' . $id);
@@ -211,7 +222,7 @@ class EventControl extends Control
 			$out['location_id'] = null;
 		} else {
 			$out['online'] = 0;
-			$id = $this->gateway->addLocation(
+			$id = $this->eventGateway->addLocation(
 				$this->getPostString('location_name'),
 				$this->getPost('lat'),
 				$this->getPost('lon'),
