@@ -6,12 +6,14 @@
         <ul class="linklist">
             {% for event in events %}
             <li>
+                {# TODO migrate this view to EventPanel #}
                 <a href="/?page=event&id={{ event.id }}">
-                        <span class="calendar" style="margin-right:10px;">
-                            <span class="month">{{ event.start_ts|format_date(pattern='MMMM') }}</span>
-                            <span class="day">{{ event.start_ts|date('d') }}</span>
-                        </span>
-                    <span class="title">{{ event.name }}</span><br />
+                    <span class="calendar" style="margin-right:10px;">
+                        <span class="month">{{ event.start_ts|format_date(pattern='MMMM') }}</span>
+                        <span class="day">{{ event.start_ts|date('d') }}</span>
+                    </span>
+                    <span class="title">{{ event.name }}</span>
+                    <br />
                     {{ event.start_ts|date('d.m.Y H:i') }} - {{ event.end_ts|date('d.m.Y H:i') }}
                     <span class="clear"></span>
                 </a>
@@ -23,7 +25,7 @@
 {% endblock %}
 
 {% block right %}
-    {% embed 'components/field.twig' with {'title': 'events.add_event'|trans, 'classes': ['ui-padding']} %}
+    {% embed 'components/field.twig' with {'title': 'events.add_new_event'|trans, 'classes': ['ui-padding']} %}
     {% block content %}
         <p align="center"><a class="button" href="/?page=event&sub=add&bid={{ region.id }}">{{ 'events.add_new_event'|trans }}</a></p>
     {% endblock %}

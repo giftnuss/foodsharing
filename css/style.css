@@ -866,55 +866,8 @@ a.light {
   color: var(--fs-brown);
 }
 
-.calendar {
-  display: block;
-  float: left;
-  height: 70px;
-  margin: 0 20px 0 0;
-  padding: 0;
-  width: 70px;
-  text-decoration: none;
-}
-
-.calendar .month {
-  background-color: #e07a0b !important;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  color: var(--white) !important;
-  display: block;
-  font-size: 13px;
-  font-weight: bold;
-  height: 23px;
-  line-height: 23px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
-  text-decoration: none;
-}
-
-.calendar .day {
-  background-color: #eae2cb !important;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  color: #2f291e !important;
-  display: block;
-  font-size: 17px;
-  font-weight: bold;
-  height: 44px;
-  line-height: 42px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  text-decoration: none;
-}
-
 ul.linklist li > a:hover span.day {
   color: #2f291e !important;
-}
-
-a.calendar {
-  text-decoration: none !important;
 }
 
 a.expand-collapse-link {

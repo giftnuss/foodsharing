@@ -44,14 +44,14 @@ div.event {
   margin: 0 20px 0 0;
   padding: 0;
   width: 70px;
+  text-decoration: none;
 }
 
 .calendar .month {
-  background-color: #4d7216;
-  border: 1px solid #2b400c;
+  background-color: #e07a0b !important;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  color: #ffffff;
+  color: var(--white) !important;
   display: block;
   font-size: 13px;
   font-weight: bold;
@@ -61,16 +61,14 @@ div.event {
   padding: 0;
   text-align: center;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+  text-decoration: none;
 }
 
 .calendar .day {
-  background-color: #eae2cb;
-  border-bottom: 1px solid #bba595;
+  background-color: #eae2cb !important;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  border-left: 1px solid #bba595;
-  border-right: 1px solid #bba595;
-  color: #2f291e;
+  color: #2f291e !important;
   display: block;
   font-size: 17px;
   font-weight: bold;
@@ -79,6 +77,7 @@ div.event {
   margin: 0;
   padding: 0;
   text-align: center;
+  text-decoration: none;
 }
 
 /* TODO move me to MemberList.vue */

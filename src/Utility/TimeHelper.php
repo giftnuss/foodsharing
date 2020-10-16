@@ -60,6 +60,11 @@ final class TimeHelper
 		return date('j.m.Y. H:i', $ts);
 	}
 
+	public function month(int $ts): string
+	{
+		return $this->translator->trans('month.' . intval(date('m', $ts)));
+	}
+
 	public function getDow(int $day): string
 	{
 		return [

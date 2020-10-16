@@ -130,6 +130,11 @@
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
 - Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
 - Rewrite blogpost management list in Vue !1791 @ChrisOelmueller
+- Display event region on dashboard invitations #992 !1717 @ChrisOelmueller
+
+## Changes
+- Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
+- New look for event header panels and dashboard invitations !1717 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg

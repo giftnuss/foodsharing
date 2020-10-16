@@ -78,7 +78,7 @@ class EventControl extends Control
 
 		$this->pageHelper->addContent($this->view->eventPanel($event, $mayEdit), CNT_TOP);
 		$this->pageHelper->addContent($this->view->event($event));
-		$this->setContentWidth(6, 6);
+		$this->pageHelper->setContentWidth(6, 6);
 
 		if ($event['online'] == 0 && $event['location'] != false) {
 			$this->pageHelper->addContent($this->view->location($event['location']), CNT_LEFT);
