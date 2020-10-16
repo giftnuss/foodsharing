@@ -17,7 +17,7 @@ if (sub === 'add' || sub === 'edit') {
   initWall('event', GET('id'))
 } else {
   vueRegister({
-    EventPanel
+    EventPanel,
   })
 
   vueApply('#event-panel', true)

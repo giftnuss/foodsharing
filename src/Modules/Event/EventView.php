@@ -264,6 +264,24 @@ class EventView extends View
 		], ['submit' => $this->translator->trans('button.save')]), $title, ['class' => 'ui-padding']);
 	}
 
+	public function dashboardEventPanels(array $events, bool $invitationsTitle = false): string
+	{
+		$out = '';
+		foreach ($events as $e) {
+			$out .= $this->eventPanel($e);
+		}
+
+		if ($invitationsTitle) {
+			$eventTitle = $this->translator->trans('dashboard.invitations');
+		} elseif (count($events) > 1) {
+			$eventTitle = $this->translator->trans('dashboard.events', ['{count}' => count($events)]);
+		} else {
+			$eventTitle = $this->translator->trans('dashboard.event');
+		}
+
+		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'truncate-content truncate-height-160']);
+	}
+
 	public function eventPanel(array $event, bool $mayEdit = false): string
 	{
 		return $this->vueComponent('event-panel', 'EventPanel', [

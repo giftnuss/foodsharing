@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Dashboard;
 
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Modules\Event\InvitationStatus;
 
 class DashboardView extends View
 {

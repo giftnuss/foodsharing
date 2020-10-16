@@ -957,12 +957,6 @@ events:
   maybeCount: "{count} kommen vielleicht"
   invitedCount: "{count} Einladungen"
   morePeople: "… und {count} weitere"
-  goto: "Zum Termin"
-  notFound: 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.'
-  acceptedCount: '{count} sind dabei'
-  maybeCount: '{count} kommen vielleicht'
-  invitedCount: '{count} Einladungen'
-  morePeople: '… und {count} weitere'
   button:
     yes: "Bin dabei"
     maybe: "Vielleicht"

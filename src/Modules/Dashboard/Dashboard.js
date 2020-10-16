@@ -4,6 +4,7 @@ import '@/globals'
 import { vueRegister, vueApply } from '@/vue'
 import ActivityOverview from './components/ActivityOverview'
 import DashboardWarning from './components/DashboardWarning'
+import EventPanel from '../Event/components/EventPanel'
 
 import './Dashboard.css'
 
@@ -13,8 +14,10 @@ import { pulseSuccess, pulseError } from '@/script'
 
 vueRegister({
   ActivityOverview,
+  EventPanel,
 })
 vueApply('#activity-overview')
+vueApply('#event-panel', true)
 
 if (document.querySelector('#dashboard-warning') !== null) {
   vueRegister({

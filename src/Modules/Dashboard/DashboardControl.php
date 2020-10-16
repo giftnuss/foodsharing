@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
+use Foodsharing\Modules\Event\EventView;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
@@ -25,6 +26,7 @@ class DashboardControl extends Control
 	private StoreGateway $storeGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private EventGateway $eventGateway;
+	private EventView $eventView;
 	private \Twig\Environment $twig;
 	private ProfileGateway $profileGateway;
 	private Sanitizer $sanitizerService;
@@ -39,6 +41,7 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
+		EventView $eventView,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
@@ -52,6 +55,7 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
+		$this->eventView = $eventView;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
@@ -242,14 +246,12 @@ class DashboardControl extends Control
 			}
 		}
 
-		/* Invitations */
 		if ($invites = $this->eventGateway->getEventInvitations($this->session->id())) {
-			$this->pageHelper->addContent($this->view->u_invites($invites));
+			$this->pageHelper->addContent($this->eventView->dashboardEventPanels($invites, true));
 		}
 
-		/* Events */
 		if ($events = $this->eventGateway->getEventsInterestedIn($this->session->id())) {
-			$this->pageHelper->addContent($this->view->u_events($events));
+			$this->pageHelper->addContent($this->eventView->dashboardEventPanels($events));
 		}
 
 		$this->pageHelper->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));

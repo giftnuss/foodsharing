@@ -151,6 +151,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// pure-grid is doing very weird things on the dashboard without this:
+.event-panel div.btn-group > .btn {
+  white-space: initial;
+}
+
 .event-link {
   color: initial;
 }

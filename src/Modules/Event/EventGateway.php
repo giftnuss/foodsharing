@@ -148,14 +148,24 @@ class EventGateway extends BaseGateway
 				e.name,
 				e.description,
 				e.start,
+				e.end,
 				UNIX_TIMESTAMP(e.start) AS start_ts,
+				e.bezirk_id,
+				r.name AS regionName,
 				fhe.status
 			FROM
 				fs_event e
 			LEFT JOIN
 				fs_foodsaver_has_event fhe
 			ON
-				e.id = fhe.event_id AND fhe.foodsaver_id = :userId
+				e.id = fhe.event_id
+			AND
+				fhe.foodsaver_id = :userId
+			LEFT JOIN
+				fs_bezirk r
+			ON
+				e.bezirk_id = r.id
+
 			WHERE
 				e.end >= CURDATE()
 			AND
@@ -185,21 +195,31 @@ class EventGateway extends BaseGateway
 				e.name,
 				e.description,
 				e.start,
+				e.end,
 				UNIX_TIMESTAMP(e.start) AS start_ts,
+				e.bezirk_id,
+				r.name AS regionName,
 				fhe.`status`
+
 			FROM
-				fs_event e,
+				fs_event e
+			LEFT JOIN
 				fs_foodsaver_has_event fhe
-			WHERE
-			    fhe.event_id = e.id
+			ON
+				e.id = fhe.event_id
 			AND
 				fhe.foodsaver_id = :userId
-			AND
+			LEFT JOIN
+				fs_bezirk r
+			ON
+				e.bezirk_id = r.id
+
+			WHERE
 				fhe.status = 0
 			AND
 				e.end > NOW()
 			ORDER BY
-			e.start
+				e.start
 		', [':userId' => $userId]);
 	}
 
