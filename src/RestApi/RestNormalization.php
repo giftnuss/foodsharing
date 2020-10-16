@@ -171,7 +171,22 @@ class RestNormalization
 	}
 
 	/**
-	 * Returns the response data for a note on a store's wall.
+	 * @param array $data the event from the database
+	 */
+	public static function normalizeEvent(array $data): array
+	{
+		return [
+			'id' => (int)$data['id'],
+			'eventTitle' => $data['name'],
+			'description' => $data['description'],
+			'start' => self::normalizeDate($data['start_ts']),
+			'end' => self::normalizeDate($data['end_ts']),
+			'regionId' => $data['bezirk_id'],
+		];
+	}
+
+	/**
+	 * Returns the response data for a note on a store's wall (milestone).
 	 *
 	 * @param array $data the note data from the database
 	 */
