@@ -264,80 +264,19 @@ class EventView extends View
 		], ['submit' => $this->translator->trans('button.save')]), $title, ['class' => 'ui-padding']);
 	}
 
-	public function statusMenu(array $event, int $user_status): string
+	public function eventPanel(array $event, bool $mayEdit = false): string
 	{
-		$menu = [];
-		$eventId = intval($event['id']);
-
-		if ($this->eventPermissions->mayEditEvent($event)) {
-			$menu[] = [
-				'name' => $this->translator->trans('events.menu.edit'),
-				'href' => '/?page=event&sub=edit&id=' . $eventId,
-			];
-		}
-
-		if ($this->eventPermissions->mayJoinEvent($event)) {
-			$menu[] = [
-				'name' => $this->translator->trans('events.menu.yes'),
-				'click' => $this->buildEventResponse($eventId, InvitationStatus::ACCEPTED),
-			];
-			$menu[] = [
-				'name' => $this->translator->trans('events.menu.maybe'),
-				'click' => $this->buildEventResponse($eventId, InvitationStatus::MAYBE),
-			];
-			$menu[] = [
-				'name' => $this->translator->trans('events.menu.no'),
-				'click' => $this->buildEventResponse($eventId, InvitationStatus::WONT_JOIN),
-			];
-		}
-
-		return $this->v_utils->v_field(
-			$this->menu($menu), $this->translator->trans('events.menu.options'), [], 'fas fa-cog'
-		);
-	}
-
-	/** TODO Duplicated in DashboardView right now.
-	 * @param int $newStatus  The invitation response (a valid {@see InvitationStatus})
-	 */
-	private function buildEventResponse(int $eventId, $newStatus): string
-	{
-		return "ajreq('eventresponse',{app:'event',id:'" . $eventId . "',s:'" . $newStatus . "'});return false;";
-	}
-
-	public function eventTop(array $event): string
-	{
-		$sameDay = (date('Y-m-d', $event['start_ts']) == date('Y-m-d', $event['end_ts']));
-		$end = $sameDay ? $this->ts_time($event['end_ts']) : $this->timeHelper->niceDate($event['end_ts']);
-		$duration = $this->translator->trans('events.duration', [
-			'{from}' => $this->timeHelper->niceDate($event['start_ts']),
-			'{until}' => $end,
+		return $this->vueComponent('event-panel', 'EventPanel', [
+			'eventId' => $event['id'],
+			'regionName' => $event['regionName'],
+			'start' => $event['start'],
+			'end' => $event['end'],
+			'title' => $event['name'],
+			'location' => ($event['location'] ?? '') ?: '',
+			'mayEdit' => $mayEdit,
+			'status' => $event['status'] ?? '',
+			'e' => $event,
 		]);
-
-		return '
-		<div class="event welcome ui-padding margin-bottom ui-corner-all">
-			<div class="welcome_profile_image">
-				<span class="calendar">
-					<span class="month">' . $this->timeHelper->month($event['start_ts']) . '</span>
-					<span class="day">' . date('d', $event['start_ts']) . '</span>
-				</span>
-				<div class="clear"></div>
-			</div>
-			<div class="welcome_profile_name">
-				<div class="user_display_name">' . $event['name'] . '</div>
-				<div class="welcome_quick_link">
-					<ul>
-						<li>' . $duration . '</li>
-					</ul>
-					<div class="clear"></div>
-				</div>
-			</div>
-			<div class="clear"></div>
-		</div>';
-	}
-
-	private function ts_time($ts): string
-	{
-		return $this->translator->trans('date.time', ['{time}' => date('H:i', $ts)]);
 	}
 
 	public function invites(array $invites): string

@@ -74,14 +74,16 @@ class EventControl extends Control
 		$event['status'] = $status;
 		$event['regionName'] = $regionName;
 
-		$this->pageHelper->addContent($this->view->eventTop($event), CNT_TOP);
-		$this->pageHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
+		$mayEdit = $this->eventPermissions->mayEditEvent($event);
+
+		$this->pageHelper->addContent($this->view->eventPanel($event, $mayEdit), CNT_TOP);
 		$this->pageHelper->addContent($this->view->event($event));
+		$this->setContentWidth(6, 6);
 
 		if ($event['online'] == 0 && $event['location'] != false) {
-			$this->pageHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->location($event['location']), CNT_LEFT);
 		} elseif ($event['online'] == 1) {
-			$this->pageHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->locationMumble(), CNT_LEFT);
 		}
 
 		if ($event['invites']) {
