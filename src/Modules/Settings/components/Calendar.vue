@@ -1,18 +1,19 @@
 <template>
   <div>
     <div class="head ui-widget-header ui-corner-top">
-      Dein Abholkalendar
+      {{ $i18n('settings.calendar.title') }}
     </div>
     <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
       <p>
-        Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!
-
-        Hinweis: Halte den Link unbedingt geheim! Er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.
-
-        Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!
+        {{ $i18n('settings.calendar.content_1') }}
       </p>
-
-      <h3>ICS/ICAL/WebCal:</h3>
+      <p>
+        {{ $i18n('settings.calendar.content_2') }}
+      </p>
+      <p>
+        {{ $i18n('settings.calendar.content_3') }}
+      </p>
+      <h3>{{ $i18n('settings.calendar.link_title') }}</h3>
       <p class="webcal">
         <strong>
           <a
@@ -27,7 +28,7 @@
           <a
             :href="url + '&opts=se'"
           >
-            {{ url }}&opts=se (inkl. Events)
+            {{ url }}&opts=se {{ $i18n('settings.calendar.event_link_desc') }}
           </a>
         </strong>
       </p>

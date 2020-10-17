@@ -368,7 +368,7 @@ class SettingsControl extends Control
 
 	public function calendar()
 	{
-		$this->pageHelper->addBread($this->translator->trans('settings.calendar'));
+		$this->pageHelper->addBread($this->translator->trans('settings.calendar.menu'));
 		$token = $this->generate_api_token($this->session->id());
 		$this->pageHelper->addContent($this->view->settingsCalendar($token));
 	}
