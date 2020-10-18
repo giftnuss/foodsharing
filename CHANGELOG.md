@@ -2,6 +2,7 @@
 
 ## Features
 - Add button that marks emails as unread !1681 @alex.simm
+- Implement a Webcal URI for iCal export !1716 @chriswalg
 
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm

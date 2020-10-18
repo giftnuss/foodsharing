@@ -6,14 +6,16 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
 	$protocol = 'https';
 }
 
+$base_domain = '://lmr.local/';
+
 define('PROTOCOL',$protocol);
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','pw');
 define('DB_DB','lmr2');
 define('ERROR_REPORT',E_ALL);
-define('BASE_URL', $protocol . '//lmr.local/');
-define('WEBCAL_URL', 'webcal' . '://lmr.local/');
+define('BASE_URL', $protocol . $base_domain);
+define('WEBCAL_URL', 'webcal' . $base_domain);
 define('DEFAULT_EMAIL','noreply@foodsharing.network');
 define('DEFAULT_EMAIL_NAME','foodsharing Freiwillige');
 define('VERSION','0.8.1');

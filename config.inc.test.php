@@ -16,6 +16,8 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 	$protocol = 'https';
 }
 
+$base_domain = '://lmr.local/';
+
 define('PROTOCOL', $protocol);
 define('DB_HOST', 'db');
 define('DB_USER', 'root');
@@ -23,8 +25,8 @@ define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
 define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 define('ERROR_REPORT', E_ALL);
-define('BASE_URL', $protocol . '://lmr.local/');
-define('WEBCAL_URL', 'webcal' . '://lmr.local/');
+define('BASE_URL', $protocol . $base_domain);
+define('WEBCAL_URL', 'webcal' . $base_domain);
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
 define('SUPPORT_EMAIL', 'it@foodsharing.network');
 define('DEFAULT_EMAIL_NAME', 'foodsharing-Freiwillige');
