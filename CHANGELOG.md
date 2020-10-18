@@ -8,6 +8,9 @@
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
 - Don't set "follow by email" as default when opening a new thread !1676 @Caluera
+- New favicon created with support for all platforms and browsers !1720 @chriswalg
+
+## Bugfixes
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
