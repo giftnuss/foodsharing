@@ -62,6 +62,17 @@
           @keydown.enter="submit"
         >
       </div>
+      <div>
+        <b-checkbox
+          id="login-rememberme"
+          v-model="rememberMe"
+          switch
+          size="sm"
+          class="login-rememberme"
+        >
+          {{ $i18n('login.steady_login') }}
+        </b-checkbox>
+      </div>
       <b-overlay
         :show="isLoading"
       >
@@ -81,6 +92,14 @@
           <i class="fas fa-arrow-right mr-auto" />
         </b-button>
       </b-overlay>
+      <div class="password-reset">
+        <b-link
+          :href="$url('passwordReset')"
+          class="b-link"
+        >
+          {{ $i18n('login.forgotten_password_label') }}
+        </b-link>
+      </div>
     </form>
   </b-popover>
 </template>
@@ -117,12 +136,10 @@ export default {
     async submit () {
       if (!this.email) {
         pulseError(i18n('login.error_no_email'))
-        // window.location = this.$url('login')
         return
       }
       if (!this.password) {
         pulseError(i18n('login.error_no_password'))
-        // window.location = this.$url('login')
         return
       }
       this.isLoading = true
@@ -142,7 +159,6 @@ export default {
         if (err.code && err.code === 401) {
           pulseError(i18n('login.error_no_auth'))
           setTimeout(() => {
-            // window.location = this.$url('login')
           }, 2000)
         } else {
           pulseError(i18n('error_unexpected'))
@@ -189,5 +205,18 @@ export default {
   .login-popover {
     box-shadow: -0.5em 0.5em 20px -3px #333;
     max-width: 100%;
+  }
+  .login-rememberme /deep/ .custom-control-label {
+    font-size: 0.7rem!important;
+    &::before {
+      top: 0;
+    }
+    &::after {
+      top: 2px;
+    }
+  }
+  .password-reset {
+    font-size: 0.7rem;
+    margin-top: 10px;
   }
 </style>
