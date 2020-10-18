@@ -21,7 +21,7 @@
         role="menuitem"
         href="#"
         target="_self"
-        class="dropdown-item text-truncate"
+        class="dropdown-item text-truncate dropdown-header"
       >
         {{ region.name }}
       </a>
@@ -34,7 +34,7 @@
         <a
           :href="$url('forum', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="far fa-comment-alt" />{{ $i18n('menu.entry.forum') }}
         </a>
@@ -42,49 +42,49 @@
           v-if="region.isBot"
           :href="$url('forum', region.id, 1)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="far fa-comment-dots" />{{ $i18n('menu.entry.BOTforum') }}
         </a>
         <a
           :href="$url('foodsharepoints', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-recycle" />{{ $i18n('terminology.fsp') }}
         </a>
         <a
           :href="$url('members', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-user" />{{ $i18n('menu.entry.members') }}
         </a>
         <a
           :href="$url('events', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="far fa-calendar-alt" />{{ $i18n('menu.entry.events') }}
         </a>
         <a
           :href="$url('stores', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-cart-plus" />{{ $i18n('menu.entry.stores') }}
         </a>
         <a
           :href="$url('workingGroups', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-users" />{{ $i18n('terminology.groups') }}
         </a>
         <a
           :href="$url('statistic', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
         </a>
@@ -92,7 +92,7 @@
           v-if="region.hasConference"
           href="#"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
           @click="showConferencePopup(region.id)"
         >
           <i class="fas fa-users" />{{ $i18n('menu.entry.conference') }}
@@ -100,7 +100,7 @@
         <a
           :href="$url('polls', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-poll-h" />{{ $i18n('terminology.polls') }}
         </a>
@@ -108,7 +108,7 @@
           v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-user" />{{ $i18n('menu.entry.fs') }}
         </a>
@@ -116,7 +116,7 @@
           v-if="region.isBot"
           :href="$url('passports', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
@@ -124,7 +124,7 @@
           v-if="region.isBot"
           :href="$url('reports', region.id)"
           role="menuitem"
-          class="dropdown-item dropdown-item-sub"
+          class="dropdown-item"
         >
           <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
         </a>
@@ -203,23 +203,6 @@ export default {
 <style lang="scss" scoped>
 .regionName {
     max-width: 120px;
-    display: inline-block;
     margin-bottom: -0.35em;
-}
-
-.dropdown-item {
-  font-weight: bold;
-  font-size: 0.9em;
-  i {
-    display: inline-block;
-    width: 1.7em;
-    text-align: center;
-    margin-left: -0.4em;
-  }
-}
-.sub .dropdown-item {
-    font-size: 0.8em;
-    padding-left: 3em;
-    font-weight: normal;
 }
 </style>

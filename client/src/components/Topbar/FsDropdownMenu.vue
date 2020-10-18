@@ -134,6 +134,12 @@ i {
     }
     .dropdown-item {
       font-size: 15px;
+        i {
+        display: inline-block;
+        width: 1.7em;
+        text-align: center;
+        margin-left: -0.4em;
+      }
     }
     .sub {
       padding-left: 2.2rem;
