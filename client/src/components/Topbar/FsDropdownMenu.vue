@@ -132,6 +132,16 @@ i {
       min-height: 120px;
       overflow: auto;
     }
+    .dropdown-item {
+      font-size: 15px;
+    }
+    .sub {
+      padding-left: 2.2rem;
+      font-size: 0.9rem;
+    }
+    .dropdown-header {
+     font-weight: bold;
+    }
   }
   @media (max-width: 575px) {
     position: initial;

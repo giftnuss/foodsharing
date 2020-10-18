@@ -42,7 +42,7 @@ export default {
         {
           heading: 'menu.entry.background',
           menuItems: [
-            { url: 'support', menuTitle: 'menu.entry.faq', target: '_blank' },
+            { url: 'support', menuTitle: 'menu.entry.support', target: '_blank' },
             { url: 'wiki', menuTitle: 'menu.entry.wiki' },
             { url: 'guide', menuTitle: 'menu.entry.guide', target: '_blank' },
             { url: 'statistics', menuTitle: 'menu.entry.statistics' },

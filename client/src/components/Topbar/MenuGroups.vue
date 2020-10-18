@@ -16,7 +16,7 @@
           v-if="!alwaysOpen"
           v-b-toggle="`topbargroup_${group.id}`"
           role="menuitem"
-          class="dropdown-item text-truncate"
+          class="dropdown-header text-truncate"
           href="#"
           target="_self"
         >
@@ -129,10 +129,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.dropdown-header {
-    font-weight: bold;
-    font-size: 0.9em;
-}
-</style>
