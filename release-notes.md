@@ -36,6 +36,12 @@ Außerdem lässt sich das Forum nun auf kleinen Bildschirmen bzw. mobil besser n
 
 Wenn du einen Post auf der Pinnwand eines Fairteilers schreibst, wirst du nicht mehr selbst per E-Mail benachrichtigt. (Referenz: !1638)
 
+Die Abholquote im Profil wurde deaktiviert. Da die technische Unterstützung des Meldesystem ruht, die Zahl aber darauf basiert, wird diese genauso vorübergehend ausgeblendet. 
+(Referenz !1706)
+
+Verlässt ein foodsaver selbstständig seinen Stammbezirk, so verliert er seine Verifizierung und er muss sich beim neuen Botschafter melden. Botschafter sehen im Profil, wann und von wem der Stammbezirk geändert worden ist.
+(Referenz !1358)
+
 <img class="pageImage right clear" src="./img/releasenotes/oktober-2020-send-message-kick-slot.png">
 ## Betriebsverantwortliche
 Wenn du als betriebsverantwortliche Person Foodsaver\*innen aus einem Abholtermin austrägst, versendest du jetzt automatisch eine Chatnachricht an diese Person. Du kannst direkt einen individuellen Text ergänzen und dort erklären, weshalb das Austragen erfolgt ist. (Referenz: !1677 !1703)
