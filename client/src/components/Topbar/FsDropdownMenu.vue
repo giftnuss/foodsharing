@@ -160,5 +160,10 @@ i {
       }
     }
   }
+  /deep/ .badge {
+    position: absolute;
+    margin-top: -0.5em;
+    margin-left: -0.7em;
+  }
 }
 </style>
