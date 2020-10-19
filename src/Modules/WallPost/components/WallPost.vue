@@ -23,19 +23,24 @@
         class="datetime text-right flex-grow-0 flex-shrink-1"
       >
         <i class="far fa-fw fa-clock" />
-        {{ $dateDistanceInWords(post.createdAt) }}
+        {{ displayedDate }}
       </span>
     </div>
 
     <div class="content w-100 m-1 flex-grow-0 flex-shrink-0 d-flex">
       <div class="img mr-2 flex-grow-0 flex-shrink-0 align-self-baseline">
-        <Avatar
-          :url="post.author.avatar"
-          :size="50"
-          :rounded="true"
-          class="member-pic img"
-          :sleep-status="post.author.sleepStatus"
-        />
+        <a
+          :href="$url('profile', post.author.id)"
+          class="d-inline-block"
+        >
+          <Avatar
+            :url="post.author.avatar"
+            :size="50"
+            :rounded="true"
+            class="member-pic img"
+            :sleep-status="post.author.sleepStatus"
+          />
+        </a>
       </div>
 
       <div class="msg ml-1">
