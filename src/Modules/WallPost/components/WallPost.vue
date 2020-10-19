@@ -106,6 +106,7 @@
 
 <script>
 import differenceInDays from 'date-fns/differenceInDays'
+import differenceInCalendarYears from 'date-fns/differenceInCalendarYears'
 import serverData from '@/server-data'
 import Avatar from '@/components/Avatar'
 import Markdown from '@/components/Markdown/Markdown'
@@ -115,9 +116,17 @@ export default {
   props: {
     post: { type: Object, default: () => {} },
     managers: { type: Array, default: () => [] },
-    mayDeleteEverything: { type: Boolean, default: false }
+    mayDeleteEverything: { type: Boolean, default: false },
   },
   computed: {
+    displayedDate () {
+      const createdAt = this.post.createdAt
+      if (differenceInCalendarYears(new Date(), createdAt) >= 1) {
+        return this.$dateFormat(createdAt, 'full-long')
+      } else {
+        return this.$dateDistanceInWords(createdAt)
+      }
+    },
     canDelete () {
       if (!serverData.user.id) return false
       // orga can remove problematic content, see StorePermissions:mayDeleteStoreWallPost
@@ -131,7 +140,7 @@ export default {
       } else {
         return false
       }
-    }
+    },
   },
   methods: {
     isManager (userId) {
@@ -144,8 +153,8 @@ export default {
     isImportant (post) {
       if (!post || !post.author || !post.author.id) return false
       return this.isManager(post.author.id)
-    }
-  }
+    },
+  },
 }
 </script>
 
