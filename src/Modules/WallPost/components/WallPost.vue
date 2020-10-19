@@ -5,7 +5,7 @@
     :class="[`wallpost-${post.id}`, {'important': isImportant(post)}]"
   >
     <div class="metadata text-muted w-100 mx-1 d-inline-flex">
-      <span class="author flex-grow-1 flex-shrink-1 mr-1">
+      <span class="author flex-grow-1 flex-shrink-1 ml-sm-5 mr-1 pl-1">
         <a :href="$url('profile', post.author.id)">
           {{ post.author.name }}
         </a>
