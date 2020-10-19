@@ -59,4 +59,32 @@ class ApplicationRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * Declines an application for a work group.
+	 *
+	 * @SWG\Tag(name="application")
+	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which work group the request is for")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @SWG\Response(response="404", description="Workgroup does not exist.")
+	 *
+	 * @Rest\Delete("applications/{groupId}/{userId}", requirements={"groupId" = "\d+", "userId" = "\d+"})
+	 */
+	public function declineApplicationAction(int $groupId, int $userId): Response
+	{
+		try {
+			$group = $this->regionGateway->getRegion($groupId);
+		} catch (Exception $e) {
+			throw new HttpException(404);
+		}
+
+		if (!$this->workGroupPermissions->mayEdit($group)) {
+			throw new HttpException(403);
+		}
+
+		$this->applicationTransactions->declineApplication($group, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
 }

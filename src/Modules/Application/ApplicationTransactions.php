@@ -33,4 +33,19 @@ class ApplicationTransactions
 		], 'workgroup-arequest-' . $userId);
 		$this->bellGateway->addBell($userId, $bellData);
 	}
+
+	/**
+	 * Deletes a request for joining a work group and creates a bell notification for the applicant.
+	 */
+	public function declineApplication(array $group, int $userId): void
+	{
+		$this->applicationGateway->denyApplication($group['id'], $userId);
+
+		$bellData = Bell::create('workgroup_request_decline_title', 'workgroup_request_decline', 'fas fa-user-times', [
+			'href' => '/?page=groups&p=' . $group['parent_id']
+		], [
+			'name' => $group['name']
+		], 'workgroup-drequest-' . $userId);
+		$this->bellGateway->addBell($userId, $bellData);
+	}
 }

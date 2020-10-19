@@ -19,7 +19,7 @@ class ApplicationView extends View
 	{
 		return $this->v_utils->v_menu([
 			['click' => 'tryAcceptApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => 'Ja'],
-			['click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein']
+			['click' => 'tryDeclineApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => 'Nein']
 		], 'Bewerbung annehmen');
 	}
 

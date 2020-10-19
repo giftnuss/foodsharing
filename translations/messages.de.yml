@@ -298,6 +298,7 @@ group:
     send: Bewerbung absenden
     sent: Bewerbung wurde abgeschickt!
     accepted: Bewerbung angenommen
+    declined: Bewerbung abgelehnt
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
@@ -1090,6 +1091,8 @@ bell:
 
   workgroup_request_accept_title: "{name}"
   workgroup_request_accept: "Du wurdest in die Arbeitsgruppe aufgenommen."
+  workgroup_request_decline_title: "{name}"
+  workgroup_request_decline: "Du wurdest nicht in die Arbeitsgruppe aufgenommen."
 
 list:
   filter_for: "Filtern nach..."
