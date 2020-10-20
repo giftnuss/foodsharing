@@ -77,9 +77,9 @@ export default {
   computed: {
     show () {
       if (this.hideOnlyOnMobile) {
-        return !(this.wXS || this.wSM)
+        return !(this.wXS || this.wSM || this.wMD)
       } else if (this.showOnlyOnMobile) {
-        return this.wXS || this.wSM
+        return this.wXS || this.wSM || this.wMD
       }
       return true
     }
@@ -95,15 +95,24 @@ i {
   padding-bottom: 5px;
   text-align: center;
   &::after {
-    display: flex;
+    display:flex;
     width: max-content;
     align-self: center;
     margin-left: auto;
     margin-right: auto;
+    visibility: hidden;
+  }
+  &:hover::after {
+    visibility: visible;
+  }
+  @media (hover: none) {
+    &::after {
+      visibility: visible;
+    }
   }
 }
 
-@media(max-width: 767px) {
+@media(max-width: 991px) {
   .collapse {
     .caret-beneath /deep/ .dropdown-toggle {
       text-align: unset;
