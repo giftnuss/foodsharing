@@ -218,6 +218,19 @@
         </div>
       </b-form>
     </div>
+
+    <b-modal
+      ref="newPollConfirmModal"
+      :title="$i18n('poll.new_poll.submit')"
+      :cancel-title="$i18n('button.cancel')"
+      :ok-title="$i18n('button.send')"
+      modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="submitPoll"
+    >
+      {{ $i18n('poll.submit_vote_question') }}
+    </b-modal>
   </div>
 </template>
 
@@ -236,6 +249,7 @@ import {
   BButton,
   BFormRow,
   BCol,
+  BModal,
 } from 'bootstrap-vue'
 import { createPoll } from '@/api/voting'
 import { pulseError } from '@/script'
@@ -259,6 +273,7 @@ export default {
     BButton,
     BFormRow,
     BCol,
+    BModal,
   },
   props: {
     region: {
@@ -360,6 +375,10 @@ export default {
         this.options.fill('', oldLength, this.numOptions)
       }
       this.$v.options.$touch()
+    },
+    showConfirmDialog (e) {
+      e.preventDefault()
+      this.$refs.newPollConfirmModal.show()
     },
     async submitPoll (e) {
       e.preventDefault()
