@@ -26,7 +26,14 @@
         />
       </div>
     </div>
-    <div class="list-grou-item p-2 text-right">
+    <div class="btn-group special btn-group-sm">
+      <a
+        v-if="unread"
+        class="btn btn-sm btn-secondary"
+        @click="markUnreadMessagesAsRead"
+      >
+        <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
+      </a>
       <a
         :href="$url('conversations')"
         class="btn btn-sm btn-secondary"
@@ -61,6 +68,9 @@ export default {
   methods: {
     close () {
       this.$refs.dropdown.visible = false
+    },
+    markUnreadMessagesAsRead () {
+      conversationStore.markUnreadMessagesAsRead()
     }
   }
 }
@@ -71,5 +81,13 @@ export default {
     .dropdown-menu {
       padding: 0;
     }
+  }
+
+  .btn-group.special {
+    display: flex;
+  }
+
+  .special .btn {
+    flex: 1
   }
 </style>

@@ -30,6 +30,17 @@
         @bellRead="onBellRead"
       />
     </div>
+    <div
+      v-if="unread"
+      class="btn-group special btn-group-sm"
+    >
+      <a
+        class="btn btn-sm btn-secondary"
+        @click="markNewBellsAsRead"
+      >
+        <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
+      </a>
+    </div>
   </b-nav-item-dropdown>
 </template>
 <script>
@@ -72,6 +83,13 @@ export default {
           pulseError(i18n('error_unexpected'))
         }
       }
+    },
+    markNewBellsAsRead () {
+      try {
+        bellStore.markNewBellsAsRead()
+      } catch {
+        pulseError(i18n('error_unexpected'))
+      }
     }
   }
 }
@@ -82,5 +100,13 @@ export default {
         width: 280px;
         padding: 0;
     }
+}
+
+.btn-group.special {
+  display: flex;
+}
+
+.special .btn {
+  flex: 1
 }
 </style>

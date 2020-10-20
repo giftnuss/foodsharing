@@ -25,10 +25,17 @@ export default new Vue({
         throw err
       }
     },
-    async markAsRead (bell) {
+    markAsRead (bell) {
       const bellsToMarkAsRead = this.allBellsWithSameHref(bell)
-
+      this.markBells(bellsToMarkAsRead)
+    },
+    markNewBellsAsRead () {
+      const bellsToMarkAsRead = this.bells
+      this.markBells(bellsToMarkAsRead)
+    },
+    async markBells (bellsToMarkAsRead) {
       const ids = []
+
       for (const b of bellsToMarkAsRead) {
         b.isRead = true
         ids.push(b.id)

@@ -55,6 +55,7 @@ menu:
   entry:
     activities: Activities
     infos: Infos
+    mark_as_read: Mark all as read
     all_messages: All Messages
     messages: Messages
     your_groups: Your groups

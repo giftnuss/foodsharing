@@ -30,7 +30,7 @@
           @basketRemove="openRemoveBasketForm"
         />
       </div>
-      <div class="list-grou-item p-2 text-center">
+      <div class="btn-group special btn-group-sm">
         <a
           :href="$url('baskets')"
           class="btn btn-sm btn-secondary"
@@ -97,5 +97,13 @@ export default {
         overflow-x: hidden;
         padding: 0;
     }
+}
+
+.btn-group.special {
+  display: flex;
+}
+
+.special .btn {
+  flex: 1
 }
 </style>

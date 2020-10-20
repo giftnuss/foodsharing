@@ -1618,6 +1618,7 @@ menu:
   entry:
     activities: Aktionen
     infos: Infos
+    mark_as_read: Alle als gelesen markieren
     all_messages: Alle Nachrichten
     messages: Nachrichten
     your_groups: Deine Gruppen

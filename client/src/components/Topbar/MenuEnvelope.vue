@@ -9,6 +9,12 @@
       <i class="fas fa-envelope" />
       <span class="sr-only">{{ $i18n('menu.entry.contact') }}</span>
       <span v-if="displayText">{{ $i18n('menu.entry.contact') }}</span>
+      <span
+        v-if="unread"
+        class="badge badge-danger"
+      >
+        {{ unread }}
+      </span>
     </template>
     <b-dropdown-item
       v-if="displayMailbox"
