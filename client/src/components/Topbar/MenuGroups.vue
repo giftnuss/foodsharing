@@ -16,7 +16,7 @@
           v-if="!alwaysOpen"
           v-b-toggle="`topbargroup_${group.id}`"
           role="menuitem"
-          class="dropdown-header text-truncate"
+          class="dropdown-header dropdown-item text-truncate"
           href="#"
           target="_self"
         >
@@ -33,40 +33,39 @@
           :id="`topbargroup_${group.id}`"
           :visible="alwaysOpen"
           :accordion="alwaysOpen ? null : 'groups'"
-          class="sub"
         >
           <a
             :href="$url('forum', group.id)"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
           >
             <i class="far fa-comment-alt" /> {{ $i18n('menu.entry.forum') }}
           </a>
           <a
             :href="$url('wall', group.id)"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
           >
             <i class="fas fa-bullhorn" /> {{ $i18n('menu.entry.wall') }}
           </a>
           <a
             :href="$url('events', group.id)"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
           >
             <i class="far fa-calendar-alt" /> {{ $i18n('menu.entry.events') }}
           </a>
           <a
             :href="$url('members', group.id)"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
           >
             <i class="fas fa-user" /> {{ $i18n('menu.entry.members') }}
           </a>
           <a
             href="#"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
             @click="showConferencePopup(group.id)"
           >
             <i class="fas fa-users" /> {{ $i18n('menu.entry.conference') }}
@@ -74,7 +73,7 @@
           <a
             :href="$url('polls', group.id)"
             role="menuitem"
-            class="dropdown-item dropdown-item-sub"
+            class="dropdown-item sub"
           >
             <i class="fas fa-poll-h" /> {{ $i18n('terminology.polls') }}
           </a>
@@ -82,7 +81,7 @@
             v-if="group.isBot"
             :href="$url('workingGroupEdit', group.id)"
             role="menuitem"
-            class="dropdown-item"
+            class="dropdown-item sub"
           >
             <i class="fas fa-cog" /> {{ $i18n('menu.entry.workingGroupEdit') }}
           </a>
@@ -92,7 +91,7 @@
       <a
         :href="$url('workingGroups')"
         role="menuitem"
-        class="dropdown-item"
+        class="dropdown-item sub"
       >
         <small><i class="fas fa-users" /> {{ $i18n('menu.entry.groups') }}</small>
       </a>
