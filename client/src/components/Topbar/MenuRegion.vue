@@ -28,13 +28,12 @@
       <b-collapse
         :id="`topbarregion_${region.id}`"
         :visible="region.id === activeRegionId"
-        class="sub"
         accordion="regions"
       >
         <a
           :href="$url('forum', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="far fa-comment-alt" />{{ $i18n('menu.entry.forum') }}
         </a>
@@ -42,49 +41,49 @@
           v-if="region.isBot"
           :href="$url('forum', region.id, 1)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="far fa-comment-dots" />{{ $i18n('menu.entry.BOTforum') }}
         </a>
         <a
           :href="$url('foodsharepoints', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-recycle" />{{ $i18n('terminology.fsp') }}
         </a>
         <a
           :href="$url('members', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-user" />{{ $i18n('menu.entry.members') }}
         </a>
         <a
           :href="$url('events', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="far fa-calendar-alt" />{{ $i18n('menu.entry.events') }}
         </a>
         <a
           :href="$url('stores', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-cart-plus" />{{ $i18n('menu.entry.stores') }}
         </a>
         <a
           :href="$url('workingGroups', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-users" />{{ $i18n('terminology.groups') }}
         </a>
         <a
           :href="$url('statistic', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
         </a>
@@ -92,7 +91,7 @@
           v-if="region.hasConference"
           href="#"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
           @click="showConferencePopup(region.id)"
         >
           <i class="fas fa-users" />{{ $i18n('menu.entry.conference') }}
@@ -100,7 +99,7 @@
         <a
           :href="$url('polls', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-poll-h" />{{ $i18n('terminology.polls') }}
         </a>
@@ -108,7 +107,7 @@
           v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-user" />{{ $i18n('menu.entry.fs') }}
         </a>
@@ -116,7 +115,7 @@
           v-if="region.isBot"
           :href="$url('passports', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
@@ -124,7 +123,7 @@
           v-if="region.isBot"
           :href="$url('reports', region.id)"
           role="menuitem"
-          class="dropdown-item"
+          class="dropdown-item sub"
         >
           <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
         </a>
@@ -202,7 +201,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .regionName {
-    max-width: 120px;
+    max-width: 110px;
     margin-bottom: -0.35em;
 }
 </style>
