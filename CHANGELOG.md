@@ -89,6 +89,10 @@
 - Introduce some more specific store gateway functionality !1686 @ChrisOelmueller
 - Replace Vue filters with prototypes !1689 @ChrisOelmueller
 - Remove unused Xhr methods for region applications !1707 @alex.simm
+- Deprecate `v_form_picture` !1701 @ChrisOelmueller
+- Rename `theme` variables to `thread` !1645 #840 @Caluera @ChrisOelmueller
+- Deprecate `v_scroller` !1698 @ChrisOelmueller
+- Make navigation bar responsive !1532 @moffer
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm
