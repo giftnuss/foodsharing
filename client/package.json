@@ -11,7 +11,7 @@
     "test": "node test"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.1",
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "@sentry/browser": "^5.21.3",
     "@sentry/integrations": "^5.21.3",
     "@sum.cumo/vue-datepicker": "^2.1.1",
