@@ -1895,10 +1895,10 @@ autosize@^4.0.2:
   resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.2.tgz#073cfd07c8bf45da4b9fd153437f5bafbba1e4c9"
   integrity sha512-jnSyH2d+qdfPGpWlcuhGiHmqBJ6g3X+8T+iRwFrHPLVcdoGJE/x6Qicm6aDHfTsbgZKxyV8UU/YB2p4cjKDRRA==
 
-awesome-phonenumber@^2.15.0:
-  version "2.32.0"
-  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-2.32.0.tgz#8b6018b4ef08023e8c4d3f23af9ef96089b23ef8"
-  integrity sha512-zvOZhZt+cNgGSVOAii5cjz0p9giEAVp3NLJ2tTlClWJYiw32gFIrHTvE+8FUb9cpnOVY+/r1uu+Xiw7oSr89VQ==
+awesome-phonenumber@^2.39.0:
+  version "2.40.0"
+  resolved "https://registry.yarnpkg.com/awesome-phonenumber/-/awesome-phonenumber-2.40.0.tgz#02963b7a1a372572e42fb827401eb78d9ac4e294"
+  integrity sha512-ViGH+iNPzFCQ1s0Lut8jQC2dP05SjnntlA10emT8ANXy3UtyWykeWvKaDG17eWIcSjXqPvdKkPCco9Nu+Egj1g==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -8680,13 +8680,13 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-tel-input@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-4.4.0.tgz#d51fbf915a9ac7024e851bd7de7b5c527fed81d0"
-  integrity sha512-P2enml2Ei32LGCbUXKo2BZdWDm6n+P7lHb3NfOWAGYvSfCY/mn6HpRnaVGd100hQlr8bBYIJTnQtTidBhvXuMQ==
+vue-tel-input@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-4.4.2.tgz#a673f706f1e452b862908b9d7a0496df0e114a35"
+  integrity sha512-fZm9/gE2MFAe+EoF/R66t9oc0U9oI87TiPTxv6pHG8MGhrc62a+uvPqyE/clNhdEJJ0slGzVqkelBuw23HHWtw==
   dependencies:
     "@babel/runtime" "^7.8.4"
-    awesome-phonenumber "^2.15.0"
+    awesome-phonenumber "^2.39.0"
     core-js "^3.6.4"
 
 vue-template-compiler@^2.6.11:

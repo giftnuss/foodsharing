@@ -50,7 +50,7 @@
     "underscore": "^1.9.2",
     "vue": "^2.6.11",
     "vue-infinite-loading": "^2.4.5",
-    "vue-tel-input": "^4.4.0",
+    "vue-tel-input": "^4.4.2",
     "vue-slider-component": "^3.2.5",
     "vuelidate": "^0.7.5",
     "vue-croppie": "^2.0.1",
