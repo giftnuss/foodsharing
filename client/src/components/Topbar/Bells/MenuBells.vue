@@ -22,13 +22,15 @@
       >
         {{ $i18n('bell.no_bells') }}
       </small>
-      <menu-bells-entry
-        v-for="bell in bells"
-        :key="bell.id"
-        :bell="bell"
-        @remove="onBellDelete"
-        @bellRead="onBellRead"
-      />
+      <div class="scroll-container">
+        <menu-bells-entry
+          v-for="bell in bells"
+          :key="bell.id"
+          :bell="bell"
+          @remove="onBellDelete"
+          @bellRead="onBellRead"
+        />
+      </div>
     </div>
     <div
       v-if="unread"
