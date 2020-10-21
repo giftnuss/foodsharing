@@ -37,7 +37,7 @@
     "lodash.pickby": "^4.6.0",
     "mapbox-gl": "^1.9.1",
     "mapbox-gl-leaflet": "^0.0.12",
-    "markdown-it": "^11.0.0",
+    "markdown-it": "^12.0.1",
     "node-sass": "^4.13.1",
     "object-path": "^0.11.4",
     "serviceworker-webpack-plugin": "^1.0.1",
