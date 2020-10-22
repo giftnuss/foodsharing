@@ -8,6 +8,7 @@
 - Don't set "follow by email" as default when opening a new thread !1676 @Caluera
 
 ## Bugfixes
+- Fix komoot's URL for address search !1727 @alex.simm
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller

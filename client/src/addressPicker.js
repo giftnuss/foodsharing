@@ -42,7 +42,7 @@ export function attachAddressPicker () {
 
   const engine = new PhotonAddressEngine(
     {
-      url: 'https://photon.komoot.de',
+      url: 'https://photon.komoot.io',
       formatResult: function (feature) {
         const prop = feature.properties
         return [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')

@@ -24,7 +24,7 @@ class ContentSecurityPolicy
 				$self,
 				$this->websocketUrlFor($httpHost),
 				'https://sentry.io',
-				'https://photon.komoot.de',
+				'https://photon.komoot.io',
 				'https://maps.geoapify.com',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
 				'blob:',

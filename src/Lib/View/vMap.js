@@ -64,7 +64,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
 
   const engine = new PhotonAddressEngine(
     {
-      url: 'https://photon.komoot.de',
+      url: 'https://photon.komoot.io',
       formatResult: function (feature) {
         const prop = feature.properties
         const formatted = [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
