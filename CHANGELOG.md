@@ -35,6 +35,7 @@
 
 ## Bugfixes
 - Fix komoot's URL for address search !1727 @alex.simm
+- Update docker images to node:14.14.0-alpine3.12, redis:6.0.8-alpine and ruby:2.7.2-alpine3.12 !1724 @chriswalg
 
 # Release "Cranberry", 2020-10-11
 

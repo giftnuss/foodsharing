@@ -46,7 +46,7 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:13.10.1-alpine
+    image: node:14.14.0-alpine3.12
     ports:
       - 18080:18080
     command: sh -c "yarn && yarn dev"
@@ -86,7 +86,7 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
-    image: node:13.10.1-alpine
+    image: node:14.14.0-alpine3.12
     working_dir: /app/chat
     command: sh -c "yarn && yarn ts-node-dev src/index.ts 0.0.0.0"
     user: "node"
@@ -125,7 +125,7 @@ services:
 
   redis:
     container_name: foodsharing_dev_redis
-    image: redis:5.0.8-alpine
+    image: redis:6.0.8-alpine
     ports:
       - "127.0.0.1:16379:6379"
     expose:
