@@ -22,6 +22,7 @@
 
 ## Bugfixes
 - Fix komoot's URL for address search !1727 @alex.simm
+- Update many frontend dependencies !1723 @chriswalg
 
 # Release "Cranberry", 2020-10-11
 
