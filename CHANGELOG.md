@@ -1,26 +1,7 @@
-# Release "Dragonfruit", unreleased
-
-## Features
-- Add button that marks emails as unread !1681 @alex.simm
-
-## Changes
-- Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
-- Don't set "follow by email" as default when opening a new thread !1676 @Caluera
+# 2020-10-23 Hotfix
 
 ## Bugfixes
 - Fix komoot's URL for address search !1727 @alex.simm
-
-## Refactoring
-- Flatten some workgroup function calls !1702 @ChrisOelmueller
-- Remove some long-unused grabInfo code !1695 @ChrisOelmueller
-- New endpoints for requesting and setting dashboard activity options !1669 @alex.simm
-- Deprecate `v_form_picture` !1701 @ChrisOelmueller
-- Rename `theme` variables to `thread` !1645 #840 @Caluera @ChrisOelmueller
-- Deprecate `v_scroller` !1698 @ChrisOelmueller
-- Deprecate and remove most of v_activeSwitcher !1697 @ChrisOelmueller
-
-## Dev/Test/CI stuff
-
 
 # Release "Cranberry", 2020-10-11
 
