@@ -5,30 +5,24 @@
     </div>
     <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
       <p>
-        {{ $i18n('settings.calendar.content_1') }}
-      </p>
-      <p>
-        {{ $i18n('settings.calendar.content_2') }}
-      </p>
-      <p>
-        {{ $i18n('settings.calendar.content_3') }}
+        {{ $i18n('settings.calendar.content') }}
       </p>
       <h3>{{ $i18n('settings.calendar.link_title') }}</h3>
       <p class="webcal">
         <strong>
           <a
-            :href="url + '&opts=s'"
+            :href="webcalPickups"
           >
-            {{ url }}&opts=s
+            {{ webcalPickups }}
           </a>
         </strong>
       </p>
       <p class="webcal">
         <strong>
           <a
-            :href="url + '&opts=se'"
+            :href="webcalPickupsAndEvents"
           >
-            {{ url }}&opts=se {{ $i18n('settings.calendar.event_link_desc') }}
+            {{ webcalPickupsAndEvents }} {{ $i18n('settings.calendar.event_link_desc') }}
           </a>
         </strong>
       </p>
@@ -40,9 +34,14 @@
 
 export default {
   props: {
-    url: {
-      type: String,
-      default: ''
+    url: { type: String, default: '' }
+  },
+  computed: {
+    webcalPickups () {
+      return this.url + '&opts=s'
+    },
+    webcalPickupsAndEvents () {
+      return this.url + '&opts=se'
     }
   }
 }
@@ -52,6 +51,7 @@ export default {
 @media (max-width: 396px) {
   .webcal {
     word-break: break-all;
+    overflow-wrap: break-word;
   }
 }
 </style>
