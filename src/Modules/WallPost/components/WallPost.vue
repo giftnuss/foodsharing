@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import differenceInDays from 'date-fns/differenceInDays'
+import differenceInMonths from 'date-fns/differenceInMonths'
 import differenceInCalendarYears from 'date-fns/differenceInCalendarYears'
 import serverData from '@/server-data'
 import Avatar from '@/components/Avatar'
@@ -134,9 +134,9 @@ export default {
       // own posts can always be removed, see StorePermissions:mayDeleteStoreWallPost
       if (this.isOwn(this.post)) return true
 
-      // managers can clean up posts older than 3 weeks, see StorePermissions:mayDeleteStoreWallPost
+      // managers can clean up posts older than 1 month, see StorePermissions:mayDeleteStoreWallPost
       if (this.isManager(serverData.user.id)) {
-        return differenceInDays(new Date(), this.post.createdAt) >= 3 * 7
+        return differenceInMonths(new Date(), this.post.createdAt) >= 1
       } else {
         return false
       }

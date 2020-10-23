@@ -121,7 +121,7 @@ class StorePermissions
 			return true;
 		}
 		if ($this->mayEditStore($storeId)) {
-			return $post['zeit'] <= Carbon::today()->subWeeks(3);
+			return $post['zeit'] <= Carbon::today()->subMonth();
 		}
 
 		return false;
