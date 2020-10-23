@@ -5,7 +5,7 @@
     :class="[`wallpost-${post.id}`, {'important': isImportant(post)}]"
   >
     <div class="metadata text-muted w-100 mx-1 d-inline-flex">
-      <span class="author flex-grow-1 flex-shrink-1 ml-sm-5 mr-1 pl-1">
+      <span class="author flex-grow-1 flex-shrink-1 ml-sm-2 mr-1" :class="{'with-padding': !wXS}">
         <a :href="$url('profile', post.author.id)">
           {{ post.author.name }}
         </a>
@@ -110,9 +110,11 @@ import differenceInCalendarYears from 'date-fns/differenceInCalendarYears'
 import serverData from '@/server-data'
 import Avatar from '@/components/Avatar'
 import Markdown from '@/components/Markdown/Markdown'
+import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
   components: { Avatar, Markdown },
+  mixins: [MediaQueryMixin],
   props: {
     post: { type: Object, default: () => {} },
     managers: { type: Array, default: () => [] },
@@ -160,20 +162,29 @@ export default {
 
 <style lang="scss" scoped>
 .posts .post {
+  --storewall-padding: 0.4rem;
+
   vertical-align: top;
-  padding: 0.75rem 0.5rem;
+  padding: calc(2 * var(--storewall-padding)) var(--storewall-padding);
   position: relative;
   border-top: 1px solid var(--border);
   border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
 
   .metadata {
-    margin-top: -0.25rem;
-    margin-bottom: 0.25rem;
+    margin-top: calc(-1 * var(--storewall-padding));
+    margin-bottom: var(--storewall-padding);
     font-size: smaller;
     color: var(--dark);
 
-    .author a {
-      color: var(--secondary);
+    .author {
+      &.with-padding {
+        padding-left: calc(50px + 0.25rem); // avatar width + ml-1 post body alignment
+      }
+
+      a {
+        color: var(--secondary);
+      }
     }
   }
 
@@ -189,6 +200,7 @@ export default {
 
   &.important {
     border-left-color: rgba(var(--warning-rgb), 0.75);
+    border-right-color: rgba(var(--warning-rgb), 0.75);
   }
 }
 
