@@ -73,7 +73,6 @@ class StoreApiCest
 		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => 'Lorem ipsum.']);
 
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
-
 	}
 
 	public function noStoreWallIfNotLoggedIn(ApiTester $I): void
@@ -84,11 +83,11 @@ class StoreApiCest
 
 		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => 'Lorem ipsum.']);
 
-		$I->seeResponseCodeIs(Http::FORBIDDEN);
+		$I->seeResponseCodeIs(Http::UNAUTHORIZED);
 	}
 
 	/**
-	 * All team members can remove their own posts at any time
+	 * All team members can remove their own posts at any time.
 	 */
 	public function canRemoveOwnStorePost(ApiTester $I): void
 	{
@@ -121,7 +120,7 @@ class StoreApiCest
 	}
 
 	/**
-	 * Store managers can remove posts by others if they are older than 1 month
+	 * Store managers can remove posts by others if they are older than 1 month.
 	 */
 	public function storeManagerCanRemoveOldStorePost(ApiTester $I): void
 	{

@@ -16,6 +16,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class StoreRestController extends AbstractFOSRestController
 {
@@ -52,13 +54,13 @@ class StoreRestController extends AbstractFOSRestController
 	public function getStoreAction(int $storeId): Response
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
 		}
 
 		$store = $this->storeGateway->getBetrieb($storeId);
 
 		if (!$store || !isset($store[self::ID])) {
-			throw new HttpException(404, 'Store does not exist.');
+			throw new NotFoundHttpException('Store does not exist.');
 		}
 
 		$store = RestNormalization::normalizeStore($store);
@@ -93,10 +95,10 @@ class StoreRestController extends AbstractFOSRestController
 	public function getStorePosts(int $storeId): Response
 	{
 		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
 		}
 		if (!$this->storePermissions->mayReadStoreWall($storeId)) {
-			throw new HttpException(403);
+			throw new AccessDeniedHttpException();
 		}
 
 		$notes = $this->storeGateway->getStorePosts($storeId) ?? [];
@@ -108,11 +110,17 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Write a new "wallpost" for the given store. Returns 200 and the created entry,
+	 * 401 if not logged in, or 403 if you may not view this store.
+	 *
 	 * @Rest\Post("stores/{storeId}/posts")
 	 * @Rest\RequestParam(name="text")
 	 */
 	public function addStorePostAction(int $storeId, ParamFetcher $paramFetcher): Response
 	{
+		if (!$this->session->may()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
 		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
 			throw new AccessDeniedHttpException();
 		}
@@ -154,12 +162,16 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Deletes a post from the wall of a store.
+	 * Deletes a post from the wall of a store. Returns 200 upon successful deletion,
+	 * 401 if not logged in, or 403 if you may not remove this particular "wallpost".
 	 *
 	 * @Rest\Delete("stores/{storeId}/posts/{postId}")
 	 */
 	public function deleteStorePostAction(int $storeId, int $postId): Response
 	{
+		if (!$this->session->may()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
 		if (!$this->storePermissions->mayDeleteStoreWallPost($storeId, $postId)) {
 			throw new AccessDeniedHttpException();
 		}
