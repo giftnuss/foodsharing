@@ -5,6 +5,13 @@ namespace Foodsharing\Modules\Group;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 
+/**
+ * This gateway covers all functionality that is related to workgroups which are configured to have
+ * some predefined function ({@see WorkgroupFunction}) for their attached group (region or workgroup).
+ *
+ * For legacy codebase reasons, some of the method names still use `region` which in this context can
+ * stand for both actual regions and workgroups. Entities providing this function are always workgroups.
+ */
 class GroupFunctionGateway extends BaseGateway
 {
 	public function getRegionFunctionGroupId(int $parentId, int $function): ?int

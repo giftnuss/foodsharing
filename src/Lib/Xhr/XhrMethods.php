@@ -1223,8 +1223,7 @@ class XhrMethods
 		$functionId = $g_data['workgroup_function'];
 		$oldFunctionId = $oldRegionData['workgroup_function'];
 		if ($functionId && !$oldFunctionId) {
-			// TODO check validity as static method of WorkgroupFunction:
-			if ($functionId > 0) {
+			if (WorkgroupFunction::isValidFunction($functionId)) {
 				$this->groupFunctionGateway->addRegionFunction($regionId, $parentId, $functionId);
 			}
 		} elseif ($functionId != $oldFunctionId) {
