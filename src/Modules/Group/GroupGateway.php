@@ -118,20 +118,28 @@ class GroupGateway extends BaseGateway
 
 	private function existRegionWelcomeGroup(int $region_id, int $target_id): bool
 	{
-		return  $this->db->exists('fs_region_function',
-			['region_id' => $region_id,
-			 'function_id' => WorkgroupFunction::WELCOME,
-			 'target_id' => $target_id]
-		);
+		return $this->db->exists('fs_region_function', [
+			'region_id' => $region_id,
+			'function_id' => WorkgroupFunction::WELCOME,
+			'target_id' => $target_id,
+		]);
 	}
 
 	private function existRegionVotingGroup(int $region_id, int $target_id): bool
 	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
+		return $this->db->exists('fs_region_function', [
+			'region_id' => $region_id,
+			'function_id' => WorkgroupFunction::VOTING,
+			'target_id' => $target_id,
+		]);
 	}
 
 	private function existRegionFSPGroup(int $region_id, int $target_id): bool
 	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
+		return $this->db->exists('fs_region_function', [
+			'region_id' => $region_id,
+			'function_id' => WorkgroupFunction::FSP,
+			'target_id' => $target_id
+		]);
 	}
 }
