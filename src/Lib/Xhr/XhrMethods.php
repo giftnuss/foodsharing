@@ -17,6 +17,7 @@ use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Message\MessageGateway;
@@ -45,6 +46,7 @@ class XhrMethods
 	private Utils $v_utils;
 	private ViewUtils $xhrViewUtils;
 	private StoreModel $storeModel;
+	private GroupFunctionGateway $groupFunctionGateway;
 	private GroupGateway $groupGateway;
 	private MessageGateway $messageGateway;
 	private RegionGateway $regionGateway;
@@ -72,6 +74,7 @@ class XhrMethods
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
+		GroupFunctionGateway $groupFunctionGateway,
 		GroupGateway $groupGateway,
 		MessageGateway $messageGateway,
 		RegionGateway $regionGateway,
@@ -98,6 +101,7 @@ class XhrMethods
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 		$this->groupGateway = $groupGateway;
 		$this->messageGateway = $messageGateway;
 		$this->regionGateway = $regionGateway;
@@ -1161,7 +1165,7 @@ class XhrMethods
 				'script' => 'pulseError("' . $this->translator->trans('group.function.invalid') . '");',
 			]);
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::WELCOME) {
-			$welcomeGroupId = $this->regionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::WELCOME);
+			$welcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($parentId);
 			if ($welcomeGroupId && ($welcomeGroupId != $regionId)) {
 				return json_encode([
 					'status' => 1,
@@ -1169,16 +1173,16 @@ class XhrMethods
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::VOTING) {
-			$votingGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::VOTING);
-			if ($votingGroupId !== null && $votingGroupId !== (int)$data['bezirk_id']) {
+			$votingGroupId = $this->regionGateway->getRegionVotingGroupId($parentId);
+			if ($votingGroupId !== null && $votingGroupId !== $regionId) {
 				return json_encode([
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_voting_team') . '");',
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::FSP) {
-			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::FSP);
-			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+			$fspGroupId = $this->regionGateway->getRegionFoodsharepointGroupId($parentId);
+			if ($fspGroupId !== null && $fspGroupId !== $regionId) {
 				return json_encode([
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_fsp_team') . '");',
@@ -1206,22 +1210,25 @@ class XhrMethods
 		if ($oldRegionData['parent_id'] != $parentId) {
 			if ($oldRegionData['type'] == Type::WORKING_GROUP) {
 				if ($oldRegionData['workgroup_function']) {
-					$this->regionGateway->deleteRegionFunction($regionId, $oldRegionData['workgroup_function']);
+					$this->groupFunctionGateway->deleteRegionFunction($regionId, $oldRegionData['workgroup_function']);
 				}
 			} else {
-				$this->regionGateway->deleteTargetFunctions($regionId);
+				$this->groupFunctionGateway->deleteTargetFunctions($regionId);
 			}
 			$oldRegionData = $this->groupGateway->getGroupLegacy($regionId);
 		}
 
 		$this->regionGateway->update_bezirkNew($regionId, $g_data);
 
-		if (!$oldRegionData['workgroup_function'] && $g_data['workgroup_function']) {
-			if ($g_data['workgroup_function'] > 0) {
-				$this->regionGateway->addRegionFunction($regionId, $g_data['workgroup_function'], $parentId);
+		$functionId = $g_data['workgroup_function'];
+		$oldFunctionId = $oldRegionData['workgroup_function'];
+		if ($functionId && !$oldFunctionId) {
+			// TODO check validity as static method of WorkgroupFunction:
+			if ($functionId > 0) {
+				$this->groupFunctionGateway->addRegionFunction($regionId, $parentId, $functionId);
 			}
-		} elseif ($oldRegionData['workgroup_function'] != $g_data['workgroup_function']) {
-			$this->regionGateway->deleteRegionFunction($regionId, $oldRegionData['workgroup_function']);
+		} elseif ($functionId != $oldFunctionId) {
+			$this->groupFunctionGateway->deleteRegionFunction($regionId, $oldFunctionId);
 		}
 
 		return json_encode([

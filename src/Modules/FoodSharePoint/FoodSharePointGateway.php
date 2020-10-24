@@ -8,7 +8,6 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
-use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
@@ -436,7 +435,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$region = $this->regionGateway->getRegion($foodSharePoint['bezirk_id']);
 
-		$fspWGId = $this->regionGateway->getRegionFunctionGroupId($region['id'], WorkgroupFunction::FSP);
+		$fspWGId = $this->regionGateway->getRegionFoodsharepointGroupId($region['id']);
 		if (empty($fspWGId)) {
 			$fspBellRecipients = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 		} else {

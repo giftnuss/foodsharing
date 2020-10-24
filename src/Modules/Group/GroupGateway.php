@@ -3,6 +3,8 @@
 namespace Foodsharing\Modules\Group;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 
 /* Group gateway meant to collect queries common for regions as well as working groups */
 class GroupGateway extends BaseGateway
@@ -14,11 +16,11 @@ class GroupGateway extends BaseGateway
 			['id' => $groupId]
 		);
 
-		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
+		if ($this->groupFunctionGateway->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
-		} elseif ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
+		} elseif ($this->groupFunctionGateway->existRegionVotingGroup($out['id'], $out['parent_id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::VOTING;
-		} elseif ($this->existRegionFSPGroup($out['id'], $out['parent_id'])) {
+		} elseif ($this->groupFunctionGateway->existRegionFSPGroup($out['id'], $out['parent_id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::FSP;
 		} else {
 			$out['workgroup_function'] = [];
