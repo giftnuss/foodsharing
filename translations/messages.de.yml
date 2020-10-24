@@ -1302,11 +1302,16 @@ settings:
   saved: Änderungen wurden gespeichert.
   calendar:
     menu: Kalendar
-    title: Dein Abholkalendar
-    content: |
-      Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!
-      Hinweis Halte den Link unbedingt geheim! Er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.
-      Hinweis Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!
+    title: Dein Abholkalender
+    teaser: |
+      Du kannst deinen Abholkalender mit einem Kalenderprogramm deiner Wahl ansehen.
+      Abonniere dir dazu einen der beiden folgenden Kalender-Links:
+    token-warning: |
+      Wichtig: Halte den Link unbedingt geheim!
+      Er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.
+    sync: |
+      Dein Kalenderprogramm muss diesen Kalender regelmäßig neu synchronisieren.
+      Nur dann tauchen neue Abholtermine auf oder abgesagte Termine nicht mehr.
     link_title: 'ICS/ICAL/WebCal:'
     event_link_desc: (inkl. Events)
   photo:
