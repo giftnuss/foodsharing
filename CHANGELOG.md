@@ -3,6 +3,7 @@
 ## Features
 - Add button that marks emails as unread !1681 @alex.simm
 - Implement a Webcal URI for iCal export !1716 @chriswalg @ChrisOelmueller
+- Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 !1673 !1725 TheSoulT
 
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
@@ -36,7 +37,6 @@
 - Add ageband to statistic page !1685 @fs_k
 - Activity page shows only last entry to buddywall, eventwall, fairsharepointwall !1694 @fs_k
 - Leaving a district is captured in history. Leaving a home district removes verification. !1358 @fs_k
-- Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 !1673 TheSoulT
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg

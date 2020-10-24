@@ -71,6 +71,7 @@ export default {
     },
     markUnreadMessagesAsRead () {
       conversationStore.markUnreadMessagesAsRead()
+      this.close()
     }
   }
 }
