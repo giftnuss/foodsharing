@@ -527,14 +527,6 @@ class RegionGateway extends BaseGateway
 			);
 	}
 
-	public function RegionFunctionGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->fetchValueByCriteria('fs_region_function', 'function_id',
-			['region_id' => $region_id,
-			 'target_id' => $target_id]
-		);
-	}
-
 	public function genderCountRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(
