@@ -73,14 +73,6 @@ class RegionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getMailBezirk(int $regionId): array
-	{
-		return $this->db->fetchByCriteria('fs_bezirk',
-			['id', 'name', 'email', 'email_name', 'email_pass'],
-			['id' => $regionId]
-		);
-	}
-
 	public function listRegionsIncludingParents(array $regionId): array
 	{
 		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $regionId)) . ')';
