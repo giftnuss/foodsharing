@@ -7,6 +7,41 @@ use Foodsharing\Modules\Core\BaseGateway;
 /* Group gateway meant to collect queries common for regions as well as working groups */
 class GroupGateway extends BaseGateway
 {
+	public function getGroupLegacy(int $groupId): array
+	{
+		$out = $this->db->fetchByCriteria('fs_bezirk',
+			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
+			['id' => $groupId]
+		);
+
+		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
+			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
+		} elseif ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
+			$out['workgroup_function'] = WorkgroupFunction::VOTING;
+		} elseif ($this->existRegionFSPGroup($out['id'], $out['parent_id'])) {
+			$out['workgroup_function'] = WorkgroupFunction::FSP;
+		} else {
+			$out['workgroup_function'] = [];
+		}
+
+		$out['botschafter'] = $this->db->fetchAll('
+			SELECT  `fs_foodsaver`.`id`,
+			        CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
+
+			FROM    `fs_botschafter`,
+			        `fs_foodsaver`
+
+			WHERE   `fs_foodsaver`.`id` = `fs_botschafter`.`foodsaver_id`
+			AND     `fs_botschafter`.`bezirk_id` = ' . $groupId . '
+		');
+
+		$out['foodsaver'] = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id',
+			['bezirk_id' => $groupId]
+		);
+
+		return $out;
+	}
+
 	public function deleteGroup($groupId)
 	{
 		$parent_id = $this->db->fetchValueByCriteria(
@@ -79,5 +114,24 @@ class GroupGateway extends BaseGateway
 		return $this->db->exists('fs_fairteiler', [
 			'bezirk_id' => $groupId
 		]);
+	}
+
+	private function existRegionWelcomeGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function',
+			['region_id' => $region_id,
+			 'function_id' => WorkgroupFunction::WELCOME,
+			 'target_id' => $target_id]
+		);
+	}
+
+	private function existRegionVotingGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
+	}
+
+	private function existRegionFSPGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
 	}
 }

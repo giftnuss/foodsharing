@@ -34,45 +34,6 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function getOne_bezirk(int $regionId): array
-	{
-		$out = $this->db->fetchByCriteria('fs_bezirk',
-			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
-			['id' => $regionId]
-		);
-
-		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
-			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
-		} else {
-			if ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
-				$out['workgroup_function'] = WorkgroupFunction::VOTING;
-			} else {
-				if ($this->existRegionFSPGroup($out['id'], $out['parent_id'])) {
-					$out['workgroup_function'] = WorkgroupFunction::FSP;
-				} else {
-					$out['workgroup_function'] = [];
-				}
-			}
-		}
-
-		$out['botschafter'] = $this->db->fetchAll('
-				SELECT 		`fs_foodsaver`.`id`,
-							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
-
-				FROM 		`fs_botschafter`,
-							`fs_foodsaver`
-
-				WHERE 		`fs_foodsaver`.`id` = `fs_botschafter`.`foodsaver_id`
-				AND 		`fs_botschafter`.`bezirk_id` = ' . $regionId . '
-			');
-
-		$out['foodsaver'] = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id',
-			['bezirk_id' => $regionId]
-		);
-
-		return $out;
-	}
-
 	public function listRegionsIncludingParents(array $regionId): array
 	{
 		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $regionId)) . ')';
@@ -572,25 +533,6 @@ class RegionGateway extends BaseGateway
 			['region_id' => $region_id,
 			 'target_id' => $target_id]
 		);
-	}
-
-	public function existRegionWelcomeGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->exists('fs_region_function',
-			['region_id' => $region_id,
-			 'function_id' => WorkgroupFunction::WELCOME,
-			 'target_id' => $target_id]
-		);
-	}
-
-	public function existRegionVotingGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
-	}
-
-	public function existRegionFSPGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
 	}
 
 	public function genderCountRegion(int $regionId): array

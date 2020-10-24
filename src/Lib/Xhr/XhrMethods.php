@@ -17,6 +17,7 @@ use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\ForumGateway;
@@ -44,6 +45,7 @@ class XhrMethods
 	private Utils $v_utils;
 	private ViewUtils $xhrViewUtils;
 	private StoreModel $storeModel;
+	private GroupGateway $groupGateway;
 	private MessageGateway $messageGateway;
 	private RegionGateway $regionGateway;
 	private StorePermissions $storePermissions;
@@ -70,6 +72,7 @@ class XhrMethods
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
+		GroupGateway $groupGateway,
 		MessageGateway $messageGateway,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
@@ -95,6 +98,7 @@ class XhrMethods
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
+		$this->groupGateway = $groupGateway;
 		$this->messageGateway = $messageGateway;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
@@ -906,7 +910,7 @@ class XhrMethods
 		if (!$this->regionPermissions->mayAdministrateRegions()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
+		$g_data = $this->groupGateway->getGroupLegacy($data['id']);
 
 		$g_data['mailbox_name'] = '';
 		if ($mbname = $this->mailboxGateway->getMailboxname($g_data['mailbox_id'])) {
@@ -1182,7 +1186,7 @@ class XhrMethods
 			}
 		}
 
-		$oldRegionData = $this->regionGateway->getOne_bezirk($regionId);
+		$oldRegionData = $this->groupGateway->getGroupLegacy($regionId);
 
 		$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM fs_bezirk WHERE id = ' . $regionId);
 
@@ -1207,7 +1211,7 @@ class XhrMethods
 			} else {
 				$this->regionGateway->deleteTargetFunctions($regionId);
 			}
-			$oldRegionData = $this->regionGateway->getOne_bezirk($regionId);
+			$oldRegionData = $this->groupGateway->getGroupLegacy($regionId);
 		}
 
 		$this->regionGateway->update_bezirkNew($regionId, $g_data);
