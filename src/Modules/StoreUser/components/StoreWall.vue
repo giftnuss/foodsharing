@@ -11,6 +11,7 @@
         :placeholder="$i18n('wall.message_placeholder')"
         rows="2"
         max-rows="6"
+        @keydown.ctrl.enter="writePost"
       />
 
       <div class="submit d-flex">
@@ -19,7 +20,6 @@
           :class="{'d-none': !newPostExists}"
           variant="outline-secondary"
           :disabled="!newPostExists"
-          squared
           @click.prevent.stop="writePost"
         >
           {{ $i18n('button.send') }}
@@ -53,30 +53,26 @@ export default {
     storeId: { type: Number, required: true },
     managers: { type: Array, default: () => [] },
     mayWritePost: { type: Boolean, required: true },
-    mayDeleteEverything: { type: Boolean, required: true }
+    mayDeleteEverything: { type: Boolean, required: true },
   },
   data () {
     return {
-      loaded: {},
-      posts: [],
-      newPostText: ''
+      posts: undefined,
+      newPostText: '',
     }
   },
   computed: {
     newPostExists () {
       return this.newPostText.trim().length > 0
-    }
+    },
   },
   async created () {
-    this.loadPosts()
+    await this.loadPosts()
   },
   methods: {
     async loadPosts () {
-      if (this.loaded.posts) return
-      if (!this.posts.length) {
-        this.posts = (await getStoreWall(this.storeId))
-      }
-      this.loaded.posts = true
+      if (this.posts && this.posts.length) return
+      this.posts = (await getStoreWall(this.storeId))
     },
     async writePost () {
       const text = this.newPostText.trim()
@@ -112,8 +108,8 @@ export default {
       } finally {
         hideLoader()
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
