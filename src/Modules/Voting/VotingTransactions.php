@@ -230,8 +230,12 @@ class VotingTransactions
 		$this->votingGateway->vote($poll->id, $this->session->id(), $values);
 
 		// remove the 'new poll' bell for this user
-		$bellId = $this->bellGateway->getOneByIdentifier('new-poll-' . $poll->id);
-		$this->bellGateway->delBellForFoodsaver($bellId, $this->session->id());
+		try {
+			$bellId = $this->bellGateway->getOneByIdentifier('new-poll-' . $poll->id);
+			$this->bellGateway->delBellForFoodsaver($bellId, $this->session->id());
+		} catch (\Exception $e) {
+			// in case the bell does not exist, do nothing
+		}
 
 		return true;
 	}

@@ -278,11 +278,11 @@ export default {
   props: {
     region: {
       type: Object,
-      required: true
+      required: true,
     },
     isWorkGroup: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   data () {

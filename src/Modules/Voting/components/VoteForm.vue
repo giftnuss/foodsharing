@@ -100,7 +100,7 @@ export default {
   computed: {
     shuffledOptions: function () {
       return shuffle(this.poll.options)
-    }
+    },
   },
   methods: {
     showConfirmDialog (e) {
