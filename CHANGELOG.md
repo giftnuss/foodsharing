@@ -17,6 +17,7 @@
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
 - Markdown support for store posts #921 !1690 @ChrisOelmueller
+- Update voting tool functions and usability !1726 #975 @alex.simm
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller

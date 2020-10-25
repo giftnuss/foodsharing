@@ -5,25 +5,25 @@
     >
       <SingleSelectionVotingComponent
         v-if="poll.type===0"
-        :options="poll.options"
+        :options="shuffledOptions"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <MultiSelectionVotingComponent
         v-else-if="poll.type===1"
-        :options="poll.options"
+        :options="shuffledOptions"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <ThumbVotingComponent
         v-else-if="poll.type===2"
-        :options="poll.options"
+        :options="shuffledOptions"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <ScoreVotingComponent
         v-else-if="poll.type===3"
-        :options="poll.options"
+        :options="shuffledOptions"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
@@ -67,7 +67,7 @@ import ScoreVotingComponent from './ScoreVotingComponent'
 import SingleSelectionVotingComponent from './SingleSelectionVotingComponent'
 import MultiSelectionVotingComponent from './MultiSelectionVotingComponent'
 import { vote } from '@/api/voting'
-import { pulseError, pulseSuccess } from '@/script'
+import { pulseError, pulseSuccess, shuffle } from '@/script'
 import i18n from '@/i18n'
 
 export default {
@@ -95,6 +95,11 @@ export default {
     return {
       isValidSelection: false,
       votingRequestValues: null,
+    }
+  },
+  computed: {
+    shuffledOptions: function () {
+      return shuffle(this.poll.options)
     }
   },
   methods: {

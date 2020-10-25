@@ -6,7 +6,7 @@
       </div>
       <b-form
         :class="{disabledLoading: isLoading, 'card-body': true}"
-        @submit="submitPoll"
+        @submit="showConfirmDialog"
       >
         <b-form-group
           :label="$i18n('poll.new_poll.name')"
@@ -229,7 +229,7 @@
       content-class="pr-3 pt-3"
       @ok="submitPoll"
     >
-      {{ $i18n('poll.submit_vote_question') }}
+      {{ $i18n('poll.new_poll.submit_question') }}
     </b-modal>
   </div>
 </template>
