@@ -91,7 +91,7 @@
       <a
         :href="$url('workingGroups')"
         role="menuitem"
-        class="dropdown-item sub"
+        class="dropdown-item"
       >
         <small><i class="fas fa-users" /> {{ $i18n('menu.entry.groups') }}</small>
       </a>

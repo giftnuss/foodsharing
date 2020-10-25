@@ -142,7 +142,6 @@ i {
       overflow: auto;
     }
     .dropdown-item {
-      font-size: 15px;
         i {
         display: inline-block;
         width: 1.7em;
@@ -156,6 +155,9 @@ i {
     }
     .dropdown-header {
      font-weight: bold;
+    }
+    .group .dropdown-header {
+      color: black;
     }
   }
   @media (max-width: 575px) {

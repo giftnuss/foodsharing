@@ -14,6 +14,7 @@
     <div
       v-for="region in regionsSorted"
       :key="region.id"
+      class="group"
     >
       <a
         v-if="region.id !== activeRegionId || regions.length !== 1"
