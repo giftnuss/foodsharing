@@ -138,6 +138,7 @@ class StoreRestController extends AbstractFOSRestController
 
 		$storeName = $this->storeGateway->getStoreName($storeId);
 		$userName = $this->session->user('name');
+		$userPhoto = $this->session->user('photo');
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
 		$bellData = Bell::create(
@@ -156,6 +157,7 @@ class StoreRestController extends AbstractFOSRestController
 
 		$note = $this->storeGateway->getStoreWallpost($storeId, $postId);
 		$note['name'] = $userName;
+		$note['photo'] = $userPhoto;
 		$post = RestNormalization::normalizeStoreNote($note);
 
 		return $this->handleView($this->view(['post' => $post], 200));
