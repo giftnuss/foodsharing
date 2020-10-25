@@ -2,20 +2,21 @@
 <template>
   <li
     class="post d-flex flex-column justify-content-between align-items-center"
-    :class="[`wallpost-${post.id}`, {'important': isImportant(post)}]"
+    :class="`wallpost-${post.id}`"
   >
     <div class="metadata text-muted w-100 mx-1 d-inline-flex">
       <span class="author flex-grow-1 flex-shrink-1 ml-sm-2 mr-1" :class="{'with-padding': !wXS}">
-        <a :href="$url('profile', post.author.id)">
-          {{ post.author.name }}
-        </a>
         <span
           v-if="isManager(post.author.id)"
           v-b-tooltip="$i18n('store.isManager')"
-          class="is-manager"
+          class="is-manager fa-stack"
         >
-          <i class="fab fa-fw fa-redhat" />
+          <i class="fas fa-square fa-stack-2x" />
+          <i class="fab fa-redhat fa-stack-1x fa-inverse" />
         </span>
+        <a :href="$url('profile', post.author.id)">
+          {{ post.author.name }}
+        </a>
       </span>
 
       <span
@@ -172,8 +173,6 @@ export default {
   padding: calc(2 * var(--storewall-padding)) var(--storewall-padding);
   position: relative;
   border-top: 1px solid var(--border);
-  border-left: 3px solid transparent;
-  border-right: 3px solid transparent;
 
   .metadata {
     margin-top: calc(-1 * var(--storewall-padding));
@@ -184,10 +183,21 @@ export default {
     .author {
       &.with-padding {
         padding-left: calc(50px + 0.25rem); // avatar width + ml-1 post body alignment
+
+        .is-manager {
+          margin-left: -2.5em; // width of .fa-stack
+        }
       }
 
       a {
         color: var(--secondary);
+      }
+
+      .is-manager {
+        color: rgba(var(--warning-rgb), 0.75);
+        font-size: 0.75rem;
+        transform: scale(0.75);
+        margin-left: 0;
       }
     }
   }
@@ -200,11 +210,6 @@ export default {
     .delete:hover {
       color: var(--danger) !important;
     }
-  }
-
-  &.important {
-    border-left-color: rgba(var(--warning-rgb), 0.75);
-    border-right-color: rgba(var(--warning-rgb), 0.75);
   }
 }
 
