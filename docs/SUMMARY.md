@@ -20,18 +20,26 @@
   - [Troubleshooting](troubleshooting.md)
   - [Beta Testing (DE)](beta-testing-de.md)
 
+### PHP Reference
+- [Modern PHP](php.md)
+  - [PHP Structure](php-structure.md)
+- [Legacy PHP](php-legacy.md)
+  - [Libraries](php-libraries.md)
+  - [View code (TBD)](php-view.md)
+- [Refactoring](refactor.md)
+- [Translation](internationalization.md)
+
 ### References
   - [Scripts](scripts.md)
-  - [php](php.md)
-    - [Structure](php-structure.md)
-    - [Translation](internationalization.md)
-  - [request types](requests.md)
-  - [javascript, vue.js](javascript.md)
-    - [icons](icons.md)
+  - [Request types](requests.md)
+    - [Legacy XHR](requests-xhr.md)
+    - [REST API](requests-rest.md)
+    - [Chat messages](requests-chat.md)
+  - [Javascript, Vue.js](javascript.md)
+    - [Icons](icons.md)
   - [Databases](database.md)
     - [Tables, columns](database-tables-columns.md)
   - [Tests](tests.md)
-  - [Refactoring](refactor.md)
   - [Release](release.md)
   - [Glossary](GLOSSARY.md)
 

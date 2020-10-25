@@ -2,7 +2,8 @@
   "title": "foodsharing Developer Documentation",
   "gitbook": ">3.0.0",
   "structure": {
-    "readme": "README.md"
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
   },
   "plugins": [
     "richquotes",
