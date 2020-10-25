@@ -76,11 +76,15 @@
     >
       <template v-slot:modal-header>
         <div v-if="!isOwn(post)" class="alert alert-warning" role="alert">
-          <i class="fas fa-fw fa-info-circle" />
-          {{ $i18n('wall.info-somebody-else') }}
-          <hr>
-          <i class="fas fa-fw fa-archive" />
-          {{ $i18n('wall.info-logging') }}
+          <div v-if="!mayDeleteEverything">
+            <i class="fas fa-fw fa-info-circle" />
+            {{ $i18n('wall.info-somebody-else') }}
+          </div>
+          <hr v-if="!mayDeleteEverything">
+          <div>
+            <i class="fas fa-fw fa-archive" />
+            {{ $i18n('wall.info-logging') }}
+          </div>
         </div>
       </template>
 
@@ -208,6 +212,11 @@ export default {
   .alert {
     margin-bottom: 0;
     font-size: 0.9rem;
+
+    hr {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
   }
   blockquote {
     margin: 0.5rem;

@@ -855,7 +855,7 @@ wall:
   delete: Eintrag löschen
   confirm-deletion: 'Soll der folgende Pinnwand-Eintrag von {name} wirklich entfernt werden?'
   info-somebody-else: 'Dieser Eintrag ist älter als ein Monat, daher kannst du ihn als Verantwortliche*r bei Bedarf entfernen.'
-  info-logging: 'Beachte bitte, dass zur Vermeidung von Konflikten dabei der Inhalt und die ausführende Person protokolliert werden.'
+  info-logging: 'Beachte bitte, dass zur Vermeidung von Konflikten der Inhalt und die ausführende Person protokolliert werden.'
   error-delete: 'Diesen Eintrag kannst du nicht entfernen.'
   created: 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
   error-create: 'Dein Pinnwandeintrag konnte nicht gespeichert werden.'
