@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Carbon\Translator;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -12,12 +11,14 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\LoginService;
 use Foodsharing\Utility\Sanitizer;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DashboardControl extends Control
 {
@@ -35,6 +36,8 @@ class DashboardControl extends Control
 	private ImageHelper $imageService;
 	private QuizSessionGateway $quizSessionGateway;
 	private LoginGateway $loginGateway;
+	private MailsGateway $mailsGateway;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		DashboardView $view,
@@ -42,6 +45,7 @@ class DashboardControl extends Control
 		ContentGateway $contentGateway,
 		BasketGateway $basketGateway,
 		StoreGateway $storeGateway,
+		MailsGateway $mailsGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
 		LoginService $loginService,
@@ -50,9 +54,11 @@ class DashboardControl extends Control
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
 		QuizSessionGateway $quizSessionGateway,
-		LoginGateway $loginGateway
+		LoginGateway $loginGateway,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
+		$this->mailsGateway = $mailsGateway;
 		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
 		$this->basketGateway = $basketGateway;
@@ -66,6 +72,7 @@ class DashboardControl extends Control
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->loginGateway = $loginGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -94,10 +101,18 @@ class DashboardControl extends Control
 		}
 
 		$fsId = $this->session->id();
-		if (!$this->loginGateway->isActivated($fsId)) {
-			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body.part_1') . '<a href="/?page=dashboard&a=activate">' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_2') . '</a>' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_3') .
-				' ' . '<a href="/?page=settings&sub=general">' . $this->translator->trans('dashboard.mail_activation_error_body.part_4') . '</a>', $this->translator->trans('dashboard.mail_activation_error_title')));
+		$email = $this->session->get('user')['email'];
+		if ($this->mailsGateway->emailIsBouncing($email)) {
+			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('profile.mailBounceWarning', [
+				'{email}' => $email,
+			])));
+		} else {
+			if (!$this->loginGateway->isActivated($fsId)) {
+				$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body.part_1') . '<a href="/?page=dashboard&a=activate">' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_2') . '</a>' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_3') .
+					' ' . '<a href="/?page=settings&sub=general">' . $this->translator->trans('dashboard.mail_activation_error_body.part_4') . '</a>', $this->translator->trans('dashboard.mail_activation_error_title')));
+			}
 		}
+
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
 			($is_bieb && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
