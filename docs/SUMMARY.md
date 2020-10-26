@@ -5,9 +5,11 @@
 - [Call for contribution (EN)](it-tasks_EN.md)
 
 ### Getting started
-  - [Getting the code](getting-the-code.md)
-  - [Running the code: Docker](running-the-code.md)
-  - [Setting things up](setting-things-up.md)
+- [Getting the code](getting-the-code.md)
+- [Running the code: Docker](running-the-code.md)
+- [Setting things up](setting-things-up.md)
+  - [IDE setup](ide-setup.md)
+  - [User roles](learn-user-roles.md)
 
 ### Contributing
   - [Einführung in Git und unser Arbeiten](contributing_DE.md)
