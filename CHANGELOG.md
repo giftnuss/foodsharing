@@ -30,6 +30,7 @@
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
 - JS linter now asks for dangling comma !1728 @ChrisOelmueller
+- Update backend dependencies (codeception, twig, symfony, friendsofsymfony, phpunit) and removed abandoned flow/jsonpath !1732 @chriswalg
 
 # 2020-10-23 Hotfix
 
