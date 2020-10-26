@@ -84,7 +84,8 @@ class ContentControl extends Control
 			} else {
 				$this->pageHelper->addBread($this->translator->trans('content.public'), '/?page=content');
 
-				if ($data = $this->contentGateway->list($this->contentPermissions->mayEditContentListIDs())) {
+				$contentIds = $this->contentPermissions->getEditableContentIds();
+				if ($data = $this->contentGateway->list($contentIds)) {
 					$rows = [];
 					foreach ($data as $d) {
 						$link = '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">';

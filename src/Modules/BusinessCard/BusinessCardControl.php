@@ -109,8 +109,6 @@ class BusinessCardControl extends Control
 		$data['subtitle'] = $this->displayedRole($role, $data['geschlecht'], $mailbox['name']);
 
 		$this->generatePdf($data, $role);
-
-		return;
 	}
 
 	private function displayedRole(string $role, int $gender, string $regionName): string

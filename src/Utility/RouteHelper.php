@@ -39,9 +39,9 @@ final class RouteHelper
 		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 	}
 
-	public function goPage(?string $page = null): void
+	public function goPage(string $page = ''): void
 	{
-		if ($page === null) {
+		if (empty($page)) {
 			$page = $this->getPage();
 			if (isset($_GET['bid'])) {
 				$page .= '&bid=' . (int)$_GET['bid'];

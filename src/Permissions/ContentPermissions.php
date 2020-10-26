@@ -65,7 +65,7 @@ final class ContentPermissions
 			|| $this->session->isAdminFor(RegionIDs::PR_START_PAGE);
 	}
 
-	public function mayEditContentListIDs(): array
+	public function getEditableContentIds(): array
 	{
 		if ($this->session->may('orga')) {
 			return [];
