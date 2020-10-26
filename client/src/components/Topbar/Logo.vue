@@ -4,10 +4,10 @@
     :aria-label="$i18n('home.title')"
     class="navbar-brand brand"
   >
-    <span class="logo-text d-none d-md-inline-block">
+    <span class="logo-text d-none d-lg-inline-block">
       food<span class="green">shar<span class="apple">i</span>ng</span>
     </span>
-    <span class="logo-text d-md-none">
+    <span class="logo-text d-lg-none">
       f<span class="green">s</span>
     </span>
   </a>

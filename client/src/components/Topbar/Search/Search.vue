@@ -171,6 +171,7 @@ export default {
   #topbar-search {
     .input-group {
       align-items: unset;
+      flex-wrap: nowrap;
     }
   }
   @media (max-width: 767px) {
