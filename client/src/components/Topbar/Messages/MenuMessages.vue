@@ -18,7 +18,7 @@
       </span>
       <span v-else />
     </template>
-    <div class="list-group">
+    <div class="list-group menu-messages-width">
       <div class="scroll-container">
         <menu-messages-entry
           v-for="conversation in conversations"
@@ -96,5 +96,8 @@ export default {
 
   .special .btn {
     flex: 1
+  }
+  .menu-messages-width {
+    min-width: 280px;
   }
 </style>
