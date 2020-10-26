@@ -54,10 +54,10 @@ import Avatar from '@/components/Avatar'
 export default {
   components: { Avatar },
   props: {
-    user: { type: Object, required: true }
+    user: { type: Object, required: true },
   },
   methods: {
-  }
+  },
 }
 </script>
 

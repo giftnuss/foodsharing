@@ -26,8 +26,8 @@ export default {
   props: {
     may: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   computed: {
     items () {
@@ -37,55 +37,55 @@ export default {
         items.push({
           url: url('blogEdit'),
           icon: 'far fa-newspaper',
-          label: i18n('menu.blog')
+          label: i18n('menu.blog'),
         })
       }
       if (this.may.editQuiz) {
         items.push({
           url: url('quizEdit'),
           icon: 'fas fa-question-circle',
-          label: i18n('menu.quiz')
+          label: i18n('menu.quiz'),
         })
       }
       if (this.may.handleReports) {
         items.push({
           url: url('reports'),
           icon: 'fas fa-exclamation',
-          label: i18n('menu.reports')
+          label: i18n('menu.reports'),
         })
       }
       if (this.may.administrateRegions) {
         items.push({
           url: url('region'),
           icon: 'fas fa-map',
-          label: i18n('menu.manage_regions')
+          label: i18n('menu.manage_regions'),
         })
       }
       if (this.may.administrateNewsletterEmail) {
         items.push({
           url: url('email'),
           icon: 'fas fa-envelope',
-          label: i18n('menu.email')
+          label: i18n('menu.email'),
         })
       }
       if (this.may.manageMailboxes) {
         items.push({
           url: url('mailboxManage'),
           icon: 'far fa-envelope',
-          label: i18n('menu.manage_mailboxes')
+          label: i18n('menu.manage_mailboxes'),
         })
       }
       if (this.may.editContent) {
         items.push({
           url: url('contentEdit'),
           icon: 'fas fa-file-alt',
-          label: i18n('menu.content')
+          label: i18n('menu.content'),
         })
       }
 
       return items.sort((a, b) => a.label.localeCompare(b.label))
-    }
-  }
+    },
+  },
 }
 </script>
 

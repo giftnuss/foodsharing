@@ -5,12 +5,12 @@ import { vueRegister, vueApply } from '@/vue'
 import StoreList from './components/StoreList.vue'
 import { attachAddressPicker } from '@/addressPicker'
 import {
-  GET
+  GET,
 } from '@/script'
 
 if (GET('a') === undefined) {
   vueRegister({
-    StoreList
+    StoreList,
   })
   vueApply('#vue-storelist', true)
 }

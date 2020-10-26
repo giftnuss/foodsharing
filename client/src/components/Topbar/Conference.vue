@@ -7,7 +7,7 @@ export default {
   components: { BModal },
   data () {
     return {
-      id: null
+      id: null,
     }
   },
   methods: {
@@ -18,7 +18,7 @@ export default {
         cancelTitle: i18n('button.cancel'),
         okTitle: i18n('conference.join'),
         headerClass: 'd-flex',
-        contentClass: 'pr-3 pt-3'
+        contentClass: 'pr-3 pt-3',
       })
       if (join) {
         this.id = id
@@ -27,7 +27,7 @@ export default {
     },
     join () {
       window.open(`/api/groups/${this.id}/conference?redirect=true`)
-    }
-  }
+    },
+  },
 }
 </script>

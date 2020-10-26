@@ -17,7 +17,7 @@ import { removeBasket, listBasketCoordinates } from '@/api/baskets'
 import basketStore from '@/stores/baskets'
 
 expose({
-  tryRemoveBasket
+  tryRemoveBasket,
 })
 
 const mapsearch = {
@@ -36,7 +36,7 @@ const mapsearch = {
         lng: marker.lon,
         click: function () {
           mapsearch.loadBasket(marker.id)
-        }
+        },
       })
     })
 
@@ -45,7 +45,7 @@ const mapsearch = {
   loadBasket: function (id) {
     ajreq('bubble', {
       app: 'basket',
-      id: id
+      id: id,
     })
   },
   fillBasketList: function (baskets) {
@@ -73,7 +73,7 @@ const mapsearch = {
     }
 
     this.$basketList.append(`<li><a class="ui-corner-all" onclick="ajreq('bubble',{app:'basket',id:${basket.id},modal:1});return false;" href="#"><span style="float:left;margin-right:7px;"><img width="35px" src="${img}" class="ui-corner-all"></span><span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(${distance})</strong>${basket.description}</span><span style="clear:both;"></span></a></li>`)
-  }
+  },
 }
 
 mapsearch.init()
@@ -90,13 +90,13 @@ if ($('#mapsearch').length > 0) {
 
     ajax.req('basket', 'nearbyBaskets', {
       data: {
-        coordinates: JSON.parse($('#map-latLng').val())
+        coordinates: JSON.parse($('#map-latLng').val()),
       },
       success: function (ret) {
         if (ret.baskets != undefined) {
           mapsearch.fillBasketList(ret.baskets)
         }
-      }
+      },
     })
   })
 }
@@ -106,7 +106,7 @@ $(document).ready(() => {
   var requestFormContainerId = 'vue-BasketRequestForm'
   if (document.getElementById(requestFormContainerId)) {
     vueRegister({
-      RequestForm
+      RequestForm,
     })
     vueApply('#' + requestFormContainerId)
   }

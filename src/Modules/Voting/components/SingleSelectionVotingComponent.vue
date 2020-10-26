@@ -22,12 +22,12 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
-      selected: -1
+      selected: -1,
     }
   },
   computed: {
@@ -37,16 +37,16 @@ export default {
     // only the selected option is needed for the REST request
     votingRequestValues: function () {
       return { [this.selected]: 1 }
-    }
+    },
   },
   watch: {
     isValidSelection () { this.$emit('updateValidSelection', this.isValidSelection) },
-    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) }
+    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) },
   },
   created () {
     this.$emit('updateValidSelection', this.isValidSelection)
     this.$emit('updateVotingRequestValues', this.votingRequestValues)
-  }
+  },
 }
 </script>
 

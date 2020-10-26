@@ -67,35 +67,35 @@ export default {
     MenuBaskets,
     MenuMessages,
     MenuBells,
-    MenuUser
+    MenuUser,
   },
 
   props: {
     hasFsRole: {
       type: Boolean,
-      default: true
+      default: true,
     },
     regions: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     workingGroups: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     mayAddStore: {
       type: Boolean,
-      default: false
+      default: false,
     },
     avatar: {
       type: String,
-      default: ''
+      default: '',
     },
     userId: {
       type: Number,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 }
 
 </script>

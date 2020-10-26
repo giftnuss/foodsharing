@@ -107,12 +107,12 @@ export default {
   props: {
     regionId: {
       type: String,
-      default: null
+      default: null,
     },
     regionName: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data () {
     return {
@@ -123,56 +123,56 @@ export default {
         {
           key: 'avatar',
 
-          label: ''
+          label: '',
         },
         {
           key: 'fs_stadt',
           label: this.$i18n('reports.city'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'time',
           label: this.$i18n('reports.time'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'name',
           label: this.$i18n('reports.about_first_name'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'fs_nachname',
           label: this.$i18n('reports.about_last_name'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'rp_name',
           label: this.$i18n('reports.from_first_name'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'rp_nachname',
           label: this.$i18n('reports.from_last_name'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'b_name',
           label: this.$i18n('reports.region'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'actions',
-          label: ''
-        }
-      ]
+          label: '',
+        },
+      ],
     }
   },
   async created () {
     const reports = await api.getReportsByRegion(this.regionId)
     Object.assign(this, {
-      reports
+      reports,
     })
-  }
+  },
 }
 </script>
 <style>

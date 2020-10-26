@@ -85,7 +85,7 @@
 <script>
 export default {
   props: {
-    classes: { type: String, default: '' }
+    classes: { type: String, default: '' },
   },
   data () {
     return {
@@ -94,7 +94,7 @@ export default {
     }
   },
   methods: {
-  }
+  },
 }
 </script>
 

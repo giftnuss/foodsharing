@@ -8,12 +8,12 @@ import { GET } from '@/browser'
 
 if (GET('sub') === 'new') {
   vueRegister({
-    NewPollForm
+    NewPollForm,
   })
   vueApply('#new-poll-form')
 } else {
   vueRegister({
-    PollOverview
+    PollOverview,
   })
   vueApply('#poll-overview')
 }

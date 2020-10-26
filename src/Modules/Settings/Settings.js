@@ -11,7 +11,7 @@ import {
   pulseSuccess,
   pulseError,
   collapse_wrapper,
-  GET
+  GET,
 } from '@/script'
 import { expose } from '@/utils'
 import i18n from '@/i18n'
@@ -22,7 +22,7 @@ import Calendar from './components/Calendar'
 
 if (GET('sub') === 'calendar') {
   vueRegister({
-    Calendar
+    Calendar,
   })
   vueApply('#calendar')
 }
@@ -31,7 +31,7 @@ expose({
   fotoupload,
   picFinish,
   confirmDeleteUser,
-  collapse_wrapper
+  collapse_wrapper,
 })
 
 if (GET('sub') === 'general') {

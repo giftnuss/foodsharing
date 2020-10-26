@@ -14,16 +14,16 @@ export default {
   props: {
     wXS: {
       type: Boolean,
-      default: true
+      default: true,
     },
     displayArrow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     displayText: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
@@ -36,8 +36,8 @@ export default {
             { url: 'grundsaetze', menuTitle: 'menu.entry.fundamentals' },
             { url: 'blog', menuTitle: 'menu.entry.blog' },
             { url: 'team', menuTitle: 'menu.entry.team' },
-            { url: 'partner', menuTitle: 'menu.entry.partners' }
-          ]
+            { url: 'partner', menuTitle: 'menu.entry.partners' },
+          ],
         },
         {
           heading: 'menu.entry.background',
@@ -48,11 +48,11 @@ export default {
             { url: 'statistics', menuTitle: 'menu.entry.statistics' },
             { url: 'transparency', menuTitle: 'menu.entry.transparency' },
             { url: 'dataprivacy', menuTitle: 'menu.entry.dataprivacy' },
-            { url: 'releaseNotes', menuTitle: 'menu.entry.release-notes' }
-          ]
-        }
-      ]
+            { url: 'releaseNotes', menuTitle: 'menu.entry.release-notes' },
+          ],
+        },
+      ],
     }
-  }
+  },
 }
 </script>

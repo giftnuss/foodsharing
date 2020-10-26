@@ -11,7 +11,7 @@ import { subscribeForPushNotifications } from '@/pushNotifications'
 import { pulseSuccess, pulseError } from '@/script'
 
 vueRegister({
-  ActivityOverview
+  ActivityOverview,
 })
 
 vueApply('#activity-overview')

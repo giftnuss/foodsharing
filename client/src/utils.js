@@ -18,11 +18,11 @@ export function getBrowserLocation (success) {
       ajreq('savebpos', {
         app: 'map',
         lat: pos.coords.latitude,
-        lon: pos.coords.longitude
+        lon: pos.coords.longitude,
       })
       success({
         lat: pos.coords.latitude,
-        lon: pos.coords.longitude
+        lon: pos.coords.longitude,
       })
     })
   }
@@ -71,7 +71,7 @@ export function dateFormat (date, format = 'full-long') {
 export function dateDistanceInWords (date) {
   return dateFnsFormatDistance(date, new Date(), {
     locale: dateFnsLocaleDE,
-    addSuffix: true
+    addSuffix: true,
   })
 }
 
@@ -146,7 +146,7 @@ export function plainToHtml (string) {
   const entityMap = {
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
+    '>': '&gt;',
   }
   return autoLink(nl2br(String(string).replace(/[&<>]/g, function fromEntityMap (s) {
     return entityMap[s]
@@ -156,11 +156,11 @@ export function plainToHtml (string) {
 export function plainToHtmlAttribute (string) {
   const entityMap = {
     '"': '&quot',
-    "'": '&#39;'
+    "'": '&#39;',
   }
   return String(string).replace(/["']/g, function fromEntityMap (s) {
     return entityMap[s]
-  }
+  },
   )
 }
 

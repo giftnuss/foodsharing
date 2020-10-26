@@ -73,7 +73,7 @@ function handleErrors (err, stats, exit) {
   if (stats.hasErrors() || stats.hasWarnings()) {
     console.log(stats.toString({
       chunks: false,
-      colors: true
+      colors: true,
     }))
   }
 

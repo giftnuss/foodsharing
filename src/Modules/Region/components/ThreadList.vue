@@ -52,18 +52,18 @@ export default {
   components: { ForumSearchField, ThreadListEntry, InfiniteLoading },
   props: {
     groupId: { type: Number, required: true },
-    subforumId: { type: Number, required: true }
+    subforumId: { type: Number, required: true },
   },
   data () {
     return {
       threads: [],
-      offset: 0
+      offset: 0,
     }
   },
   computed: {
     subforumName () {
       return this.subforumId === 1 ? 'botforum' : 'forum'
-    }
+    },
   },
   methods: {
     async infiniteHandler ($state) {
@@ -78,8 +78,8 @@ export default {
         $state.loaded()
         $state.complete()
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

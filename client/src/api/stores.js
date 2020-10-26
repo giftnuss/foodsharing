@@ -7,7 +7,7 @@ export async function listPickups (storeId) {
 
   return res.pickups.map(c => ({
     ...c,
-    date: dateFnsParseISO(c.date)
+    date: dateFnsParseISO(c.date),
   }))
 }
 
@@ -20,7 +20,7 @@ export async function listPickupHistory (storeId, fromDate, toDate) {
   return _.groupBy(slots.map(s => ({
     ...s,
     isConfirmed: !!s.confirmed,
-    date: dateFnsParseISO(s.date)
+    date: dateFnsParseISO(s.date),
   })), 'date_ts')
 }
 
@@ -32,7 +32,7 @@ export async function joinPickup (storeId, pickupDate, fsId) {
 export async function leavePickup (storeId, pickupDate, fsId, message) {
   const date = pickupDate.toISOString()
   return remove(`/stores/${storeId}/pickups/${date}/${fsId}`, {
-    message: message
+    message: message,
   })
 }
 

@@ -19,13 +19,13 @@ import {
   GET,
   pulseInfo,
   pulseError,
-  shuffle
+  shuffle,
 } from '@/script'
 
 import {
   dateDistanceInWords, dateFormat,
   plainToHtml,
-  plainToHtmlAttribute
+  plainToHtmlAttribute,
 } from '@/utils'
 
 const msg = {
@@ -59,14 +59,14 @@ const msg = {
       this.$conversation.css('height', height)
 
       this.$conversation.slimScroll({
-        height: height
+        height: height,
       })
     } else {
       this.$conversation.css({
         height: 'auto',
         overflow: 'hidden',
         padding: '0',
-        margin: '0'
+        margin: '0',
       })
       msg.scrollBottom()
     }
@@ -81,7 +81,7 @@ const msg = {
         msg.$conversation.parent('.slimScrollDiv').css('height', height)
         msg.$conversation.slimScroll({
           height: height,
-          scrollTo: `${msg.$conversation.prop('scrollHeight')}px`
+          scrollTo: `${msg.$conversation.prop('scrollHeight')}px`,
         })
       }
     })
@@ -419,7 +419,7 @@ const msg = {
     } else {
       $(window).scrollTop($(document).height())
     }
-  }
+  },
 }
 
 export default msg

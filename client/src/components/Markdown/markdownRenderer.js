@@ -5,7 +5,7 @@ const md = markdownIt('zero', {
   breaks: true,
   linkify: true,
   typopgrapher: true,
-  quotes: '“”‘’'
+  quotes: '“”‘’',
 })
   .enable([
     'heading',
@@ -20,7 +20,7 @@ const md = markdownIt('zero', {
     'hr',
     'list',
     'fence',
-    'code'
+    'code',
   ])
 
 export default md

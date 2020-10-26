@@ -44,15 +44,15 @@ export default {
   props: {
     userId: {
       type: Number,
-      default: null
+      default: null,
     },
     avatar: {
       type: String,
-      default: null
+      default: null,
     },
     showOnlyOnMobile: { type: Boolean, default: false },
-    hideOnlyOnMobile: { type: Boolean, default: false }
-  }
+    hideOnlyOnMobile: { type: Boolean, default: false },
+  },
 }
 </script>
 

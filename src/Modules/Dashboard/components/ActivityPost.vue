@@ -141,12 +141,12 @@ export default {
   props: {
     type: {
       type: String,
-      default: null
+      default: null,
     },
     data: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data () {
     return {
@@ -154,7 +154,7 @@ export default {
       qrLoading: false,
       user_id: serverData.user.id,
       user_avatar: serverData.user.avatar.mini,
-      quickreplyValue: null
+      quickreplyValue: null,
     }
   },
   computed: {
@@ -187,7 +187,7 @@ export default {
     },
     when () {
       return dateFnsParseISO(this.data.time)
-    }
+    },
   },
   methods: {
     async sendQuickreply (txt) {
@@ -196,8 +196,8 @@ export default {
       await sendQuickreply(this.data.quickreply, this.quickreplyValue).then((x) => { pulseInfo(x.message) })
       this.qrLoading = false
       return true
-    }
-  }
+    },
+  },
 }
 </script>
 

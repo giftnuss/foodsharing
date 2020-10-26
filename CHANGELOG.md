@@ -25,12 +25,13 @@
 - Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
+- Update many frontend dependencies !1723 @chriswalg
+- JS linter now asks for dangling comma !1728 @ChrisOelmueller
 
 # 2020-10-23 Hotfix
 
 ## Bugfixes
 - Fix komoot's URL for address search !1727 @alex.simm
-- Update many frontend dependencies !1723 @chriswalg
 
 # Release "Cranberry", 2020-10-11
 

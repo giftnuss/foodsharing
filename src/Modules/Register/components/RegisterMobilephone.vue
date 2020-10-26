@@ -47,7 +47,7 @@ import i18n from '@/i18n'
 
 export default {
   components: {
-    VueTelInput
+    VueTelInput,
   },
   props: { mobile: { type: String, default: null } },
   data () {
@@ -61,14 +61,14 @@ export default {
         preferredCountries: ['DE', 'AT', 'CH'],
         name: 'mobilephone',
         maxLen: 18,
-        validCharactersOnly: true
-      }
+        validCharactersOnly: true,
+      },
     }
   },
   computed: {
     isValid () {
       return this.phoneNumberValid || this.mobile === null || this.mobile === ''
-    }
+    },
   },
   methods: {
     update (phoneNumber, phoneObject) {
@@ -82,8 +82,8 @@ export default {
       if (this.isValid) {
         this.$emit('next')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

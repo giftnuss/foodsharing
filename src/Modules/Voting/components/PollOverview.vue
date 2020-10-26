@@ -76,24 +76,24 @@ export default {
   props: {
     poll: {
       type: Object,
-      required: true
+      required: true,
     },
     regionName: {
       type: String,
-      required: true
+      required: true,
     },
     isWorkGroup: {
       type: Boolean,
-      default: false
+      default: false,
     },
     mayVote: {
       type: Boolean,
-      default: false
+      default: false,
     },
     userVoteDate: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     startDate () {
@@ -107,7 +107,7 @@ export default {
     },
     isPollInFuture () {
       return isAfter(this.startDate, new Date())
-    }
+    },
   },
   methods: {
     disableVoteForm () {
@@ -115,8 +115,8 @@ export default {
     },
     parseDate (date) {
       return dateFnsParseISO(date)
-    }
-  }
+    },
+  },
 }
 </script>
 

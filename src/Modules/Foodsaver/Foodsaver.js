@@ -23,13 +23,13 @@ const fsapp = {
     ajreq('loadFoodsaver', {
       app: 'foodsaver',
       id: foodsaverId,
-      bid: GET('bid')
+      bid: GET('bid'),
     })
   },
   refreshFoodsaver: function () {
     ajreq('foodsaverrefresh', {
       app: 'foodsaver',
-      bid: GET('bid')
+      bid: GET('bid'),
     })
   },
   deleteFromRegion: function (foodsaverId) {
@@ -37,10 +37,10 @@ const fsapp = {
       ajreq('deleteFromRegion', {
         app: 'foodsaver',
         bid: GET('bid'),
-        id: foodsaverId
+        id: foodsaverId,
       })
     }
-  }
+  },
 }
 
 export async function confirmDeleteUser (fsId, name) {
@@ -55,5 +55,5 @@ fsapp.init()
 
 expose({
   fsapp,
-  confirmDeleteUser
+  confirmDeleteUser,
 })

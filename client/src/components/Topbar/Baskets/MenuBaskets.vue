@@ -64,8 +64,8 @@ export default {
   props: {
     showLabel: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     baskets () {
@@ -73,7 +73,7 @@ export default {
     },
     basketsSorted () {
       return this.baskets.slice().sort((a, b) => dateFnsCompareDesc(a.updatedAt, b.updatedAt))
-    }
+    },
   },
   created () {
     basketStore.loadBaskets()
@@ -88,10 +88,10 @@ export default {
       ajreq('removeRequest', {
         app: 'basket',
         id: basketId,
-        fid: userId
+        fid: userId,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

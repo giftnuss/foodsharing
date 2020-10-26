@@ -8,15 +8,15 @@ import {
   showLoader,
   hideLoader,
   goTo,
-  checkAllCb
+  checkAllCb,
 } from '@/script'
 import {
-  expose
+  expose,
 } from '@/utils'
 import './PassportGenerator.css'
 
 expose({
-  checkAllCb
+  checkAllCb,
 })
 
 let verify_fid = 0
@@ -37,13 +37,13 @@ $('#verifyconfirm-dialog').dialog({
         complete: () => {
           hideLoader()
           $(this).dialog('close')
-        }
+        },
       })
     },
     [i18n('button.cancel')]: function () {
       $(this).dialog('close')
-    }
-  }
+    },
+  },
 })
 
 $('#unverifyconfirm-dialog').dialog({
@@ -55,8 +55,8 @@ $('#unverifyconfirm-dialog').dialog({
     },
     [i18n('button.cancel')]: function () {
       $(this).dialog('close')
-    }
-  }
+    },
+  },
 })
 
 $('.checker').on('click', function (el) {
@@ -93,7 +93,7 @@ $('.verify').on('click', function () {
       },
       complete: function () {
         hideLoader()
-      }
+      },
     })
   }
 

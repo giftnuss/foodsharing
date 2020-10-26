@@ -48,7 +48,7 @@ export function vueApply (selector, disableElNotFoundException = false) {
       el,
       render (h) {
         return h(componentName, { props })
-      }
+      },
     })
     if (initialData && typeof initialData === 'object') {
       for (const key in initialData) {

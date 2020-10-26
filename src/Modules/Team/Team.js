@@ -6,7 +6,7 @@ import {
   checkEmail,
   pulseError,
   ajax,
-  goTo
+  goTo,
 } from '@/script'
 import './Team.css'
 
@@ -38,7 +38,7 @@ if ($form.length > 0) {
     } else {
       ajax.req('team', 'contact', {
         data: $form.serialize(),
-        method: 'post'
+        method: 'post',
       })
     }
   })

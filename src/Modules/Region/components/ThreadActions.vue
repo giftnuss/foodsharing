@@ -47,8 +47,8 @@ export default {
     isFollowingBell: { type: Boolean, default: null },
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
-    showSticky: { type: Boolean, default: null }
-  }
+    showSticky: { type: Boolean, default: null },
+  },
 }
 </script>
 

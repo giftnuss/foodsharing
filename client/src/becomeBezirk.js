@@ -5,11 +5,11 @@ import $ from 'jquery'
 import {
   pulseError,
   showLoader,
-  hideLoader
+  hideLoader,
 } from '@/script'
 
 import {
-  goTo
+  goTo,
 } from '@/browser'
 
 import 'jquery-ui'
@@ -99,7 +99,7 @@ export function u_printChildBezirke (element) {
     },
     complete: function () {
       hideLoader()
-    }
+    },
   })
 }
 

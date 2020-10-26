@@ -33,11 +33,11 @@ import {
   becomeBezirk,
   betriebRequest,
   withdrawStoreRequest,
-  error
+  error,
 } from '@/script'
 
 import {
-  u_printChildBezirke
+  u_printChildBezirke,
 } from '@/becomeBezirk'
 
 expose({
@@ -61,5 +61,5 @@ expose({
   u_printChildBezirke,
   conv,
   error,
-  sock: socket
+  sock: socket,
 })

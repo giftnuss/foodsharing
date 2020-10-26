@@ -10,7 +10,7 @@ $('table.tablesorter').each((index, table) => {
 
   const options = {
     headers: {},
-    wigets: ['zebrea']
+    wigets: ['zebrea'],
   }
 
   // column disabled for sorting? set in the options
@@ -24,15 +24,15 @@ $('table.tablesorter').each((index, table) => {
 
     $('.prev', pager).button({
       icons: {
-        primary: 'ui-icon-circle-arrow-w'
+        primary: 'ui-icon-circle-arrow-w',
       },
-      text: false
+      text: false,
     })
     $('.next', pager).button({
       icons: {
-        primary: 'ui-icon-circle-arrow-e'
+        primary: 'ui-icon-circle-arrow-e',
       },
-      text: false
+      text: false,
     })
   }
 })

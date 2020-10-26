@@ -92,34 +92,34 @@ import { uploadFile } from '@/api/uploads'
 export default {
   components: {
     'b-modal': BModal,
-    VueCroppie
+    VueCroppie,
   },
   directives: {
-    'b-modal': VBModal
+    'b-modal': VBModal,
   },
   props: {
     filename: {
       type: String,
-      default: null
+      default: null,
     },
     isImage: {
       type: Boolean,
-      default: false
+      default: false,
     },
     imgHeight: {
       type: Number,
-      default: 0
+      default: 0,
     },
     imgWidth: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data () {
     return {
       isLoading: false,
       newFilename: null,
-      boundary: { height: this.imgHeight, width: this.imgWidth }
+      boundary: { height: this.imgHeight, width: this.imgWidth },
     }
   },
   computed: {
@@ -134,7 +134,7 @@ export default {
     },
     previewAlt () {
       return this.$i18n('upload.preview_image')
-    }
+    },
   },
   methods: {
     openUploadDialog () {
@@ -191,18 +191,18 @@ export default {
       this.$refs['upload-modal'].show()
       this.$refs.croppie.initCroppie()
       this.$refs.croppie.bind({
-        url: dataUrl
+        url: dataUrl,
       })
     },
     cropImage () {
       this.isLoading = true
       this.$refs.croppie.result({
-        type: 'base64'
+        type: 'base64',
       }, (output) => {
         this.uploadFile(this.newFilename, output.split('base64,')[1])
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

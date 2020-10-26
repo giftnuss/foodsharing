@@ -4,17 +4,17 @@ import { expose } from '@/utils'
 
 const basketStore = new Vue({
   data: {
-    baskets: []
+    baskets: [],
   },
   methods: {
     async loadBaskets () {
       this.baskets = await getBaskets()
-    }
-  }
+    },
+  },
 })
 
 expose({
-  basketStore
+  basketStore,
 })
 
 export default basketStore

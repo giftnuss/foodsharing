@@ -235,7 +235,7 @@ import {
   BFormSpinbutton,
   BButton,
   BFormRow,
-  BCol
+  BCol,
 } from 'bootstrap-vue'
 import { createPoll } from '@/api/voting'
 import { pulseError } from '@/script'
@@ -258,13 +258,13 @@ export default {
     BFormSpinbutton,
     BButton,
     BFormRow,
-    BCol
+    BCol,
   },
   props: {
     region: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
@@ -290,8 +290,8 @@ export default {
           labelSelected: i18n('timepicker.labelSelected'),
           labelNoTimeSelected: i18n('timepicker.labelNoTimeSelected'),
           labelCloseButton: i18n('timepicker.labelCloseButton'),
-          labelNowButton: i18n('timepicker.labelNowButton')
-        }
+          labelNowButton: i18n('timepicker.labelNowButton'),
+        },
       },
       labelsCalendar: {
         de: {
@@ -306,9 +306,9 @@ export default {
           labelCalendar: i18n('calendar.labelCalendar'),
           labelNav: i18n('calendar.labelNav'),
           labelHelp: i18n('calendar.labelHelp'),
-          labelTodayButton: i18n('calendar.labelToday')
-        }
-      }
+          labelTodayButton: i18n('calendar.labelToday'),
+        },
+      },
     }
   },
   validations: {
@@ -318,11 +318,11 @@ export default {
       required,
       $each: {
         required,
-        minLength: minLength(1)
-      }
+        minLength: minLength(1),
+      },
     },
     startDateTime: { required },
-    endDateTime: { required, isAfterStart }
+    endDateTime: { required, isAfterStart },
   },
   computed: {
     startDateTime () {
@@ -330,7 +330,7 @@ export default {
     },
     endDateTime () {
       return parse(this.endDate + ' ' + this.endTime, 'yyyy-MM-dd HH:mm:ss', new Date())
-    }
+    },
   },
   methods: {
     updateDateStartTimes () {
@@ -359,8 +359,8 @@ export default {
       }
 
       this.isLoading = false
-    }
-  }
+    },
+  },
 }
 </script>
 

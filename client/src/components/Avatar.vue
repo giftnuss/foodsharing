@@ -19,35 +19,35 @@ export default {
   props: {
     url: {
       type: String,
-      default: null
+      default: null,
     },
     size: {
       type: Number,
-      default: 35
+      default: 35,
     },
     sleepStatus: {
       type: Number,
-      default: 0
+      default: 0,
     },
     imgClass: {
       type: String,
-      default: ''
+      default: '',
     },
     rounded: {
       type: Boolean,
-      default: true
+      default: true,
     },
     autoScale: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     avatarUrl () {
       const prefix = {
         35: 'mini_q_',
         50: '50_q_',
-        130: '130_q_'
+        130: '130_q_',
       }[this.size] || ''
       if (this.url) {
         return '/images/' + prefix + this.url
@@ -69,8 +69,8 @@ export default {
         styles['border-radius'] = '5px'
       }
       return styles
-    }
-  }
+    },
+  },
 }
 </script>
 

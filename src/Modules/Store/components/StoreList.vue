@@ -157,7 +157,7 @@ import {
   BFormSelect,
   VBTooltip,
   BButton,
-  BCard
+  BCard,
 } from 'bootstrap-vue'
 import StoreStatusIcon from './StoreStatusIcon.vue'
 import i18n from '@/i18n'
@@ -168,20 +168,20 @@ export default {
   props: {
     regionName: {
       type: String,
-      default: ''
+      default: '',
     },
     stores: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     regionId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     showCreateStore: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
@@ -196,48 +196,48 @@ export default {
           key: 'status',
           label: i18n('storelist.status'),
           tdClass: 'status',
-          sortable: true
+          sortable: true,
         },
         {
           key: 'name',
           label: i18n('storelist.name'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'address',
           label: i18n('storelist.address'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'zipcode',
           label: i18n('storelist.zipcode'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'city',
           label: i18n('storelist.city'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'added',
           label: i18n('storelist.added'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'region',
           label: i18n('storelist.region'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'geo',
           label: i18n('storelist.geo'),
-          sortable: false
+          sortable: false,
         },
         {
           key: 'actions',
           label: '',
-          sortable: false
-        }
+          sortable: false,
+        },
       ],
       statusOptions: [
         { value: null, text: 'Status' },
@@ -245,8 +245,8 @@ export default {
         { value: 2, text: i18n('storestatus.2') }, // CooperationStatus::IN_NEGOTIATION
         { value: 3, text: i18n('storestatus.3') }, // CooperationStatus::COOPERATION_STARTING or COOPERATION_ESTABLISHED
         { value: 4, text: i18n('storestatus.4') }, // CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US
-        { value: 6, text: i18n('storestatus.6') } // CooperationStatus::GIVES_TO_OTHER_CHARITY
-      ]
+        { value: 6, text: i18n('storestatus.6') }, // CooperationStatus::GIVES_TO_OTHER_CHARITY
+      ],
     }
   },
   computed: {
@@ -284,7 +284,7 @@ export default {
       })
 
       return fields
-    }
+    },
   },
   methods: {
     clearFilter () {
@@ -293,8 +293,8 @@ export default {
     },
     mapLink: function (store) {
       return 'geo:0,0?q=' + store.geo
-    }
-  }
+    },
+  },
 }
 </script>
 <style>

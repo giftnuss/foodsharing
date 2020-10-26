@@ -19,7 +19,7 @@ export function createPoll (regionId, name, description, startDate, endDate, sco
     scope: scope,
     type: type,
     options: options,
-    notifyVoters: notifyVoters
+    notifyVoters: notifyVoters,
   })
 }
 
@@ -29,6 +29,6 @@ export async function deletePoll (pollId) {
 
 export async function vote (pollId, options) {
   return put(`/polls/${pollId}/vote`, {
-    options: options
+    options: options,
   })
 }

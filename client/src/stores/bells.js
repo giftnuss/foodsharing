@@ -3,12 +3,12 @@ import { getBellList, deleteBell, markBellsAsRead } from '@/api/bells'
 
 export default new Vue({
   data: {
-    bells: []
+    bells: [],
   },
   computed: {
     unreadCount () {
       return this.bells.filter(b => !b.isRead).length
-    }
+    },
   },
   methods: {
     async loadBells () {
@@ -45,6 +45,6 @@ export default new Vue({
     },
     allBellsWithSameHref (bell) {
       return this.bells.filter(b => b.href === bell.href)
-    }
-  }
+    },
+  },
 })

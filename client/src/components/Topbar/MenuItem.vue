@@ -32,7 +32,7 @@ export default {
     hideTitleAlways: { type: Boolean, default: false },
     hideTitleMobile: { type: Boolean, default: false },
     hideOnMobile: { type: Boolean, default: false },
-    showOnlyOnMobile: { type: Boolean, default: false }
+    showOnlyOnMobile: { type: Boolean, default: false },
   },
   computed: {
     show () {
@@ -42,8 +42,8 @@ export default {
         return this.wXS || this.wSM
       }
       return true
-    }
-  }
+    },
+  },
 }
 </script>
 

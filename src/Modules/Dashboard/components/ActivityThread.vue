@@ -44,13 +44,13 @@ export default {
   props: {
     displayedTypes: {
       type: Array,
-      default: () => { return allFilterTypes }
-    }
+      default: () => { return allFilterTypes },
+    },
   },
   data () {
     return {
       updates: [],
-      page: 0
+      page: 0,
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
         // this assumes that no other filter enables more than one type!
         return 'all'
       }
-    }
+    },
   },
   methods: {
     resetInfinity () {
@@ -91,8 +91,8 @@ export default {
       this.resetInfinity()
       this.page = 0
       this.updates = []
-    }
-  }
+    },
+  },
 }
 </script>
 

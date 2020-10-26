@@ -158,8 +158,8 @@ export default {
   props: {
     regions: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     activeRegionId () {
@@ -174,14 +174,14 @@ export default {
         if (this.activeRegionId && b.id === this.activeRegionId) return 1
         else return a.name.localeCompare(b.name)
       })
-    }
+    },
   },
   methods: {
     joinRegionDialog () {
       this.$refs.dropdown.visible = false
       becomeBezirk()
-    }
-  }
+    },
+  },
 }
 </script>
 

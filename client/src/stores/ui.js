@@ -4,23 +4,23 @@ import { GET } from '@/script'
 
 const mediaQuery = {
   xs: {
-    max: 575
+    max: 575,
   },
   sm: {
     min: 576,
-    max: 753
+    max: 753,
   },
   md: {
     min: 754,
-    max: 991
+    max: 991,
   },
   lg: {
     min: 992,
-    max: 1999
+    max: 1999,
   },
   xl: {
-    min: 1200
-  }
+    min: 1200,
+  },
 }
 
 const ui = new Vue({
@@ -32,7 +32,7 @@ const ui = new Vue({
     wLG: false,
     wXL: false,
 
-    activeRegionId: null
+    activeRegionId: null,
   },
   methods: {
     updateWindowWidth (event) {
@@ -55,8 +55,8 @@ const ui = new Vue({
         this.activeRegionId = regionId
         localStorage.setItem('lastRegion', regionId)
       }
-    }
-  }
+    },
+  },
 })
 
 ui.$nextTick(function () {

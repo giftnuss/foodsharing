@@ -10,5 +10,5 @@ import { expose } from '@/utils'
 expose({
   pictureCrop,
   pictureReady,
-  ifconfirm
+  ifconfirm,
 })

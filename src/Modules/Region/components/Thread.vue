@@ -146,8 +146,8 @@ export default {
   props: {
     id: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data () {
     return {
@@ -165,13 +165,13 @@ export default {
 
       isLoading: false,
       loadingPosts: [],
-      errorMessage: null
+      errorMessage: null,
     }
   },
   computed: {
     userId () {
       return user.id
-    }
+    },
   },
   async created () {
     this.isLoading = true
@@ -208,7 +208,7 @@ export default {
           mayModerate: res.mayModerate,
           mayDelete: res.mayDelete,
           isFollowingEmail: res.isFollowingEmail,
-          isFollowingBell: res.isFollowingBell
+          isFollowingBell: res.isFollowingBell,
         })
         this.isLoading = false
       } catch (err) {
@@ -319,8 +319,8 @@ export default {
         reactions: {},
         author: {
           name: `${user.firstname} ${user.lastname}`,
-          avatar: user.avatar['130'].replace(/^(\/images\/130_q_)/, '')
-        }
+          avatar: user.avatar['130'].replace(/^(\/images\/130_q_)/, ''),
+        },
       }
       this.loadingPosts.push(-1)
       this.posts.push(dummyPost)
@@ -358,8 +358,8 @@ export default {
         this.isLoading = false
         pulseError(i18n('error_unexpected'))
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

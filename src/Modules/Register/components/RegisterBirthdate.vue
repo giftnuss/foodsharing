@@ -62,20 +62,20 @@ import { required } from 'vuelidate/lib/validators'
 
 export default {
   components: {
-    DatePicker
+    DatePicker,
   },
   props: { birthdate: { type: Date, default: null } },
   data () {
     return {
-      de: de
+      de: de,
     }
   },
   validations: {
     birthdate: {
       required,
       dateValid,
-      ageCheck
-    }
+      ageCheck,
+    },
   },
   methods: {
     redirect () {
@@ -83,8 +83,8 @@ export default {
       if (!this.$v.$invalid) {
         this.$emit('next')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style>

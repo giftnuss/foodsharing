@@ -51,8 +51,8 @@ export default {
   props: {
     bell: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
     bellClasses () {
@@ -61,10 +61,10 @@ export default {
         'list-group-item-action',
         'flex-row',
         !this.bell.isRead ? 'list-group-item-warning' : null,
-        this.bell.isDeleting ? 'disabledLoading' : null
+        this.bell.isDeleting ? 'disabledLoading' : null,
       ]
-    }
-  }
+    },
+  },
 }
 </script>
 

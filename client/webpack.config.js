@@ -28,8 +28,8 @@ if (!dev) {
       generateStatsFile: false,
       statsFilename: 'stats.json',
       statsOptions: null,
-      logLevel: 'info'
-    })
+      logLevel: 'info',
+    }),
   )
 }
 
@@ -51,22 +51,22 @@ plugins.push(
         writeFileSync(modulesJsonPath, json)
         return Promise.resolve()
       })
-    }
-  }
+    },
+  },
 )
 plugins.push(
   new CopyWebpackPlugin({
     patterns: [
-      { from: './lib/tinymce', to: './tinymce' }
-    ]
-  })
+      { from: './lib/tinymce', to: './tinymce' },
+    ],
+  }),
 )
 
 plugins.push(
   new ServiceWorkerWebpackPlugin({
     entry: path.join(__dirname, 'src/serviceWorker.js'),
-    filename: '../sw.js'
-  })
+    filename: '../sw.js',
+  }),
 )
 
 module.exports = merge(webpackBase, {
@@ -78,12 +78,12 @@ module.exports = merge(webpackBase, {
     path: assetsPath,
     ...(dev ? {
       filename: 'js/[name].js',
-      chunkFilename: 'js/[chunkhash].js'
+      chunkFilename: 'js/[chunkhash].js',
     } : {
       filename: 'js/[name].[hash].js',
-      chunkFilename: 'js/[id].[chunkhash].js'
+      chunkFilename: 'js/[id].[chunkhash].js',
     }),
-    publicPath: '/assets/'
+    publicPath: '/assets/',
   },
   module: {
     rules: [
@@ -92,45 +92,45 @@ module.exports = merge(webpackBase, {
         test: /\.(js|vue)$/,
         exclude: [
           /node_modules/,
-          resolve('lib')
+          resolve('lib'),
         ],
         loader: 'eslint-loader',
         options: {
-          configFile: resolve('package.json')
-        }
+          configFile: resolve('package.json'),
+        },
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: dev ? 'img/[name].[ext]' : 'img/[name].[hash:7].[ext]'
-        }
+          name: dev ? 'img/[name].[ext]' : 'img/[name].[hash:7].[ext]',
+        },
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]'
-        }
-      }
-    ]
+          name: dev ? 'fonts/[name].[ext]' : 'fonts/[name].[hash:7].[ext]',
+        },
+      },
+    ],
   },
   plugins,
   optimization: {
     minimizer: [
       new TerserPlugin({
-        sourceMap: true
-      })
+        sourceMap: true,
+      }),
     ],
     runtimeChunk: true,
     splitChunks: {
       chunks: 'all',
       name: dev,
-      maxInitialRequests: 5
-    }
-  }
+      maxInitialRequests: 5,
+    },
+  },
 })
 
 function resolve (dir) {

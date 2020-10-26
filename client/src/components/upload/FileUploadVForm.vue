@@ -29,36 +29,36 @@ export default {
   components: { FileUpload },
   props: {
     isImage: {
-      type: Boolean
+      type: Boolean,
     },
     initialValue: {
       type: String,
-      default: null
+      default: null,
     },
     inputName: {
       type: String,
-      default: 'file'
+      default: 'file',
     },
     imgHeight: {
       type: Number,
-      default: 0
+      default: 0,
     },
     imgWidth: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data () {
     return {
-      value: this.initialValue
+      value: this.initialValue,
     }
   },
   methods: {
     onFileChange (file) {
       console.log(file)
       this.value = file.url
-    }
-  }
+    },
+  },
 }
 </script>
 

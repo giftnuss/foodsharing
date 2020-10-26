@@ -17,7 +17,7 @@ export function registerUser (firstName, lastName, email, password, gender, birt
     gender: gender,
     birthdate: birthdate,
     mobilePhone: mobilePhone,
-    subscribeNewsletter: subscribeNewsletter
+    subscribeNewsletter: subscribeNewsletter,
   })
 }
 

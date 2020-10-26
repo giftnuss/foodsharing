@@ -28,13 +28,13 @@ export async function initializeMap (el, cb = null) {
     zoom = 13,
     searchpanel = false,
     markers = [],
-    defaultMarkerOptions
+    defaultMarkerOptions,
   } = mapOptions
 
   defaultMarker = L.AwesomeMarkers.icon({
     icon: defaultMarkerOptions.icon,
     markerColor: defaultMarkerOptions.color,
-    prefix: defaultMarkerOptions.prefix
+    prefix: defaultMarkerOptions.prefix,
   })
 
   map = initMap(el, center, zoom)
@@ -59,7 +59,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
     {
       icon: 'smile',
       markerColor: 'orange',
-      prefix: 'fa'
+      prefix: 'fa',
     })
 
   const engine = new PhotonAddressEngine(
@@ -70,19 +70,19 @@ function initializeSearchpanel (searchpanel, cb = null) {
         const formatted = [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
         return formatted
       },
-      lang: 'de'
-    }
+      lang: 'de',
+    },
   )
 
   $searchpanel.typeahead(
     {
       highlight: true,
       minLength: 3,
-      hint: true
+      hint: true,
     },
     {
       displayKey: 'description',
-      source: engine.ttAdapter()
+      source: engine.ttAdapter(),
     })
   engine.bindDefaultTypeaheadEvent($searchpanel)
 
@@ -98,7 +98,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
       const b = result.properties.extent
       map.fitBounds([
         [b[1], b[0]],
-        [b[3], b[2]]
+        [b[3], b[2]],
       ])
     } else {
       map.setView(latLng, 15)

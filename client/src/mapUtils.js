@@ -9,7 +9,7 @@ export function initMap (element, center, zoom, maxZoom = 20) {
 
   if (isWebGLSupported()) {
     L.mapboxGL({
-      style: MAP_TILES_URL
+      style: MAP_TILES_URL,
     }).addTo(map)
   } else {
     // WebGL is not supported, fallback to raster tiles

@@ -17,8 +17,8 @@ export default {
   props: {
     date: { type: Date, default: null },
     link: { type: String, default: '' },
-    classes: { type: String, default: '' }
-  }
+    classes: { type: String, default: '' },
+  },
 }
 </script>
 

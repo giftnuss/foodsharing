@@ -64,12 +64,12 @@ export default {
   props: {
     groupId: {
       type: Number,
-      default: -1
+      default: -1,
     },
     subforumId: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
@@ -78,15 +78,15 @@ export default {
       query: '',
       isOpen: false,
       isLoading: false,
-      threads: []
+      threads: [],
     }
   },
   computed: {
     resultsStyle () {
       return {
-        left: `${this.posX}px`
+        left: `${this.posX}px`,
       }
-    }
+    },
   },
   watch: {
     query (query) {
@@ -102,7 +102,7 @@ export default {
         this.close()
         this.isLoading = false
       }
-    }
+    },
   },
   mounted () {
     // close the result box if another dropdown menu gets opened
@@ -139,8 +139,8 @@ export default {
     },
     clickOutListener () {
       this.isOpen = false
-    }
-  }
+    },
+  },
 }
 </script>
 

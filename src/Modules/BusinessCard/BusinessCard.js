@@ -5,7 +5,7 @@ import $ from 'jquery'
 import { expose } from '@/utils'
 
 expose({
-  u_download
+  u_download,
 })
 
 function u_download (short) {

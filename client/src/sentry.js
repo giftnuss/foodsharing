@@ -7,6 +7,6 @@ if (serverData.ravenConfig) {
   console.log('using sentry config from server', serverData.ravenConfig)
   Sentry.init({
     dsn: serverData.ravenConfig,
-    integrations: [new Integrations.Vue({ Vue, attachProps: true, logErrors: true })]
+    integrations: [new Integrations.Vue({ Vue, attachProps: true, logErrors: true })],
   })
 }

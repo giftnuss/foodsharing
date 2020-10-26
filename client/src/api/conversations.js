@@ -20,13 +20,13 @@ export function getMessages (conversationId, olderThanID) {
 
 export function sendMessage (conversationId, body) {
   return post(`/conversations/${conversationId}/messages`, {
-    body: body
+    body: body,
   })
 }
 
 export function renameConversation (conversationId, newName) {
   return patch(`/conversations/${conversationId}`, {
-    name: newName
+    name: newName,
   })
 }
 
@@ -36,7 +36,7 @@ export function removeUserFromConversation (conversationId, userId) {
 
 export function createConversation (userIds) {
   return post('/conversations', {
-    members: userIds
+    members: userIds,
   })
 }
 

@@ -25,7 +25,7 @@ const storage = {
   reset: function () {
     this.del('badge')
     this.del('msg-chats')
-  }
+  },
 }
 
 export default storage

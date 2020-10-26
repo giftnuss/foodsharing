@@ -26,25 +26,25 @@ export default {
   props: {
     href: {
       type: String,
-      default: null
+      default: null,
     },
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     teaser: {
       type: String,
-      default: ''
+      default: '',
     },
     teaserIcon: {
       type: String,
-      default: ''
+      default: '',
     },
     image: {
       type: String,
-      default: ''
-    }
-  }
+      default: '',
+    },
+  },
 }
 </script>
 

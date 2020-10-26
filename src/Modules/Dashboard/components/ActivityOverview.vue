@@ -93,13 +93,13 @@ export default {
   props: {
     allTypes: {
       type: Array,
-      default: () => { return allFilterTypes }
-    }
+      default: () => { return allFilterTypes },
+    },
   },
   data () {
     return {
       displayedTypes: this.allTypes,
-      showListings: false
+      showListings: false,
     }
   },
   computed: {
@@ -110,7 +110,7 @@ export default {
         // this assumes that no other filter enables more than one type!
         return null
       }
-    }
+    },
   },
   methods: {
     filter: function (category = null) {
@@ -136,8 +136,8 @@ export default {
         default:
           return null
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

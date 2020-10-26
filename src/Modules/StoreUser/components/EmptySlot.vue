@@ -55,18 +55,18 @@ export default {
   props: {
     allowJoin: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowRemove: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
-      hover: false
+      hover: false,
     }
-  }
+  },
 }
 </script>
 

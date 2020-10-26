@@ -73,8 +73,8 @@ export default {
   props: {
     basket: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   methods: {
     openChat (userId, e) {
@@ -82,8 +82,8 @@ export default {
     },
     openRemoveDialog (userId, e) {
       this.$emit('basketRemove', this.basket.id, userId)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -14,6 +14,6 @@ export function deleteBell (id) {
  */
 export async function markBellsAsRead (ids) {
   return (await patch('/bells', {
-    ids: ids
+    ids: ids,
   })).marked
 }

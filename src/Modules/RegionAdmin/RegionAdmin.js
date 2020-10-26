@@ -23,7 +23,7 @@ expose({
   deleteActiveGroup,
   initMap,
   tryMasterUpdate,
-  searchUser
+  searchUser,
 })
 
 async function deleteActiveGroup () {

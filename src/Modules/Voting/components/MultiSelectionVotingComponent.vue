@@ -22,12 +22,12 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
-      selected: []
+      selected: [],
     }
   },
   computed: {
@@ -38,15 +38,15 @@ export default {
         v[x.toString()] = 1
       }
       return v
-    }
+    },
   },
   watch: {
-    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) }
+    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) },
   },
   created () {
     this.$emit('updateValidSelection', true)
     this.$emit('updateVotingRequestValues', this.votingRequestValues)
-  }
+  },
 }
 </script>
 

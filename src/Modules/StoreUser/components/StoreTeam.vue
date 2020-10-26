@@ -191,14 +191,14 @@ export default {
     mayEditStore: { type: Boolean, default: false },
     team: { type: Array, required: true },
     storeId: { type: Number, required: true },
-    storeTitle: { type: String, default: '' }
+    storeTitle: { type: String, default: '' },
   },
   data () {
     return {
       sortfun: this.tableSortFunction,
       sortdesc: true,
       managementModeEnabled: false,
-      displayMembers: true
+      displayMembers: true,
     }
   },
   computed: {
@@ -208,7 +208,7 @@ export default {
     tableFields () {
       const fields = [
         { key: 'ava', class: 'col-ava', sortable: true },
-        { key: 'info', class: 'col-info' }
+        { key: 'info', class: 'col-info' },
       ]
       if (this.wSM) {
         fields.push({ key: 'mobinfo', class: 'col-mobinfo' })
@@ -217,7 +217,7 @@ export default {
         fields.push({ key: 'call', class: 'col-call' })
       }
       return fields
-    }
+    },
   },
   methods: {
     toggleManageControls () {
@@ -259,7 +259,7 @@ export default {
       const fData = {
         bid: this.storeId,
         fsid: fsId,
-        action: newStatus
+        action: newStatus,
       }
       xhrf('bcontext', fData)
       const index = this.team.findIndex(fs => fs.id === fsId)
@@ -283,7 +283,7 @@ export default {
       const fData = {
         bid: this.storeId,
         fsid: fsId,
-        action: 'delete'
+        action: 'delete',
       }
       xhrf('bcontext', fData)
       const index = this.foodsaver.findIndex(member => member.id === fsId)
@@ -354,10 +354,10 @@ export default {
         phone: fs.telefon,
         joinDate: fs.add_date ? fromUnixTime(fs.add_date) : null,
         lastPickup: fs.last_fetch ? fromUnixTime(fs.last_fetch) : null,
-        fetchCount: fs.stat_fetchcount
+        fetchCount: fs.stat_fetchcount,
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

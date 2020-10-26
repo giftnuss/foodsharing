@@ -59,7 +59,7 @@ export default {
 
   validations: {
     acceptGdpr: { sameAs: sameAs(() => true) },
-    acceptLegal: { sameAs: sameAs(() => true) }
-  }
+    acceptLegal: { sameAs: sameAs(() => true) },
+  },
 }
 </script>

@@ -118,13 +118,13 @@ export default {
   props: {
     workingGroups: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     alwaysOpen () {
       return this.workingGroups.length <= 2
-    }
-  }
+    },
+  },
 }
 </script>

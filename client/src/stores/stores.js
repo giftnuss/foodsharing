@@ -3,11 +3,11 @@ import { listStoresForCurrentUser } from '@/api/stores'
 
 export default new Vue({
   data: {
-    stores: null
+    stores: null,
   },
   methods: {
     async loadStores () {
       this.stores = await listStoresForCurrentUser()
-    }
-  }
+    },
+  },
 })

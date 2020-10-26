@@ -15,16 +15,16 @@ export default {
   props: {
     displayArrow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     displayText: {
       type: Boolean,
-      default: false
+      default: false,
     },
     displayMailbox: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     const contactMenuItems = []
@@ -39,7 +39,7 @@ export default {
     return {
       headings: [{
         heading: 'menu.entry.contact',
-        menuItems: contactMenuItems
+        menuItems: contactMenuItems,
       },
       {
         heading: 'menu.entry.regionalgroups',
@@ -47,11 +47,11 @@ export default {
           { url: 'communitiesGermany', menuTitle: 'menu.entry.Germany' },
           { url: 'communitiesAustria', menuTitle: 'menu.entry.Austria' },
           { url: 'communitiesSwitzerland', menuTitle: 'menu.entry.Swiss' },
-          { url: 'international', menuTitle: 'menu.entry.international' }
-        ]
-      }]
+          { url: 'international', menuTitle: 'menu.entry.international' },
+        ],
+      }],
     }
-  }
+  },
 }
 
 </script>

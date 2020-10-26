@@ -53,14 +53,14 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
       selected: Array(this.options.length).fill(0),
       marks: [-3, -2, -1, 0, 1, 2, 3],
-      smallLayout: window.innerWidth < 500
+      smallLayout: window.innerWidth < 500,
     }
   },
   computed: {
@@ -70,10 +70,10 @@ export default {
         v[this.options[i].optionIndex] = this.selected[i]
       }
       return v
-    }
+    },
   },
   watch: {
-    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) }
+    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) },
   },
   created () {
     this.$emit('updateValidSelection', true)
@@ -83,8 +83,8 @@ export default {
   methods: {
     updateWidth (event) {
       this.smallLayout = window.innerWidth < 500
-    }
-  }
+    },
+  },
 }
 </script>
 

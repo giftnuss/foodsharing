@@ -1,23 +1,23 @@
 // mostly copied from https://github.com/jofftiquez/vue-media-query-mixin
 const mediaQuery = {
   xs: {
-    max: 575
+    max: 575,
   },
   sm: {
     min: 576,
-    max: 767
+    max: 767,
   },
   md: {
     min: 768,
-    max: 991
+    max: 991,
   },
   lg: {
     min: 992,
-    max: 1999
+    max: 1999,
   },
   xl: {
-    min: 1200
-  }
+    min: 1200,
+  },
 }
 
 export default {
@@ -28,7 +28,7 @@ export default {
       wSM: false,
       wMD: false,
       wLG: false,
-      wXL: false
+      wXL: false,
     }
   },
   mounted () {
@@ -46,9 +46,9 @@ export default {
       this.wMD = w >= mediaQuery.md.min && w <= mediaQuery.md.max
       this.wLG = w >= mediaQuery.lg.min && w <= mediaQuery.lg.max
       this.wXL = w >= mediaQuery.xl.min
-    }
+    },
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.getWindowWidth)
-  }
+  },
 }

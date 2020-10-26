@@ -120,24 +120,24 @@ export default {
   props: {
     regionName: {
       type: String,
-      default: ''
+      default: '',
     },
     pickupDataDailyTab: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     pickupDataWeeklyTab: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     pickupDataMonthlyTab: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     pickupDataYearlyTab: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data () {
     return {
@@ -152,30 +152,30 @@ export default {
         {
           key: 'time',
           label: this.$i18n('pickuplist.time_table_header'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'NumberOfStores',
           label: this.$i18n('pickuplist.NumberOfStores_table_header'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'NumberOfAppointments',
           label: this.$i18n('pickuplist.NumberOfAppointments_table_header'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'NumberOfSlots',
           label: this.$i18n('pickuplist.NumberOfSlots_table_header'),
-          sortable: true
+          sortable: true,
         },
         {
           key: 'NumberOfFoodsavers',
           label: this.$i18n('pickuplist.NumberOfFoodSavers_table_header'),
-          sortable: true
-        }
-      ]
+          sortable: true,
+        },
+      ],
     }
-  }
+  },
 }
 </script>

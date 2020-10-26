@@ -13,7 +13,7 @@ export function u_delPost (postId, module, wallId) {
       if (data.status == 1) {
         $(`.wallpost-${postId}`).remove()
       }
-    }
+    },
   })
 }
 
@@ -79,7 +79,7 @@ export function init (module, wallId) {
         data:
           {
             text: text,
-            attach: attach
+            attach: attach,
           },
         dataType: 'JSON',
         success:
@@ -92,7 +92,7 @@ export function init (module, wallId) {
                 $.globalEval(data.script)
               }
             }
-          }
+          },
       })
 
       $('#wallpost-text').val('')
@@ -116,6 +116,6 @@ export function init (module, wallId) {
           $('.wall-posts').html(data.html)
           $('.preview-thumb').fancybox()
         }
-      }
+      },
   })
 }

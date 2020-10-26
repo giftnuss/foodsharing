@@ -14,15 +14,15 @@ module.exports = {
     publicPath: '/assets/',
     overlay: {
       warnings: true,
-      errors: true
+      errors: true,
     },
     proxy: {
       '!/sockjs-node/**': {
         target,
         changeOrigin: true,
         xfwd: true,
-        ws: true
-      }
-    }
-  }
+        ws: true,
+      },
+    },
+  },
 }

@@ -15,12 +15,12 @@ export async function setFilters (options) {
     for (var item in options[optionId].items) {
       excluded.push({
         index: options[optionId].index,
-        id: options[optionId].items[item].id
+        id: options[optionId].items[item].id,
       })
     }
   }
   return patch('/activities/filters', {
-    excluded: excluded
+    excluded: excluded,
   })
 }
 

@@ -27,8 +27,8 @@ export default {
   props: {
     classes: { type: String, default: 'mh-50px' },
     mayEditStore: { type: Boolean, required: true },
-    member: { type: Object, required: true }
-  }
+    member: { type: Object, required: true },
+  },
 }
 </script>
 

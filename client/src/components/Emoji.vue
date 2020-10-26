@@ -12,13 +12,13 @@ export default {
   props: {
     name: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   data () {
     return {
-      emojis: emojiList
+      emojis: emojiList,
     }
-  }
+  },
 }
 </script>

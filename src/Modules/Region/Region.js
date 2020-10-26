@@ -5,7 +5,7 @@ import $ from 'jquery'
 import {
   goTo,
   GET,
-  pulseError
+  pulseError,
 } from '@/script'
 import i18n from '@/i18n'
 import './Region.css'
@@ -48,22 +48,22 @@ $(document).ready(() => {
       },
       [i18n('button.cancel')]: function () {
         $(this).dialog('close')
-      }
-    }
+      },
+    },
   })
 
   if (GET('sub') == 'wall') {
     wall.init('bezirk', GET('bid'))
   } else if (GET('sub') === 'members') {
     vueRegister({
-      MemberList
+      MemberList,
     })
     vueApply('#vue-memberlist')
   } else if (GET('sub') == 'statistic') {
     vueRegister({
       GenderList,
       PickupList,
-      AgeBandList
+      AgeBandList,
     })
     vueApply('#vue-genderlist')
     vueApply('#vue-ageBandlist')
@@ -71,18 +71,18 @@ $(document).ready(() => {
   } else if (['botforum', 'forum'].includes(GET('sub'))) {
     if (GET('tid') !== undefined) {
       vueRegister({
-        Thread
+        Thread,
       })
       vueApply('#vue-thread')
     } else if (!GET('newthread')) {
       vueRegister({
-        ThreadList
+        ThreadList,
       })
       vueApply('#vue-threadlist')
     }
   } else if (GET('sub') === 'polls') {
     vueRegister({
-      PollList
+      PollList,
     })
     vueApply('#vue-polllist')
   }

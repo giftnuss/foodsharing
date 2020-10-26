@@ -191,18 +191,18 @@ export default {
   props: {
     isFsDotAt: {
       type: Boolean,
-      default: false
+      default: false,
     },
     srcRevision: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     revisionLink () {
       return 'https://gitlab.com/foodsharing-dev/foodsharing/tree/' + this.srcRevision
-    }
-  }
+    },
+  },
 }
 </script>
 

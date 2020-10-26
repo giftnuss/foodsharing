@@ -13,7 +13,7 @@ describe('i18n', () => {
   it('translation with variables', () => {
     assert.strictEqual(i18n('test.vars', {
       NAME: 'Peter',
-      AGE: 23
+      AGE: 23,
     }), 'My name is Peter and I am 23 years old')
   })
 
@@ -28,7 +28,7 @@ describe('i18n', () => {
   it('accepts falsy value as variable', () => {
     assert.strictEqual(i18n('test.vars', {
       NAME: '',
-      AGE: 0
+      AGE: 0,
     }), 'My name is  and I am 0 years old')
   })
 })

@@ -102,16 +102,16 @@ export default {
   props: {
     regionName: {
       type: String,
-      default: ''
+      default: '',
     },
     members: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isWorkGroup: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
@@ -123,14 +123,14 @@ export default {
           key: 'imageUrl',
           sortable: false,
           label: '',
-          class: 'foto-column'
+          class: 'foto-column',
         }, {
           key: 'userName',
           label: this.$i18n('group.name'),
           sortable: false,
-          class: 'align-middle'
-        }
-      ]
+          class: 'align-middle',
+        },
+      ],
     }
   },
   computed: {
@@ -145,7 +145,7 @@ export default {
           )
         )
       })
-    }
+    },
   },
   methods: {
     compare: optimizedCompare,
@@ -153,8 +153,8 @@ export default {
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''
-    }
-  }
+    },
+  },
 }
 </script>
 

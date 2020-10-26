@@ -59,7 +59,7 @@ export default {
   components: { MenuBellsEntry, FsDropdownMenu },
   props: {
     showOnlyOnMobile: { type: Boolean, default: false },
-    hideOnlyOnMobile: { type: Boolean, default: false }
+    hideOnlyOnMobile: { type: Boolean, default: false },
   },
   computed: {
     bells () {
@@ -71,7 +71,7 @@ export default {
     },
     unread () {
       return bellStore.unreadCount
-    }
+    },
   },
   created () {
     bellStore.loadBells()
@@ -99,8 +99,8 @@ export default {
       } catch {
         pulseError(i18n('error_unexpected'))
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

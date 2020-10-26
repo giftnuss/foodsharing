@@ -121,7 +121,7 @@ export default {
       rememberMe: false,
       isLoading: false,
       error: null,
-      focusLogin: false
+      focusLogin: false,
     }
   },
   watch: {
@@ -130,7 +130,7 @@ export default {
         this.$refs.email.focus()
         this.$refs.email.select()
       }
-    }
+    },
   },
   methods: {
     async submit () {
@@ -176,8 +176,8 @@ export default {
           ;(ref.$el || ref).focus()
         })
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

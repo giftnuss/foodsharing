@@ -78,45 +78,45 @@ export default {
   props: {
     particularitiesDescription: {
       type: String,
-      default: ''
+      default: '',
     },
     collectionQuantity: {
       type: String,
-      default: ''
+      default: '',
     },
     storeTitle: {
       type: String,
-      default: null
+      default: null,
     },
     street: {
       type: String,
-      default: ''
+      default: '',
     },
     housenumber: {
       type: String,
-      default: ''
+      default: '',
     },
     postcode: {
       type: String,
-      default: ''
+      default: '',
     },
     city: {
       type: String,
-      default: ''
+      default: '',
     },
     lastFetchDate: {
       type: Date,
-      default: null
+      default: null,
     },
     press: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   computed: {
     allowedToMentionInPublic () {
       return this.press === 1
-    }
+    },
   },
   methods: {
     formatLastFetchDate () {
@@ -125,8 +125,8 @@ export default {
 
     distanceInDays () {
       return differenceInCalendarDays(new Date(), new Date(this.lastFetchDate))
-    }
-  }
+    },
+  },
 }
 </script>
 

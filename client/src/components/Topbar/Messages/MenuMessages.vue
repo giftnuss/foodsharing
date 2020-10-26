@@ -54,19 +54,19 @@ export default {
   components: { MenuMessagesEntry, FsDropdownMenu },
   props: {
     showOnlyOnMobile: { type: Boolean, default: false },
-    hideOnlyOnMobile: { type: Boolean, default: false }
+    hideOnlyOnMobile: { type: Boolean, default: false },
   },
   computed: {
     conversations () {
       /* let res = Array.from(conversationStore.conversations) // .filter(c => c.lastMessage || c.messages)
       return res */
       return Object.values(conversationStore.conversations).filter((a) => (a.lastMessage != null)).sort(
-        (a, b) => (a.hasUnreadMessages === b.hasUnreadMessages) ? ((a.lastMessage.sentAt < b.lastMessage.sentAt) ? 1 : -1) : (a.hasUnreadMessages ? -1 : 1)
+        (a, b) => (a.hasUnreadMessages === b.hasUnreadMessages) ? ((a.lastMessage.sentAt < b.lastMessage.sentAt) ? 1 : -1) : (a.hasUnreadMessages ? -1 : 1),
       )
     },
     unread () {
       return conversationStore.unreadCount
-    }
+    },
   },
   created () {
     return conversationStore.loadConversations()
@@ -78,8 +78,8 @@ export default {
     markUnreadMessagesAsRead () {
       conversationStore.markUnreadMessagesAsRead()
       this.close()
-    }
-  }
+    },
+  },
 }
 </script>
 

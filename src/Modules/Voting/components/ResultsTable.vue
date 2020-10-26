@@ -65,12 +65,12 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
+      required: true,
     },
     numVotes: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     numValues () {
@@ -83,8 +83,8 @@ export default {
           sortable: true,
           sortByFormatted: 'true',
           label: this.$i18n('poll.results.option_text'),
-          class: 'align-left'
-        }
+          class: 'align-left',
+        },
       ]
 
       const entries = Object.entries(this.options[0].values).sort(function (a, b) {
@@ -99,7 +99,7 @@ export default {
           class: 'align-middle',
           formatter: (value, key, item) => {
             return item.values[v[0]]
-          }
+          },
         })
       })
 
@@ -112,11 +112,11 @@ export default {
           class: 'align-middle',
           formatter: (value, key, item) => {
             return this.averageVotes(item)
-          }
+          },
         })
       }
       return result
-    }
+    },
   },
   methods: {
     averageVotes (option) {
@@ -125,7 +125,7 @@ export default {
         average += v * option.values[v]
       }
       return average
-    }
-  }
+    },
+  },
 }
 </script>

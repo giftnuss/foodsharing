@@ -43,7 +43,7 @@ import { url } from '@/urls'
 export default {
   components: { Avatar },
   props: {
-    thread: { type: Object, required: true }
+    thread: { type: Object, required: true },
   },
   computed: {
     threadUrl () {
@@ -51,8 +51,8 @@ export default {
     },
     lastPostDate () {
       return dateFnsParseISO(this.thread.lastPost.createdAt)
-    }
-  }
+    },
+  },
 }
 </script>
 

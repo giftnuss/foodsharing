@@ -76,26 +76,26 @@ export default {
   props: {
     storeId: {
       type: Number,
-      required: true
+      required: true,
     },
     storeTitle: {
       type: String,
-      default: ''
+      default: '',
     },
     isCoordinator: {
       type: Boolean,
-      default: false
+      default: false,
     },
     teamConversationId: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data () {
     return {
       pickups: [],
       isLoading: false,
-      user: user
+      user: user,
     }
   },
   _interval: null,
@@ -181,15 +181,15 @@ export default {
         'adddate',
         {
           app: 'betrieb',
-          id: this.storeId
-        }
+          id: this.storeId,
+        },
       )
     },
     loadEditRecurringPickupModal () {
       $('#bid').val(this.storeId)
       $('#editpickups').dialog('open')
-    }
-  }
+    },
+  },
 }
 </script>
 

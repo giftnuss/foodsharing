@@ -35,9 +35,9 @@ export default {
   props: {
     mayAddStore: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 

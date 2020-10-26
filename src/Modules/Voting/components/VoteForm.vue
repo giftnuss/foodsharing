@@ -79,22 +79,22 @@ export default {
     BButton,
     BForm,
     BAlert,
-    BModal
+    BModal,
   },
   props: {
     poll: {
       type: Object,
-      required: true
+      required: true,
     },
     mayVote: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
       isValidSelection: false,
-      votingRequestValues: null
+      votingRequestValues: null,
     }
   },
   methods: {
@@ -124,7 +124,7 @@ export default {
     },
     updateVotingRequestValues (value) {
       this.votingRequestValues = value
-    }
-  }
+    },
+  },
 }
 </script>

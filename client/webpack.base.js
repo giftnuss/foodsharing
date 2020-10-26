@@ -7,7 +7,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const plugins = [
   new VueLoaderPlugin(),
-  new WriteFilePlugin() // to write files to filesystem when using webpack-dev-server
+  new WriteFilePlugin(), // to write files to filesystem when using webpack-dev-server
 ]
 
 const production = process.env.NODE_ENV === 'production'
@@ -16,8 +16,8 @@ if (production) {
   plugins.push(
     new MiniCssExtractPlugin({
       filename: 'css/[id].[hash].css',
-      chunkFilename: 'css/[id].[hash].css'
-    })
+      chunkFilename: 'css/[id].[hash].css',
+    }),
   )
 }
 
@@ -25,7 +25,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue'],
     modules: [
-      resolve('node_modules')
+      resolve('node_modules'),
     ],
     alias: {
       ...shims.alias,
@@ -36,8 +36,8 @@ module.exports = {
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
-      '@translations': resolve('../translations')
-    }
+      '@translations': resolve('../translations'),
+    },
   },
   module: {
     rules: [
@@ -45,7 +45,7 @@ module.exports = {
         test: /\.js$/,
         exclude: [
           /(node_modules)/,
-          resolve('lib') // ignore the old lib/**.js files
+          resolve('lib'), // ignore the old lib/**.js files
         ],
         use: {
           loader: 'babel-loader',
@@ -55,53 +55,53 @@ module.exports = {
                 '@babel/preset-env',
                 {
                   targets: {
-                    browsers: ['> 0.5%', 'ie_mob >=11']
+                    browsers: ['> 0.5%', 'ie_mob >=11'],
                   },
                   useBuiltIns: 'usage',
                   modules: 'commonjs',
-                  corejs: '3'
-                }
-              ]
-            ]
-          }
-        }
+                  corejs: '3',
+                },
+              ],
+            ],
+          },
+        },
       },
       {
         test: /\.vue$/,
         exclude: /(node_modules)/,
-        use: 'vue-loader'
+        use: 'vue-loader',
       },
       {
         test: /\.css$/,
         use: [
           production ? MiniCssExtractPlugin.loader : 'style-loader',
           {
-            loader: 'css-loader'
-          }
-        ]
+            loader: 'css-loader',
+          },
+        ],
       },
       {
         test: /\.scss$/,
         use: [
           production ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       {
         test: /\.yml$/,
         exclude: [
-          /(node_modules)/
+          /(node_modules)/,
         ],
         use: [
           'json-loader',
-          'yaml-loader'
-        ]
+          'yaml-loader',
+        ],
       },
-      ...shims.rules
-    ]
+      ...shims.rules,
+    ],
   },
-  plugins
+  plugins,
 }
 
 function resolve (dir) {

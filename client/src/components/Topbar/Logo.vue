@@ -17,9 +17,9 @@ export default {
   props: {
     linkUrl: {
       type: String,
-      default: ''
-    }
-  }
+      default: '',
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

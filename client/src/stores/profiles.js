@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default new Vue({
   data: {
-    profiles: {}
+    profiles: {},
   },
   methods: {
     updateFrom (profiles) {
@@ -11,8 +11,8 @@ export default new Vue({
           Vue.set(this.profiles, profile.id, convertProfile(profile))
         }
       }
-    }
-  }
+    },
+  },
 })
 
 export function convertProfile (val) {
@@ -20,7 +20,7 @@ export function convertProfile (val) {
     return val.map(convertProfile)
   } else {
     return {
-      ...val
+      ...val,
     }
   }
 }

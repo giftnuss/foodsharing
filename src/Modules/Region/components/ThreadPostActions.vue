@@ -94,16 +94,16 @@ export default {
   props: {
     reactions: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     mayDelete: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
-      emojis: emojiList
+      emojis: emojiList,
     }
   },
   computed: {
@@ -115,7 +115,7 @@ export default {
     },
     emojisToGive () {
       return pickBy(this.emojis, (symbol, key) => !this.gaveIThisReaction(key))
-    }
+    },
   },
   methods: {
     toggleReaction (key, dontRemove = false) {
@@ -143,8 +143,8 @@ export default {
         return names[0]
       }
       return `${names.slice(0, names.length - 1).join(', ')} & ${names[names.length - 1]}`
-    }
-  }
+    },
+  },
 }
 </script>
 

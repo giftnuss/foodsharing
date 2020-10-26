@@ -52,7 +52,7 @@ export default {
   computed: {
     stores () {
       return vueStore.stores || []
-    }
+    },
   },
   async created () {
     this.loadStores()
@@ -75,8 +75,8 @@ export default {
     tooltipId (pickupStatus) {
       const ids = ['', 'store.tooltip_yellow', 'store.tooltip_orange', 'store.tooltip_red']
       return ids[pickupStatus]
-    }
-  }
+    },
+  },
 }
 </script>
 

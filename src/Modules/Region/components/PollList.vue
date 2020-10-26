@@ -107,21 +107,21 @@ export default {
   props: {
     regionId: {
       type: Number,
-      required: true
+      required: true,
     },
     polls: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     mayCreatePoll: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
       currentPage: 1,
-      perPage: 20
+      perPage: 20,
     }
   },
   computed: {
@@ -133,7 +133,7 @@ export default {
     },
     endedPolls: function () {
       return this.polls.filter(p => this.isPollInPast(p))
-    }
+    },
   },
   methods: {
     compare: optimizedCompare,
@@ -148,8 +148,8 @@ export default {
     },
     formatDate (date, formatStr) {
       return format(date, formatStr)
-    }
-  }
+    },
+  },
 }
 </script>
 

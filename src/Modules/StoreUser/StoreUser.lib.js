@@ -15,7 +15,7 @@ export function u_updatePosts () {
       if (data.status == 1) {
         $('#pinnwand .posts').html(data.html)
       }
-    }
+    },
   })
 }
 
@@ -38,7 +38,7 @@ export function acceptRequest (fsid, bid) {
         reload()
       }
     },
-    complete: function () { hideLoader() }
+    complete: function () { hideLoader() },
   })
 }
 export function warteRequest (fsid, bid) {
@@ -52,7 +52,7 @@ export function warteRequest (fsid, bid) {
         reload()
       }
     },
-    complete: function () { hideLoader() }
+    complete: function () { hideLoader() },
   })
 }
 export async function denyRequest (fsid, bid) {

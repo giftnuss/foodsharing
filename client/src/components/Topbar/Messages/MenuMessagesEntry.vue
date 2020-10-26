@@ -40,8 +40,8 @@ export default {
   props: {
     conversation: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
     classes () {
@@ -50,7 +50,7 @@ export default {
         'list-group-item-action',
         'flex-column',
         'align-items-start',
-        this.conversation.hasUnreadMessages ? 'list-group-item-warning' : null
+        this.conversation.hasUnreadMessages ? 'list-group-item-warning' : null,
       ]
     },
     title () {
@@ -95,14 +95,14 @@ export default {
     },
     loggedinUser () {
       return serverData.user
-    }
+    },
   },
   methods: {
     openChat () {
       conv.chat(this.conversation.id)
       this.$emit('chatOpened')
-    }
-  }
+    },
+  },
 }
 </script>
 

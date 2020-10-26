@@ -48,7 +48,7 @@ export const sleepmode = {
       var $this = $(this)
       $this.children('.bubble').remove()
     })
-  }
+  },
 }
 
 export function initialize () {
@@ -80,7 +80,7 @@ export function initialize () {
       if (($this.height() > max_height) || $this.hasClass('force-collapse')) {
         $this.css({
           height: `${max_height}px`,
-          overflow: 'hidden'
+          overflow: 'hidden',
         })
         $this.after(`<a class="expand-collapse-link" href="#" data-show="0" data-maxheight="${max_height}">
             <i class="fas fa-plus-square"></i>
@@ -99,7 +99,7 @@ export function initialize () {
           // currently collapsed => expand, and convert button to "collapse on click"
           $wrapper.css({
             height: 'auto',
-            overflow: 'visible'
+            overflow: 'visible',
           })
           $link.children('i.fas').removeClass('fa-plus-square').addClass('fa-minus-square')
           $link.children('span').text('einklappen')
@@ -109,7 +109,7 @@ export function initialize () {
           const max_height = $link.attr('data-maxheight')
           $wrapper.css({
             height: `${max_height}px`,
-            overflow: 'hidden'
+            overflow: 'hidden',
           })
           $link.children('i.fas').removeClass('fa-minus-square').addClass('fa-plus-square')
           $link.children('span').text('mehr anzeigen')
@@ -141,8 +141,8 @@ export function initialize () {
               .addClass(feedback.vertical)
               .addClass(feedback.horizontal)
               .appendTo(this)
-          }
-        }
+          },
+        },
       })
     }
 
@@ -159,8 +159,8 @@ export function initialize () {
           },
           [i18n('button.cancel')]: function () {
             $(this).dialog('close')
-          }
-        }
+          },
+        },
       })
     })
     $('.dialog').dialog()
@@ -169,18 +169,18 @@ export function initialize () {
       $(this).addClass('ui-state-hover')
     }).on('mouseleave', function () {
       $(this).removeClass('ui-state-hover')
-    }
+    },
     )
 
     $('.text, .textarea, select').on('focus',
       function () {
         $(this).addClass('focus')
-      }
+      },
     )
     $('.text, .textarea, select').on('blur',
       function () {
         $(this).removeClass('focus')
-      }
+      },
     )
 
     $('.value').on('blur', function () {
@@ -197,8 +197,8 @@ export function initialize () {
         {
           Upload: function () {
             uploadPhoto()
-          }
-        }
+          },
+        },
     })
   })
 }
@@ -289,16 +289,16 @@ export const ajax = {
         if (opt.complete != undefined) {
           opt.complete()
         }
-      }
+      },
     })
-  }
+  },
 }
 export function ajreq (name, options, method, app) {
   options = typeof options !== 'undefined' ? options : {}
   return ajax.req(options.app || app || GET('page'), name, {
     method: method,
     data: options,
-    loader: options.loader
+    loader: options.loader,
   })
 }
 
@@ -359,7 +359,7 @@ export function xhrf (func, fdata = null) {
     },
     complete: function () {
       hideLoader()
-    }
+    },
   })
 }
 
@@ -389,7 +389,7 @@ export function addSelect (id) {
         $(`#${id}-dialog`).dialog('close')
         $(`#${id} option`).removeAttr('selected')
         $(`#${id} option`).last().attr('selected', true)
-      }
+      },
     })
   }
 }
@@ -440,7 +440,7 @@ export function fotoupload (file, id) {
       $(`#${id}-y`).val(c.y)
       $(`#${id}-w`).val(c.w)
       $(`#${id}-h`).val(c.h)
-    }
+    },
   })
   $(`#${id}-save`).show()
   $(`#${id}-save`).button().on('click', function () {
@@ -488,7 +488,7 @@ export function pictureCrop (id, img) {
         $(`#${id}-y`).val(c.y)
         $(`#${id}-w`).val(c.w)
         $(`#${id}-h`).val(c.h)
-      }
+      },
     })
     hideLoader()
     setTimeout(function () {
@@ -502,7 +502,7 @@ export function pictureCrop (id, img) {
         x: Math.round($(`#${id}-x`).val()),
         y: Math.round($('#' + id + '-y').val()),
         w: Math.round($('#' + id + '-w').val()),
-        h: Math.round($('#' + id + '-h').val())
+        h: Math.round($('#' + id + '-h').val()),
       }
       $(`#${id}-ratio-val`).val(JSON.stringify(ratio_val))
 
@@ -569,7 +569,7 @@ export function betriebRequest (id) {
     },
     complete: function () {
       hideLoader()
-    }
+    },
   })
 }
 
@@ -593,7 +593,7 @@ export function checkAllCb (sel) {
 export function becomeBezirk () {
   $('#becomeBezirk-link').fancybox({
     minWidth: 390,
-    maxWidth: 400
+    maxWidth: 400,
   })
   $('#becomeBezirk-link').trigger('click')
 }
@@ -652,5 +652,5 @@ $.fn.extend({
       this.unselectable = 'on'
       $(this).css('user-select', 'none')
     })
-  }
+  },
 })

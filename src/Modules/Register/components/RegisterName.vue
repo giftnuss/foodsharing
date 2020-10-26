@@ -104,7 +104,7 @@ export default {
   validations: {
     firstname: { required, minLength: minLength(2) },
     lastname: { required, minLength: minLength(2) },
-    gender: { required }
+    gender: { required },
   },
 
   methods: {
@@ -113,8 +113,8 @@ export default {
       if (!this.$v.$invalid) {
         this.$emit('next')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

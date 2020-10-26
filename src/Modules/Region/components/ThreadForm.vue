@@ -37,7 +37,7 @@ export default {
   props: {},
   data () {
     return {
-      text: ''
+      text: '',
     }
   },
   methods: {
@@ -48,8 +48,8 @@ export default {
     },
     focus () {
       this.$refs.textarea.focus()
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -29,31 +29,31 @@ export function unfollowThreadByBell (threadId) {
 
 export function stickThread (threadId) {
   return patch(`/forum/thread/${threadId}`, {
-    isSticky: true
+    isSticky: true,
   })
 }
 
 export function unstickThread (threadId) {
   return patch(`/forum/thread/${threadId}`, {
-    isSticky: false
+    isSticky: false,
   })
 }
 
 export function activateThread (threadId) {
   return patch(`/forum/thread/${threadId}`, {
-    isActive: true
+    isActive: true,
   })
 }
 
 export function createPost (threadId, body) {
   return post(`/forum/thread/${threadId}/posts`, {
-    body: body
+    body: body,
   })
 }
 
 export function updatePost (postId, body) {
   return put('/forum/post', {
-    body: body
+    body: body,
   })
 }
 

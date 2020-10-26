@@ -65,16 +65,16 @@ export default {
   props: {
     regionName: {
       type: String,
-      default: ''
+      default: '',
     },
     genderDataTab: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     genderDataHomeDistrictTab: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data () {
     return {
@@ -98,15 +98,15 @@ export default {
                 return this.$i18n('genderlist.gender_not_selected')
             }
           },
-          sortable: true
+          sortable: true,
         },
         {
           key: 'NumberOfGender',
           label: this.$i18n('genderlist.number_table_header'),
-          sortable: true
-        }
-      ]
+          sortable: true,
+        },
+      ],
     }
-  }
+  },
 }
 </script>

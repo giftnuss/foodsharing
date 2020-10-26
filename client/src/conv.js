@@ -12,7 +12,7 @@ import profileStore from '@/stores/profiles'
 import * as api from '@/api/conversations'
 
 import {
-  plainToHtml
+  plainToHtml,
 } from '@/utils'
 const conv = {
 
@@ -249,7 +249,7 @@ const conv = {
       tmp.push({
         id: parseInt(conv.chatboxes[i].id),
         min: conv.chatboxes[i].minimized,
-        lmid: conv.chatboxes[i].last_mid
+        lmid: conv.chatboxes[i].last_mid,
       })
     }
 
@@ -288,7 +288,7 @@ const conv = {
     if (message.authorId === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
     conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(
-      `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`
+      `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`,
     )
   },
 
@@ -390,7 +390,7 @@ const conv = {
         el: $el,
         id: cid,
         minimized: false,
-        last_mid: 0
+        last_mid: 0,
       })
 
       this.chatCount++
@@ -417,7 +417,7 @@ const conv = {
   },
   addChatOption: function (cid, el) {
     $(`#chat-${cid} .settings`).append(`<li>${el}</li>`)
-  }
+  },
 }
 $(function () {
   if ($('body.loggedin').length > 0) {

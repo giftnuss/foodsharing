@@ -6,7 +6,7 @@ import i18n from '@/i18n'
 import { expose } from '@/utils'
 
 expose({
-  tryAcceptApplication
+  tryAcceptApplication,
 })
 
 async function tryAcceptApplication (groupId, userId) {

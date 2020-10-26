@@ -53,16 +53,16 @@ export default {
   props: {
     regionName: {
       type: String,
-      default: ''
+      default: '',
     },
     ageBandDataTab: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     ageBandDataHomeDistrictTab: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data () {
     return {
@@ -70,14 +70,14 @@ export default {
       fields: {
         ageBand: {
           label: this.$i18n('ageBandList.ageBand'),
-          sortable: true
+          sortable: true,
         },
         NumberOfAgeband: {
           label: this.$i18n('ageBandList.NumberOfAgeband'),
-          sortable: true
-        }
-      }
+          sortable: true,
+        },
+      },
     }
-  }
+  },
 }
 </script>

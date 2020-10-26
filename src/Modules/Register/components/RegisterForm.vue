@@ -74,7 +74,7 @@ export default {
     RegisterBirthdate,
     RegisterMobilephone,
     RegisterLegalAgreement,
-    RegisterSuccess
+    RegisterSuccess,
   },
   data () {
     return {
@@ -89,7 +89,7 @@ export default {
       mobile: '',
       subscribeNewsletter: true,
       acceptGdpr: false,
-      acceptedLegal: false
+      acceptedLegal: false,
     }
   },
   methods: {
@@ -115,8 +115,8 @@ export default {
         pulseError(`${i18n('register.join_error')}<br><br> ${err.message}`)
       }
       this.isLoading = false
-    }
-  }
+    },
+  },
 }
 </script>
 

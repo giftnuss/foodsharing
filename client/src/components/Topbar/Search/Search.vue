@@ -69,8 +69,8 @@ export default {
   props: {
     showOnMobile: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data () {
     return {
@@ -83,22 +83,22 @@ export default {
       results: {
         stores: [],
         users: [],
-        regions: []
+        regions: [],
       },
       index: {
         myStores: [],
         myGroups: [],
         myRegions: [],
-        myBuddies: []
-      }
+        myBuddies: [],
+      },
     }
   },
   computed: {
     resultsStyle () {
       return {
-        left: `${this.posX}px`
+        left: `${this.posX}px`,
       }
-    }
+    },
   },
   watch: {
     query (query, oldQuery) {
@@ -117,7 +117,7 @@ export default {
         this.close()
         this.isLoading = false
       }
-    }
+    },
   },
   mounted () {
     // close the result box if another dropdown menu gets opened
@@ -158,8 +158,8 @@ export default {
     },
     clickOutListener () {
       this.isOpen = false
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -40,7 +40,7 @@
 <script>
 export default {
   props: {
-    url: { type: String, default: '' }
+    url: { type: String, default: '' },
   },
   computed: {
     webcalPickups () {
@@ -48,8 +48,8 @@ export default {
     },
     webcalPickupsAndEvents () {
       return this.url + '&opts=se'
-    }
-  }
+    },
+  },
 }
 </script>
 

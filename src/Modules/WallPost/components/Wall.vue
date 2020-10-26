@@ -79,12 +79,12 @@ export default {
   props: {
     target: {
       type: String,
-      required: true
+      required: true,
     },
     targetId: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
@@ -93,7 +93,7 @@ export default {
       isSending: false,
       error: false,
       mayDelete: false,
-      mayPost: false
+      mayPost: false,
     }
   },
   async created () {
@@ -128,8 +128,8 @@ export default {
     },
     i18n (key) {
       return i18n(key)
-    }
-  }
+    },
+  },
 
 }
 </script>

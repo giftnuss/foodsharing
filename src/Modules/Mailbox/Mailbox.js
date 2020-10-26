@@ -12,7 +12,7 @@ import {
   ajreq,
   pulseInfo,
   pulseError,
-  checkEmail
+  checkEmail,
 } from '@/script'
 import './Mailbox.css'
 import i18n from '@/i18n'
@@ -37,7 +37,7 @@ expose({
   u_addTypeHead,
   setAutocompleteAddresses,
   mb_foldRecipients,
-  trySetEmailStatus
+  trySetEmailStatus,
 })
 
 function mb_finishFile (newname) {
@@ -78,7 +78,7 @@ function mb_moveto (folder) {
   if (folder > 0) {
     ajreq('move', {
       mid: $('#mb-hidden-id').val(),
-      f: folder
+      f: folder,
     })
   }
 }
@@ -98,7 +98,7 @@ function mb_answer () {
   }
 
   $('#message-editor').dialog('option', {
-    title: subject
+    title: subject,
   })
 
   $('#edit-subject').val(subject)
@@ -140,7 +140,7 @@ function mb_clearEditor () {
   $('#edit-body').val('')
   $('#edit-reply').val('0')
   $('#message-editor').dialog('option', {
-    title: 'Neue Nachricht'
+    title: 'Neue Nachricht',
   })
   mb_reset()
 }
@@ -160,7 +160,7 @@ function mb_send_message () {
   $('#et-file-list li').each(function () {
     attach[i] = {
       name: $(this).text(),
-      tmp: $('#et-file-list li input')[i].value
+      tmp: $('#et-file-list li input')[i].value,
     }
 
     i++
@@ -184,7 +184,7 @@ function mb_send_message () {
       sub: $('#edit-subject').val(),
       body: $('#edit-body').val(),
       attach: attach,
-      reply: parseInt($('#edit-reply').val())
+      reply: parseInt($('#edit-reply').val()),
     }, 'post')
   }
 }
@@ -193,7 +193,7 @@ function mb_refresh () {
   ajreq('loadmails', {
     mb: $('#mbh-mailbox').val(),
     folder: $('#mbh-folder').val(),
-    type: $('#mbh-type').val()
+    type: $('#mbh-type').val(),
   })
 }
 
@@ -227,12 +227,12 @@ function u_addTypeHead () {
   $('.edit-an').typeahead('destroy')
   $('.edit-an:last').typeahead({
     hint: true,
-    minLength: 2
+    minLength: 2,
   }, {
     name: 'addresses',
     displayKey: 'value',
     source: substringMatcher(addresses),
-    limit: 15
+    limit: 15,
   })
 
   $('.edit-an').on('typeahead:selected typeahead:autocompleted', function (e, datum) {

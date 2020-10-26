@@ -19,8 +19,8 @@ export default {
   props: {
     status: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     description () {
@@ -39,8 +39,8 @@ export default {
         default: // unclear
           return i18n('storestatus.0')
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

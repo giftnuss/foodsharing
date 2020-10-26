@@ -68,15 +68,15 @@ export default {
   data () {
     return {
       listings: [],
-      isLoading: true
+      isLoading: true,
     }
   },
   computed: {
     filteredUpdates: function () {
       return this.updates.filter(
-        a => this.displayedTypes.indexOf(a.type) !== -1
+        a => this.displayedTypes.indexOf(a.type) !== -1,
       )
-    }
+    },
   },
   async created () {
     this.listings = await getFilters()
@@ -89,8 +89,8 @@ export default {
       this.$emit('close')
       this.isLoading = false
       this.$emit('reloadData')
-    }
-  }
+    },
+  },
 }
 </script>
 

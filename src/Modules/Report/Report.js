@@ -11,7 +11,7 @@ if (GET('a') === 'undefined') {
   var reportListContainerId = 'vue-reportlist'
   if (document.getElementById(reportListContainerId)) {
     vueRegister({
-      ReportList
+      ReportList,
     })
     vueApply('#' + reportListContainerId)
   }

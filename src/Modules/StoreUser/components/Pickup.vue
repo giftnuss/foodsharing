@@ -172,7 +172,7 @@ export default {
     totalSlots: { type: Number, default: 0 },
     occupiedSlots: { type: Array, default: () => [] },
     isCoordinator: { type: Boolean, default: false },
-    user: { type: Object, default: () => { return { id: null } } }
+    user: { type: Object, default: () => { return { id: null } } },
   },
   data () {
     return {
@@ -180,25 +180,25 @@ export default {
       activeSlot: {
         profile: {
           name: '',
-          id: null
-        }
+          id: null,
+        },
       },
       // cannot use slotDate here since it's computed and needs to avoid circular data references:
       teamMessage: this.$i18n('pickup.leave_team_message_template', { date: this.$dateFormat(this.date, 'full-long') }),
-      kickMessage: ''
+      kickMessage: '',
     }
   },
   computed: {
     slotDate () {
       return {
-        date: this.$dateFormat(this.date, 'full-long')
+        date: this.$dateFormat(this.date, 'full-long'),
       }
     },
     slotInfo () {
       return {
         date: this.$dateFormat(this.date, 'full-long'),
         storeName: this.storeTitle,
-        name: this.activeSlot.profile.name
+        name: this.activeSlot.profile.name,
       }
     },
     isUserParticipant () {
@@ -217,8 +217,8 @@ export default {
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -111,14 +111,14 @@ const calendarLabels = {
   labelNoDateSelected: i18n('calendar.labelNoDateSelected'),
   labelCalendar: i18n('calendar.labelCalendar'),
   labelNav: i18n('calendar.labelNav'),
-  labelHelp: i18n('calendar.labelHelp')
+  labelHelp: i18n('calendar.labelHelp'),
 }
 
 export default {
   components: { Pickup },
   props: {
     storeId: { type: Number, required: true },
-    coopStart: { type: String, default: '' }
+    coopStart: { type: String, default: '' },
   },
   data () {
     const maxDate = new Date()
@@ -128,7 +128,7 @@ export default {
       year: 'numeric',
       month: '2-digit',
       day: 'numeric',
-      weekday: 'short'
+      weekday: 'short',
     }
 
     return {
@@ -140,7 +140,7 @@ export default {
       maxDateTo: maxDate,
       minDateFrom: this.coopStart ? max([minDate, parseISO(this.coopStart)]) : minDate,
       pickupList: [],
-      calendarLabels: calendarLabels
+      calendarLabels: calendarLabels,
     }
   },
   computed: {
@@ -152,7 +152,7 @@ export default {
     },
     searchable () {
       return !this.isLoading && this.fromDate && this.toDate
-    }
+    },
   },
   methods: {
     toggleDisplay () {
@@ -167,7 +167,7 @@ export default {
         this.pickupList = await listPickupHistory(
           this.storeId,
           startOfDay(this.fromDate),
-          min([new Date(), endOfDay(this.toDate)])
+          min([new Date(), endOfDay(this.toDate)]),
         )
       } catch (e) {
         pulseError(i18n('error_unexpected') + e)
@@ -176,8 +176,8 @@ export default {
     },
     when (dt) {
       return parseISO(dt)
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -15,7 +15,7 @@ export async function getBaskets () {
 
 export async function requestBasket (basketId, message) {
   return (post(`/baskets/${basketId}/request`, {
-    message: message
+    message: message,
   }))
 }
 

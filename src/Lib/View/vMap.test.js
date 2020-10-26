@@ -12,14 +12,14 @@ describe('vMap', () => {
       markers: [
         {
           lat: 50.89,
-          lng: 10.13
-        }
+          lng: 10.13,
+        },
       ],
       defaultMarkerOptions: {
         color: 'orange',
         icon: 'smile',
-        prefix: 'fa'
-      }
+        prefix: 'fa',
+      },
     }
 
     document.body.innerHTML = `
@@ -51,6 +51,6 @@ function escape (str) {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#039;'
+    "'": '&#039;',
   }[m]))
 }

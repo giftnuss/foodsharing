@@ -45,25 +45,25 @@ export default {
   props: {
     displayMailbox: {
       type: Boolean,
-      default: false
+      default: false,
     },
     userId: {
       type: Number,
-      default: null
+      default: null,
     },
     avatar: {
       type: String,
-      default: ''
+      default: '',
     },
     may: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   computed: {
     someAdminRights () {
       return this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.manageMailboxes || this.may.administrateNewsletterEmail || this.may.administrateRegions
-    }
-  }
+    },
+  },
 }
 </script>

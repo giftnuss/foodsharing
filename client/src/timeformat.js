@@ -26,7 +26,7 @@ const timeformat = {
     const parts = dbtime.split('-')
 
     return `${parts[2]}.${parts[1]}.${parts[0]}`
-  }
+  },
 
 }
 

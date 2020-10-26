@@ -16,7 +16,7 @@ import {
   pulseError, pulseInfo,
   showLoader,
   hideLoader,
-  GET
+  GET,
 } from '@/script'
 import '@/tablesorter' // Remove after replacing u_storeList
 
@@ -26,7 +26,7 @@ import {
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest
+  denyRequest,
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupHistory from './components/PickupHistory'
@@ -41,7 +41,7 @@ expose({
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest
+  denyRequest,
 })
 
 $(document).ready(() => {
@@ -98,7 +98,7 @@ $(document).ready(() => {
           submitButton.prop('disabled', false)
           // handle error
           pulseError(error.responseJSON.message)
-        }
+        },
       })
     }
   })
@@ -116,17 +116,17 @@ $(document).ready(() => {
             data: { id: GET('id') },
             success: function () {
 
-            }
+            },
           })
-        }
+        },
       },
       {
         text: $('#signout_shure .abort').text(),
         click: function () {
           $('#signout_shure').dialog('close')
-        }
-      }
-    ]
+        },
+      },
+    ],
   })
 
   $('#delete_shure').dialog({
@@ -146,22 +146,22 @@ $(document).ready(() => {
             pulseError(i18n('error_unexpected'))
           }
           hideLoader()
-        }
+        },
       },
       {
         text: $('#delete_shure .abort').text(),
         click: function () {
           $('#delete_shure').dialog('close')
-        }
-      }
-    ]
+        },
+      },
+    ],
   })
 
   $('.nft-remove').button({
     text: false,
     icons: {
-      primary: 'ui-icon-trash'
-    }
+      primary: 'ui-icon-trash',
+    },
   }).on('click', function () {
     const $this = $(this)
     $this.parent().parent().remove()
@@ -174,7 +174,7 @@ $(document).ready(() => {
         val = 1
       } else if (val > 2) {
         pulseInfo(i18n('pickup.edit.many-people'), {
-          sticky: true
+          sticky: true,
         })
       }
       this.value = val
@@ -182,14 +182,14 @@ $(document).ready(() => {
   })
 
   $('#nft-add').button({
-    text: false
+    text: false,
   }).on('click', function () {
     $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
     $('.nft-remove').button({
       text: false,
       icons: {
-        primary: 'ui-icon-trash'
-      }
+        primary: 'ui-icon-trash',
+      },
     }).on('click', function () {
       const $this = $(this)
       $this.parent().parent().remove()
@@ -200,7 +200,7 @@ $(document).ready(() => {
     PickupHistory,
     PickupList,
     StoreInfos,
-    StoreTeam
+    StoreTeam,
   })
   vueApply('#vue-pickup-history', true)
   vueApply('#vue-pickuplist', true)

@@ -13,7 +13,7 @@ const $groups = $('.groups .field')
 if ($groups.length > 3) {
   $groups.children('.head').css({
     cursor: 'pointer',
-    'margin-bottom': '10px'
+    'margin-bottom': '10px',
   }).on('mouseover', function () {
     $(this).css('text-decoration', 'underline')
   }).on('mouseout', function () {
@@ -25,11 +25,11 @@ if ($groups.length > 3) {
       $groups.children('.ui-widget.ui-widget-content.corner-bottom').hide()
 
       $groups.children('.head').css({
-        'margin-bottom': '10px'
+        'margin-bottom': '10px',
       })
 
       $this.css({
-        'margin-bottom': '0px'
+        'margin-bottom': '0px',
       }).next('.ui-widget.ui-widget-content.corner-bottom').show()
     } else {
       $this.css('margin-bottom', '10px')
@@ -75,7 +75,7 @@ $('#work_group_form_photo-link').fancybox({
     const uploadError = document.getElementById('work_group_form_photo-upload-error')
     const cropperOptions = {
       viewMode: 1,
-      autoCrop: true
+      autoCrop: true,
     }
     if (cropper === null) {
       cropper = new Cropper(image, cropperOptions)
@@ -117,7 +117,7 @@ $('#work_group_form_photo-link').fancybox({
         maxWidth: 2000,
         maxHeight: 2000,
         fillColor: '#ffffff',
-        imageSmoothingQuality: 'high'
+        imageSmoothingQuality: 'high',
       }).toBlob((blob) => {
         const formData = new window.FormData()
         formData.append('image', blob)
@@ -135,7 +135,7 @@ $('#work_group_form_photo-link').fancybox({
           },
           error: (data) => {
             uploadError.innerHTML = `Upload failed: ${data}`
-          }
+          },
         })
       })
     }
@@ -143,8 +143,8 @@ $('#work_group_form_photo-link').fancybox({
     onAfterClose.push(() => upload.removeEventListener('click', onUploadClick))
   },
   helpers: {
-    overlay: { closeClick: false }
-  }
+    overlay: { closeClick: false },
+  },
 })
 
 $('#work_group_form_photo-opener').button().on('click', function () {
@@ -163,7 +163,7 @@ const tageditOptions = {
   deleteEmptyItems: true,
   allowEdit: false,
   allowAdd: false,
-  animSpeed: 100
+  animSpeed: 100,
 }
 
 $('#work_group_form_members input.tag').tagedit(tageditOptions)

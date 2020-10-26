@@ -97,39 +97,39 @@ export default {
   props: {
     basketId: {
       type: Number,
-      default: null
+      default: null,
     },
     basketCreatorId: {
       type: Number,
-      default: null
+      default: null,
     },
     initialHasRequested: {
       type: Boolean,
-      default: false
+      default: false,
     },
     initialRequestCount: {
       type: Number,
-      default: null
+      default: null,
     },
     mobileNumber: {
       type: String,
-      default: null
+      default: null,
     },
     landlineNumber: {
       type: String,
-      default: null
+      default: null,
     },
     allowRequestByMessage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data () {
     return {
       isLoading: false,
       requestMessage: '',
       hasRequested: this.initialHasRequested,
-      requestCount: this.initialRequestCount
+      requestCount: this.initialRequestCount,
     }
   },
   _interval: null,
@@ -176,8 +176,8 @@ export default {
     },
     openChat () {
       conv.userChat(this.basketCreatorId)
-    }
-  }
+    },
+  },
 }
 </script>
 

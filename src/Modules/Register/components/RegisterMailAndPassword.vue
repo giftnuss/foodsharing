@@ -117,18 +117,18 @@ export default {
     return {
       confirmPassword: '',
       isMailValidForRegistration: false,
-      isMailInvalid: false
+      isMailInvalid: false,
     }
   },
   validations: {
     email: { required, email, foodsharing: not(isFoodsharingDomain) },
     password: { required, minLength: minLength(8) },
-    confirmPassword: { required, sameAsPassword: sameAs('password') }
+    confirmPassword: { required, sameAsPassword: sameAs('password') },
   },
   computed: {
     isValid () {
       return this.isMailValidForRegistration && !this.$v.$invalid && !this.isMailInvalid
-    }
+    },
   },
   methods: {
     redirect () {
@@ -158,8 +158,8 @@ export default {
         }
         return this.isMailValidForRegistration
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

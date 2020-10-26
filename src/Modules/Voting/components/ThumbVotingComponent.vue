@@ -45,12 +45,12 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data () {
     return {
-      selected: Array(this.options.length).fill(0)
+      selected: Array(this.options.length).fill(0),
     }
   },
   computed: {
@@ -60,15 +60,15 @@ export default {
         v[this.options[i].optionIndex] = this.selected[i]
       }
       return v
-    }
+    },
   },
   watch: {
-    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) }
+    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) },
   },
   mounted () {
     this.$emit('updateValidSelection', true)
     this.$emit('updateVotingRequestValues', this.votingRequestValues)
-  }
+  },
 }
 </script>
 

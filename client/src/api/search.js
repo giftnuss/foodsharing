@@ -25,7 +25,7 @@ function mapOldResponseToNewFormat (data) {
     'Deine Gruppen': 'myGroups',
     'Deine Betriebe': 'myStores',
     'Deine Bezirke': 'myRegions',
-    'Menschen die Du kennst': 'myBuddies'
+    'Menschen die Du kennst': 'myBuddies',
   }
   return data.reduce((o, el) => {
     const key = mapping[el.title]
@@ -33,7 +33,7 @@ function mapOldResponseToNewFormat (data) {
       id: i.id || parseInt(i.href.match(/id=(.*?)(&|$)/)[1]),
       name: i.name,
       image: i.img || null,
-      teaser: i.teaser || null
+      teaser: i.teaser || null,
     }))
     return o
   }, { groups: [] })

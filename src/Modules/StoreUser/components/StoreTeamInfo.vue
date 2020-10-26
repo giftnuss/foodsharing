@@ -62,8 +62,8 @@
 export default {
   props: {
     user: { type: Object, required: true },
-    storeManagerView: { type: Boolean, default: false }
-  }
+    storeManagerView: { type: Boolean, default: false },
+  },
 }
 </script>
 

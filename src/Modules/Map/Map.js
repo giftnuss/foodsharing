@@ -29,30 +29,30 @@ let markers = null
 expose({
   u_map,
   u_init_map,
-  u_loadDialog
+  u_loadDialog,
 })
 
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
 
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'orange'
+  markerColor: 'orange',
 })
 const bkIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-basket',
-  markerColor: 'green'
+  markerColor: 'green',
 })
 const botIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'red'
+  markerColor: 'red',
 })
 const bIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-cart',
-  markerColor: 'darkred'
+  markerColor: 'darkred',
 })
 const fIcon = L.AwesomeMarkers.icon({
   icon: 'recycle',
-  markerColor: 'beige'
+  markerColor: 'beige',
 })
 
 const map = {
@@ -113,7 +113,7 @@ const map = {
       this.init()
     }
     u_map.setView([lat, lon], zoom, { animation: true })
-  }
+  },
 }
 
 expose({ map })
@@ -132,7 +132,7 @@ function u_loadDialog (purl) {
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
     left: `${pos.left}px`,
-    top: '80px'
+    top: '80px',
   })
 
   if (purl != undefined) {
@@ -145,7 +145,7 @@ function u_loadDialog (purl) {
         } else {
           $('#b_content').removeClass('loading')
         }
-      }
+      },
     })
   }
 }
@@ -162,7 +162,7 @@ function init_bDialog () {
     autoOpen: false,
     modal: false,
     draggable: false,
-    resizable: false
+    resizable: false,
   })
 }
 
@@ -249,7 +249,7 @@ function loadMarker (types, loader) {
               id: a.id,
               bid: a.bid,
               icon: fIcon,
-              type: 'f'
+              type: 'f',
             })
 
             markers.addLayer(marker)
@@ -271,7 +271,7 @@ function loadMarker (types, loader) {
     },
     complete: function () {
       hideLoader()
-    }
+    },
   })
 }
 

@@ -12,7 +12,7 @@ function createMockStore () {
     id: 15906,
     name: 'betrieb_Bader Hammer KG',
     region: 'Göttingen',
-    status: 3
+    status: 3,
   }
 }
 
@@ -38,8 +38,8 @@ describe('StoreList', () => {
     const wrapper = mount(storeList, {
       propsData: {
         regionName,
-        stores: [createMockStore()]
-      }
+        stores: [createMockStore()],
+      },
     })
     assert.notStrictEqual(wrapper.vm.$el.innerHTML.indexOf(regionName), -1)
   })

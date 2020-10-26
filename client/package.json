@@ -117,13 +117,9 @@
       "plugin:vue/recommended"
     ],
     "rules": {
-      "object-curly-spacing": [
-        "error",
-        "always"
-      ],
-      "vue/no-v-html": [
-        "off"
-      ]
+      "comma-dangle": ["error", "always-multiline"],
+      "object-curly-spacing": ["error", "always"],
+      "vue/no-v-html": ["off"]
     },
     "overrides": [
       {

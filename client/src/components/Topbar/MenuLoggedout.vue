@@ -25,6 +25,6 @@ import MenuItem from './MenuItem'
 
 export default {
   components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav, MenuItem },
-  directives: { VBTooltip }
+  directives: { VBTooltip },
 }
 </script>

@@ -37,7 +37,7 @@ async function trySendBuddyRequest (userId) {
 }
 
 vueRegister({
-  PublicProfile
+  PublicProfile,
 })
 
 vueApply('#profile-public', true)

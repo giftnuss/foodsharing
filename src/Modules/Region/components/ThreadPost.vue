@@ -85,18 +85,18 @@ export default {
     reactions: { type: Object, default: () => ({}) },
     mayEdit: { type: Boolean, default: false },
     mayDelete: { type: Boolean, default: false },
-    isLoading: { type: Boolean, default: true }
+    isLoading: { type: Boolean, default: true },
   },
   computed: {
     isMe () {
       return this.userId === this.author.id
-    }
+    },
   },
   methods: {
     openChat () {
       conv.userChat(this.author.id)
-    }
-  }
+    },
+  },
 }
 </script>
 

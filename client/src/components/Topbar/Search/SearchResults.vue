@@ -140,44 +140,44 @@ export default {
   props: {
     stores: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     groups: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     regions: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     users: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     myGroups: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     myStores: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     myRegions: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     myBuddies: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     query: {
       type: String,
-      default: ''
+      default: '',
     },
     isLoading: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     filtered () {
@@ -200,7 +200,7 @@ export default {
         myGroups: this.myGroups.filter(filterFunction),
         myStores: this.myStores.filter(filterFunction),
         myRegions: this.myRegions.filter(filterFunction),
-        myBuddies: this.myBuddies.filter(filterFunction)
+        myBuddies: this.myBuddies.filter(filterFunction),
       }
 
       // additionally remove elements in global search which are already contained in the private lists
@@ -225,8 +225,8 @@ export default {
                 !this.filtered.myRegions.length &&
                 !this.filtered.myBuddies.length
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

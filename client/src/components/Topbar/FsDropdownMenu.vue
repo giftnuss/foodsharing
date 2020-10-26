@@ -49,30 +49,30 @@ export default {
   props: {
     menuTitle: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     items: {
       type: Array,
-      default: undefined
+      default: undefined,
     },
     icon: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     showMenuTitle: {
       type: Boolean,
-      default: true
+      default: true,
     },
     lazy: {
       type: Boolean,
-      default: false
+      default: false,
     },
     right: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showOnlyOnMobile: { type: Boolean, default: false },
-    hideOnlyOnMobile: { type: Boolean, default: false }
+    hideOnlyOnMobile: { type: Boolean, default: false },
   },
   computed: {
     show () {
@@ -82,8 +82,8 @@ export default {
         return this.wXS || this.wSM
       }
       return true
-    }
-  }
+    },
+  },
 }
 </script>
 

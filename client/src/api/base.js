@@ -3,7 +3,7 @@ const DEFAULT_OPTIONS = {
   method: 'GET',
   credentials: 'same-origin',
   mode: 'cors',
-  headers: {}
+  headers: {},
 }
 if (self.fetch) self.fetch.activeFetchCalls = 0
 
@@ -56,9 +56,9 @@ export function post (path, body) {
   return request(path, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   })
 }
 
@@ -66,9 +66,9 @@ export function put (path, body) {
   return request(path, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   })
 }
 
@@ -76,9 +76,9 @@ export function patch (path, body) {
   return request(path, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   })
 }
 
@@ -87,9 +87,9 @@ export function remove (path, body = {}) {
   return request(path, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   })
 }
 

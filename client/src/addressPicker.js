@@ -10,7 +10,7 @@ import { initMap } from '@/mapUtils'
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
   markerColor: 'orange',
-  prefix: 'fa'
+  prefix: 'fa',
 })
 
 let markers = L.featureGroup()
@@ -22,10 +22,10 @@ function showSelected (event, selected, map, engine) {
 
   L.marker([
     selected.geometry.coordinates[1],
-    selected.geometry.coordinates[0]
+    selected.geometry.coordinates[0],
   ], {
     icon: fsIcon,
-    draggable: true
+    draggable: true,
   }).on('dragend', function (event) {
     const pos = event.target.getLatLng()
     engine.reverseGeocode([pos.lat, pos.lng])
@@ -47,8 +47,8 @@ export function attachAddressPicker () {
         const prop = feature.properties
         return [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
       },
-      lang: 'de'
-    }
+      lang: 'de',
+    },
   )
 
   if (data[0] !== '0' || data[1] !== '0') {
@@ -60,11 +60,11 @@ export function attachAddressPicker () {
     {
       highlight: true,
       minLength: 3,
-      hint: true
+      hint: true,
     },
     {
       displayKey: 'description',
-      source: engine.ttAdapter()
+      source: engine.ttAdapter(),
     })
   engine.bindDefaultTypeaheadEvent($('#addresspicker'))
   $(engine).bind('addresspicker:selected', function (event, selectedPlace) {

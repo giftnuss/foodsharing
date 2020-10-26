@@ -44,29 +44,29 @@ function match (word, e) {
 
 export default {
   components: {
-    SearchResultEntry
+    SearchResultEntry,
   },
   props: {
     threads: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     groupId: {
       type: Number,
-      required: true
+      required: true,
     },
     subforumId: {
       type: Number,
-      required: true
+      required: true,
     },
     query: {
       type: String,
-      default: ''
+      default: '',
     },
     isLoading: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     filteredThreads () {
@@ -85,7 +85,7 @@ export default {
     },
     isEmpty () {
       return !this.filteredThreads.length
-    }
+    },
   },
   methods: {
     getThreadDate (thread) {
@@ -95,8 +95,8 @@ export default {
       } else {
         return this.$dateDistanceInWords(lastUpdated) + ` (${this.$dateFormat(lastUpdated, 'full-short')})`
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

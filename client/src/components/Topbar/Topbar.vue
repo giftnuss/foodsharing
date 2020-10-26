@@ -95,47 +95,47 @@ export default {
     MenuItem,
     LoggedInFixedNav,
     MenuLoggedin,
-    Search
+    Search,
   },
   props: {
     userId: {
       type: Number,
-      default: null
+      default: null,
     },
     loggedIn: {
       type: Boolean,
-      default: true
+      default: true,
     },
     avatar: {
       type: String,
-      default: ''
+      default: '',
     },
     mailbox: {
       type: Boolean,
-      default: true
+      default: true,
     },
     hasFsRole: {
       type: Boolean,
-      default: true
+      default: true,
     },
     may: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     regions: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     workingGroups: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data () {
     return {
-      searchOpen: false
+      searchOpen: false,
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>

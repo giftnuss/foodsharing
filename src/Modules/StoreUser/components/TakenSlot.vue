@@ -72,28 +72,28 @@ export default {
   props: {
     profile: {
       type: Object,
-      default: null
+      default: null,
     },
     confirmed: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowLeave: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowKick: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowConfirm: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowChat: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     callLink () {
@@ -106,7 +106,7 @@ export default {
     },
     canCopy () {
       return !!navigator.clipboard
-    }
+    },
   },
   methods: {
     copyIntoClipboard (text) {
@@ -118,8 +118,8 @@ export default {
     },
     openChat () {
       conv.userChat(this.profile.id)
-    }
-  }
+    },
+  },
 }
 </script>
 

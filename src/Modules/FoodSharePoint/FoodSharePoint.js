@@ -10,7 +10,7 @@ import FileUploadVForm from '@/components/upload/FileUploadVForm'
 
 import {
   pictureCrop,
-  pictureReady
+  pictureReady,
 } from '@/script'
 import { expose } from '@/utils'
 import { GET } from '@/browser'
@@ -18,12 +18,12 @@ import { GET } from '@/browser'
 import './FoodSharePoint.css'
 
 vueRegister({
-  FileUploadVForm
+  FileUploadVForm,
 })
 
 expose({
   pictureCrop,
-  pictureReady
+  pictureReady,
 })
 
 const sub = GET('sub')

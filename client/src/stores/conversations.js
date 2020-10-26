@@ -5,12 +5,12 @@ import serverData from '@/server-data'
 
 export default new Vue({
   data: {
-    conversations: {}
+    conversations: {},
   },
   computed: {
     unreadCount () {
       return Object.values(this.conversations).filter(b => b.hasUnreadMessages).length
-    }
+    },
   },
   methods: {
     async loadConversations (limit = 20) {
@@ -21,7 +21,7 @@ export default new Vue({
         Vue.set(this.conversations, conversation.id, {
           ...conversation,
           messages: Object.assign({}, c.messages),
-          lastMessage: convertMessage(conversation.lastMessage)
+          lastMessage: convertMessage(conversation.lastMessage),
         })
       }
     },
@@ -37,7 +37,7 @@ export default new Vue({
       Vue.set(this.conversations, id, {
         ...res.conversation,
         messages: c.messages,
-        lastMessage: convertMessage(res.conversation.lastMessage)
+        lastMessage: convertMessage(res.conversation.lastMessage),
       })
     },
     async loadMoreMessages (cid) {
@@ -74,15 +74,15 @@ export default new Vue({
       for (const cid in this.conversations) {
         await this.markAsRead(cid)
       }
-    }
-  }
+    },
+  },
 })
 
 export function convertMessage (val) {
   if (val !== null) {
     return {
       ...val,
-      sentAt: new Date(val.sentAt)
+      sentAt: new Date(val.sentAt),
     }
   } else {
     return null
@@ -95,7 +95,7 @@ export function convertProfile (val) {
   } else {
     return {
       ...val,
-      avatar: val.avatar ? `/image/mini_q_${val.avatar}` : null
+      avatar: val.avatar ? `/image/mini_q_${val.avatar}` : null,
     }
   }
 }

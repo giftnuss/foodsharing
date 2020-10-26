@@ -58,8 +58,8 @@ export default {
     canPickUp: { type: Boolean, default: false },
     fromRegion: { type: String, default: '' },
     fsId: { type: Number, default: 0 },
-    initials: { type: String, required: true }
-  }
+    initials: { type: String, required: true },
+  },
 }
 </script>
 
