@@ -1,8 +1,13 @@
 import '@/core'
 import '@/globals'
 import i18n from '@/i18n'
+import { vueApply, vueRegister } from '@/vue'
+import Index from './components/Index'
 
-import './Index.scss'
+vueRegister({
+  Index,
+})
+vueApply('#index')
 
 const video = document.querySelector('.vidlink')
 video.addEventListener('click', (event) => {

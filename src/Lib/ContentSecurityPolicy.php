@@ -39,6 +39,9 @@ class ContentSecurityPolicy
 				'https:',
 				'blob:'
 			],
+			'media-src' => [
+				$self
+			],
 			'style-src' => [
 				$self,
 				$unsafeInline,

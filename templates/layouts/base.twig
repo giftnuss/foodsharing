@@ -70,9 +70,8 @@
             <div id="main" class="{{ isMob ? 'mobile' : '' }}">
 
                 {% include 'partials/breadcrumbs.twig' with { items: bread } %}
-
-                {% if _top is not empty %}
-                    <div class="pure-g">
+            {% if _top is not empty %}
+                <div class="pure-g">
                         <div id="content_top" class="pure-u-1">
                             <div class="inside">
                                 {{ _top|raw }}
