@@ -18,11 +18,43 @@ In addition to the above, there are also a few select users with global Orga per
 
 ### Foodsharer
 
-TODO
+A Foodsharer can
+- offer food baskets food baskets on the platform or pick them up
+- post information to foodsharepoints (e.g. about current content)
+- join or participate in events
+- see some personal data for other users (pickup count, forum posts, public info, regions & workgroups, wall)
+- edit their own profile and optionally include their address
+- chat with other users and become buddies with them (*Ich kenne*)
+- receive trust bananas, but not give them
+- receive newsletter mail
+- remove their own account
+
+One becomes Foodsharer simply by creating an account on foodsharing.de or foodsharing.at or ... (depending upon country).
+A foodsharer can not view or interact with stores.
+They also cannot join a region, so interacting with the forums is not possible.
 
 ### Foodsaver
 
-TODO
+A Foodsaver can
+
+- join and leave regions (the [nightly script](scripts.md#nightly-maintenance) makes sure to also add them to parent regions)
+- see stores and apply for membership in a store team, if the team is looking for help
+- sign up to fetch food from stores with empty slots, and sign themself out of future pickup slots
+- create events in regions or workgroups they are part of
+- apply for workgroups and participate  
+  (in theory they could even administrate the group without having the Store Manager Quiz)
+- view and write in the forum, react to forum posts (large region forums on our platform are moderated)
+- generate their personal business card (once verified), not to be confused with their passport
+- be asked to manage any foodsharepoint in regions which they are part of
+- give and receive trust bananas
+- do a lot more that's not listed here :)
+
+Foodsavers have:
+1. passed the quiz for Foodsaver
+2. signed the legal agreement
+3. correct data (which is verified by the BOT via foodsaver ID)
+4. had some introductory pick-ups (once verified)
+5. a foodsharing passport (once verified, or soon after)
 
 ### Store Manager
 
