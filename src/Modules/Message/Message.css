@@ -189,7 +189,7 @@ ul.conversation-list > li.unread-1 {
 
   #msg-conversation-wrapper .field .head {
     position: fixed;
-    top: 73px;
+    top: 40px;
     left: 0;
     width: 100%;
     z-index: 11;
