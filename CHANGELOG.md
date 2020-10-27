@@ -11,8 +11,6 @@
 - New favicon created with support for all platforms and browsers !1720 @chriswalg
 
 ## Bugfixes
-
-## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
 
 ## Refactoring
@@ -31,6 +29,7 @@
 - Update many frontend dependencies !1723 @chriswalg
 - JS linter now asks for dangling comma !1728 @ChrisOelmueller
 - Update backend dependencies (codeception, twig, symfony, friendsofsymfony, phpunit) and removed abandoned flow/jsonpath !1732 @chriswalg
+- Update Composer to version 2 and PHP to version 7.4.11 !1734 @peter.toennies
 
 # 2020-10-23 Hotfix
 
