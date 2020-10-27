@@ -77,4 +77,23 @@ final class TimeHelper
 			0 => $this->translator->trans('date.sunday'),
 		][$day];
 	}
+
+	public static function parsePickupDate(string $pickupDate): ?Carbon
+	{
+		$date = null;
+
+		try {
+			$date = @Carbon::createFromFormat(DATE_ATOM, $pickupDate);
+		} catch (\Exception $e) {
+		}
+
+		if (is_null($date)) {
+			try {
+				$date = Carbon::createFromFormat('Y-m-d\TH:i:s.uP', $pickupDate);
+			} catch (\Exception $e) {
+			}
+		}
+
+		return $date;
+	}
 }

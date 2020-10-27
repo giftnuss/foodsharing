@@ -11,6 +11,7 @@ use Foodsharing\Modules\Message\MessageTransactions;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -43,26 +44,6 @@ final class PickupRestController extends AbstractFOSRestController
 		$this->messageTransactions = $messageTransactions;
 	}
 
-	public function parsePickupDate(string $pickupDate): Carbon
-	{
-		$date = null;
-		try {
-			$date = @Carbon::createFromFormat(DATE_ATOM, $pickupDate);
-		} catch (\Exception $e) {
-		}
-		if (!$date) {
-			try {
-				$date = Carbon::createFromFormat('Y-m-d\TH:i:s.uP', $pickupDate);
-			} catch (\Exception $e) {
-			}
-			if (!$date) {
-				throw new HttpException(400, 'Invalid date format');
-			}
-		}
-
-		return $date;
-	}
-
 	/**
 	 * @Rest\Post("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 */
@@ -76,7 +57,10 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$date = $this->parsePickupDate($pickupDate);
+		$date = TimeHelper::parsePickupDate($pickupDate);
+		if (is_null($date)) {
+			throw new HttpException(400, 'Invalid date format');
+		}
 
 		$isConfirmed = $this->storeTransactions->joinPickup($storeId, $date, $fsId, $this->session->id());
 
@@ -97,7 +81,11 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$date = $this->parsePickupDate($pickupDate);
+		$date = TimeHelper::parsePickupDate($pickupDate);
+		if (is_null($date)) {
+			throw new HttpException(400, 'Invalid date format');
+		}
+
 		if ($date < Carbon::now()) {
 			throw new HttpException(400, 'Cannot modify pickup in the past.');
 		}
@@ -144,7 +132,10 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$date = $this->parsePickupDate($pickupDate);
+		$date = TimeHelper::parsePickupDate($pickupDate);
+		if (is_null($date)) {
+			throw new HttpException(400, 'Invalid date format');
+		}
 
 		if ($paramFetcher->get('isConfirmed')) {
 			if (!$this->storeGateway->confirmFetcher($fsId, $storeId, $date)) {
@@ -172,7 +163,10 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$date = $this->parsePickupDate($pickupDate);
+		$date = TimeHelper::parsePickupDate($pickupDate);
+		if (is_null($date)) {
+			throw new HttpException(400, 'Invalid date format');
+		}
 
 		if ($date < Carbon::now()) {
 			throw new HttpException(400, 'Cannot modify pickup in the past.');
@@ -218,16 +212,13 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 		// convert date strings into datetime objects
-		$from = null;
-		$to = null;
-		try {
-			$from = $this->parsePickupDate($fromDate)->min(Carbon::now());
-			$to = $this->parsePickupDate($toDate)->min(Carbon::now());
-		} catch (\Exception $e) {
-		}
-		if (!$from || !$to) {
+		$from = TimeHelper::parsePickupDate($fromDate);
+		$to = TimeHelper::parsePickupDate($toDate);
+		if (is_null($from) || is_null($to)) {
 			throw new HttpException(400, 'Invalid date format');
 		}
+		$from = $from->min(Carbon::now());
+		$to = $to->min(Carbon::now());
 
 		$pickups = [[
 			'occupiedSlots' => $this->storeGateway->getPickupHistory($storeId, $from, $to)

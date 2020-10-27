@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,16 +33,13 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	public function listPastPickupsAction(int $fsId, string $fromDate, string $toDate): Response
 	{
 		// convert date strings into datetime objects
-		$from = null;
-		$to = null;
-		try {
-			$from = $this->pickupRestController->parsePickupDate($fromDate)->min(Carbon::now());
-			$to = $this->pickupRestController->parsePickupDate($toDate)->min(Carbon::now());
-		} catch (\Exception $e) {
-		}
-		if (!$from || !$to) {
+		$from = TimeHelper::parsePickupDate($fromDate);
+		$to = TimeHelper::parsePickupDate($toDate);
+		if (is_null($from) || is_null($to)) {
 			throw new HttpException(400, 'Invalid date format');
 		}
+		$from = $from->min(Carbon::now());
+		$to = $to->min(Carbon::now());
 
 		$pickups = [
 			['occupiedSlots' => $this->profileGateway->getRecentPickups($fsId, $from, $to)],
