@@ -4,7 +4,7 @@
     ref="dropdown"
     menu-title="basket.title"
     icon="fa-shopping-basket"
-    class="topbar-baskets"
+    class="list-with-actions"
   >
     <template v-slot:heading-text>
       <span
@@ -36,19 +36,19 @@
     </div>
     <template v-slot:actions>
       <b-btn
-          :href="$url('baskets')"
+        :href="$url('baskets')"
         secondary
         size="sm"
-        >
-          {{ $i18n('basket.all') }}
+      >
+        {{ $i18n('basket.all') }}
       </b-btn>
       <b-btn
-          href="#"
+        href="#"
         secondary
         size="sm"
-          @click="openBasketCreationForm"
-        >
-          {{ $i18n('basket.add') }}
+        @click="openBasketCreationForm"
+      >
+        {{ $i18n('basket.add') }}
       </b-btn>
     </template>
   </fs-dropdown-menu>
@@ -98,18 +98,5 @@ export default {
 </script>
 
 <style lang="scss">
-.topbar-baskets {
-    .dropdown-menu {
-        overflow-x: hidden;
-        padding: 0;
-    }
-}
 
-.btn-group.special {
-  display: flex;
-}
-
-.special .btn {
-  flex: 1
-}
 </style>

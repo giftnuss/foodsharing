@@ -4,7 +4,7 @@
     menu-title="menu.entry.notifications"
     icon="fa-bell"
     right
-    class="topbar-bells"
+    class="topbar-bells list-with-actions"
     :show-only-on-mobile="showOnlyOnMobile"
     :hide-only-on-mobile="hideOnlyOnMobile"
   >
@@ -105,9 +105,7 @@ export default {
 <style lang="scss">
 .topbar-bells {
     .dropdown-menu {
-        width: 280px;
-        padding: 0;
+        min-width: 280px;
     }
-}
 }
 </style>

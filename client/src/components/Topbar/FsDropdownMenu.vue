@@ -137,6 +137,9 @@ i {
   }
 }
 .dropdown {
+  &.list-with-actions /deep/ .dropdown-menu {
+    padding: 0;
+  }
   /deep/ .dropdown-menu {
     max-width: 300px;
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);

@@ -4,7 +4,7 @@
     ref="dropdown"
     menu-title="menu.entry.messages"
     icon="fa-comments"
-    class="topbar-messages"
+    class="topbar-messages list-with-actions"
     :show-only-on-mobile="showOnlyOnMobile"
     :hide-only-on-mobile="hideOnlyOnMobile"
     right
@@ -90,13 +90,8 @@ export default {
 <style lang="scss">
   .topbar-messages {
     .dropdown-menu {
-      padding: 0;
+      width: 300px;
     }
-  }
-
-  .btn-group.special {
-    display: flex;
-  }
   }
   .menu-messages-width {
     min-width: 280px;
