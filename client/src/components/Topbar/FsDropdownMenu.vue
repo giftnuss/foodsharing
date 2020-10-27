@@ -18,6 +18,7 @@
         >{{ $i18n(menuTitle) }}</span>
       </slot>
     </template>
+    <div class="scroll-container">
     <slot>
       <template v-for="heading in items">
         <h3
@@ -39,6 +40,10 @@
         </a>
       </template>
     </slot>
+    </div>
+    <div class="d-flex actions">
+      <slot name="actions" />
+    </div>
   </b-nav-item-dropdown>
 </template>
 <script>
@@ -134,15 +139,12 @@ i {
 .dropdown {
   /deep/ .dropdown-menu {
     max-width: 300px;
-    overflow-y: auto;
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-    // Fixes problem that list of dropdown items is to long.
-    max-height: 70vh;
-    overflow: auto;
     .scroll-container {
-      max-height: 300px;
-      min-height: 120px;
-      overflow: auto;
+      // LibSass is deprecated: https://github.com/sass/libsass/issues/2701
+      max-height: unquote("min(340px, 70vh)");
+    // Fixes problem that list of dropdown items is to long.
+    overflow: auto;
     }
     .dropdown-item {
         i {
@@ -151,6 +153,10 @@ i {
         text-align: center;
         margin-left: -0.4em;
       }
+    }
+    .actions .btn{
+      flex: 1 1 auto;
+      margin: 0 1px;
     }
     .sub {
       padding-left: 2.2rem;

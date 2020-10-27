@@ -34,17 +34,16 @@
         />
       </div>
     </div>
-    <div
-      v-if="unread"
-      class="btn-group special btn-group-sm"
-    >
-      <a
-        class="btn btn-sm btn-secondary"
+    <template v-slot:actions>
+      <b-btn
+        secondary
+        size="sm"
+        :disabled="unread"
         @click="markNewBellsAsRead"
       >
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
-      </a>
-    </div>
+      </b-btn>
+    </template>
   </fs-dropdown-menu>
 </template>
 <script>
@@ -110,12 +109,5 @@ export default {
         padding: 0;
     }
 }
-
-.btn-group.special {
-  display: flex;
-}
-
-.special .btn {
-  flex: 1
 }
 </style>

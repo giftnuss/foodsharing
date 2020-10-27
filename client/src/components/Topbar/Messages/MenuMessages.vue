@@ -28,21 +28,25 @@
         />
       </div>
     </div>
-    <div class="btn-group special btn-group-sm">
-      <a
-        v-if="unread"
-        class="btn btn-sm btn-secondary"
+    <template v-slot:actions>
+      <!-- <div class="btn-group special btn-group-sm"> -->
+      <b-btn
+        :disabled="unread"
+        secondary
+        size="sm"
         @click="markUnreadMessagesAsRead"
       >
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
-      </a>
-      <a
+      </b-btn>
+      <b-btn
         :href="$url('conversations')"
-        class="btn btn-sm btn-secondary"
+        secondary
+        size="sm"
       >
         <i class="fas fa-comments" /> {{ $i18n('menu.entry.all_messages') }}
-      </a>
-    </div>
+      </b-btn>
+      <!-- </div> -->
+    </template>
   </fs-dropdown-menu>
 </template>
 <script>
@@ -93,9 +97,6 @@ export default {
   .btn-group.special {
     display: flex;
   }
-
-  .special .btn {
-    flex: 1
   }
   .menu-messages-width {
     min-width: 280px;

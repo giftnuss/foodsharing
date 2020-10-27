@@ -33,22 +33,24 @@
           @basketRemove="openRemoveBasketForm"
         />
       </div>
-      <div class="btn-group special btn-group-sm">
-        <a
+    </div>
+    <template v-slot:actions>
+      <b-btn
           :href="$url('baskets')"
-          class="btn btn-sm btn-secondary"
+        secondary
+        size="sm"
         >
           {{ $i18n('basket.all') }}
-        </a>
-        <a
+      </b-btn>
+      <b-btn
           href="#"
-          class="btn btn-sm btn-secondary"
+        secondary
+        size="sm"
           @click="openBasketCreationForm"
         >
           {{ $i18n('basket.add') }}
-        </a>
-      </div>
-    </div>
+      </b-btn>
+    </template>
   </fs-dropdown-menu>
 </template>
 <script>

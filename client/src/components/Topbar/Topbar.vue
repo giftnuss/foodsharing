@@ -180,7 +180,7 @@ export default {
     max-height: 70vh;
     overflow: auto;
     border-top: 1px solid var(--primary);
-    .dropdown-menu  {
+    .dropdown-menu .scroll-container  {
       max-height: initial;
     }
   }
