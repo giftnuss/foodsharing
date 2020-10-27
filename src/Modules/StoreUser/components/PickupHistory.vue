@@ -26,6 +26,7 @@
           <b-form-datepicker
             id="datepicker-from"
             v-model="fromDate"
+            v-b-tooltip.hover
             v-bind="calendarLabels"
             :value-as-date="true"
             :date-format-options="dateFormatOptions"
@@ -37,6 +38,7 @@
             :hide-header="true"
             :start-weekday="1"
             :locale="$i18n('calendar.locale')"
+            :title="$i18n('date.from')"
             no-highlight-today
           />
 
@@ -46,6 +48,7 @@
           <b-form-datepicker
             id="datepicker-to"
             v-model="toDate"
+            v-b-tooltip.hover
             v-bind="calendarLabels"
             :value-as-date="true"
             :date-format-options="dateFormatOptions"
@@ -55,6 +58,7 @@
             :hide-header="true"
             :start-weekday="1"
             :locale="$i18n('calendar.locale')"
+            :title="$i18n('date.to')"
             no-highlight-today
           />
         </b-form>
@@ -125,6 +129,7 @@ export default {
     coopStart: { type: String, default: '' },
   },
   data () {
+    const fromDate = this.fsId ? sub(new Date(), { weeks: 2 }) : null
     const maxDate = new Date()
     const minDate = sub(new Date(), this.fsId ? { months: 1 } : { years: 10, months: 1, days: 1 })
 
@@ -138,13 +143,13 @@ export default {
     return {
       display: !this.collapsedAtFirst,
       isLoading: false,
-      fromDate: null,
+      fromDate,
       toDate: maxDate,
       dateFormatOptions,
       maxDateTo: maxDate,
       minDateFrom: this.coopStart ? max([minDate, parseISO(this.coopStart)]) : minDate,
       pickupList: [],
-      calendarLabels: calendarLabels,
+      calendarLabels,
     }
   },
   computed: {
@@ -204,6 +209,9 @@ export default {
     width: 100%;
   }
 
+  .date-separator {
+    border-top-color: var(--border);
+  }
   .date-separator::after {
     content: '->';
     visibility: hidden;
