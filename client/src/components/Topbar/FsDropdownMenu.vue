@@ -19,27 +19,27 @@
       </slot>
     </template>
     <div class="scroll-container">
-    <slot>
-      <template v-for="heading in items">
-        <h3
-          :key="heading.heading"
-          class="dropdown-header"
-        >
-          {{ $i18n(heading.heading) }}
-        </h3>
-        <a
-          v-for="item in heading.menuItems"
-          :key="item.url"
-          :href="$url(item.url)"
-          class="dropdown-item sub"
-          role="menuitem"
-          :target="item.target ? item.target : ''"
-          :rel="item.target === '_blank' ? 'noopener noreferrer nofollow' : '' "
-        >
-          {{ $i18n(item.menuTitle) }}
-        </a>
-      </template>
-    </slot>
+      <slot>
+        <template v-for="heading in items">
+          <h3
+            :key="heading.heading"
+            class="dropdown-header"
+          >
+            {{ $i18n(heading.heading) }}
+          </h3>
+          <a
+            v-for="item in heading.menuItems"
+            :key="item.url"
+            :href="$url(item.url)"
+            class="dropdown-item sub"
+            role="menuitem"
+            :target="item.target ? item.target : ''"
+            :rel="item.target === '_blank' ? 'noopener noreferrer nofollow' : '' "
+          >
+            {{ $i18n(item.menuTitle) }}
+          </a>
+        </template>
+      </slot>
     </div>
     <div class="d-flex actions">
       <slot name="actions" />
@@ -141,13 +141,16 @@ i {
     padding: 0;
   }
   /deep/ .dropdown-menu {
+    // Bug of chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=957946
+    background-clip: unset;
+
     max-width: 300px;
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
     .scroll-container {
       // LibSass is deprecated: https://github.com/sass/libsass/issues/2701
       max-height: unquote("min(340px, 70vh)");
     // Fixes problem that list of dropdown items is to long.
-    overflow: auto;
+      overflow: auto;
     }
     .dropdown-item {
         i {
