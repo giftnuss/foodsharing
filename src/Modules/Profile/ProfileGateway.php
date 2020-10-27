@@ -290,14 +290,14 @@ final class ProfileGateway extends BaseGateway
 			        p1.betrieb_id AS storeId,
 			        b.name AS storeTitle
 
-			FROM   fs_abholer p1,
-			       fs_abholer p2,
-			       fs_betrieb b
+			FROM      fs_abholer p1
+			LEFT JOIN fs_abholer p2
+			    ON    p1.betrieb_id = p2.betrieb_id
+			    AND   p1.date = p2.date
+			LEFT JOIN fs_betrieb b
+			    ON    p1.betrieb_id = b.id
 
-			WHERE p1.betrieb_id = p2.betrieb_id
-			  AND p1.date = p2.date
-			  AND p1.betrieb_id = b.id
-			  AND p2.foodsaver_id = :fs_id
+			WHERE p2.foodsaver_id = :fs_id
 			  AND p2.date > :date_from
 			  AND p2.date < :date_to
 
