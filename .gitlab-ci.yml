@@ -63,7 +63,7 @@ outdated:
   stage: outdated
   script:
   # unfortunately "composer outdated -D" only works if you have installed the dependencies :/
-  - composer install --verbose --prefer-dist --no-progress --no-interaction --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
+  - composer install --verbose --prefer-dist --no-progress --no-interaction --classmap-authoritative --no-scripts --ignore-platform-reqs
   - ./scripts/outdated-notify
   cache:
     key: outdated:v1
@@ -127,12 +127,12 @@ build:backend:
   image: registry.gitlab.com/foodsharing-dev/images/php:7.4
   stage: build
   script:
-    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
-    - (cd phinx && composer install --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs)
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-scripts --ignore-platform-reqs
+    - (cd phinx && composer install --no-progress --no-interaction --no-scripts --ignore-platform-reqs)
     - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose --ansi
     - vendor/bin/parallel-lint --no-progress --exclude vendor .
     - FS_ENV=dev vendor/bin/phpstan analyse --memory-limit=768M --no-progress
-    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
     - mkdir assets
     - FS_ENV=dev bin/console assets:install

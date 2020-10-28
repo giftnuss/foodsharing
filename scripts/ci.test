@@ -21,7 +21,7 @@ sed -i "s#www-data#root#g" /usr/local/etc/php-fpm.d/fpm.conf
 rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 bin/console foodsharing:setup
 # also install dev packages
-composer install --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs && composer outdated --direct
+composer install --prefer-dist --no-progress --no-interaction --no-scripts --ignore-platform-reqs && composer outdated --direct
 php-fpm -R 2> php_fpm_err.log &
 echo $SECONDS seconds elapsed
 
