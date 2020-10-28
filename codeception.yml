@@ -15,13 +15,6 @@ extensions:
         - Codeception\Extension\RunFailed
     commands:
         - Foodsharing\Dev\SeedCommand
-coverage:
-  enabled: false
-  remote: false
-  include:
-    - src/*
-    - lib/*
-    - app/*
 modules:
     config:
         Db:

@@ -36,7 +36,6 @@ client/.cache
 client/.yarnrc
 client/dist
 client/test/_compiled.js
-c3.php
 /images/
 /nbproject/
 maintenance_mode_on
