@@ -152,7 +152,7 @@ build:docs:
   image: node:14.14.0-alpine3.12
   stage: build
   script:
-  - yarn global add gitbook-cli
+  - yarn global add graceful-fs gitbook-cli
   - gitbook install docs
   - gitbook build docs docs/dist
   cache:
