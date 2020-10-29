@@ -149,10 +149,10 @@ build:backend:
 
 build:docs:
   <<: *defaults
-  image: node:14.14.0-alpine3.12
+  image: node:12.18.2-alpine
   stage: build
   script:
-  - yarn global add graceful-fs gitbook-cli
+  - yarn global add gitbook-cli
   - gitbook install docs
   - gitbook build docs docs/dist
   cache:
