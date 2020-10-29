@@ -14,7 +14,7 @@ name=foodsharing_$FS_ENV
 echo "Removing $name containers"
 containers=$(docker ps -aq -f name="$name")
 if [ "x" != "x$containers" ]; then
-  docker rm "$containers"
+  echo "$containers" | xargs docker rm
 else
   echo "... there are none!"
 fi
@@ -31,7 +31,7 @@ if [ "x" != "x$volumes" ]; then
     fi
   done
   echo "Removing volumes: $remove"
-  docker volume rm "$remove"
+  echo "$remove" | xargs docker volume rm
 else
   echo "... there are none!"
 fi
