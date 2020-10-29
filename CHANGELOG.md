@@ -30,6 +30,7 @@
 - JS linter now asks for dangling comma !1728 @ChrisOelmueller
 - Update backend dependencies (codeception, twig, symfony, friendsofsymfony, phpunit) and removed abandoned flow/jsonpath !1732 @chriswalg
 - Update Composer to version 2 and PHP to version 7.4.11 !1734 @peter.toennies
+- Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
 
 # 2020-10-23 Hotfix
 
