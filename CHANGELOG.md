@@ -50,6 +50,7 @@
 - Remove unused `triage` CI script #979 !1750 @ChrisOelmueller
 - Update Nelmio API doc bundle to 4.0.1 !1747 @alex.simm
 - upgrade webpack-merge to v 5 !1744 @peter.toennies
+- Replaced gitbook v1 to mdbook !1738 @chriswalg
 
 # 2020-10-23 Hotfix
 

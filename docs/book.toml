@@ -1,0 +1,19 @@
+[book]
+title = "foodsharing Developer Documentation"
+description = "This is the developer documentation for the code that powers foodsharing.de, foodsharing.at, and foodsharingschweiz.ch."
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "navy"
+additional-css = ["styles/website.css"]
+git-repository-url = "https://gitlab.com/foodsharing-dev/foodsharing"
+
+[rust]
+edition = "2018"
+
+[build]
+build-dir = "dist"
+create-missing = false
+
+[output.html.search]
+limit-results = 15

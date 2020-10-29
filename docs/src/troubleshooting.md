@@ -70,7 +70,7 @@ This deletes and restarts the docker containers.
 The local website gives you database access so that you can directly view and modify what is written in the database.
 Access to the e-mails that are sent via the website can also be found.
 
-| dev | test |
+| | dev | test |
 --- | --- | --- |
 Website | [`localhost:18080`](localhost:18080) | |
 phpadmin (database access) | [`localhost:18081`](localhost:18081) | [`localhost:18080`](localhost:28081) |

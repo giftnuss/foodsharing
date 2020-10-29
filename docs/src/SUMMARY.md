@@ -4,14 +4,14 @@
 - [Aufruf zur Unterstützung (DE)](it-tasks.md)
 - [Call for contribution (EN)](it-tasks_EN.md)
 
-### Getting started
+# Getting started
 - [Getting the code](getting-the-code.md)
 - [Running the code: Docker](running-the-code.md)
 - [Setting things up](setting-things-up.md)
   - [IDE setup](ide-setup.md)
   - [User roles](learn-user-roles.md)
 
-### Contributing
+# Contributing
   - [Einführung in Git und unser Arbeiten](contributing_DE.md)
   - [Making and submitting changes](contributing.md)
   - [getting to know our codebase](codebase.md)
@@ -22,7 +22,7 @@
   - [Troubleshooting](troubleshooting.md)
   - [Beta Testing (DE)](beta-testing-de.md)
 
-### PHP Reference
+# PHP Reference
 - [Modern PHP](php.md)
   - [PHP Structure](php-structure.md)
 - [Legacy PHP](php-legacy.md)
@@ -31,7 +31,7 @@
 - [Refactoring](refactor.md)
 - [Translation](internationalization.md)
 
-### References
+# References
   - [Scripts](scripts.md)
   - [Request types](requests.md)
     - [Legacy XHR](requests-xhr.md)
