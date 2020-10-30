@@ -116,7 +116,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function listThreadsAction(int $forumId, int $forumSubId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
 		}
 
@@ -156,6 +156,10 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function getThreadAction(int $threadId): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$thread = $this->forumGateway->getThread($threadId);
 
 		if (!$thread) {
@@ -194,7 +198,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function createPostAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayPostToThread($threadId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayPostToThread($threadId)) {
 			throw new HttpException(403);
 		}
 
@@ -216,7 +220,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function createThreadAction(int $forumId, int $forumSubId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
 		}
 
@@ -242,7 +246,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function patchThreadAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayModerate($threadId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayModerate($threadId)) {
 			throw new HttpException(403);
 		}
 
@@ -272,7 +276,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function followThreadByEmailAction(int $threadId): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
 		$this->forumFollowerGateway->followThreadByEmail($this->session->id(), $threadId);
@@ -290,7 +294,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function followThreadByBellAction(int $threadId): SymfonyResponse
 	{
-		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+		if (!$this->session->id() || !$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
 
@@ -304,10 +308,15 @@ class ForumRestController extends AbstractFOSRestController
 	 *
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="401", description="Insufficient permissions")
 	 * @Rest\Delete("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
 	public function unfollowThreadByEmailAction(int $threadId): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$this->forumFollowerGateway->unfollowThreadByEmail($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
@@ -318,10 +327,15 @@ class ForumRestController extends AbstractFOSRestController
 	 *
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="401", description="Insufficient permissions")
 	 * @Rest\Delete("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
 	public function unfollowThreadByBellAction(int $threadId): SymfonyResponse
 	{
+		if (!$this->session->id() || !$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
+		}
+
 		$this->forumFollowerGateway->unfollowThreadByBell($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
@@ -338,6 +352,10 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function deletePostAction(int $postId): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$post = $this->forumGateway->getPost($postId);
 		if (!$post) {
 			throw new HttpException(404);
@@ -363,6 +381,10 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function deleteThreadAction(int $threadId): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$thread = $this->forumGateway->getThread($threadId);
 		if (!$thread) {
 			throw new HttpException(404);
@@ -386,6 +408,10 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function addReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
@@ -402,10 +428,15 @@ class ForumRestController extends AbstractFOSRestController
 	 *
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="401", description="Insufficient permissions")
 	 * @Rest\Delete("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function deleteReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$this->forumTransactions->removeReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
