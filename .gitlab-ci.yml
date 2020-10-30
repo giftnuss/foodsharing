@@ -135,16 +135,12 @@ build:backend:
 
 build:docs:
   <<: *defaults
+  image:
+    name: peaceiris/mdbook:v0.4.4
+    entrypoint: [ "" ]
   stage: build
-  variables:
-    MDBOOK_VERSION: 0.4.4
-    HOME: $CI_PROJECT_DIR/mdbook
-  before_script:
-    - mkdir $HOME && cd $HOME
-    - curl -O -L https://github.com/rust-lang/mdBook/releases/download/v$MDBOOK_VERSION/mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz
-    - tar xvzf mdbook-v$MDBOOK_VERSION-x86_64-unknown-linux-gnu.tar.gz
   script:
-    - ./mdbook build $CI_PROJECT_DIR/docs
+    - mdbook build docs
   artifacts:
     expire_in: 1 week
     paths:
