@@ -79,7 +79,7 @@ class ProfileView extends View
 					'{email}' => $this->foodsaver['email'],
 				]) . '</h1>';
 				$warningContainer = '<div>'
-					. $this->v_utils->v_info($warningMessage, false, '<i class="fas fa-exclamation-triangle"></i>')
+					. $this->v_utils->v_info($warningMessage, '', '<i class="fas fa-exclamation-triangle"></i>')
 					. '</div>';
 				$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
 			}
@@ -193,7 +193,7 @@ class ProfileView extends View
 		if ($this->foodsaver['online']) {
 			$online = '<div class="mt-2">' . $this->v_utils->v_info(
 				$this->translator->trans('profile.online', ['{name}' => $this->foodsaver['name']]),
-				false,
+				'',
 				'<i class="fas fa-circle text-secondary"></i>'
 			) . '</div>';
 		}
