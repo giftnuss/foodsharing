@@ -18,19 +18,19 @@
       <i class="fas fa-fw fa-user" /> {{ $i18n('pickup.open_profile') }}
     </b-dropdown-item>
     <b-dropdown-item
-      v-if="allowChat"
+      v-if="allowChat && !isMe"
       @click="openChat"
     >
       <i class="fas fa-fw fa-comment" /> {{ $i18n('chat.open_chat') }}
     </b-dropdown-item>
     <b-dropdown-item
-      v-if="callLink"
+      v-if="callLink && !isMe"
       :href="callLink"
     >
       <i class="fas fa-fw fa-phone" /> {{ $i18n('pickup.call') }}
     </b-dropdown-item>
     <b-dropdown-item
-      v-else-if="callText"
+      v-else-if="callText && !isMe"
       @click="copyIntoClipboard(callText)"
     >
       <!-- eslint-disable-next-line vue/max-attributes-per-line -->
@@ -66,6 +66,7 @@ import { pulseSuccess } from '@/script'
 import { callableNumber } from '@/utils'
 import conv from '@/conv'
 import i18n from '@/i18n'
+import serverData from '@/server-data'
 
 export default {
   components: { Avatar, BDropdown, BDropdownItem },
@@ -106,6 +107,9 @@ export default {
     },
     canCopy () {
       return !!navigator.clipboard
+    },
+    isMe () {
+      return serverData.user.id === this.profile.id
     },
   },
   methods: {
