@@ -43,7 +43,7 @@
     "ext-redis": "*",
     "ext-simplexml": "*",
     "ext-zlib": "*",
-    "ddeboer/imap": "1.10.0",
+    "ddeboer/imap": "1.10.1",
     "doctrine/annotations": "1.10.3",
     "doctrine/cache": "1.10.1",
     "erusev/parsedown": "1.7.4",

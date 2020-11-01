@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d27d48360584d6c7c8677cebcdfaa8ca",
+    "content-hash": "826e4020e74c9fbb719f3dbc44a676c6",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -147,16 +147,16 @@
         },
         {
             "name": "ddeboer/imap",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/imap.git",
-                "reference": "fc09dbf6fb9ba7317a95c719e45893efc4fe6bde"
+                "reference": "d439d09376dd53209788cddb6e2ea277f8ddc8a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/imap/zipball/fc09dbf6fb9ba7317a95c719e45893efc4fe6bde",
-                "reference": "fc09dbf6fb9ba7317a95c719e45893efc4fe6bde",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/d439d09376dd53209788cddb6e2ea277f8ddc8a6",
+                "reference": "d439d09376dd53209788cddb6e2ea277f8ddc8a6",
                 "shasum": ""
             },
             "require": {
@@ -167,11 +167,11 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.16",
+                "laminas/laminas-mail": "^2.10",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpstan/phpstan-strict-rules": "^0.12",
-                "phpunit/phpunit": "^8.5",
-                "zendframework/zend-mail": "^2.10"
+                "phpunit/phpunit": "^8.5"
             },
             "type": "library",
             "autoload": {
@@ -205,9 +205,19 @@
             ],
             "support": {
                 "issues": "https://github.com/ddeboer/imap/issues",
-                "source": "https://github.com/ddeboer/imap/tree/1.10.0"
+                "source": "https://github.com/ddeboer/imap/tree/1.10.1"
             },
-            "time": "2020-01-24T08:15:24+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/Slamdunk",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/ddeboer",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-08-26T07:12:55+00:00"
         },
         {
             "name": "doctrine/annotations",
