@@ -48,7 +48,7 @@
     "doctrine/cache": "1.10.1",
     "erusev/parsedown": "1.7.4",
     "exercise/htmlpurifier-bundle": "3.0",
-    "filp/whoops": "2.7.2",
+    "filp/whoops": "2.9.1",
     "fpdo/fluentpdo": "2.1.2",
     "friendsofsymfony/rest-bundle": "3.0.3",
     "html2text/html2text": "4.3.1",
