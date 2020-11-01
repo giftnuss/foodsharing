@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "826e4020e74c9fbb719f3dbc44a676c6",
+    "content-hash": "9ae1bbf41fd1e0cb54195c3cebc4e0c5",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -7873,16 +7873,16 @@
         },
         {
             "name": "voku/bounce-mail-handler",
-            "version": "v6.0.1",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/PHPMailer-BMH.git",
-                "reference": "121e338000f3f7f8d80581e02b086e0a970a2029"
+                "reference": "93afed549f4df30b51b927637b4beb6c65c9c470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/PHPMailer-BMH/zipball/121e338000f3f7f8d80581e02b086e0a970a2029",
-                "reference": "121e338000f3f7f8d80581e02b086e0a970a2029",
+                "url": "https://api.github.com/repos/voku/PHPMailer-BMH/zipball/93afed549f4df30b51b927637b4beb6c65c9c470",
+                "reference": "93afed549f4df30b51b927637b4beb6c65c9c470",
                 "shasum": ""
             },
             "require": {
@@ -7934,9 +7934,9 @@
             ],
             "support": {
                 "issues": "https://github.com/voku/PHPMailer-BMH/issues",
-                "source": "https://github.com/voku/PHPMailer-BMH/tree/v6.0.1"
+                "source": "https://github.com/voku/PHPMailer-BMH/tree/6.0.3"
             },
-            "time": "2019-07-19T00:31:08+00:00"
+            "time": "2020-10-22T09:24:56+00:00"
         },
         {
             "name": "web-token/jwt-core",
