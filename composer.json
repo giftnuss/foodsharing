@@ -52,7 +52,7 @@
     "fpdo/fluentpdo": "2.2.0",
     "friendsofsymfony/rest-bundle": "3.0.3",
     "html2text/html2text": "4.3.1",
-    "influxdb/influxdb-php": "1.15.0",
+    "influxdb/influxdb-php": "1.15.1",
     "intervention/image": "2.5.1",
     "jms/serializer-bundle": "3.7.0",
     "maximebf/debugbar": "1.16.3",
