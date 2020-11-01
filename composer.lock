@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbae7ad00c8f84d43db1da92b360783a",
+    "content-hash": "4d53608157b157ba4f977ff9d4990bc9",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -959,21 +959,21 @@
         },
         {
             "name": "fpdo/fluentpdo",
-            "version": "v2.1.2",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/envms/fluentpdo.git",
-                "reference": "3af5c02ec3d38654e0346029ccbcd8aca930a663"
+                "reference": "8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/envms/fluentpdo/zipball/3af5c02ec3d38654e0346029ccbcd8aca930a663",
-                "reference": "3af5c02ec3d38654e0346029ccbcd8aca930a663",
+                "url": "https://api.github.com/repos/envms/fluentpdo/zipball/8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260",
+                "reference": "8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260",
                 "shasum": ""
             },
             "require-dev": {
                 "envms/fluent-test": "^1.0",
-                "phpunit/phpunit": "^7.0"
+                "phpunit/phpunit": "^8.0"
             },
             "type": "library",
             "autoload": {
@@ -989,7 +989,7 @@
             "authors": [
                 {
                     "name": "envms",
-                    "homepage": "http://env.ms"
+                    "homepage": "https://env.ms"
                 }
             ],
             "description": "FluentPDO is a quick and light PHP library for rapid query building. It features a smart join builder, which automatically creates table joins.",
@@ -1007,9 +1007,9 @@
             ],
             "support": {
                 "issues": "https://github.com/envms/fluentpdo/issues",
-                "source": "https://github.com/envms/fluentpdo/tree/v2.1.2"
+                "source": "https://github.com/envms/fluentpdo/tree/v2.2.0"
             },
-            "time": "2018-10-30T11:53:23+00:00"
+            "time": "2020-09-30T14:24:57+00:00"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
