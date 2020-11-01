@@ -62,7 +62,7 @@
     "nesbot/carbon": "2.35.0",
     "sensio/framework-extra-bundle": "5.5.5",
     "sentry/sentry-symfony": "^3.5",
-    "setasign/fpdi": "2.3.3",
+    "setasign/fpdi": "2.3.4",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/asset": "5.1.8",
     "symfony/config": "5.1.8",
