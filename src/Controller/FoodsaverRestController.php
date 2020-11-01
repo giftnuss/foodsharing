@@ -4,6 +4,7 @@ namespace Foodsharing\Controller;
 
 use Carbon\Carbon;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -13,17 +14,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class FoodsaverRestController extends AbstractFOSRestController
 {
+	private FoodsaverGateway $foodsaverGateway;
 	private ProfileGateway $profileGateway;
-	private PickupRestController $pickupRestController;
 	private Session $session;
 
 	public function __construct(
+		FoodsaverGateway $foodsaverGateway,
 		ProfileGateway $profileGateway,
-		PickupRestController $pickupRestController,
 		Session $session
 	) {
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
-		$this->pickupRestController = $pickupRestController;
 		$this->session = $session;
 	}
 
@@ -46,7 +47,30 @@ final class FoodsaverRestController extends AbstractFOSRestController
 		];
 
 		return $this->handleView($this->view([
-			'pickups' => $this->pickupRestController->enrichPickupSlots($pickups),
+			'pickups' => $this->enrichPickupSlots($pickups),
 		]));
+	}
+
+	/**
+	 * @deprecated This is a (less generic) duplicate of PickupRestController:enrichPickupSlots.
+	 *
+	 * It should be removed soon, or combined into a RestNormalization or DTO.
+	 * Right now, this is not possible because of the foodsaverGateway coupling!
+	 */
+	private function enrichPickupSlots(array $pickups): array
+	{
+		foreach ($pickups as &$pickup) {
+			foreach ($pickup['occupiedSlots'] as &$slot) {
+				$details = $this->foodsaverGateway->getFoodsaver($slot['foodsaverId']);
+				$slot['profile'] = RestNormalization::normalizeStoreUser($details);
+			}
+			unset($slot['foodsaverId']);
+		}
+		unset($pickup);
+		usort($pickups, function ($a, $b) {
+			return $a['date']->lt($b['date']) ? -1 : 1;
+		});
+
+		return $pickups;
 	}
 }
