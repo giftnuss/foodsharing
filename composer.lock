@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b6e6015531ca064862fee88db343bd4",
+    "content-hash": "acadbde3e07040b7cc159cf03d3b9dbe",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -660,16 +660,16 @@
         },
         {
             "name": "exercise/htmlpurifier-bundle",
-            "version": "v3.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Exercise/HTMLPurifierBundle.git",
-                "reference": "b6c238e9dce45aa8fcb9d1bac3fe3acc0999e489"
+                "reference": "852d00ce4ec6b077fb6f3bfa7931b55ab46666da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Exercise/HTMLPurifierBundle/zipball/b6c238e9dce45aa8fcb9d1bac3fe3acc0999e489",
-                "reference": "b6c238e9dce45aa8fcb9d1bac3fe3acc0999e489",
+                "url": "https://api.github.com/repos/Exercise/HTMLPurifierBundle/zipball/852d00ce4ec6b077fb6f3bfa7931b55ab46666da",
+                "reference": "852d00ce4ec6b077fb6f3bfa7931b55ab46666da",
                 "shasum": ""
             },
             "require": {
@@ -716,9 +716,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Exercise/HTMLPurifierBundle/issues",
-                "source": "https://github.com/Exercise/HTMLPurifierBundle/tree/v3.0"
+                "source": "https://github.com/Exercise/HTMLPurifierBundle/tree/v3.0.1"
             },
-            "time": "2020-03-10T19:35:42+00:00"
+            "time": "2020-09-18T10:46:31+00:00"
         },
         {
             "name": "exsyst/swagger",
