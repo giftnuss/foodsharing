@@ -30,7 +30,7 @@
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
 - JS linter now asks for dangling comma !1728 @ChrisOelmueller
-- Update backend dependencies (codeception, twig, symfony, friendsofsymfony, phpunit) and removed abandoned flow/jsonpath !1732 @chriswalg
+- Update backend dependencies !1732 !1740 @chriswalg
 - Update Composer to version 2 and PHP to version 7.4.11 !1734 @peter.toennies
 - Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
 - Increase phpstan analysis level to 5 and fix all issues !1674 !1729 @ChrisOelmueller
