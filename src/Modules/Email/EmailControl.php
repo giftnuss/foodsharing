@@ -78,8 +78,7 @@ class EmailControl extends Control
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
 		$offerAllOptions = $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail();
-		$offerSomeOptions = $this->session->isAmbassador();
-		$this->pageHelper->addContent($this->view->v_email_compose($boxes, $offerAllOptions, $offerSomeOptions));
+		$this->pageHelper->addContent($this->view->v_email_compose($boxes, $offerAllOptions));
 
 		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 

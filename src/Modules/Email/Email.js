@@ -7,6 +7,7 @@ import i18n from '@/i18n'
 import { pulseInfo, pulseError } from '@/script'
 import { expose } from '@/utils'
 import { sendTestEmail } from '@/api/newsletter'
+import './Email.css'
 
 expose({ trySendTestEmail })
 
