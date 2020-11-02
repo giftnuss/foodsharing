@@ -101,7 +101,7 @@
       :url="$url('workingGroups')"
       icon="fa-users"
       :title="$i18n('menu.entry.groups')"
-      :hide-title-mobile="true"
+      :hide-title-always="true"
     />
   </div>
 </template>
