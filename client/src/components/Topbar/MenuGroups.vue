@@ -106,14 +106,14 @@
   </div>
 </template>
 <script>
-import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
+import { BCollapse, VBToggle } from 'bootstrap-vue'
 import Conference from './Conference'
 import FsDropdownMenu from './FsDropdownMenu'
 import MenuItem from './MenuItem'
 
 export default {
   components: { BCollapse, FsDropdownMenu, MenuItem },
-  directives: { VBToggle, VBTooltip },
+  directives: { VBToggle },
   mixins: [Conference],
   props: {
     workingGroups: {
