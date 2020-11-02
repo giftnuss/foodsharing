@@ -15,6 +15,7 @@
 - Only display broadcast message for logged-in users !1757 @ChrisOelmueller
 - Recolor formerly brown topbar to beige !1762 @ChrisOelmueller
 - Adjust structure and color scheme of dashboard activity updates !1753 @ChrisOelmueller
+- Ambassadors can access management for workgroups in "their" region from topbar #965 !1742 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
@@ -42,6 +43,7 @@
 - Replace isOrgaTeam checks with may(orga) #883 !1680 @ChrisOelmueller
 - Rewrite store wall with REST and Vue !1690 !1750 @ChrisOelmueller
 - Rewrite store application screen in Vue !1756 @ChrisOelmueller
+- Some changes to Session and PageHelper group handling !1742 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
