@@ -42,7 +42,7 @@
           :has-fs-role="hasFsRole"
           :regions="regions"
           :working-groups="workingGroups"
-          :may-add-stores="may.addStore"
+          :may-add-store="may.addStore"
           :avatar="avatar"
           :user-id="userId"
           @openSearch="searchOpen = !searchOpen"
