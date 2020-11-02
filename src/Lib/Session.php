@@ -264,11 +264,10 @@ class Session
 
 	public function listRegionIDs(): array
 	{
+		$regions = $this->getRegions();
 		$out = [];
-		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$out[] = $region['id'];
-			}
+		foreach ($regions as $region) {
+			$out[] = $region['id'];
 		}
 
 		return $out;
