@@ -254,7 +254,7 @@ class Session
 		return false;
 	}
 
-	public function isAdminFor(int $regionId): bool
+	public function isAdminFor(?int $regionId): bool
 	{
 		if ($this->isAmbassador()) {
 			foreach ($_SESSION['client']['botschafter'] as $b) {
@@ -409,16 +409,7 @@ class Session
 				}
 			}
 
-			if ($r = $this->regionGateway->listForFoodsaver($fs['id'])) {
-				$_SESSION['client']['bezirke'] = [];
-				foreach ($r as $rr) {
-					$_SESSION['client']['bezirke'][$rr['id']] = [
-						'id' => $rr['id'],
-						'name' => $rr['name'],
-						'type' => $rr['type']
-					];
-				}
-			}
+			$_SESSION['client']['bezirke'] = $this->regionGateway->listForFoodsaver($fs['id']) ?? [];
 		}
 
 		if ($r = $this->storeGateway->listStoreIdsForBieb($fs['id'])) {

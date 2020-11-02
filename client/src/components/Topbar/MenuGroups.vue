@@ -78,7 +78,7 @@
             <i class="fas fa-poll-h" /> {{ $i18n('terminology.polls') }}
           </a>
           <a
-            v-if="group.isBot"
+            v-if="group.isAdmin"
             :href="$url('workingGroupEdit', group.id)"
             role="menuitem"
             class="dropdown-item sub"

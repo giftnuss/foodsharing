@@ -12,6 +12,7 @@ use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Permissions\WorkGroupPermissions;
 use Twig\Environment;
 
 final class PageHelper
@@ -47,6 +48,7 @@ final class PageHelper
 	private RegionPermissions $regionPermissions;
 	private ReportPermissions $reportPermissions;
 	private StorePermissions $storePermissions;
+	private WorkGroupPermissions $workGroupPermissions;
 	private Environment $twig;
 
 	public function __construct(
@@ -63,7 +65,8 @@ final class PageHelper
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
 		RegionPermissions $regionPermissions,
-		NewsletterEmailPermissions $newsletterEmailPermissions
+		NewsletterEmailPermissions $newsletterEmailPermissions,
+		WorkGroupPermissions $workGroupPermissions
 	) {
 		$this->twig = $twig;
 		$this->identificationHelper = $identificationHelper;
@@ -79,6 +82,7 @@ final class PageHelper
 		$this->regionPermissions = $regionPermissions;
 		$this->reportPermissions = $reportPermissions;
 		$this->storePermissions = $storePermissions;
+		$this->workGroupPermissions = $workGroupPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -221,13 +225,14 @@ final class PageHelper
 			$groupId = $group['id'];
 			$groupType = $group['type'];
 			$group = array_merge($group, [
-				'isBot' => $this->session->isAdminFor($groupId),
 				'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($groupId),
 				'hasConference' => $this->regionPermissions->hasConference($groupType),
 			]);
 			if (Type::isRegion($groupType)) {
+				$group['isAdmin'] = $this->session->isAdminFor($groupId);
 				$regions[] = $group;
 			} else {
+				$group['isAdmin'] = $this->workGroupPermissions->mayEdit($group);
 				$workingGroups[] = $group;
 			}
 		}

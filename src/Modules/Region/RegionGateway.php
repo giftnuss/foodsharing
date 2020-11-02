@@ -163,7 +163,8 @@ class RegionGateway extends BaseGateway
 			'
 			SELECT 	b.`id`,
 					b.name,
-					b.type
+					b.type,
+					b.parent_id
 
 			FROM 	`fs_foodsaver_has_bezirk` hb,
 					`fs_bezirk` b

@@ -39,7 +39,7 @@
           <i class="far fa-comment-alt" />{{ $i18n('menu.entry.forum') }}
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.isAdmin"
           :href="$url('forum', region.id, 1)"
           role="menuitem"
           class="dropdown-item sub"
@@ -113,7 +113,7 @@
           <i class="fas fa-user" />{{ $i18n('menu.entry.fs') }}
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.isAdmin"
           :href="$url('passports', region.id)"
           role="menuitem"
           class="dropdown-item sub"
@@ -121,7 +121,7 @@
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.isAdmin"
           :href="$url('reports', region.id)"
           role="menuitem"
           class="dropdown-item sub"
