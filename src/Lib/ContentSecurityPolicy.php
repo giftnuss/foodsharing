@@ -57,6 +57,9 @@ class ContentSecurityPolicy
 			'child-src' => [
 				$self,
 				'blob:'
+			],
+			'manifest-src' => [
+				$self
 			]
 		];
 
