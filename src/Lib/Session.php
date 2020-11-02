@@ -282,11 +282,7 @@ class Session
 
 	public function isAmbassador(): bool
 	{
-		if (isset($_SESSION['client']['botschafter'])) {
-			return true;
-		}
-
-		return false;
+		return isset($_SESSION['client']['botschafter']);
 	}
 
 	public function login($fs_id = null, $rememberMe = false)
