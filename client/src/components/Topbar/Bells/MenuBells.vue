@@ -38,7 +38,7 @@
       <b-btn
         secondary
         size="sm"
-        :disabled="unread"
+        :disabled="!!unread"
         @click="markNewBellsAsRead"
       >
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
