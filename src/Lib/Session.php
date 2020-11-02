@@ -233,6 +233,14 @@ class Session
 		return $_SESSION['client']['bezirke'] ?? [];
 	}
 
+	/**
+	 * @deprecated helper that makes ancient code easier to read (in theory, DashboardControl could use this)
+	 */
+	private function getManagedRegions(): array
+	{
+		return $_SESSION['client']['botschafter'] ?? [];
+	}
+
 	public function listRegionIDs(): array
 	{
 		$regions = $this->getRegions();
@@ -246,7 +254,7 @@ class Session
 
 	public function getMyAmbassadorRegionIds(): array
 	{
-		$managedRegions = $_SESSION['client']['botschafter'] ?? [];
+		$managedRegions = $this->getManagedRegions();
 		$out = [];
 		foreach ($managedRegions as $region) {
 			$out[] = $region['bezirk_id'];
@@ -258,8 +266,9 @@ class Session
 	public function isAdminFor(?int $regionId): bool
 	{
 		if ($this->isAmbassador()) {
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				if ($b['bezirk_id'] == $regionId) {
+			$managedRegions = $this->getManagedRegions();
+			foreach ($managedRegions as $region) {
+				if ($region['bezirk_id'] == $regionId) {
 					return true;
 				}
 			}
@@ -449,9 +458,11 @@ class Session
 			if ($include_parent_regions) {
 				$regionIds = $this->regionGateway->listRegionsIncludingParents($regionIds);
 			}
-			foreach ($_SESSION['client']['botschafter'] as $b) {
+			$managedRegions = $this->getManagedRegions();
+			foreach ($managedRegions as $region) {
 				foreach ($regionIds as $regId) {
-					if ($b['bezirk_id'] == $regId && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
+					$consider = $include_groups || Type::isRegion($region['type']);
+					if ($consider && $region['bezirk_id'] == $regId) {
 						return true;
 					}
 				}
