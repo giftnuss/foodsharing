@@ -206,7 +206,7 @@ export default {
     box-shadow: -0.5em 0.5em 20px -3px #333;
     max-width: 100%;
   }
-  .login-rememberme /deep/ .custom-control-label {
+  .login-rememberme ::v-deep .custom-control-label {
     font-size: 0.7rem!important;
     &::before {
       top: 0;

@@ -17,6 +17,7 @@
         :calendar-button="true"
         input-class="datepickerClass pl-3"
         :class="{ 'is-invalid': $v.birthdate.$error }"
+        class="datepicker"
         calendar-button-icon="fa fa-calendar"
         @selected="$emit('update:birthdate', $event)"
         @input="$emit('update:birthdate', $event)"
@@ -87,12 +88,11 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .datepickerClass {
   border: 1px solid var(--border) !important;
 }
-
-.bootstrap .input-group .input-group-text {
+.datepicker ::v-deep .input-group-text{
   background-color: var(--fs-green);
   color: white;
 }

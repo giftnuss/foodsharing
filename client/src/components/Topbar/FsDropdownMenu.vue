@@ -96,7 +96,7 @@ export default {
 i {
   font-size: 1rem;
 }
-.caret-beneath /deep/ .dropdown-toggle {
+.caret-beneath ::v-deep .dropdown-toggle {
   padding-bottom: 5px;
   text-align: center;
   &::after {
@@ -119,7 +119,7 @@ i {
 
 @media(max-width: 767px) {
   .collapse {
-    .caret-beneath /deep/ .dropdown-toggle {
+    .caret-beneath ::v-deep .dropdown-toggle {
       text-align: unset;
       &::after {
         display: inline-block;
@@ -130,17 +130,17 @@ i {
         visibility: visible;
       }
     }
-    .dropdown /deep/ .dropdown-menu {
+    .dropdown ::v-deep .dropdown-menu {
       // Margin to have an indent in the burger menu.
       margin-left: 30px;
     }
   }
 }
 .dropdown {
-  &.list-with-actions /deep/ .dropdown-menu {
+  &.list-with-actions ::v-deep .dropdown-menu {
     padding: 0;
   }
-  /deep/ .dropdown-menu {
+  ::v-deep .dropdown-menu {
     // Bug of chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=957946
     background-clip: unset;
 
@@ -177,7 +177,7 @@ i {
   }
   @media (max-width: 575px) {
     position: initial;
-    /deep/ .dropdown-menu {
+    ::v-deep .dropdown-menu {
       width: 100%;
       max-width: initial;
       top: 2.2em;
@@ -186,7 +186,7 @@ i {
       }
     }
   }
-  /deep/ .badge {
+  ::v-deep .badge {
     position: absolute;
     margin-top: -0.5em;
     margin-left: -0.7em;

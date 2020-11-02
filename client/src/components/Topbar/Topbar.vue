@@ -158,7 +158,7 @@ export default {
   flex-grow: 1;
   align-items: center;
   justify-content: space-evenly;
-  /deep/ .nav-item {
+  ::v-deep .nav-item {
     padding-right: 6px;
   }
   .login-popover {
@@ -174,7 +174,7 @@ export default {
   color: var(--primary);
 }
 
-/deep/ .navbar-collapse {
+::v-deep .navbar-collapse {
   &.show {
     // Only when menu is shown. Fixes problem that list of dropdown items is to long.
     max-height: 70vh;

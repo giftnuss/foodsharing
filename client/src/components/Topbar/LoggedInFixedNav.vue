@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bootstrap .navbar-nav /deep/ .dropdown-menu {
+.bootstrap .navbar-nav ::v-deep .dropdown-menu {
   position: absolute;
 }
 </style>

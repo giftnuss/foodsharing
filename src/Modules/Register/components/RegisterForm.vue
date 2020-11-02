@@ -125,18 +125,11 @@ export default {
   display: none;
 }
 
-div#main {
-  margin-top: 45px;
-}
-
-.bootstrap .form-control {
-  background-color: var(--fs-white);
-}
 </style>
 
 <style lang="scss" scoped>
 .bootstrap {
-  .form-control {
+  ::v-deep .form-control {
       background-color: var(--fs-white);
   }
 
@@ -163,7 +156,7 @@ div#main {
     }
   }
 
-  .card /deep/ a[href] {
+  .card ::v-deep a[href] {
     font-weight: bolder;
     color: var(--fs-green);
   }
