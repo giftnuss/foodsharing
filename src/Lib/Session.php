@@ -230,12 +230,7 @@ class Session
 
 	public function getRegions(): array
 	{
-		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			return $_SESSION['client']['bezirke'];
-		}
-		// TODO enable to receive Sentry messages
-		// trigger_error('$this->session->getRegions(): accessed but not initialized yet', E_USER_NOTICE);
-		return [];
+		return $_SESSION['client']['bezirke'] ?? [];
 	}
 
 	public function getMyAmbassadorRegionIds()
