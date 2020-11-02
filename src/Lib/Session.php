@@ -233,6 +233,17 @@ class Session
 		return $_SESSION['client']['bezirke'] ?? [];
 	}
 
+	public function listRegionIDs(): array
+	{
+		$regions = $this->getRegions();
+		$out = [];
+		foreach ($regions as $region) {
+			$out[] = $region['id'];
+		}
+
+		return $out;
+	}
+
 	public function getMyAmbassadorRegionIds(): array
 	{
 		$managedRegions = $_SESSION['client']['botschafter'] ?? [];
@@ -255,17 +266,6 @@ class Session
 		}
 
 		return false;
-	}
-
-	public function listRegionIDs(): array
-	{
-		$regions = $this->getRegions();
-		$out = [];
-		foreach ($regions as $region) {
-			$out[] = $region['id'];
-		}
-
-		return $out;
 	}
 
 	public function getCurrentRegionId()
