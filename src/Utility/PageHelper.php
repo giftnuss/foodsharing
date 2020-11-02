@@ -212,20 +212,23 @@ final class PageHelper
 
 	private function getMenu(): string
 	{
+		$groups = $_SESSION['client']['bezirke'] ?? [];
+
 		$regions = [];
 		$workingGroups = [];
-		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, [
-					'isBot' => $this->session->isAdminFor($region['id']),
-					'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($region['id']),
-					'hasConference' => $this->regionPermissions->hasConference($region['type']),
-				]);
-				if ($region['type'] == Type::WORKING_GROUP) {
-					$workingGroups[] = $region;
-				} else {
-					$regions[] = $region;
-				}
+
+		foreach ($groups as $group) {
+			$groupId = $group['id'];
+			$groupType = $group['type'];
+			$group = array_merge($group, [
+				'isBot' => $this->session->isAdminFor($groupId),
+				'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($groupId),
+				'hasConference' => $this->regionPermissions->hasConference($groupType),
+			]);
+			if (Type::isRegion($groupType)) {
+				$regions[] = $group;
+			} else {
+				$workingGroups[] = $group;
 			}
 		}
 
