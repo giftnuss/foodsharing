@@ -233,20 +233,15 @@ class Session
 		return $_SESSION['client']['bezirke'] ?? [];
 	}
 
-	public function getMyAmbassadorRegionIds()
+	public function getMyAmbassadorRegionIds(): array
 	{
+		$managedRegions = $_SESSION['client']['botschafter'] ?? [];
 		$out = [];
-		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
-			foreach ($_SESSION['client']['botschafter'] as $b) {
-				$out[] = $b['bezirk_id'];
-			}
+		foreach ($managedRegions as $region) {
+			$out[] = $region['bezirk_id'];
 		}
 
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
+		return $out;
 	}
 
 	public function isAdminFor(?int $regionId): bool
