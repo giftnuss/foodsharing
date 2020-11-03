@@ -6,7 +6,6 @@ use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 use Minishlink\WebPush\Encryption;
-use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\Utils;
 use Minishlink\WebPush\WebPush;
@@ -56,23 +55,17 @@ class WebPushHandler implements PushNotificationHandlerInterface
 
 			$subscription = Subscription::create($subscriptionArray);
 
-			/**
-			 * @var MessageSentReport
-			 */
-			$reportGenerator = $this->webpush->sendNotification($subscription, $payload, true);
+			$messageSentReport = $this->webpush->sendOneNotification($subscription, $payload);
 
-			// @phpstan-ignore-next-line see https://github.com/phpstan/phpstan/issues/1060#issuecomment-667675767
-			foreach ($reportGenerator as $report) {
-				$endpoint = $report->getEndpoint();
+			$endpoint = $messageSentReport->getEndpoint();
 
-				if ($report->isSubscriptionExpired()) {
-					$deadSubscriptions[] = $subscriptionAsJson;
-				}
+			if ($messageSentReport->isSubscriptionExpired()) {
+				$deadSubscriptions[] = $subscriptionAsJson;
+			}
 
-				// logging
-				if (!$report->isSuccess()) {
-					error_log("Message failed to send for subscription {$endpoint}: {$report->getReason()}");
-				}
+			// logging
+			if (!$messageSentReport->isSuccess()) {
+				error_log("Message failed to send for subscription {$endpoint}: {$messageSentReport->getReason()}");
 			}
 		}
 
