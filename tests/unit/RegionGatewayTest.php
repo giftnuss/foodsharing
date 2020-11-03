@@ -1,6 +1,7 @@
 <?php
 
 use Foodsharing\Modules\Region\RegionGateway;
+use UnitTester;
 
 class RegionGatewayTest extends \Codeception\Test\Unit
 {
@@ -40,7 +41,8 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 		$this->assertEquals([
 			'id' => $this->region['id'],
 			'name' => $this->region['name'],
-			'type' => $this->region['type']
+			'type' => $this->region['type'],
+			'parent_id' => $this->region['parent_id'],
 		], $regions[$this->region['id']]);
 	}
 
