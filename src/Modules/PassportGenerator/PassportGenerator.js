@@ -28,6 +28,7 @@ $('#verifyconfirm-dialog').dialog({
   modal: true,
   buttons: {
     [i18n('pass.button.verify')]: async function () {
+      $(this).parent().find('button.ui-button').prop('disabled', true)
       showLoader()
       try {
         await verifyUser(verify_fid)
@@ -37,6 +38,7 @@ $('#verifyconfirm-dialog').dialog({
         console.error(err)
         pulseError(i18n('error_unexpected'))
       } finally {
+        $(this).parent().find('button.ui-button').prop('disabled', false)
         hideLoader()
         $(this).dialog('close')
       }
@@ -78,6 +80,7 @@ $('.verify').on('click', async function () {
   if ($this.hasClass('verify-do')) {
     $('#verifyconfirm-dialog').dialog('open')
   } else {
+    verify_el.css('pointer-events', 'none')
     showLoader()
     try {
       await deverifyUser(verify_fid)
@@ -91,6 +94,7 @@ $('.verify').on('click', async function () {
         pulseError(i18n('error_unexpected'))
       }
     } finally {
+      verify_el.css('pointer-events', 'auto')
       hideLoader()
     }
   }
