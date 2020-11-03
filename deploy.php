@@ -3,7 +3,7 @@
 namespace Deployer;
 
 require 'recipe/common.php';
-require 'recipe/cachetool.php';
+require 'contrib/cachetool.php';
 
 // Project name
 set('application', 'foodsharing');
