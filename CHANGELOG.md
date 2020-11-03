@@ -48,6 +48,7 @@
 - Annotate some variables in unit tests, streamline namespace "imports" !1748 @ChrisOelmueller
 - Remove unused `triage` CI script #979 !1750 @ChrisOelmueller
 - Update Nelmio API doc bundle to 4.0.1 !1747 @alex.simm
+- upgrade webpack-merge to v 5 !1744 @peter.toennies
 
 # 2020-10-23 Hotfix
 

@@ -1,5 +1,5 @@
 const glob = require('glob')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
 const path = require('path')
 const clientRoot = path.resolve(__dirname)

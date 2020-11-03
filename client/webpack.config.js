@@ -1,5 +1,5 @@
 const mkdirp = require('mkdirp')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
