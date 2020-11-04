@@ -1,21 +1,13 @@
 <?php
 
+use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\Database;
+
 class EmojiTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Core\Database
-	 */
-	private $db;
-
-	/**
-	 * @var \Foodsharing\Lib\Db\Db
-	 */
-	private $db2;
+	protected UnitTester $tester;
+	private Database $db;
+	private Db $db2;
 
 	private $user1;
 	private $user2;
@@ -25,8 +17,8 @@ class EmojiTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->db = $this->tester->get(\Foodsharing\Modules\Core\Database::class);
-		$this->db2 = $this->tester->get(\Foodsharing\Lib\Db\Db::class);
+		$this->db = $this->tester->get(Database::class);
+		$this->db2 = $this->tester->get(Db::class);
 		$this->user1 = $this->tester->createFoodsharer();
 		$this->user2 = $this->tester->createFoodsharer();
 		$this->conversation = $this->tester->createConversation([
