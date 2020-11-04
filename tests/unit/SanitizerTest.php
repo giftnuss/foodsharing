@@ -1,20 +1,15 @@
 <?php
 
+use Foodsharing\Utility\Sanitizer;
+
 class SanitizerTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Utility\Sanitizer
-	 */
-	private $sanitizer;
+	protected UnitTester $tester;
+	private Sanitizer $sanitizer;
 
 	protected function _before()
 	{
-		$this->sanitizer = $this->tester->get(\Foodsharing\Utility\Sanitizer::class);
+		$this->sanitizer = $this->tester->get(Sanitizer::class);
 	}
 
 	protected function _after()
