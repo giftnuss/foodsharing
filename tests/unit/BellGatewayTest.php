@@ -1,40 +1,34 @@
 <?php
 
+use Faker\Factory;
+use Faker\Generator;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
+
 class BellGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Bell\BellGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var Faker\Generator
-	 */
-	private $faker;
+	protected UnitTester $tester;
+	private BellGateway $gateway;
+	private Generator $faker;
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Bell\BellGateway::class);
-		$this->faker = Faker\Factory::create('de_DE');
+		$this->gateway = $this->tester->get(BellGateway::class);
+		$this->faker = Factory::create('de_DE');
 	}
 
 	public function testAddBell()
 	{
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
-		$bellData = \Foodsharing\Modules\Bell\DTO\Bell::create(
+		$bellData = Bell::create(
 			'first bell title',
 			$this->faker->text(50),
 			'',
 			[''],
 			[],
 			'',
-			1
+			true,
 		);
 		/* addBell accepts different inputs: $id, [$id, $id], [['id' => $id]] */
 		$this->gateway->addBell([$user1, $user2], $bellData);
@@ -108,14 +102,14 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
 
-		$bellData = \Foodsharing\Modules\Bell\DTO\Bell::create(
+		$bellData = Bell::create(
 			'title',
 			$this->faker->text(50),
 			'some-icon',
 			[],
 			[],
 			'some-identifier',
-			$closable = 0
+			$closable = false,
 		);
 
 		$this->gateway->addBell([$user1, $user2], $bellData);
@@ -126,7 +120,7 @@ class BellGatewayTest extends \Codeception\Test\Unit
 			'body' => $this->faker->text(50),
 			'icon' => 'some-updated-icon',
 			'identifier' => 'some-updated-identifier',
-			'closeable' => 1
+			'closeable' => true,
 		];
 
 		$this->gateway->updateBell($bellId, $updatedData);
