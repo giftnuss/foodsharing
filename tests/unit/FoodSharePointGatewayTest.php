@@ -6,35 +6,12 @@ use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
 class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var FoodSharePointGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var array
-	 */
-	private $foodsaver;
-
-	/**
-	 * @var array
-	 */
-	private $otherFoodsaver;
-
-	/**
-	 * @var array
-	 */
-	private $foodSharePoint;
-
-	/**
-	 * @var array
-	 */
-	private $bezirk;
+	protected UnitTester $tester;
+	private FoodSharePointGateway $gateway;
+	private array $foodsaver;
+	private array $otherFoodsaver;
+	private array $foodSharePoint;
+	private array $bezirk;
 
 	protected function _before()
 	{
@@ -114,7 +91,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 
 	public function testUpdateFoodSharePointThrowsIfIDNotFound()
 	{
-		$this->expectException(\Exception::class);
+		$this->expectException(Exception::class);
 		$this->gateway->updateFoodSharePoint(
 			99999999, []
 		);
