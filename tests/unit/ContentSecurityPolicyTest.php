@@ -1,20 +1,15 @@
 <?php
 
+use Foodsharing\Lib\ContentSecurityPolicy;
+
 class ContentSecurityPolicyTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Lib\ContentSecurityPolicy
-	 */
-	private $csp;
+	protected UnitTester $tester;
+	private ContentSecurityPolicy $csp;
 
 	protected function _before()
 	{
-		$this->csp = $this->tester->get(\Foodsharing\Lib\ContentSecurityPolicy::class);
+		$this->csp = $this->tester->get(ContentSecurityPolicy::class);
 	}
 
 	public function testWebsocketUrlFor(): void
