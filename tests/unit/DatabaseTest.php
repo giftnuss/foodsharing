@@ -1,20 +1,15 @@
 <?php
 
+use Foodsharing\Modules\Core\Database;
+
 class DatabaseTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Core\Database
-	 */
-	private $db;
+	protected UnitTester $tester;
+	private Database $db;
 
 	protected function _before()
 	{
-		$this->db = $this->tester->get(\Foodsharing\Modules\Core\Database::class);
+		$this->db = $this->tester->get(Database::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->foodsaver2 = $this->tester->createFoodsaver();
 	}
@@ -73,7 +68,7 @@ class DatabaseTest extends \Codeception\Test\Unit
 
 	public function testFetchValueByCriteriaThrowsIfNotFound()
 	{
-		$this->expectException(\Exception::class);
+		$this->expectException(Exception::class);
 		$this->expectExceptionMessage('Expected one or more results, but none was returned');
 		$this->db->fetchValueByCriteria(
 			'fs_foodsaver',
