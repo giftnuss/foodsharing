@@ -1,23 +1,16 @@
 <?php
 
 use Carbon\Carbon;
+use Faker\Factory;
+use Faker\Generator;
+use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Store\TeamStatus;
 
 class StoreGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var Faker\Generator
-	 */
-	private $faker;
-
-	/**
-	 * @var \Foodsharing\Modules\Store\StoreGateway
-	 */
-	private $gateway;
+	protected UnitTester $tester;
+	private Generator $faker;
+	private StoreGateway $gateway;
 
 	private $store;
 	private $foodsaver;
@@ -53,11 +46,11 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Store\StoreGateway::class);
+		$this->gateway = $this->tester->get(StoreGateway::class);
 		$this->region = $this->tester->createRegion();
 		$this->store = $this->tester->createStore($this->region['id']);
 		$this->foodsaver = $this->tester->createFoodsaver();
-		$this->faker = Faker\Factory::create('de_DE');
+		$this->faker = Factory::create('de_DE');
 	}
 
 	public function testGetPickupDates()
@@ -110,24 +103,24 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	public function testIsInTeam()
 	{
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::NoMember,
+		$this->assertEquals(TeamStatus::NoMember,
 			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $this->store['id'])
 		);
 
 		$this->tester->addStoreTeam($this->store['id'], $this->foodsaver['id']);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Member,
+		$this->assertEquals(TeamStatus::Member,
 			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $this->store['id'])
 		);
 
 		$coordinator = $this->tester->createStoreCoordinator();
 		$this->tester->addStoreTeam($this->store['id'], $coordinator['id'], true);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Coordinator,
+		$this->assertEquals(TeamStatus::Coordinator,
 			$this->gateway->getUserTeamStatus($coordinator['id'], $this->store['id'])
 		);
 
 		$waiter = $this->tester->createFoodsaver();
 		$this->tester->addStoreTeam($this->store['id'], $waiter['id'], false, true);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::WaitingList,
+		$this->assertEquals(TeamStatus::WaitingList,
 			$this->gateway->getUserTeamStatus($waiter['id'], $this->store['id'])
 		);
 	}
