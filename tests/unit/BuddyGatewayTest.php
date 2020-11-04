@@ -4,17 +4,14 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 
 class BuddyGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
+	protected UnitTester $tester;
 
 	/**
 	 * @var BuddyGateway|null
 	 */
 	private $gateway;
-	private $foodsaver;
-	private $otherFoodsaver;
+	private array $foodsaver;
+	private array $otherFoodsaver;
 
 	protected function _before()
 	{
