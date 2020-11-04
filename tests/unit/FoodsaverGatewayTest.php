@@ -1,18 +1,12 @@
 <?php
 
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class FoodsaverGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Foodsaver\FoodsaverGateway
-	 */
-	private $gateway;
+	protected UnitTester $tester;
+	private FoodsaverGateway $gateway;
 	private $foodsharer;
 	private $foodsaver;
 	private $region;
@@ -21,7 +15,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Foodsaver\FoodsaverGateway::class);
+		$this->gateway = $this->tester->get(FoodsaverGateway::class);
 
 		$this->foodsharer = $this->tester->createFoodsharer(null, ['newsletter' => 1]);
 		$this->foodsaver = $this->tester->createFoodsaver(null, ['newsletter' => 1]);
@@ -142,7 +136,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	public function testGetAllEmailAddressesFromNewsletterSubscribers()
@@ -155,7 +149,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	public function testGetAllEmailAddressesFromNewsletterSubscribersExcludeFoodsharers()
@@ -168,7 +162,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	public function testGetAllEmailAddressesExcludeFoodsharers()
@@ -181,7 +175,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	public function testGetAllEmailAddressesFromStoreManagersOrBelow()
@@ -194,7 +188,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	public function testGetAllEmailAddressesFromRegion()
@@ -207,7 +201,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
 		$intersection = array_intersect($expectedResult, $result);
-		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expectations: ' . serialize($result));
 	}
 
 	private function expectedEmailResult(array $foodsavers): array
