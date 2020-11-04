@@ -4,10 +4,7 @@ use Foodsharing\Lib\Routing;
 
 class RouterReturnsCorrectClassNameTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
+	protected UnitTester $tester;
 
 	protected function _before()
 	{
