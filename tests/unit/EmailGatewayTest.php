@@ -1,20 +1,15 @@
 <?php
 
+use Foodsharing\Modules\Email\EmailGateway;
+
 class EmailGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Email\EmailGateway
-	 */
-	private $gateway;
+	protected UnitTester $tester;
+	private EmailGateway $gateway;
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Email\EmailGateway::class);
+		$this->gateway = $this->tester->get(EmailGateway::class);
 	}
 
 	public function testInitEmail()
