@@ -2,18 +2,12 @@
 
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class BellUpdateTriggerTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var BellUpdateTrigger
-	 */
-	private $bellUpdateTrigger;
+	protected UnitTester $tester;
+	private BellUpdateTrigger $bellUpdateTrigger;
 
 	protected function _before()
 	{
@@ -28,7 +22,7 @@ class BellUpdateTriggerTest extends \Codeception\Test\Unit
 	public function testBellUpdateGetsTriggered()
 	{
 		/**
-		 * @var BellUpdaterInterface|PHPUnit\Framework\MockObject\MockObject
+		 * @var BellUpdaterInterface|MockObject
 		 */
 		$bellUpdater = $this->getMockBuilder(BellUpdaterInterface::class)->getMock();
 		$bellUpdater->expects($this->once())->method('updateExpiredBells');
