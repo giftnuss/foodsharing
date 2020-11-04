@@ -4,50 +4,15 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class RegionGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var RegionGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var array
-	 */
-	private $foodsaver;
-
-	/**
-	 * @var array
-	 */
-	private $otherFoodsaver;
-
-	/**
-	 * @var array
-	 */
-	private $foodSharePoint;
-
-	/**
-	 * @var array
-	 */
-	private $region;
-
-	/**
-	 * @var array
-	 */
-	private $childRegion;
-
-	/**
-	 * @var array
-	 */
-	private $childChildRegion;
-
-	/**
-	 * @var array
-	 */
-	private $unrelatedRegion;
+	protected UnitTester $tester;
+	private RegionGateway $gateway;
+	private array $foodsaver;
+	private array $otherFoodsaver;
+	private array $foodSharePoint;
+	private array $region;
+	private array $childRegion;
+	private array $childChildRegion;
+	private array $unrelatedRegion;
 
 	protected function _before()
 	{
