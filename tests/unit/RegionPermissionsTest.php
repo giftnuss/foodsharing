@@ -5,18 +5,12 @@ namespace Foodsharing\unit;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
+use UnitTester;
 
 final class RegionPermissionsTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var RegionPermissions
-	 */
-	protected $regionPermissions;
+	protected UnitTester $tester;
+	protected RegionPermissions $regionPermissions;
 
 	protected function _before()
 	{
