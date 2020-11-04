@@ -3,27 +3,21 @@
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 
 class QuizSessionGatewayTest extends \Codeception\Test\Unit
 {
-	protected $tester;
-
-	private $gateway;
-
-	private $foodsharer;
-	private $foodsaver;
-	/**
-	 * @var array
-	 */
-	private $basketsIds;
+	protected UnitTester $tester;
+	private QuizSessionGateway $gateway;
+	private array $foodsharer;
+	private array $foodsaver;
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Quiz\QuizSessionGateway::class);
+		$this->gateway = $this->tester->get(QuizSessionGateway::class);
 
 		$this->foodsharer = $this->tester->createFoodsharer();
 		$this->foodsaver = $this->tester->createFoodsaver();
-		$this->basketsIds = [];
 		foreach (range(1, 3) as $quizId) {
 			$this->tester->createQuiz($quizId);
 		}
