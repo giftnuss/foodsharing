@@ -2,30 +2,18 @@
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Faker\Factory;
+use Faker\Generator;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
 
 class StoreTransactionsTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-	/**
-	 * @var StoreTransactions
-	 */
-	private $transactions;
-
-	/**
-	 * @var StoreGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var Faker\Generator
-	 */
-	private $faker;
+	protected UnitTester $tester;
+	private StoreTransactions $transactions;
+	private StoreGateway $gateway;
+	private Generator $faker;
 
 	private $region_id;
 	private $foodsaver;
@@ -34,7 +22,7 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 	{
 		$this->transactions = $this->tester->get(StoreTransactions::class);
 		$this->gateway = $this->tester->get(StoreGateway::class);
-		$this->faker = $this->faker = Faker\Factory::create('de_DE');
+		$this->faker = $this->faker = Factory::create('de_DE');
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region_id = $this->tester->createRegion()['id'];
 	}
@@ -75,7 +63,7 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$date2 = $date->copy()->addHours(1);
 		$this->tester->addPickup($store['id'], ['time' => $date2, 'fetchercount' => 1]);
 		$this->assertFalse($this->transactions->joinPickup($store['id'], $date, $this->foodsaver['id']));
-		$this->expectException(\DomainException::class);
+		$this->expectException(DomainException::class);
 		$this->transactions->joinPickup($store['id'], $date, $user['id']);
 	}
 
