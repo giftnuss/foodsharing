@@ -1,21 +1,15 @@
 <?php
 
+use Faker\Factory;
+use Faker\Generator;
+use Foodsharing\Modules\Event\EventGateway;
+use Foodsharing\Modules\Region\RegionGateway;
+
 class EventGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\Event\EventGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var Faker\Generator
-	 */
-	private $faker;
+	protected UnitTester $tester;
+	private EventGateway $gateway;
+	private Generator $faker;
 
 	protected $foodsaver;
 	protected $regionGateway;
@@ -24,10 +18,10 @@ class EventGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Event\EventGateway::class);
-		$this->faker = Faker\Factory::create('de_DE');
+		$this->gateway = $this->tester->get(EventGateway::class);
+		$this->faker = Factory::create('de_DE');
 
-		$this->regionGateway = $this->tester->get(\Foodsharing\Modules\Region\RegionGateway::class);
+		$this->regionGateway = $this->tester->get(RegionGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region = $this->tester->createRegion('God');
 		$this->tester->addRegionMember($this->region['id'], $this->foodsaver['id']);
