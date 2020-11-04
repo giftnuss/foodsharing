@@ -1,33 +1,19 @@
 <?php
 
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
+use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 
 class PushNotificationGatewayTest extends \Codeception\Test\Unit
 {
-	/**
-	 * @var \UnitTester
-	 */
-	protected $tester;
-
-	/**
-	 * @var \Foodsharing\Modules\PushNotification\PushNotificationGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var array
-	 */
-	private $testUser;
-
-	/**
-	 * @var string
-	 */
-	private $testSubscription;
+	protected UnitTester $tester;
+	private PushNotificationGateway $gateway;
+	private array $testUser;
+	private string $testSubscription;
 
 	public function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\PushNotification\PushNotificationGateway::class);
+		$this->gateway = $this->tester->get(PushNotificationGateway::class);
 		$this->testUser = $this->tester->createFoodsaver();
 		$this->testSubscription = '
 		{
