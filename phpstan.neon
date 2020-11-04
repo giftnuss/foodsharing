@@ -10,6 +10,10 @@ parameters:
   ignoreErrors:
     # LEVEL 0+ see https://github.com/phpstan/phpstan/issues/1557
     - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
+    # Level 4+ see https://github.com/phpstan/phpstan/issues/3264
+    - '#Comparison operation ">" between int<1, max> and 0 is always true#'
+    # Level 4+ see https://github.com/phpstan/phpstan/issues/2889
+    - '#Strict comparison using === between int<1, max> and 0 will always evaluate to false#'
     # LEVEL 4+ We include constant values for MEM_ENABLED from config.inc.*.php:
     -
       message: '#If condition is always true#'
@@ -20,10 +24,6 @@ parameters:
       paths:
         - src/Lib/Db/Mem.php
     # LEVEL 5+ some legacy code calling legacy library code:
-    -
-      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Flourish\\fImage::[a-zA-Z]+\(\) expects Flourish\\numeric, int given#'
-      paths:
-        - src/
     -
       message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Flourish\\fImage::[a-zA-Z]+\(\) expects int, string given#'
       paths:
