@@ -1,16 +1,16 @@
 <?php
 
+use Foodsharing\Modules\Quiz\QuizGateway;
+
 class QuizGatewayTest extends \Codeception\Test\Unit
 {
-	protected $tester;
-
-	private $gateway;
-
-	private $foodsaver;
+	protected UnitTester $tester;
+	private QuizGateway $gateway;
+	private array $foodsaver;
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(\Foodsharing\Modules\Quiz\QuizGateway::class);
+		$this->gateway = $this->tester->get(QuizGateway::class);
 
 		$this->foodsaver = $this->tester->createFoodsaver();
 
