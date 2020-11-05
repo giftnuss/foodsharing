@@ -4,7 +4,7 @@ A lot of code is sorted into modules in the `/src/Modules` directory.
 This is a sorting by topic: each module contains files for one topic.
 That can be a [gateway](#gateway-classes),
 a controller, an (old) view, javascript, css, (old) [XHR](requests.md#xhr),
-(old) [models](#deprecated-code-structure).
+(old) [models](#deprecated-module-structure).
 
 The [Rest api controllers](requests.md#rest-api) do not go into
 their respective module directory but into the `/src/Controller`
