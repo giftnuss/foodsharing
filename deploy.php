@@ -77,7 +77,7 @@ task('deploy', [
 	'cachetool:clear:opcache',
 	'deploy:unlock',
 	'deploy:cleanup',
-	'success'
+	'deploy:success'
 ]);
 
 // [Optional] If deploy fails automatically unlock.
