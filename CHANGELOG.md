@@ -35,6 +35,8 @@
 - Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
 - Increase phpstan analysis level to 5 and fix all issues !1674 !1729 @ChrisOelmueller
 - Remove the abandoned deployer/recipes package and deployer/phar-update and update deployer to v 7 !1743 @peter.toennies
+- Remove the abandoned deployer recipes package !1743 @peter.toennies
+- Annotate some variables in unit tests, streamline namespace "imports" !1748 @ChrisOelmueller
 
 # 2020-10-23 Hotfix
 
