@@ -28,14 +28,14 @@ set('default_timeout', 600);
 
 // Hosts
 host('beta')
-	->alias('dragonfruit.foodsharing.network')
-	->user('deploy')
+	->setHostname('dragonfruit.foodsharing.network')
+	->setRemoteUser('deploy')
 	->set('deploy_path', '/var/www/beta')
 	->set('cachetool', '/var/run/php7-fpm-beta.sock');
 
 host('production')
-	->alias('dragonfruit.foodsharing.network')
-	->user('deploy')
+	->setHostname('dragonfruit.foodsharing.network')
+	->setRemoteUser('deploy')
 	->set('deploy_path', '/var/www/production')
 	->set('cachetool', '/var/run/php7-fpm-production.sock');
 
@@ -64,7 +64,7 @@ task('deploy:cache:warmup', function () {
 desc('Deploy your project');
 task('deploy', [
 	'deploy:info',
-	'deploy:prepare',
+	'deploy:setup',
 	'deploy:lock',
 	'deploy:release',
 	'deploy:update_code',
@@ -76,7 +76,7 @@ task('deploy', [
 	'deploy:symlink',
 	'cachetool:clear:opcache',
 	'deploy:unlock',
-	'cleanup',
+	'deploy:cleanup',
 	'success'
 ]);
 
