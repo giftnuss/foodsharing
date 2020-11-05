@@ -282,7 +282,7 @@ class UserRestController extends AbstractFOSRestController
 	 * Gives a banana to a user.
 	 *
 	 * @SWG\Parameter(name="userId", in="path", type="integer", description="to which user to give the banana")
-	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user")
+	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user", @SWG\Schema(type="string"))
 	 * @SWG\Response(response="200", description="Success.")
 	 * @SWG\Response(response="400", description="Accompanying message is too short.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to rate that user.")
