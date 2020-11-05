@@ -1,5 +1,5 @@
 {
     "require-dev": {
-        "deployer/deployer": "~v6.8.0"
+        "deployer/deployer": "~7.0.0-beta.3"
     }
 }

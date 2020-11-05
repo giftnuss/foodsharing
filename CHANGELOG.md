@@ -34,7 +34,7 @@
 - Update Composer to version 2 and PHP to version 7.4.11 !1734 @peter.toennies
 - Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
 - Increase phpstan analysis level to 5 and fix all issues !1674 !1729 @ChrisOelmueller
-- Remove the abandoned deployer recipes package !1743 @peter.toennies
+- Remove the abandoned deployer/recipes package and deployer/phar-update and update deployer to v 7 !1743 @peter.toennies
 
 # 2020-10-23 Hotfix
 
