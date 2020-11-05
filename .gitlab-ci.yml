@@ -38,25 +38,10 @@ variables:
   - ./scripts/deploy.notifyslack.sh
 
 stages:
-- triage
 - outdated
 - build
 - test
 - deploy
-
-triage:
-  image: ruby:2.7.2-alpine3.12
-  stage: triage
-  script:
-  - gem install gitlab-triage
-  - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
-  rules:
-  - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB == "triage"
-    when: always
-  tags:
-  - shared
-  - linux
-  - ruby
 
 outdated:
   <<: *defaults

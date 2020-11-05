@@ -41,6 +41,7 @@
 - Remove the abandoned deployer/recipes package and deployer/phar-update and update deployer to v 7 !1743 @peter.toennies
 - Remove the abandoned deployer recipes package !1743 @peter.toennies
 - Annotate some variables in unit tests, streamline namespace "imports" !1748 @ChrisOelmueller
+- Remove unused `triage` CI script #979 !1750 @ChrisOelmueller
 
 # 2020-10-23 Hotfix
 
@@ -113,6 +114,7 @@
 - Update devdocs for database migrations in phinx, fedora 32 and WSL2 !1675 @chriswalg
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 - Increase phpstan analysis level to 4 and fix all issues !1672 @ChrisOelmueller
+- Fix `outdated` CI script #979 !1712 @ChrisOelmueller
 
 # 2020-08-11 Hotfix
 
