@@ -73,8 +73,7 @@ task('deploy', [
 	'deploy:clear_paths',
 	'deploy:create_revision',
 	'deploy:cache:warmup',
-	'deploy:symlink',
-	'cachetool:clear:opcache',
+	after('deploy:symlink', 'cachetool:clear:opcache'),
 	'deploy:unlock',
 	'deploy:cleanup',
 	'deploy:success'
