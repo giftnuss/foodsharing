@@ -28,13 +28,13 @@ set('default_timeout', 600);
 
 // Hosts
 host('beta')
-	->hostname('dragonfruit.foodsharing.network')
+	->alias('dragonfruit.foodsharing.network')
 	->user('deploy')
 	->set('deploy_path', '/var/www/beta')
 	->set('cachetool', '/var/run/php7-fpm-beta.sock');
 
 host('production')
-	->hostname('dragonfruit.foodsharing.network')
+	->alias('dragonfruit.foodsharing.network')
 	->user('deploy')
 	->set('deploy_path', '/var/www/production')
 	->set('cachetool', '/var/run/php7-fpm-production.sock');
