@@ -53,6 +53,8 @@ echo "  Or seed the db with some data:"
 echo
 echo "    ./scripts/seed"
 echo
+echo "  Or go to http://localhost:18080/api/doc/ to see the API docs"
+echo
 echo "  You can find more useful information at:"
 echo
 echo "    https://devdocs.foodsharing.network/setting-things-up.html"
