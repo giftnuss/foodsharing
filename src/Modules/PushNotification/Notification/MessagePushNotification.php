@@ -13,32 +13,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class MessagePushNotification extends PushNotification
 {
 	/**
-	 * @var Message
-	 *
+	 * The message to which this notification refers.
+	 */
+	private Message $message;
+
+	/**
 	 * This is the author of the message. It's a foodsaver's user name, not a conversation title or anything.
 	 */
-	private $message;
+	private Profile $author;
 
 	/**
-	 * @var Profile
-	 *
-	 * This is the author of the message. It's a foodsaver's user name, not a conversation title or anything.
+	 * The conversation id will be needed to enable the user to reply to the message this notification resembles.
 	 */
-	private $author;
+	private int $conversationId;
 
 	/**
-	 * @var int
-	 *
-	 * The conversation id will be needed to enable the user to reply to the message this notification resembles
-	 */
-	private $conversationId;
-
-	/**
-	 * @var string|null
-	 *
 	 * Optional. This is the name of the conversation, if the conversation has one.
 	 */
-	private $conversationName;
+	private ?string $conversationName;
 
 	public function __construct(Message $message, Profile $author, int $conversationId, ?string $conversationName = null)
 	{

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\PushNotification\PushNotificationHandlers;
 
 use Base64Url\Base64Url;
+use Exception;
 use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
@@ -14,15 +15,9 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 {
 	private const typeIdentifier = 'android';
 
-	/**
-	 * @var string
-	 */
-	private $fcmKey;
+	private string $fcmKey;
 
-	/**
-	 * @var TranslatorInterface
-	 */
-	private $translator;
+	private TranslatorInterface $translator;
 
 	public function __construct(TranslatorInterface $translator)
 	{
@@ -31,7 +26,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * @see PushNotificationHandlerInterface::getTypeIdentifier()
+	 * {@inheritdoc}
 	 */
 	public static function getTypeIdentifier(): string
 	{
@@ -39,7 +34,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * @var string[] an array with subscription strings in JSON format
+	 * @param string[] $subscriptionData an array with subscription strings in JSON format
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
@@ -63,7 +58,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 
 				$keychainUniqueId = $subscriptionArray['public_key']['keychain_unique_id'] ?? '';
 				$serialNumber = $subscriptionArray['public_key']['serial_number'] ?? 0;
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				// Failed to read required elements from the subscription data
 				$deadSubscriptions[] = $subscriptionAsJson;
 				continue;
@@ -110,6 +105,9 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 		return $deadSubscriptions;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getServerInformation(): array
 	{
 		return [];
