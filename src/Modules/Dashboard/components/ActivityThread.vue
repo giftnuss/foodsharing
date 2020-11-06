@@ -98,9 +98,9 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ ul.linklist li {
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
   background-color: var(--white);
-  padding: 10px;
+  padding: 0.5rem;
   border-radius: 6px;
 }
 </style>

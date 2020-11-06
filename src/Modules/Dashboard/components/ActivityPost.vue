@@ -1,23 +1,6 @@
 <template>
   <li class="activity-item">
-    <span class="i">
-      <a
-        v-if="data.fs_id"
-        :href="$url('profile', data.fs_id)"
-      >
-        <img
-          :src="data.icon"
-          width="50"
-        >
-      </a>
-      <a v-else>
-        <img
-          :src="data.icon"
-          width="50"
-        >
-      </a>
-    </span>
-    <span class="n">
+    <span class="n mb-2">
       <a
         v-if="data.fs_id"
         :href="$url('profile', data.fs_id)"
@@ -74,8 +57,25 @@
         {{ data.mailbox_name }}
       </small>
     </span>
+    <span class="i">
+      <a
+        v-if="data.fs_id"
+        :href="$url('profile', data.fs_id)"
+      >
+        <img
+          :src="data.icon"
+          width="50"
+        >
+      </a>
+      <a v-else>
+        <img
+          :src="data.icon"
+          width="50"
+        >
+      </a>
+    </span>
     <span class="t">
-      <span class="txt">
+      <span class="txt mb-1 pl-2">
         <span v-if="data.gallery">
           <a
             v-for="img in data.gallery"
@@ -100,9 +100,9 @@
         </a>
       </span>
     </span>
-    <span
+    <div
       v-if="data.quickreply"
-      class="qr"
+      class="qr mt-2"
     >
       <img :src="user_avatar">
       <textarea
@@ -119,11 +119,13 @@
       >
         <i class="fas fa-spinner fa-spin" />
       </span>
-    </span>
-    <span class="time">
-      <i class="far fa-clock" /> {{ $dateDistanceInWords(when) }}
-      <i class="fas fa-angle-right" /> {{ $dateFormat(when, 'full-short') }}
-    </span>
+    </div>
+    <div class="time mt-2 text-muted">
+      <i class="far fa-clock" />
+      <span class="font-weight-bolder"> {{ $dateDistanceInWords(when) }} </span>
+      <i class="fas fa-angle-right" />
+      <span> {{ $dateFormat(when, 'full-short') }} </span>
+    </div>
     <span class="c" />
   </li>
 </template>
@@ -203,34 +205,19 @@ export default {
 
 <style lang="scss" scoped>
 .activity-item {
-  margin-bottom: 10px;
-  background-color: var(--white);
-  padding: 10px;
-  border-radius: 6px;
-
-  span {
-    color: #4a3520;
-
-    a {
-      color: var(--fs-green) !important;
-
-      &:hover {
-        text-decoration: underline !important;
-        color: var(--fs-green) !important;
-      }
-    }
+  a,
+  span a {
+    color: var(--fs-green) !important;
+    font-weight: bolder;
   }
 
-  span.time {
-    margin-left: 58px;
-    display: block;
-    margin-top: 10px;
-    font-size: 10px;
-    opacity: 0.8;
+  .qr,
+  .time {
+    clear: both;
   }
 
-  span.qr {
-    margin-left: 58px;
+  .qr {
+    margin-left: 25px;
     border-radius: 3px;
     opacity: 0.5;
 
@@ -243,9 +230,7 @@ export default {
       height: 32px;
       width: 32px;
       margin-right: -35px;
-      border-right: 1px solid var(--white);
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
+      border-radius: 3px;
     }
 
     textarea,
@@ -276,53 +261,46 @@ export default {
     }
   }
 
-  span.n {
+  .n {
     display: block;
     overflow: hidden;
-    font-weight: normal;
-    font-size: 13px;
-    margin-bottom: 10px;
     text-overflow: unset;
     white-space: inherit;
     overflow-wrap: break-word;
 
-    i.fa {
-      display: inline-block;
-      width: 11px;
-      text-align: center;
+    i.fas {
+      width: 0.75em;
     }
 
     small {
       float: right;
-      opacity: 0.8;
-      font-size: 12px;
+      font-weight: bolder;
+      opacity: 0.5;
     }
   }
 
-  span.t {
+  .t {
     img {
       float: left;
       padding-right: 10px;
     }
 
-    span.txt {
+    .txt {
       overflow: hidden;
       text-overflow: unset;
       white-space: normal;
-      padding-left: 10px;
-      border-left: 2px solid var(--fs-brown);
-      margin-bottom: 10px;
+      border-left: 3px solid var(--border);
       display: block;
 
       a {
         cursor: pointer;
       }
 
-      p {
-        margin: 5px 0;
-      }
-
       ::v-deep .markdown {
+        p {
+          margin: 5px 0;
+        }
+
         ol, ul {
           padding-left: 5px;
 
@@ -337,24 +315,24 @@ export default {
 }
 
 @media (max-width: 900px) {
-  .activity-item span.qr textarea,
-  .activity-item span.qr .loader {
+  .activity-item .qr textarea,
+  .activity-item .qr .loader {
     width: 74.6%;
   }
 }
 @media (max-width: 400px) {
-  .activity-item span.n {
+  .activity-item .n {
     height: 55px;
   }
-  .activity-item span.qr textarea,
-  .activity-item span.qr .loader {
+  .activity-item .qr textarea,
+  .activity-item .qr .loader {
     width: 82%;
   }
-  .activity-item span.time,
-  .activity-item span.qr {
+  .activity-item .time,
+  .activity-item .qr {
     margin-left: 0px;
   }
-  .activity-item span.n small {
+  .activity-item .n small {
     float: none;
     display: block;
   }
