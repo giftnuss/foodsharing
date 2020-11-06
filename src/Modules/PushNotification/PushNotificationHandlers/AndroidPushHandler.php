@@ -14,6 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AndroidPushHandler implements PushNotificationHandlerInterface
 {
 	private const typeIdentifier = 'android';
+	private const FCM_URL = 'https://fcm.googleapis.com/fcm/send';
 
 	private string $fcmKey;
 
@@ -75,7 +76,6 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 			$encryptionContentCodingHeader = Encryption::getContentCodingHeader($salt, $localPublicKey, $contentEncoding);
 			$payload = $encryptionContentCodingHeader . $cipherText;
 
-			$url = 'https://fcm.googleapis.com/fcm/send';
 			$data = [
 				'to' => $userFcmToken,
 				'data' => [
@@ -94,10 +94,12 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 				]
 			];
 			$context = stream_context_create($options);
-			$result = file_get_contents($url, false, $context);
+			$result = file_get_contents(self::FCM_URL, false, $context);
 
 			$resultJson = json_decode($result, true);
-			if ($resultJson['failure'] === 1 && $resultJson['results'][0]['error'] == 'NotRegistered') {
+			if ($resultJson['failure'] === 1 && in_array($resultJson['results'][0]['error'], [
+						'NotRegistered', 'InvalidRegistration', 'MismatchSenderId', 'InvalidApnsCredential']
+				)) {
 				$deadSubscriptions[] = $subscriptionAsJson;
 			}
 		}
