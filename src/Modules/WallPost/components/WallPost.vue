@@ -174,9 +174,14 @@ export default {
   position: relative;
   border-top: 1px solid var(--border);
 
+  .member-pic ::v-deep img {
+    width: 50px;
+    height: 50px;
+  }
+
   .metadata {
     margin-top: calc(-1 * var(--storewall-padding));
-    margin-bottom: var(--storewall-padding);
+    margin-bottom: calc(var(--storewall-padding) / 2);
     font-size: smaller;
     color: var(--dark);
 
