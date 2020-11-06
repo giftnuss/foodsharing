@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 
 class ActivityGateway extends BaseGateway
 {
@@ -191,18 +192,15 @@ class ActivityGateway extends BaseGateway
 					b.name AS betrieb_name,
 					b.stadt AS region_name
 
-			FROM 	fs_betrieb_notiz n,
-					fs_foodsaver fs,
-					fs_betrieb_team bt,
-					fs_betrieb b
+			FROM 	fs_betrieb_notiz n
+			LEFT OUTER JOIN fs_foodsaver fs    ON fs.id = n.foodsaver_id
+			LEFT OUTER JOIN fs_betrieb_team bt ON bt.betrieb_id = n.betrieb_id
+			LEFT OUTER JOIN fs_betrieb b       ON b.id = n.betrieb_id
 
-			WHERE 	n.foodsaver_id = fs.id
-			AND 	n.betrieb_id = b.id
-			AND 	bt.betrieb_id = n.betrieb_id
+			WHERE 	bt.active = 1
 			AND 	bt.foodsaver_id = :foodsaver_id
-			AND 	bt.active = 1
-			AND 	n.milestone = 0
 			AND 	n.last = 1
+			AND 	n.milestone = :wall_message
 
 			ORDER BY n.id DESC
 			LIMIT :start_item_index, :items_per_page
@@ -212,6 +210,7 @@ class ActivityGateway extends BaseGateway
 			$stm,
 			[
 				':foodsaver_id' => $fsId,
+				':wall_message' => Milestone::NONE,
 				':start_item_index' => $page * self::ITEMS_PER_PAGE,
 				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
