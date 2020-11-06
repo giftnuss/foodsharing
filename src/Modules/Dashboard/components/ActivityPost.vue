@@ -173,11 +173,11 @@ export default {
       }
     },
     isTruncatable () {
-      return this.data.desc.split(' ').length > 18
+      return this.data.desc.split(' ').length > 24
     },
     truncatedText () {
       if (this.isTruncatable && this.isTruncatedText) {
-        return this.data.desc.split(' ').splice(0, 12).join(' ') + '...'
+        return this.data.desc.split(' ').splice(0, 20).join(' ') + '...'
       } else {
         return this.data.desc
       }
@@ -322,7 +322,7 @@ export default {
         margin: 5px 0;
       }
 
-      /deep/ .markdown {
+      ::v-deep .markdown {
         ol, ul {
           padding-left: 5px;
 
