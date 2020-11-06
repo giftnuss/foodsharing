@@ -192,14 +192,22 @@ class ActivityGateway extends BaseGateway
 					b.name AS betrieb_name,
 					b.stadt AS region_name
 
-			FROM 	fs_betrieb_notiz n
+			FROM (
+				select max(n.id) as n_id
+
+				from fs_betrieb_notiz n
+
+				group by n.betrieb_id
+			) source
+
+			LEFT OUTER JOIN fs_betrieb_notiz n ON n.id = n_id
 			LEFT OUTER JOIN fs_foodsaver fs    ON fs.id = n.foodsaver_id
 			LEFT OUTER JOIN fs_betrieb_team bt ON bt.betrieb_id = n.betrieb_id
 			LEFT OUTER JOIN fs_betrieb b       ON b.id = n.betrieb_id
 
-			WHERE 	bt.active = 1
+			WHERE	n.id IS NOT NULL
+			AND 	bt.active = 1
 			AND 	bt.foodsaver_id = :foodsaver_id
-			AND 	n.last = 1
 			AND 	n.milestone = :wall_message
 
 			ORDER BY n.id DESC
