@@ -15,7 +15,7 @@
       </a>
       <i
         v-if="type != 'friendWall'"
-        class="fas fa-angle-right"
+        class="fas fa-fw fa-angle-right"
       />
       <a
         v-if="type == 'forum'"
@@ -95,7 +95,7 @@
           {{ isTruncatedText ? 'alles zeigen' : 'weniger' }}
           <i
             :class="{ 'fa-rotate-180': !isTruncatedText }"
-            class="fas fa-angle-down"
+            class="fas fa-fw fa-angle-down"
           />
         </a>
       </span>
@@ -121,9 +121,9 @@
       </span>
     </div>
     <div class="time mt-2 text-muted">
-      <i class="far fa-clock" />
+      <i class="far fa-fw fa-clock" />
       <span class="font-weight-bolder"> {{ $dateDistanceInWords(when) }} </span>
-      <i class="fas fa-angle-right" />
+      <i class="fas fa-fw fa-angle-right" />
       <span> {{ $dateFormat(when, 'full-short') }} </span>
     </div>
     <span class="c" />
