@@ -93,7 +93,7 @@
         <strong>
           {{ $i18n('wall.confirm-deletion', { name: post.author.name }) }}
         </strong>
-        <blockquote>
+        <blockquote class="excerpt">
           <div class="msg ml-1">
             <Markdown :source="post.body" />
           </div>
@@ -228,7 +228,9 @@ export default {
       margin-bottom: 0.5rem;
     }
   }
-  blockquote {
+  .excerpt {
+    max-height: calc(50vh - 1rem);
+    overflow-y: auto;
     margin: 0.5rem;
     margin-left: 0;
     padding-left: 0.5rem;
