@@ -1,5 +1,4 @@
 <?php
-
 namespace Deployer;
 
 require 'recipe/common.php';
@@ -11,10 +10,6 @@ set('application', 'foodsharing');
 // Project repository
 set('repository', 'git@gitlab.com:foodsharing-dev/foodsharing.git');
 
-// [Optional] Allocate tty for git clone. Default value is false.
-// Needs to be false when we run in CI environment
-set('git_tty', false);
-
 // Shared files/dirs between deploys
 set('shared_files', ['config.inc.prod.php']);
 set('shared_dirs', ['images', 'data', 'tmp']);
@@ -22,22 +17,19 @@ set('shared_dirs', ['images', 'data', 'tmp']);
 // Writable dirs by web server
 set('writable_dirs', ['tmp', 'cache', 'var']);
 set('http_user', 'www-data');
+set('remote_user', 'deploy');
+set('deploy_path', '/var/www/{{alias}}');
+set('cachetool', '/var/run/php7-fpm-{{alias}}.sock');
 
 // default timeout of 300 was failing sometimes
 set('default_timeout', 600);
 
 // Hosts
 host('beta')
-	->setHostname('dragonfruit.foodsharing.network')
-	->setRemoteUser('deploy')
-	->set('deploy_path', '/var/www/beta')
-	->set('cachetool', '/var/run/php7-fpm-beta.sock');
+	->setHostname('dragonfruit.foodsharing.network');
 
 host('production')
-	->setHostname('dragonfruit.foodsharing.network')
-	->setRemoteUser('deploy')
-	->set('deploy_path', '/var/www/production')
-	->set('cachetool', '/var/run/php7-fpm-production.sock');
+	->setHostname('dragonfruit.foodsharing.network');
 
 // Tasks
 desc('Create the revision information');
@@ -74,11 +66,11 @@ task('deploy', [
 	'deploy:create_revision',
 	'deploy:cache:warmup',
 	'deploy:symlink',
+	'cachetool:clear:opcache',
 	'deploy:unlock',
 	'deploy:cleanup',
 	'deploy:success'
 ]);
-after('deploy:symlink', 'cachetool:clear:opcache');
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
