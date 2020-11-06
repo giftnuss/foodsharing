@@ -28,8 +28,9 @@ $('#verifyconfirm-dialog').dialog({
     [i18n('pass.button.verify')]: function () {
       showLoader()
       $.ajax({
-        url: `/xhr.php?f=verify&fid=${verify_fid}&v=1`,
+        url: `/api/user/${verify_fid}/verify`,
         dataType: 'json',
+        type: 'PATCH',
         success: function (data) {
           verify_el.removeClass('verify-do')
           verify_el.addClass('verify-undo')
@@ -79,16 +80,16 @@ $('.verify').on('click', function () {
   } else {
     showLoader()
     $.ajax({
-      url: `/xhr.php?f=verify&fid=${$this.parent().parent().children('td:first').children('input').val()}&v=0`,
+      url: `/api/user/${verify_fid}/verify`,
       dataType: 'json',
+      type: 'DELETE',
       success: function (data) {
-        if (data.status == '0') {
-          if ($this.hasClass('verify-undo')) {
-            $('#unverifyconfirm-dialog').dialog('open')
-          }
-        } else {
-          $this.removeClass('verify-undo')
-          $this.addClass('verify-do')
+        $this.removeClass('verify-undo')
+        $this.addClass('verify-do')
+      },
+      error: function (req) {
+        if (req.status === 400) {
+          $('#unverifyconfirm-dialog').dialog('open')
         }
       },
       complete: function () {

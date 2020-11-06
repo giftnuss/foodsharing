@@ -936,4 +936,20 @@ final class FoodsaverGateway extends BaseGateway
 
 		return count($foodsaverIds) === count($existing);
 	}
+
+	public function changeUserVerification(int $userId, int $actorId, bool $newStatus): void
+	{
+		$this->db->update('fs_foodsaver', ['verified' => intval($newStatus)], [
+			'id' => $userId,
+		]);
+
+		$verificationChange = [
+			'fs_id' => $userId,
+			'date' => $this->db->now(),
+			'bot_id' => $actorId,
+			'change_status' => intval($newStatus),
+		];
+
+		$this->db->insert('fs_verify_history', $verificationChange);
+	}
 }

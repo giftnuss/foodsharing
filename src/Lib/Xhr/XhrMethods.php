@@ -116,58 +116,6 @@ class XhrMethods
 		$this->translator = $translator;
 	}
 
-	public function xhr_verify($data)
-	{
-		$regions = $this->regionGateway->getFsRegionIds((int)$data['fid']);
-
-		if (!$this->session->isAmbassadorForRegion($regions, false, true) && !$this->session->isOrgaTeam()) {
-			return json_encode(['status' => 0]);
-		}
-
-		$countver = $this->model->qOne('
-			SELECT COUNT(*) FROM fs_verify_history
-			WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now()
-			AND bot_id = ' . $this->session->id()
-		);
-		if ($countver > 10) {
-			return json_encode(['status' => 0]);
-		}
-
-		$countFetch = $this->model->qOne('
-			SELECT 	count(a.`date`)
-			FROM   `fs_abholer` a
-
-			WHERE a.foodsaver_id = ' . (int)$data['fid'] . '
-			AND   a.`date` > NOW()
-		');
-
-		if ($countFetch > 0) {
-			return json_encode(['status' => 0]);
-		}
-
-		if ($this->model->update('UPDATE `fs_foodsaver` SET `verified` = ' . (int)$data['v'] . ' WHERE `id` = ' . (int)$data['fid'])) {
-			$this->model->insert('
-				INSERT INTO `fs_verify_history`
-				(
-					`fs_id`,
-					`date`,
-					`bot_id`,
-					`change_status`
-				)
-				VALUES
-				(
-					' . (int)$data['fid'] . ',
-					NOW(),
-					' . $this->session->id() . ',
-					' . (int)$data['v'] . '
-				)
-			');
-			$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$data['fid']);
-
-			return json_encode(['status' => 1]);
-		}
-	}
-
 	public function xhr_activeSwitch($data)
 	{
 		$allowed = [

@@ -171,6 +171,11 @@ final class ProfileGateway extends BaseGateway
 		return $data;
 	}
 
+	public function isUserVerified(int $userId): bool
+	{
+		return boolval($this->db->fetchValueByCriteria('fs_foodsaver', 'verified', ['id' => $userId]));
+	}
+
 	/**
 	 * @param array $data pass by reference with "&" --> otherwise the array will only be changed in scope of the method
 	 * @param int $fsId the foodsaver id for which bananas should be loaded
@@ -263,7 +268,7 @@ final class ProfileGateway extends BaseGateway
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 
-			WHERE a.betrieb_id =b.id
+			WHERE a.betrieb_id = b.id
 			AND   a.foodsaver_id = :fs_id
 			AND   a.`date` > NOW()
 

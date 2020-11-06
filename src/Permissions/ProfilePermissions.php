@@ -16,13 +16,13 @@ class ProfilePermissions
 		$this->regionGateway = $regionGateway;
 	}
 
-	public function mayAdministrateUserProfile(int $userId, int $regionId = 0): bool
+	public function mayAdministrateUserProfile(int $userId, ?int $regionId = null): bool
 	{
 		if (!$this->session->isAmbassador()) {
 			return false;
 		}
 
-		if ($regionId !== 0 && $this->session->isAdminFor($regionId)) {
+		if ($regionId !== null && $this->session->isAdminFor($regionId)) {
 			return true;
 		}
 
@@ -33,6 +33,11 @@ class ProfilePermissions
 		$regionIds = $this->regionGateway->getFsRegionIds($userId);
 
 		return $this->session->isAmbassadorForRegion($regionIds, false, true);
+	}
+
+	public function mayChangeUserVerification(int $userId): bool
+	{
+		return $this->mayAdministrateUserProfile($userId);
 	}
 
 	public function maySeeHistory(int $fsId): bool

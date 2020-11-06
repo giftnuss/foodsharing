@@ -28,6 +28,7 @@
 - Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
 - Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
 - Deprecate both `v_form_recip_chooser` variants !1699 @ChrisOelmueller
+- Reimplement user verification as REST endpoints !1696 @ChrisOelmueller
 - Rewrite store wall with REST and Vue !1690 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
