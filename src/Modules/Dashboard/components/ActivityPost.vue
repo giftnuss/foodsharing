@@ -120,9 +120,9 @@
         <i class="fas fa-spinner fa-spin" />
       </span>
     </div>
-    <div class="time mt-2 text-muted">
+    <div class="time mt-2">
       <i class="far fa-fw fa-clock" />
-      <span class="font-weight-bolder"> {{ $dateDistanceInWords(when) }} </span>
+      <span> {{ $dateDistanceInWords(when) }} </span>
       <i class="fas fa-fw fa-angle-right" />
       <span> {{ $dateFormat(when, 'full-short') }} </span>
     </div>

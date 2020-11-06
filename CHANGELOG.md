@@ -14,6 +14,7 @@
 - Notify a user who is accepted to or declined from a workgroup with a bell #808 !1708 !1721 @alex.simm
 - Only display broadcast message for logged-in users !1757 @ChrisOelmueller
 - Recolor formerly brown topbar to beige !1762 @ChrisOelmueller
+- Adjust structure and color scheme of dashboard activity updates !1753 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
