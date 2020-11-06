@@ -73,11 +73,12 @@ task('deploy', [
 	'deploy:clear_paths',
 	'deploy:create_revision',
 	'deploy:cache:warmup',
-	after('deploy:symlink', 'cachetool:clear:opcache'),
+	'deploy:symlink',
 	'deploy:unlock',
 	'deploy:cleanup',
 	'deploy:success'
 ]);
+after('deploy:symlink', 'cachetool:clear:opcache');
 
 // [Optional] If deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
