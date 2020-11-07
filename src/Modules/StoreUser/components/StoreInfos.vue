@@ -9,9 +9,9 @@
     <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
       <div
         id="inputAdress"
-        class="desc-block"
+        class="desc-block mb-1 py-1"
       >
-        <div class="desc-block-title ui-widget">
+        <div class="desc-block-title mb-2 py-1">
           {{ $i18n('store.address') }}
         </div>
         <div>
@@ -21,18 +21,18 @@
       </div>
       <div
         id="inputParticularities"
-        class="desc-block"
+        class="desc-block mb-1 py-1"
       >
-        <div class="desc-block-title ui-widget">
+        <div class="desc-block-title mb-2 py-1">
           {{ $i18n('store.particularities') }}
         </div>
         <Markdown :source="particularitiesDescription" />
       </div>
       <div
         id="inputAverageCollectionQuantity"
-        class="desc-block"
+        class="desc-block mb-1 py-1"
       >
-        <div class="desc-block-title ui-widget">
+        <div class="desc-block-title mb-2 py-1">
           {{ $i18n('store.average_collection_quantity') }}
         </div>
         <div>
@@ -41,9 +41,9 @@
       </div>
       <div
         id="inputAttribution"
-        class="desc-block"
+        class="desc-block mb-1 py-1"
       >
-        <div class="desc-block-title ui-widget">
+        <div class="desc-block-title mb-2 py-1">
           {{ $i18n('store.attribution') }}
         </div>
         <span v-if="allowedToMentionInPublic">{{ $i18n('store.may_referred_to_in_public') }}</span>
@@ -52,9 +52,9 @@
       <div
         v-if="lastFetchDate !== null"
         id="inputMyLastPickup"
-        class="desc-block"
+        class="desc-block mb-1 py-1"
       >
-        <div class="desc-block-title ui-widget">
+        <div class="desc-block-title mb-2 py-1">
           {{ $i18n('store.my_last_pickup') }}
         </div>
         <span>
@@ -133,11 +133,14 @@ export default {
 <style lang="scss" scoped>
 .store-desc {
   display: inline-block;
+  font-size: 0.875rem;
+
+  div, p, ul, ol, th, td, label {
+    font-size: inherit;
+  }
 
   .desc-block {
     max-width: 100%;
-    margin-bottom: 5px;
-    padding-bottom: 10px;
     /* Global fallback */
     overflow-wrap: break-word;
     /* Safari / Edge compat: */
@@ -145,18 +148,18 @@ export default {
     /* Desired behavior: */
     overflow-wrap: anywhere;
 
-    &:last-child {
-      padding-bottom: 0;
-    }
+    ::v-deep .markdown {
+      div, p, ul, ol, th, td, label {
+        font-size: inherit;
+      }
 
-    /deep/ .markdown {
       hr {
         border: 0;
         border-top: 1px solid var(--border);
       }
 
       blockquote {
-        padding: 4px 8px;
+        padding: 0.25rem 0.5rem;
         border-left: 2px solid var(--border);
         background-color: var(--fs-white);
       }
@@ -164,9 +167,6 @@ export default {
   }
 
   .desc-block-title {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    margin-bottom: 10px;
     background-color: var(--fs-beige);
     color: var(--fs-brown);
     font-weight: bolder;
