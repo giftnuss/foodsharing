@@ -25,7 +25,7 @@
           >
             <button
               v-b-tooltip.hover="$i18n('pickup.delete_title')"
-              class="btn btn-sm"
+              class="btn"
               :class="{'cannot-delete': occupiedSlots.length > 0}"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
@@ -233,6 +233,7 @@ export default {
 
 .pickup-date {
   padding-bottom: 5px;
+  font-size: 0.875rem;
 
   &.today {
     &:not(.past) {
@@ -270,6 +271,11 @@ export default {
 .pickup {
   .store-title {
     display: none;
+  }
+
+  .pickup-title,
+  .store-title {
+    font-size: inherit;
   }
 
   .pickup-text {
