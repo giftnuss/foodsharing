@@ -5,14 +5,11 @@ namespace Foodsharing\Modules\Login;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsGateway;
-use Mobile_Detect;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginControl extends Control
 {
-	private FormFactoryInterface $formFactory;
 	private LoginGateway $loginGateway;
 	private SettingsGateway $settingsGateway;
 	private ContentGateway $contentGateway;
@@ -31,14 +28,6 @@ class LoginControl extends Control
 		parent::__construct();
 	}
 
-	/**
-	 * @required
-	 */
-	public function setFormFactory(FormFactoryInterface $formFactory): void
-	{
-		$this->formFactory = $formFactory;
-	}
-
 	public function unsubscribe()
 	{
 		$this->pageHelper->addTitle('Newsletter Abmeldung');
@@ -53,33 +42,8 @@ class LoginControl extends Control
 	{
 		if (!$this->session->may()) {
 			$has_subpage = $request->query->has('sub');
-
-			$form = $this->formFactory->create(LoginForm::class);
-			$form->handleRequest($request);
-
 			if (!$has_subpage) {
-				if ($form->isSubmitted() && $form->isValid()) {
-					$this->handleLogin($request);
-				}
-
-				$ref = false;
-				if (isset($_GET['ref'])) {
-					$ref = urldecode($_GET['ref']);
-				}
-
-				$action = '/?page=login';
-				if ($ref) {
-					$action = '/?page=login&ref=' . urlencode($ref);
-				} elseif (!isset($_GET['ref'])) {
-					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
-				}
-
-				$params = [
-					'action' => $action,
-					'form' => $form->createView(),
-				];
-
-				$response->setContent($this->render('pages/Login/page.twig', $params));
+				$this->pageHelper->addContent($this->view->loginForm());
 			}
 		} else {
 			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
@@ -97,36 +61,6 @@ class LoginControl extends Control
 			$this->flashMessageHelper->error($this->translator->trans('register.activation_failed'));
 			$this->routeHelper->goPage('login');
 		}
-	}
-
-	private function handleLogin(Request $request): void
-	{
-		$email_address = $request->request->get('login_form')['email_address'];
-		$password = $request->request->get('login_form')['password'];
-
-		$fs_id = $this->loginGateway->login($email_address, $password);
-
-		if ($fs_id === null) {
-			$this->flashMessageHelper->error($this->translator->trans('login.error_no_auth'));
-
-			return;
-		}
-
-		$this->session->login($fs_id);
-
-		if (isset($_POST['ismob'])) {
-			$_SESSION['mob'] = (int)$_POST['ismob'];
-		}
-
-		$mobileDetect = new Mobile_Detect();
-		if ($mobileDetect->isMobile()) {
-			$_SESSION['mob'] = 1;
-		}
-
-		if (isset($_GET['ref'])) {
-			$this->routeHelper->go(urldecode($_GET['ref']));
-		}
-		$this->routeHelper->go('/?page=dashboard');
 	}
 
 	public function passwordReset()

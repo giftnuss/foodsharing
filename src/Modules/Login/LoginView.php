@@ -65,4 +65,9 @@ class LoginView extends View
 		}
 		$_SESSION['msg']['success'][] = $t . $msg;
 	}
+
+	public function loginForm()
+	{
+		return $this->vueComponent('login-form', 'LoginForm');
+	}
 }

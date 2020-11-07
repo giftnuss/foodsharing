@@ -27,13 +27,11 @@
           />
           <menu-item
             id="login"
+            :url="$url('login')"
             icon="fa-rocket"
             :title="$i18n('login.topbar')"
             :show-title-always="true"
           />
-          <div class="bootstrap">
-            <Login />
-          </div>
         </b-navbar-nav>
 
         <!-- When logged in -->
@@ -78,7 +76,6 @@
 <script>
 import { BNavbarBrand, BNavbarToggle, BCollapse } from 'bootstrap-vue'
 import Logo from './Logo'
-import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
 import MenuLoggedin from './MenuLoggedin'
 import MenuItem from './MenuItem'
@@ -90,7 +87,6 @@ export default {
     BCollapse,
     BNavbarToggle,
     BNavbarBrand,
-    Login,
     MenuLoggedout,
     Logo,
     MenuItem,
