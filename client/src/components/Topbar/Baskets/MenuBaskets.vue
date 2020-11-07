@@ -1,10 +1,9 @@
 <template>
   <fs-dropdown-menu
-    id="dropdown-baskets"
     ref="dropdown"
     menu-title="basket.title"
     icon="fa-shopping-basket"
-    class="list-with-actions"
+    class="list-with-actions topbar-baskets"
   >
     <template v-slot:heading-text>
       <span

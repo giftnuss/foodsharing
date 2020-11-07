@@ -75,8 +75,8 @@
             <img src="/img/469.gif">
           </template>
           <b-button
+            id="login-btn"
             :aria-label="$i18n('login.login_button_label')"
-            href="#"
             secondary
             class="login-btn"
             @click="submit"
@@ -197,13 +197,10 @@ export default {
   .login-btn {
     display: flex;
     align-items: center;
+    width: 100%;
     span {
       width: 100%;
     }
-  }
-  .login-popover {
-    box-shadow: -0.5em 0.5em 20px -3px #333;
-    max-width: 100%;
   }
   .login-rememberme ::v-deep .custom-control-label {
     font-size: 0.7rem!important;

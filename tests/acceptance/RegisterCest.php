@@ -84,7 +84,7 @@ class RegisterCest
 		$I->waitForElement('#login-email');
 		$I->fillField('#login-email', $this->email);
 		$I->fillField('#login-password', $this->password);
-		$I->click('#topbar .login-btn');
+		$I->click('#login-btn');
 		$I->waitForElement('#pulse-success');
 
 		$I->seeInDatabase('fs_foodsaver', [

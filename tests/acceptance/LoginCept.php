@@ -12,7 +12,7 @@ $I->click('#login');
 $I->waitForElement('#login-email');
 $I->fillField('#login-email', $foodsaver['email']);
 $I->fillField('#login-password', $pass);
-$I->click('#topbar .login-btn');
+$I->click('#login-btn');
 $I->waitForActiveAPICalls();
 $I->waitForElementNotVisible('#pulse-success');
 $I->waitForPageBody();

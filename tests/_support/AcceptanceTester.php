@@ -40,7 +40,7 @@ class AcceptanceTester extends Codeception\Actor
 		$I->waitForElement('#login-email');
 		$I->fillField('#login-email', $email);
 		$I->fillField('#login-password', $password);
-		$I->click('#topbar .login-btn');
+		$I->click('#login-btn');
 		$I->waitForActiveAPICalls();
 		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
