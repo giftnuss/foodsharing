@@ -8,11 +8,11 @@ table.timetable td {
 }
 
 table.timetable select.nft-dow {
-  width: 6rem;
+  width: calc(6rem + 15px);
 }
 table.timetable select.nfttime-hour,
 table.timetable select.nfttime-min {
-  width: 3rem;
+  width: calc(3rem + 15px);
 }
 table.timetable input.fetchercount {
   width: 2rem;
