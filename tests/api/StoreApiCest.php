@@ -29,6 +29,7 @@ class StoreApiCest
 		$this->store = $I->createStore($this->region['id']);
 		$this->user = $I->createFoodsaver();
 		$this->manager = $I->createStoreCoordinator(null, ['bezirk_id' => $this->region['id']]);
+		$I->addStoreTeam($this->store[self::ID], $this->manager[self::ID], true);
 		$this->faker = Faker\Factory::create('de_DE');
 	}
 
@@ -133,7 +134,6 @@ class StoreApiCest
 		];
 		$postId = $I->haveInDatabase('fs_betrieb_notiz', $wallPost);
 
-		$I->addStoreTeam($this->store[self::ID], $this->manager[self::ID], true);
 		$I->login($this->manager[self::EMAIL]);
 
 		$I->sendDELETE(self::API_STORES . '/' . $this->store[self::ID] . '/posts/' . $postId);
@@ -162,12 +162,104 @@ class StoreApiCest
 		];
 		$postId = $I->haveInDatabase('fs_betrieb_notiz', $wallPost);
 
-		$I->addStoreTeam($this->store[self::ID], $this->manager[self::ID], true);
 		$I->login($this->manager[self::EMAIL]);
 
 		$I->sendDELETE(self::API_STORES . '/' . $this->store[self::ID] . '/posts/' . $postId);
 
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
 		$I->seeInDatabase('fs_betrieb_notiz', ['id' => $postId]);
+	}
+
+	public function canAcceptStoreRequests(ApiTester $I): void
+	{
+		// create a request
+		$user2 = $I->createFoodsaver();
+		$this->createStoreRequest($I, $user2['id']);
+
+		// accept request
+		$I->login($this->manager[self::EMAIL]);
+		$I->sendPatch(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::OK);
+
+		// user should be in store and in store's region
+		$I->seeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
+			'verantwortlich' => 0,
+			'active' => 1
+		]);
+		$I->seeInDatabase('fs_foodsaver_has_bezirk', [
+			'foodsaver_id' => $user2['id'],
+			'bezirk_id' => $this->store['bezirk_id']
+		]);
+	}
+
+	public function canOnlyAcceptStoreRequestsAsManager(ApiTester $I): void
+	{
+		// create a request
+		$user2 = $I->createFoodsaver();
+		$this->createStoreRequest($I, $user2['id']);
+
+		// accept request
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPatch(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+
+		// user should not be active in store
+		$I->seeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
+			'verantwortlich' => 0,
+			'active' => 0
+		]);
+	}
+
+	public function canRejectStoreRequests(ApiTester $I): void
+	{
+		// create a request
+		$user2 = $I->createFoodsaver();
+		$this->createStoreRequest($I, $user2['id']);
+
+		// accept request
+		$I->login($this->manager[self::EMAIL]);
+		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::OK);
+
+		// user should not be in store and in store's region
+		$I->dontSeeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
+		]);
+	}
+
+	public function canOnlyRejectStoreRequestsAsManager(ApiTester $I): void
+	{
+		// create a request
+		$user2 = $I->createFoodsaver();
+		$this->createStoreRequest($I, $user2['id']);
+
+		// accept request
+		$I->login($this->user[self::EMAIL]);
+		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+
+		// user's request should still be there
+		$I->seeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
+			'verantwortlich' => 0,
+			'active' => 0
+		]);
+	}
+
+	private function createStoreRequest(ApiTester $I, int $userId): void
+	{
+		// create a request
+		$I->haveInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $userId,
+			'verantwortlich' => 0,
+			'active' => 0
+		]);
 	}
 }
