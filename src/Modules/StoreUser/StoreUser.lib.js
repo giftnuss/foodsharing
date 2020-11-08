@@ -3,26 +3,24 @@
 import $ from 'jquery'
 
 import { hideLoader, showLoader, reload, pulseError } from '@/script'
-import { removeStoreRequest } from '@/api/stores'
+import { acceptStoreRequest, removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
 
 export function u_betrieb_sign_out (bid) {
   $('#signout_shure').dialog('open')
 }
 
-export function acceptRequest (fsid, bid) {
+export async function acceptRequest (fsid, bid) {
   showLoader()
-  $.ajax({
-    dataType: 'json',
-    data: 'fsid=' + fsid + '&bid=' + bid,
-    url: '/xhr.php?f=acceptRequest',
-    success: function (data) {
-      if (data.status == 1) {
-        reload()
-      }
-    },
-    complete: function () { hideLoader() },
-  })
+
+  try {
+    await acceptStoreRequest(bid, fsid)
+    reload()
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+
+  hideLoader()
 }
 export function warteRequest (fsid, bid) {
   showLoader()
