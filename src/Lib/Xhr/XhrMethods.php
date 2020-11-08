@@ -13,7 +13,6 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
-use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
@@ -1107,27 +1106,6 @@ class XhrMethods
 		}
 
 		return false;
-	}
-
-	public function xhr_acceptRequest($data)
-	{
-		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-		$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
-
-		$this->storeGateway->add_betrieb_notiz([
-			'foodsaver_id' => $data['fsid'],
-			'betrieb_id' => $data['bid'],
-			'text' => '{ACCEPT_REQUEST}',
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => Milestone::ACCEPTED,
-		]);
-
-		$regionId = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
-		$this->regionGateway->linkBezirk($data['fsid'], $regionId);
-
-		return json_encode(['status' => 1]);
 	}
 
 	public function xhr_warteRequest($data)

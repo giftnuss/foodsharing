@@ -187,6 +187,25 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Accepts a user's request for joining a store.
+	 *
+	 * @Rest\Patch("stores/{storeId}/requests/{userId}")
+	 */
+	public function acceptStoreRequestAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new HttpException(401);
+		}
+		if (!$this->storePermissions->mayAcceptRequests($storeId)) {
+			throw new HttpException(403);
+		}
+
+		$this->storeTransactions->acceptStoreRequest($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Removes the user's own request or denies another user's request for a store.
 	 *
 	 * @Rest\Delete("stores/{storeId}/requests/{userId}")

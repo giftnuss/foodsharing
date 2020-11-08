@@ -276,36 +276,6 @@ class StoreModel extends Db
 		return $id;
 	}
 
-	public function acceptRequest($fsid, $storeId)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $storeId);
-
-		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'fas fa-user-check', [
-			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $betrieb
-		], 'store-arequest-' . (int)$fsid);
-		$this->bellGateway->addBell((int)$fsid, $bellData);
-
-		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageGateway->deleteUserFromConversation($scid, $fsid);
-		}
-
-		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
-			$this->messageGateway->addUserToConversation($tcid, $fsid);
-		}
-
-		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::REQUEST_APPROVED);
-
-		return $this->update('
-					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 1, `stat_add_date` = NOW()
-					WHERE 		`betrieb_id` = ' . (int)$storeId . '
-					AND 		`foodsaver_id` = ' . (int)$fsid . '
-		');
-	}
-
 	public function warteRequest($fsid, $storeId)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);

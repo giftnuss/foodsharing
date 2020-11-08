@@ -7,8 +7,11 @@ use DateTime;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
+use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -19,6 +22,7 @@ class StoreTransactions
 	private TranslatorInterface $translator;
 	private BellGateway $bellGateway;
 	private FoodsaverGateway $foodsaverGateway;
+	private RegionGateway $regionGateway;
 	private Session $session;
 	const MAX_SLOTS_PER_PICKUP = 10;
 	// status constants for getAvailablePickupStatus
@@ -33,6 +37,7 @@ class StoreTransactions
 		TranslatorInterface $translator,
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
+		RegionGateway $regionGateway,
 		Session $session
 	) {
 		$this->messageGateway = $messageGateway;
@@ -40,6 +45,7 @@ class StoreTransactions
 		$this->translator = $translator;
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 	}
 
@@ -189,6 +195,46 @@ class StoreTransactions
 		}
 
 		return $filteredStoresForUser;
+	}
+
+	/**
+	 * Accepts a user's request to join a store. This creates a bell notification for that user, adds an entry
+	 * to the store log and the store's wall, and makes sure the user is in the store's region.
+	 */
+	public function acceptStoreRequest(int $storeId, int $userId): void
+	{
+		// add user to the team and to the team's conversation
+		$this->storeGateway->addUserToTeam($storeId, $userId);
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$this->messageGateway->deleteUserFromConversation($scid, $userId);
+		}
+		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
+			$this->messageGateway->addUserToConversation($tcid, $userId);
+		}
+
+		// add an entry to the store log and a note the store wall
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::REQUEST_APPROVED);
+		$this->storeGateway->add_betrieb_notiz([
+			'foodsaver_id' => $userId,
+			'betrieb_id' => $storeId,
+			'text' => '{ACCEPT_REQUEST}',
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => Milestone::ACCEPTED,
+		]);
+
+		// create bell for the user who is accepted
+		$storeName = $this->storeGateway->getStoreName($storeId);
+		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'fas fa-user-check', [
+			'href' => '/?page=fsbetrieb&id=' . $storeId
+		], [
+			'user' => $this->session->user('name'),
+			'name' => $storeName
+		], 'store-arequest-' . $userId);
+		$this->bellGateway->addBell($userId, $bellData);
+
+		// add the user to the store's region
+		$regionId = $this->storeGateway->getStoreRegionId($storeId);
+		$this->regionGateway->linkBezirk($userId, $regionId);
 	}
 
 	/**
