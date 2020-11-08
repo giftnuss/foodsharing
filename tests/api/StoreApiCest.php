@@ -236,7 +236,7 @@ class StoreApiCest
 		$user2 = $I->createFoodsaver();
 		$this->createStoreRequest($I, $user2['id']);
 
-		// accept request
+		// reject request
 		$I->login($this->manager[self::EMAIL]);
 		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
 		$I->seeResponseCodeIs(Http::OK);
@@ -254,7 +254,7 @@ class StoreApiCest
 		$user2 = $I->createFoodsaver();
 		$this->createStoreRequest($I, $user2['id']);
 
-		// accept request
+		// reject request
 		$I->login($this->user[self::EMAIL]);
 		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
@@ -272,7 +272,7 @@ class StoreApiCest
 	{
 		$user2 = $I->createFoodsaver();
 
-		// accept request
+		// reject request
 		$I->login($this->manager[self::EMAIL]);
 		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
 		$I->seeResponseCodeIs(Http::NOT_FOUND);

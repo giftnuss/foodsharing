@@ -31,6 +31,7 @@
 - Deprecate both `v_form_recip_chooser` variants !1699 @ChrisOelmueller
 - Reimplement user verification as REST endpoints !1696 @ChrisOelmueller
 - Rewrite store wall with REST and Vue !1690 @ChrisOelmueller
+- Move xhr functions for store requests to REST !1755 @alex.simm
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
