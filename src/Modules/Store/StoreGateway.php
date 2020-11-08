@@ -1262,7 +1262,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function addUserToTeam(int $storeId, int $userId): void
 	{
 		$this->db->update('fs_betrieb_team', [
-			'active' => 1,
+			'active' => MembershipStatus::MEMBER,
 			'stat_add_date' => $this->db->now()
 		], [
 			'betrieb_id' => $storeId,

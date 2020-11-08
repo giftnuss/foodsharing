@@ -214,6 +214,22 @@ class StoreApiCest
 		]);
 	}
 
+	public function canNotAcceptNonexistingRequests(ApiTester $I): void
+	{
+		$user2 = $I->createFoodsaver();
+
+		// accept request
+		$I->login($this->manager[self::EMAIL]);
+		$I->sendPatch(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::NOT_FOUND);
+
+		// user should not be in store
+		$I->dontSeeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
+		]);
+	}
+
 	public function canRejectStoreRequests(ApiTester $I): void
 	{
 		// create a request
@@ -249,6 +265,22 @@ class StoreApiCest
 			'foodsaver_id' => $user2['id'],
 			'verantwortlich' => 0,
 			'active' => 0
+		]);
+	}
+
+	public function canNotRejectNonexistingRequests(ApiTester $I): void
+	{
+		$user2 = $I->createFoodsaver();
+
+		// accept request
+		$I->login($this->manager[self::EMAIL]);
+		$I->sendDelete(self::API_STORES . '/' . $this->store['id'] . '/requests/' . $user2['id']);
+		$I->seeResponseCodeIs(Http::NOT_FOUND);
+
+		// user should not be in store
+		$I->dontSeeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $user2['id'],
 		]);
 	}
 

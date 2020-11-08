@@ -9,10 +9,12 @@ use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
+use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -189,6 +191,14 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Accepts a user's request for joining a store.
 	 *
+	 * @SWG\Parameter(name="storeId", in="path", type="integer", description="for which store to accept a request")
+	 * @SWG\Parameter(name="userId", in="path", type="integer", description="who should be accepted")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="401", description="Not logged in")
+	 * @SWG\Response(response="403", description="Insufficient permissions to accept requests")
+	 * @SWG\Response(response="404", description="Request does not exist")
+	 * @SWG\Tag(name="stores")
+	 *
 	 * @Rest\Patch("stores/{storeId}/requests/{userId}")
 	 */
 	public function acceptStoreRequestAction(int $storeId, int $userId): Response
@@ -199,6 +209,9 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayAcceptRequests($storeId)) {
 			throw new HttpException(403);
 		}
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamStatus::Applied) {
+			throw new HttpException(404);
+		}
 
 		$this->storeTransactions->acceptStoreRequest($storeId, $userId);
 
@@ -208,12 +221,27 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Removes the user's own request or denies another user's request for a store.
 	 *
+	 * @SWG\Parameter(name="storeId", in="path", type="integer", description="for which store to remove a request")
+	 * @SWG\Parameter(name="userId", in="path", type="integer", description="whose request should be removed")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="401", description="Not logged in")
+	 * @SWG\Response(response="403", description="Insufficient permissions to remove the request")
+	 * @SWG\Response(response="404", description="Request does not exist")
+	 * @SWG\Tag(name="stores")
+	 *
 	 * @Rest\Delete("stores/{storeId}/requests/{userId}")
 	 */
 	public function removeStoreRequestAction(int $storeId, int $userId): Response
 	{
-		if ($this->session->id() !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
+		$sessionId = $this->session->id();
+		if (!$sessionId) {
+			throw new HttpException(401);
+		}
+		if ($sessionId !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new HttpException(403);
+		}
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamStatus::Applied) {
+			throw new HttpException(404);
 		}
 
 		$this->storeTransactions->removeStoreRequest($storeId, $userId);
