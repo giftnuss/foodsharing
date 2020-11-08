@@ -29,6 +29,7 @@ import { vueApply, vueRegister } from '@/vue'
 import PickupHistory from './components/PickupHistory'
 import PickupList from './components/PickupList'
 import Store from './components/Store'
+import StoreApplications from './components/StoreApplications'
 import StoreInfos from './components/StoreInfos'
 import StoreTeam from './components/StoreTeam'
 
@@ -117,12 +118,14 @@ $(document).ready(() => {
     PickupHistory,
     PickupList,
     Store,
+    StoreApplications,
     StoreInfos,
     StoreTeam,
   })
   vueApply('#vue-pickup-history', true) // PickupHistory
   vueApply('#vue-pickuplist', true) // PickupList
   vueApply('#vue-storeview', true) // Store
+  vueApply('#vue-store-applications', true) // StoreApplications
   vueApply('#vue-storeinfos', true) // StoreInfos
   vueApply('#vue-storeteam', true) // StoreTeam
 })

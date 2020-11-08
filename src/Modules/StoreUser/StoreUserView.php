@@ -59,35 +59,6 @@ class StoreUserView extends View
 		return $out;
 	}
 
-	public function handleRequests($storeData)
-	{
-		$out = '<table class="pintable">';
-		$odd = 'odd';
-		$this->pageHelper->addJs('$("table.pintable tr td ul li").tooltip();');
-
-		foreach ($storeData['requests'] as $r) {
-			if ($odd == 'even') {
-				$odd = 'odd';
-			} else {
-				$odd = 'even';
-			}
-			$verificationStatus = $r['verified'] ? '<i class="fas fa-user-check" title="' . $this->translator->trans('store.request.verified') . '"></i> ' : '';
-			$out .= '
-		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->imageService->img($r['photo']) . '" /></a></td>
-			<td style="padding-top:17px;"><span class="msg">' . $verificationStatus . '<a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
-			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$storeData['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$storeData['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$storeData['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
-		</tr>';
-		}
-
-		$out .= '</table>';
-
-		$this->pageHelper->hiddenDialog('requests', [$out]);
-		$this->pageHelper->addJs('$("#requests").dialog("option", "title", "Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
-		$this->pageHelper->addJs('$("#requests").dialog("option", "buttons", {});');
-		$this->pageHelper->addJs('$("#requests").dialog("open");');
-	}
-
 	public function u_legacyStoreTeamStatus(array $storeData): string
 	{
 		$this->pageHelper->addJs('

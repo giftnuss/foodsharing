@@ -121,11 +121,6 @@ class StoreUserControl extends Control
 						. $this->translator->trans('storeedit.team.orga')
 					);
 				}
-				if ($store['verantwortlich']) {
-					if (!empty($store['requests'])) {
-						$this->view->handleRequests($store);
-					}
-				}
 
 				$this->dataHelper->setEditData($store);
 
@@ -280,6 +275,17 @@ class StoreUserControl extends Control
 							['class' => 'ui-padding']
 						),
 						CNT_LEFT
+					);
+				}
+
+				if ($store['verantwortlich']) {
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-store-applications', 'StoreApplications', [
+							'storeId' => $storeId,
+							'storeTitle' => $store['name'] ?? '',
+							'storeRequests' => $store['requests'] ?? [],
+							'requestCount' => count($store['requests'] ?? []),
+						])
 					);
 				}
 

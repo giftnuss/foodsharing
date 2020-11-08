@@ -677,7 +677,11 @@ store:
     orga-instead: 'Das Orga-Team wurde informiert.'
     withdraw: Anfrage zurückziehen
     withdrawn: 'Die Anfrage wurde erfolgreich zurückgezogen.'
+    title: Anfragen für {storeTitle}
     verified: Nutzer*in ist verifiziert
+    to-team: Aufnehmen
+    to-jumper: Springerliste
+    to-nowhere: Ablehnen
 
 storeedit:
   bread: Betrieb bearbeiten
@@ -1363,6 +1367,7 @@ index:
 
 profile:
   title: Profil
+  go: Profil aufrufen
   notFound: Dieses Nutzerprofil gibt es nicht oder nicht mehr
   warning: Warnung
   mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das Ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
