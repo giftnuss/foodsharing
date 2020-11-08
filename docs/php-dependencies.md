@@ -69,5 +69,3 @@ but about the functionality they provide.
 Symfony config is in `/config/services.yml`. This configuration makes sure that services
 get created automatically. See the [Symfony docs](https://symfony.com/doc/current/service_container.html)
 for further reference.
-
-<!-- TODO: when does [Symfony](https://symfony.com/doc) work? -->

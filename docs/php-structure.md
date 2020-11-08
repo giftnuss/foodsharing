@@ -10,6 +10,7 @@ Different kinds of classes and concepts are explained there:
 - [Controllers](#controllers)
 - [Services](#services)
 - [Helper](#helpers)
+- [Routing](#routing)
 
 If you are looking for a general description of our PHP setup, please check [PHP](#php.md)!
 
@@ -20,3 +21,4 @@ If you are looking for a general description of our PHP setup, please check [PHP
 {% include "./php-controllers.md" %}
 {% include "./php-services.md" %}
 {% include "./php-helpers.md" %}
+{% include "./php-routing.md" %}
