@@ -80,7 +80,7 @@ class XhrController extends AbstractController
 		$action = $request->query->get('f');
 
 		if ($action === null) {
-			return new Response(Response::HTTP_BAD_REQUEST);
+			return new Response(null, Response::HTTP_BAD_REQUEST);
 		}
 
 		if (!in_array($action, XhrController::csrf_whitelist) && !$session->isValidCsrfHeader()) {
@@ -94,7 +94,7 @@ class XhrController extends AbstractController
 
 		$func = 'xhr_' . $action;
 		if (!method_exists($xhr, $func)) {
-			return new Response(Response::HTTP_BAD_REQUEST);
+			return new Response(null, Response::HTTP_BAD_REQUEST);
 		}
 
 		$response = new Response();

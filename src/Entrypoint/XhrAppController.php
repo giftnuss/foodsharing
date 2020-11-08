@@ -151,7 +151,7 @@ class XhrAppController extends AbstractController
 	public function __invoke(Request $request, Session $session): Response
 	{
 		if (!isset($_GET['app'], $_GET['m'])) {
-			return new Response(Response::HTTP_BAD_REQUEST);
+			return new Response(null, Response::HTTP_BAD_REQUEST);
 		}
 
 		$app = str_replace('/', '', $_GET['app']);
@@ -166,7 +166,7 @@ class XhrAppController extends AbstractController
 		$obj = $this->fullServiceContainer->get(ltrim($class, '\\'));
 
 		if (!method_exists($obj, $meth)) {
-			return new Response(Response::HTTP_BAD_REQUEST);
+			return new Response(null, Response::HTTP_BAD_REQUEST);
 		}
 
 		$response = new Response();
