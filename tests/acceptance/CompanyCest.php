@@ -52,14 +52,14 @@ class CompanyCest
 		$I->login($this->sameRegionFoodsaver['email']);
 	}
 
-	public function CoordinatorCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I)
+	public function CoordinatorCanSeeCompanyOnDashboard(\AcceptanceTester $I)
 	{
 		$this->loginAsCoordinator();
 		$I->see('Du bist verantwortlich', 'div.head.ui-widget-header.ui-corner-top');
 		$I->see($this->store['name'], 'a.ui-corner-all');
 	}
 
-	public function MemberCanSeeCompanyOnDashboard(\HtmlAcceptanceTester $I)
+	public function MemberCanSeeCompanyOnDashboard(\AcceptanceTester $I)
 	{
 		$this->loginAsMember();
 		$I->see('Du holst Lebensmittel ab bei', 'div.head.ui-widget-header.ui-corner-top');
@@ -67,11 +67,11 @@ class CompanyCest
 	}
 
 	/**
-	 * @param HtmlAcceptanceTester $I
+	 * @param AcceptanceTester $I
 	 * @example["loginAsCoordinator"]
 	 * @example["loginAsMember"]
 	 */
-	public function CanAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
+	public function CanAccessCompanyPage(\AcceptanceTester $I, \Codeception\Example $example)
 	{
 		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeUrl($this->store['id']));
@@ -79,12 +79,12 @@ class CompanyCest
 	}
 
 	/**
-	 * @param HtmlAcceptanceTester $I
+	 * @param AcceptanceTester $I
 	 * @example["loginAsFoodsharer"]
 	 * @example["loginAsUnconnectedFoodsaver"]
 	 * @example["loginAsSameRegionFoodsaver"]
 	 */
-	public function CanNotAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
+	public function CanNotAccessCompanyPage(\AcceptanceTester $I, \Codeception\Example $example)
 	{
 		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeUrl($this->store['id']));
@@ -92,11 +92,11 @@ class CompanyCest
 	}
 
 	/**
-	 * @param HtmlAcceptanceTester $I
+	 * @param AcceptanceTester $I
 	 * @example["loginAsCoordinator", true]
 	 * @example["loginAsMember", false]
 	 */
-	public function CanAccessCompanyEditPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
+	public function CanAccessCompanyEditPage(\AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$canAccess = $example[1];
 		call_user_func([$this, $example[0]]);
@@ -110,13 +110,13 @@ class CompanyCest
 		}
 	}
 
-	public function _before(HtmlAcceptanceTester $I)
+	public function _before(AcceptanceTester $I)
 	{
 		$this->tester = $I;
 		$this->createStoreAndUsers();
 	}
 
-	public function _after(HtmlAcceptanceTester $I)
+	public function _after(AcceptanceTester $I)
 	{
 	}
 }

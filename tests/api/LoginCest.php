@@ -16,16 +16,12 @@ class LoginCest
 
 		$I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-		$I->sendPOST('/?page=login', [
-			'login_form' => [
-				'email_address' => $user['email'],
-				'password' => $pass
-			]
+		$I->sendPOST('api/user/login', [
+			'email' => $user['email'],
+			'password' => $pass
 		]);
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->seeHtml();
-		$I->seeRegExp('~.*' . $example[1] . '.*~i');
 
 		$I->seeInDatabase('fs_foodsaver', [
 			'email' => $user['email']
@@ -42,15 +38,12 @@ class LoginCest
 
 		$I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-		$I->sendPOST('/?page=login', [
-			'login_form' => [
-				'email_address' => $user['email'],
-				'password' => 'WROOOOOOOOONG'
-			]
+		$I->sendPOST('api/user/login', [
+			'email' => $user['email'],
+			'password' => 'WROOOONG'
 		]);
 
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->seeHtml();
-		$I->seeResponseContains('E-Mail-Adresse oder Passwort sind falsch');
+		$I->seeResponseCodeIs(401);
+		$I->seeResponseContains('email or password are invalid');
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-$I = new HtmlAcceptanceTester($scenario);
+$I = new AcceptanceTester($scenario);
 
 $I->wantTo('see that the foodsaver list for a bezirk contains a second list with inactive foodsavers');
 $region = $I->createRegion();
