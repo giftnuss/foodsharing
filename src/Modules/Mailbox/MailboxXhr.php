@@ -12,10 +12,10 @@ use Foodsharing\Utility\TimeHelper;
 
 class MailboxXhr extends Control
 {
-	private $sanitizerService;
-	private $timeHelper;
-	private $mailboxGateway;
-	private $mailboxPermissions;
+	private Sanitizer $sanitizerService;
+	private TimeHelper $timeHelper;
+	private MailboxGateway $mailboxGateway;
+	private MailboxPermissions $mailboxPermissions;
 
 	public function __construct(
 		MailboxView $view,
