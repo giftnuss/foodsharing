@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BlogView extends View
 {
-	private $blogPermissions;
+	private BlogPermissions $blogPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
