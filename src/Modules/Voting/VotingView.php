@@ -9,7 +9,7 @@ use Foodsharing\Modules\Voting\DTO\Poll;
 
 class VotingView extends View
 {
-	public function pollOverview(Poll $poll, array $region, bool $mayVote, ?DateTime $userVoteDate, bool $mayEdit)
+	public function pollOverview(Poll $poll, array $region, bool $mayVote, ?DateTime $userVoteDate, bool $mayEdit): string
 	{
 		return $this->vueComponent('poll-overview', 'pollOverview', [
 			'poll' => $poll,
@@ -21,7 +21,7 @@ class VotingView extends View
 		]);
 	}
 
-	public function newPollForm(array $region)
+	public function newPollForm(array $region): string
 	{
 		return $this->vueComponent('new-poll-form', 'newPollForm', [
 			'region' => $region,
