@@ -57,15 +57,6 @@ class LoginView extends View
 		);
 	}
 
-	public function success(string $msg, $title = false): void
-	{
-		$t = '';
-		if ($title !== false) {
-			$t = '<strong>' . $title . '</strong> ';
-		}
-		$_SESSION['msg']['success'][] = $t . $msg;
-	}
-
 	public function loginForm()
 	{
 		return $this->vueComponent('login-form', 'LoginForm');
