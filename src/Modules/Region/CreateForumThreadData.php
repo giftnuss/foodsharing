@@ -10,20 +10,20 @@ class CreateForumThreadData
 	 * @Assert\Type("string")
 	 * @Assert\NotBlank()
 	 */
-	public $title;
+	public string $title;
 
 	/**
 	 * @Assert\Type("string")
 	 * @Assert\NotBlank()
 	 */
-	public $body;
+	public string $body;
 
 	/**
 	 * @Assert\Type("bool")
 	 */
-	public $sendMail;
+	public bool $sendMail;
 
-	public static function create()
+	public static function create(): self
 	{
 		return new self();
 	}
