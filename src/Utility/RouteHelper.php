@@ -9,9 +9,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RouteHelper
 {
-	private $session;
-	private $translator;
-	private $legalGateway;
+	private Session $session;
+	private TranslatorInterface $translator;
+	private LegalGateway $legalGateway;
 
 	public function __construct(
 		Session $session,
