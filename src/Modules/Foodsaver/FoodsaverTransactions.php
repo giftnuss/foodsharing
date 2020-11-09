@@ -8,8 +8,8 @@ use Foodsharing\Modules\Store\StoreModel;
 
 class FoodsaverTransactions
 {
-	private $foodsaverGateway;
-	private $quizSessionGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private QuizSessionGateway $quizSessionGateway;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
