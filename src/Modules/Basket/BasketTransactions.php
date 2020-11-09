@@ -9,8 +9,8 @@ class BasketTransactions
 	private const TEL = 'tel';
 	private const MOBILE_NUMBER = 'handy';
 
-	private $basketGateway;
-	private $session;
+	private BasketGateway $basketGateway;
+	private Session $session;
 
 	public function __construct(
 		BasketGateway $basketGateway,
