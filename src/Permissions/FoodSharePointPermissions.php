@@ -65,7 +65,7 @@ class FoodSharePointPermissions
 		return $this->mayAdd($regionId);
 	}
 
-	public function mayDeleteFoodSharePointWallPostOfRegion(?int $regionId)
+	public function mayDeleteFoodSharePointWallPostOfRegion(?int $regionId): bool
 	{
 		if ($this->session->may('orga')) {
 			return true;
