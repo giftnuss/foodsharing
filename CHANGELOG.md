@@ -11,6 +11,7 @@
 - Don't set "follow by email" as default when opening a new thread !1676 @Caluera
 - New favicon created with support for all platforms and browsers !1720 !1741 @chriswalg
 - Notify a user who is accepted to or declined from a workgroup with a bell #808 !1708 !1721 @alex.simm
+- Only display broadcast message for logged-in users !1757 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg

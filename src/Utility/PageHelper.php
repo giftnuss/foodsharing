@@ -127,7 +127,7 @@ final class PageHelper
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->hidden,
 			'isMob' => $this->session->isMob(),
-			'broadcast_message' => $g_broadcast_message,
+			'broadcast_message' => $this->session->id() ? $g_broadcast_message : '', // only when logged in
 			'footer' => $footer,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
 			'content' => [
