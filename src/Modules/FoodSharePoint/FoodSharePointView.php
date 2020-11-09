@@ -25,7 +25,7 @@ class FoodSharePointView extends View
 	private array $foodSharePoint;
 	private array $follower;
 
-	private $fspPermissions;
+	private FoodSharePointPermissions $fspPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
