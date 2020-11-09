@@ -2,41 +2,25 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\View\vMap;
 use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
 {
-	public function join(string $email = '', string $pass = '', $datenschutz, $rechtsvereinbarung)
+	public function passwordRequest(): string
 	{
-		$map = new vMap();
-		$map->setSearchPanel('login_location');
+		if ($this->session->may()) {
+			return '';
+		}
+
 		$params = [
-			'date_min' => date('Y-m-d', strtotime('-120 years')),
-			'date_max' => date('Y-m-d', strtotime('-18 years')),
-			'datenschutz' => $datenschutz,
-			'rechtsvereinbarung' => $rechtsvereinbarung,
-			'pass' => $pass,
-			'email' => $email,
-			'map' => $map->render()
+			'email' => $this->translator->trans('register.login_email'),
+			'action' => $_SERVER['REQUEST_URI'],
 		];
 
-		return $this->twig->render('pages/Register/RegisterForm.twig', $params);
+		return $this->twig->render('pages/ForgotPassword/ForgotPasswordForm.twig', $params);
 	}
 
-	public function passwordRequest()
-	{
-		if (!$this->session->may()) {
-			$params = [
-				'email' => $this->translator->trans('register.login_email'),
-				'action' => $_SERVER['REQUEST_URI']
-			];
-
-			return $this->twig->render('pages/ForgotPassword/ForgotPasswordForm.twig', $params);
-		}
-	}
-
-	public function newPasswordForm(string $key)
+	public function newPasswordForm(string $key): string
 	{
 		$key = preg_replace('/[^0-9a-zA-Z]/', '', $key);
 		$out = $this->v_utils->v_info($this->translator->trans('register.change-password'));
