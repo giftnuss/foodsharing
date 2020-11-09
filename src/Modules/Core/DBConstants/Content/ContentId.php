@@ -31,6 +31,7 @@ class ContentId
 	public const QUIZ_FAILED_AMB_TRY_3_PAGE_27 = 27;
 	public const QUIZ_REMARK_PAGE_33 = 33;
 	public const QUIZ_POPUP_SM_PAGE_34 = 34;
+	public const QUIZ_MESSAGE_SM_UNVERIFIED_PAGE_45 = 45;
 	public const QUIZ_POPUP_AMB_PAGE_35 = 35;
 	public const QUIZ_POPUP_AMB_LAST_PAGE_36 = 36;
 

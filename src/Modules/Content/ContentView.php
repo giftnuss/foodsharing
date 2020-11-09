@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\View;
 
 class ContentView extends View
 {
-	public function simple($cnt)
+	public function simple(array $cnt): string
 	{
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
@@ -15,7 +15,7 @@ class ContentView extends View
 		</div>';
 	}
 
-	public function partner($cnt)
+	public function partner(array $cnt): string
 	{
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
@@ -24,7 +24,7 @@ class ContentView extends View
 		</div>';
 	}
 
-	public function impressum($cnt)
+	public function impressum(array $cnt): string
 	{
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
@@ -33,7 +33,7 @@ class ContentView extends View
 		</div>';
 	}
 
-	public function about($cnt)
+	public function about(array $cnt): string
 	{
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
@@ -42,7 +42,7 @@ class ContentView extends View
 		</div>';
 	}
 
-	public function joininfo()
+	public function joininfo(): string
 	{
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">

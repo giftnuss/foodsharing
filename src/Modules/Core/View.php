@@ -248,13 +248,6 @@ class View
 		return $out;
 	}
 
-	public function simpleContent($content)
-	{
-		$out = $this->v_utils->v_field($content['body'], $content['title'], ['class' => 'ui-padding']);
-
-		return $out;
-	}
-
 	public function vueComponent($id, $component, $props = [], $data = [])
 	{
 		return $this->twig->render('partials/vue-wrapper.twig', [
