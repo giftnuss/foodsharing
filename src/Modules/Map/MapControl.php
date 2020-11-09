@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\Control;
 
 class MapControl extends Control
 {
-	private $mapGateway;
+	private MapGateway $mapGateway;
 
 	public function __construct(MapGateway $mapGateway, MapView $view)
 	{
