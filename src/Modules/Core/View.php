@@ -149,7 +149,7 @@ class View
 		return $out;
 	}
 
-	public function menu($items, $option = [])
+	public function menu(array $items, array $option = []): string
 	{
 		$title = false;
 		if (isset($option['title'])) {
@@ -204,7 +204,7 @@ class View
 		</div>';
 	}
 
-	public function latLonPicker($id, $options = [], $context = '')
+	public function latLonPicker(string $id, array $options = [], string $context = ''): string
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
@@ -248,7 +248,7 @@ class View
 		return $out;
 	}
 
-	public function vueComponent($id, $component, $props = [], $data = [])
+	public function vueComponent(string $id, string $component, array $props = [], array $data = []): string
 	{
 		return $this->twig->render('partials/vue-wrapper.twig', [
 			'id' => $id,
