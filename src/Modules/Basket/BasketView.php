@@ -21,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BasketView extends View
 {
-	private $basketPermissions;
+	private BasketPermissions $basketPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
