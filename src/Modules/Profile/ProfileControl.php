@@ -12,7 +12,7 @@ use Foodsharing\Permissions\ReportPermissions;
 
 final class ProfileControl extends Control
 {
-	private $foodsaver;
+	private array $foodsaver;
 	private MailsGateway $mailsGateway;
 	private RegionGateway $regionGateway;
 	private ProfileGateway $profileGateway;
