@@ -173,19 +173,6 @@ abstract class Control
 		return false;
 	}
 
-	public function getPostHtml($name)
-	{
-		if ($val = $this->getPost($name)) {
-			$val = strip_tags($val, '<p><ul><li><ol><strong><span><i><div><h1><h2><h3><h4><h5><br><img><table><thead><tbody><th><td><tr><i><a>');
-			$val = trim($val);
-			if (!empty($val)) {
-				return $val;
-			}
-		}
-
-		return false;
-	}
-
 	public function getPostDate($name)
 	{
 		if ($date = $this->getPostString($name)) {
