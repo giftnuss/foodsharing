@@ -112,6 +112,7 @@ build:backend:
   image: registry.gitlab.com/foodsharing-dev/images/php:7.4.11
   stage: build
   script:
+    - composer validate --no-check-all --no-check-publish
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-scripts --ignore-platform-reqs
     - (cd phinx && composer install --no-progress --no-interaction --no-scripts --ignore-platform-reqs)
     - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose --ansi
