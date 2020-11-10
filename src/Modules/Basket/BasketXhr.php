@@ -520,7 +520,7 @@ class BasketXhr extends Control
 
 	private function preparePicture(string $filename): string
 	{
-		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename);
+		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename) ?? '';
 		if (!empty($pic) && file_exists('tmp/' . $pic)) {
 			$this->resizePic($pic);
 		}
