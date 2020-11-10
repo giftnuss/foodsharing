@@ -9,7 +9,7 @@ use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -38,12 +38,12 @@ class VerificationRestController extends AbstractFOSRestController
 	/**
 	 * Changes verification status of one user to 'verified'.
 	 *
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="which user to verify")
-	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="401", description="Not logged in.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to verify this user.")
-	 * @SWG\Response(response="404", description="User not found.")
-	 * @SWG\Response(response="422", description="Already verified.")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to verify")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="401", description="Not logged in.")
+	 * @OA\Response(response="403", description="Insufficient permissions to verify this user.")
+	 * @OA\Response(response="404", description="User not found.")
+	 * @OA\Response(response="422", description="Already verified.")
 	 *
 	 * @Rest\Patch("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */
@@ -71,13 +71,13 @@ class VerificationRestController extends AbstractFOSRestController
 	/**
 	 * Changes verification status of one user to 'deverified'.
 	 *
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="which user to deverify")
-	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="400", description="Has future pickups.")
-	 * @SWG\Response(response="401", description="Not logged in.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to deverify this user.")
-	 * @SWG\Response(response="404", description="User not found.")
-	 * @SWG\Response(response="422", description="Already deverified.")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to deverify")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="400", description="Has future pickups.")
+	 * @OA\Response(response="401", description="Not logged in.")
+	 * @OA\Response(response="403", description="Insufficient permissions to deverify this user.")
+	 * @OA\Response(response="404", description="User not found.")
+	 * @OA\Response(response="422", description="Already deverified.")
 	 *
 	 * @Rest\Delete("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */

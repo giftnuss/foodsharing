@@ -9,7 +9,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\WorkGroupPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -35,11 +35,11 @@ class ApplicationRestController extends AbstractFOSRestController
 	/**
 	 * Accepts an application for a work group.
 	 *
-	 * @SWG\Tag(name="application")
-	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which work group the request is for")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
-	 * @SWG\Response(response="404", description="Workgroup does not exist.")
+	 * @OA\Tag(name="application")
+	 * @OA\Parameter(name="groupId", in="path", @OA\Schema(type="integer"), description="which work group the request is for")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="404", description="Workgroup does not exist.")
 	 *
 	 * @Rest\Patch("applications/{groupId}/{userId}", requirements={"groupId" = "\d+", "userId" = "\d+"})
 	 */
@@ -63,11 +63,11 @@ class ApplicationRestController extends AbstractFOSRestController
 	/**
 	 * Declines an application for a work group.
 	 *
-	 * @SWG\Tag(name="application")
-	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which work group the request is for")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
-	 * @SWG\Response(response="404", description="Workgroup does not exist.")
+	 * @OA\Tag(name="application")
+	 * @OA\Parameter(name="groupId", in="path", @OA\Schema(type="integer"), description="which work group the request is for")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="404", description="Workgroup does not exist.")
 	 *
 	 * @Rest\Delete("applications/{groupId}/{userId}", requirements={"groupId" = "\d+", "userId" = "\d+"})
 	 */

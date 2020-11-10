@@ -8,7 +8,7 @@ use Foodsharing\Modules\Activity\ActivityTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -31,9 +31,9 @@ class ActivityRestController extends AbstractFOSRestController
 	/**
 	 * Returns the filters for all dashboard activities for the current user.
 	 *
-	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to request filters.")
-	 * @SWG\Tag(name="activities")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="403", description="Insufficient permissions to request filters.")
+	 * @OA\Tag(name="activities")
 	 *
 	 * @Rest\Get("activities/filters")
 	 */
@@ -51,9 +51,9 @@ class ActivityRestController extends AbstractFOSRestController
 	/**
 	 * Sets which dashboard activities should be deactivated for the current user.
 	 *
-	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to set filters.")
-	 * @SWG\Tag(name="activities")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="403", description="Insufficient permissions to set filters.")
+	 * @OA\Tag(name="activities")
 	 *
 	 * @Rest\Patch("activities/filters")
 	 * @Rest\RequestParam(name="excluded")

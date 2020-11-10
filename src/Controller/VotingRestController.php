@@ -14,7 +14,7 @@ use Foodsharing\Permissions\VotingPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -40,10 +40,10 @@ class VotingRestController extends AbstractFOSRestController
 	/**
 	 * Returns the details of a poll.
 	 *
-	 * @SWG\Parameter(name="pollId", in="path", type="integer", description="which poll to return")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="404", description="Poll does not exist.")
-	 * @SWG\Tag(name="polls")
+	 * @OA\Parameter(name="pollId", in="path", @OA\Schema(type="integer"), description="which poll to return")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="404", description="Poll does not exist.")
+	 * @OA\Tag(name="polls")
 	 *
 	 * @Rest\Get("polls/{pollId}", requirements={"pollId" = "\d+"})
 	 */
@@ -64,9 +64,9 @@ class VotingRestController extends AbstractFOSRestController
 	/**
 	 * Lists all polls in a region or working group.
 	 *
-	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="which region to list polls for")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Tag(name="polls")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="which region to list polls for")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Tag(name="polls")
 	 *
 	 * @Rest\Get("groups/{groupId}/polls", requirements={"groupId" = "\d+"})
 	 */
@@ -85,12 +85,12 @@ class VotingRestController extends AbstractFOSRestController
 	 * Vote in a poll. The options need to be a list mapping option indices to the vote values (+1, 0, -1). Depending
 	 * on the voting type not all options need to be included.
 	 *
-	 * @SWG\Parameter(name="pollId", in="path", type="integer", description="in which poll to vote")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="400", description="Invalid options.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to vote in that polls.")
-	 * @SWG\Response(response="404", description="Poll does not exist.")
-	 * @SWG\Tag(name="polls")
+	 * @OA\Parameter(name="pollId", in="path", @OA\Schema(type="integer"), description="in which poll to vote")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="400", description="Invalid options.")
+	 * @OA\Response(response="403", description="Insufficient permissions to vote in that polls.")
+	 * @OA\Response(response="404", description="Poll does not exist.")
+	 * @OA\Tag(name="polls")
 	 *
 	 * @Rest\Put("polls/{pollId}/vote", requirements={"pollId" = "\d+"})
 	 * @Rest\RequestParam(name="options", nullable=false)
@@ -128,10 +128,10 @@ class VotingRestController extends AbstractFOSRestController
 	 * server. Options must be passed as an array of strings for the options' texts. The order of the options will
 	 * be kept.
 	 *
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="400", description="Invalid parameters.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to create a poll in that region.")
-	 * @SWG\Tag(name="polls")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="400", description="Invalid parameters.")
+	 * @OA\Response(response="403", description="Insufficient permissions to create a poll in that region.")
+	 * @OA\Tag(name="polls")
 	 *
 	 * @Rest\Post("polls")
 	 * @Rest\RequestParam(name="name", nullable=false)
@@ -204,10 +204,10 @@ class VotingRestController extends AbstractFOSRestController
 	/**
 	 * Cancels a poll.
 	 *
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to delete that poll.")
-	 * @SWG\Response(response="404", description="Poll does not exist.")
-	 * @SWG\Tag(name="polls")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions to delete that poll.")
+	 * @OA\Response(response="404", description="Poll does not exist.")
+	 * @OA\Tag(name="polls")
 	 *
 	 * @Rest\Delete("polls/{pollId}", requirements={"pollId" = "\d+"})
 	 */

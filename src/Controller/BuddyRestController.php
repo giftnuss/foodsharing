@@ -7,7 +7,7 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Buddy\BuddyTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -30,13 +30,13 @@ class BuddyRestController extends AbstractFOSRestController
 	/**
 	 * Sends a buddy request to a user.
 	 *
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="which user to send the request to")
-	 * @SWG\Response(response="200", description="Success.", @SWG\Schema(type="object",
-	 *     @SWG\Property(property="isBuddy", type="integer", description="whether the other user is now this user's buddy")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to send the request to")
+	 * @OA\Response(response="200", description="Success.", @OA\Schema(type="object",
+	 *     @OA\Property(property="isBuddy", type="integer", description="whether the other user is now this user's buddy")
 	 * ))
-	 * @SWG\Response(response="400", description="Already buddy with that user.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to send the request.")
-	 * @SWG\Tag(name="tag")
+	 * @OA\Response(response="400", description="Already buddy with that user.")
+	 * @OA\Response(response="403", description="Insufficient permissions to send the request.")
+	 * @OA\Tag(name="tag")
 	 *
 	 * @Rest\Put("buddy/{userId}", requirements={"userId" = "\d+"})
 	 */

@@ -13,7 +13,7 @@ use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -105,12 +105,12 @@ class RegionRestController extends AbstractFOSRestController
 	 * not a member of that region. That means that after a 200 result the user will definitely not be a member of that
 	 * region anymore.
 	 *
-	 * @SWG\Tag(name="region")
-	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="which region or group to leave")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="400", description="Region or group does not exist")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
-	 * @SWG\Response(response="409", description="User is still an active store manager in the region")
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="which region or group to leave")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="400", description="Region or group does not exist")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="409", description="User is still an active store manager in the region")
 	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
 	 */
 	public function leaveRegionAction(int $regionId): Response
@@ -135,10 +135,10 @@ class RegionRestController extends AbstractFOSRestController
 	/**
 	 * Updates the master region for the given region and all its subregions.
 	 *
-	 * @SWG\Tag(name="region")
-	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="the region that will be updated")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="the region that will be updated")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Patch("region/{regionId}/masterupdate", requirements={"regionId" = "\d+"})
 	 */
 	public function masterUpdateAction(int $regionId): Response

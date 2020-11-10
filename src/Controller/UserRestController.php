@@ -18,7 +18,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Mobile_Detect;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -281,13 +281,13 @@ class UserRestController extends AbstractFOSRestController
 	/**
 	 * Gives a banana to a user.
 	 *
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="to which user to give the banana")
-	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user", @SWG\Schema(type="string"))
-	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="400", description="Accompanying message is too short.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to rate that user.")
-	 * @SWG\Response(response="404", description="User to rate does not exist.")
-	 * @SWG\Tag(name="user")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="to which user to give the banana")
+	 * @OA\RequestBody(description="message to the user")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="400", description="Accompanying message is too short.")
+	 * @OA\Response(response="403", description="Insufficient permissions to rate that user.")
+	 * @OA\Response(response="404", description="User to rate does not exist.")
+	 * @OA\Tag(name="user")
 	 *
 	 * @Rest\Put("user/{userId}/banana", requirements={"userId" = "\d+"})
 	 * @Rest\RequestParam(name="message", nullable=false)

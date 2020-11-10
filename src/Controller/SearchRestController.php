@@ -14,7 +14,7 @@ use Foodsharing\Permissions\ForumPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -131,20 +131,20 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * Searches in the titles of forum threads in a specific group.
 	 *
-	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which forum to return threads for (region or group)")
-	 * @SWG\Parameter(name="subforumId", in="path", type="integer", description="ID of the forum in the group (normal or ambassador forum)")
-	 * @SWG\Parameter(name="q", in="query", type="string", description="search query")
-	 * @SWG\Response(response="200", description="Success",
-	 *     @SWG\Schema(type="object", @SWG\Property(property="data", type="array",
-	 *         @SWG\Items(type="object",
-	 *             @SWG\Property(property="id", type="integer", description="thread id"),
-	 *             @SWG\Property(property="name", type="string", description="thread title")
+	 * @OA\Parameter(name="groupId", in="path", @OA\Schema(type="integer"), description="which forum to return threads for (region or group)")
+	 * @OA\Parameter(name="subforumId", in="path", @OA\Schema(type="integer"), description="ID of the forum in the group (normal or ambassador forum)")
+	 * @OA\Parameter(name="q", in="query", @OA\Schema(type="string"), description="search query")
+	 * @OA\Response(response="200", description="Success",
+	 *     @OA\Schema(type="object", @OA\Property(property="data", type="array",
+	 *         @OA\Items(type="object",
+	 *             @OA\Property(property="id", type="integer", description="thread id"),
+	 *             @OA\Property(property="name", type="string", description="thread title")
 	 *         )
 	 *     ))
 	 * )
-	 * @SWG\Response(response="400", description="Empty search query.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to search in that forum.")
-	 * @SWG\Tag(name="search")
+	 * @OA\Response(response="400", description="Empty search query.")
+	 * @OA\Response(response="403", description="Insufficient permissions to search in that forum.")
+	 * @OA\Tag(name="search")
 	 *
 	 * @Rest\Get("search/forum/{groupId}/{subforumId}", requirements={"groupId" = "\d+", "subforumId" = "\d+"})
 	 * @Rest\QueryParam(name="q", description="Search query.", nullable=false)

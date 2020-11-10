@@ -12,7 +12,7 @@ use Foodsharing\Utility\Sanitizer;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -88,28 +88,28 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Gets available threads including their last post.
 	 *
-	 * @SWG\Parameter(name="forumId", in="path", type="integer",
+	 * @OA\Parameter(name="forumId", in="path", @OA\Schema(type="integer"),
 	 *   description="which forum to return threads for (region or group)")
-	 * @SWG\Parameter(name="forumSubId", in="path", type="integer",
+	 * @OA\Parameter(name="forumSubId", in="path", @OA\Schema(type="integer"),
 	 *   description="each region/group has another namespace to separate different forums with the same base id (region/group id, here: forumId). So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads).
 	 * 0: Forum, 1: Ambassador forum")
-	 * @SWG\Parameter(name="limit", in="query", type="integer", description="how many search results to return")
-	 * @SWG\Parameter(name="offset", in="query", type="integer", description="starting with which result")
-	 * @SWG\Response(response="200", description="Success",
-	 *     @SWG\Schema(type="object", @SWG\Property(property="data", type="array", @SWG\Items(type="object",
-	 *     @SWG\Property(property="id", type="integer", description="thread id"),
-	 *     @SWG\Property(property="regionId", type="integer", description="region/forum id"),
-	 *     @SWG\Property(property="regionSubId", type="integer", description="region/forum sub id"),
-	 *     @SWG\Property(property="title", type="string", description="thread title"),
-	 *     @SWG\Property(property="createdAt", type="integer", description="region/forum sub id"),
-	 *     @SWG\Property(property="isSticky", type="integer", description="region/forum sub id"),
-	 *     @SWG\Property(property="isActive", type="integer", description="region/forum sub id"),
-	 *     @SWG\Property(property="lastPost", type="object", @SWG\Items()),
-	 *     @SWG\Property(property="creator", type="object", @SWG\Items()),
+	 * @OA\Parameter(name="limit", in="query", @OA\Schema(type="integer"), description="how many search results to return")
+	 * @OA\Parameter(name="offset", in="query", @OA\Schema(type="integer"), description="starting with which result")
+	 * @OA\Response(response="200", description="Success",
+	 *     @OA\Schema(type="object", @OA\Property(property="data", type="array", @OA\Items(type="object",
+	 *     @OA\Property(property="id", type="integer", description="thread id"),
+	 *     @OA\Property(property="regionId", type="integer", description="region/forum id"),
+	 *     @OA\Property(property="regionSubId", type="integer", description="region/forum sub id"),
+	 *     @OA\Property(property="title", type="string", description="thread title"),
+	 *     @OA\Property(property="createdAt", type="integer", description="region/forum sub id"),
+	 *     @OA\Property(property="isSticky", type="integer", description="region/forum sub id"),
+	 *     @OA\Property(property="isActive", type="integer", description="region/forum sub id"),
+	 *     @OA\Property(property="lastPost", type="object", @OA\Items()),
+	 *     @OA\Property(property="creator", type="object", @OA\Items()),
 	 *
 	 * ))))
-	 * @SWG\Response(response="403", description="Insufficient permissions to view that forum.")
-	 * @SWG\Tag(name="forum")
+	 * @OA\Response(response="403", description="Insufficient permissions to view that forum.")
+	 * @OA\Tag(name="forum")
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="how many search results to return")
 	 * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="starting with which result")
@@ -145,13 +145,13 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Get a single forum thread including some of its messages.
 	 *
-	 * @SWG\Parameter(name="threadId", in="path", type="integer",
+	 * @OA\Parameter(name="threadId", in="path", @OA\Schema(type="integer"),
 	 *   description="which ID to return threads for")
 	 *
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to view that forum/thread")
-	 * @SWG\Response(response="404", description="Thread does not exist.")
-	 * @SWG\Tag(name="forum")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions to view that forum/thread")
+	 * @OA\Response(response="404", description="Thread does not exist.")
+	 * @OA\Tag(name="forum")
 	 * @Rest\Get("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 */
 	public function getThreadAction(int $threadId): SymfonyResponse
@@ -186,9 +186,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Create a post inside a thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/thread/{threadId}/posts", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="body", description="post message")
 	 */
@@ -207,9 +207,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Create a thread inside a forum.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
 	 * @Rest\RequestParam(name="title", description="title of thread")
 	 * @Rest\RequestParam(name="body", description="post message")
@@ -233,9 +233,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Change attributes for a thread: Stickyness, activate thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Patch("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="isSticky", nullable=true, default=null, description="should thread be pinned to the top of forum?")
 	 * @Rest\RequestParam(name="isActive", nullable=true, default=null, description="should a thread in a moderated forum be activated?")
@@ -265,9 +265,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * request email notifications for activities in at thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
 	public function followThreadByEmailAction(int $threadId): SymfonyResponse
@@ -283,9 +283,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * request bell notifications for activities in a thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
 	public function followThreadByBellAction(int $threadId): SymfonyResponse
@@ -302,8 +302,8 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Remove email notifications for activities in a thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
 	 * @Rest\Delete("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
 	public function unfollowThreadByEmailAction(int $threadId): SymfonyResponse
@@ -316,8 +316,8 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Remove bell notifications for activities in a thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
 	 * @Rest\Delete("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
 	public function unfollowThreadByBellAction(int $threadId): SymfonyResponse
@@ -330,10 +330,10 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Delete a forum post.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="404", description="Post does not exist")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="404", description="Post does not exist")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Delete("forum/post/{postId}", requirements={"postId" = "\d+"})
 	 */
 	public function deletePostAction(int $postId): SymfonyResponse
@@ -354,11 +354,11 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Deletes a forum thread.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Parameter(name="threadId", in="path", type="integer", description="ID of the thread that will be deleted")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to delete that thread or thread is already active")
-	 * @SWG\Response(response="404", description="Thread does not exist.")
+	 * @OA\Tag(name="forum")
+	 * @OA\Parameter(name="threadId", in="path", @OA\Schema(type="integer"), description="ID of the thread that will be deleted")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions to delete that thread or thread is already active")
+	 * @OA\Response(response="404", description="Thread does not exist.")
 	 * @Rest\Delete("forum/thread/{threadId}", requirements={"postId" = "\d+"})
 	 */
 	public function deleteThreadAction(int $threadId): SymfonyResponse
@@ -379,9 +379,9 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Adds an emoji reaction to a post. An emoji is an arbitrary string but needs to be supported by the frontend.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
-	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function addReactionAction(int $postId, string $emoji): SymfonyResponse
@@ -400,8 +400,8 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * Remove an emoji reaction the logged in user has given from a post.
 	 *
-	 * @SWG\Tag(name="forum")
-	 * @SWG\Response(response="200", description="success")
+	 * @OA\Tag(name="forum")
+	 * @OA\Response(response="200", description="success")
 	 * @Rest\Delete("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function deleteReactionAction(int $postId, string $emoji): SymfonyResponse
