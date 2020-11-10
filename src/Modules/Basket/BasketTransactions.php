@@ -39,8 +39,8 @@ class BasketTransactions
 			$contactString = implode(':', $contactTypes);
 			if (\in_array(2, $contactTypes, true)) {
 				$phone = [
-					self::TEL => preg_replace('/[^0-9\-\/]/', '', $tel),
-					self::MOBILE_NUMBER => preg_replace('/[^0-9\-\/]/', '', $handy),
+					self::TEL => preg_replace('/[^0-9\-\/]/', '', $tel ?? ''),
+					self::MOBILE_NUMBER => preg_replace('/[^0-9\-\/]/', '', $handy ?? ''),
 				];
 			}
 		}
