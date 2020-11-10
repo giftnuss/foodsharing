@@ -69,7 +69,7 @@ class ForumFollowerGateway extends BaseGateway
 		]);
 	}
 
-	public function isFollowingEmail($fsId, $threadId)
+	public function isFollowingEmail(?int $fsId, int $threadId): bool
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
@@ -77,7 +77,7 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function isFollowingBell($fsId, $threadId)
+	public function isFollowingBell(?int $fsId, int $threadId): bool
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
@@ -85,11 +85,11 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function followThreadByEmail($fs_id, $thread_id)
+	public function followThreadByEmail(?int $fsId, int $threadId): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::EMAIL]
+			['foodsaver_id' => $fsId, 'theme_id' => $threadId, 'infotype' => InfoType::EMAIL]
 		);
 	}
 
@@ -105,27 +105,27 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function followThreadByBell($fs_id, $thread_id)
+	public function followThreadByBell(?int $fsId, int $threadId): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::ENABLED]
+			['foodsaver_id' => $fsId, 'theme_id' => $threadId, 'bell_notification' => FollowStatus::ENABLED]
 		);
 	}
 
-	public function unfollowThreadByEmail($fs_id, $thread_id)
+	public function unfollowThreadByEmail(?int $fsId, int $threadId): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::NONE]
+			['foodsaver_id' => $fsId, 'theme_id' => $threadId, 'infotype' => InfoType::NONE]
 		);
 	}
 
-	public function unfollowThreadByBell($fs_id, $thread_id)
+	public function unfollowThreadByBell(?int $fsId, int $threadId): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::DISABLED]
+			['foodsaver_id' => $fsId, 'theme_id' => $threadId, 'bell_notification' => FollowStatus::DISABLED]
 		);
 	}
 

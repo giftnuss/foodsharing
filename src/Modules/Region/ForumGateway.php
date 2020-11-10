@@ -74,7 +74,7 @@ class ForumGateway extends BaseGateway
 		return $threads ?: [];
 	}
 
-	public function getThreadInfo($threadId)
+	public function getThreadInfo(int $threadId): array
 	{
 		return $this->db->fetch('
 		SELECT		t.name as title,
@@ -86,7 +86,7 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $threadId]);
 	}
 
-	public function getThread($thread_id)
+	public function getThread(int $threadId): array
 	{
 		return $this->db->fetch('
 			SELECT 		t.id,
@@ -108,7 +108,7 @@ class ForumGateway extends BaseGateway
 			
 			LIMIT 1
 
-		', ['thread_id' => $thread_id]);
+		', ['thread_id' => $threadId]);
 	}
 
 	public function addThread($foodsaverId, $regionId, $title, $body, $isActive, $ambassadorForum = false)
