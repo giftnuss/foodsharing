@@ -351,20 +351,20 @@ class ContentControl extends Control
 			[
 				'id' => '2020-12',
 				'title' => 'Release "Dragonfruit" (Dezember 2020)',
-				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-12.md')),
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-12.md') ?: ''),
 				'visible' => true,
 			], [
 				'id' => '2020-10',
 				'title' => 'Release "Cranberry" (Oktober 2020)',
-				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-10.md')),
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-10.md') ?: ''),
 			], [
 				'id' => '2020-08',
 				'title' => 'Release "Birne" (August 2020)',
-				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-08.md')),
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-08.md') ?: ''),
 			], [
 				'id' => '2020-05',
 				'title' => 'Release "Apfelsine" (Mai 2020)',
-				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-05.md')),
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-05.md') ?: ''),
 			],
 		];
 
@@ -377,7 +377,7 @@ class ContentControl extends Control
 	{
 		$this->pageHelper->addBread($this->translator->trans('content.changelog'));
 		$this->pageHelper->addTitle($this->translator->trans('content.changelog'));
-		$markdown = $this->parseGitlabLinks(file_get_contents('CHANGELOG.md'));
+		$markdown = $this->parseGitlabLinks(file_get_contents('CHANGELOG.md') ?: '');
 		$Parsedown = new Parsedown();
 		$cl['title'] = $this->translator->trans('content.changelog');
 		$cl['body'] = $Parsedown->parse($markdown);
@@ -433,11 +433,11 @@ class ContentControl extends Control
 
 	private function parseGitlabLinks($markdown)
 	{
-		$markdown = preg_replace('/\W@(\S+)/', ' [@\1](https://gitlab.com/\1)', $markdown);
-		$markdown = preg_replace('/(android)!([0-9]+)/', '[\1!\2](https://gitlab.com/foodsharing-dev/foodsharing-android/merge_requests/\2)', $markdown);
-		$markdown = preg_replace('/(android)#([0-9]+)/', '[\1#\2](https://gitlab.com/foodsharing-dev/foodsharing-android/issues/\2))', $markdown);
-		$markdown = preg_replace('/\W!([0-9]+)/', ' [!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
-		$markdown = preg_replace('/\W#([0-9]+)/', ' [#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+		$markdown = preg_replace('/\W@(\S+)/', ' [@\1](https://gitlab.com/\1)', $markdown) ?? $markdown;
+		$markdown = preg_replace('/(android)!([0-9]+)/', '[\1!\2](https://gitlab.com/foodsharing-dev/foodsharing-android/merge_requests/\2)', $markdown) ?? $markdown;
+		$markdown = preg_replace('/(android)#([0-9]+)/', '[\1#\2](https://gitlab.com/foodsharing-dev/foodsharing-android/issues/\2))', $markdown) ?? $markdown;
+		$markdown = preg_replace('/\W!([0-9]+)/', ' [!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown) ?? $markdown;
+		$markdown = preg_replace('/\W#([0-9]+)/', ' [#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown) ?? $markdown;
 
 		return $markdown;
 	}

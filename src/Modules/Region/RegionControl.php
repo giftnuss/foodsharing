@@ -96,7 +96,7 @@ final class RegionControl extends Control
 		return false;
 	}
 
-	private function regionViewData(array $region, string $activeSubpage): array
+	private function regionViewData(array $region, ?string $activeSubpage): array
 	{
 		$isWorkGroup = $this->isWorkGroup($region);
 		$regionId = (int)$region['id'];
@@ -179,7 +179,10 @@ final class RegionControl extends Control
 			'votingAdmins' => array_map($avatarListEntry, array_slice($this->region['votingAdmins'], 0, self::DisplayAvatarListEntries)),
 			'fspAdmins' => array_map($avatarListEntry, array_slice($this->region['fspAdmins'], 0, self::DisplayAvatarListEntries)),
 		];
-		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
+		$viewdata['nav'] = [
+			'menu' => $menu,
+			'active' => $activeSubpage ? ('=' . $activeSubpage) : null,
+		];
 
 		return $viewdata;
 	}

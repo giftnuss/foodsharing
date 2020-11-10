@@ -100,8 +100,8 @@ final class ImageHelper
 		}
 
 		// prevent path traversal
-		$file = preg_replace('/%/', '', $file);
-		$file = preg_replace('/\.+/', '.', $file);
+		$file = preg_replace('/%/', '', $file) ?? '';
+		$file = preg_replace('/\.+/', '.', $file) ?? '';
 
 		if (!empty($file) && file_exists('images/' . $file)) {
 			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
@@ -121,8 +121,8 @@ final class ImageHelper
 	private function resizeImg(string $img, string $width, string $format): bool
 	{
 		// prevent path traversal
-		$img = preg_replace('/%/', '', $img);
-		$img = preg_replace('/\.+/', '.', $img);
+		$img = preg_replace('/%/', '', $img) ?? '';
+		$img = preg_replace('/\.+/', '.', $img) ?? '';
 		if (file_exists($img)) {
 			$opt = 'auto';
 			if ($format == 'q') {
