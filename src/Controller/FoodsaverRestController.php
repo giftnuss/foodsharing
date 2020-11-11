@@ -63,8 +63,8 @@ final class FoodsaverRestController extends AbstractFOSRestController
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				$details = $this->foodsaverGateway->getFoodsaver($slot['foodsaverId']);
 				$slot['profile'] = RestNormalization::normalizeStoreUser($details);
+				unset($slot['foodsaverId']);
 			}
-			unset($slot['foodsaverId']);
 		}
 		unset($pickup);
 		usort($pickups, function ($a, $b) {
