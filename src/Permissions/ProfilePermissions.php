@@ -18,15 +18,15 @@ class ProfilePermissions
 
 	public function mayAdministrateUserProfile(int $userId, ?int $regionId = null): bool
 	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
 		if (!$this->session->isAmbassador()) {
 			return false;
 		}
 
 		if ($regionId !== null && $this->session->isAdminFor($regionId)) {
-			return true;
-		}
-
-		if ($this->session->may('orga')) {
 			return true;
 		}
 

@@ -40,7 +40,11 @@ final class RegionPermissions
 
 	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
 	{
-		return $this->session->isAmbassadorForRegion([$regionId], false, false) || $this->session->may('orga');
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return $this->session->isAmbassadorForRegion([$regionId], false, false);
 	}
 
 	public function hasConference(int $regionType): bool
