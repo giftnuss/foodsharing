@@ -14,7 +14,7 @@ use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -191,13 +191,13 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Accepts a user's request for joining a store.
 	 *
-	 * @SWG\Parameter(name="storeId", in="path", type="integer", description="for which store to accept a request")
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="who should be accepted")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="401", description="Not logged in")
-	 * @SWG\Response(response="403", description="Insufficient permissions to accept requests")
-	 * @SWG\Response(response="404", description="Request does not exist")
-	 * @SWG\Tag(name="stores")
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="for which store to accept a request")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="who should be accepted")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to accept requests")
+	 * @OA\Response(response="404", description="Request does not exist")
+	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Patch("stores/{storeId}/requests/{userId}")
 	 */
@@ -221,13 +221,13 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Removes the user's own request or denies another user's request for a store.
 	 *
-	 * @SWG\Parameter(name="storeId", in="path", type="integer", description="for which store to remove a request")
-	 * @SWG\Parameter(name="userId", in="path", type="integer", description="whose request should be removed")
-	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="401", description="Not logged in")
-	 * @SWG\Response(response="403", description="Insufficient permissions to remove the request")
-	 * @SWG\Response(response="404", description="Request does not exist")
-	 * @SWG\Tag(name="stores")
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="for which store to remove a request")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="whose request should be removed")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to remove the request")
+	 * @OA\Response(response="404", description="Request does not exist")
+	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Delete("stores/{storeId}/requests/{userId}")
 	 */
