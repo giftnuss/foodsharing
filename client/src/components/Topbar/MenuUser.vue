@@ -60,7 +60,7 @@ export default {
 img {
     height: 1.2rem;
     border-radius: 16px;
-    border: 1px solid white;
+    border: 1px solid var(--fs-brown);
     margin-bottom: 1px;
     margin-top: -2px;
 }

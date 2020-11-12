@@ -25,7 +25,7 @@ export default {
 <style lang="scss" scoped>
 .brand {
     font-family: 'Alfa Slab One',serif;
-    color: #ffffff;
+    color: var(--primary);
     margin-right: 0;
     margin-left: 5px;
     font-size: 1.1rem;

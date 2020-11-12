@@ -6,7 +6,8 @@
     <b-navbar
       fixed="top"
       toggleable="md"
-      class="navbar-expand-md navbar-dark bg-primary"
+      class="navbar-expand-md"
+      type="custom"
     >
       <b-container fluid="xl">
         <b-navbar-brand>
@@ -16,7 +17,7 @@
         <!-- When not logged in -->
         <b-navbar-nav
           v-if="!loggedIn"
-          class="nav-row justify-content-md-end"
+          class="nav-row flex-row justify-content-md-end"
         >
           <menu-item
             :url="$url('joininfo')"
@@ -143,6 +144,8 @@ export default {
   height: 50px;
   nav {
     box-shadow: 0em 0em 5px 0px black;
+    background-color: var(--fs-beige);
+    color: var(--primary);
   }
 }
   .bootstrap .navbar-brand {
@@ -150,7 +153,6 @@ export default {
     margin-right: 3px;
   }
  .nav-row {
-  flex-direction: row!important;
   margin:0;
   display: flex;
   flex-grow: 1;
@@ -168,11 +170,16 @@ export default {
   }
 }
 
+.navbar-toggler {
+  color: var(--primary);
+}
+
 /deep/ .navbar-collapse {
   &.show {
     // Only when menu is shown. Fixes problem that list of dropdown items is to long.
     max-height: 70vh;
     overflow: auto;
+    border-top: 1px solid var(--primary);
     .dropdown-menu  {
       max-height: initial;
     }

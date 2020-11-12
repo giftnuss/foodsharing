@@ -1,6 +1,6 @@
 <template>
   <b-navbar-nav
-    class="nav-row justify-content-md-center"
+    class="nav-row flex-row justify-content-md-center"
   >
     <menu-item
       v-if="!hasFsRole"
