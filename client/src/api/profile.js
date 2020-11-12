@@ -12,5 +12,5 @@ export async function listPastPickups (fsId, fromDate, toDate) {
     ...s,
     isConfirmed: true,
     date: dateFnsParseISO(s.date),
-  })), 'date_ts')
+  })), (s) => { return s.storeId + '-' + s.date_ts })
 }
