@@ -89,6 +89,6 @@ class BellType
 	 */
 	public static function createIdentifier(string $typeString, ...$params)
 	{
-		return sprintf($typeString, $params);
+		return sprintf($typeString, ...$params);
 	}
 }
