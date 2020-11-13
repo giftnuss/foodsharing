@@ -34,55 +34,55 @@ class BellType
 	/**
 	 * The creation of the foodsaver's pass has failed.
 	 */
-	public const PASS_CREATION_FAILED = 'pass-fail-';
+	public const PASS_CREATION_FAILED = 'pass-fail-%d';
 	/**
 	 * Notification for a store manager that someone wants to join a store.
 	 */
-	public const NEW_STORE_REQUEST = 'store-request-';
+	public const NEW_STORE_REQUEST = 'store-request-%d';
 	/**
 	 * The user's store request was accepted.
 	 */
-	public const STORE_REQUEST_ACCEPTED = 'store-arequest-';
+	public const STORE_REQUEST_ACCEPTED = 'store-arequest-%d';
 	/**
 	 * The user's store request was rejected.
 	 */
-	public const STORE_REQUEST_REJECTED = 'store-drequest-';
+	public const STORE_REQUEST_REJECTED = 'store-drequest-%d';
 	/**
 	 * The user was put on the waiting list (jumper) of a store.
 	 */
-	public const STORE_REQUEST_WAITING = 'store-wrequest-';
+	public const STORE_REQUEST_WAITING = 'store-wrequest-%d';
 	/**
 	 * Notification for a store manager that there are unconfirmed pickups.
 	 */
-	public const STORE_UNCONFIRMED_PICKUP = 'store-fetch-unconfirmed-';
+	public const STORE_UNCONFIRMED_PICKUP = 'store-fetch-unconfirmed-%d';
 	/**
 	 * A new store was created.
 	 */
-	public const NEW_STORE = 'store-new-';
+	public const NEW_STORE = 'store-new-%d';
 	/**
 	 * The pickup times in a store were changed.
 	 */
-	public const STORE_TIME_CHANGED = 'store-time-';
+	public const STORE_TIME_CHANGED = 'store-time-%d';
 	/**
 	 * A new post was written on the wall of a store.
 	 */
-	public const STORE_WALL_POST = 'store-wallpost-';
+	public const STORE_WALL_POST = 'store-wallpost-%d';
 	/**
 	 * A new blog entry is created and needs to be checked.
 	 */
-	public const NEW_BLOG_POST = 'blog-check-';
+	public const NEW_BLOG_POST = 'blog-check-%d';
 	/**
 	 * A new poll was created in a region or work group.
 	 */
-	public const NEW_POLL = 'new-poll-';
+	public const NEW_POLL = 'new-poll-%d';
 	/**
 	 * The user's request to join a work group was accepted.
 	 */
-	public const WORK_GROUP_REQUEST_ACCEPTED = 'workgroup-arequest-';
+	public const WORK_GROUP_REQUEST_ACCEPTED = 'workgroup-arequest-%d';
 	/**
 	 * The user's request to join a work group was denied.
 	 */
-	public const WORK_GROUP_REQUEST_DENIED = 'workgroup-drequest-';
+	public const WORK_GROUP_REQUEST_DENIED = 'workgroup-drequest-%d';
 
 	/**
 	 * Creates a bell identifier from a template and an optional list of parameters.
