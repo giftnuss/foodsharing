@@ -165,7 +165,7 @@ class VotingTransactions
 			'fas fa-poll-h',
 			['href' => '/?page=poll&id=' . $poll->id],
 			['title' => $poll->name, 'region' => $region['name']],
-			BellType::NEW_POLL . $poll->id
+			BellType::createIdentifier(BellType::NEW_POLL, $poll->id)
 		);
 		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);
 	}
@@ -176,7 +176,7 @@ class VotingTransactions
 	public function cancelPoll(int $pollId): void
 	{
 		$this->votingGateway->cancelPoll($pollId, $this->session->id());
-		$this->bellGateway->delBellsByIdentifier('new-poll-' . $pollId);
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::NEW_POLL, $pollId));
 	}
 
 	/**
@@ -240,7 +240,7 @@ class VotingTransactions
 
 		// remove the 'new poll' bell for this user
 		try {
-			$bellId = $this->bellGateway->getOneByIdentifier('new-poll-' . $poll->id);
+			$bellId = $this->bellGateway->getOneByIdentifier(BellType::createIdentifier(BellType::NEW_POLL, $poll->id));
 			$this->bellGateway->delBellForFoodsaver($bellId, $this->session->id());
 		} catch (\Exception $e) {
 			// in case the bell does not exist, do nothing

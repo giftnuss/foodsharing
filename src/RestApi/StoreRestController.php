@@ -153,7 +153,7 @@ class StoreRestController extends AbstractFOSRestController
 				'user' => $userName,
 				'name' => $storeName
 			],
-			BellType::STORE_WALL_POST . $storeId
+			BellType::createIdentifier(BellType::STORE_WALL_POST, $storeId)
 		);
 
 		$this->bellGateway->addBell($team, $bellData);

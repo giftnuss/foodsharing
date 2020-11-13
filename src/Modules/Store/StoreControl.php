@@ -244,7 +244,7 @@ class StoreControl extends Control
 				], [
 					'user' => $this->session->user('name'),
 					'name' => $g_data['name']
-				], BellType::NEW_STORE . (int)$id);
+				], BellType::createIdentifier(BellType::NEW_STORE, (int)$id));
 				$this->bellGateway->addBell($foodsaver, $bellData);
 
 				$this->flashMessageHelper->success($this->translator->trans('storeedit.add_success'));

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Bell\DTO;
 
 use DateTime;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 
 /**
  * Class that represents the data of a bell notification, in a format in which it can be sent to foodsavers or be
@@ -59,7 +60,8 @@ class Bell
 	 * store with the id 42.
 	 *
 	 * This identifier can be used to find bells of certain domains in the database and to match them to their domain
-	 * entity.
+	 * entity. All used identifier templates are listed in {@link BellType} and can be constructed with arguments using
+	 * {@link BellType::createIdentifier()}.
 	 */
 	public string $identifier;
 

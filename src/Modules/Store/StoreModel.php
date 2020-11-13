@@ -259,7 +259,7 @@ class StoreModel extends Db
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		], BellType::STORE_REQUEST_WAITING . (int)$fsid);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, (int)$fsid));
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {

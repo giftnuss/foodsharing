@@ -140,7 +140,7 @@ final class PassportGeneratorControl extends Control
 						'fas fa-camera',
 						['href' => '/?page=settings'],
 						['user' => $this->session->user('name')],
-						BellType::PASS_CREATION_FAILED . $foodsaver['id']
+						BellType::createIdentifier(BellType::PASS_CREATION_FAILED, $foodsaver['id'])
 					);
 					$this->bellGateway->addBell($foodsaver['id'], $bellData);
 					//continue;

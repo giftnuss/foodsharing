@@ -65,7 +65,7 @@ class ProfileXhr extends Control
 
 				$this->view->setData($this->foodsaver);
 			} else {
-				$this->bellGateway->delBellsByIdentifier(BellType::NEW_FOODSAVER_IN_REGION . (int)$_GET['id']);
+				$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::NEW_FOODSAVER_IN_REGION, (int)$_GET['id']));
 			}
 		}
 	}

@@ -36,8 +36,8 @@ class BuddyTransactions
 	{
 		$this->buddyGateway->confirmBuddy($userId, $this->session->id());
 
-		$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . $userId);
-		$this->bellGateway->delBellsByIdentifier('buddy-' . $userId . '-' . $this->session->id());
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::BUDDY_REQUEST, $this->session->id(), $userId));
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::BUDDY_REQUEST, $userId, $this->session->id()));
 
 		$buddyIds = $this->session->get('buddy-ids') ?: [];
 
@@ -59,7 +59,7 @@ class BuddyTransactions
 			$this->imageHelper->img($this->session->user('photo')),
 			['href' => '/profile/' . (int)$this->session->id() . ''],
 			['name' => $this->session->user('name')],
-			BellType::BUDDY_REQUEST . $this->session->id() . '-' . $userId
+			BellType::createIdentifier(BellType::BUDDY_REQUEST, $this->session->id(), $userId)
 		));
 	}
 }

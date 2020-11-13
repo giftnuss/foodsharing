@@ -233,7 +233,7 @@ class StoreTransactions
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName
-		], BellType::STORE_REQUEST_ACCEPTED . $userId);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId));
 		$this->bellGateway->addBell($userId, $bellData);
 
 		// add the user to the store's region
@@ -263,7 +263,7 @@ class StoreTransactions
 			'href' => '/?page=fsbetrieb&id=' . $storeId
 		], [
 			'name' => $storeName,
-		], BellType::STORE_REQUEST_REJECTED . $userId);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_REJECTED, $userId));
 
 		$this->bellGateway->addBell($userId, $bellData);
 	}

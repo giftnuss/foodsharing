@@ -92,7 +92,7 @@ class RegionRestController extends AbstractFOSRestController
 				'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 				'bezirk' => $region['name']
 			],
-			BellType::NEW_FOODSAVER_IN_REGION . $sessionId,
+			BellType::createIdentifier(BellType::NEW_FOODSAVER_IN_REGION, $sessionId),
 			true
 		);
 		$this->bellGateway->addBell($welcomeBellRecipients, $bellData);

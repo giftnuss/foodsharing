@@ -4,6 +4,7 @@ namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Permissions\ProfilePermissions;
@@ -63,7 +64,7 @@ class VerificationRestController extends AbstractFOSRestController
 		}
 
 		$this->foodsaverGateway->changeUserVerification($userId, $sessionId, true);
-		$this->bellGateway->delBellsByIdentifier('new-fs-' . $userId);
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::NEW_FOODSAVER_IN_REGION, $userId));
 
 		return $this->handleView($this->view([], 200));
 	}

@@ -84,7 +84,7 @@ class ForumTransactions
 				'forum' => $regionName,
 				'title' => $info['title'],
 			],
-			BellType::NEW_FORUM_POST . $postId
+			BellType::createIdentifier(BellType::NEW_FORUM_POST, $postId)
 		);
 		$this->bellGateway->addBell(array_column($subscribedFs, 'id'), $bellData);
 	}

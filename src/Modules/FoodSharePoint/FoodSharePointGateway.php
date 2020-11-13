@@ -449,7 +449,7 @@ class FoodSharePointGateway extends BaseGateway
 			'fas fa-recycle',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
-			BellType::NEW_FOOD_SHARE_POINT . $foodSharePointId,
+			BellType::createIdentifier(BellType::NEW_FOOD_SHARE_POINT, $foodSharePointId),
 			false
 		);
 		$this->bellGateway->addBell($fspBellRecipients, $bellData);
@@ -457,7 +457,7 @@ class FoodSharePointGateway extends BaseGateway
 
 	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void
 	{
-		$identifier = 'new-fairteiler-' . $foodSharePointId;
+		$identifier = BellType::createIdentifier(BellType::NEW_FOOD_SHARE_POINT, $foodSharePointId);
 		if (!$this->bellGateway->bellWithIdentifierExists($identifier)) {
 			return;
 		}

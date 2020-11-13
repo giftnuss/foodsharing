@@ -214,7 +214,7 @@ final class BlogGateway extends BaseGateway
 				'teaser' => $this->sanitizerService->tt($data['teaser'], 100),
 				'title' => $data['name']
 			],
-			BellType::NEW_BLOG_POST . $id
+			BellType::createIdentifier(BellType::NEW_BLOG_POST, $id)
 		);
 		$this->bellGateway->addBell($foodsaver, $bellData);
 

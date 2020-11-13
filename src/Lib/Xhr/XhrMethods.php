@@ -868,7 +868,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], BellType::STORE_TIME_CHANGED . (int)$data['bid']);
+		], BellType::createIdentifier(BellType::STORE_TIME_CHANGED, (int)$data['bid']));
 		$this->bellGateway->addBell($team, $bellData);
 
 		return json_encode(['status' => 1]);
@@ -1139,7 +1139,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], BellType::NEW_STORE_REQUEST . $storeId);
+		], BellType::createIdentifier(BellType::NEW_STORE_REQUEST, $storeId));
 		$this->bellGateway->addBell($bellRecipients, $bellData);
 
 		$this->storeModel->teamRequest($this->session->id(), $storeId);

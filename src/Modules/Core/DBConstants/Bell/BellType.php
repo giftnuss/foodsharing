@@ -2,28 +2,35 @@
 
 namespace Foodsharing\Modules\Core\DBConstants\Bell;
 
+use Foodsharing\Modules\Bell\DTO\Bell;
+
+/**
+ * Templates for the identifiers of bells.
+ *
+ * @see Bell::$identifier
+ */
 class BellType
 {
 	/**
-	 * The user has a new friend request.
+	 * The user has a new friend request. Arguments: IDs of this user and the sender of the request.
 	 */
-	public const BUDDY_REQUEST = 'buddy-';
+	public const BUDDY_REQUEST = 'buddy-%d-%d';
 	/**
-	 * A new post was written on the wall of an FSP which the user is following.
+	 * A new post was written on the wall of an FSP which the user is following. Argument: ID of the FSP.
 	 */
-	public const FOOD_SHARE_POINT_POST = 'fairteiler-';
+	public const FOOD_SHARE_POINT_POST = 'fairteiler-%d';
 	/**
-	 * Notification for ambassadors about a new FSP proposal.
+	 * Notification for ambassadors about a new FSP proposal. Argument: ID of the FSP.
 	 */
-	public const NEW_FOOD_SHARE_POINT = 'new-fairteiler-';
+	public const NEW_FOOD_SHARE_POINT = 'new-fairteiler-%d';
 	/**
-	 * A new forum post in a thread the user is participating in.
+	 * A new forum post in a thread the user is participating in. Argument: ID of the post.
 	 */
-	public const NEW_FORUM_POST = 'forum-post-';
+	public const NEW_FORUM_POST = 'forum-post-%d';
 	/**
-	 * Notification for ambassadors about a new foodsaver.
+	 * Notification for ambassadors about a new foodsaver. Argument: the foodsaver's ID.
 	 */
-	public const NEW_FOODSAVER_IN_REGION = 'new-fs-';
+	public const NEW_FOODSAVER_IN_REGION = 'new-fs-%d';
 	/**
 	 * The creation of the foodsaver's pass has failed.
 	 */
@@ -76,4 +83,12 @@ class BellType
 	 * The user's request to join a work group was denied.
 	 */
 	public const WORK_GROUP_REQUEST_DENIED = 'workgroup-drequest-';
+
+	/**
+	 * Creates a bell identifier from a template and an optional list of parameters.
+	 */
+	public static function createIdentifier(string $typeString, ...$params)
+	{
+		return sprintf($typeString, $params);
+	}
 }

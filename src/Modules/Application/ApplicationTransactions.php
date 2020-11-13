@@ -31,7 +31,7 @@ class ApplicationTransactions
 			'href' => '/?page=bezirk&bid=' . $group['id']
 		], [
 			'name' => $group['name']
-		], BellType::WORK_GROUP_REQUEST_ACCEPTED . $userId);
+		], BellType::createIdentifier(BellType::WORK_GROUP_REQUEST_ACCEPTED, $userId));
 		$this->bellGateway->addBell($userId, $bellData);
 	}
 
@@ -46,7 +46,7 @@ class ApplicationTransactions
 			'href' => '/?page=groups&p=' . $group['parent_id']
 		], [
 			'name' => $group['name']
-		], BellType::WORK_GROUP_REQUEST_DENIED . $userId);
+		], BellType::createIdentifier(BellType::WORK_GROUP_REQUEST_DENIED, $userId));
 		$this->bellGateway->addBell($userId, $bellData);
 	}
 }

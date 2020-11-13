@@ -72,7 +72,7 @@ class FoodSharePointTransactions
 					'fas fa-recycle',
 					['href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId],
 					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizer->tt($post['body'], 100)],
-					BellType::FOOD_SHARE_POINT_POST . $foodSharePointId
+					BellType::createIdentifier(BellType::FOOD_SHARE_POINT_POST, $foodSharePointId)
 				);
 				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
 			}
