@@ -5,6 +5,7 @@ namespace Foodsharing\RestApi;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
@@ -91,7 +92,7 @@ class RegionRestController extends AbstractFOSRestController
 				'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 				'bezirk' => $region['name']
 			],
-			'new-fs-' . $sessionId,
+			BellType::NEW_FOODSAVER_IN_REGION . $sessionId,
 			true
 		);
 		$this->bellGateway->addBell($welcomeBellRecipients, $bellData);

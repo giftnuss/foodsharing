@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -258,7 +259,7 @@ class StoreModel extends Db
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		], 'store-wrequest-' . (int)$fsid);
+		], BellType::STORE_REQUEST_WAITING . (int)$fsid);
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {

@@ -96,6 +96,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
 - Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
+- Replace bell identifiers by enum class #987 !1764 @alex.simm
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg

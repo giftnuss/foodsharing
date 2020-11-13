@@ -6,6 +6,7 @@ use Endroid\QrCode\QrCode;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -139,7 +140,7 @@ final class PassportGeneratorControl extends Control
 						'fas fa-camera',
 						['href' => '/?page=settings'],
 						['user' => $this->session->user('name')],
-						'pass-fail-' . $foodsaver['id']
+						BellType::PASS_CREATION_FAILED . $foodsaver['id']
 					);
 					$this->bellGateway->addBell($foodsaver['id'], $bellData);
 					//continue;

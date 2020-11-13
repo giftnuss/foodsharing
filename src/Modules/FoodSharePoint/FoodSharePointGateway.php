@@ -6,6 +6,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -448,7 +449,7 @@ class FoodSharePointGateway extends BaseGateway
 			'fas fa-recycle',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
-			'new-fairteiler-' . $foodSharePointId,
+			BellType::NEW_FOOD_SHARE_POINT . $foodSharePointId,
 			false
 		);
 		$this->bellGateway->addBell($fspBellRecipients, $bellData);

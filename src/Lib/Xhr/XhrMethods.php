@@ -10,6 +10,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
@@ -867,7 +868,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], 'store-time-' . (int)$data['bid']);
+		], BellType::STORE_TIME_CHANGED . (int)$data['bid']);
 		$this->bellGateway->addBell($team, $bellData);
 
 		return json_encode(['status' => 1]);
@@ -1138,7 +1139,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], 'store-request-' . $storeId);
+		], BellType::NEW_STORE_REQUEST . $storeId);
 		$this->bellGateway->addBell($bellRecipients, $bellData);
 
 		$this->storeModel->teamRequest($this->session->id(), $storeId);

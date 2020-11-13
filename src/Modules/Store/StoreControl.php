@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
@@ -243,7 +244,7 @@ class StoreControl extends Control
 				], [
 					'user' => $this->session->user('name'),
 					'name' => $g_data['name']
-				], 'store-new-' . (int)$id);
+				], BellType::NEW_STORE . (int)$id);
 				$this->bellGateway->addBell($foodsaver, $bellData);
 
 				$this->flashMessageHelper->success($this->translator->trans('storeedit.add_success'));

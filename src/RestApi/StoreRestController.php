@@ -5,6 +5,7 @@ namespace Foodsharing\RestApi;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -152,7 +153,7 @@ class StoreRestController extends AbstractFOSRestController
 				'user' => $userName,
 				'name' => $storeName
 			],
-			'store-wallpost-' . $storeId
+			BellType::STORE_WALL_POST . $storeId
 		);
 
 		$this->bellGateway->addBell($team, $bellData);

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Application;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 
 class ApplicationTransactions
 {
@@ -30,7 +31,7 @@ class ApplicationTransactions
 			'href' => '/?page=bezirk&bid=' . $group['id']
 		], [
 			'name' => $group['name']
-		], 'workgroup-arequest-' . $userId);
+		], BellType::WORK_GROUP_REQUEST_ACCEPTED . $userId);
 		$this->bellGateway->addBell($userId, $bellData);
 	}
 
@@ -45,7 +46,7 @@ class ApplicationTransactions
 			'href' => '/?page=groups&p=' . $group['parent_id']
 		], [
 			'name' => $group['name']
-		], 'workgroup-drequest-' . $userId);
+		], BellType::WORK_GROUP_REQUEST_DENIED . $userId);
 		$this->bellGateway->addBell($userId, $bellData);
 	}
 }

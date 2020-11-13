@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\Sanitizer;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -71,7 +72,7 @@ class FoodSharePointTransactions
 					'fas fa-recycle',
 					['href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId],
 					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizer->tt($post['body'], 100)],
-					'fairteiler-' . $foodSharePointId
+					BellType::FOOD_SHARE_POINT_POST . $foodSharePointId
 				);
 				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
 			}

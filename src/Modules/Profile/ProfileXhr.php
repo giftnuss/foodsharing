@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\PickupGateway;
@@ -64,7 +65,7 @@ class ProfileXhr extends Control
 
 				$this->view->setData($this->foodsaver);
 			} else {
-				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$_GET['id']);
+				$this->bellGateway->delBellsByIdentifier(BellType::NEW_FOODSAVER_IN_REGION . (int)$_GET['id']);
 			}
 		}
 	}

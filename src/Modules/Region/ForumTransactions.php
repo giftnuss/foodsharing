@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Utility\EmailHelper;
@@ -83,7 +84,7 @@ class ForumTransactions
 				'forum' => $regionName,
 				'title' => $info['title'],
 			],
-			'forum-post-' . $postId
+			BellType::NEW_FORUM_POST . $postId
 		);
 		$this->bellGateway->addBell(array_column($subscribedFs, 'id'), $bellData);
 	}

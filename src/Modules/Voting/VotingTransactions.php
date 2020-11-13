@@ -6,6 +6,7 @@ use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
@@ -164,7 +165,7 @@ class VotingTransactions
 			'fas fa-poll-h',
 			['href' => '/?page=poll&id=' . $poll->id],
 			['title' => $poll->name, 'region' => $region['name']],
-			'new-poll-' . $poll->id
+			BellType::NEW_POLL . $poll->id
 		);
 		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);
 	}

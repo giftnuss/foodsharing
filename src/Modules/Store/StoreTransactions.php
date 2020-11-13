@@ -7,6 +7,7 @@ use DateTime;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -232,7 +233,7 @@ class StoreTransactions
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName
-		], 'store-arequest-' . $userId);
+		], BellType::STORE_REQUEST_ACCEPTED . $userId);
 		$this->bellGateway->addBell($userId, $bellData);
 
 		// add the user to the store's region
@@ -262,7 +263,7 @@ class StoreTransactions
 			'href' => '/?page=fsbetrieb&id=' . $storeId
 		], [
 			'name' => $storeName,
-		], 'store-drequest-' . $userId);
+		], BellType::STORE_REQUEST_REJECTED . $userId);
 
 		$this->bellGateway->addBell($userId, $bellData);
 	}
