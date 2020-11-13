@@ -1,4 +1,5 @@
 # Running the code
+(Unten gibt es eine deutsche Übersetzung)
 
 We use Docker and Docker Compose.
 
@@ -214,3 +215,217 @@ Note:
 `./scripts/start` will always be executed, when you start the virtual machine with `vagrant up`.
 
 There is a known bug when running VirtualBox + nginx that nginx serves files from a memory cache. If you encounter this problem, then it can probably be fixed by emptying the memory cache with ``sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"`` or even running this every second with ``watch -n 1 'sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"'``.
+
+
+------
+
+# Den Code zum laufen bringen
+
+Wir benutzen Docker und Docker Compose.
+
+Du kannst das Docker Compose setup benutzen, falls du mit 
+
+- Linux (64bit)
+- OSX Yosemite 10.10.3 oder darüber - oder aber
+- Windows 10 Pro oder darüber arbeitest.
+
+
+Falls du keines von denen nutzt, probiere es mit Vagrant + dem Docker Compose Setup.
+
+## Linux
+
+Installiere
+[Docker CE](https://docs.docker.com/engine/installation/).
+
+Stelle sicher, dass du
+[Docker Compose](https://docs.docker.com/compose/install/) (mindestens version 1.6.0)
+auch installiert hast (gibt es oft zusammen mit Docker).
+
+### Fedora 31 
+Fedora benutzt mittlerweile cgroupsV2 als Standart, was noch nicht von Docker unterstützt wird. Um es abzustellen, lautet der Befehl:
+
+```
+sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+```
+Danach neu starten.
+
+### Fedora 32 oder Debian 10
+Manchmal wird als Standard  firewall backend nftables genutzt. Docker unterstützt derzeit nur iptables. Die Docker-Container können dann keine Netzwerkverbindung miteinander herstellen.
+
+**Hilfestellung:** Setze den Eintrag `FirewallBackend = iptables` in /etc/firewalld/firewalld.conf. 
+
+Nach einem Neustart sollten firewalld und Docker arbeiten.
+
+Wenn du dich als lokaler Nutzer nicht mit Docker verbinden kannst, kann es helfen, dich selbst zur Docker Gruppe hinzuzufügen:
+
+### Fedora 32
+
+Lade docker hier herunter: https://download.docker.com/linux/fedora/31/x86_64/stable/Packages/
+```
+sudo dnf -y install /path/to/package.rpm
+sudo systemctl start docker
+```
+> Error response from daemon: cgroups: cgroup mountpoint does not exist: unknown
+
+```
+sudo mkdir /sys/fs/cgroup/systemd
+sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
+```
+# General on Linux
+```
+sudo usermod -aG docker $USER
+```
+Dann logge dich entweder noch einmal ein oder lade die Gruppen neu oder führe (für jedes Fenster) aus:
+`su - $USER`
+
+Jetzt solltest du dich ohne Fehler verbinden können.
+
+`docker info`
+
+Dann:
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+cd foodsharing
+./scripts/start
+```
+
+## OSX Yosemite 10.10.3 oder darüber
+
+Installiere [Docker for Mac](https://docs.docker.com/docker-for-mac/install/) ([direct link](https://download.docker.com/mac/stable/Docker.dmg)).
+
+Dann:
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+cd foodsharing
+./scripts/start
+```
+
+## Windows 
+
+### Neuer Zugang bei WSL2
+
+* Installiere Ubuntu 20.xx via Windows AppStore (WSL2) (das musst du für Schritt drei einmal starten)
+* Installiere windowsTerminal via Appstore
+* Öffne einen neuen Tab im WinTerminal mit Ubuntu
+* Wechsle dein Zielverzeichnis
+* Führe aus git download aus (es kann sein, dass du einen SSH-Schlüssel für diese Umgebung hinzufügen musst)
+```
+`git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+```
+
+* Füge das Folgende ~/.bashrc mit einem Editor hinzu (z.B. nano)
+```
+export DOCKER_HOST=tcp://localhost:2375
+export DOCKER_BUILDKIT=1
+```
+* Prüfe in den Docker Einstellungen - Resources - WSL Integration, dass deine Umgebung aktiv ist.
+```
+cd /foodsharing
+sudo./scripts/start
+sudo./scripts/seed
+```
+
+## Bei WSL1
+
+Wenn du Windows 10 pro oder darüber nutzt, klick auf diesen Link:
+
+Installiere [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([Direktlink](https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe)) und
+[Git for Windows](https://git-scm.com/download/win).
+
+Wenn Du Windows 10 Home verwendest, stelle sicher, dass Du alle [Systemanforderungen](https://docs.docker.com/docker-for-windows/install-windows-home/#system-requirements) erfüllst.  Dann installiere sowohl [Docker Desktop on Windows Home](https://docs.docker.com/docker-for-windows/install-windows-home/) und [Git for Windows](https://git-scm.com/download/win). 
+
+Es ist wichtig, Docker-Zugriff auf C: zu gewähren (in der grafischen Docker-Oberfläche: Einstellungen -> Ressourcen -> Filesharing -> C markieren, anwenden und neu starten).
+
+Du kannst deinen in der Kommando-Shell (z.B. cmd oder powershell) mit dem Befehl ```docker --version``` testen. Wenn es etwas anzeigt, kannst du loslegen.
+
+Starte jetzt dein Windows neu.
+
+Es gibt eine grafische Benutzeroberfläche zur Verwaltung des Repos, die für Git-Anfänger empfohlen wird. Aber Du kannst die Git Bash-Shell genau wie unter Linux benutzen, um sie zu klonen:
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+```
+
+Nach diesem Befehl befinden sich Deine Dateien im Ordner ````%UserProfile%\foodsharing```
+
+Um die Container zu starten, verwende die Git Bash-Shell:
+```
+cd foodsharing
+./scripts/start
+```
+
+Wenn Du das Startskript zum ersten Mal ausführst, was sehr viel Zeit in Anspruch nimmt, musst du wahrscheinlich der Windows-Firewall das OK geben, damit Docker funktioniert. 
+
+### Bekannte Windows-Fehler
+
+ - allgemein
+
+Wenn etwas nicht in Ordnung ist, überprüfe bitte in Deinem Task-Manager unter "Leistung", ob die Virtualisierung aktiviert ist und behebe gegebenenfalls Fehler.
+
+ - git Fehler (bei WSL1)
+ 
+ Wenn git nicht gut arbeitet, mach bitte folgendes:
+ ```
+ cd foodsharing/bin
+ tr -d '\15' < console > console
+``` 
+Stell sicher, dass du die `Konsole'-Datei nicht committest und besprich vielleicht weitere Schritte mit dem Team. 
+ 
+ - ```[RuntimeException]```
+
+Wenn du eine ```[RuntimeException]```, bekommst, lass ```./scripts/start``` noch einmal und wieder und wieder laufen, bis alles fertig ist.
+
+ - yarn lint
+
+Es gibt einen bekannten Fehler bezüglich yarn, siehe: https://github.com/yarnpkg/yarn/issues/7187 and https://github.com/yarnpkg/yarn/issues/7732 und https://github.com/yarnpkg/yarn/issues/7551
+
+ - Veränderungen in js, vue etc. erscheinen nicht
+
+Damit der webpack-dev-server Änderungen erkennt, musst du diesen watchOptions-Block zu ```client/serve.config.js``` hinzufügen:
+```
+[...]
+module.exports = {
+  [...]
+  devServer: {
+    watchOptions: {
+      poll: true
+    },
+    [...]
+```
+
+Hinweis: Bitte achte darauf, diese Datei nicht nachträglich mit Ihren Änderungen zu übertragen.
+
+## Vagrant
+
+Wenn Du keine der oben genannten Methoden verwenden kannst, dann sollte dies mit jedem gängigen Betriebssystem funktionieren. Allerdings sind wir mit dieser Lösung weniger vertraut, so dass wir Dich damit möglicherweise weniger gut unterstützen können:
+
+Installiere
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads) und
+[Vagrant](https://www.vagrantup.com/downloads.html).
+
+Dann:
+
+```
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+cd foodsharing
+vagrant up
+```
+
+### Für's Tägliche Arbeiten
+`vagrant up` startet die Maschine und das Foodsharing-Projekt.
+
+`vagrant halt` stoppt die virtuelle Maschine.
+
+`vagrant ssh` verbindet sich mit der virtuellen Maschine.
+
+Sobald die Verbindung mit der virtuellen Maschine hergestellt ist, gehe mit `cd /vagrant` nach /vagrant.
+Dort wird der Foodsharing-Ordner in der VM gemountet.
+Von dort aus kannst Du alle Skripte mit `./scripts/NAME` ausführen.
+
+Notiz:
+`./Skripte/Start` wird immer ausgeführt, wenn Du die virtuelle Maschine mit `vagrant up` startest.
+
+Es gibt einen bekannten Fehler beim Ausführen von VirtualBox + nginx, dass nginx Dateien aus einem Speicher-Cache bedient. Wenn Du auf dieses Problem stößt, dann kann es wahrscheinlich behoben werden, indem Du den Speicher-Cache mit
+``sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"`` or even running this every second with ``watch -n 1 'sync; sudo sh -c "/bin/echo 3 > /proc/sys/vm/drop_caches"'`` ausführst.
