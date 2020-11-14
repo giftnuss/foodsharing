@@ -179,6 +179,16 @@ services:
       - influxdb:/var/lib/influxdb:cached
       - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
+  mdbook:
+    container_name: foodsharing_dev_devdocs
+    image: peaceiris/mdbook:v0.4.4
+    command: serve --hostname '0.0.0.0'
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ../docs:/book
+
 volumes:
   client-node-modules:
   chat-node-modules:

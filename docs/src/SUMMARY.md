@@ -27,7 +27,6 @@
   - [PHP Structure](php-structure.md)
 - [Legacy PHP](php-legacy.md)
   - [Libraries](php-libraries.md)
-  - [View code (TBD)](php-view.md)
 - [Refactoring](refactor.md)
 - [Translation](internationalization.md)
 
