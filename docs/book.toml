@@ -3,10 +3,12 @@ title = "foodsharing Developer Documentation"
 description = "This is the developer documentation for the code that powers foodsharing.de, foodsharing.at, and foodsharingschweiz.ch."
 
 [output.html]
-default-theme = "rust"
-preferred-dark-theme = "navy"
+default-theme = "light"
+preferred-dark-theme = "ayu"
 additional-css = ["styles/website.css"]
+no-section-label = true
 git-repository-url = "https://gitlab.com/foodsharing-dev/foodsharing"
+git-repository-icon = "fa-gitlab"
 
 [rust]
 edition = "2018"
@@ -17,3 +19,5 @@ create-missing = false
 
 [output.html.search]
 limit-results = 15
+use-boolean-and = true
+heading-split-level = 4
