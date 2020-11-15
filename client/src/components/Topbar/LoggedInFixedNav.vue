@@ -7,7 +7,7 @@
       :url="$url('upgradeToFs')"
       icon="fa-rocket"
       :title="$i18n('foodsaver.upgrade.to_fs')"
-      :show-title-always="true"
+      :hide-title-mobile="true"
     />
 
     <menu-region

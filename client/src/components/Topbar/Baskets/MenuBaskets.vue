@@ -8,7 +8,7 @@
     <template v-slot:heading-text>
       <span
         v-if="showLabel"
-        class="d-none d-sm-inline-block"
+        class="d-none d-md-inline-block"
       >
         {{ $i18n('basket.title') }}
       </span>
