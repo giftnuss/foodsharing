@@ -1,6 +1,6 @@
 # Icons
 
-For including icons in the website we do not create a lot of them ourself but use [Font Aw    +++esome](https://fontawesome.com/icons).
+For including icons in the website we do not create a lot of them ourself but use [Font Awesome](https://fontawesome.com/icons).
 In order to use an icon, use the code proposed by Font Awesome. For example it looks like
 ```
 <i class="fas fa-user" />

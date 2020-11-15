@@ -10,8 +10,8 @@ Other ways to interact with the foodsharing platform are:
 - [the REST API endpoints](#rest-api) - the preferred option
 - [our chatserver](#nodejs-for-messages)
 
-{% include "./requests-xhr.md" %}
+{{ #include requests-xhr.md }}
 
-{% include "./requests-rest.md" %}
+{{ #include requests-rest.md }}
 
-{% include "./requests-chat.md" %}
+{{ #include requests-chat.md }}

@@ -1,6 +1,6 @@
 ## Syntax
 
-Here we collect the parts of language [php](https://secure.php.net/docs.php) that are used in this project.
+Here we collect the parts of the [PHP](https://secure.php.net/docs.php) language that we use in this project.
 As I write this I already got some experiences in other languages and therefore only include short explanations of surprising syntax.
 
 - Variables: all occurences of variables are starting with a Dollar (`$`) symbol:

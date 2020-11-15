@@ -2,7 +2,7 @@
 
 A lot of code is sorted into modules in the `/src/Modules` directory.
 This is a sorting by topic: each module contains files for one topic.
-That can be a [gateway](#gateway-classes),
+That can be a [gateway](#gateways),
 a controller, an (old) view, javascript, css, (old) [XHR](requests.md#xhr),
 (old) [models](#deprecated-module-structure).
 
@@ -23,9 +23,9 @@ Those are executed with the functions inherited from the `Db` class (see `use Fo
 ### Newer module structure
 
 Instead of Model classes, that hold both, data query logic and domain logic, we move towards splitting these up
-into [Gateway classes](#gateway-classes) and [Transaction classes](#transaction-classes).
+into [Gateway classes](#gateways) and [Transaction classes](#transactions).
 
-For a general description what „domain logic“ is, see section [Transactions](#transaction-classes).
+For a general description what „domain logic“ is, see section [Transactions](#transactions).
 
 Note that all of the following guidelines have a lot of exceptions
 in the existing code. Nevertheless try to heed the following guidelines

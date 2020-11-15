@@ -3,7 +3,7 @@
 Our concept of Gateway classes follows the [Table Data Gateway pattern](https://www.martinfowler.com/eaaCatalog/tableDataGateway.html).
 
 One main difference to Models is that a Gateway doesn't contain the actual model of an entity, as the overall
-domain logic is put into [Transactions](#transaction-classes) while the structure lives in [Data Transfer Objects](#data-transfer-objects).
+domain logic is put into [Transactions](#transactions) while the structure lives in [Data Transfer Objects](#data-transfer-objects).
 
 The purpose of a Gateway is to provide functionality to *query* instances of a certain entity type from the database. If
 you are familiar with ORM based architectures, you might compare the Gateway's responsibility to the one of a

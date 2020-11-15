@@ -51,4 +51,4 @@ which can be necessary or very useful for manual testing and troubleshooting.
 
 MailDev is also included: [localhost:18084](localhost:18084). There you can read all e-mails that you write via the front end.
 
-{% include "./ide-setup.md" %}
+{{ #include ide-setup.md }}

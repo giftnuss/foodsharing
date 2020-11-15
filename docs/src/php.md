@@ -9,7 +9,7 @@ This page describes broadly how PHP is used in our project:
 - [Syntax](#syntax)
 - [Conventions / Coding Style](#conventions)
 
-For more specific explanations of the types of classes we use, make sure to check [PHP Structure](#php-structure.md)!
+For more specific explanations of the types of classes we use, make sure to check [PHP Structure](php-structure.md)!
 
 ## Main entry point
 
@@ -26,6 +26,6 @@ The fourth entry point is `restApi.php`, which will be used whenever a URL start
 requested. This is the route to our modern API following REST principles (see [REST-API](requests.md#rest-api)).
 It is also a standard Symfony entry point.
 
-{% include "./php-dependencies.md" %}
+{{ #include php-dependencies.md }}
 
-{% include "./php-syntax.md" %}
+{{ #include php-syntax.md }}
