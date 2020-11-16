@@ -365,29 +365,6 @@ export function uploadPhotoReady (id, file) {
   pulseInfo('Foto erfolgreich hochgeladen!')
 }
 
-export function addSelect (id) {
-  if ($(`#${id}neu`).val().length > 0) {
-    $.ajax({
-      dataType: 'json',
-      url: `/xhr.php?f=add${ucfirst(id)}&neu=${encodeURIComponent($('#' + id + 'neu').val())}`,
-      success: function (data) {
-        $(`#${id}`).append(`<option value="${data.id}">${data.name}</option>`)
-
-        $(`#${id}neu`).val('')
-        $(`#${id}-dialog`).dialog('close')
-        $(`#${id} option`).removeAttr('selected')
-        $(`#${id} option`).last().attr('selected', true)
-      },
-    })
-  }
-}
-
-export function ucfirst (str) {
-  str += ''
-  var f = str.charAt(0).toUpperCase()
-  return f + str.substr(1)
-}
-
 export function ifconfirm (url, question, title) {
   if (question != undefined) {
     $('#dialog-confirm-msg').html(question)
