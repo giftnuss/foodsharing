@@ -1,5 +1,5 @@
 {
     "require-dev": {
-        "deployer/deployer": "~7.0.0-beta.4"
+        "deployer/deployer": "~7.0.0-beta.5"
     }
 }

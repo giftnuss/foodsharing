@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d904fa11f2c65e35771f842fd7c0fad6",
+    "content-hash": "c43163fb09fb926152fdb71edc3851e3",
     "packages": [],
     "packages-dev": [
         {
             "name": "deployer/deployer",
-            "version": "v7.0.0-beta.4",
+            "version": "v7.0.0-beta.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/deployphp/deployer.git",
-                "reference": "2209942bff6abde90f26c5f9e6f21e634c64a2ee"
+                "reference": "a80798106361fdd4575f1ea44aa66e15f58b1745"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deployphp/deployer/zipball/2209942bff6abde90f26c5f9e6f21e634c64a2ee",
-                "reference": "2209942bff6abde90f26c5f9e6f21e634c64a2ee",
+                "url": "https://api.github.com/repos/deployphp/deployer/zipball/a80798106361fdd4575f1ea44aa66e15f58b1745",
+                "reference": "a80798106361fdd4575f1ea44aa66e15f58b1745",
                 "shasum": ""
             },
             "require": {
@@ -77,7 +77,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-11-05T22:04:16+00:00"
+            "time": "2020-11-15T22:10:49+00:00"
         },
         {
             "name": "evenement/evenement",
