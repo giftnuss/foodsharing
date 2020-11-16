@@ -527,6 +527,7 @@ yes: Ja
 no: Nein
 back: Zurück
 success: Erfolgreich abgeschlossen
+error_permissions: 'Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang.'
 error_unexpected: Es ist ein Fehler aufgetreten
 error_ajax: |
   Das hat leider nicht geklappt.

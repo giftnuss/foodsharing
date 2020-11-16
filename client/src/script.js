@@ -184,25 +184,21 @@ export function profile (id) {
   goTo(`/profile/${id}`)
 }
 
+function displayXhrMessages (msg) {
+  for (let i = 0; i < msg.length; i++) {
+    switch (msg[i].type) {
+      case 'error':
+        pulseError(msg[i].text); break
+      case 'success':
+        pulseSuccess(msg[i].text); break
+      default:
+        pulseInfo(msg[i].text); break
+    }
+  }
+}
+
 export const ajax = {
   data: {},
-  msg: function (msg) {
-    for (let i = 0; i < msg.length; i++) {
-      switch (msg[i].type) {
-        case 'error':
-          pulseError(msg[i].text)
-          break
-
-        case 'success':
-          pulseSuccess(msg[i].text)
-          break
-
-        default:
-          pulseInfo(msg[i].text)
-          break
-      }
-    }
-  },
   req: function (app, method, option) {
     var opt = {}
     if (option != undefined) {
@@ -230,7 +226,7 @@ export const ajax = {
       success: function (ret) {
         if (ret.status == 1) {
           if (ret.msg != undefined) {
-            ajax.msg(ret.msg)
+            displayXhrMessages(ret.msg)
           }
 
           if (ret.append != undefined) {
@@ -251,7 +247,7 @@ export const ajax = {
       },
       fail: function (request) {
         if (request.status === 403) {
-          pulseError('Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang.')
+          pulseError(i18n('error_permissions'))
         }
       },
       complete: function () {
