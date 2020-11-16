@@ -175,9 +175,10 @@ import compareAsc from 'date-fns/compareAsc'
 
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
-import { xhrf, chat, pulseSuccess } from '@/script'
+import { chat, pulseSuccess } from '@/script'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
+import { legacyXhrCall } from './legacy'
 import StoreManagementPanel from './StoreManagementPanel'
 import StoreTeamAvatar from './StoreTeamAvatar'
 import StoreTeamInfo from './StoreTeamInfo'
@@ -255,13 +256,13 @@ export default {
       chat(fsId)
     },
     // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
-    changeMembershipStatus (fsId, newStatus) {
+    async changeMembershipStatus (fsId, newStatus) {
       const fData = {
         bid: this.storeId,
         fsid: fsId,
         action: newStatus,
       }
-      xhrf('bcontext', fData)
+      await legacyXhrCall('bcontext', fData)
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
@@ -272,7 +273,7 @@ export default {
       }
     },
     // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
-    removeFromTeam (fs) {
+    async removeFromTeam (fs) {
       if (!fs || !fs.id) {
         return
       }
@@ -285,7 +286,7 @@ export default {
         fsid: fsId,
         action: 'delete',
       }
-      xhrf('bcontext', fData)
+      await legacyXhrCall('bcontext', fData)
       const index = this.foodsaver.findIndex(member => member.id === fsId)
       if (index >= 0) {
         this.foodsaver.splice(index, 1)
@@ -357,6 +358,7 @@ export default {
         fetchCount: fs.stat_fetchcount,
       }
     },
+    legacyXhrCall,
   },
 }
 </script>

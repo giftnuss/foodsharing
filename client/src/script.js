@@ -333,24 +333,6 @@ export function img (photo, size) {
   }
 }
 
-export function xhrf (func, fdata = null) {
-  showLoader()
-  $.ajax({
-    dataType: 'json',
-    url: `/xhr.php?f=${func}`,
-    data: fdata || {},
-    success: function (data) {
-      hideLoader()
-      if (data.status == 1) {
-        hideLoader()
-      }
-    },
-    complete: function () {
-      hideLoader()
-    },
-  })
-}
-
 export function reload () {
   window.location.reload()
 }
