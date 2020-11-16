@@ -85,7 +85,6 @@ class ActivityRestController extends AbstractFOSRestController
 
 		$updates = [
 			'updates' => $this->activityTransactions->getUpdateData($page),
-			'user' => $this->activityTransactions->getUpdateUser(),
 		];
 
 		return $this->handleView($this->view($updates, 200));

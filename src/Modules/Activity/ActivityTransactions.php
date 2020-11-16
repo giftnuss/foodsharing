@@ -151,15 +151,6 @@ class ActivityTransactions
 		);
 	}
 
-	public function getUpdateUser(): array
-	{
-		return [
-			'id' => $this->session->id(),
-			'name' => $this->session->user('name'),
-			'avatar' => $this->imageHelper->img($this->session->user('photo')),
-		];
-	}
-
 	private function loadEventWallUpdates(int $page): array
 	{
 		$updates = $this->activityGateway->fetchAllEventUpdates($this->session->id(), $page);
