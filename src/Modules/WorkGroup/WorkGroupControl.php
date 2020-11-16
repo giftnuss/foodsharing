@@ -152,7 +152,7 @@ class WorkGroupControl extends Control
 			$this->routeHelper->go('/?page=dashboard');
 		}
 
-		$bread = $this->translator->trans('group.edit', ['{name}' => $group['name']]);
+		$bread = $this->translator->trans('group.edit', ['{group}' => $group['name']]);
 		$this->pageHelper->addBread($bread, '/?page=groups&sub=edit&id=' . (int)$group['id']);
 
 		$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
