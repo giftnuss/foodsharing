@@ -147,19 +147,14 @@ export function initialize () {
       $(this).addClass('ui-state-hover')
     }).on('mouseleave', function () {
       $(this).removeClass('ui-state-hover')
-    },
-    )
+    })
 
-    $('.text, .textarea, select').on('focus',
-      function () {
-        $(this).addClass('focus')
-      },
-    )
-    $('.text, .textarea, select').on('blur',
-      function () {
-        $(this).removeClass('focus')
-      },
-    )
+    $('.text, .textarea, select').on('focus', function () {
+      $(this).addClass('focus')
+    })
+    $('.text, .textarea, select').on('blur', function () {
+      $(this).removeClass('focus')
+    })
 
     $('.value').on('blur', function () {
       const el = $(this)
@@ -171,12 +166,11 @@ export function initialize () {
     $('#uploadPhoto').dialog({
       autoOpen: false,
       modal: true,
-      buttons:
-        {
-          Upload: function () {
-            uploadPhoto()
-          },
+      buttons: {
+        [i18n('upload.image')]: function () {
+          uploadPhoto()
         },
+      },
     })
   })
 }
