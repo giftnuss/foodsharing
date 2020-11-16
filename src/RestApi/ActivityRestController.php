@@ -69,4 +69,25 @@ class ActivityRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * Returns the updates object for <ActivityOverview> to display on the dashboard.
+	 *
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Tag(name="activities")
+	 *
+	 * @Rest\Get("activities/updates")
+	 * @Rest\QueryParam(name="page", requirements="\d+", default="0", description="Which page of updates to return")
+	 */
+	public function getActivityUpdatesAction(ParamFetcher $paramFetcher): Response
+	{
+		$page = intval($paramFetcher->get('page'));
+
+		$updates = [
+			'updates' => $this->activityTransactions->getUpdateData($page),
+			'user' => $this->activityTransactions->getUpdateUser(),
+		];
+
+		return $this->handleView($this->view($updates, 200));
+	}
 }

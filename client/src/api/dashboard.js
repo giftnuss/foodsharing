@@ -1,7 +1,7 @@
 import { get, patch, post } from './base'
 
 export async function getUpdates (pagenumber) {
-  return (await get(`/../xhrapp.php?app=activity&m=load&page=${pagenumber}`)).data.updates
+  return (await get(`/activities/updates?page=${pagenumber}`)).updates
 }
 
 export async function getFilters () {
