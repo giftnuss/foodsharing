@@ -1308,6 +1308,7 @@ settings:
     full: Ich tauche erstmal auf unbestimmte Zeit ab
     range: 'Gib an, für welchen Zeitraum du in etwa nicht zur Verfügung stehen wirst:'
     saved: Die Einstellungen wurden gespeichert
+    tooltip: '{name} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus'
   email: E-Mail-Adresse ändern
   changemail:
     passcheck: Bestätige die Änderung bitte mit deinem Passwort

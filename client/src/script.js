@@ -26,23 +26,19 @@ export function collapse_wrapper (id) {
   }
 }
 
-export const sleepmode = {
-  init: function () {
-    $('.sleepmode-1, .sleepmode-2').on('mouseover', function () {
-      var $this = $(this)
-      $this.append(`<span class="corner-all bubble bubble-right ui-shadow">${$this.text()} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>`)
-    })
-    $('.sleepmode-1, .sleepmode-2').on('mouseout', function () {
-      var $this = $(this)
-      $this.children('.bubble').remove()
-    })
-  },
+function initSleepmode () {
+  $('.sleepmode-1, .sleepmode-2').on('mouseover', function () {
+    const tooltip = i18n('settings.sleep.tooltip', { name: $(this).text() })
+    $(this).append(`<span class="corner-all bubble bubble-right ui-shadow">${tooltip}</span>`)
+  })
+  $('.sleepmode-1, .sleepmode-2').on('mouseout', function () {
+    $(this).children('.bubble').remove()
+  })
 }
 
 export function initialize () {
   $(function () {
-    // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
-    sleepmode.init()
+    initSleepmode()
 
     $('textarea.comment').autosize()
     $('#main').css('display', 'block')
