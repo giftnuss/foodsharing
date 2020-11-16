@@ -107,13 +107,7 @@ export function initialize () {
         show: false,
         hide: false,
         content: function () {
-          var el = $(this)
-          if (el.attr('title').substring(0, 4) == '#tt-') {
-            const id = el.attr('title').substring(4)
-            return $(`.${id}`).html()
-          } else {
-            return el.attr('title')
-          }
+          return $(this).attr('title')
         },
         position: {
           my: 'center bottom-20',
