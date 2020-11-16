@@ -26,18 +26,6 @@ export function collapse_wrapper (id) {
   }
 }
 
-export function closeAllDialogs () {
-  const $activeDialogs = $('.ui-dialog').find('.ui-dialog-content')
-
-  $activeDialogs.each(function () {
-    const $dia = $(this)
-    $dia.dialog()
-    if ($dia.dialog('isOpen')) {
-      $dia.dialog().dialog('close')
-    }
-  })
-}
-
 export const sleepmode = {
   init: function () {
     $('.sleepmode-1, .sleepmode-2').on('mouseover', function () {
