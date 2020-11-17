@@ -135,6 +135,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 
 # 2020-11-25 Hotfix
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
+- upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 
 # 2020-10-23 Hotfix
 
