@@ -43,3 +43,4 @@ sw.js
 .vscode
 var/**
 builds
+/chat/yarn-error.log
