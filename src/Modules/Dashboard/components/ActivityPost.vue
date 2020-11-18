@@ -209,6 +209,7 @@ export default {
   span a {
     color: var(--fs-green) !important;
     font-weight: bolder;
+    font-size: 0.875rem;
   }
 
   .qr,
@@ -275,6 +276,7 @@ export default {
     small {
       float: right;
       font-weight: bolder;
+      font-size: 0.875rem;
       opacity: 0.5;
     }
   }
