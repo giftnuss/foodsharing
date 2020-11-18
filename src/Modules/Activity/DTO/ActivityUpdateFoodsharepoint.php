@@ -15,11 +15,11 @@ class ActivityUpdateFoodsharepoint
 	public string $icon;
 
 	public string $source;
+	public string $title;
 	public ?array $gallery;
 
 	// Individual update-type properties
 	public int $fsp_id;
-	public string $fsp_name;
 	public string $region_name;
 
 	public static function create(
@@ -47,10 +47,10 @@ class ActivityUpdateFoodsharepoint
 		$u->icon = $icon;
 
 		$u->source = $source;
+		$u->title = $fsp_name;
 		$u->gallery = $gallery ?? [];
 
 		$u->fsp_id = $fsp_id;
-		$u->fsp_name = $fsp_name;
 		$u->region_name = $region_name;
 
 		return $u;

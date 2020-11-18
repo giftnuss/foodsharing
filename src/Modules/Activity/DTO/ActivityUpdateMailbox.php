@@ -14,10 +14,10 @@ class ActivityUpdateMailbox
 	public string $icon = '/img/mailbox-50x50.png';
 
 	public string $source;
-	public int $mailbox_id;
+	public string $title;
 
 	// Individual update-type properties
-	public string $subject;
+	public int $mailbox_id;
 	public string $sender_email;
 
 	public static function create(
@@ -39,9 +39,9 @@ class ActivityUpdateMailbox
 		$u->quickreply = $quickreply;
 
 		$u->source = $mailbox_name;
+		$u->title = $subject;
 
 		$u->mailbox_id = $mailbox_id;
-		$u->subject = $subject;
 		$u->sender_email = $sender_email;
 
 		return $u;

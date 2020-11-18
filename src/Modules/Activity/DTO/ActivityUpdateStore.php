@@ -15,10 +15,10 @@ class ActivityUpdateStore
 	public string $icon;
 
 	public string $source;
+	public string $title;
 
 	// Individual update-type properties
 	public int $store_id;
-	public string $store_name;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -43,9 +43,9 @@ class ActivityUpdateStore
 		$u->icon = $icon;
 
 		$u->source = $region_name;
+		$u->title = $store_name;
 
 		$u->store_id = $store_id;
-		$u->store_name = $store_name;
 
 		return $u;
 	}

@@ -1484,7 +1484,6 @@ dashboard:
   no_more_updates_store: "Keine weiteren Betriebs-Infos"
   activity_filter_info: Hier kannst du einstellen, welche Updates auf deiner Startseite angezeigt werden sollen.
   empty_section: "Du hast noch keine {type}"
-  event_title: "Termin: {title}"
   save_selection: Einstellungen speichern
   source_foodsharepoint: "Fairteiler {0}"
   source_friendWall: "Pinnwand von {0}"

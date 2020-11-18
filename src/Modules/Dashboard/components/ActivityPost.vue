@@ -12,20 +12,8 @@
       <i v-if="type != 'friendWall'" class="fas fa-angle-right" />
 
       <a :href="dashboardContentLink">
-        <span v-if="type == 'forum'">
-          {{ forum_name }}
-        </span>
-        <span v-else-if="type == 'foodsharepoint'">
-          {{ fsp_name }}
-        </span>
-        <span v-else-if="type == 'event'">
-          {{ $i18n('dashboard.event_title', {title: event_name}) }}
-        </span>
-        <span v-else-if="type == 'mailbox'">
-          {{ subject }}
-        </span>
-        <span v-else-if="type == 'store'">
-          {{ store_name }}
+        <span v-if="type != 'friendWall'">
+          {{ title }}
         </span>
       </a>
 
@@ -119,27 +107,30 @@ export default {
     fs_id: { type: Number, default: null },
     fs_name: { type: String, default: '' },
     source: { type: String, default: '' },
+    title: { type: String, default: '' },
+
     // Individual update-type properties for buddy wallposts: ActivityUpdateBuddy
     is_own: { type: String, default: '' },
+
     // Individual update-type properties for events: ActivityUpdateEvent
     event_id: { type: Number, default: null },
-    event_name: { type: String, default: '' },
+
     // Individual update-type properties for foodsharepoint wallposts: ActivityUpdateFoodsharepoint
     fsp_id: { type: Number, default: null },
-    fsp_name: { type: String, default: '' },
     region_name: { type: String, default: '' },
+
     // Individual update-type properties for forum posts: ActivityUpdateForum
     forum_thread: { type: Number, default: null },
     forum_post: { type: Number, default: null },
-    forum_name: { type: String, default: '' },
     forum_type: { type: String, default: '' },
     is_bot: { type: String, default: '' },
+
     // Individual update-type properties for mailboxes: ActivityUpdateMailbox
     mailbox_id: { type: Number, default: null },
     sender_email: { type: String, default: '' },
+
     // Individual update-type properties for store wallposts: ActivityUpdateStore
     store_id: { type: Number, default: null },
-    store_name: { type: String, default: '' },
   },
   /* eslint-enable */
   data () {

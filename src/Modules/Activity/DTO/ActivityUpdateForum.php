@@ -16,12 +16,12 @@ class ActivityUpdateForum
 	public string $icon;
 
 	public string $source;
+	public string $title;
 	public int $region_id;
 
 	// Individual update-type properties
 	public int $forum_thread;
 	public int $forum_post;
-	public string $forum_name;
 	public string $forum_type;
 	public ?string $is_bot;
 
@@ -54,11 +54,11 @@ class ActivityUpdateForum
 		$u->icon = $icon;
 
 		$u->source = $source;
+		$u->title = $forum_name;
 		$u->region_id = $region_id;
 
 		$u->forum_thread = $forum_thread;
 		$u->forum_post = $forum_post;
-		$u->forum_name = $forum_name;
 		$u->forum_type = $forum_type;
 		$u->is_bot = $is_bot ? '_bot' : null;
 

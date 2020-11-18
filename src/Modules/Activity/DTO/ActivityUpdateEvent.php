@@ -16,11 +16,11 @@ class ActivityUpdateEvent
 	public string $icon;
 
 	public string $source;
+	public string $title;
 	public ?array $gallery;
 
 	// Individual update-type properties
 	public int $event_id;
-	public string $event_name;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -48,10 +48,10 @@ class ActivityUpdateEvent
 		$u->icon = $icon;
 
 		$u->source = $source;
+		$u->title = $event_name;
 		$u->gallery = $gallery ?? [];
 
 		$u->event_id = $event_id;
-		$u->event_name = $event_name;
 
 		return $u;
 	}
