@@ -106,9 +106,7 @@ export default {
     fs_id: { type: Number, default: null },
     fs_name: { type: String, default: '' },
     region_id: { type: Number, default: null },
-
-    // Individual update-type properties for events: ActivityUpdateEvent
-    event_id: { type: Number, default: null },
+    entity_id: { type: Number, default: null },
 
     // Individual update-type properties for foodsharepoint wallposts: ActivityUpdateFoodsharepoint
     fsp_id: { type: Number, default: null },
@@ -139,7 +137,7 @@ export default {
     dashboardContentLink () {
       switch (this.type) {
         case 'event':
-          return url('event', this.event_id)
+          return url('event', this.entity_id)
         case 'foodsharepoint':
           return url('foodsharepoint', this.region_id, this.fsp_id)
         case 'friendWall':

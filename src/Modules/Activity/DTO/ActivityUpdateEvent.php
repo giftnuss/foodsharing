@@ -10,17 +10,14 @@ class ActivityUpdateEvent
 
 	public string $desc;
 	public ?string $quickreply;
+	public string $icon;
+	public string $title;
+	public string $source;
+	public ?array $gallery;
 
 	public int $fs_id;
 	public string $fs_name;
-	public string $icon;
-
-	public string $source;
-	public string $title;
-	public ?array $gallery;
-
-	// Individual update-type properties
-	public int $event_id;
+	public int $entity_id;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -42,16 +39,14 @@ class ActivityUpdateEvent
 
 		$u->desc = $desc;
 		$u->quickreply = $quickreply;
+		$u->icon = $icon;
+		$u->title = $event_name;
+		$u->source = $source;
+		$u->gallery = $gallery ?? [];
 
 		$u->fs_id = $fs_id;
 		$u->fs_name = $fs_name;
-		$u->icon = $icon;
-
-		$u->source = $source;
-		$u->title = $event_name;
-		$u->gallery = $gallery ?? [];
-
-		$u->event_id = $event_id;
+		$u->entity_id = $event_id;
 
 		return $u;
 	}
