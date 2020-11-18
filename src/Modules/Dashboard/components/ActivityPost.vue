@@ -1,19 +1,11 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <li class="activity-item">
-    <span class="i">
-      <a v-if="fs_id" :href="$url('profile', fs_id)">
-        <img :src="icon" width="50">
-      </a>
-      <a v-else>
-        <img :src="icon" width="50">
-      </a>
-    </span>
     <span class="n mb-2">
       <a v-if="fs_id" :href="$url('profile', fs_id)">
         {{ fs_name }}
       </a>
-      <a v-if="sender_email" :href="dashboardContentLink">
+      <a v-else-if="sender_email" :href="dashboardContentLink">
         {{ sender_email }}
       </a>
 
@@ -37,31 +29,13 @@
         </span>
       </a>
 
-      <small v-if="source_name">
-        {{ source_name }}
-      </small>
-      <small v-else-if="source">
+      <small v-if="source">
         {{ $i18n(translationKey, [source]) }}
-      </small>
-      <small v-else-if="mailbox_name && sender_email != mailbox_name">
-        {{ mailbox_name }}
       </small>
     </span>
     <span class="i">
-      <a
-        v-if="fs_id"
-        :href="$url('profile', fs_id)"
-      >
-        <img
-          :src="icon"
-          width="50"
-        >
-      </a>
-      <a v-else>
-        <img
-          :src="icon"
-          width="50"
-        >
+      <a :href="fs_id ? $url('profile', fs_id) : null">
+        <img :src="icon" width="50">
       </a>
     </span>
     <span class="t">
@@ -162,8 +136,6 @@ export default {
     is_bot: { type: String, default: '' },
     // Individual update-type properties for mailboxes: ActivityUpdateMailbox
     mailbox_id: { type: Number, default: null },
-    mailbox_name: { type: String, default: '' },
-    subject: { type: String, default: '' },
     sender_email: { type: String, default: '' },
     // Individual update-type properties for store wallposts: ActivityUpdateStore
     store_id: { type: Number, default: null },
@@ -230,7 +202,8 @@ export default {
 <style lang="scss" scoped>
 .activity-item {
   a,
-  span a {
+  span a,
+  span a > span {
     color: var(--fs-green);
     font-size: 0.875rem;
   }

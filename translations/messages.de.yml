@@ -1492,6 +1492,7 @@ dashboard:
   source_forum: "Forum {0}"
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
+  source_mailbox: "{0}"
   source_store: "Betriebe {0}"
   activation_mail_sent: Aktivierungslink verschickt - bitte prüfe deine E-Mails
   activation_mail_failure: Es konnte kein neuer Aktivierungslink verschickt werden

@@ -287,8 +287,8 @@ class ActivityTransactions
 				$u['time_ts'],
 				$u['body'] ?? '',
 				$replyUrl,
-				$u['id'],
 				$u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
+				$u['id'],
 				$u['subject'],
 				$sender['mailbox'] . '@' . $sender['host']
 			);

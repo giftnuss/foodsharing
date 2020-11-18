@@ -11,9 +11,10 @@ class ActivityUpdateMailbox
 	public string $desc;
 	public ?string $quickreply;
 
-	public int $mailbox_id;
-	public string $mailbox_name;
 	public string $icon = '/img/mailbox-50x50.png';
+
+	public string $source;
+	public int $mailbox_id;
 
 	// Individual update-type properties
 	public string $subject;
@@ -24,8 +25,8 @@ class ActivityUpdateMailbox
 		int $time_ts,
 		string $desc,
 		?string $quickreply,
-		int $mailbox_id,
 		string $mailbox_name,
+		int $mailbox_id,
 		string $subject,
 		string $sender_email
 	): self {
@@ -37,9 +38,9 @@ class ActivityUpdateMailbox
 		$u->desc = $desc;
 		$u->quickreply = $quickreply;
 
-		$u->mailbox_id = $mailbox_id;
-		$u->mailbox_name = $mailbox_name;
+		$u->source = $mailbox_name;
 
+		$u->mailbox_id = $mailbox_id;
 		$u->subject = $subject;
 		$u->sender_email = $sender_email;
 
