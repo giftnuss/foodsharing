@@ -115,7 +115,6 @@ export default {
     forum_type: { type: String, default: '' },
 
     // Individual update-type properties for mailboxes: ActivityUpdateMailbox
-    mailbox_id: { type: Number, default: null },
     sender_email: { type: String, default: '' },
   },
   /* eslint-enable */
@@ -140,7 +139,7 @@ export default {
         case 'forum':
           return url('forum', this.region_id, (this.forum_type === 'botforum'), this.forum_thread, this.forum_post)
         case 'mailbox':
-          return url('mailbox', this.mailbox_id)
+          return url('mailbox', this.entity_id)
         case 'store':
           return url('store', this.entity_id)
         default:
