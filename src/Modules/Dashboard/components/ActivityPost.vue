@@ -96,8 +96,9 @@ export default {
 
     type: { type: String, required: true },
     desc: { type: String, default: '' },
-    icon: { type: String, default: '' },
     title: { type: String, default: '' },
+
+    icon: { type: String, default: '' },
     source: { type: String, default: '' },
     source_suffix: { type: String, default: '' },
     gallery: { type: Array, default: () => { return [] } },
@@ -119,9 +120,6 @@ export default {
     // Individual update-type properties for mailboxes: ActivityUpdateMailbox
     mailbox_id: { type: Number, default: null },
     sender_email: { type: String, default: '' },
-
-    // Individual update-type properties for store wallposts: ActivityUpdateStore
-    store_id: { type: Number, default: null },
   },
   /* eslint-enable */
   data () {
@@ -147,7 +145,7 @@ export default {
         case 'mailbox':
           return url('mailbox', this.mailbox_id)
         case 'store':
-          return url('store', this.store_id)
+          return url('store', this.entity_id)
         default:
           return '#'
       }
