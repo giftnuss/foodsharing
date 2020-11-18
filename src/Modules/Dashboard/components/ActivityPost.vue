@@ -26,6 +26,7 @@
         <img :src="icon" width="50">
       </a>
     </span>
+
     <span class="t">
       <span class="txt mb-1 pl-2">
         <span v-if="gallery">
@@ -52,10 +53,8 @@
         </a>
       </span>
     </span>
-    <div
-      v-if="quickreply"
-      class="qr mt-2"
-    >
+
+    <div v-if="quickreply" class="qr mt-2">
       <img :src="user_avatar">
       <textarea
         v-if="!qrLoading"
@@ -65,20 +64,17 @@
         placeholder="Schreibe eine Antwort..."
         @keyup.enter="sendQuickreply"
       />
-      <span
-        v-else
-        class="loader"
-      >
+      <span v-else class="loader">
         <i class="fas fa-spinner fa-spin" />
       </span>
     </div>
+
     <div class="time mt-2">
       <i class="far fa-fw fa-clock" />
       <span> {{ $dateDistanceInWords(when) }} </span>
       <i class="fas fa-fw fa-angle-right" />
       <span> {{ $dateFormat(when, 'full-short') }} </span>
     </div>
-    <span class="c" />
   </li>
 </template>
 
@@ -100,14 +96,15 @@ export default {
 
     type: { type: String, required: true },
     desc: { type: String, default: '' },
-    quickreply: { type: String, default: '' },
     icon: { type: String, default: '' },
+    title: { type: String, default: '' },
+    source: { type: String, default: '' },
     gallery: { type: Array, default: () => { return [] } },
+    quickreply: { type: String, default: '' },
 
     fs_id: { type: Number, default: null },
     fs_name: { type: String, default: '' },
-    source: { type: String, default: '' },
-    title: { type: String, default: '' },
+    region_id: { type: Number, default: null },
 
     // Individual update-type properties for buddy wallposts: ActivityUpdateBuddy
     is_own: { type: String, default: '' },
@@ -117,7 +114,6 @@ export default {
 
     // Individual update-type properties for foodsharepoint wallposts: ActivityUpdateFoodsharepoint
     fsp_id: { type: Number, default: null },
-    region_name: { type: String, default: '' },
 
     // Individual update-type properties for forum posts: ActivityUpdateForum
     forum_thread: { type: Number, default: null },

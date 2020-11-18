@@ -195,12 +195,12 @@ class ActivityTransactions
 				$u['body'] ?? '',
 				$u['fs_id'],
 				$u['fs_name'],
+				$u['region_id'],
 				$this->imageHelper->img($u['fs_photo'], 50),
 				$u['fsp_location'],
 				$u['gallery'] ?? [],
 				$u['fsp_id'],
-				$u['name'],
-				$u['region_id']
+				$u['name']
 			);
 		}
 

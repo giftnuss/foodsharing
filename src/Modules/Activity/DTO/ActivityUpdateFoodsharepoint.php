@@ -12,6 +12,7 @@ class ActivityUpdateFoodsharepoint
 
 	public int $fs_id;
 	public string $fs_name;
+	public int $region_id;
 	public string $icon;
 
 	public string $source;
@@ -20,7 +21,6 @@ class ActivityUpdateFoodsharepoint
 
 	// Individual update-type properties
 	public int $fsp_id;
-	public string $region_name;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -28,12 +28,12 @@ class ActivityUpdateFoodsharepoint
 		string $desc,
 		int $fs_id,
 		string $fs_name,
+		int $region_id,
 		string $icon,
 		string $source,
 		?array $gallery,
 		int $fsp_id,
-		string $fsp_name,
-		string $region_name
+		string $fsp_name
 	): self {
 		$u = new self();
 
@@ -44,6 +44,7 @@ class ActivityUpdateFoodsharepoint
 
 		$u->fs_id = $fs_id;
 		$u->fs_name = $fs_name;
+		$u->region_id = $region_id;
 		$u->icon = $icon;
 
 		$u->source = $source;
@@ -51,7 +52,6 @@ class ActivityUpdateFoodsharepoint
 		$u->gallery = $gallery ?? [];
 
 		$u->fsp_id = $fsp_id;
-		$u->region_name = $region_name;
 
 		return $u;
 	}
