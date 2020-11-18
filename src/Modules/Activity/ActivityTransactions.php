@@ -165,22 +165,19 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$replyUrl = '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id'];
 
-			$out[] = [
-				'type' => 'event',
-				'data' => EventUpdate::create(
-					$u['time'], // TODO DateTime
-					$u['time_ts'],
-					$u['body'] ?? '',
-					$replyUrl,
-					$u['fs_id'],
-					$u['fs_name'],
-					$this->imageHelper->img($u['fs_photo'], 50),
-					$u['event_region'],
-					$u['gallery'] ?? [],
-					$u['event_id'],
-					$u['name']
-				),
-			];
+			$out[] = EventUpdate::create(
+				$u['time'], // TODO DateTime
+				$u['time_ts'],
+				$u['body'] ?? '',
+				$replyUrl,
+				$u['fs_id'],
+				$u['fs_name'],
+				$this->imageHelper->img($u['fs_photo'], 50),
+				$u['event_region'],
+				$u['gallery'] ?? [],
+				$u['event_id'],
+				$u['name']
+			);
 		}
 
 		return $out;
@@ -192,22 +189,19 @@ class ActivityTransactions
 		$out = [];
 
 		foreach ($updates as $u) {
-			$out[] = [
-				'type' => 'foodsharepoint',
-				'data' => FspUpdate::create(
-					$u['time'], // TODO DateTime
-					$u['time_ts'],
-					$u['body'] ?? '',
-					$u['fs_id'],
-					$u['fs_name'],
-					$this->imageHelper->img($u['fs_photo'], 50),
-					$u['fsp_location'],
-					$u['gallery'] ?? [],
-					$u['fsp_id'],
-					$u['name'],
-					$u['region_id']
-				),
-			];
+			$out[] = FspUpdate::create(
+				$u['time'], // TODO DateTime
+				$u['time_ts'],
+				$u['body'] ?? '',
+				$u['fs_id'],
+				$u['fs_name'],
+				$this->imageHelper->img($u['fs_photo'], 50),
+				$u['fsp_location'],
+				$u['gallery'] ?? [],
+				$u['fsp_id'],
+				$u['name'],
+				$u['region_id']
+			);
 		}
 
 		return $out;
@@ -239,19 +233,16 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$is_own = $u['fs_id'] === $this->session->id();
 
-			$out[] = [
-				'type' => 'friendWall',
-				'data' => BuddyUpdate::create(
-					$u['time'], // TODO DateTime
-					$u['time_ts'],
-					$u['body'] ?? '',
-					$u['fs_id'],
-					$u['fs_name'],
-					$this->imageHelper->img($u['fs_photo'], 50),
-					$u['gallery'] ?? [],
-					$is_own
-				),
-			];
+			$out[] = BuddyUpdate::create(
+				$u['time'], // TODO DateTime
+				$u['time_ts'],
+				$u['body'] ?? '',
+				$u['fs_id'],
+				$u['fs_name'],
+				$this->imageHelper->img($u['fs_photo'], 50),
+				$u['gallery'] ?? [],
+				$is_own
+			);
 		}
 
 		return $out;
@@ -291,19 +282,16 @@ class ActivityTransactions
 			$sender = json_decode($u['sender'], true, 512, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_IGNORE);
 			$replyUrl = '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id'];
 
-			$out[] = [
-				'type' => 'mailbox',
-				'data' => MailboxUpdate::create(
-					$u['time'], // TODO DateTime
-					$u['time_ts'],
-					$u['body'] ?? '',
-					$replyUrl,
-					$u['id'],
-					$u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
-					$u['subject'],
-					$sender['mailbox'] . '@' . $sender['host']
-				),
-			];
+			$out[] = MailboxUpdate::create(
+				$u['time'], // TODO DateTime
+				$u['time_ts'],
+				$u['body'] ?? '',
+				$replyUrl,
+				$u['id'],
+				$u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
+				$u['subject'],
+				$sender['mailbox'] . '@' . $sender['host']
+			);
 		}
 
 		return $out;
@@ -349,7 +337,6 @@ class ActivityTransactions
 				. '&sub=' . $forumTypeString;
 
 			$out[] = [
-				'type' => 'forum',
 				'data' => ForumUpdate::create(
 					$u['update_time'], // TODO DateTime
 					$u['update_time_ts'],
@@ -381,20 +368,17 @@ class ActivityTransactions
 
 		$out = [];
 		foreach ($updates as $u) {
-			$out[] = [
-				'type' => 'store',
-				'data' => StoreUpdate::create(
-					$u['update_time'], // TODO DateTime
-					$u['update_time_ts'],
-					$u['text'] ?? '',
-					$u['foodsaver_id'],
-					$u['foodsaver_name'],
-					$this->imageHelper->img($u['foodsaver_photo'], 50),
-					$u['region_name'],
-					$u['betrieb_id'],
-					$u['betrieb_name']
-				),
-			];
+			$out[] = StoreUpdate::create(
+				$u['update_time'], // TODO DateTime
+				$u['update_time_ts'],
+				$u['text'] ?? '',
+				$u['foodsaver_id'],
+				$u['foodsaver_name'],
+				$this->imageHelper->img($u['foodsaver_photo'], 50),
+				$u['region_name'],
+				$u['betrieb_id'],
+				$u['betrieb_name']
+			);
 		}
 
 		return $out;

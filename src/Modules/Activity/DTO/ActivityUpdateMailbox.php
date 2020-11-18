@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Activity\DTO;
 
 class ActivityUpdateMailbox
 {
+	public string $type = 'mailbox';
 	public string $time;
 	public int $time_ts; // Legacy timestamp (still used for comparison)
 

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Activity\DTO;
 
 class ActivityUpdateBuddy
 {
+	public string $type = 'friendWall';
 	public string $time;
 	public int $time_ts; // Legacy timestamp (still used for comparison)
 

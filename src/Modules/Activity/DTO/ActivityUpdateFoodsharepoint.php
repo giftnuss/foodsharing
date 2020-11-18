@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Activity\DTO;
 
 class ActivityUpdateFoodsharepoint
 {
+	public string $type = 'foodsharepoint';
 	public string $time; // public DateTime $time;
 	public int $time_ts; // Legacy timestamp (still used for comparison)
 

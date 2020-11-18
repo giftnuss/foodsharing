@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Activity\DTO;
 
 class ActivityUpdateEvent
 {
+	public string $type = 'event';
 	public string $time;
 	public int $time_ts; // Legacy timestamp (still used for comparison)
 

@@ -2,10 +2,9 @@
   <div>
     <ul class="linklist">
       <ActivityPost
-        v-for="(el, index) in hideUnwanted(updates)"
+        v-for="(post, index) in hideUnwanted(updates)"
         :key="index"
-        :type="el.type"
-        :data="el.data"
+        v-bind="post"
       />
       <infinite-loading
         ref="infiniteLoading"
@@ -78,7 +77,7 @@ export default {
       if (filtered.length) {
         this.page += 1
         updates.sort((a, b) => {
-          return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
+          return b.time_ts - a.time_ts
         })
         this.updates.push(...updates)
         $state.loaded()

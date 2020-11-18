@@ -2,16 +2,16 @@
   <li class="activity-item">
     <span class="n mb-2">
       <a
-        v-if="data.fs_id"
-        :href="$url('profile', data.fs_id)"
+        v-if="fs_id"
+        :href="$url('profile', fs_id)"
       >
-        {{ data.fs_name }}
+        {{ fs_name }}
       </a>
       <a
-        v-if="data.sender_email"
-        :href="'/?page=mailbox&show=' + data.mailbox_id"
+        v-if="sender_email"
+        :href="'/?page=mailbox&show=' + mailbox_id"
       >
-        {{ data.sender_email }}
+        {{ sender_email }}
       </a>
       <i
         v-if="type != 'friendWall'"
@@ -21,64 +21,64 @@
         v-if="type == 'forum'"
         :href="dashboardContentLink"
       >
-        {{ data.forum_name }}
+        {{ forum_name }}
       </a>
       <a
         v-else-if="type == 'foodsharepoint'"
         :href="dashboardContentLink"
       >
-        {{ data.fsp_name }}
+        {{ fsp_name }}
       </a>
       <a
         v-else-if="type == 'event'"
         :href="dashboardContentLink"
       >
-        {{ $i18n('dashboard.event_title', {title: data.event_name}) }}
+        {{ $i18n('dashboard.event_title', {title: event_name}) }}
       </a>
       <a
         v-else-if="type == 'mailbox'"
-        :href="'/?page=mailbox&show=' + data.mailbox_id"
+        :href="'/?page=mailbox&show=' + mailbox_id"
       >
-        {{ data.subject }}
+        {{ subject }}
       </a>
       <a
         v-else-if="type == 'store'"
-        :href="'/?page=fsbetrieb&id=' + data.store_id"
+        :href="'/?page=fsbetrieb&id=' + store_id"
       >
-        {{ data.store_name }}
+        {{ store_name }}
       </a>
-      <small v-if="data.source_name">
-        {{ data.source_name }}
+      <small v-if="source_name">
+        {{ source_name }}
       </small>
-      <small v-else-if="data.source">
-        {{ $i18n(translationKey, [data.source]) }}
+      <small v-else-if="source">
+        {{ $i18n(translationKey, [source]) }}
       </small>
-      <small v-else-if="data.mailbox_name && data.sender_email != data.mailbox_name">
-        {{ data.mailbox_name }}
+      <small v-else-if="mailbox_name && sender_email != mailbox_name">
+        {{ mailbox_name }}
       </small>
     </span>
     <span class="i">
       <a
-        v-if="data.fs_id"
-        :href="$url('profile', data.fs_id)"
+        v-if="fs_id"
+        :href="$url('profile', fs_id)"
       >
         <img
-          :src="data.icon"
+          :src="icon"
           width="50"
         >
       </a>
       <a v-else>
         <img
-          :src="data.icon"
+          :src="icon"
           width="50"
         >
       </a>
     </span>
     <span class="t">
       <span class="txt mb-1 pl-2">
-        <span v-if="data.gallery">
+        <span v-if="gallery">
           <a
-            v-for="img in data.gallery"
+            v-for="img in gallery"
             :key="img.thumb"
             :href="dashboardContentLink"
           >
@@ -101,7 +101,7 @@
       </span>
     </span>
     <div
-      v-if="data.quickreply"
+      v-if="quickreply"
       class="qr mt-2"
     >
       <img :src="user_avatar">
@@ -140,16 +140,46 @@ import Markdown from '@/components/Markdown/Markdown'
 
 export default {
   components: { Markdown },
+  /* eslint-disable vue/prop-name-casing */
   props: {
-    type: {
-      type: String,
-      default: null,
-    },
-    data: {
-      type: Object,
-      default: null,
-    },
+    // Shared properties
+    time: { type: String, required: true },
+    time_ts: { type: Number, required: true },
+
+    type: { type: String, required: true },
+    desc: { type: String, default: '' },
+    quickreply: { type: String, default: '' },
+    icon: { type: String, default: '' },
+    gallery: { type: Array, default: () => { return [] } },
+
+    fs_id: { type: Number, default: null },
+    fs_name: { type: String, default: '' },
+    source: { type: String, default: '' },
+    // Individual update-type properties for buddy wallposts: ActivityUpdateBuddy
+    is_own: { type: String, default: '' },
+    // Individual update-type properties for events: ActivityUpdateEvent
+    event_id: { type: Number, default: null },
+    event_name: { type: String, default: '' },
+    // Individual update-type properties for foodsharepoint wallposts: ActivityUpdateFoodsharepoint
+    fsp_id: { type: Number, default: null },
+    fsp_name: { type: String, default: '' },
+    region_name: { type: String, default: '' },
+    // Individual update-type properties for forum posts: ActivityUpdateForum
+    forum_thread: { type: Number, default: null },
+    forum_post: { type: Number, default: null },
+    forum_name: { type: String, default: '' },
+    forum_type: { type: String, default: '' },
+    is_bot: { type: String, default: '' },
+    // Individual update-type properties for mailboxes: ActivityUpdateMailbox
+    mailbox_id: { type: Number, default: null },
+    mailbox_name: { type: String, default: '' },
+    subject: { type: String, default: '' },
+    sender_email: { type: String, default: '' },
+    // Individual update-type properties for store wallposts: ActivityUpdateStore
+    store_id: { type: Number, default: null },
+    store_name: { type: String, default: '' },
   },
+  /* eslint-enable */
   data () {
     return {
       isTruncatedText: true,
@@ -163,39 +193,39 @@ export default {
     dashboardContentLink () {
       switch (this.type) {
         case 'event':
-          return url('event', this.data.event_id)
+          return url('event', this.event_id)
         case 'foodsharepoint':
-          return url('foodsharepoint', this.data.region_id, this.data.fsp_id)
+          return url('foodsharepoint', this.region_id, this.fsp_id)
         case 'friendWall':
-          return url('profile', this.data.fs_id)
+          return url('profile', this.fs_id)
         case 'forum':
-          return url('forum', this.data.region_id, (this.data.forum_type === 'botforum'), this.data.forum_thread, this.data.forum_post)
+          return url('forum', this.region_id, (this.forum_type === 'botforum'), this.forum_thread, this.forum_post)
         default:
           return '#'
       }
     },
     isTruncatable () {
-      return this.data.desc.split(' ').length > 24
+      return this.desc.split(' ').length > 30
     },
     truncatedText () {
       if (this.isTruncatable && this.isTruncatedText) {
-        return this.data.desc.split(' ').splice(0, 20).join(' ') + '...'
+        return this.desc.split(' ').splice(0, 30).join(' ') + ' ...'
       } else {
-        return this.data.desc
+        return this.desc
       }
     },
     translationKey () {
-      return 'dashboard.source_' + this.type + (this.data.is_own || this.data.is_bot || '')
+      return 'dashboard.source_' + this.type + (this.is_own || this.is_bot || '')
     },
     when () {
-      return dateFnsParseISO(this.data.time)
+      return dateFnsParseISO(this.time)
     },
   },
   methods: {
     async sendQuickreply (txt) {
       console.log('sending reply', this.quickreplyValue)
       this.qrLoading = true
-      await sendQuickreply(this.data.quickreply, this.quickreplyValue).then((x) => { pulseInfo(x.message) })
+      await sendQuickreply(this.quickreply, this.quickreplyValue).then((x) => { pulseInfo(x.message) })
       this.qrLoading = false
       return true
     },
