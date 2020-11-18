@@ -109,9 +109,6 @@ export default {
     region_id: { type: Number, default: null },
     entity_id: { type: Number, default: null },
 
-    // Individual update-type properties for foodsharepoint wallposts: ActivityUpdateFoodsharepoint
-    fsp_id: { type: Number, default: null },
-
     // Individual update-type properties for forum posts: ActivityUpdateForum
     forum_thread: { type: Number, default: null },
     forum_post: { type: Number, default: null },
@@ -137,7 +134,7 @@ export default {
         case 'event':
           return url('event', this.entity_id)
         case 'foodsharepoint':
-          return url('foodsharepoint', this.region_id, this.fsp_id)
+          return url('foodsharepoint', this.region_id, this.entity_id)
         case 'friendWall':
           return url('profile', this.fs_id)
         case 'forum':

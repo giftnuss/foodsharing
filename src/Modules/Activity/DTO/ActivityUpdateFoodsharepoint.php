@@ -4,23 +4,21 @@ namespace Foodsharing\Modules\Activity\DTO;
 
 class ActivityUpdateFoodsharepoint
 {
-	public string $type = 'foodsharepoint';
 	public string $time; // public DateTime $time;
 	public int $time_ts; // Legacy timestamp (still used for comparison)
 
+	public string $type = 'foodsharepoint';
 	public string $desc;
+	public string $title;
+
+	public string $icon;
+	public string $source;
+	public ?array $gallery;
 
 	public int $fs_id;
 	public string $fs_name;
 	public int $region_id;
-	public string $icon;
-
-	public string $source;
-	public string $title;
-	public ?array $gallery;
-
-	// Individual update-type properties
-	public int $fsp_id;
+	public int $entity_id;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -41,17 +39,16 @@ class ActivityUpdateFoodsharepoint
 		$u->time_ts = $time_ts;
 
 		$u->desc = $desc;
+		$u->title = $fsp_name;
+
+		$u->icon = $icon;
+		$u->source = $source;
+		$u->gallery = $gallery ?? [];
 
 		$u->fs_id = $fs_id;
 		$u->fs_name = $fs_name;
 		$u->region_id = $region_id;
-		$u->icon = $icon;
-
-		$u->source = $source;
-		$u->title = $fsp_name;
-		$u->gallery = $gallery ?? [];
-
-		$u->fsp_id = $fsp_id;
+		$u->entity_id = $fsp_id;
 
 		return $u;
 	}
