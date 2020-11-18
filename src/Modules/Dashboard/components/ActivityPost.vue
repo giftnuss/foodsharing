@@ -99,15 +99,13 @@ export default {
     icon: { type: String, default: '' },
     title: { type: String, default: '' },
     source: { type: String, default: '' },
+    source_suffix: { type: String, default: '' },
     gallery: { type: Array, default: () => { return [] } },
     quickreply: { type: String, default: '' },
 
     fs_id: { type: Number, default: null },
     fs_name: { type: String, default: '' },
     region_id: { type: Number, default: null },
-
-    // Individual update-type properties for buddy wallposts: ActivityUpdateBuddy
-    is_own: { type: String, default: '' },
 
     // Individual update-type properties for events: ActivityUpdateEvent
     event_id: { type: Number, default: null },
@@ -119,7 +117,6 @@ export default {
     forum_thread: { type: Number, default: null },
     forum_post: { type: Number, default: null },
     forum_type: { type: String, default: '' },
-    is_bot: { type: String, default: '' },
 
     // Individual update-type properties for mailboxes: ActivityUpdateMailbox
     mailbox_id: { type: Number, default: null },
@@ -168,7 +165,7 @@ export default {
       }
     },
     translationKey () {
-      return 'dashboard.source_' + this.type + (this.is_own || this.is_bot || '')
+      return 'dashboard.source_' + this.type + this.source_suffix
     },
     when () {
       return dateFnsParseISO(this.time)

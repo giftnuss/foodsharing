@@ -15,15 +15,15 @@ class ActivityUpdateForum
 	public string $fs_name;
 	public string $icon;
 
-	public string $source;
 	public string $title;
+	public string $source;
+	public string $source_suffix;
 	public int $region_id;
 
 	// Individual update-type properties
 	public int $forum_thread;
 	public int $forum_post;
 	public string $forum_type;
-	public ?string $is_bot;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -53,14 +53,14 @@ class ActivityUpdateForum
 		$u->fs_name = $fs_name;
 		$u->icon = $icon;
 
-		$u->source = $source;
 		$u->title = $forum_name;
+		$u->source = $source;
+		$u->source_suffix = $is_bot ? '_bot' : '';
 		$u->region_id = $region_id;
 
 		$u->forum_thread = $forum_thread;
 		$u->forum_post = $forum_post;
 		$u->forum_type = $forum_type;
-		$u->is_bot = $is_bot ? '_bot' : null;
 
 		return $u;
 	}

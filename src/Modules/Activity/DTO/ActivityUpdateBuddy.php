@@ -15,10 +15,8 @@ class ActivityUpdateBuddy
 	public string $icon;
 
 	public string $source;
+	public string $source_suffix;
 	public ?array $gallery;
-
-	// Individual update-type properties
-	public ?string $is_own;
 
 	public static function create(
 		string $time, // DateTime $time,
@@ -42,9 +40,8 @@ class ActivityUpdateBuddy
 		$u->icon = $icon;
 
 		$u->source = $fs_name;
+		$u->source_suffix = $is_own ? '_own' : '';
 		$u->gallery = $gallery ?? [];
-
-		$u->is_own = $is_own ? '_own' : null;
 
 		return $u;
 	}
