@@ -1,52 +1,42 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <li class="activity-item">
+    <span class="i">
+      <a v-if="fs_id" :href="$url('profile', fs_id)">
+        <img :src="icon" width="50">
+      </a>
+      <a v-else>
+        <img :src="icon" width="50">
+      </a>
+    </span>
     <span class="n mb-2">
-      <a
-        v-if="fs_id"
-        :href="$url('profile', fs_id)"
-      >
+      <a v-if="fs_id" :href="$url('profile', fs_id)">
         {{ fs_name }}
       </a>
-      <a
-        v-if="sender_email"
-        :href="'/?page=mailbox&show=' + mailbox_id"
-      >
+      <a v-if="sender_email" :href="dashboardContentLink">
         {{ sender_email }}
       </a>
-      <i
-        v-if="type != 'friendWall'"
-        class="fas fa-fw fa-angle-right"
-      />
-      <a
-        v-if="type == 'forum'"
-        :href="dashboardContentLink"
-      >
-        {{ forum_name }}
+
+      <i v-if="type != 'friendWall'" class="fas fa-angle-right" />
+
+      <a :href="dashboardContentLink">
+        <span v-if="type == 'forum'">
+          {{ forum_name }}
+        </span>
+        <span v-else-if="type == 'foodsharepoint'">
+          {{ fsp_name }}
+        </span>
+        <span v-else-if="type == 'event'">
+          {{ $i18n('dashboard.event_title', {title: event_name}) }}
+        </span>
+        <span v-else-if="type == 'mailbox'">
+          {{ subject }}
+        </span>
+        <span v-else-if="type == 'store'">
+          {{ store_name }}
+        </span>
       </a>
-      <a
-        v-else-if="type == 'foodsharepoint'"
-        :href="dashboardContentLink"
-      >
-        {{ fsp_name }}
-      </a>
-      <a
-        v-else-if="type == 'event'"
-        :href="dashboardContentLink"
-      >
-        {{ $i18n('dashboard.event_title', {title: event_name}) }}
-      </a>
-      <a
-        v-else-if="type == 'mailbox'"
-        :href="'/?page=mailbox&show=' + mailbox_id"
-      >
-        {{ subject }}
-      </a>
-      <a
-        v-else-if="type == 'store'"
-        :href="'/?page=fsbetrieb&id=' + store_id"
-      >
-        {{ store_name }}
-      </a>
+
       <small v-if="source_name">
         {{ source_name }}
       </small>
@@ -200,6 +190,10 @@ export default {
           return url('profile', this.fs_id)
         case 'forum':
           return url('forum', this.region_id, (this.forum_type === 'botforum'), this.forum_thread, this.forum_post)
+        case 'mailbox':
+          return url('mailbox', this.mailbox_id)
+        case 'store':
+          return url('store', this.store_id)
         default:
           return '#'
       }

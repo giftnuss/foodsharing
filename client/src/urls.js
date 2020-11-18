@@ -51,7 +51,7 @@ const urls = {
   legal_agreement: () => 'https://wiki.foodsharing.de/Rechtsvereinbarung',
   login: () => '/?page=login',
   logout: () => '/?page=logout',
-  mailbox: () => '/?page=mailbox',
+  mailbox: (mailboxId = null) => `/?page=mailbox${mailboxId ? `&show=${mailboxId}` : ''}`,
   mailboxManage: () => '/?page=mailbox&a=manage',
   map: () => '/karte',
   members: (regionId) => `/?page=bezirk&bid=${regionId}&sub=members`,
