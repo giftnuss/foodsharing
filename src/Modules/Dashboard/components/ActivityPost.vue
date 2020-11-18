@@ -110,7 +110,6 @@ export default {
     entity_id: { type: Number, default: null },
 
     // Individual update-type properties for forum posts: ActivityUpdateForum
-    forum_thread: { type: Number, default: null },
     forum_post: { type: Number, default: null },
     forum_type: { type: String, default: '' },
 
@@ -137,7 +136,7 @@ export default {
         case 'friendWall':
           return url('profile', this.fs_id)
         case 'forum':
-          return url('forum', this.region_id, (this.forum_type === 'botforum'), this.forum_thread, this.forum_post)
+          return url('forum', this.region_id, (this.forum_type === 'botforum'), this.entity_id, this.forum_post)
         case 'mailbox':
           return url('mailbox', this.entity_id)
         case 'store':

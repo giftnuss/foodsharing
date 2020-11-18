@@ -5,12 +5,8 @@ namespace Foodsharing\Modules\Activity;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Activity\DTO\ActivityFilter;
 use Foodsharing\Modules\Activity\DTO\ActivityFilterCategory;
-use Foodsharing\Modules\Activity\DTO\ActivityUpdateBuddy as BuddyUpdate;
-use Foodsharing\Modules\Activity\DTO\ActivityUpdateEvent as EventUpdate;
-use Foodsharing\Modules\Activity\DTO\ActivityUpdateFoodsharepoint as FspUpdate;
-use Foodsharing\Modules\Activity\DTO\ActivityUpdateForum as ForumUpdate;
+use Foodsharing\Modules\Activity\DTO\ActivityUpdate;
 use Foodsharing\Modules\Activity\DTO\ActivityUpdateMailbox as MailboxUpdate;
-use Foodsharing\Modules\Activity\DTO\ActivityUpdateStore as StoreUpdate;
 use Foodsharing\Modules\Activity\DTO\ImageActivityFilter;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -165,18 +161,20 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$replyUrl = '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id'];
 
-			$out[] = EventUpdate::create(
-				$u['time'], // TODO DateTime
+			$out[] = ActivityUpdate::create(
+				'event',
+				$u['time'],
 				$u['time_ts'],
+				$u['name'],
 				$u['body'] ?? '',
+				$u['event_region'],
+				'',
+				$this->imageHelper->img($u['fs_photo'], 50),
+				$u['gallery'] ?? [],
 				$replyUrl,
 				$u['fs_id'],
 				$u['fs_name'],
-				$this->imageHelper->img($u['fs_photo'], 50),
-				$u['event_region'],
-				$u['gallery'] ?? [],
-				$u['event_id'],
-				$u['name']
+				$u['event_id']
 			);
 		}
 
@@ -189,18 +187,21 @@ class ActivityTransactions
 		$out = [];
 
 		foreach ($updates as $u) {
-			$out[] = FspUpdate::create(
-				$u['time'], // TODO DateTime
+			$out[] = ActivityUpdate::create(
+				'foodsharepoint',
+				$u['time'],
 				$u['time_ts'],
+				$u['name'],
 				$u['body'] ?? '',
+				$u['fsp_location'],
+				'',
+				$this->imageHelper->img($u['fs_photo'], 50),
+				$u['gallery'] ?? [],
+				null,
 				$u['fs_id'],
 				$u['fs_name'],
-				$u['region_id'],
-				$this->imageHelper->img($u['fs_photo'], 50),
-				$u['fsp_location'],
-				$u['gallery'] ?? [],
 				$u['fsp_id'],
-				$u['name']
+				$u['region_id']
 			);
 		}
 
@@ -233,15 +234,20 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$is_own = $u['fs_id'] === $this->session->id();
 
-			$out[] = BuddyUpdate::create(
-				$u['time'], // TODO DateTime
+			$out[] = ActivityUpdate::create(
+				'friendWall',
+				$u['time'],
 				$u['time_ts'],
+				'',
 				$u['body'] ?? '',
-				$u['fs_id'],
 				$u['fs_name'],
+				$is_own ? '_own' : '',
 				$this->imageHelper->img($u['fs_photo'], 50),
 				$u['gallery'] ?? [],
-				$is_own
+				null,
+				$u['fs_id'],
+				$u['fs_name'],
+				$u['fs_id']
 			);
 		}
 
@@ -336,24 +342,24 @@ class ActivityTransactions
 				. '&pid=' . (int)$u['last_post_id']
 				. '&sub=' . $forumTypeString;
 
-			$out[] = [
-				'data' => ForumUpdate::create(
-					$u['update_time'], // TODO DateTime
-					$u['update_time_ts'],
-					$u['post_body'] ?? '',
-					$replyUrl,
-					(int)$u['foodsaver_id'],
-					$u['foodsaver_name'],
-					$this->imageHelper->img($u['foodsaver_photo'], 50),
-					$u['bezirk_name'],
-					(int)$u['bezirk_id'],
-					(int)$u['id'],
-					(int)$u['last_post_id'],
-					$u['name'],
-					$forumTypeString,
-					$is_bot
-				),
-			];
+			$out[] = ActivityUpdate::create(
+				'forum',
+				$u['update_time'],
+				$u['update_time_ts'],
+				$u['name'],
+				$u['post_body'] ?? '',
+				$u['bezirk_name'],
+				$is_bot ? '_bot' : '',
+				$this->imageHelper->img($u['foodsaver_photo'], 50),
+				[],
+				$replyUrl,
+				(int)$u['foodsaver_id'],
+				$u['foodsaver_name'],
+				(int)$u['id'],
+				(int)$u['bezirk_id'],
+				(int)$u['last_post_id'],
+				$forumTypeString
+			);
 		}
 
 		return $out;
@@ -368,16 +374,20 @@ class ActivityTransactions
 
 		$out = [];
 		foreach ($updates as $u) {
-			$out[] = StoreUpdate::create(
-				$u['update_time'], // TODO DateTime
+			$out[] = ActivityUpdate::create(
+				'store',
+				$u['update_time'],
 				$u['update_time_ts'],
+				$u['betrieb_name'],
 				$u['text'] ?? '',
+				$u['region_name'],
+				'',
+				$this->imageHelper->img($u['foodsaver_photo'], 50),
+				null,
+				null,
 				$u['foodsaver_id'],
 				$u['foodsaver_name'],
-				$this->imageHelper->img($u['foodsaver_photo'], 50),
-				$u['region_name'],
-				$u['betrieb_id'],
-				$u['betrieb_name']
+				$u['betrieb_id']
 			);
 		}
 
