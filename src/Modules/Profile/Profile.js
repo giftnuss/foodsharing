@@ -8,6 +8,7 @@ import { sendBuddyRequest } from '@/api/buddy'
 import { pulseError, pulseInfo, profile } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
+import BananaList from './components/BananaList'
 import PublicProfile from './components/PublicProfile'
 import PickupHistory from '../StoreUser/components/PickupHistory'
 
@@ -38,9 +39,11 @@ async function trySendBuddyRequest (userId) {
 }
 
 vueRegister({
+  BananaList,
   PickupHistory,
   PublicProfile,
 })
 
-vueApply('#profile-public', true)
-vueApply('#vue-pickup-history', true)
+vueApply('#vue-profile-bananalist', true) // BananaList
+vueApply('#vue-pickup-history', true) // PickupHistory
+vueApply('#profile-public', true) // PublicProfile

@@ -1381,7 +1381,7 @@ profile:
   mailBounceWarning_3: wird diese Sperre wieder entfernt.
   banana:
     title: '{count} Vertrauensbananen'
-    by: ' von '
+    by: '{date} von {name}'
     give: Schenke {name} eine Banane
     details: |
       Hier kannst du etwas dazu schreiben, warum du {name} gerne eine Banane schenken möchtest.

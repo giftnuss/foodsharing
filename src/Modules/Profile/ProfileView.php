@@ -576,12 +576,11 @@ class ProfileView extends View
 				<div class="popbox bootstrap">
 					<h3>' . $this->translator->trans('profile.banana.title', [
 						'{count}' => str_replace('&nbsp;', '', $bananaCount),
-					]) . '</h3>' . $giveBanana . '
-					<table class="pintable">
-						<tbody>
-							' . $this->renderBananasTable($this->foodsaver['bananen']) . '
-						</tbody>
-					</table>
+					]) . '</h3>'
+					. $giveBanana
+					. $this->vueComponent('vue-profile-bananalist', 'BananaList', [
+						'bananas' => $this->foodsaver['bananen'],
+					]) . '
 				</div>
 			</div>
 		');
@@ -592,36 +591,6 @@ class ProfileView extends View
 				<span class="name">&nbsp;</span>
 			</a>
 		';
-	}
-
-	private function renderBananasTable(array $bananasFrom): string
-	{
-		$out = '';
-
-		foreach ($bananasFrom as $foodsaver) {
-			$fsName = $foodsaver['name'];
-			$when = $this->timeHelper->niceDate($foodsaver['time_ts']);
-			$photo = $this->imageService->img($foodsaver['photo'], '50');
-			$text = nl2br(strip_tags($foodsaver['msg']));
-			$out .= '
-			<tr class="border-top">
-				<td>
-					<a title="' . $fsName . '" href="/profile/' . $foodsaver['id'] . '">
-						<img src="' . $photo . '">
-					</a>
-				</td>
-				<td>
-					<span class="msg">' . $text . '</span>
-					<div class="foot">
-						<span class="time">' . $when . $this->translator->trans('profile.banana.by') . $fsName . '</span>
-
-					</div>
-				</td>
-			</tr>
-			';
-		}
-
-		return $out;
 	}
 
 	private function renderInformation(): string

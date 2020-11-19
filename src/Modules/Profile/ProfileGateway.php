@@ -187,16 +187,21 @@ final class ProfileGateway extends BaseGateway
 							fs.name,
 							fs.photo,
 							r.`msg`,
-							r.`time`,
-							UNIX_TIMESTAMP(r.`time`) AS time_ts
+							r.`time`
 					FROM 	`fs_foodsaver` fs,
 							 `fs_rating` r
 					WHERE 	r.rater_id = fs.id
 					AND 	r.foodsaver_id = :fs_id
 					ORDER BY time DESC
 			';
-		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
-		$bananaCountNew = count($data['bananen']);
+
+		$bananaList = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
+		foreach ($bananaList as &$banana) {
+			$banana['createdAt'] = str_replace(' ', 'T', $banana['time']);
+		}
+
+		$data['bananen'] = $bananaList;
+		$bananaCountNew = count($bananaList);
 
 		if ($data['stat_bananacount'] != $bananaCountNew) {
 			$this->db->update('fs_foodsaver', ['stat_bananacount' => $bananaCountNew], ['id' => $fsId]);
