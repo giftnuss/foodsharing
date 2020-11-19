@@ -1710,17 +1710,34 @@ menu:
     friendcircle: Freundeskreis
 
 footer:
+  call_to_action: Mitmachen
+  about_us: Über uns
   team: Team
   imprint: Impressum
   dataprivacy: Datenschutz
-  support: Hilfe & Support
   guide: Hygiene-Ratgeber
-  infosCompany: Unternehmen
+  infosCompany: Für Unternehmen
+  infosPrivatePersons: Für Privatpersonen
   partner: Partner
+  our_partner: Unsere Partner
+  contact: Kontakt
+  press: Presse
+  wiki: Wiki
+  blog: Blog
   statistics: Statistik
+  hosting_info: CO2-neutral gehostet auf
+  hosting_tooltip: CO2-neutral gehostet auf manitu.
   donate: Unterstützen
-  thanksHoster: Vielen Dank an unseren Öko-Hoster
   version: "Version: {version}"
+  call_to_donate: |
+    Du möchtest foodsharing
+    unterstützen?
+  donate_now: Jetzt spenden
+  it_slogan: Made with
+  it_slogan_from: by foodsharing IT
+  wiener_tafel_alt_text: Wiener Tafel
+  lebensministerium_alt_text: Lebensministerium
+  denns_at_alt_text: 'Denns´s Bio-Markt'
 
 storestatus:
   0: Status unklar

@@ -8,11 +8,17 @@
   --fs-green-rgb: 100, 174,  36;
   --fs-beige-rgb: 241, 231, 201;
   --fs-white-rgb: 249, 245, 224;
+  --fs-black-rgb: 51, 51, 51;
+  --fs-dark-grey-rgb: 85, 85, 85;
+  --fs-light-grey-rgb: 156, 156, 156;
 
   --fs-brown: rgb(var(--fs-brown-rgb)); /* #533a20 */
   --fs-green: rgb(var(--fs-green-rgb)); /* #64ae24 */
   --fs-beige: rgb(var(--fs-beige-rgb)); /* #f1e7c9 */
   --fs-white: rgb(var(--fs-white-rgb)); /* #f9f5e0 */
+  --fs-dark-grey: rgb(var(--fs-dark-grey-rgb)); /* #9C9C9C */
+  --fs-black: rgb(var(--fs-black-rgb)); /*#333333 */
+  --fs-light-grey: rgb(var(--fs-light-grey-rgb)); /* #555555 */
 }
 
 .avatar,

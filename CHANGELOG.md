@@ -20,6 +20,7 @@
 - Ambassadors can access management for workgroups in "their" region from topbar #965 !1742 @ChrisOelmueller
 - Send chat notifications by mail, only if last login is less than 6 months away !1623 @chriswalg
 - Replaced in topbar donation page to twingle pages !1773 @chriswalg
+- Complete redesign of the footer !1769 @chriswalg
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg

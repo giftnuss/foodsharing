@@ -83,6 +83,11 @@ const urls = {
   donations: () => 'https://spenden.foodsharing.de',
   circle_of_friends: () => 'https://spenden.foodsharing.de/freundeskreis',
   selfservice: () => 'https://spenden.foodsharing.de/selfservice',
+  devdocs: () => 'https://devdocs.foodsharing.network',
+  hoster: () => 'https://manitu.de',
+  wiener_tafel: () => 'https://www.wienertafel.at',
+  bmlfuw: () => 'https://www.bmlrt.gv.at',
+  denns: () => 'https://www.denns-biomarkt.at',
 }
 
 const url = (key, ...params) => {
