@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable vue/max-attributes-per-line -->
-  <div class="banana-container d-flex my-1 py-1">
+  <div class="banana-container d-flex my-1 py-2">
     <a
       v-b-tooltip.hover="$i18n('profile.go')"
       :href="$url('profile', authorId)"
@@ -8,7 +8,7 @@
       <Avatar
         :url="avatar"
         :size="50"
-        class="member-pic mt-4 pr-1 pt-2"
+        class="member-pic mt-1 pr-2 pt-1"
         :auto-scale="false"
       />
     </a>
@@ -21,7 +21,7 @@
         {{ $dateFormat(when, 'full-long') }}
       </div>
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-      <div class="msg p-1">{{ text }}</div>
+      <div class="msg ml-1 p-1 pl-2">{{ text }}</div>
     </div>
   </div>
 </template>
@@ -59,6 +59,7 @@ export default {
 
   .msg {
     white-space: pre-line;
+    border-left: 3px solid var(--border);
   }
 
   .time a {

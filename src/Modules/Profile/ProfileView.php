@@ -522,48 +522,6 @@ class ProfileView extends View
 			return '';
 		}
 
-		$bananaCount = count($this->foodsaver['bananen']);
-		if ($bananaCount === 0) {
-			$bananaCount = '&nbsp;';
-		}
-
-		$buttonClass = ' bouched';
-		$giveBanana = '';
-
-		if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
-			$buttonClass = '';
-			$giveBanana = '
-		<div class="mb-2">
-			<a class="btn btn-secondary btn-sm" href="#" onclick="
-				$(this).hide().next().removeClass(\'d-none\');
-				$(\'#bouch-ta\').autosize();
-				$.fancybox.update();
-				return false;"
-			>
-				' . $this->translator->trans('profile.banana.give', ['{name}' => $this->foodsaver['name']]) . '
-			</a>
-			<div class="d-none">
-				<div class="info">
-					' . $this->translator->trans('profile.banana.details', ['{name}' => $this->foodsaver['name']]) . '
-					<br>
-					<strong>' . $this->translator->trans('profile.banana.undo') . '</strong>
-					<br>
-					' . $this->translator->trans('profile.banana.vouch') . '
-				</div>
-				<div class="d-flex">
-					<textarea id="bouch-ta" class="textarea mr-2" placeholder="' . $this->translator->trans('profile.banana.placeholder') . '"></textarea>
-					<a href="#" class="btn btn-sm btn-secondary float-right d-inline-flex" onclick="
-						trySendBanana(' . (int)$this->foodsaver['id'] . ');
-						return false;"
-					>
-						<img src="/img/banana.png" class="align-self-center" />
-					</a>
-				</div>
-			</div>
-		</div>
-		';
-		}
-
 		$this->pageHelper->addJs('
 			$(".stat_bananacount").fancybox({
 				closeClick: false,
@@ -571,19 +529,19 @@ class ProfileView extends View
 			});
 		');
 
-		$this->pageHelper->addHidden('
-			<div id="bananas">
-				<div class="popbox bootstrap">
-					<h3>' . $this->translator->trans('profile.banana.title', [
-						'{count}' => str_replace('&nbsp;', '', $bananaCount),
-					]) . '</h3>'
-					. $giveBanana
-					. $this->vueComponent('vue-profile-bananalist', 'BananaList', [
-						'bananas' => $this->foodsaver['bananen'],
-					]) . '
-				</div>
-			</div>
-		');
+		$canGiveBanana = (!$this->foodsaver['bouched']) && ($this->foodsaver['id'] != $this->session->id());
+
+		$this->pageHelper->addHidden(
+			$this->vueComponent('vue-profile-bananalist', 'BananaList', [
+				'recipientId' => intval($this->foodsaver['id']),
+				'recipientName' => $this->foodsaver['name'],
+				'canGiveBanana' => $canGiveBanana,
+				'bananas' => $this->foodsaver['bananen'],
+			])
+		);
+
+		$buttonClass = $canGiveBanana ? '' : ' bouched';
+		$bananaCount = count($this->foodsaver['bananen']) ?: '&nbsp;';
 
 		return '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $buttonClass . '">

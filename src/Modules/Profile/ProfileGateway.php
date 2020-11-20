@@ -238,15 +238,14 @@ final class ProfileGateway extends BaseGateway
 			throw new \UnexpectedValueException('Must be logged in to give banana.');
 		}
 
-		return $this->db->insert(
-			'fs_rating',
-			[
-				'foodsaver_id' => $fsId,
-				'rater_id' => $sessionId,
-				'msg' => $message,
-				'time' => $this->db->now(),
-			]
-		);
+		$bananaId = $this->db->insert('fs_rating', [
+			'foodsaver_id' => $fsId,
+			'rater_id' => $sessionId,
+			'msg' => $message,
+			'time' => $this->db->now(),
+		]);
+
+		return $bananaId;
 	}
 
 	/**

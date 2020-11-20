@@ -3,30 +3,15 @@ import '@/globals'
 import './Profile.css'
 import $ from 'jquery'
 import { expose } from '@/utils'
-import { sendBanana } from '@/api/user'
 import { sendBuddyRequest } from '@/api/buddy'
-import { pulseError, pulseInfo, profile } from '@/script'
+import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
 import BananaList from './components/BananaList'
 import PublicProfile from './components/PublicProfile'
 import PickupHistory from '../StoreUser/components/PickupHistory'
 
-expose({ trySendBanana, trySendBuddyRequest })
-
-async function trySendBanana (id) {
-  try {
-    await sendBanana(id, $('#bouch-ta').val().trim())
-    pulseInfo(i18n('profile.banana.sent'))
-    profile(id)
-  } catch (err) {
-    if (err.code === 400) {
-      pulseError(i18n('profile.banana.messageTooShort'))
-    } else {
-      pulseError(i18n('error_unexpected'))
-    }
-  }
-}
+expose({ trySendBuddyRequest })
 
 async function trySendBuddyRequest (userId) {
   try {
