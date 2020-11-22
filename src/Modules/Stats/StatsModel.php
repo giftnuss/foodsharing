@@ -205,20 +205,16 @@ class StatsModel extends Db
 	public function getBotCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = [];
-		if ($foodsaver = $this->q('
-			SELECT 	amb.foodsaver_id AS id
-			FROM 	fs_botschafter amb JOIN fs_bezirk region ON amb.bezirk_id = region.id
+
+		return $this->qOne('
+			SELECT 	COUNT(DISTINCT amb.foodsaver_id)
+
+			FROM 	fs_botschafter amb
+			JOIN	fs_bezirk region  ON  amb.bezirk_id = region.id
+
 			WHERE 	amb.bezirk_id IN(' . implode(',', $child_ids) . ')
 			AND NOT	region.type = ' . Type::WORKING_GROUP . '
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				$out[$fs['id']] = true;
-			}
-		}
-
-		return count($out);
+		');
 	}
 
 	public function getFsCount($region_id, $child_ids)
