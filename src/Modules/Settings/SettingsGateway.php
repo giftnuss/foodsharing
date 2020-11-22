@@ -140,7 +140,7 @@ class SettingsGateway extends BaseGateway
 
 	public function saveApiToken(int $fsId, string $token): void
 	{
-		$this->db->insert(
+		$this->db->insertOrUpdate(
 			'fs_apitoken',
 			[
 				'foodsaver_id' => $fsId,
@@ -188,5 +188,13 @@ class SettingsGateway extends BaseGateway
 		} catch (Exception $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Deletes the user's token for the iCal API.
+	 */
+	public function removeApiToken(int $userId): void
+	{
+		$this->db->delete('fs_apitoken', ['foodsaver_id' => $userId]);
 	}
 }

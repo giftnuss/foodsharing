@@ -25,6 +25,8 @@ class CalendarRestController extends AbstractFOSRestController
 	private ProfileGateway $profileGateway;
 	private Factory $icalFactory;
 
+	private const TOKEN_LENGTH_IN_BYTES = 10;
+
 	public function __construct(
 		Session $session,
 		SettingsGateway $settingsGateway,
@@ -35,6 +37,76 @@ class CalendarRestController extends AbstractFOSRestController
 		$this->profileGateway = $profileGateway;
 
 		$this->icalFactory = new Factory();
+	}
+
+	/**
+	 * Returns the user's current access token.
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="404", description="User does not have a token")
+	 * @OA\Tag(name="calendar")
+	 *
+	 * @Rest\Get("calendar/token")
+	 */
+	public function getTokenAction(): Response
+	{
+		$userId = $this->session->id();
+		if (!$userId) {
+			throw new HttpException(401);
+		}
+
+		$token = $this->settingsGateway->getApiToken($userId);
+		if (empty($token)) {
+			throw new HttpException(404);
+		}
+
+		return $this->handleView($this->view(['token' => $token]));
+	}
+
+	/**
+	 * Creates a new random access token for the user. An existing token will be overwritten. Returns
+	 * the created token.
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Tag(name="calendar")
+	 *
+	 * @Rest\Put("calendar/token")
+	 */
+	public function createTokenAction(): Response
+	{
+		$userId = $this->session->id();
+		if (!$userId) {
+			throw new HttpException(401);
+		}
+
+		$token = bin2hex(openssl_random_pseudo_bytes(self::TOKEN_LENGTH_IN_BYTES));
+		$this->settingsGateway->removeApiToken($userId);
+		$this->settingsGateway->saveApiToken($userId, $token);
+
+		return $this->handleView($this->view(['token' => $token]));
+	}
+
+	/**
+	 * Removes the user's token. If the user does not have a token nothing will happen.
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Tag(name="calendar")
+	 *
+	 * @Rest\Delete("calendar/token")
+	 */
+	public function deleteTokenAction(): Response
+	{
+		$userId = $this->session->id();
+		if (!$userId) {
+			throw new HttpException(401);
+		}
+
+		$this->settingsGateway->removeApiToken($userId);
+
+		return $this->handleView($this->view());
 	}
 
 	/**
@@ -52,7 +124,7 @@ class CalendarRestController extends AbstractFOSRestController
 	{
 		$userId = $this->session->id();
 		if (!$userId) {
-			throw new HttpException(403);
+			throw new HttpException(401);
 		}
 
 		// check access token
