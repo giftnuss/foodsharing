@@ -10,7 +10,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 	$protocol = 'https';
 }
 
-$base_domain = '://localhost:18080';
+$host = 'localhost:18080';
 
 define('PROTOCOL', $protocol);
 define('DB_HOST', 'db');
@@ -18,8 +18,8 @@ define('DB_USER', 'root');
 define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
 define('ERROR_REPORT', E_ALL);
-define('BASE_URL', $protocol . $base_domain);
-define('WEBCAL_URL', 'webcal' . $base_domain);
+define('BASE_URL', $protocol . '://' . $host);
+define('WEBCAL_URL', 'webcal://' . $host);
 
 define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 
