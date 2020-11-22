@@ -224,19 +224,12 @@ class StatsModel extends Db
 	public function getFsCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = [];
-		if ($foodsaver = $this->q('
-			SELECT 	fb.foodsaver_id AS id
+
+		return $this->qOne('
+			SELECT 	COUNT(DISTINCT fb.foodsaver_id)
 			FROM 	fs_foodsaver_has_bezirk fb
 			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				$out[$fs['id']] = true;
-			}
-		}
-
-		return count($out);
+		');
 	}
 
 	public function getFetchWeight($region_id, $last_update, $child_ids)
