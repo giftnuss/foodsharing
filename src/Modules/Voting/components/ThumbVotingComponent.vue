@@ -13,6 +13,7 @@
             v-model="selected[i]"
             value="-1"
             button
+            button-variant="outline-secondary"
           >
             <i class="fas fa-thumbs-down" />
           </b-form-radio>
@@ -20,6 +21,7 @@
             v-model="selected[i]"
             value="0"
             button
+            button-variant="outline-secondary"
           >
             <i class="fas fa-meh" />
           </b-form-radio>
@@ -27,6 +29,7 @@
             v-model="selected[i]"
             value="1"
             button
+            button-variant="outline-secondary"
           >
             <i class="fas fa-thumbs-up" />
           </b-form-radio>
