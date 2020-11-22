@@ -29,6 +29,7 @@
       />
 
       <b-alert
+        v-if="mayVote"
         show
         variant="warning"
         class="mt-5"

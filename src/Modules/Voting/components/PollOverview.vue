@@ -5,9 +5,7 @@
         {{ poll.name }}
       </div>
       <div class="card-body">
-        <Markdown :source="poll.description" />
-        <hr>
-        <div class="mt-4">
+        <div>
           <b>{{ $i18n('poll.time_period') }}:</b> {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
           <span v-if="isPollInPast">
             ({{ $i18n('poll.in_past') }})
@@ -30,20 +28,38 @@
           v-if="userVoteDate !== null"
           class="my-1 mt-3"
         >
-          {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
+          <b-alert
+            show
+            variant="info"
+          >
+            {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
+          </b-alert>
         </div>
         <div
           v-else-if="isPollInFuture"
           class="my-1 mt-3"
         >
-          {{ $i18n('poll.may_not_yet_vote') }}
+          <b-alert
+            show
+            variant="info"
+          >
+            {{ $i18n('poll.may_not_yet_vote') }}
+          </b-alert>
         </div>
         <div
           v-else-if="!mayVote && !isPollInPast"
           class="mt-3"
         >
-          {{ $i18n('poll.may_not_vote') }}
+          <b-alert
+            show
+            variant="info"
+          >
+            {{ $i18n('poll.may_not_vote') }}
+          </b-alert>
         </div>
+
+        <hr>
+        <Markdown :source="poll.description" />
 
         <VoteForm
           v-if="!isPollInPast"
@@ -70,9 +86,10 @@ import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
+import { BAlert } from 'bootstrap-vue'
 
 export default {
-  components: { ResultsTable, VoteForm, Markdown },
+  components: { ResultsTable, VoteForm, Markdown, BAlert },
   props: {
     poll: {
       type: Object,
