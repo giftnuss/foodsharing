@@ -177,4 +177,16 @@ class SettingsGateway extends BaseGateway
 			'option_value' => $value,
 		]);
 	}
+
+	/**
+	 * Returns the user's token for the iCal API, or null if the user does not have a token.
+	 */
+	public function getApiToken(int $userId): ?string
+	{
+		try {
+			return $this->db->fetchValueByCriteria('fs_apitoken', 'token', ['foodsaver_id' => $userId]);
+		} catch (Exception $e) {
+			return null;
+		}
+	}
 }
