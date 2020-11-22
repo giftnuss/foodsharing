@@ -80,6 +80,7 @@ class SettingsControl extends Control
 			['name' => $this->translator->trans('settings.header'), 'href' => '/?page=settings&sub=general'],
 			['name' => $this->translator->trans('settings.notifications'), 'href' => '/?page=settings&sub=info'],
 			['name' => $this->translator->trans('settings.businesscard'), 'href' => '/?page=bcard'],
+			['name' => $this->translator->trans('settings.calendar.menu'), 'href' => '/?page=settings&sub=calendar'],
 		];
 
 		$this->pageHelper->addContent($this->view->menu($menu, [

@@ -1401,7 +1401,7 @@ settings:
     done: "Deine E-Mail-Adresse wurde geändert!"
   saved: "Änderungen wurden gespeichert."
   calendar:
-    menu: "Kalendar"
+    menu: "Kalender"
     title: "Dein Abholkalender"
     teaser: |
       Du kannst deinen Abholkalender mit einem Kalenderprogramm deiner Wahl ansehen.
