@@ -207,7 +207,7 @@ class ForumRestController extends AbstractFOSRestController
 		if (!$this->session->id()) {
 			throw new HttpException(401);
 		}
-		if ($this->forumPermissions->mayPostToThread($threadId)) {
+		if (!$this->forumPermissions->mayPostToThread($threadId)) {
 			throw new HttpException(403);
 		}
 
@@ -334,7 +334,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
 	 * @OA\Response(response="401", description="Not logged in.")
-	 * @OA\Response(response="401", description="Insufficient permissions")
+	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Delete("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
 	public function unfollowThreadByEmailAction(int $threadId): SymfonyResponse
@@ -380,8 +380,8 @@ class ForumRestController extends AbstractFOSRestController
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
 	 * @OA\Response(response="401", description="Not logged in.")
-	 * @OA\Response(response="404", description="Post does not exist")
 	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="404", description="Post does not exist")
 	 * @Rest\Delete("forum/post/{postId}", requirements={"postId" = "\d+"})
 	 */
 	public function deletePostAction(int $postId): SymfonyResponse
