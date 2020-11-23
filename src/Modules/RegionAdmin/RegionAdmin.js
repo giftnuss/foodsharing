@@ -35,7 +35,11 @@ async function deleteActiveGroup () {
       pulseSuccess(i18n('success'))
       goTo('/?page=region')
     } catch (err) {
-      pulseError(i18n('error_unexpected'))
+      if (err.code === 409) {
+        pulseError(i18n('region.still_contains_elements'))
+      } else {
+        pulseError(i18n('error_unexpected'))
+      }
       throw err
     }
   }

@@ -5,11 +5,13 @@ namespace Foodsharing\RestApi;
 use Foodsharing\Lib\BigBlueButton;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Group\GroupGateway;
+use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -18,19 +20,27 @@ class GroupRestController extends AbstractFOSRestController
 	private GroupGateway $groupGateway;
 	private Session $session;
 	private RegionPermissions $regionPermissions;
+	private GroupTransactions $groupTransactions;
 
 	public function __construct(
 		GroupGateway $groupGateway,
 		Session $session,
-		RegionPermissions $regionPermissions
+		RegionPermissions $regionPermissions,
+		GroupTransactions $groupTransactions
 	) {
 		$this->groupGateway = $groupGateway;
 		$this->session = $session;
 		$this->regionPermissions = $regionPermissions;
+		$this->groupTransactions = $groupTransactions;
 	}
 
 	/**
 	 * Delete a region or a working group.
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="409", description="Group still contains elements")
+	 * @OA\Tag(name="groups")
 	 *
 	 * @Rest\Delete("groups/{groupId}", requirements={"groupId" = "\d+"})
 	 */
@@ -38,6 +48,11 @@ class GroupRestController extends AbstractFOSRestController
 	{
 		if (!$this->regionPermissions->mayAdministrateRegions()) {
 			throw new HttpException(403);
+		}
+
+		// check if the group still contains elements
+		if ($this->groupTransactions->hasSubElements($groupId)) {
+			throw new HttpException(409);
 		}
 
 		$this->groupGateway->deleteGroup($groupId);

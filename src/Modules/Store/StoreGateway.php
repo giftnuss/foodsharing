@@ -842,10 +842,9 @@ class StoreGateway extends BaseGateway
 
 	public function listStoresInRegion(int $regionId, bool $includeSubregions = false): array
 	{
+		$regionIds = [$regionId];
 		if ($includeSubregions) {
-			$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
-		} else {
-			$regionIds = [$regionId];
+			$regionIds = array_merge($regionIds, $this->regionGateway->listIdsForDescendantsAndSelf($regionId));
 		}
 
 		return $this->db->fetchAll('
