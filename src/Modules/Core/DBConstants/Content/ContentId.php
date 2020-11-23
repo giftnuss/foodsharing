@@ -34,7 +34,6 @@ class ContentId
 	public const QUIZ_POPUP_AMB_PAGE_35 = 35;
 	public const QUIZ_POPUP_AMB_LAST_PAGE_36 = 36;
 
-	public const SUPPORT_FOODSHARING_PAGE_42 = 42;
 	public const PRIVACY_POLICY_CONTENT = 28;
 	public const START_MAIN_AU_PAGE_37 = 37;
 	public const START_MAIN_DE_PAGE_38 = 38;

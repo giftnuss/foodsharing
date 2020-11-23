@@ -80,6 +80,9 @@ const urls = {
   workingGroups: (regionId = null) => regionId ? `/?page=groups&p=${regionId}` : '/?page=groups',
   workshops: () => '/?page=content&sub=workshops',
   urlencode: (url) => encodeURIComponent(`${url}`),
+  donations: () => 'https://spenden.foodsharing.de',
+  circle_of_friends: () => 'https://spenden.foodsharing.de/freundeskreis',
+  selfservice: () => 'https://spenden.foodsharing.de/selfservice',
 }
 
 const url = (key, ...params) => {

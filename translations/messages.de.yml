@@ -1666,7 +1666,6 @@ menu:
     talksandworkshops: Vorträge und Workshops
     fsfestival: foodsharing Festival
     mailbox: E-Mail-Postfach
-    donate: Spenden
     press: Presse
     forcompanies: Für Unternehmen
     imprint: Impressum
@@ -1700,6 +1699,10 @@ menu:
     ids: Ausweise
     joinregion: Einem Bezirk beitreten
     conference: Videokonferenz
+    fundraising: Fundraising
+    donations: Spenden
+    selfservice: Selfservice
+    friendcircle: Freundeskreis
 
 footer:
   team: Team

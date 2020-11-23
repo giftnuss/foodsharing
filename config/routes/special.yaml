@@ -70,10 +70,6 @@ fairteilerrettung:
   path: /fairteilerrettung
   controller: Foodsharing\Entrypoint\IndexController
 
-unterstuetzung:
-  path: /unterstuetzung
-  controller: Foodsharing\Entrypoint\IndexController
-
 impressum:
   path: /impressum
   controller: Foodsharing\Entrypoint\IndexController
