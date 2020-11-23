@@ -148,7 +148,7 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
 
-			$stores = $this->storeModel->listBetriebReq($regionId);
+			$stores = $this->storeGateway->listStoresInRegion($regionId, true);
 
 			$storesMapped = array_map(function ($store) {
 				return [

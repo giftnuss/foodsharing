@@ -98,33 +98,6 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function listBetriebReq($bezirk_id)
-	{
-		return $this->q('
-				SELECT 	fs_betrieb.id,
-						`fs_betrieb`.betrieb_status_id,
-						fs_betrieb.plz,
-						fs_betrieb.added,
-						`stadt`,
-						fs_betrieb.kette_id,
-						fs_betrieb.betrieb_kategorie_id,
-						fs_betrieb.name,
-						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
-						fs_betrieb.str,
-						fs_betrieb.hsnr,
-						CONCAT(fs_betrieb.lat,", ",fs_betrieb.lon) AS geo,
-						fs_betrieb.`betrieb_status_id`,
-						fs_bezirk.name AS bezirk_name
-
-				FROM 	fs_betrieb,
-						fs_bezirk
-
-				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
-				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
-
-		');
-	}
-
 	public function update_betrieb($id, $data)
 	{
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {

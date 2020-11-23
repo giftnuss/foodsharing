@@ -839,4 +839,36 @@ class StoreGateway extends BaseGateway
 			'foodsaver_id' => $userId
 		]);
 	}
+
+	public function listStoresInRegion(int $regionId, bool $includeSubregions = false): array
+	{
+		if ($includeSubregions) {
+			$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+		} else {
+			$regionIds = [$regionId];
+		}
+
+		return $this->db->fetchAll('
+				SELECT 	fs_betrieb.id,
+						`fs_betrieb`.betrieb_status_id,
+						fs_betrieb.plz,
+						fs_betrieb.added,
+						`stadt`,
+						fs_betrieb.kette_id,
+						fs_betrieb.betrieb_kategorie_id,
+						fs_betrieb.name,
+						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
+						fs_betrieb.str,
+						fs_betrieb.hsnr,
+						CONCAT(fs_betrieb.lat,", ",fs_betrieb.lon) AS geo,
+						fs_betrieb.`betrieb_status_id`,
+						fs_bezirk.name AS bezirk_name
+
+				FROM 	fs_betrieb,
+						fs_bezirk
+
+				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
+				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $regionIds) . ')
+		');
+	}
 }
