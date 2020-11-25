@@ -1,3 +1,6 @@
+# 2020-11-25 Hotfix
+- Fix the CSP to make the map work again !1776 @\_fridtjof_
+
 # 2020-10-23 Hotfix
 
 ## Bugfixes
