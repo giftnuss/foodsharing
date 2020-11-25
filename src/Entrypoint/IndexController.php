@@ -83,11 +83,6 @@ class IndexController extends AbstractController
 			unset($_SESSION['client']);
 		}
 
-		global $content_left_width;
-		$content_left_width = 6;
-		global $content_right_width;
-		$content_right_width = 6;
-
 		global $g_template;
 		$g_template = 'default';
 		global $g_data;

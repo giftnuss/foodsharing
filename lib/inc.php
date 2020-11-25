@@ -37,9 +37,6 @@ if (isset($_GET['logout'])) {
 	unset($_SESSION['client']);
 }
 
-$content_left_width = 6;
-$content_right_width = 6;
-
 /* @var DataHelper $dataHelper */
 $dataHelper = $container->get(DataHelper::class);
 

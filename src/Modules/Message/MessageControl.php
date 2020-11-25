@@ -28,7 +28,7 @@ final class MessageControl extends Control
 	public function index(): void
 	{
 		$this->setTemplate('msg');
-		$this->setContentWidth(5, 8);
+		$this->pageHelper->setContentWidth(5, 8);
 
 		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
 		$this->pageHelper->addBread($this->translator->trans('messages.bread'));

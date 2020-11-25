@@ -68,7 +68,7 @@ class MailboxControl extends Control
 
 	public function index()
 	{
-		$this->setContentWidth(8, 16);
+		$this->pageHelper->setContentWidth(8, 16);
 		$this->pageHelper->addBread($this->translator->trans('mailbox.title'));
 
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {

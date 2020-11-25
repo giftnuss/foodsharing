@@ -45,6 +45,6 @@ class StatisticsControl extends Control
 		$this->pageHelper->addContent($this->view->getStatRegions($stat_regions), CNT_LEFT);
 		$this->pageHelper->addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
 
-		$this->setContentWidth(12, 12);
+		$this->pageHelper->setContentWidth(12, 12);
 	}
 }

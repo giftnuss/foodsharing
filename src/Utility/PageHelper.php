@@ -33,6 +33,9 @@ final class PageHelper
 	private array $webpackScripts = [];
 	private array $webpackStylesheets = [];
 
+	private int $content_left_width = 6;
+	private int $content_right_width = 6;
+
 	public array $jsData = [];
 
 	private IdentificationHelper $identificationHelper;
@@ -88,8 +91,6 @@ final class PageHelper
 	public function generateAndGetGlobalViewData(): array
 	{
 		global $g_broadcast_message;
-		global $content_left_width;
-		global $content_right_width;
 
 		$menu = $this->getMenu();
 
@@ -101,11 +102,11 @@ final class PageHelper
 		$contentRight = $this->getContent(CNT_RIGHT);
 
 		if (!empty($contentLeft)) {
-			$mainWidth -= $content_left_width;
+			$mainWidth -= $this->content_left_width;
 		}
 
 		if (!empty($contentRight)) {
-			$mainWidth -= $content_right_width;
+			$mainWidth -= $this->content_right_width;
 		}
 
 		$bodyClasses = [];
@@ -141,12 +142,12 @@ final class PageHelper
 				],
 				'left' => [
 					'html' => $contentLeft,
-					'width' => $content_left_width,
+					'width' => $this->content_left_width,
 					'id' => 'left'
 				],
 				'right' => [
 					'html' => $contentRight,
-					'width' => $content_right_width,
+					'width' => $this->content_right_width,
 					'id' => 'right'
 				],
 				'top' => [
@@ -480,5 +481,11 @@ final class PageHelper
 		}
 	});
 	');
+	}
+
+	public function setContentWidth(int $left, int $right): void
+	{
+		$this->content_left_width = $left;
+		$this->content_right_width = $right;
 	}
 }

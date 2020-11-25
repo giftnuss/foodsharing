@@ -147,7 +147,7 @@ class DashboardControl extends Control
 	 */
 	private function dashFoodsharer(): void
 	{
-		$this->setContentWidth(8, 8);
+		$this->pageHelper->setContentWidth(8, 8);
 		$subtitle = $this->translator->trans('dashboard.foodsharer');
 
 		if ($this->user['stat_fetchweight'] > 0) {
