@@ -26,6 +26,9 @@ class ContentSecurityPolicy
 				'https://sentry.io',
 				'https://photon.komoot.io',
 				'https://maps.geoapify.com',
+				'https://maps01.geoapify.com',
+				'https://maps02.geoapify.com',
+				'https://maps03.geoapify.com',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
 				'blob:',
 				'ws:'
