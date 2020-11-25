@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 class IndexController extends AbstractController
 {
@@ -147,31 +146,23 @@ class IndexController extends AbstractController
 
 		$page = $response->getContent();
 		$controllerUsedResponse = $page !== '--';
-		if ($controllerUsedResponse) {
-			if ($debugBar->isEnabled()) {
-				$response->setContent(str_replace(
-					'</body>',
-					$debugBar->renderContent() . '</body>',
-					$response->getContent()
-				));
-			}
-
-			if (isset($cache) && $cache->shouldCache()) {
-				$cache->cache($page);
-			}
-		} else {
-			if ($debugBar->isEnabled()) {
-				$pageHelper->addContent($debugBar->renderContent(), CNT_BOTTOM);
-			}
-			/* @var Environment $twig */
-			$twig = $this->get('twig');
-			$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
-
-			if (isset($cache) && $cache->shouldCache()) {
-				$cache->cache($page);
-			}
+		if (!$controllerUsedResponse) {
+			$page = $this->renderView('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 
 			$response->setContent($page);
+		}
+
+		if ($debugBar->isEnabled()) {
+			// append the debug bar at the very end of <body>
+			$response->setContent(str_replace(
+				'</body>',
+				$debugBar->renderContent() . '</body>',
+				$response->getContent()
+			));
+		}
+
+		if (isset($cache) && $cache->shouldCache()) {
+			$cache->cache($response->getContent());
 		}
 
 		return $response;
