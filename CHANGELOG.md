@@ -24,6 +24,8 @@
 - Fully display hour and minute values when editing pickup times #1001 !1754 @ChrisOelmueller
 - Add login checks to all forum endpoints to prevent errors !1739 #993 @alex.simm
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
+- Resolved newsletter flag: Disable the default value to false !1779 @chriswalg
+- Resolved the user registration: Removed adding the accepted_date to getPnVersion !1779 @chriswalg
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
@@ -59,6 +61,7 @@
 - Update Nelmio API doc bundle to 4.0.1 !1747 @alex.simm
 - upgrade webpack-merge to v 5 !1744 @peter.toennies
 - Replaced gitbook v1 to mdbook !1738 @chriswalg
+- Improved the RegisterCest.php: This check the variants with and without newsletter now. !1779 @chriswalg
 
 # 2020-10-23 Hotfix
 
