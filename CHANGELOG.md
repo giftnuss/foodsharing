@@ -20,7 +20,7 @@
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
 - Markdown support for store posts #921 !1690 @ChrisOelmueller
-- Update voting tool functions and usability !1726 #975 @alex.simm
+- Update voting tool functions and usability !1726 !1780 #975 @alex.simm
 - Fully display hour and minute values when editing pickup times #1001 !1754 @ChrisOelmueller
 - Add login checks to all forum endpoints to prevent errors !1739 #993 @alex.simm
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
