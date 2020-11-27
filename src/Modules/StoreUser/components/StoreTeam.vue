@@ -153,6 +153,28 @@
               </b-button>
 
               <b-button
+                v-if="managementModeEnabled && data.item.mayManage && !data.item.isManager"
+                size="sm"
+                variant="warning"
+                :block="!(wXS || wSM)"
+                @click="promoteToManager(data.item)"
+              >
+                <i class="fas fa-fw fa-cog" />
+                {{ $i18n('store.sm.promoteToManager') }}
+              </b-button>
+
+              <b-button
+                v-if="managementModeEnabled && data.item.mayManage && data.item.isManager"
+                size="sm"
+                variant="outline-primary"
+                :block="!(wXS || wSM)"
+                @click="demoteAsManager(data.item)"
+              >
+                <i class="fas fa-fw fa-cog" />
+                {{ $i18n('store.sm.demoteAsManager') }}
+              </b-button>
+
+              <b-button
                 v-if="mayEditStore && !data.item.isManager"
                 size="sm"
                 variant="danger"
@@ -175,6 +197,7 @@ import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import compareAsc from 'date-fns/compareAsc'
 
+import { demoteAsStoreManager, promoteToStoreManager } from '@/api/stores'
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
 import { chat, pulseSuccess } from '@/script'
@@ -294,6 +317,21 @@ export default {
         this.foodsaver.splice(index, 1)
         this.$refs.teamlist.refresh()
       }
+    },
+    async promoteToManager (fs) {
+      if (!fs || !fs.id) {
+        return
+      }
+      await promoteToStoreManager(this.storeId, fs.id)
+    },
+    async demoteAsManager (fs) {
+      if (!fs || !fs.id) {
+        return
+      }
+      if (!confirm(i18n('store.sm.reallyDemote', { name: fs.name }))) {
+        return
+      }
+      await demoteAsStoreManager(this.storeId, fs.id)
     },
     /* eslint-disable brace-style */
     pickupSortFunction (a, b, key, directionDesc) {

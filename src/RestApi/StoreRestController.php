@@ -18,6 +18,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -254,6 +255,95 @@ class StoreRestController extends AbstractFOSRestController
 		}
 
 		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, $LogAction);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Promotes a user to store manager.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to add as manager")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="404", description="Store does not exist")
+	 * @OA\Response(response="409", description="User cannot become manager of this store")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Post("stores/{storeId}/managers/{userId}")
+	 */
+	public function addStoreManagerAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->may()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+		$store = $this->storeGateway->getBetrieb($storeId);
+		if (!$store || !isset($store['id'])) {
+			throw new NotFoundHttpException('Store does not exist.');
+		}
+		if (!$this->storePermissions->mayBecomeStoreManager($storeId, $userId)) {
+			throw new ConflictHttpException();
+		}
+		/*
+		// also handle bells etc here:
+		$this->storeTransactions->addStoreManager($storeId, $userId);
+
+		// or quick&dirty gateway call:
+		$this->storeGateway->addStoreManager($storeId, $userId);
+		*/
+
+		/*
+		$this->storeGateway->addStoreLog($storeId, ...);
+		*/
+
+		return $this->handleView($this->view([], 200));
+	}
+
+
+	/**
+	 * Demotes a user from store manager to regular store team member.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to remove as manager")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="404", description="Store does not exist")
+	 * @OA\Response(response="409", description="User cannot lose responsibility for this store")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Delete("stores/{storeId}/managers/{userId}")
+	 */
+	public function removeStoreManagerAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->may()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+		$store = $this->storeGateway->getBetrieb($storeId);
+		if (!$store || !isset($store['id'])) {
+			throw new NotFoundHttpException('Store does not exist.');
+		}
+		if (!$this->storePermissions->mayLoseStoreManagement($storeId, $userId)) {
+			throw new ConflictHttpException();
+		}
+		/*
+		// also handle bells etc here:
+		$this->storeTransactions->removeStoreManager($storeId, $userId);
+
+		// or quick&dirty gateway call:
+		$this->storeGateway->removeStoreManager($storeId, $userId);
+		*/
+
+		/*
+		$this->storeGateway->addStoreLog($storeId, ...);
+		*/
 
 		return $this->handleView($this->view([], 200));
 	}

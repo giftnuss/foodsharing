@@ -710,6 +710,9 @@ store:
     reallyRemove: "Möchtest du wirklich {name} aus diesem Betriebs-Team entfernen?"
     makeJumper: "Auf die Springerliste"
     makeRegularTeamMember: "In das Team aufnehmen"
+    promoteToManager: "Verantwortlich machen"
+    demoteAsManager: "Als BV entfernen"
+    reallyDemote: "Möchtest du wirklich {name} die Verantwortung für diesen Betrieb entziehen?"
   request:
     request: "In diesem Team würde ich gerne helfen."
     got-it: "Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden."

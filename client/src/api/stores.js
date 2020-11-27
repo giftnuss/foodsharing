@@ -79,3 +79,13 @@ export async function acceptStoreRequest (storeId, userId) {
 export async function removeStoreRequest (storeId, userId) {
   return remove(`/stores/${storeId}/requests/${userId}`)
 }
+
+export async function promoteToStoreManager (storeId, userId) {
+  console.warn('promoteToStoreManager', { storeId, userId })
+  return post(`/stores/${storeId}/managers/${userId}`)
+}
+
+export async function demoteAsStoreManager (storeId, userId) {
+  console.warn('demoteAsStoreManager', { storeId, userId })
+  return remove(`/stores/${storeId}/managers/${userId}`)
+}

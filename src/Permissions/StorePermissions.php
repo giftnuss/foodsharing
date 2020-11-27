@@ -262,4 +262,17 @@ class StorePermissions
 	{
 		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
 	}
+
+	public function mayBecomeStoreManager(int $storeId, int $userId): bool
+	{
+		// TODO FIXME this should check the relevant cases that would prevent a promotion
+		// (user doesn't exist? may(BV)? already managing this store? not member of team? limit of managers reached? etc)
+		return $this->session->may('bieb');
+	}
+
+	public function mayLoseStoreManagement(int $storeId, int $userId): bool
+	{
+		// TODO FIXME this should check the relevant cases that would prevent a demotion
+		return true;
+	}
 }
