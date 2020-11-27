@@ -42,7 +42,8 @@
 
       <!-- preparation for more store-management features -->
       <StoreManagementPanel
-        v-if="false && managementModeEnabled"
+        v-if="managementModeEnabled"
+        :store-id="storeId"
         classes="p-2 team-management"
       />
 

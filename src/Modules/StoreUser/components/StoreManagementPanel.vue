@@ -3,8 +3,34 @@
     class="bg-white ui-corner-top"
     :class="classes"
   >
+    <span class="text-muted">{{ $i18n('store.sm.makeRegularTeamMember') }}</span>
+
+    <b-input-group class="m-1">
+      <b-form-input
+        v-model="newUserId"
+        class="with-border"
+        :placeholder="$i18n('profile.infos.foodsaverId')"
+      />
+      <b-input-group-append>
+        <b-button
+          v-b-tooltip="$i18n('store.sm.makeRegularTeamMember')"
+          :disabled="!newUserId.trim()"
+          variant="secondary"
+          type="submit"
+          size="sm"
+          @click.prevent="addNewTeamMember"
+        >
+          <i class="fas fa-fw fa-user-plus" />
+        </b-button>
+      </b-input-group-append>
+    </b-input-group>
+
+    <hr>
+
+    <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
+
     <b-button-toolbar
-      class="flex-md-column p-1"
+      class="flex-md-column p-1 d-none"
       key-nav
       justify
       :aria-label="$i18n('store.sm.managementActions')"
@@ -86,14 +112,20 @@
 export default {
   props: {
     classes: { type: String, default: '' },
+    storeId: { type: Number, required: true },
   },
   data () {
     return {
+      newUserId: '',
       // active sorting controls
       // active filtering controls
     }
   },
   methods: {
+    async addNewTeamMember () {
+      const userId = parseInt(this.newUserId)
+      await console.warn('addNewTeamMember', { userId, storeId: this.storeId })
+    },
   },
 }
 </script>

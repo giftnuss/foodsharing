@@ -107,14 +107,14 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
             font-size: 0.9rem;
         }
 
-        input.form-control {
-        padding-left: 0;
-        border: none;
-
-        &:focus {
-            box-shadow: none;
+        input.form-control:not(.with-border) {
             border: none;
-        }
+            padding-left: 0;
+
+            &:focus {
+                box-shadow: none;
+                border: none;
+            }
         }
     }
 
