@@ -1,12 +1,13 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -37,7 +38,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
 	 */
-	public function listNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	public function listNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
@@ -67,7 +68,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 *
 	 * @deprecated Old naming scheme, remove this when all clients are updated
 	 */
-	public function oldListNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	public function oldListNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): Response
 	{
 		return $this->listNearbyFoodSharePointsAction($paramFetcher);
 	}
@@ -78,7 +79,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Get("foodSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
 	 */
-	public function getFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
+	public function getFoodSharePointAction(int $foodSharePointId): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
@@ -101,7 +102,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 *
 	 * @deprecated Old naming scheme, remove this when all clients are updated
 	 */
-	public function oldGetFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
+	public function oldGetFoodSharePointAction(int $foodSharePointId): Response
 	{
 		return $this->getFoodSharePointAction($foodSharePointId);
 	}

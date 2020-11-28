@@ -1,6 +1,8 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
+
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 
 /**
  * Utility class that can be user by all controllers to format objects for
@@ -91,7 +93,7 @@ class RestNormalization
 	}
 
 	/**
-	 * @return ?\Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus
+	 * @return ?SleepStatus
 	 */
 	private static function getSleepStatus(array $data, string $prefix = '')
 	{

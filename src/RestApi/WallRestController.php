@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\WallPost\WallPostGateway;
@@ -8,6 +8,7 @@ use Foodsharing\Permissions\WallPostPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class WallRestController extends AbstractFOSRestController
@@ -44,7 +45,7 @@ class WallRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 */
-	public function getPostsAction(string $target, int $targetId): \Symfony\Component\HttpFoundation\Response
+	public function getPostsAction(string $target, int $targetId): Response
 	{
 		if ($this->session->id() === null || !$this->wallPostPermissions->mayReadWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
@@ -78,7 +79,7 @@ class WallRestController extends AbstractFOSRestController
 	 *
 	 * @throws \Exception
 	 */
-	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): Response
 	{
 		if ($this->session->id() === null || !$this->wallPostPermissions->mayWriteWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
@@ -95,7 +96,7 @@ class WallRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("wall/{target}/{targetId}/{id}", requirements={"targetId" = "\d+", "id" = "\d+"})
 	 */
-	public function delPostAction(string $target, int $targetId, int $id): \Symfony\Component\HttpFoundation\Response
+	public function delPostAction(string $target, int $targetId, int $id): Response
 	{
 		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId)) {
 			throw new HttpException(403);

@@ -7,7 +7,7 @@ a controller, an (old) view, javascript, css, (old) [XHR](requests.md#xhr),
 (old) [models](#deprecated-module-structure).
 
 The [Rest api controllers](requests.md#rest-api) do not go into
-their respective module directory but into the `/src/Controller`
+their respective module directory but into the `/src/RestApi`
 directory. This does not have a good reason but it's the way it is now. 
 
 ### Deprecated module structure

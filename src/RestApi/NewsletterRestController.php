@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Email\EmailGateway;

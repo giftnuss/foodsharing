@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Carbon\Carbon;
 use Foodsharing\Lib\Session;

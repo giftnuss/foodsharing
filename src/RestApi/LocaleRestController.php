@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session as Session;
 use FOS\RestBundle\Controller\AbstractFOSRestController;

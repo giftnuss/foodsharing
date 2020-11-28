@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Controller;
+namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\BigBlueButton;
 use Foodsharing\Lib\Session;
