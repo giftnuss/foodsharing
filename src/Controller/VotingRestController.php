@@ -174,7 +174,75 @@ class VotingRestController extends AbstractFOSRestController
 		$poll->authorId = $this->session->id();
 
 		// parse options and check that they are not empty
-		$poll->options = array_map(function ($x) {
+		$poll->options = $this->parseOptions($paramFetcher->get('options'));
+
+		// create poll
+		$this->votingTransactions->createPoll($poll, $paramFetcher->get('notifyVoters'));
+
+		return $this->handleView($this->view($poll, 200));
+	}
+
+	/**
+	 * Updates an existing poll.
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="400", description="Invalid parameters")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to edit that poll")
+	 * @OA\Response(response="404", description="Poll does not exist")
+	 * @OA\Tag(name="polls")
+	 *
+	 * @Rest\Patch("polls/{pollId}", requirements={"pollId" = "\d+"})
+	 * @Rest\RequestParam(name="name", nullable=true, default=null)
+	 * @Rest\RequestParam(name="description", nullable=true, default=null)
+	 * @Rest\RequestParam(name="options", nullable=true, default=null)
+	 */
+	public function editPollAction(int $pollId, ParamFetcher $paramFetcher): Response
+	{
+		// check permissions and get poll
+		$userId = $this->session->id();
+		if (!$userId) {
+			throw new HttpException(401);
+		}
+
+		$poll = $this->votingGateway->getPoll($pollId, false);
+		if (is_null($poll)) {
+			throw new HttpException(404);
+		}
+
+		if (!$this->votingPermissions->mayEditPoll($poll)) {
+			throw new HttpException(403);
+		}
+
+		// check name and description
+		$name = $paramFetcher->get('name');
+		if (!empty($name)) {
+			$poll->name = trim($name);
+		}
+		$description = trim($paramFetcher->get('description'));
+		if (!empty($description)) {
+			$poll->description = $description;
+		}
+
+		// parse options and check that they are not empty
+		$options = $paramFetcher->get('options');
+		if (!empty($options)) {
+			$poll->options = $this->parseOptions($options);
+		}
+
+		// update poll
+		$this->votingGateway->updatePoll($poll);
+
+		return $this->handleView($this->view($poll, 200));
+	}
+
+	/**
+	 * Parses poll options from a request and returns them as {@see PollOption} objects. Throws exceptions if
+	 * the list is empty or if any option does not have a valid text.
+	 */
+	private function parseOptions(array $data): array
+	{
+		$options = array_map(function ($x) {
 			$o = new PollOption();
 			$o->text = trim($x);
 			if (empty($o->text)) {
@@ -182,20 +250,17 @@ class VotingRestController extends AbstractFOSRestController
 			}
 
 			return $o;
-		}, $paramFetcher->get('options'));
-		if (empty($poll->options)) {
+		}, $data);
+		if (empty($options)) {
 			throw new HttpException(400, 'poll does not have any options');
 		}
-		foreach ($poll->options as $option) {
+		foreach ($options as $option) {
 			if (empty($option->text)) {
 				throw new HttpException(400, 'option text must not be empty');
 			}
 		}
 
-		// create poll
-		$this->votingTransactions->createPoll($poll, $paramFetcher->get('notifyVoters'));
-
-		return $this->handleView($this->view($poll, 200));
+		return $options;
 	}
 
 	/**

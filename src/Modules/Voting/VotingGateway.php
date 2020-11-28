@@ -200,27 +200,7 @@ class VotingGateway extends BaseGateway
 		]);
 
 		// insert all options
-		foreach ($poll->options as $index => $option) {
-			if (!($option instanceof PollOption)) {
-				throw new Exception('unexpected object type for the poll option');
-			}
-
-			$this->db->insert('fs_poll_has_options', [
-				'poll_id' => $pollId,
-				'option' => $option->optionIndex,
-				'option_text' => $option->text
-			]);
-
-			// insert all values for this option
-			foreach (array_keys($option->values) as $value) {
-				$this->db->insert('fs_poll_option_has_value', [
-					'poll_id' => $pollId,
-					'option' => $option->optionIndex,
-					'value' => $value,
-					'votes' => 0
-				]);
-			}
-		}
+		$this->insertOptions($poll->options, $pollId);
 
 		foreach ($voterIds as $id) {
 			$this->db->insert('fs_foodsaver_has_poll', [
@@ -231,6 +211,23 @@ class VotingGateway extends BaseGateway
 		}
 
 		return $pollId;
+	}
+
+	/**
+	 * Updates the name, description, and options of the poll.
+	 */
+	public function updatePoll(Poll $poll): void
+	{
+		// update texts
+		$this->db->update('fs_poll', [
+			'name' => $poll->name,
+			'description' => $poll->description,
+		], ['id' => $poll->id]);
+
+		// remove all options and create new ones
+		$this->db->delete('fs_poll_has_options', ['poll_id' => $poll->id]);
+		$this->db->delete('fs_poll_option_has_value', ['poll_id' => $poll->id]);
+		$this->insertOptions($poll->options, $poll->id);
 	}
 
 	/**
@@ -334,5 +331,30 @@ class VotingGateway extends BaseGateway
 			[':regionId' => $groupId,
 			 ':workingGroupType' => Type::WORKING_GROUP]
 		);
+	}
+
+	private function insertOptions(array $options, int $pollId): void
+	{
+		foreach ($options as $index => $option) {
+			if (!($option instanceof PollOption)) {
+				throw new Exception('unexpected object type for the poll option');
+			}
+
+			$this->db->insert('fs_poll_has_options', [
+				'poll_id' => $pollId,
+				'option' => $option->optionIndex,
+				'option_text' => $option->text
+			]);
+
+			// insert all values for this option
+			foreach (array_keys($option->values) as $value) {
+				$this->db->insert('fs_poll_option_has_value', [
+					'poll_id' => $pollId,
+					'option' => $option->optionIndex,
+					'value' => $value,
+					'votes' => 0
+				]);
+			}
+		}
 	}
 }

@@ -23,6 +23,14 @@ export function createPoll (regionId, name, description, startDate, endDate, sco
   })
 }
 
+export function editPoll (pollId, name, description, options) {
+  return post('/polls', {
+    name: name,
+    description: description,
+    options: options,
+  })
+}
+
 export async function deletePoll (pollId) {
   return remove(`/polls/${pollId}`)
 }

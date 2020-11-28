@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Permissions;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
@@ -85,5 +87,15 @@ final class VotingPermissions
 	public function mayDeletePoll(int $pollId): bool
 	{
 		return $this->session->may('orga');
+	}
+
+	public function mayEditPoll(Poll $poll): bool
+	{
+		// polls can be edited by the author during the first hour after creating the poll
+		if ($this->session->id() != $poll->authorId) {
+			return false;
+		}
+
+		return $poll->creationDate->add(CarbonInterval::hours(1)) > Carbon::now();
 	}
 }
