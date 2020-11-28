@@ -9,14 +9,15 @@ use Foodsharing\Modules\Voting\DTO\Poll;
 
 class VotingView extends View
 {
-	public function pollOverview(Poll $poll, array $region, bool $mayVote, ?DateTime $userVoteDate)
+	public function pollOverview(Poll $poll, array $region, bool $mayVote, ?DateTime $userVoteDate, bool $mayEdit)
 	{
 		return $this->vueComponent('poll-overview', 'pollOverview', [
 			'poll' => $poll,
 			'regionName' => $region['name'],
 			'isWorkGroup' => $region['type'] === Type::WORKING_GROUP,
 			'mayVote' => $mayVote,
-			'userVoteDate' => $userVoteDate
+			'userVoteDate' => $userVoteDate,
+			'mayEdit' => $mayEdit
 		]);
 	}
 

@@ -57,6 +57,7 @@ const urls = {
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
   passwordReset: () => '/?page=login&sub=passwordReset',
   poll: (pollId) => `/?page=poll&id=${pollId}`,
+  pollEdit: (pollId) => `/?page=poll&id=${pollId}&sub=edit`,
   pollNew: (regionId) => `/?page=poll&bid=${regionId}&sub=new`,
   polls: (regionId) => `/?page=bezirk&bid=${regionId}&sub=polls`,
   press: () => '/?page=content&sub=presse',

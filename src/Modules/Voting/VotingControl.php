@@ -46,8 +46,9 @@ class VotingControl extends Control
 				} catch (Exception $e) {
 					$voteDateTime = null;
 				}
+				$mayEdit = $this->votingPermissions->mayEditPoll($poll);
 				$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,
-					$mayVote ? null : $voteDateTime)
+					$mayVote ? null : $voteDateTime, $mayEdit)
 				);
 			} elseif (isset($_GET['sub']) && $_GET['sub'] === 'new' && isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid']))
 				&& $this->votingPermissions->mayCreatePoll($region['id'])) {

@@ -6,6 +6,13 @@
         {{ poll.name }}
       </div>
       <div class="card-body">
+        <b-link
+          v-if="mayEdit"
+          :href="$url('pollEdit', poll.id)"
+          class="btn btn-sm btn-secondary mb-3"
+        >
+          {{ $i18n('poll.edit') }}
+        </b-link>
         <ul class="poll-properties">
           <li class="poll-date">
             <b>{{ $i18n('poll.time_period') }}:</b>
@@ -100,10 +107,10 @@ import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
-import { BAlert } from 'bootstrap-vue'
+import { BAlert, BLink } from 'bootstrap-vue'
 
 export default {
-  components: { ResultsTable, VoteForm, Markdown, BAlert },
+  components: { ResultsTable, VoteForm, Markdown, BAlert, BLink },
   props: {
     poll: {
       type: Object,
@@ -124,6 +131,10 @@ export default {
     userVoteDate: {
       type: Object,
       default: null,
+    },
+    mayEdit: {
+      type: Boolean,
+      default: false,
     },
   },
   data () {
