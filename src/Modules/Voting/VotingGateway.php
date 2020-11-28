@@ -245,31 +245,53 @@ class VotingGateway extends BaseGateway
 		], ['id' => $pollId]);
 	}
 
-	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true, bool $restrict_homeDistrict = false): array
+	/**
+	 * Returns the IDs of all users in a specific region, optionally including subregions. The results can be
+	 * filtered by a minimal role, verification, and home district.
+	 *
+	 * @param int $regionId ID of the region
+	 * @param int $minRole minimal role of users that should be included
+	 * @param bool $onlyVerified only verified users should be included
+	 * @param bool $restrict_homeDistrict only users whose home region is the specified region or any subregion (if included)
+	 * @param bool $includeSubregions whether users from subregions should be included
+	 *
+	 * @return array user IDs
+	 *
+	 * @throws Exception
+	 */
+	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true, bool $restrict_homeDistrict = false,
+											  bool $includeSubregions = true): array
 	{
+		// fetch all subregion-IDs if they should be included
+		$regionIds = [$regionId];
+		if ($includeSubregions) {
+			$subregions = $this->db->fetchAllValuesByCriteria('fs_bezirk_closure', 'bezirk_id',
+				['ancestor_id' => $regionId, 'depth >=' => 1]
+			);
+			$regionIds = array_merge($regionIds, $subregions);
+		}
 		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';
 
+		// fetch all user IDs
 		if ($restrict_homeDistrict) {
 			$list = $this->db->fetchAll('
-			SELECT id
+			SELECT DISTINCT id
 			FROM fs_foodsaver fs
-			WHERE fs.bezirk_id = :regionId
-			AND fs.rolle > :role
+			WHERE fs.bezirk_id IN ( ' . implode(',', $regionIds) . ')
+			AND fs.rolle >= :role
 			' . $verifiedCondition, [
-				':regionId' => $regionId,
 				':role' => $minRole
 			]);
 		} else {
 			$list = $this->db->fetchAll('
-				SELECT id
+				SELECT DISTINCT id
 				FROM fs_foodsaver fs
 				INNER JOIN fs_foodsaver_has_bezirk hb
 				ON fs.id = hb.foodsaver_id
-				WHERE hb.bezirk_id = :regionId
+				WHERE hb.bezirk_id IN (' . implode(',', $regionIds) . ')
 				AND hb.active = 1
-				AND fs.rolle > :role
+				AND fs.rolle >= :role
 				' . $verifiedCondition, [
-				':regionId' => $regionId,
 				':role' => $minRole
 			]);
 		}
