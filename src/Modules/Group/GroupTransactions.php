@@ -2,10 +2,6 @@
 
 namespace Foodsharing\Modules\Group;
 
-use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
-use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Store\StoreGateway;
-
 class GroupTransactions
 {
 	private GroupGateway $groupGateway;
