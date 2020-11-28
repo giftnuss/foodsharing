@@ -4,6 +4,7 @@ namespace Foodsharing\Lib;
 
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -15,6 +16,7 @@ use Foodsharing\Utility\TranslationHelper;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -102,5 +104,23 @@ abstract class FoodsharingController extends AbstractController
 		}
 
 		$this->metrics->addPageStatData(['controller' => $className]);
+	}
+
+	/**
+	 * Previously, most controllers relied on IndexController actually rendering the website.
+	 * They mostly talk to pageHelper, which is then used like this to generate the view data for the desired twig template.
+	 * There are two things to be mentioned here:
+	 * - TODO g_template: a global that is usually not changed, except in MapControl and MessageControl. Once these are ported,
+	 * it can be made a member of this class with a default value.
+	 * Some controllers call Control::render, which is different from AbstractController::render.
+	 *
+	 * If a controller method only interacts with PageHelper (directly, or indirectly through a View class that gets it through DI),
+	 * all you have to do to port it (rendering wise) is call this method at the end, and then return its result.
+	 *
+	 * @return Response
+	 */
+	protected function renderGlobal(): Response {
+		global $g_template;
+		return $this->render('layouts/' . $g_template . '.twig', $this->pageHelper->generateAndGetGlobalViewData());
 	}
 }
