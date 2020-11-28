@@ -8,40 +8,29 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class GroupTransactions
 {
-	private RegionGateway $regionGateway;
-	private FoodSharePointGateway $foodSharePointGateway;
-	private StoreGateway $storeGateway;
+	private GroupGateway $groupGateway;
 
 	public function __construct(
-		RegionGateway $regionGateway,
-		FoodSharePointGateway $foodSharePointGateway,
-		StoreGateway $storeGateway
+		GroupGateway $groupGateway
 	) {
-		$this->regionGateway = $regionGateway;
-		$this->foodSharePointGateway = $foodSharePointGateway;
-		$this->storeGateway = $storeGateway;
+		$this->groupGateway = $groupGateway;
 	}
 
 	/**
-	 * Returns whether the group still contains any sub-regions, stores, or food-share-points.
+	 * Returns whether the group still contains any sub-regions, stores, or foodsharepoints.
 	 */
 	public function hasSubElements(int $groupId): bool
 	{
-		$regions = $this->regionGateway->getBezirkByParent($groupId, true);
-		if (!empty($regions)) {
+		$hasRegions = $this->groupGateway->hasSubregions($groupId);
+		if ($hasRegions) {
 			return true;
 		}
 
-		$fsps = $this->foodSharePointGateway->listFoodSharePointsNested([$groupId]);
-		if (!empty($fsps)) {
+		$hasFSPs = $this->groupGateway->hasFoodSharePoints($groupId);
+		if ($hasFSPs) {
 			return true;
 		}
 
-		$stores = $this->storeGateway->listStoresInRegion($groupId, true);
-		if (!empty($stores)) {
-			return true;
-		}
-
-		return false;
+		return $this->groupGateway->hasStores($groupId);
 	}
 }

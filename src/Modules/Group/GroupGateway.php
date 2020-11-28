@@ -49,4 +49,35 @@ class GroupGateway extends BaseGateway
 		}
 		$this->db->commit();
 	}
+
+	/**
+	 * Returns whether the group contains any subregions or working groups.
+	 */
+	public function hasSubregions(int $groupId): bool
+	{
+		return $this->db->exists('fs_bezirk', [
+			'parent_id' => $groupId
+		]);
+	}
+
+	/**
+	 * Returns whether the group contains any stores. This does not include subregions.
+	 */
+	public function hasStores(int $groupId): bool
+	{
+		return $this->db->exists('fs_betrieb', [
+			'bezirk_id' => $groupId
+		]);
+	}
+
+	/**
+	 * Returns whether the group contains any foodsharepoints. This does not search subregions, if the group has
+	 * any, but includes FSPs that have not been accepted yet.
+	 */
+	public function hasFoodSharePoints(int $groupId): bool
+	{
+		return $this->db->exists('fs_fairteiler', [
+			'bezirk_id' => $groupId
+		]);
+	}
 }
