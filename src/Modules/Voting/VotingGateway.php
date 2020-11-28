@@ -24,7 +24,7 @@ class VotingGateway extends BaseGateway
 	public function getPoll(int $pollId, bool $includeResults): ?Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
-			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes', 'eligible_votes_count'],
+			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes', 'eligible_votes_count', 'creation_timestamp'],
 			['id' => $pollId]
 		);
 		if (empty($data)) {
@@ -36,6 +36,7 @@ class VotingGateway extends BaseGateway
 		return Poll::create($pollId, $data['name'], $data['description'],
 			new DateTime($data['start']), new DateTime($data['end']),
 			$data['region_id'], $data['scope'], $data['type'], $data['author'],
+			new DateTime($data['creation_timestamp']),
 			VotingType::getNumberOfValues($data['type']),
 			$includeResults ? $data['votes'] : null, $data['eligible_votes_count'], $options);
 	}
@@ -90,7 +91,7 @@ class VotingGateway extends BaseGateway
 	public function listPolls(int $regionId): array
 	{
 		$data = $this->db->fetchAllByCriteria('fs_poll',
-			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'eligible_votes_count'],
+			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'eligible_votes_count', 'creation_timestamp'],
 			['region_id' => $regionId]
 		);
 
@@ -99,7 +100,7 @@ class VotingGateway extends BaseGateway
 			$options = $this->getOptions($d['id'], false);
 			$polls[] = Poll::create($d['id'], $d['name'], $d['description'],
 				new DateTime($d['start']), new DateTime($d['end']),
-				$d['region_id'], $d['scope'], $d['type'], $d['author'],
+				$d['region_id'], $d['scope'], $d['type'], $d['author'], new DateTime($d['creation_timestamp']),
 				VotingType::getNumberOfValues($d['type']), null, $d['eligible_votes_count'], $options);
 		}
 
@@ -195,6 +196,7 @@ class VotingGateway extends BaseGateway
 			'author' => $poll->authorId,
 			'votes' => 0,
 			'eligible_votes_count' => count($voterIds),
+			'creation_timestamp' => $this->db->now(),
 		]);
 
 		// insert all options

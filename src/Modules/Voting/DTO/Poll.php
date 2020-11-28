@@ -59,6 +59,11 @@ class Poll
 	public int $authorId;
 
 	/**
+	 * Date at which this poll was created.
+	 */
+	public DateTime $creationDate;
+
+	/**
 	 * The number of different values that each option is this poll can have.
 	 */
 	public int $numValues;
@@ -92,6 +97,7 @@ class Poll
 		$this->scope = -1;
 		$this->type = -1;
 		$this->authorId = -1;
+		$this->creationDate = new DateTime();
 		$this->numValues = 0;
 		$this->votes = null;
 		$this->eligibleVotesCount = 0;
@@ -108,6 +114,7 @@ class Poll
 		int $scope,
 		int $type,
 		int $authorId,
+		DateTime $creationDate,
 		int $numValues,
 		?int $votes,
 		int $eligibleVotesCount,
@@ -123,6 +130,7 @@ class Poll
 		$poll->scope = $scope;
 		$poll->type = $type;
 		$poll->authorId = $authorId;
+		$poll->creationDate = $creationDate;
 		$poll->numValues = $numValues;
 		$poll->votes = $votes;
 		$poll->eligibleVotesCount = $eligibleVotesCount;
