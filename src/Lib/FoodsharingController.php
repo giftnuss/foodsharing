@@ -70,16 +70,24 @@ abstract class FoodsharingController extends AbstractController
 		$this->translator = $container->get('translator'); // TODO TranslatorInterface is an alias
 
 		$reflection = new ReflectionClass($this);
-		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
 		$className = $reflection->getShortName();
 
 		// $sub, $sub_func would be set up here.
 		// as mentioned above, they and their behavior are not implemented
 
-		$pos = strpos($className, 'Control');
+		/*
+		 * This will make sure all controllers are suffixed 'Controller'.
+		 * It also makes it relatively easy for a developer to catch the (unlikely) mistake.
+		 * Also, when porting an old "Control" to a new Symfony "Controller" class,
+		 * it makes it easy to have both working at the same time for comparisons.
+		 */
+		$pos = strpos($className, 'Controller');
+		if ($pos === false) {
+			throw new \Exception('Please rename the controller "' . $className . '" to end with "Controller".');
+		}
 
-		// TODO base this path on the project root
-		$webpackModules = $dir . '../../../assets/modules.json';
+		$projectDir = $container->get('kernel')->getProjectDir();
+		$webpackModules = $projectDir . '/assets/modules.json';
 		$manifest = json_decode(file_get_contents($webpackModules), true);
 		$moduleName = substr($className, 0, $pos);
 		$entry = 'Modules/' . $moduleName;
