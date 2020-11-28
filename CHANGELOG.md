@@ -44,6 +44,7 @@
 - More annotations and correctness fixes !1761 @ChrisOelmueller
 - Bumped some container versions !1865 @\_fridtjof_
 - Updated mdbook to 0.4.6 !1876 @chriswalg
+- upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 
 # Release "Dragonfruit", 2020-12-31
 
@@ -135,7 +136,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 
 # 2020-11-25 Hotfix
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
-- upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 
 # 2020-10-23 Hotfix
 

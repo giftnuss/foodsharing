@@ -2,7 +2,7 @@ const mkdirp = require('mkdirp')
 const { merge } = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const BundleAnalyzePlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
@@ -20,14 +20,11 @@ const plugins = []
 
 if (!dev) {
   plugins.push(
-    new BundleAnalyzerPlugin({
+    new BundleAnalyzePlugin({
       analyzerMode: 'static',
       reportFilename: 'bundlesize.html',
       defaultSizes: 'gzip',
       openAnalyzer: false,
-      generateStatsFile: false,
-      statsFilename: 'stats.json',
-      statsOptions: null,
       logLevel: 'info',
     }),
   )
