@@ -138,8 +138,7 @@ class IndexController extends AbstractController
 			$response->setContent('');
 		}
 
-		$page = $response->getContent();
-		$controllerUsedResponse = $page !== '--';
+		$controllerUsedResponse = $response->getContent() !== '--';
 		if (!$controllerUsedResponse) {
 			$page = $this->renderView('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 
