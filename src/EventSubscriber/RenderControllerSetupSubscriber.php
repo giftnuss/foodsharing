@@ -135,7 +135,6 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 
 		// TODO check if all of these are actually needed anymore
 		$pageHelper = $this->get(PageHelper::class);
-		$pageHelper->addHidden('<div id="u-profile"></div>');
 		$pageHelper->addHidden('<ul id="hidden-info"></ul>');
 		$pageHelper->addHidden('<ul id="hidden-error"></ul>');
 		$pageHelper->addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
