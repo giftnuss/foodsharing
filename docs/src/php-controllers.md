@@ -16,4 +16,11 @@ as arguments to the transaction class.
 We have:
 - [REST controllers](requests.md#rest-api) with the name `<submodule>RestController.php`
 - (legacy) XHR controllers with the name `<module>Xhr.php`
-- (legacy) HTML controllers with the name `<module>Control.php`
+- (legacy) render controllers with the name `<module>Control.php`
+- modern render controllers with the name `<module>Controller.php`
+
+Render controllers are called that because they always render a part of the website,
+as opposed to API controllers (like REST and XHR),
+which are usually called by the rendered website (client) and return data, not an HTML document.
+
+For a guide to refactoring legacy HTML controllers to modern controllers, see the [PHP controller refactoring guide](php-controller-migration.md)
