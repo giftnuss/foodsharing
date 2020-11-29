@@ -56,6 +56,9 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 	 */
 	private ContainerInterface $fullServiceContainer;
 
+	// needs to be persisted between onKernelController and onKernelResponse
+	private Caching $cache;
+
 	public function __construct(ContainerInterface $container)
 	{
 		$this->fullServiceContainer = $container;
@@ -108,8 +111,8 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 			$mem = $this->get(Mem::class);
 			/* @var InfluxMetrics $influxdb */
 			$influxdb = $this->get(InfluxMetrics::class);
-			$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
-			$cache->lookup();
+			$this->cache = new Caching($g_page_cache, $session, $mem, $influxdb);
+			$this->cache->lookup();
 		}
 
 		$translator = $this->get('translator');
@@ -195,8 +198,8 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 			));
 		}
 
-		if (isset($cache) && $cache->shouldCache()) {
-			$cache->cache($response->getContent());
+		if (isset($this->cache) && $this->cache->shouldCache()) {
+			$this->cache->cache($response->getContent());
 		}
 	}
 
