@@ -26,6 +26,7 @@
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
 - Resolved newsletter flag: Disable the default value to false !1779 @chriswalg
 - Resolved the user registration: Removed adding the accepted_date to getPnVersion !1779 @chriswalg
+- Disabled session cookie checkbox in login form, until there is a solution in issue 956 !1785 @chriswalg
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
