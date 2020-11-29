@@ -1,28 +1,32 @@
 <template>
+  <!-- eslint-disable vue/max-attributes-per-line -->
   <div class="bootstrap">
     <div class="card rounded">
       <div class="card-header text-white bg-primary">
         {{ poll.name }}
       </div>
       <div class="card-body">
-        <div>
-          <b>{{ $i18n('poll.time_period') }}:</b> {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
-          <span v-if="isPollInPast">
-            ({{ $i18n('poll.in_past') }})
-          </span>
-          <span v-else-if="isPollInFuture">
-            ({{ $i18n('poll.in_future') }})
-          </span>
-        </div>
-        <div class="my-1">
-          <b>{{ $i18n(isWorkGroup ? 'terminology.group' : 'terminology.region') }}:</b> {{ regionName }}
-        </div>
-        <div class="my-1">
-          <b>{{ $i18n('poll.allowed_voters') }}:</b> {{ $i18n('poll.scope_description_'+poll.scope) }}
-        </div>
-        <div class="my-1">
-          <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
-        </div>
+        <ul class="poll-properties">
+          <li class="poll-date">
+            <b>{{ $i18n('poll.time_period') }}:</b>
+            {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
+            <b-badge v-if="isPollInPast" pill variant="info">
+              {{ $i18n('poll.in_past') }}
+            </b-badge>
+            <b-badge v-else-if="isPollInFuture" pill variant="secondary">
+              {{ $i18n('poll.in_future') }}
+            </b-badge>
+          </li>
+          <li class="poll-region">
+            <b>{{ $i18n(isWorkGroup ? 'terminology.group' : 'terminology.region') }}:</b> {{ regionName }}
+          </li>
+          <li class="poll-scope">
+            <b>{{ $i18n('poll.allowed_voters') }}:</b> {{ $i18n('poll.scope_description_'+poll.scope) }}
+          </li>
+          <li class="poll-type">
+            <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
+          </li>
+        </ul>
 
         <div
           v-if="userVoteDate !== null"
@@ -60,12 +64,12 @@
 
         <hr>
         <Markdown :source="poll.description" />
+        <hr>
 
         <VoteForm
           v-if="!isPollInPast"
           :poll="poll"
           :may-vote="mayVote"
-          class="mt-5"
           @disableVoteForm="disableVoteForm"
         />
 
@@ -73,7 +77,6 @@
           v-if="isPollInPast"
           :options="poll.options"
           :num-votes="poll.votes"
-          class="mt-5"
         />
       </div>
     </div>
@@ -137,8 +140,28 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .prestyled {
   white-space: pre-line;
+}
+
+.poll-properties {
+  font-size: 0.875rem;
+
+  & > li {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.card-body {
+  hr {
+    // counter the .card definition of padding: 6px 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+
+  ::v-deep label {
+    max-width: 100%;
+  }
 }
 </style>
