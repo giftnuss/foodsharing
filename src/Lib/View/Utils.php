@@ -994,7 +994,7 @@ class Utils
 			}
 			$titleHtml .= htmlspecialchars($title);
 			if ($titleSpanId !== null) {
-				$titleHtml .= '<span id="' . $titleSpanId . '">';
+				$titleHtml .= '</span>';
 			}
 			$titleHtml .= '</div>';
 		} else {

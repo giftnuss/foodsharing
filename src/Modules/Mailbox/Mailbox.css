@@ -126,11 +126,6 @@
   margin-top: 10px;
   padding: 5px;
 }
-.mailbox-body iframe{
-  /* background-color: white; */
-}
-.mailbox-body-loader {
-}
 
 .edit-body {
   background-color: #ffffff;
@@ -219,17 +214,6 @@ span.status.answer-1 {
 #mailattch ul li a:hover {
   background-color: var(--fs-brown);
   color: #ffffff;
-}
-
-span.dynatree-folder a {
-  font-weight: normal;
-}
-
-a.newmail {
-  font-weight: bold !important;
-}
-a.newmail:before {
-  content: attr(data-count);
 }
 
 table.edit-table {

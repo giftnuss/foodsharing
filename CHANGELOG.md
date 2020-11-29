@@ -1,8 +1,9 @@
-# Unreleased
+# Release "Erdbeere", Unreleased
 
 ## Features
 
 ## Changes
+- New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 
 ## Bugfixes
 
@@ -13,7 +14,7 @@
 ## Dev/Test/CI stuff
 
 
-# Release "Dragonfruit", 2020-31-12
+# Release "Dragonfruit", 2020-12-31
 
 ## Features
 - Add button that marks emails as unread !1681 @alex.simm

@@ -72,26 +72,31 @@ class MailboxGateway extends BaseGateway
 		return $this->db->insert('fs_mailbox', ['name' => strip_tags($name), 'member' => $member]);
 	}
 
+	private function getMailboxesWithUnreadCount(array $mailboxIds): array
+	{
+		return $this->db->fetchAll('
+			SELECT	mb.id,
+					mb.name,
+					(
+						SELECT	COUNT(*) FROM fs_mailbox_message mm
+						WHERE	mb.id = mm.mailbox_id
+						AND		mm.read = 0
+					) AS count
+
+			FROM	fs_mailbox mb
+
+			WHERE	mb.id IN(' . implode(',', $mailboxIds) . ');
+		');
+	}
+
 	public function getNewCount(array $boxes): array
 	{
-		$barr = [];
+		$mailboxIds = [];
 		foreach ($boxes as $b) {
-			$barr[] = $b['id'];
+			$mailboxIds[] = $b['id'];
 		}
 
-		return $this->db->fetchAll(
-			'
-			SELECT 	COUNT(`mm`.id) AS count,
-					mb.name,
-					mb.id
-			FROM 	`fs_mailbox` mb,
-					`fs_mailbox_message` mm
-			WHERE 	mm.mailbox_id = mb.id
-			AND 	mb.id IN(' . implode(',', array_map('intval', $barr)) . ')
-			AND 	mm.read = 0
-			GROUP BY mm.mailbox_id
-		'
-		);
+		return $this->getMailboxesWithUnreadCount($mailboxIds);
 	}
 
 	public function setAnswered(int $message_id): int
@@ -394,7 +399,6 @@ class MailboxGateway extends BaseGateway
 						'id' => $region['id'],
 						'name' => $region['name'],
 						'email_name' => $region['email_name'],
-						'type' => 'bot',
 					];
 				}
 			}
@@ -457,7 +461,6 @@ class MailboxGateway extends BaseGateway
 					'id' => $m['id'],
 					'name' => $m['name'],
 					'email_name' => $m['email_name'],
-					'type' => 'member',
 				];
 			}
 		}
@@ -479,7 +482,6 @@ class MailboxGateway extends BaseGateway
 				'id' => $mebox['id'],
 				'name' => $mebox['name'],
 				'email_name' => $mebox['email_name'],
-				'type' => 'fs',
 			];
 		}
 

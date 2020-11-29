@@ -106,7 +106,8 @@ class MailboxXhr extends Control
 			return [
 				'status' => 1,
 				'html' => $this->view->noMessage(),
-				'append' => '#messagelist tbody'
+				'append' => '#messagelist tbody',
+				'script' => '$("#mb-messagelist-title").text("' . $this->translator->trans('mailbox.mail') . '");',
 			];
 		}
 		$folder = $farray[$_GET['folder']];
@@ -119,24 +120,11 @@ class MailboxXhr extends Control
 				return [
 					'status' => 1,
 					'html' => $this->view->noMessage(),
-					'append' => '#messagelist tbody'
+					'append' => '#messagelist tbody',
+					'script' => '$("#mb-messagelist-title").text("' . $this->translator->trans('mailbox.mail') . '");',
 				];
 			}
 
-			$nc_js = '';
-			// we already handled the "not a store manager case" (PERMISSION_DENIED) earlier
-			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), true)) {
-				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
-					foreach ($newcount as $nc) {
-						// locate the tree entry for this mailbox with jQuery + append unread count
-						$mailboxName = $nc['name'] . '@' . PLATFORM_MAILBOX_HOST;
-						$nc_js .= '
-				$("ul.dynatree-container a.dynatree-title").filter(function () {
-					return $(this).text() === "' . $mailboxName . '";
-				}).addClass("newmail").attr("data-count","(' . $nc['count'] . ') ");';
-					}
-				}
-			}
 			$fromToTitles = [
 				MailboxFolder::FOLDER_INBOX => 'Von',
 				MailboxFolder::FOLDER_SENT => 'An',
@@ -150,21 +138,21 @@ class MailboxXhr extends Control
 				'html' => $this->view->listMessages($messages, $folder, $currentMailboxName),
 				'append' => '#messagelist tbody',
 				'script' => '
-						$("#messagelist .from a:first").text("' . $fromToTitles[$folder] . '");
-						$("#messagelist tbody tr").on("mouseover", function(){
-							$("#messagelist tbody tr").removeClass("selected focused");
-							$(this).addClass("selected focused");
+					$("#mb-messagelist-title").text("' . $currentMailboxName . '");
+					$("#messagelist .from a:first").text("' . $fromToTitles[$folder] . '");
+					$("#messagelist tbody tr").on("mouseover", function () {
+						$("#messagelist tbody tr").removeClass("selected focused");
+						$(this).addClass("selected focused");
 
-						});
-						$("#messagelist tbody tr").on("mouseout", function(){
-							$("#messagelist tbody tr").removeClass("selected focused");
-						});
-						$("#messagelist tbody tr").on("click", function(){
-							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
-						});
-						$("#messagelist tbody td").disableSelection();
-						' . $nc_js . '
-					'
+					});
+					$("#messagelist tbody tr").on("mouseout", function () {
+						$("#messagelist tbody tr").removeClass("selected focused");
+					});
+					$("#messagelist tbody tr").on("click", function () {
+						ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
+					});
+					$("#messagelist tbody td").disableSelection();
+				',
 			];
 		}
 	}
@@ -386,8 +374,6 @@ class MailboxXhr extends Control
 			$html = str_replace(['<head>', '<HEAD>', '<Head>'], '<head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
 		}
 
-		// $html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
-
 		echo $html;
 		exit();
 	}
@@ -410,27 +396,26 @@ class MailboxXhr extends Control
 				'html' => $this->view->message($mail),
 				'append' => '#message-body',
 				'script' => '
+					bodymin = 80;
+					if ($("#mailattch").length > 0) {
+						bodymin += 40;
+					}
 
-				bodymin = 80;
-				if($("#mailattch").length > 0)
-				{
-					bodymin += 40;
-				}
-
-				$("#message-body").dialog("option",{
-					title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
-					height: ($( window ).height()-40)
-				});
-				$(".mailbox-body").css({
-					"height" : ($("#message-body").height()-bodymin)+"px",
-					"overflow":"auto"
-				});
-				$(".mailbox-body-loader").css({
-					"height" : ($("#message-body").height()-bodymin)+"px",
-					"overflow":"auto"
-				});
-				$("#message-body").dialog("open");
-				$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");'
+					$("#message-body").dialog("option", {
+						title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
+						height: ($( window ).height()-40)
+					});
+					$(".mailbox-body").css({
+						"height": ($("#message-body").height()-bodymin)+"px",
+						"overflow": "auto"
+					});
+					$(".mailbox-body-loader").css({
+						"height": ($("#message-body").height()-bodymin)+"px",
+						"overflow": "auto"
+					});
+					$("#message-body").dialog("open");
+					$("tr#message-' . (int)$_GET['id'] . ' .read-0, tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");
+				',
 			];
 		}
 	}

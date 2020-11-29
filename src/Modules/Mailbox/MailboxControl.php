@@ -71,18 +71,36 @@ class MailboxControl extends Control
 		$this->pageHelper->setContentWidth(8, 16);
 		$this->pageHelper->addBread($this->translator->trans('mailbox.title'));
 
-		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
-			if (isset($_GET['show']) && (int)$_GET['show']) {
-				if ($this->mailboxPermissions->mayMessage($_GET['show'])) {
-					$this->pageHelper->addJs('ajreq("loadMail",{id:' . (int)$_GET['show'] . '});');
+		$boxes = $this->mailboxGateway->getBoxes(
+			$this->session->isAmbassador(),
+			$this->session->id(),
+			$this->session->may('bieb')
+		);
+		if ($boxes) {
+			$messageId = $_GET['show'] ?? null;
+			if (!is_null($messageId) && $this->mailboxPermissions->mayMessage($messageId)) {
+				$this->pageHelper->addJs('ajreq("loadMail", {id:' . intval($messageId) . '});');
+				$mailboxId = $this->mailboxGateway->getMailboxId($messageId);
+				if (!is_null($mailboxId) && $this->mailboxPermissions->mayMailbox($mailboxId)) {
+					$folder = 'inbox';
+					$this->pageHelper->addJs('
+						ajreq("loadmails", {
+							mb:' . intval($mailboxId) . ',
+							folder: "' . $folder . '",
+						});
+					');
 				}
 			}
 
+			$this->pageHelper->addContent($this->view->vueComponent('vue-mailbox', 'Mailbox', [
+				'hostname' => PLATFORM_MAILBOX_HOST,
+				'mailboxes' => $this->mailboxGateway->getNewCount($boxes),
+			]), CNT_LEFT);
+
 			$mailadresses = $this->mailboxGateway->getMailAdresses($this->session->id());
 
-			$this->pageHelper->addContent($this->view->folder($boxes), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->legacyMailfolderFields(), CNT_LEFT);
 			$this->pageHelper->addContent($this->view->folderlist($boxes, $mailadresses));
-			$this->pageHelper->addContent($this->view->options(), CNT_LEFT);
 		}
 
 		if (isset($_GET['mailto']) && $this->emailHelper->validEmail($_GET['mailto'])) {

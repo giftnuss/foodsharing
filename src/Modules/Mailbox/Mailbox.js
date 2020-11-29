@@ -1,9 +1,7 @@
 /* eslint-disable eqeqeq,camelcase */
 import '@/core'
 import '@/globals'
-// import '@/tablesorter' // TODO is this used here?
 import $ from 'jquery'
-import 'jquery-dynatree'
 import 'corejs-typeahead'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
@@ -14,20 +12,20 @@ import {
   pulseError,
   checkEmail,
 } from '@/script'
+import { vueRegister, vueApply } from '@/vue'
 import './Mailbox.css'
+import Mailbox from './components/Mailbox.vue'
 import i18n from '@/i18n'
 import { setEmailStatus } from '@/api/mailbox'
 
 expose({
   mb_finishFile,
   mb_removeLast,
-  mb_new_message,
   mb_mailto,
   mb_moveto,
   mb_reset,
   mb_answer,
   mb_forward,
-  mb_setMailbox,
   mb_clearEditor,
   mb_closeEditor,
   mb_send_message,
@@ -40,6 +38,11 @@ expose({
   trySetEmailStatus,
 })
 
+vueRegister({
+  Mailbox,
+})
+vueApply('#vue-mailbox', true) // Mailbox
+
 function mb_finishFile (newname) {
   $('ul#et-file-list li:last').addClass('finish').append(`<input type="hidden" class="tmp" value="${newname}" name="tmp_${$('ul#et-file-list li').length}" />`)
   $('#etattach-button').button('option', 'disabled', false)
@@ -50,7 +53,7 @@ function mb_removeLast () {
   $('#etattach-button').button('option', 'disabled', false)
 }
 
-function mb_new_message (email) {
+export function mb_new_message (email) {
   mb_clearEditor()
   $('#message-editor').dialog('open')
   if ($('.edit-an').length > 0) {
@@ -118,7 +121,7 @@ function mb_forward () {
 
 }
 
-function mb_setMailbox (mb_id) {
+export function mb_setMailbox (mb_id) {
   if ($('#edit-von').length > 0) {
     const email = $(`#edit-von option.mb-${mb_id}`).text()
     $(`#edit-von option.mb-${mb_id}`).remove()

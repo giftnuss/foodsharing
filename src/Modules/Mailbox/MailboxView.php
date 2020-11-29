@@ -7,65 +7,12 @@ use Foodsharing\Modules\Core\View;
 
 class MailboxView extends View
 {
-	public function folder($boxes)
+	public function legacyMailfolderFields(): string
 	{
-		$children = [];
-		$isLast = false;
-
-		foreach ($boxes as $i => $b) {
-			$mbId = intval($b['id']);
-			$isLast = ($i == count($boxes) - 1);
-
-			$inbox = ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '",title:"';
-			$sent = ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '",title:"';
-			$trash = ',folder:"trash",icon:"trash.png",type:"' . $b['type'] . '",title:"';
-
-			$children[] = '{'
-				. 'title: "' . $b['name'] . '@' . PLATFORM_MAILBOX_HOST . '",'
-				. 'isFolder: true,'
-				. 'icon: "mailbox.png",'
-				. ($isLast ? 'expand: true,' : '')
-				. 'children: ['
-				. '{ident:' . $mbId . $inbox . $this->translator->trans('mailbox.inbox') . '"},'
-				. '{ident:' . $mbId . $sent . $this->translator->trans('mailbox.sent') . '"},'
-				. '{ident:' . $mbId . $trash . $this->translator->trans('mailbox.trash') . '"}'
-				. ']}';
-		}
-
-		$this->pageHelper->addJs('
-			$("#mailfolder").dynatree({
-            onActivate: function(node) {
-				if (node.data.ident != undefined) {
-					ajreq("loadmails",{mb:node.data.ident,folder:node.data.folder,type:node.data.type});
-					mb_setMailbox(node.data.ident);
-					$("#mbh-mailbox").val(node.data.ident);
-					$("#mbh-folder").val(node.data.folder);
-					$("#mbh-type").val(node.data.type);
-				}
-            },
-			imagePath: "/img/icon-mail/",
-            persist: false,
-            children: [
-                ' . implode(',', $children) . '
-            ]
-        });' . ($isLast ? $this->openLastInboxJs($b ?? []) : ''));
-
-		return $this->v_utils->v_field('<div id="mailfolder"></div>'
-			. '<input type="hidden" id="mbh-mailbox" value="" />'
-			. '<input type="hidden" id="mbh-folder" value="" />'
-			. '<input type="hidden" id="mbh-type" value="" />',
-			$this->translator->trans('mailbox.title')
-		);
-	}
-
-	private function openLastInboxJs(array $mailbox): string
-	{
-		return 'ajreq("loadmails",'
-			. '{mb:' . $mailbox['id'] . ',folder:"inbox",type:"' . $mailbox['type'] . '"}); '
-			. 'mb_setMailbox(' . $mailbox['id'] . '); '
-			. '$("#mbh-folder").val("inbox"); '
-			. '$("#mbh-mailbox").val(' . $mailbox['id'] . '); '
-			. '$("#mbh-type").val("' . $mailbox['type'] . '");';
+		return $this->v_utils->v_field('
+			<input type="hidden" id="mbh-mailbox" value="" />
+			<input type="hidden" id="mbh-folder" value="" />
+		');
 	}
 
 	public function manageMemberBox($box)
@@ -92,14 +39,6 @@ class MailboxView extends View
 	{
 		return $this->v_utils->v_menu([
 			['name' => $this->translator->trans('mailbox.create'), 'href' => '/?page=mailbox&a=newbox']
-		], $this->translator->trans('mailbox.actions'));
-	}
-
-	public function options()
-	{
-		return $this->v_utils->v_menu([
-			['name' => $this->translator->trans('mailbox.refresh'), 'click' => 'mb_refresh();return false;'],
-			['name' => $this->translator->trans('mailbox.write'), 'click' => 'mb_new_message();return false;']
 		], $this->translator->trans('mailbox.actions'));
 	}
 
@@ -327,7 +266,6 @@ class MailboxView extends View
 		/*
 		 * [id] => 1
 		 * [name] => deutschland
-		 * [type] => bot
 		 */
 		if (count($mailboxes) == 1) {
 			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . PLATFORM_MAILBOX_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
@@ -435,6 +373,6 @@ class MailboxView extends View
 		<tbody>
 
 		</tbody>
-	</table>', $this->translator->trans('mailbox.mail'));
+	</table>', $this->translator->trans('mailbox.mail'), [], null, 'mb-messagelist-title');
 	}
 }
