@@ -2031,7 +2031,7 @@ poll:
     submit: Abstimmung speichern
     submit_success: Die Abstimmung wurde angelegt
     missing_fields: Es müssen alle Felder ausgefüllt werden
-    submit_question: Die Umfrage kann später nicht mehr geändert werden. Möchtest du sie wirklich jetzt anlegen?
+    submit_question: Die Umfrage kann nur noch innerhalb einer Stunde geändert werden. Möchtest du sie wirklich jetzt anlegen?
   ended_at: lief bis
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen
@@ -2044,4 +2044,7 @@ poll:
     average: Mittelwert
   submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
   eligible_votes_count: Anzahl der Stimmberechtigten
-  edit: Abstimmung bearbeiten
+  edit:
+    title: Abstimmung bearbeiten
+    submit: Abstimmung speichern
+    submit_question: Möchtest du die Änderungen an der Abstimmung wirklich speichern?

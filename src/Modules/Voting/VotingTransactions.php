@@ -55,16 +55,7 @@ class VotingTransactions
 	public function createPoll(Poll &$poll, bool $notifyVoters): void
 	{
 		// assign valid indices and values to the options
-		$possibleValues = $this->getPossibleValues($poll->type);
-		$possibleValues = array_combine($possibleValues, array_fill(0, sizeof($possibleValues), 0));
-		$mappedOptions = [];
-		$index = 0;
-		foreach ($poll->options as $option) {
-			$option->optionIndex = $index;
-			$option->values = $possibleValues;
-			$mappedOptions[$index++] = $option;
-		}
-		$poll->options = $mappedOptions;
+		$this->updateOptionValues($poll);
 
 		// create poll
 		$voterIds = $this->listUserIds($poll->regionId, $poll->scope);
@@ -78,6 +69,25 @@ class VotingTransactions
 		if ($notifyVoters) {
 			$this->notifyUsers($poll, $voterIds);
 		}
+	}
+
+	/**
+	 * Assigns valid indices and values to all options in the poll. This need to be done before a poll is
+	 * stored in the gateway.
+	 */
+	private function updateOptionValues(Poll &$poll): void
+	{
+		// assign valid indices and values to the options
+		$possibleValues = $this->getPossibleValues($poll->type);
+		$possibleValues = array_combine($possibleValues, array_fill(0, sizeof($possibleValues), 0));
+		$mappedOptions = [];
+		$index = 0;
+		foreach ($poll->options as $option) {
+			$option->optionIndex = $index;
+			$option->values = $possibleValues;
+			$mappedOptions[$index++] = $option;
+		}
+		$poll->options = $mappedOptions;
 	}
 
 	/**
@@ -260,5 +270,14 @@ class VotingTransactions
 		}
 
 		return $poll;
+	}
+
+	public function updatePoll(Poll $poll): void
+	{
+		// assign valid indices and values to the options
+		$this->updateOptionValues($poll);
+
+		// save poll
+		$this->votingGateway->updatePoll($poll);
 	}
 }

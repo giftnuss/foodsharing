@@ -40,16 +40,20 @@ class VotingControl extends Control
 				$this->pageHelper->addBread($poll->name);
 				$this->pageHelper->addTitle($poll->name);
 
-				$mayVote = $this->votingPermissions->mayVote($poll);
-				try {
-					$voteDateTime = $this->votingGateway->getVoteDatetime($poll->id, $this->session->id());
-				} catch (Exception $e) {
-					$voteDateTime = null;
+				if (isset($_GET['sub']) && $_GET['sub'] === 'edit' && $this->votingPermissions->mayEditPoll($poll)) {
+					$this->pageHelper->addContent($this->view->editPollForm($poll));
+				} else {
+					$mayVote = $this->votingPermissions->mayVote($poll);
+					try {
+						$voteDateTime = $this->votingGateway->getVoteDatetime($poll->id, $this->session->id());
+					} catch (Exception $e) {
+						$voteDateTime = null;
+					}
+					$mayEdit = $this->votingPermissions->mayEditPoll($poll);
+					$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,
+						$mayVote ? null : $voteDateTime, $mayEdit)
+					);
 				}
-				$mayEdit = $this->votingPermissions->mayEditPoll($poll);
-				$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,
-					$mayVote ? null : $voteDateTime, $mayEdit)
-				);
 			} elseif (isset($_GET['sub']) && $_GET['sub'] === 'new' && isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid']))
 				&& $this->votingPermissions->mayCreatePoll($region['id'])) {
 				$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region['id']);

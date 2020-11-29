@@ -1,4 +1,4 @@
-import { get, post, put, remove } from './base'
+import { get, patch, post, put, remove } from './base'
 import { formatISO } from 'date-fns'
 
 export async function getPoll (pollId) {
@@ -24,7 +24,7 @@ export function createPoll (regionId, name, description, startDate, endDate, sco
 }
 
 export function editPoll (pollId, name, description, options) {
-  return post('/polls', {
+  return patch(`/polls/${pollId}`, {
     name: name,
     description: description,
     options: options,

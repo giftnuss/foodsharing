@@ -28,4 +28,11 @@ class VotingView extends View
 			'isWorkGroup' => $region['type'] == Type::WORKING_GROUP
 		]);
 	}
+
+	public function editPollForm(Poll $poll)
+	{
+		return $this->vueComponent('edit-poll-form', 'editPollForm', [
+			'poll' => $poll,
+		]);
+	}
 }

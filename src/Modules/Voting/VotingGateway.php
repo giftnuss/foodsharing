@@ -333,6 +333,15 @@ class VotingGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * Inserts the options into 'fs_poll_has_options' and 'fs_poll_option_has_value' when creating or updating
+	 * a poll. Existing options will not be changed.
+	 *
+	 * @param array $options array of {@see PollOption} objects
+	 * @param int $pollId ID of the poll
+	 *
+	 * @throws Exception
+	 */
 	private function insertOptions(array $options, int $pollId): void
 	{
 		foreach ($options as $index => $option) {

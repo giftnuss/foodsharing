@@ -231,7 +231,7 @@ class VotingRestController extends AbstractFOSRestController
 		}
 
 		// update poll
-		$this->votingGateway->updatePoll($poll);
+		$this->votingTransactions->updatePoll($poll);
 
 		return $this->handleView($this->view($poll, 200));
 	}

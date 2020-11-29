@@ -11,7 +11,7 @@
           :href="$url('pollEdit', poll.id)"
           class="btn btn-sm btn-secondary mb-3"
         >
-          {{ $i18n('poll.edit') }}
+          {{ $i18n('poll.edit.title') }}
         </b-link>
         <ul class="poll-properties">
           <li class="poll-date">
