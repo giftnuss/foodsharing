@@ -4,6 +4,7 @@ namespace Foodsharing\Permissions;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use DateInterval;
 use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
@@ -96,6 +97,15 @@ final class VotingPermissions
 			return false;
 		}
 
-		return $poll->creationDate->add(CarbonInterval::hours(1)) > Carbon::now();
+		return $poll->creationDate->add($this->editTimeAfterPollCreation()) > Carbon::now();
+	}
+
+	/**
+	 * Returns the interval during which a poll can be edited after its creation. This also defined the
+	 * poll's minimum start time.
+	 */
+	public function editTimeAfterPollCreation(): DateInterval
+	{
+		return CarbonInterval::hours(1);
 	}
 }

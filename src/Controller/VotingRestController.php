@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Controller;
 
+use Carbon\Carbon;
 use DateTime;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
@@ -153,7 +154,8 @@ class VotingRestController extends AbstractFOSRestController
 
 		$poll->startDate = DateTime::createFromFormat(DateTime::ISO8601, $paramFetcher->get('startDate'));
 		$poll->endDate = DateTime::createFromFormat(DateTime::ISO8601, $paramFetcher->get('endDate'));
-		if (!$poll->startDate || !$poll->endDate || $poll->startDate >= $poll->endDate) {
+		if (!$poll->startDate || !$poll->endDate || $poll->startDate >= $poll->endDate
+		|| Carbon::now()->add($this->votingPermissions->editTimeAfterPollCreation()) >= $poll->startDate) {
 			throw new HttpException(400, 'invalid start or end date');
 		}
 
@@ -183,7 +185,8 @@ class VotingRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Updates an existing poll.
+	 * Updates an existing poll. This can change a poll's title, description, and options. Updating
+	 * is only possible within one hour after creation.
 	 *
 	 * @OA\Response(response="200", description="Success")
 	 * @OA\Response(response="400", description="Invalid parameters")

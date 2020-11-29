@@ -260,6 +260,10 @@ function isAfterStart (dateTime) {
   return dateTime > this.startDateTime
 }
 
+function isInOneHour (dateTime) {
+  return dateTime > new Date(new Date().getTime() + 60 * 60 * 1000)
+}
+
 export default {
   components: {
     BForm,
@@ -340,7 +344,7 @@ export default {
         minLength: minLength(1),
       },
     },
-    startDateTime: { required },
+    startDateTime: { required, isInOneHour },
     endDateTime: { required, isAfterStart },
   },
   computed: {

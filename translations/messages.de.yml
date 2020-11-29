@@ -2019,7 +2019,7 @@ poll:
     type: Abstimmungsmodus
     time: Uhrzeit
     start_date: Abstimmungsbeginn
-    start_date_required: Bitte wähle den Abstimmungsbeginn aus.
+    start_date_required: Bitte wähle den Abstimmungsbeginn aus. Er muss mindestens eine Stunde in der Zukunft liegen.
     end_date: Abstimmungsende
     end_date_required: Bitte wähle das Abstimmungsende aus, das nach dem Beginn liegt.
     description: Beschreibung
