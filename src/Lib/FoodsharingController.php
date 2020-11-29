@@ -110,17 +110,18 @@ abstract class FoodsharingController extends AbstractController
 	 * Previously, most controllers relied on IndexController actually rendering the website.
 	 * They mostly talk to pageHelper, which is then used like this to generate the view data for the desired twig template.
 	 * There are two things to be mentioned here:
-	 * - TODO g_template: a global that is usually not changed, except in MapControl and MessageControl. Once these are ported,
-	 * it can be made a member of this class with a default value.
-	 * Some controllers call Control::render, which is different from AbstractController::render.
+	 * - MapControl and MessageControl are the only controllers changing the template from 'default'.
+	 *   Currently, they are using the global $g_template for this,
+	 *   but when they are ported, they can use this method's $template argument.
+	 * - Some controllers call Control::render, which is different from AbstractController::render.
 	 *
 	 * If a controller method only interacts with PageHelper (directly, or indirectly through a View class that gets it through DI),
 	 * all you have to do to port it (rendering wise) is call this method at the end, and then return its result.
+	 *
+	 * @param string $template which template should be used when rendering the website
 	 */
-	protected function renderGlobal(): Response
+	protected function renderGlobal($template = 'default'): Response
 	{
-		global $g_template;
-
-		return $this->render('layouts/' . $g_template . '.twig', $this->pageHelper->generateAndGetGlobalViewData());
+		return $this->render('layouts/' . $template . '.twig', $this->pageHelper->generateAndGetGlobalViewData());
 	}
 }
