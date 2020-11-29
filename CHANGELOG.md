@@ -3,7 +3,7 @@
 ## Features
 - Add button that marks emails as unread !1681 @alex.simm
 - Implement a Webcal URI for iCal export !1716 @chriswalg @ChrisOelmueller
-- Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 !1673 !1725 TheSoulT
+- Add Button in message and bell list in the topbar to mark all bells and all conversations as readed #935 #1016 !1673 !1725 !1787 TheSoulT
 - Store managers can remove old store posts #92 !1690 @ChrisOelmueller
 - Allow displaying recent pickup history in profiles !1715 !1763 #989 @ChrisOelmueller
 - Given trust bananas will now notify the receiver via Bell !1795 #548 @muffelrudaijer

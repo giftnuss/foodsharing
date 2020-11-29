@@ -31,7 +31,7 @@
     <template v-slot:actions>
       <!-- <div class="btn-group special btn-group-sm"> -->
       <b-btn
-        :disabled="!!unread"
+        :disabled="!unread"
         secondary
         size="sm"
         @click="markUnreadMessagesAsRead"
