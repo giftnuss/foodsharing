@@ -22,9 +22,9 @@ use Twig\Environment;
 
 /**
  * Compatibility layer to make porting old "Control" based controllers to new "Symfony" style controllers easier.
- * Any controller based on this also opts into the setup code that used to live in IndexController
+ * Any controller based on this also opts into the setup code that used to live in IndexController.
+ *
  * @see RenderControllerSetupSubscriber
- * @package Foodsharing\Lib
  */
 abstract class FoodsharingController extends AbstractController
 {
@@ -116,11 +116,11 @@ abstract class FoodsharingController extends AbstractController
 	 *
 	 * If a controller method only interacts with PageHelper (directly, or indirectly through a View class that gets it through DI),
 	 * all you have to do to port it (rendering wise) is call this method at the end, and then return its result.
-	 *
-	 * @return Response
 	 */
-	protected function renderGlobal(): Response {
+	protected function renderGlobal(): Response
+	{
 		global $g_template;
+
 		return $this->render('layouts/' . $g_template . '.twig', $this->pageHelper->generateAndGetGlobalViewData());
 	}
 }
