@@ -18,8 +18,9 @@ class MailboxView extends View
 	public function manageMemberBox($box)
 	{
 		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, [
-			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'],
-				['label' => $this->translator->trans('mailbox.member'), 'xhr' => 'Recip']),
+			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], [
+				'label' => $this->translator->trans('mailbox.member'),
+			]),
 			$this->v_utils->v_input_wrapper($this->translator->trans('mailbox.name'),
 				'<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])

@@ -653,23 +653,24 @@ class Utils
 
 	public function v_form_tagselect(string $id, array $option = []): string
 	{
-		$xhr = $id;
-		if (isset($option['xhr'])) {
-			$xhr = $option['xhr'];
-		}
-
-		$url = 'get' . ucfirst($xhr);
+		$url = 'get' . ucfirst($id);
 		if (isset($option['url'])) {
 			$url = $option['url'];
 		}
 
 		$label = $option['label'] ?? $this->translator->trans($id);
 
-		$source = 'autocompleteURL: "/xhr.php?f=' . $url . '"';
-		$post = '';
-
 		if (isset($option['valueOptions'])) {
 			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 3}';
+		} else {
+			$source = 'autocompleteURL: async function (request, response) {
+			  let data = null
+			  try {
+				data = await searchUser(request.term)
+			  } catch (e) {
+			  }
+			  response(data)
+			}';
 		}
 
 		$this->pageHelper->addJs('

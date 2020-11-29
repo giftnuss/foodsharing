@@ -5,9 +5,11 @@ import $ from 'jquery'
 import 'corejs-typeahead'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
+import { searchUser } from '@/api/search'
 import { expose } from '@/utils'
 import {
   ajreq,
+  GET,
   pulseInfo,
   pulseError,
   checkEmail,
@@ -37,6 +39,10 @@ expose({
   mb_foldRecipients,
   trySetEmailStatus,
 })
+
+if (GET('a') === 'manage') {
+  expose({ searchUser })
+}
 
 vueRegister({
   Mailbox,
