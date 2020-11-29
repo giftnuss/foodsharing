@@ -143,10 +143,9 @@ class FoodSharePointView extends View
 			$fspName = $this->foodSharePoint['name'];
 			$title = $this->translator->trans('fsp.editName', ['{name}' => $fspName]);
 
-			$tagselect = $this->v_utils->v_form_tagselect('fspmanagers', [
-				'valueOptions' => $data['bfoodsaver_values'],
-				'values' => $data['bfoodsaver'],
-			]);
+			$tagselect = $this->v_utils->v_form_tagselect('fspmanagers', null,
+				$data['bfoodsaver_values'], $data['bfoodsaver']
+			);
 			$this->pageHelper->addJs('
 			$("#fairteiler-form").on("submit", function (ev) {
 				if ($("#fspmanagers input[type=\'hidden\']").length == 0) {

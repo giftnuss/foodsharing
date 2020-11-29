@@ -143,21 +143,19 @@ class StoreUserControl extends Control
 					$verantwortlich_select = $this->v_utils->v_form_checkbox('verantwortlicher', ['values' => $bibsaver, 'checked' => $checked]);
 					$valueOptions = $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect([$store['bezirk_id']]);
 
+					$label = $this->translator->trans('storeedit.team.foodsaver');
 					$elements = [
-						$this->v_utils->v_form_tagselect('foodsaver', [
-							'valueOptions' => $valueOptions,
-							'label' => $this->translator->trans('storeedit.team.foodsaver'),
-						]),
+						$this->v_utils->v_form_tagselect('foodsaver', $label, $valueOptions),
 						$verantwortlich_select,
 					];
 
 					if (empty($checked)) {
 						$noStoreManagerWarning = $this->v_utils->v_error($this->translator->trans('storeedit.team.unmanaged'));
 						$hiddenField = $this->v_utils->v_form_hidden('set_new_store_manager', 'true');
-						$options = $this->foodsaverGateway->xhrGetStoremanagersOfRegionsForTagSelect([$store['bezirk_id']]);
+						$valueOptions = $this->foodsaverGateway->xhrGetStoremanagersOfRegionsForTagSelect([$store['bezirk_id']]);
 						$elements = [
 							$noStoreManagerWarning,
-							$this->v_utils->v_form_tagselect('storemanagers', ['valueOptions' => $options]),
+							$this->v_utils->v_form_tagselect('storemanagers', null, $valueOptions),
 							$hiddenField,
 						];
 					}

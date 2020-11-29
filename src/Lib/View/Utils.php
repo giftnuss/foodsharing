@@ -651,18 +651,11 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
-	public function v_form_tagselect(string $id, array $option = []): string
+	public function v_form_tagselect(string $id, ?string $label = null, ?array $valueOptions = null, ?array $values = null): string
 	{
-		$url = 'get' . ucfirst($id);
-		if (isset($option['url'])) {
-			$url = $option['url'];
-		}
+		$label = $label ?? $this->translator->trans($id);
 
-		$label = $option['label'] ?? $this->translator->trans($id);
-
-		if (isset($option['valueOptions'])) {
-			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 3}';
-		} else {
+		if (is_null($valueOptions)) {
 			$source = 'autocompleteURL: async function (request, response) {
 			  let data = null
 			  try {
@@ -670,6 +663,11 @@ class Utils
 			  } catch (e) {
 			  }
 			  response(data)
+			}';
+		} else {
+			$source = 'autocompleteOptions: {
+				source: ' . json_encode($valueOptions) . ',
+				minLength: 3
 			}';
 		}
 
@@ -690,11 +688,8 @@ class Utils
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-		if (isset($option['values'])) {
-			$values = $option['values'];
-		} else {
-			$values = $this->dataHelper->getValue($id);
-		}
+		$values ??= $this->dataHelper->getValue($id);
+
 		if ($values) {
 			$input = '';
 			foreach ($values as $v) {
@@ -702,7 +697,7 @@ class Utils
 			}
 		}
 
-		return $this->v_input_wrapper($label, '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($label, '<div id="' . $id . '">' . $input . '</div>', $id, []);
 	}
 
 	public function v_form_file(string $id, array $option = []): string
