@@ -112,14 +112,7 @@ class fTimestamp
 	{
 		$args = array_slice(func_get_args(), 1);
 
-		if (class_exists('fText', false)) {
-			return call_user_func_array(
-				array('fText', 'compose'),
-				array($message, $args)
-			);
-		} else {
-			return vsprintf($message, $args);
-		}
+		return vsprintf($message, $args);
 	}
 
 	/**

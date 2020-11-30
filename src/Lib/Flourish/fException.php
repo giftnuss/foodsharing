@@ -50,15 +50,7 @@ abstract class fException extends Exception
 			$components = $components[0];
 		}
 
-		// If fText is loaded, use it
-		if (class_exists('Flourish\\fText', false)) {
-			return call_user_func_array(
-				array('Flourish\\fText', 'compose'),
-				array($message, $components)
-			);
-		} else {
-			return vsprintf($message, $components);
-		}
+		return vsprintf($message, $components);
 	}
 
 	/**
