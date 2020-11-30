@@ -1843,7 +1843,6 @@ blog:
     date: Datum
     name: Titel
     actions: Aktionen
-  article: Artikel
   actions: Aktionen
   all: Alle Blogeinträge
   new: Neuen Artikel schreiben

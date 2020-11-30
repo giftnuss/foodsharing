@@ -90,9 +90,6 @@ class BlogControl extends Control
 	{
 		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->pageHelper->addBread($this->translator->trans('blog.manage'));
-			$title = $this->translator->trans('blog.title');
-
-			$this->pageHelper->addContent($this->view->headline($title));
 
 			if ($data = $this->blogGateway->listArticle()) {
 				$this->pageHelper->addContent($this->view->listArticle($data));
