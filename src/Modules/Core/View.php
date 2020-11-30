@@ -114,32 +114,6 @@ class View
 		return $out;
 	}
 
-	public function headline($title, $img = '', $click = false)
-	{
-		if ($click !== false) {
-			$click = ' onclick="' . $click . 'return false;"';
-		}
-		if (!empty($img)) {
-			$img = '
-			<div class="welcome_profile_image">
-				<a href="#"' . $click . '>
-					<img width="50" height="50" src="' . $img . '" alt="Raphael" class="image_online">
-				</a>
-			</div>';
-		}
-
-		return '
-
-		<div class="welcome ui-padding margin-bottom ui-corner-all">
-			' . $img . '
-			<div class="welcome_profile_name">
-				<div class="user_display_name">
-					' . $title . '
-				</div>
-			</div>
-		</div>';
-	}
-
 	public function fsAvatarList(array $foodsaver, int $maxHeight = 185, bool $useScroller = false, bool $shuffle = true, ?string $id = null): string
 	{
 		$id ??= $this->identificationHelper->id('team');

@@ -25,7 +25,11 @@ class ApplicationView extends View
 
 	public function application($application)
 	{
-		$out = $this->headline('Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'], $this->imageService->img($application['photo']), 'profile(' . $application['id'] . ');');
+		$out = $this->headline(
+			'Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'],
+			$application['photo'],
+			$application['id']
+		);
 
 		$cnt = nl2br($application['application']);
 
@@ -35,5 +39,22 @@ class ApplicationView extends View
 		$out .= $this->v_utils->v_field($cnt, 'Motivations-Text', ['class' => 'ui-padding']);
 
 		return $out;
+	}
+
+	private function headline(string $title, ?string $img, int $userId): string
+	{
+		return '
+		<div class="welcome ui-padding margin-bottom ui-corner-all">
+			<div class="welcome_profile_image">
+				<a href="/profile/' . $userId . '">
+					<img width="50" height="50" src="' . $this->imageService->img($img) . '">
+				</a>
+			</div>
+			<div class="welcome_profile_name">
+				<div class="user_display_name">
+					' . $title . '
+				</div>
+			</div>
+		</div>';
 	}
 }
