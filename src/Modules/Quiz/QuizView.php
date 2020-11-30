@@ -97,12 +97,7 @@ class QuizView extends View
 				['cnt' => substr($s['time_start'], 0, -3)],
 				['cnt' => $s['fp']],
 				['cnt' => $status],
-
-				['cnt' => $this->v_utils->v_toolbar([
-					'id' => $s['id'],
-					'types' => ['delete'],
-					'confirmMsg' => 'Soll diese Quiz-Session wirklich gel&ouml;scht werden?',
-				])]
+				['cnt' => $this->legacyToolbar($s['id'])],
 			];
 			if ($cur_qid != $s['quiz_id'] || $key == (count($sessions) - 1)) {
 				$cur_qid = $s['quiz_id'];
@@ -118,6 +113,30 @@ class QuizView extends View
 		}
 
 		return $out;
+	}
+
+	/**
+	 * @deprecated Use modern frontend code instead
+	 */
+	private function legacyToolbar($id): string
+	{
+		if (isset($_GET['bid'])) {
+			$bid = '&bid=' . (int)$_GET['bid'];
+		} else {
+			$bid = $this->session->getCurrentRegionId();
+		}
+
+		$page = $this->routeHelper->getPage();
+		$confirmMsg = 'Soll diese Quiz-Session wirklich gel&ouml;scht werden?';
+		$link = "'/?page=" . $page . '&a=delete&id=' . $id . "'";
+		$out = '
+			<li class="ui-state-default ui-corner-left ui-corner-right"'
+			. ' title="' . $this->translator->trans('button.delete') . '"'
+			. ' onclick="ifconfirm(' . $link . ',\'' . $confirmMsg . '\');">'
+			. '<span class="ui-icon ui-icon-trash"></span>'
+		. '</li>';
+
+		return '<ul class="toolbar" class="ui-widget ui-helper-clearfix">' . $out . '</ul>';
 	}
 
 	public function noSessions(array $quiz): string
