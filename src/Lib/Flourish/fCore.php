@@ -186,20 +186,6 @@ class fCore
 	private static $significant_error_lines = array();
 
 	/**
-	 * An SMTP connection for sending error and exception emails.
-	 *
-	 * @var fSMTP
-	 */
-	private static $smtp_connection = null;
-
-	/**
-	 * The email address to send error emails from.
-	 *
-	 * @var string
-	 */
-	private static $smtp_from_email = null;
-
-	/**
 	 * Creates a nicely formatted backtrace to the the point where this method is called.
 	 *
 	 * @param  int $remove_lines  The number of trailing lines to remove from the backtrace
@@ -405,18 +391,6 @@ class fCore
 		$args = array_slice(func_get_args(), 1);
 
 		return vsprintf($message, $args);
-	}
-
-	/**
-	 * Sets an fSMTP object to be used for sending error and exception emails.
-	 *
-	 * @param  fSMTP  $smtp        The SMTP connection to send emails over
-	 * @param  string $from_email  The email address to use in the `From:` header
-	 */
-	public static function configureSMTP($smtp, $from_email)
-	{
-		self::$smtp_connection = $smtp;
-		self::$smtp_from_email = $from_email;
 	}
 
 	/**
@@ -692,8 +666,6 @@ class fCore
 		self::$handles_exceptions = false;
 		self::$significant_error_lines = array();
 		self::$show_context = true;
-		self::$smtp_connection = null;
-		self::$smtp_from_email = null;
 	}
 
 	/**
@@ -746,18 +718,7 @@ class fCore
 			}
 
 			if (self::checkDestination($destination) == 'email') {
-				if (self::$smtp_connection) {
-					$email = new fEmail();
-					foreach (explode(',', $destination) as $recipient) {
-						$email->addRecipient($recipient);
-					}
-					$email->setFromEmail(self::$smtp_from_email);
-					$email->setSubject($subject);
-					$email->setBody($message);
-					$email->send(self::$smtp_connection);
-				} else {
-					mail($destination, $subject, $message);
-				}
+				mail($destination, $subject, $message);
 			} else {
 				$handle = fopen($destination, 'a');
 				fwrite($handle, $subject . "\n\n");

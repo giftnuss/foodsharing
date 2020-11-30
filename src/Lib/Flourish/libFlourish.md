@@ -54,7 +54,9 @@
     - fNotFoundException
     - fNumber
     - fRequest
-- 2020-11-30: removed fText
+- 2020-11-30: removed some more unused Flourish classes
+    - fText
+    - fEmail, fSMTP
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes
