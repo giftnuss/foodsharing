@@ -487,69 +487,6 @@ class Utils
 			</div>';
 	}
 
-	public function v_toolbar(array $option = []): string
-	{
-		$id = 0;
-		if (isset($option['id'])) {
-			$id = $option['id'];
-		}
-		if (isset($option['page'])) {
-			$page = $option['page'];
-		} else {
-			$page = $this->routeHelper->getPage();
-		}
-
-		if (isset($_GET['bid'])) {
-			$bid = '&bid=' . (int)$_GET['bid'];
-		} else {
-			$bid = $this->session->getCurrentRegionId();
-		}
-
-		$out = '';
-		if (!isset($option['types'])) {
-			$option['types'] = ['edit', 'delete'];
-		}
-
-		$last = count($option['types']) - 1;
-
-		foreach ($option['types'] as $i => $t) {
-			$corner = '';
-			if ($i == 0) {
-				$corner = ' ui-corner-left';
-			}
-			if ($i == $last) {
-				$corner .= ' ui-corner-right';
-			}
-			switch ($t) {
-				case 'edit':
-					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');"'
-						. ' title="' . $this->translator->trans('button.edit') . '" class="ui-state-default' . $corner . '">'
-						. '<span class="ui-icon ui-icon-wrench"></span>'
-						. '</li>';
-					break;
-
-				case 'delete':
-					if (isset($option['confirmMsg'])) {
-						$cmsg = $option['confirmMsg'];
-					} else {
-						$cmsg = $this->translator->trans('really_delete');
-					}
-					$link = "'/?page=" . $page . '&a=delete&id=' . $id . "'";
-					$out .= '<li class="ui-state-default' . $corner . '"'
-						. ' title="' . $this->translator->trans('button.delete') . '"'
-						. ' onclick="ifconfirm(' . $link . ',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');">'
-						. '<span class="ui-icon ui-icon-trash"></span>'
-					. '</li>';
-					break;
-
-				default:
-					break;
-			}
-		}
-
-		return '<ul class="toolbar" class="ui-widget ui-helper-clearfix">' . $out . '</ul>';
-	}
-
 	public function v_tablesorter($head, $data, array $option = []): string
 	{
 		$params = [
