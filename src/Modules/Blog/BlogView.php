@@ -95,7 +95,9 @@ class BlogView extends View
 
 		$table = $this->v_utils->v_tablesorter($theads, $rows);
 
-		return $this->v_utils->v_field($table, $this->translator->trans('blog.title'));
+		return $this->vueComponent('vue-blog-overview', 'BlogOverview', [
+			'canWriteNewBlog' => $this->blogPermissions->mayAdministrateBlog(),
+		]) . $table;
 	}
 
 	public function newsPost(array $news): string

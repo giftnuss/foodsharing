@@ -96,13 +96,6 @@ class BlogControl extends Control
 			} else {
 				$this->flashMessageHelper->info($this->translator->trans('blog.empty'));
 			}
-
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
-				[
-					'href' => '/?page=blog&sub=add',
-					'name' => $this->translator->trans('blog.new')
-				]
-			]), $this->translator->trans('blog.actions')), CNT_LEFT);
 		}
 	}
 
