@@ -41,13 +41,6 @@ class fSMTP
 	private $connection;
 
 	/**
-	 * If debugging has been enabled.
-	 *
-	 * @var bool
-	 */
-	private $debug;
-
-	/**
 	 * The hostname or IP of the SMTP server.
 	 *
 	 * @var string
@@ -348,16 +341,6 @@ class fSMTP
 	}
 
 	/**
-	 * Sets if debug messages should be shown.
-	 *
-	 * @param  bool $flag  If debugging messages should be shown
-	 */
-	public function enableDebugging($flag)
-	{
-		$this->debug = (bool)$flag;
-	}
-
-	/**
 	 * Searches the response array for the the regex and returns any matches.
 	 *
 	 * @param array  $response  The lines of data to search through
@@ -438,9 +421,7 @@ class fSMTP
 				}
 			}
 		}
-		if (fCore::getDebug($this->debug)) {
-			fCore::debug("Received:\n" . join("\r\n", $response), $this->debug);
-		}
+
 		$this->handleErrors($response);
 
 		return $response;
@@ -570,9 +551,6 @@ class fSMTP
 
 		if (substr($data, -2) != "\r\n") {
 			$data .= "\r\n";
-		}
-		if (fCore::getDebug($this->debug)) {
-			fCore::debug("Sending:\n" . trim($data), $this->debug);
 		}
 
 		$res = fwrite($this->connection, $data);

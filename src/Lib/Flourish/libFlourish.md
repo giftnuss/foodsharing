@@ -25,7 +25,8 @@
     - fValidation
     - fXML
 - 2017-11-10: Namespaced, fixed codestyle 
-- 2019-07-25 removed fMailbox as it is not used 
+- 2019-07-25 removed fMailbox as it is not used
+- 2020-11-30: removed debug logging, it is never enabled
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes

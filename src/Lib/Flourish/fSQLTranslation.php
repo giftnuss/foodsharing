@@ -235,13 +235,6 @@ class fSQLTranslation
 	private $database;
 
 	/**
-	 * If debugging is enabled.
-	 *
-	 * @var bool
-	 */
-	private $debug;
-
-	/**
 	 * Database-specific schema information needed for translation.
 	 *
 	 * @var array
@@ -370,16 +363,6 @@ class fSQLTranslation
 		}
 
 		$this->schema_info = $this->cache->get($this->makeCachePrefix() . 'schema_info', array());
-	}
-
-	/**
-	 * Sets if debug messages should be shown.
-	 *
-	 * @param  bool $flag  If debugging messages should be shown
-	 */
-	public function enableDebugging($flag)
-	{
-		$this->debug = (bool)$flag;
 	}
 
 	/**
@@ -708,24 +691,10 @@ class fSQLTranslation
 			}
 
 			if ($sql != $new_sql || $extra_statements) {
-				fCore::debug(
-					self::compose(
-						'Original SQL:%s',
-						"\n" . $sql
-					),
-					$this->debug
-				);
 				$translated_sql = $new_sql;
 				if ($extra_statements) {
 					$translated_sql .= '; ' . join('; ', $extra_statements);
 				}
-				fCore::debug(
-					self::compose(
-						'Translated SQL:%s',
-						"\n" . $translated_sql
-					),
-					$this->debug
-				);
 			}
 
 			$output = array_merge($output, array($number . ':' . $sql => $new_sql), array_values($extra_statements));

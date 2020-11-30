@@ -153,13 +153,6 @@ class fDatabase
 	private $database;
 
 	/**
-	 * If debugging is enabled.
-	 *
-	 * @var bool
-	 */
-	private $debug;
-
-	/**
 	 * A temporary error holder for the mssql extension.
 	 *
 	 * @var string
@@ -351,7 +344,6 @@ class fDatabase
 			return;
 		}
 
-		fCore::debug('Total query time: ' . $this->query_time . ' seconds', $this->debug);
 		if ($this->extension == 'ibm_db2') {
 			db2_close($this->connection);
 		} elseif ($this->extension == 'mssql') {
@@ -973,16 +965,6 @@ class fDatabase
 		}
 
 		$this->schema_info = $this->cache->get($this->makeCachePrefix() . 'schema_info', array());
-	}
-
-	/**
-	 * Sets if debug messages should be shown.
-	 *
-	 * @param  bool $flag  If debugging messages should be shown
-	 */
-	public function enableDebugging($flag)
-	{
-		$this->debug = (bool)$flag;
 	}
 
 	/**
@@ -2930,16 +2912,6 @@ class fDatabase
 		// Write some debugging info
 		$query_time = microtime(true) - $start_time;
 		$this->query_time += $query_time;
-		if (fCore::getDebug($this->debug)) {
-			fCore::debug(
-				self::compose(
-					'Query time was %1$s seconds for:%2$s',
-					$query_time,
-					"\n" . $sql
-				),
-				$this->debug
-			);
-		}
 
 		if ($this->hook_callbacks['run']) {
 			foreach ($this->hook_callbacks['run'] as $callback) {
