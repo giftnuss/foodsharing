@@ -92,11 +92,7 @@ class ContentControl extends Control
 						$rows[] = [
 							['cnt' => $d['id']],
 							['cnt' => $link . $d['name'] . '</a>'],
-							['cnt' => $this->v_utils->v_toolbar([
-								'id' => $d['id'],
-								'types' => ['edit', 'delete'],
-								'confirmMsg' => $this->translator->trans('content.delete', ['{name}' => $d['name']]),
-							])],
+							['cnt' => $this->legacyToolbar($d['id'], $d['name'])],
 						];
 					}
 
@@ -118,6 +114,33 @@ class ContentControl extends Control
 				}
 			}
 		}
+	}
+
+	public function legacyToolbar($id, string $contentName): string
+	{
+		if (isset($_GET['bid'])) {
+			$bid = '&bid=' . (int)$_GET['bid'];
+		} else {
+			$bid = $this->session->getCurrentRegionId();
+		}
+
+		$page = $this->routeHelper->getPage();
+		// edit
+		$out = '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');"'
+			. ' title="' . $this->translator->trans('button.edit') . '" class="ui-state-default ui-corner-left">'
+			. '<span class="ui-icon ui-icon-wrench"></span>'
+			. '</li>';
+
+		// delete
+		$confirmMsg = $this->translator->trans('content.delete', ['{name}' => $contentName]);
+		$link = "'/?page=" . $page . '&a=delete&id=' . $id . "'";
+		$out .= '<li class="ui-state-default ui-corner-right"'
+			. ' title="' . $this->translator->trans('button.delete') . '"'
+			. ' onclick="ifconfirm(' . $link . ',\'' . $confirmMsg . '\');">'
+			. '<span class="ui-icon ui-icon-trash"></span>'
+		. '</li>';
+
+		return '<ul class="toolbar" class="ui-widget ui-helper-clearfix">' . $out . '</ul>';
 	}
 
 	public function partner(): void
