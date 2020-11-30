@@ -47,6 +47,13 @@
     - fUnbufferedResult
 - 2020-11-30: Deleted fCache, and code that used it in fSession.
     We are using the native `redis` save handler, so this can go.
+- 2020-11-30: Got rid of some leftover classes after the database cleanup
+    - fAuthorizationException
+    - fEmptySetException
+    - fNoRowsException
+    - fNotFoundException
+    - fNumber
+    - fRequest
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes
