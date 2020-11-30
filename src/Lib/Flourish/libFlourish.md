@@ -29,6 +29,22 @@
 - 2020-11-30: removed debug logging, it is never enabled
 - 2020-11-30: removed PHP version checks - Flourish is older than PHP 7, so they don't matter anymore
 - 2020-11-30: removed OS checks and resulting dead code - we only run on linux anyway
+- 2020-11-30: Deleted all database related classes, they are not in use:
+    - fActiveRecord
+    - fDatabase
+    - fORM
+    - fORMDatabase
+    - fORMRelated
+    - fORMSchema
+    - fORMValidation
+    - fRecordSet
+    - fResult
+    - fSchema
+    - fSQLException
+    - fSQLSchemaTranslation
+    - fSQLTranslation
+    - fStatement
+    - fUnbufferedResult
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes
