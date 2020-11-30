@@ -444,19 +444,9 @@ class fCryptography
 		$bytes = null;
 
 		// On linux/unix/solaris we should be able to use /dev/urandom
-		if (!fCore::checkOS('windows') && $handle = fopen('/dev/urandom', 'rb')) {
+		if ($handle = fopen('/dev/urandom', 'rb')) {
 			$bytes = fread($handle, 4);
 			fclose($handle);
-
-			// On windows we should be able to use the Cryptographic Application Programming Interface COM object
-		} elseif (fCore::checkOS('windows') && class_exists('COM', false)) {
-			try {
-				// This COM object no longer seems to work on PHP 5.2.9+, no response on the bug report yet
-				$capi = new COM('CAPICOM.Utilities.1');
-				$bytes = base64_decode($capi->getrandom(4, 0));
-				unset($capi);
-			} catch (Exception $e) {
-			}
 		}
 
 		// If we could not use the OS random number generators we get some of the most unique info we can

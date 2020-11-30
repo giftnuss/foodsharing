@@ -85,8 +85,7 @@ class fDate
 			$timestamp = strtotime(fTimestamp::fixISOWeek($date));
 		}
 
-		$is_51 = fCore::checkVersion('5.1');
-		$is_valid = ($is_51 && $timestamp !== false) || (!$is_51 && $timestamp !== -1);
+		$is_valid = $timestamp !== false;
 
 		if (!$is_valid) {
 			throw new fValidationException(

@@ -51,8 +51,6 @@ class fCore
 	const backtrace = 'Flourish\\fCore::backtrace';
 	const call = 'Flourish\\fCore::call';
 	const callback = 'Flourish\\fCore::callback';
-	const checkOS = 'Flourish\\fCore::checkOS';
-	const checkVersion = 'Flourish\\fCore::checkVersion';
 	const configureSMTP = 'Flourish\\fCore::configureSMTP';
 	const disableContext = 'Flourish\\fCore::disableContext';
 	const dump = 'Flourish\\fCore::dump';
@@ -394,82 +392,6 @@ class fCore
 	}
 
 	/**
-	 * Returns is the current OS is one of the OSes passed as a parameter.
-	 *
-	 * Valid OS strings are:
-	 *  - `'linux'`
-	 *  - `'aix'`
-	 *  - `'bsd'`
-	 *  - `'freebsd'`
-	 *  - `'netbsd'`
-	 *  - `'openbsd'`
-	 *  - `'osx'`
-	 *  - `'solaris'`
-	 *  - `'windows'`
-	 *
-	 * @param  string $os  The operating system to check - see method description for valid OSes
-	 * @param  string ...
-	 *
-	 * @return bool  If the current OS is included in the list of OSes passed as parameters
-	 */
-	public static function checkOS($os)
-	{
-		$oses = func_get_args();
-
-		$valid_oses = array('linux', 'aix', 'bsd', 'freebsd', 'openbsd', 'netbsd', 'osx', 'solaris', 'windows');
-
-		if ($invalid_oses = array_diff($oses, $valid_oses)) {
-			throw new fProgrammerException(
-				'One or more of the OSes specified, %$1s, is invalid. Must be one of: %2$s.',
-				join(' ', $invalid_oses),
-				join(', ', $valid_oses)
-			);
-		}
-
-		$uname = php_uname('s');
-
-		if (stripos($uname, 'linux') !== false) {
-			return in_array('linux', $oses);
-		} elseif (stripos($uname, 'aix') !== false) {
-			return in_array('aix', $oses);
-		} elseif (stripos($uname, 'netbsd') !== false) {
-			return in_array('netbsd', $oses) || in_array('bsd', $oses);
-		} elseif (stripos($uname, 'openbsd') !== false) {
-			return in_array('openbsd', $oses) || in_array('bsd', $oses);
-		} elseif (stripos($uname, 'freebsd') !== false) {
-			return in_array('freebsd', $oses) || in_array('bsd', $oses);
-		} elseif (stripos($uname, 'solaris') !== false || stripos($uname, 'sunos') !== false) {
-			return in_array('solaris', $oses);
-		} elseif (stripos($uname, 'windows') !== false) {
-			return in_array('windows', $oses);
-		} elseif (stripos($uname, 'darwin') !== false) {
-			return in_array('osx', $oses);
-		}
-
-		throw new fEnvironmentException('Unable to determine the current OS');
-	}
-
-	/**
-	 * Checks to see if the running version of PHP is greater or equal to the version passed.
-	 *
-	 * @return bool  If the running version of PHP is greater or equal to the version passed
-	 */
-	public static function checkVersion($version)
-	{
-		static $running_version = null;
-
-		if ($running_version === null) {
-			$running_version = preg_replace(
-				'#^(\d+\.\d+\.\d+).*$#D',
-				'\1',
-				PHP_VERSION
-			);
-		}
-
-		return version_compare($running_version, $version, '>=');
-	}
-
-	/**
 	 * Composes text using fText if loaded.
 	 *
 	 * @param  string  $message    The message to compose
@@ -688,20 +610,6 @@ class fCore
 		$backtrace = preg_replace('#: fCore::handleError\(.*?\)$#', '', $backtrace);
 
 		$error_string = preg_replace('# \[<a href=\'.*?</a>\]: #', ': ', $error_string);
-
-		// This was added in 5.2
-		if (!defined('E_RECOVERABLE_ERROR')) {
-			define('E_RECOVERABLE_ERROR', 4096);
-		}
-
-		// These were added in 5.3
-		if (!defined('E_DEPRECATED')) {
-			define('E_DEPRECATED', 8192);
-		}
-
-		if (!defined('E_USER_DEPRECATED')) {
-			define('E_USER_DEPRECATED', 16384);
-		}
 
 		switch ($error_number) {
 			case E_WARNING:		   $type = self::compose('Warning'); break;

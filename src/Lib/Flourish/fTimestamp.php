@@ -100,19 +100,6 @@ class fTimestamp
 	}
 
 	/**
-	 * Checks to make sure the current version of PHP is high enough to support timezone features.
-	 */
-	private static function checkPHPVersion()
-	{
-		if (!fCore::checkVersion('5.1')) {
-			throw new fEnvironmentException(
-				'The %s class takes advantage of the timezone features in PHP 5.1.0 and newer. Unfortunately it appears you are running an older version of PHP.',
-				__CLASS__
-			);
-		}
-	}
-
-	/**
 	 * Composes text using fText if loaded.
 	 *
 	 * @param  string  $message    The message to compose
@@ -183,8 +170,6 @@ class fTimestamp
 	 */
 	public static function getDefaultTimezone()
 	{
-		self::checkPHPVersion();
-
 		return date_default_timezone_get();
 	}
 
@@ -695,7 +680,6 @@ class fTimestamp
 	 */
 	public static function setDefaultTimezone($timezone)
 	{
-		self::checkPHPVersion();
 
 		$result = date_default_timezone_set($timezone);
 		if (!$result) {
@@ -750,7 +734,6 @@ class fTimestamp
 	 */
 	public function __construct($datetime = null, $timezone = null)
 	{
-		self::checkPHPVersion();
 
 		$default_tz = date_default_timezone_get();
 

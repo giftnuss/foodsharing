@@ -526,10 +526,8 @@ class fDatabase
 					$password = null;
 				}
 			} elseif ($this->type == 'mssql') {
-				$separator = (fCore::checkOS('windows')) ? ',' : ':';
-				$port = ($this->port) ? $separator . $this->port : '';
-				$driver = (fCore::checkOs('windows')) ? 'mssql' : 'dblib';
-				$dsn = $driver . ':host=' . $this->host . $port . ';dbname=' . $this->database;
+				$port = ($this->port) ? ':' . $this->port : '';
+				$dsn = 'dblib:host=' . $this->host . $port . ';dbname=' . $this->database;
 
 				// This driver does not support timeouts so we fake it here
 				if ($this->timeout !== null) {
@@ -625,8 +623,7 @@ class fDatabase
 
 			fCore::startErrorCapture();
 
-			$separator = (fCore::checkOS('windows')) ? ',' : ':';
-			$this->connection = mssql_connect(($this->port) ? $this->host . $separator . $this->port : $this->host, $this->username, $this->password, true);
+			$this->connection = mssql_connect(($this->port) ? $this->host . ':' . $this->port : $this->host, $this->username, $this->password, true);
 
 			if ($this->connection !== false && mssql_select_db($this->database, $this->connection) === false) {
 				$this->connection = false;
@@ -2281,7 +2278,7 @@ class fDatabase
 		} elseif ($this->extension == 'sqlsrv') {
 			$result = sqlsrv_query($this->connection, $statement);
 		} elseif ($this->extension == 'pdo') {
-			if ($this->type == 'mssql' && !fCore::checkOS('windows')) {
+			if ($this->type == 'mssql') {
 				// pdo_dblib is all messed up for return values from ->exec()
 				// and even ->query(), but ->query() is closer to correct and
 				// we use some heuristics to overcome the limitations
@@ -2415,7 +2412,7 @@ class fDatabase
 						// pdo_dblib doesn't throw an exception on error when executing
 					// a prepared statement when compiled against FreeTDS, so we have
 					// to manually check the error info to see if something went wrong
-					} elseif ($this->type == 'mssql' && !fCore::checkOS('windows') && preg_match('#^\s*EXEC(UTE)?\s+#i', $result->getSQL())) {
+					} elseif ($this->type == 'mssql' && preg_match('#^\s*EXEC(UTE)?\s+#i', $result->getSQL())) {
 						$error_info = $extra->errorInfo();
 						if ($error_info && strpos($error_info[2], '(null) [0] (severity 0)') !== 0) {
 							$returned_rows = false;

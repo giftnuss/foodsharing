@@ -193,10 +193,6 @@ class fEmail
 	 */
 	public static function fixQmail()
 	{
-		if (fCore::checkOS('windows')) {
-			return;
-		}
-
 		$sendmail_command = ini_get('sendmail_path');
 
 		if (!$sendmail_command) {
@@ -289,40 +285,9 @@ class fEmail
 
 		if (strpos(self::$fqdn, '.') === false) {
 			$can_exec = !in_array('exec', array_map('trim', explode(',', ini_get('disable_functions')))) && !ini_get('safe_mode');
-			if (fCore::checkOS('linux') && $can_exec) {
+			if ($can_exec) {
 				self::$fqdn = trim(shell_exec('hostname --fqdn'));
-			} elseif (fCore::checkOS('windows')) {
-				$shell = new COM('WScript.Shell');
-				$tcpip_key = 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip';
-				try {
-					$domain = $shell->RegRead($tcpip_key . '\Parameters\NV Domain');
-				} catch (com_exception $e) {
-					try {
-						$domain = $shell->RegRead($tcpip_key . '\Parameters\DhcpDomain');
-					} catch (com_exception $e) {
-						try {
-							$adapters = $shell->RegRead($tcpip_key . '\Linkage\Route');
-							foreach ($adapters as $adapter) {
-								if ($adapter[0] != '{') {
-									continue;
-								}
-								try {
-									$domain = $shell->RegRead($tcpip_key . '\Interfaces\\' . $adapter . '\Domain');
-								} catch (com_exception $e) {
-									try {
-										$domain = $shell->RegRead($tcpip_key . '\Interfaces\\' . $adapter . '\DhcpDomain');
-									} catch (com_exception $e) {
-									}
-								}
-							}
-						} catch (com_exception $e) {
-						}
-					}
-				}
-				if (!empty($domain)) {
-					self::$fqdn .= '.' . $domain;
-				}
-			} elseif (!fCore::checkOS('windows') && !ini_get('open_basedir') && file_exists('/etc/resolv.conf')) {
+			} elseif (!ini_get('open_basedir') && file_exists('/etc/resolv.conf')) {
 				$output = file_get_contents('/etc/resolv.conf');
 				if (preg_match('#^domain ([a-z0-9_.-]+)#im', $output, $match)) {
 					self::$fqdn .= '.' . $match[1];
@@ -1359,28 +1324,6 @@ class fEmail
 	{
 		$this->validate();
 
-		// The mail() function on Windows doesn't support names in headers so
-		// we must strip them down to just the email address
-		if ($connection === null && fCore::checkOS('windows')) {
-			$vars = array('bcc_emails', 'bounce_to_email', 'cc_emails', 'from_email', 'reply_to_email', 'sender_email', 'to_emails');
-			foreach ($vars as $var) {
-				if (!is_array($this->$var)) {
-					if (preg_match(self::NAME_EMAIL_REGEX, $this->$var, $match)) {
-						$this->$var = $match[2];
-					}
-				} else {
-					$new_emails = array();
-					foreach ($this->$var as $email) {
-						if (preg_match(self::NAME_EMAIL_REGEX, $email, $match)) {
-							$email = $match[2];
-						}
-						$new_emails[] = $email;
-					}
-					$this->$var = $new_emails;
-				}
-			}
-		}
-
 		$to = substr(trim($this->buildMultiAddressHeader('To', $this->to_emails)), 4);
 
 		$top_level_boundary = $this->createBoundary();
@@ -1411,15 +1354,11 @@ class fEmail
 
 		// Sendmail when not in safe mode will allow you to set the envelope from address via the -f parameter
 		$parameters = null;
-		if (!fCore::checkOS('windows') && $this->bounce_to_email) {
+		if ($this->bounce_to_email) {
 			preg_match(self::EMAIL_REGEX, $this->bounce_to_email, $matches);
 			$parameters = '-f ' . $matches[0];
 
 			// Windows takes the Return-Path email from the sendmail_from ini setting
-		} elseif (fCore::checkOS('windows') && $this->bounce_to_email) {
-			$old_sendmail_from = ini_get('sendmail_from');
-			preg_match(self::EMAIL_REGEX, $this->bounce_to_email, $matches);
-			ini_set('sendmail_from', $matches[0]);
 		}
 
 		// This is a gross qmail fix that is a last resort
@@ -1448,21 +1387,11 @@ class fEmail
 
 			// This is the normal way to send mail
 		} else {
-			// On Windows, mail() sends directly to an SMTP server and will
-			// strip a leading . from the body
-			if (fCore::checkOS('windows')) {
-				$body = preg_replace('#^\.#', '..', $body);
-			}
-
 			if ($parameters) {
 				$error = !mail($to, $subject, $body, $headers, $parameters);
 			} else {
 				$error = !mail($to, $subject, $body, $headers);
 			}
-		}
-
-		if (fCore::checkOS('windows') && $this->bounce_to_email) {
-			ini_set('sendmail_from', $old_sendmail_from);
 		}
 
 		if ($error) {
@@ -1508,7 +1437,7 @@ class fEmail
 	 */
 	public function setBounceToEmail($email)
 	{
-		if (ini_get('safe_mode') && !fCore::checkOS('windows')) {
+		if (ini_get('safe_mode')) {
 			throw new fProgrammerException('It is not possible to set a Bounce-To Email address when safe mode is enabled on a non-Windows server');
 		}
 		if (!$email) {

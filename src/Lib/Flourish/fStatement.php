@@ -380,17 +380,13 @@ class fStatement
 
 			case 'pdo_dblib':
 				$sql = $this->database->escape($statement, $params);
-				if (!fCore::checkOS('windows')) {
-					$result = $connection->query($sql);
-					if ($result instanceof PDOStatement) {
-						$extra = $result;
-						$result->closeCursor();
-						$result = true;
-					} else {
-						$result = false;
-					}
+				$result = $connection->query($sql);
+				if ($result instanceof PDOStatement) {
+					$extra = $result;
+					$result->closeCursor();
+					$result = true;
 				} else {
-					$result = $connection->exec($sql);
+					$result = false;
 				}
 				break;
 		}

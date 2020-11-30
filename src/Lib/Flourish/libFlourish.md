@@ -27,6 +27,8 @@
 - 2017-11-10: Namespaced, fixed codestyle 
 - 2019-07-25 removed fMailbox as it is not used
 - 2020-11-30: removed debug logging, it is never enabled
+- 2020-11-30: removed PHP version checks - Flourish is older than PHP 7, so they don't matter anymore
+- 2020-11-30: removed OS checks and resulting dead code - we only run on linux anyway
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes

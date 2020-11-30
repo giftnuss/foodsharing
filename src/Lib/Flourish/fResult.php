@@ -257,9 +257,6 @@ class fResult implements Iterator
 		switch ($this->extension) {
 			case 'mssql':
 				$row = mssql_fetch_assoc($this->result);
-				if (!empty($row)) {
-					$row = $this->fixDblibMSSQLDriver($row);
-				}
 				break;
 
 			case 'mysql':
@@ -284,9 +281,6 @@ class fResult implements Iterator
 
 			case 'pdo':
 				$row = $this->result[$this->pointer];
-				if (!empty($row) && $type == 'mssql') {
-					$row = $this->fixDblibMSSQLDriver($row);
-				}
 				break;
 
 			case 'ibm_db2':
@@ -473,77 +467,6 @@ class fResult implements Iterator
 		$row = $this->fetchRow();
 
 		return array_shift($row);
-	}
-
-	/**
-	 * Warns the user about bugs in the DBLib driver for MSSQL, fixes some bugs.
-	 *
-	 * @param  array $row  The row from the database
-	 *
-	 * @return array  The fixed row
-	 */
-	private function fixDblibMSSQLDriver($row)
-	{
-		static $using_dblib = array();
-
-		if (!isset($using_dblib[$this->extension])) {
-			// If it is not a windows box we are definitely not using dblib
-			if (!fCore::checkOS('windows')) {
-				$using_dblib[$this->extension] = false;
-
-				// Check this windows box for dblib
-			} else {
-				ob_start();
-				phpinfo(INFO_MODULES);
-				$module_info = ob_get_contents();
-				ob_end_clean();
-
-				if ($this->extension == 'pdo_mssql') {
-					$using_dblib[$this->extension] = preg_match('#MSSQL_70#i', $module_info, $match);
-				} else {
-					$using_dblib[$this->extension] = !preg_match('#FreeTDS#i', $module_info, $match);
-				}
-			}
-		}
-
-		if (!$using_dblib[$this->extension]) {
-			return $row;
-		}
-
-		foreach ($row as $key => $value) {
-			if ($value === ' ') {
-				$row[$key] = '';
-				if (!self::$silence_notices) {
-					trigger_error(
-						self::compose(
-							'A single space was detected coming out of the database and was converted into an empty string - see %s for more information',
-							'http://bugs.php.net/bug.php?id=26315'
-						),
-						E_USER_NOTICE
-					);
-				}
-			}
-			if (!self::$silence_notices && strlen($key) == 30) {
-				trigger_error(
-					self::compose(
-						'A column name exactly 30 characters in length was detected coming out of the database - this column name may be truncated, see %s for more information.',
-						'http://bugs.php.net/bug.php?id=23990'
-					),
-					E_USER_NOTICE
-				);
-			}
-			if (!self::$silence_notices && strlen($value) == 256) {
-				trigger_error(
-					self::compose(
-						'A value exactly 255 characters in length was detected coming out of the database - this value may be truncated, see %s for more information.',
-						'http://bugs.php.net/bug.php?id=37757'
-					),
-					E_USER_NOTICE
-				);
-			}
-		}
-
-		return $row;
 	}
 
 	/**

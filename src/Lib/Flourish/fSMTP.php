@@ -441,39 +441,7 @@ class fSMTP
 		$write = null;
 		$except = null;
 
-		// PHP 5.2.0 to 5.2.5 had a bug on amd64 linux where stream_select()
-		// fails, so we have to fake it - http://bugs.php.net/bug.php?id=42682
-		static $broken_select = null;
-		if ($broken_select === null) {
-			$broken_select = strpos(php_uname('m'), '64') !== false && fCore::checkVersion('5.2.0') && !fCore::checkVersion('5.2.6');
-		}
-
-		// Fixes an issue with stream_select throwing a warning on PHP 5.3 on Windows
-		if (fCore::checkOS('windows') && fCore::checkVersion('5.3.0')) {
-			$select = @stream_select($read, $write, $except, $timeout, $utimeout);
-		} elseif ($broken_select) {
-			$broken_select_buffer = null;
-			$start_time = microtime(true);
-			$i = 0;
-			do {
-				if ($i) {
-					usleep(50000);
-				}
-				$char = fgetc($this->connection);
-				if ($char != "\x00" && $char !== false) {
-					$broken_select_buffer = $char;
-				}
-				++$i;
-				if ($i > 2) {
-					break;
-				}
-			} while ($broken_select_buffer === null && microtime(true) - $start_time < ($timeout + ($utimeout / 1000000)));
-			$select = $broken_select_buffer === null ? false : $broken_select_buffer;
-		} else {
-			$select = stream_select($read, $write, $except, $timeout, $utimeout);
-		}
-
-		return $select;
+		return stream_select($read, $write, $except, $timeout, $utimeout);
 	}
 
 	/**

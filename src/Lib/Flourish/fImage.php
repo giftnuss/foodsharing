@@ -105,7 +105,7 @@ class fImage extends fFile
 			);
 		}
 
-		$binary = $path . (fCore::checkOS('windows') ? 'convert.exe' : 'convert');
+		$binary = $path . 'convert';
 
 		if (self::isOpenBaseDirRestricted($path)) {
 			exec($binary . ' -version', $executable);
@@ -184,82 +184,41 @@ class fImage extends fFile
 					throw new Exception();
 				}
 
-				if (fCore::checkOS('windows')) {
-					$win_search = 'dir /B "C:\Program Files\ImageMagick*" 2> NUL';
-					exec($win_search, $win_output);
-					$win_output = trim(join("\n", $win_output));
+				$found = false;
 
-					if (!$win_output || stripos($win_output, 'File not found') !== false) {
-						throw new Exception();
+				$locations = array(
+					'/usr/local/bin/',
+					'/usr/bin/'
+				);
+
+				foreach ($locations as $location) {
+					if (self::isSafeModeExecDirRestricted($location)) {
+						continue;
 					}
-
-					$path = 'C:\\Program Files\\' . $win_output . '\\';
-				} elseif (fCore::checkOS('linux', 'bsd', 'solaris', 'osx', 'aix')) {
-					$found = false;
-
-					if (fCore::checkOS('solaris')) {
-						$locations = array(
-							'/opt/local/bin/',
-							'/opt/bin/',
-							'/opt/csw/bin/'
-						);
-					} else {
-						$locations = array(
-							'/usr/local/bin/',
-							'/usr/bin/'
-						);
-					}
-
-					foreach ($locations as $location) {
-						if (self::isSafeModeExecDirRestricted($location)) {
-							continue;
-						}
-						if (self::isOpenBaseDirRestricted($location)) {
-							exec($location . 'convert -version', $output);
-							if ($output) {
-								$found = true;
-								$path = $location;
-								break;
-							}
-						} elseif (is_executable($location . 'convert')) {
+					if (self::isOpenBaseDirRestricted($location)) {
+						exec($location . 'convert -version', $output);
+						if ($output) {
 							$found = true;
 							$path = $location;
 							break;
 						}
+					} elseif (is_executable($location . 'convert')) {
+						$found = true;
+						$path = $location;
+						break;
 					}
+				}
 
-					// We have no fallback in solaris
-					if (!$found && fCore::checkOS('solaris')) {
+				if (!$found) {
+					$nix_search = 'whereis -b convert';
+					exec($nix_search, $nix_output);
+					$nix_output = trim(str_replace('convert:', '', join("\n", $nix_output)));
+
+					if (!$nix_output) {
 						throw new Exception();
 					}
 
-					if (!$found && fCore::checkOS('linux', 'freebsd', 'aix')) {
-						$nix_search = 'whereis -b convert';
-						exec($nix_search, $nix_output);
-						$nix_output = trim(str_replace('convert:', '', join("\n", $nix_output)));
-
-						if (!$nix_output) {
-							throw new Exception();
-						}
-
-						$path = preg_replace('#^(.*)convert$#i', '\1', $nix_output);
-					}
-
-					if (!$found && fCore::checkOS('osx', 'netbsd', 'openbsd')) {
-						$osx_search = 'whereis convert';
-						exec($osx_search, $osx_output);
-						$osx_output = trim(join("\n", $osx_output));
-
-						if (!$osx_output) {
-							throw new Exception();
-						}
-
-						if (preg_match('#^(.*)convert#i', $osx_output, $matches)) {
-							$path = $matches[1];
-						}
-					}
-				} else {
-					$path = null;
+					$path = preg_replace('#^(.*)convert$#i', '\1', $nix_output);
 				}
 
 				self::checkImageMagickBinary($path);
@@ -467,7 +426,7 @@ class fImage extends fFile
 	private static function isOpenBaseDirRestricted($path)
 	{
 		if (ini_get('open_basedir')) {
-			$open_basedirs = explode((fCore::checkOS('windows')) ? ';' : ':', ini_get('open_basedir'));
+			$open_basedirs = explode(':', ini_get('open_basedir'));
 			$found = false;
 
 			foreach ($open_basedirs as $open_basedir) {
@@ -1109,11 +1068,8 @@ class fImage extends fFile
 	private function processWithImageMagick($output_file, $jpeg_quality)
 	{
 		$type = self::getImageType($this->file);
-		if (fCore::checkOS('windows')) {
-			$command_line = str_replace(' ', '" "', self::$imagemagick_dir . 'convert.exe');
-		} else {
-			$command_line = escapeshellarg(self::$imagemagick_dir . 'convert');
-		}
+
+		$command_line = escapeshellarg(self::$imagemagick_dir . 'convert');
 
 		if (self::$imagemagick_temp_dir) {
 			$command_line .= ' -set registry:temporary-path ' . escapeshellarg(self::$imagemagick_temp_dir) . ' ';
