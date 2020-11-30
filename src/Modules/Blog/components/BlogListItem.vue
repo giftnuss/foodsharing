@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable vue/max-attributes-per-line -->
-  <div class="blog-list-item d-flex align-items-center py-2">
+  <div class="blog-list-item d-flex align-items-center py-1">
     <div class="mx-1">
       <b-link
         :disabled="!mayPublish"
@@ -9,7 +9,7 @@
         <i
           v-b-tooltip.hover="$i18n(isPublished ? 'blog.status.1' : 'blog.status.0')"
           class="fas fa-fw"
-          :class="[isPublished ? 'fa-check-square text-secondary' : 'fa-clock text-primary']"
+          :class="[isPublished ? 'fa-check-square text-secondary' : 'fa-eye-slash text-primary']"
         />
       </b-link>
     </div>
@@ -20,16 +20,28 @@
     >
       {{ $dateFormat(when, 'dd.MM.yyyy') }}
     </div>
-    <div class="mx-1">
+    <div class="mx-2">
       {{ blogTitle }}
     </div>
     <b-link
       v-if="mayEdit"
       v-b-tooltip="$i18n('blog.edit')"
+      class="mx-1"
       :href="$url('blogEdit', blogId)"
     >
       <i class="fas fa-fw fa-pencil-alt" />
     </b-link>
+    <b-button
+      v-if="mayDelete"
+      v-b-tooltip="$i18n('blog.delete')"
+      href="#"
+      size="sm"
+      class="ml-auto mr-1"
+      variant="outline-danger"
+      @click.prevent="removeBlogpost"
+    >
+      <i class="fas fa-fw fa-trash-alt" />
+    </b-button>
   </div>
 </template>
 
@@ -37,7 +49,9 @@
 import dateFnsParseISO from 'date-fns/parseISO'
 import $ from 'jquery'
 
-import { hideLoader, showLoader } from '@/script'
+import { deleteBlogpost } from '@/api/blog'
+import i18n from '@/i18n'
+import { hideLoader, showLoader, pulseSuccess } from '@/script'
 
 export default {
   props: {
@@ -48,6 +62,7 @@ export default {
     createdAt: { type: String, required: true },
     mayPublish: { type: Boolean, default: true }, // this actually depends on the regionId...
     mayEdit: { type: Boolean, default: true },
+    mayDelete: { type: Boolean, default: true },
   },
   data () {
     return {
@@ -68,6 +83,16 @@ export default {
           hideLoader()
         },
       })
+    },
+    async removeBlogpost () {
+      if (!confirm(i18n('blog.confirmDelete', { name: this.blogTitle }))) {
+        return
+      }
+      showLoader()
+      await deleteBlogpost(this.blogId)
+      hideLoader()
+      pulseSuccess(i18n('success'))
+      this.$emit('remove-blogpost-from-list', this.blogId)
     },
   },
 }

@@ -15,6 +15,7 @@ const urls = {
   basket: (basketId) => `/essenskoerbe/${basketId}`,
   baskets: () => '/essenskoerbe',
   blog: () => '/news',
+  blogAdd: () => '/?page=blog&sub=add',
   blogEdit: (blogId) => `/?page=blog&sub=edit&id=${blogId}`,
   blogList: () => '/?page=blog&sub=manage',
   changelog: () => '/?page=content&sub=changelog',

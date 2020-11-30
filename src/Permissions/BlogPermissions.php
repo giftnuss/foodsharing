@@ -39,6 +39,11 @@ final class BlogPermissions
 		return $this->session->isAdminFor($authorOfPost['bezirk_id']);
 	}
 
+	public function mayDelete(array $authorOfPost): bool
+	{
+		return $this->mayEdit($authorOfPost);
+	}
+
 	public function mayAdministrateBlog(): bool
 	{
 		return $this->session->isAdminForAWorkGroup() || $this->session->may('orga');

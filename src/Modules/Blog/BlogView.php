@@ -137,7 +137,8 @@ class BlogView extends View
 
 		return $this->v_utils->v_form('test', [
 			$this->v_utils->v_field(
-				$bezirkchoose
+				$this->v_utils->v_info($this->translator->trans('blog.publish-info'))
+				. $bezirkchoose
 				. $this->v_utils->v_form_text('name')
 				. $this->v_utils->v_form_textarea('teaser', [
 					'style' => 'height:75px;',

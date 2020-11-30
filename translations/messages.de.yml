@@ -1838,20 +1838,17 @@ blog:
   manage: Blogeinträge verwalten
   title: Blogartikel
   empty: 'Bisher sind keine Einträge vorhanden.'
-  table:
-    status: Status
-    date: Datum
-    name: Titel
-    actions: Aktionen
   actions: Aktionen
   all: Alle Blogeinträge
   new: Neuen Artikel schreiben
   edit: Blogeintrag bearbeiten
   newTitle: 'Neuer Artikel für {region}'
+  publish-info: Der Veröffentlichungs-Status des Artikels kann auf der Übersichtsseite angepasst werden.
   content: Inhalt
   status:
     0: inaktiv
     1: veröffentlicht
+  delete: Artikel löschen
   confirmDelete: Soll {name} wirklich unwiderruflich gelöscht werden?
   success:
     new: Artikel wurde angelegt

@@ -13,19 +13,21 @@
           v-b-tooltip
           :title="$i18n('blog.new')"
           class="btn btn-secondary btn-sm write-new ml-1"
+          :href="$url('blogAdd')"
         >
           <i class="fas faw fa-plus" />
         </b-button>
       </div>
       <div class="card-body bg-white mb-2">
         <BlogListItem
-          v-for="blog in blogList"
+          v-for="blog in blogposts"
           :key="blog.id"
           :blog-id="blog.id"
           :blog-title="blog.name"
           :published="!!blog.active"
           :region-id="blog.bezirk_id"
           :created-at="blog.time"
+          @remove-blogpost-from-list="removeListItem"
         />
       </div>
     </div>
@@ -40,6 +42,19 @@ export default {
   props: {
     canWriteNewBlog: { type: Boolean, default: false },
     blogList: { type: Array, default: () => { return [] } },
+  },
+  data () {
+    return {
+      blogposts: this.blogList,
+    }
+  },
+  methods: {
+    removeListItem (blogId) {
+      const index = this.blogposts.findIndex(b => b.id === blogId)
+      if (index >= 0) {
+        this.blogposts.splice(index, 1)
+      }
+    },
   },
 }
 </script>
