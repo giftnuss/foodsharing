@@ -2,7 +2,7 @@
   <div class="bootstrap">
     <div class="card rounded">
       <div
-        class="card-header bg-primary text-white d-flex justify-content-between align-items-center mb-2"
+        class="card-header bg-primary text-white d-flex justify-content-between align-items-center mb-1"
         :class="{'can-write': canWriteNewBlog}"
       >
         <div class="font-weight-bolder">
@@ -17,14 +17,29 @@
           <i class="fas faw fa-plus" />
         </b-button>
       </div>
+      <div class="card-body bg-white mb-2">
+        <BlogListItem
+          v-for="blog in blogList"
+          :key="blog.id"
+          :blog-id="blog.id"
+          :blog-title="blog.name"
+          :published="!!blog.active"
+          :region-id="blog.bezirk_id"
+          :created-at="blog.time"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import BlogListItem from './BlogListItem.vue'
+
 export default {
+  components: { BlogListItem },
   props: {
     canWriteNewBlog: { type: Boolean, default: false },
+    blogList: { type: Array, default: () => { return [] } },
   },
 }
 </script>

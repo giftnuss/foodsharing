@@ -91,8 +91,8 @@ class BlogControl extends Control
 		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->pageHelper->addBread($this->translator->trans('blog.manage'));
 
-			if ($data = $this->blogGateway->listArticle()) {
-				$this->pageHelper->addContent($this->view->listArticle($data));
+			if ($data = $this->blogGateway->getBlogpostList()) {
+				$this->pageHelper->addContent($this->view->blogpostOverview($data));
 			} else {
 				$this->flashMessageHelper->info($this->translator->trans('blog.empty'));
 			}

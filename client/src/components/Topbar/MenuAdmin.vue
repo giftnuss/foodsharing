@@ -35,7 +35,7 @@ export default {
       const items = []
       if (this.may.administrateBlog) {
         items.push({
-          url: url('blogEdit'),
+          url: url('blogList'),
           icon: 'far fa-newspaper',
           label: i18n('menu.blog'),
         })

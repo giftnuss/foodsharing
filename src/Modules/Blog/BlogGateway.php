@@ -119,7 +119,7 @@ final class BlogGateway extends BaseGateway
 		);
 	}
 
-	public function listArticle(): array
+	public function getBlogpostList(): array
 	{
 		if ($this->session->may('orga')) {
 			$filter = '';
@@ -137,7 +137,7 @@ final class BlogGateway extends BaseGateway
 						`bezirk_id`
 			FROM 		`fs_blog_entry`
 			' . $filter . '
-			ORDER BY `id` DESC');
+			ORDER BY `time` DESC');
 	}
 
 	public function del_blog_entry(int $id): int

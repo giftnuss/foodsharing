@@ -52,52 +52,12 @@ class BlogView extends View
 		$this->blogPermissions = $blogPermissions;
 	}
 
-	public function listArticle(array $data): string
+	public function blogpostOverview(array $data): string
 	{
-		$rows = [];
-		foreach ($data as $article) {
-			$blogId = intval($article['id']);
-
-			if ($this->blogPermissions->mayPublish($article['bezirk_id'])) {
-				$active = $this->v_activeSwitcher($blogId, boolval($article['active']));
-			} else {
-				$active = $this->translator->trans('blog.status.' . $article['active']);
-			}
-
-			$link = '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $blogId . '">';
-
-			// No idea what that stray `a` is doing there, perhaps it is used for sorting?
-			$when = '<span style="display: none;">' . 'a' . $article['time_ts'] . '</span>';
-			$when .= $link . date('d.m.Y', $article['time_ts']) . '</a>';
-
-			$name = $link . $article['name'] . '</a>';
-
-			$actions = $this->v_utils->v_toolbar([
-				'id' => $blogId,
-				'types' => ['edit', 'delete'],
-				'confirmMsg' => $this->translator->trans('blog.confirmDelete', ['{name}' => $article['name']]),
-			]);
-
-			$rows[] = [
-				['cnt' => $active],
-				['cnt' => $when],
-				['cnt' => $name],
-				['cnt' => $actions],
-			];
-		}
-
-		$theads = [
-			['name' => $this->translator->trans('blog.table.status'), 'sort' => false, 'width' => 140],
-			['name' => $this->translator->trans('blog.table.date'), 'width' => 80],
-			['name' => $this->translator->trans('blog.table.name')],
-			['name' => $this->translator->trans('blog.table.actions'), 'sort' => false, 'width' => 50],
-		];
-
-		$table = $this->v_utils->v_tablesorter($theads, $rows);
-
 		return $this->vueComponent('vue-blog-overview', 'BlogOverview', [
 			'canWriteNewBlog' => $this->blogPermissions->mayAdministrateBlog(),
-		]) . $table;
+			'blogList' => $data,
+		]);
 	}
 
 	public function newsPost(array $news): string
@@ -163,13 +123,6 @@ class BlogView extends View
 			$title = $this->translator->trans('blog.new');
 		} else {
 			$title = $this->translator->trans('blog.edit');
-			global $g_data;
-			$blogId = intval($_GET['id']);
-			$this->pageHelper->addContent($this->v_utils->v_field(
-				$this->v_activeSwitcher($blogId, boolval($g_data['active'])),
-				$this->translator->trans('blog.table.status'),
-				['class' => 'ui-padding']
-			), CNT_LEFT);
 		}
 
 		$bezirkchoose = '';
@@ -264,50 +217,5 @@ class BlogView extends View
 			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
 		return $this->v_utils->v_input_wrapper($this->translator->trans($id), $out);
-	}
-
-	/**
-	 * @deprecated Use modern frontend code instead
-	 */
-	private function v_activeSwitcher(int $blogId, bool $active): string
-	{
-		$id = $this->identificationHelper->id('activeswitch');
-		$table = 'blog_entry';
-
-		$this->pageHelper->addJs('
-			$("#' . $id . ' input").switchButton({
-				on_label: "' . $this->translator->trans('ui.switch.on') . '",
-				off_label: "' . $this->translator->trans('ui.switch.off') . '",
-				on_callback: function () {
-					showLoader();
-					$.ajax({
-						url: "/xhr.php?f=activeSwitch",
-						data: {t: "' . $table . '", id: "' . $blogId . '", value: 1},
-						method: "get",
-						complete: function () {
-							hideLoader();
-						}
-					});
-				},
-				off_callback: function () {
-					showLoader();
-					$.ajax({
-						url: "/xhr.php?f=activeSwitch",
-						data: {t: "' . $table . '", id: "' . $blogId . '", value: 0},
-						method: "get",
-						complete: function () {
-							hideLoader();
-						}
-					});
-				},
-			});
-		');
-
-		$checkedStatus = $active ? ' checked="checked"' : '';
-
-		return '
-			<div id="' . $id . '">
-				<input' . $checkedStatus . ' type="checkbox" name="' . $id . '" id="' . $id . '-on" value="1" />
-			</div>';
 	}
 }

@@ -4,6 +4,7 @@ import './Blog.css'
 import '@/tablesorter'
 import 'jquery.tinymce'
 import 'jquery-jcrop'
+import { GET } from '@/browser'
 import { pictureCrop, pictureReady, ifconfirm } from '@/script'
 import { expose } from '@/utils'
 import { vueApply, vueRegister } from '@/vue'
@@ -15,7 +16,9 @@ expose({
   ifconfirm,
 })
 
-vueRegister({
-  BlogOverview,
-})
-vueApply('#vue-blog-overview') // BlogOverview
+if (GET('sub') === 'manage') {
+  vueRegister({
+    BlogOverview,
+  })
+  vueApply('#vue-blog-overview') // BlogOverview
+}

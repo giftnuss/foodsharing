@@ -117,16 +117,20 @@ class XhrMethods
 
 	public function xhr_activeSwitch($data)
 	{
-		$allowed = [
-			'blog_entry' => true
-		];
-
-		if ($this->session->may()) {
-			if (isset($allowed[$data['t']])) {
-				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
-					return 1;
-				}
-			}
+		if (!$this->session->may()) {
+			return 0;
+		}
+		if ($data['t'] != 'blog_entry') {
+			return 0;
+		}
+		if (
+			$this->model->update('
+				UPDATE `fs_' . $data['t'] . '`
+				SET `active` = ' . (int)$data['value'] . '
+				WHERE `id` = ' . (int)$data['id']
+			)
+		) {
+			return 1;
 		}
 
 		return 0;
