@@ -145,7 +145,6 @@ class Session
 
 	public function setAuthLevel($role)
 	{
-		fAuthorization::setLoginPage('/?page=login');
 		fAuthorization::setUserAuthLevel($role);
 		fAuthorization::setUserACLs(
 			[
