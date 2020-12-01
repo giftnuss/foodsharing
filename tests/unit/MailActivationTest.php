@@ -1,6 +1,5 @@
 <?php
 
-use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Utility\LoginService;
 
 class MailActivationTest extends \Codeception\Test\Unit
@@ -9,8 +8,6 @@ class MailActivationTest extends \Codeception\Test\Unit
 	 * @var \UnitTester
 	 */
 	protected UnitTester $tester;
-
-	private LoginGateway $gateway;
 
 	private LoginService $service;
 
