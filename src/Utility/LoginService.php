@@ -86,7 +86,7 @@ class LoginService
 	{
 		$data = $this->loginGateway->getMailActivationData($fsId);
 
-		// Don't send a mail if mail adress is already confirmed
+		// Don't send a mail if mail address is already confirmed
 		if ($data['active'] === 1) {
 			return false;
 		}
