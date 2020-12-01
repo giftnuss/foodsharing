@@ -47,7 +47,7 @@ class LoginGateway extends BaseGateway
 		return null;
 	}
 
-	public function isActivated($fsId): bool
+	public function isActivated(int $fsId): bool
 	{
 		$isActivated = $this->db->fetchValueByCriteria('fs_foodsaver', 'active', ['id' => $fsId]);
 
