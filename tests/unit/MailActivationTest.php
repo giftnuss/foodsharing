@@ -23,8 +23,8 @@ class MailActivationTest extends \Codeception\Test\Unit
 		$this->assertArrayHasKey('t', $data);
 		$this->assertArrayHasKey('c', $data);
 		$this->assertArrayHasKey('d', $data);
-		$this->assertTrue($data['d'] === date('Ymd'));
-		$this->assertTrue($data['c'] === 1);
+		$this->assertSame($data['d'] === date('Ymd'));
+		$this->assertSame($data['c'] === 1);
 	}
 
 	public function testTokenValidation()
@@ -32,7 +32,7 @@ class MailActivationTest extends \Codeception\Test\Unit
 		$count = LoginService::ACTIVATION_MAIL_LIMIT_PER_DAY + 1;
 		$token = $this->service->generateMailActivationToken($count);
 		$validation = $this->service->validateTokenLimit($token);
-		$this->assertTrue($validation['isValid'] === false);
-		$this->assertTrue($validation['count'] === $count + 1);
+		$this->assertSame($validation['isValid'] === false);
+		$this->assertSame($validation['count'] === $count + 1);
 	}
 }
