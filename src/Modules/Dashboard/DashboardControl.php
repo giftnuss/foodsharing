@@ -96,18 +96,12 @@ class DashboardControl extends Control
 			$is_bieb = true;
 		}
 
-		$fsId = $this->session->id();
+		// Dashboard warning
 		$email = $this->session->get('user')['email'];
-		if ($this->mailsGateway->emailIsBouncing($email)) {
-			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('profile.mailBounceWarning', [
-				'{email}' => $email,
-			])));
-		} else {
-			if (!$this->loginGateway->isActivated($fsId)) {
-				$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body.part_1') . '<a href="/?page=dashboard&a=activate">' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_2') . '</a>' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_3') .
-					' ' . '<a href="/?page=settings&sub=general">' . $this->translator->trans('dashboard.mail_activation_error_body.part_4') . '</a>', $this->translator->trans('dashboard.mail_activation_error_title')));
-			}
-		}
+		$fsId = $this->session->id();
+		$isActivated = !$this->loginGateway->isActivated($fsId);
+		$emailIsBouncing = $this->mailsGateway->emailIsBouncing($email);
+		$this->pageHelper->addContent($this->view->dashboardWarning($email, $isActivated, $emailIsBouncing));
 
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||

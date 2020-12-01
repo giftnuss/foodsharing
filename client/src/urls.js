@@ -89,6 +89,7 @@ const urls = {
   wiener_tafel: () => 'https://www.wienertafel.at',
   bmlfuw: () => 'https://www.bmlrt.gv.at',
   denns: () => 'https://www.denns-biomarkt.at',
+  activate: () => '/?page=dashboard&a=activate',
 }
 
 const url = (key, ...params) => {

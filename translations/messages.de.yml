@@ -1375,7 +1375,9 @@ profile:
   go: Profil aufrufen
   notFound: Dieses Nutzerprofil gibt es nicht oder nicht mehr
   warning: Warnung
-  mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das <a href="?page=settings&sub=general">Ändern der Mail-Adresse</a> wird diese Sperre wieder entfernt.'
+  mailBounceWarning_1: 'Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das'
+  mailBounceWarning_2: Ändern der Mail-Adresse
+  mailBounceWarning_3: wird diese Sperre wieder entfernt.
   banana:
     title: '{count} Vertrauensbananen'
     by: ' von '

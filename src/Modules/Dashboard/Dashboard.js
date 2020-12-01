@@ -3,6 +3,7 @@ import '@/globals'
 
 import { vueRegister, vueApply } from '@/vue'
 import ActivityOverview from './components/ActivityOverview'
+import DashboardWarning from './components/DashboardWarning'
 
 import './Dashboard.css'
 
@@ -12,9 +13,11 @@ import { pulseSuccess, pulseError } from '@/script'
 
 vueRegister({
   ActivityOverview,
+  DashboardWarning,
 })
 
 vueApply('#activity-overview')
+vueApply('#dashboard-warning')
 
 // Push Notification Banner
 const pushnotificationsBanner = document.querySelector('#top-banner-pushnotifications')
