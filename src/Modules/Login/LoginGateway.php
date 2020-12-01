@@ -154,13 +154,11 @@ class LoginGateway extends BaseGateway
 
 	public function getMailActivationData(int $fsId): array
 	{
-		$data = $this->db->fetchByCriteria(
+		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
 			['email', 'token', 'name', 'geschlecht', 'active'],
 			['id' => $fsId]
 		);
-
-		return $data;
 	}
 
 	public function updateMailActivationToken(int $fsId, string $token): int
