@@ -44,7 +44,7 @@ class LoginService
 		$isValid = ($tokenData['count'] <= $limit || $tokenData['date'] !== date('Ymd'));
 
 		if ($tokenData['date'] === date('Ymd')) {
-			$tokenData['count'] = $tokenData['count'] + 1;
+			++$tokenData['count'];
 		} else {
 			$tokenData['count'] = 1;
 		}
