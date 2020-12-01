@@ -870,6 +870,31 @@ class fTimestamp
 	}
 
 	/**
+	 * Returns the singular or plural form of the word or based on the quantity specified.
+	 *
+	 * @param  mixed   $quantity                     The quantity (integer) or an array of objects to count
+	 * @param  string  $singular_form                The string to be returned for when `$quantity = 1`
+	 * @param  string  $plural_form                  The string to be returned for when `$quantity != 1`, use `%d` to place the quantity in the string
+	 *
+	 * @return string
+	 */
+	public static function fGrammarInflectOnQuantity($quantity, $singular_form, $plural_form)
+	{
+		if ($quantity == 1) {
+			return $singular_form;
+		} else {
+			$output = $plural_form;
+
+			// Handle placement of the quantity into the output
+			if (strpos($output, '%d') !== false) {
+				$output = str_replace('%d', $quantity, $output);
+			}
+
+			return $output;
+		}
+	}
+
+	/**
 	 * Returns the approximate difference in time, discarding any unit of measure but the least specific.
 	 *
 	 * The output will read like:
@@ -954,7 +979,7 @@ class fTimestamp
 			}
 
 			$unit_diff = round(abs($diff) / $unit_info[0]);
-			$units = fGrammar::inflectOnQuantity($unit_diff, $unit_info[1], $unit_info[2]);
+			$units = self::fGrammarInflectOnQuantity($unit_diff, $unit_info[1], $unit_info[2]);
 			break;
 		}
 

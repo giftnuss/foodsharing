@@ -514,6 +514,41 @@ class fImage extends fFile
 	private $pending_modifications = array();
 
 	/**
+	 * Inlined and simplified.
+	 * Returns the passed terms joined together using rule 2 from Strunk & White's 'The Elements of Style'.
+	 *
+	 * @param  array  $strings  An array of strings to be joined together
+	 * @param  string $type     The type of join to perform, `'and'` or `'or'`
+	 *
+	 * @return string  The terms joined together
+	 */
+	public static function fGrammarJoinArray($strings, $type = 'or')
+	{
+		settype($strings, 'array');
+		$strings = array_values($strings);
+
+		switch (sizeof($strings)) {
+			case 0:
+				return '';
+				break;
+
+			case 1:
+				return $strings[0];
+				break;
+
+			case 2:
+				return $strings[0] . ' ' . $type . ' ' . $strings[1];
+				break;
+
+			default:
+				$last_string = array_pop($strings);
+
+				return join(', ', $strings) . ' ' . $type . ' ' . $last_string;
+				break;
+		}
+	}
+
+	/**
 	 * Creates an object to represent an image on the filesystem.
 	 *
 	 * @throws fValidationException  When no image was specified, when the image does not exist or when the path specified is not an image
@@ -537,7 +572,7 @@ class fImage extends fFile
 			throw new fValidationException(
 				'The image specified, %1$s, is not a valid %2$s file',
 				$file_path,
-				fGrammar::joinArray($valid_image_types, 'or')
+				self::fGrammarJoinArray($valid_image_types)
 			);
 		}
 	}

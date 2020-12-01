@@ -88,6 +88,18 @@ class fURL
 	}
 
 	/**
+	 * Converts all HTML entities to normal characters, using UTF-8.
+	 *
+	 * @param  string $content  The content to decode
+	 *
+	 * @return string  The decoded content
+	 */
+	public static function fhtmlDecode($content)
+	{
+		return html_entity_decode($content, ENT_QUOTES, 'UTF-8');
+	}
+
+	/**
 	 * Changes a string into a URL-friendly string.
 	 *
 	 * @param  string   $string      The string to convert
@@ -106,7 +118,7 @@ class fURL
 			$max_length = null;
 		}
 
-		$string = fHTML::decode(fUTF8::ascii($string));
+		$string = self::fhtmlDecode(fUTF8::ascii($string));
 		$string = strtolower(trim($string));
 		$string = str_replace("'", '', $string);
 

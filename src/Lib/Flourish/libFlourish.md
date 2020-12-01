@@ -58,6 +58,10 @@
     - fText
     - fEmail, fSMTP
     - fConnectivityException
+- 2020-12-01: removed more Flourish classes by moving the functions used by other classes into those classes
+    - fCryptography
+    - fGrammar
+    - fHTML
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes
