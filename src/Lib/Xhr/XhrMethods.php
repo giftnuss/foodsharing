@@ -388,10 +388,10 @@ class XhrMethods
 			foreach ($ratio as $i => $r) {
 				$i = preg_replace('/%/', '', $i);
 				$i = preg_replace('/\.+/', '.', $i);
-				// @phpstan-ignore-next-line ($i = expects int, string|null given)
 				$this->cropImg(
 					ROOT_DIR . 'images/' . $data['id'],
 					$data['img'],
+					// @phpstan-ignore-next-line ($i = expects int, string|null given)
 					$i,
 					$r['x'], $r['y'],
 					$r['w'], $r['h']
