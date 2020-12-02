@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Modules\Voting\DTO\PollOption;
@@ -262,18 +263,19 @@ class VotingGateway extends BaseGateway
 	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true, bool $restrict_homeDistrict = false,
 											  bool $includeSubregions = true): array
 	{
-		// fetch all subregion-IDs if they should be included
-		$regionIds = [$regionId];
-		if ($includeSubregions) {
-			$subregions = $this->db->fetchAllValuesByCriteria('fs_bezirk_closure', 'bezirk_id',
-				['ancestor_id' => $regionId, 'depth >=' => 1]
-			);
-			$regionIds = array_merge($regionIds, $subregions);
-		}
 		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';
 
-		// fetch all user IDs
 		if ($restrict_homeDistrict) {
+			// fetch all subregion-IDs if they should be included
+			$regionIds = [$regionId];
+			if ($includeSubregions) {
+				$subregions = $this->db->fetchAllValuesByCriteria('fs_bezirk_closure', 'bezirk_id',
+					['ancestor_id' => $regionId, 'depth >=' => 1]
+				);
+				$regionIds = array_merge($regionIds, $subregions);
+			}
+
+			// fetch all user IDs
 			$list = $this->db->fetchAll('
 			SELECT DISTINCT id
 			FROM fs_foodsaver fs
@@ -283,15 +285,18 @@ class VotingGateway extends BaseGateway
 				':role' => $minRole
 			]);
 		} else {
+			/* fetching all subregions is not necessary here because all users from subregions should
+			   also be in this region */
 			$list = $this->db->fetchAll('
 				SELECT DISTINCT id
 				FROM fs_foodsaver fs
 				INNER JOIN fs_foodsaver_has_bezirk hb
 				ON fs.id = hb.foodsaver_id
-				WHERE hb.bezirk_id IN (' . implode(',', $regionIds) . ')
+				WHERE hb.bezirk_id = :regionId
 				AND hb.active = 1
 				AND fs.rolle >= :role
 				' . $verifiedCondition, [
+				':regionId' => $regionId,
 				':role' => $minRole
 			]);
 		}
@@ -299,5 +304,32 @@ class VotingGateway extends BaseGateway
 		return array_map(function ($x) {
 			return $x['id'];
 		}, $list);
+	}
+
+	/**
+	 * Returns the IDs of all ambassadors of the given region and all subregions without working groups.
+	 * If a user is ambassador of multiple subregions the ID is only included once.
+	 */
+	public function getAmbassadorsIDsOfSubregions(int $groupId): array
+	{
+		return $this->db->fetchAll('
+			SELECT DISTINCT amb.foodsaver_id
+			FROM `fs_botschafter` amb
+
+			INNER JOIN `fs_foodsaver` fs
+			ON fs.id = amb.foodsaver_id
+
+			INNER JOIN `fs_bezirk_closure` bc
+			ON bc.bezirk_id = amb.bezirk_id
+
+			INNER JOIN `fs_bezirk` b
+			ON b.id = amb.bezirk_id
+
+			WHERE bc.ancestor_id = :regionId
+			AND fs.deleted_at IS NULL
+			AND b.type <> :workingGroupType',
+			[':regionId' => $groupId,
+			 ':workingGroupType' => Type::WORKING_GROUP]
+		);
 	}
 }
