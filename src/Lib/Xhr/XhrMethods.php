@@ -115,28 +115,6 @@ class XhrMethods
 		$this->translator = $translator;
 	}
 
-	public function xhr_activeSwitch($data)
-	{
-		// TODO move this to Rest and check BlogPermissions:mayPublish instead
-		if (!$this->session->may()) {
-			return 0;
-		}
-		if ($data['t'] != 'blog_entry') {
-			return 0;
-		}
-		if (
-			$this->model->update('
-				UPDATE `fs_' . $data['t'] . '`
-				SET `active` = ' . (int)$data['value'] . '
-				WHERE `id` = ' . (int)$data['id']
-			)
-		) {
-			return 1;
-		}
-
-		return 0;
-	}
-
 	public function xhr_childBezirke($data)
 	{
 		if (isset($data['parent'])) {

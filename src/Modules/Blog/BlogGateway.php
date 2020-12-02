@@ -31,6 +31,11 @@ final class BlogGateway extends BaseGateway
 		$this->session = $session;
 	}
 
+	public function setPublished(int $blogId, bool $isPublished): int
+	{
+		return $this->db->update('fs_blog_entry', ['active' => intval($isPublished)], ['id' => $blogId]);
+	}
+
 	public function update_blog_entry(int $id, array $data): int
 	{
 		$data_stripped = [

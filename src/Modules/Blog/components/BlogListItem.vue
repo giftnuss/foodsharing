@@ -69,11 +69,10 @@
 
 <script>
 import dateFnsParseISO from 'date-fns/parseISO'
-import $ from 'jquery'
 
-import { deleteBlogpost } from '@/api/blog'
+import { publishBlogpost, deleteBlogpost } from '@/api/blog'
 import i18n from '@/i18n'
-import { hideLoader, showLoader, pulseSuccess } from '@/script'
+import { showLoader, hideLoader, pulseSuccess, pulseError } from '@/script'
 
 export default {
   props: {
@@ -96,18 +95,13 @@ export default {
     }
   },
   methods: {
-    togglePublished () {
-      // legacy v_activeSwitcher callback waiting for REST reimplementation of xhr_activeSwitch
-      showLoader()
-      $.ajax({
-        dataType: 'json',
-        data: { t: 'blog_entry', id: this.blogId, value: parseInt(!this.isPublished) },
-        url: '/xhr.php?f=activeSwitch',
-        complete: () => {
-          this.isPublished = !this.isPublished
-          hideLoader()
-        },
-      })
+    async togglePublished () {
+      try {
+        await publishBlogpost(this.blogId, !this.isPublished)
+        this.isPublished = !this.isPublished
+      } catch (e) {
+        pulseError(i18n('error_unexpected'))
+      }
     },
     async removeBlogpost () {
       if (!confirm(i18n('blog.confirmDelete', { name: this.blogTitle }))) {
