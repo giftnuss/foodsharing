@@ -34,10 +34,12 @@ class LoginService
 	}
 
 	/**
-	 * @param string $token
-	 * @param int $limit
+	 * @param string $token Base64 encoded token
+	 * @param int $limit How many days is the activation token valid
+	 *
+	 * @return array Array containing state isValid and count from token
 	 */
-	public function validateTokenLimit($token, $limit = self::ACTIVATION_MAIL_LIMIT_PER_DAY): array
+	public function validateTokenLimit(string $token, int $limit = self::ACTIVATION_MAIL_LIMIT_PER_DAY): array
 	{
 		$tokenData = $this->extractTokenData($token);
 
