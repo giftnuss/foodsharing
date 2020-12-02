@@ -29,6 +29,9 @@ final class BlogPermissions
 
 	public function mayEdit(array $authorOfPost): bool
 	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
 		if (!$authorOfPost) {
 			return false;
 		}
