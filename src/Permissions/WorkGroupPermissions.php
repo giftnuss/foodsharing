@@ -28,9 +28,11 @@ final class WorkGroupPermissions
 		}
 
 		// Ambassadors of _direct parents_ (not all hierarchical parents)
-		$parentId = $group['parent_id'];
-		if ($this->session->isAdminFor($parentId)) {
-			return true;
+		if (array_key_exists('parent_id', $group)) {
+			$parentId = $group['parent_id'];
+			if ($this->session->isAdminFor($parentId)) {
+				return true;
+			}
 		}
 
 		return false;

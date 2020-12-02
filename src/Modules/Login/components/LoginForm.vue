@@ -57,6 +57,7 @@
             @keydown.enter="submit"
           >
         </div>
+        <!-- TODO: Disabled until there is a solution in issue 956.
         <div>
           <b-checkbox
             id="login-rememberme"
@@ -68,6 +69,7 @@
             {{ $i18n('login.steady_login') }}
           </b-checkbox>
         </div>
+        -->
         <b-overlay
           :show="isLoading"
         >

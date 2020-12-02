@@ -1,0 +1,13 @@
+spenden:
+  path: /spenden
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+  defaults:
+    path: https://spenden.foodsharing.de
+    permanent: true # 301
+
+unterstuetzung:
+  path: /unterstuetzung
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+  defaults:
+    path: https://spenden.foodsharing.de
+    permanent: true # 301

@@ -375,14 +375,6 @@ abstract class Control
 		return false;
 	}
 
-	public function setContentWidth($left, $right)
-	{
-		global $content_left_width;
-		global $content_right_width;
-		$content_right_width = $right;
-		$content_left_width = $left;
-	}
-
 	public function uri($index)
 	{
 		if (isset($_GET['uri'])) {

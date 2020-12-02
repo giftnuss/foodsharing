@@ -32,7 +32,6 @@ export default {
       contactMenuItems.push({ url: 'mailbox', menuTitle: 'menu.entry.mailbox' })
     }
     contactMenuItems.push({ url: 'contact', menuTitle: 'menu.entry.contact' })
-    contactMenuItems.push({ url: 'donate', menuTitle: 'menu.entry.donate' })
     contactMenuItems.push({ url: 'press', menuTitle: 'menu.entry.press' })
     contactMenuItems.push({ url: 'infosCompany', menuTitle: 'menu.entry.forcompanies' })
     contactMenuItems.push({ url: 'imprint', menuTitle: 'menu.entry.imprint' })

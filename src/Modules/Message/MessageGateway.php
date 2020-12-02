@@ -266,8 +266,8 @@ final class MessageGateway extends BaseGateway
 
 			WHERE
 				hc.conversation_id = :conversationId AND
-				fs.deleted_at IS NULL
-		', [':conversationId' => $conversationId]);
+				fs.deleted_at IS NULL AND
+				fs.last_login > (now() - INTERVAL 180 DAY )', [':conversationId' => $conversationId]);
 	}
 
 	public function getMembersForConversations(array $cids): array

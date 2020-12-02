@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 class IndexController extends AbstractController
 {
@@ -84,17 +83,11 @@ class IndexController extends AbstractController
 			unset($_SESSION['client']);
 		}
 
-		global $content_left_width;
-		$content_left_width = 6;
-		global $content_right_width;
-		$content_right_width = 6;
-
 		global $g_template;
 		$g_template = 'default';
 		global $g_data;
 		$g_data = $dataHelper->getPostData();
 
-		$pageHelper->addHidden('<div id="u-profile"></div>');
 		$pageHelper->addHidden('<ul id="hidden-info"></ul>');
 		$pageHelper->addHidden('<ul id="hidden-error"></ul>');
 		$pageHelper->addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
@@ -145,33 +138,24 @@ class IndexController extends AbstractController
 			$response->setContent('');
 		}
 
-		$page = $response->getContent();
-		$controllerUsedResponse = $page !== '--';
-		if ($controllerUsedResponse) {
-			if ($debugBar->isEnabled()) {
-				$response->setContent(str_replace(
-					'</body>',
-					$debugBar->renderContent() . '</body>',
-					$response->getContent()
-				));
-			}
-
-			if (isset($cache) && $cache->shouldCache()) {
-				$cache->cache($page);
-			}
-		} else {
-			if ($debugBar->isEnabled()) {
-				$pageHelper->addContent($debugBar->renderContent(), CNT_BOTTOM);
-			}
-			/* @var Environment $twig */
-			$twig = $this->get('twig');
-			$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
-
-			if (isset($cache) && $cache->shouldCache()) {
-				$cache->cache($page);
-			}
+		$controllerUsedResponse = $response->getContent() !== '--';
+		if (!$controllerUsedResponse) {
+			$page = $this->renderView('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 
 			$response->setContent($page);
+		}
+
+		if ($debugBar->isEnabled()) {
+			// append the debug bar at the very end of <body>
+			$response->setContent(str_replace(
+				'</body>',
+				$debugBar->renderContent() . '</body>',
+				$response->getContent()
+			));
+		}
+
+		if (isset($cache) && $cache->shouldCache()) {
+			$cache->cache($response->getContent());
 		}
 
 		return $response;

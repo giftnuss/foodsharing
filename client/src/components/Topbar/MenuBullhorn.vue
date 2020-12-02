@@ -18,6 +18,14 @@ export default {
     return {
       headings: [
         {
+          heading: 'menu.entry.fundraising',
+          menuItems: [
+            { url: 'donations', menuTitle: 'menu.entry.donations' },
+            { url: 'selfservice', menuTitle: 'menu.entry.friendcircle' },
+            { url: 'circle_of_friends', menuTitle: 'menu.entry.selfservice' },
+          ],
+        },
+        {
           heading: 'menu.entry.politics',
           menuItems: [
             { url: 'fsstaedte', menuTitle: 'menu.entry.fscities' },

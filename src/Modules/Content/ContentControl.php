@@ -130,16 +130,6 @@ class ContentControl extends Control
 		}
 	}
 
-	public function unterstuetzung(): void
-	{
-		if ($cnt = $this->contentGateway->get(ContentId::SUPPORT_FOODSHARING_PAGE_42)) {
-			$this->pageHelper->addBread($cnt['title']);
-			$this->pageHelper->addTitle($cnt['title']);
-
-			$this->pageHelper->addContent($this->view->simple($cnt));
-		}
-	}
-
 	public function presse(): void
 	{
 		if ($cnt = $this->contentGateway->get(58)) {

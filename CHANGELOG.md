@@ -16,6 +16,8 @@
 - Recolor formerly brown topbar to beige !1762 @ChrisOelmueller
 - Adjust structure and color scheme of dashboard activity updates !1753 @ChrisOelmueller
 - Ambassadors can access management for workgroups in "their" region from topbar #965 !1742 @ChrisOelmueller
+- Send chat notifications by mail, only if last login is less than 6 months away !1623 @chriswalg
+- Replaced in topbar donation page to twingle pages !1773 @chriswalg
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
@@ -24,6 +26,11 @@
 - Fully display hour and minute values when editing pickup times #1001 !1754 @ChrisOelmueller
 - Add login checks to all forum endpoints to prevent errors !1739 #993 @alex.simm
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
+- Resolved newsletter flag: Disable the default value to false !1779 @chriswalg
+- Resolved the user registration: Removed adding the accepted_date to getPnVersion !1779 @chriswalg
+- Disabled session cookie checkbox in login form, until there is a solution in issue 956 !1785 @chriswalg
+- Disabled session cookie checkbox in login form and, until there is a solution in issue 956
+and persistent session disabled after each request, so that LastLogin is set correctly again !1785 @chriswalg
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
@@ -44,6 +51,7 @@
 - Rewrite store wall with REST and Vue !1690 !1750 @ChrisOelmueller
 - Rewrite store application screen in Vue !1756 @ChrisOelmueller
 - Some changes to Session and PageHelper group handling !1742 @ChrisOelmueller
+- Clean up IndexController and some related code !1775 @\_fridtjof_
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
@@ -59,6 +67,7 @@
 - Update Nelmio API doc bundle to 4.0.1 !1747 @alex.simm
 - upgrade webpack-merge to v 5 !1744 @peter.toennies
 - Replaced gitbook v1 to mdbook !1738 @chriswalg
+- Improved the RegisterCest.php: This check the variants with and without newsletter now. !1779 @chriswalg
 
 # 2020-10-23 Hotfix
 

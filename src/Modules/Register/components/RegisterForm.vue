@@ -87,7 +87,7 @@ export default {
       gender: null,
       birthdate: null,
       mobile: '',
-      subscribeNewsletter: true,
+      subscribeNewsletter: false,
       acceptGdpr: false,
       acceptedLegal: false,
     }
