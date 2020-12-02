@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable vue/max-attributes-per-line -->
-  <div class="blog-list-item d-flex align-items-center py-1">
+  <div class="blog-list-item d-flex align-items-center py-1 flex-wrap flex-sm-nowrap">
     <div class="mx-1">
       <b-link
         :disabled="!mayPublish"
@@ -20,13 +20,35 @@
     >
       {{ $dateFormat(when, 'dd.MM.yyyy') }}
     </div>
-    <div class="mx-2">
-      {{ blogTitle }}
+    <div class="mx-1 flex-shrink-0">
+      <b-link
+        v-b-tooltip.hover="$i18n('blog.author')"
+        class="blog-editor text-primary"
+        :href="$url('profile', authorId)"
+      >
+        <i class="fas fa-fw fa-user-edit" />
+      </b-link>
+      <b-link
+        v-if="lastEditorId"
+        v-b-tooltip.hover="$i18n('blog.last-editor')"
+        class="blog-editor text-muted"
+        :href="$url('profile', lastEditorId)"
+      >
+        <i class="fas fa-fw fa-pen-square" />
+      </b-link>
+    </div>
+    <div class="mx-1 blog-text">
+      <span class="blog-title ml-1">
+        {{ blogTitle }}
+      </span>
+      <span class="blog-teaser d-inline-block mx-1 text-muted">
+        {{ blogTeaser }}
+      </span>
     </div>
     <b-link
       v-if="mayEdit"
       v-b-tooltip="$i18n('blog.edit')"
-      class="mx-1"
+      class="ml-auto mx-1"
       :href="$url('blogEdit', blogId)"
     >
       <i class="fas fa-fw fa-pencil-alt" />
@@ -36,7 +58,7 @@
       v-b-tooltip="$i18n('blog.delete')"
       href="#"
       size="sm"
-      class="ml-auto mr-1"
+      class="mx-1"
       variant="outline-danger"
       @click.prevent="removeBlogpost"
     >
@@ -57,9 +79,12 @@ export default {
   props: {
     blogId: { type: Number, required: true },
     blogTitle: { type: String, default: '' },
+    blogTeaser: { type: String, default: '' },
     published: { type: Boolean, required: true },
     regionId: { type: Number, required: true },
     createdAt: { type: String, required: true },
+    authorId: { type: Number, required: true },
+    lastEditorId: { type: Number, default: null },
     mayPublish: { type: Boolean, default: true }, // this actually depends on the regionId...
     mayEdit: { type: Boolean, default: true },
     mayDelete: { type: Boolean, default: true },
@@ -102,6 +127,15 @@ export default {
 .blog-list-item {
   &, div {
     font-size: 0.875rem;
+  }
+  .blog-teaser {
+    font-size: 0.75rem;
+  }
+  @media only screen and (max-width: 30rem) {
+    .blog-text {
+      flex-basis: 100%;
+      order: 1;
+    }
   }
 }
 </style>

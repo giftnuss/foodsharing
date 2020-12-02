@@ -8,15 +8,28 @@
         <div class="font-weight-bolder">
           {{ $i18n('blog.title') }}
         </div>
-        <b-button
-          v-if="canWriteNewBlog"
-          v-b-tooltip
-          :title="$i18n('blog.new')"
-          class="btn btn-secondary btn-sm write-new ml-1"
-          :href="$url('blogAdd')"
-        >
-          <i class="fas faw fa-plus" />
-        </b-button>
+
+        <b-button-group class="header-buttons ml-1">
+          <b-button
+            v-b-tooltip.hover="$i18n('blog.go')"
+            variant="secondary"
+            size="sm"
+            :href="$url('blog')"
+            target="_blank"
+          >
+            <i class="fas faw fa-external-link-alt" />
+          </b-button>
+          <b-button
+            v-if="canWriteNewBlog"
+            v-b-tooltip.hover="$i18n('blog.new')"
+            class="write-new"
+            variant="secondary"
+            size="sm"
+            :href="$url('blogAdd')"
+          >
+            <i class="fas faw fa-plus" />
+          </b-button>
+        </b-button-group>
       </div>
       <div class="card-body bg-white mb-2">
         <BlogListItem
@@ -24,9 +37,11 @@
           :key="blog.id"
           :blog-id="blog.id"
           :blog-title="blog.name"
+          :blog-teaser="blog.teaser"
           :published="!!blog.active"
           :region-id="blog.bezirk_id"
           :created-at="blog.time"
+          :author-id="blog.foodsaver_id"
           @remove-blogpost-from-list="removeListItem"
         />
       </div>
@@ -65,7 +80,7 @@ export default {
   padding-bottom: 0;
 }
 
-::v-deep .write-new {
+::v-deep .header-buttons {
   margin-right: -8px;
 }
 </style>

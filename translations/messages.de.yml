@@ -1834,6 +1834,7 @@ region:
 
 blog:
   bread: Blog
+  go: Zum Blog
   header: News aus der foodsharing-Welt
   manage: Blogeinträge verwalten
   title: Blogartikel
@@ -1845,6 +1846,8 @@ blog:
   newTitle: 'Neuer Artikel für {region}'
   publish-info: Der Veröffentlichungs-Status des Artikels kann auf der Übersichtsseite angepasst werden.
   content: Inhalt
+  author: Geschrieben von
+  last-editor: Zuletzt bearbeitet von
   status:
     0: inaktiv
     1: veröffentlicht
