@@ -9,14 +9,14 @@ freundeskreis:
   path: /freundeskreis
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
   defaults:
-    path: https://spenden.foodsharing.de/selfservice
+    path: https://spenden.foodsharing.de/freundeskreis
     permanent: true # 301
 
 selfservice:
   path: /selfservice
   controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
   defaults:
-    path: https://spenden.foodsharing.de/freundeskreis
+    path: https://spenden.foodsharing.de/selfservice
     permanent: true # 301
 
 unterstuetzung:
