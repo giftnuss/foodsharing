@@ -3,7 +3,6 @@
     <div class="card rounded">
       <div
         class="card-header bg-primary text-white d-flex justify-content-between align-items-center mb-1"
-        :class="{'can-write': canWriteNewBlog}"
       >
         <div class="font-weight-bolder">
           {{ $i18n('blog.title') }}
@@ -20,7 +19,7 @@
             <i class="fas faw fa-external-link-alt" />
           </b-button>
           <b-button
-            v-if="canWriteNewBlog"
+            v-if="mayAdministrateBlog"
             v-b-tooltip.hover="$i18n('blog.new')"
             class="write-new"
             variant="secondary"
@@ -42,6 +41,7 @@
           :region-id="blog.bezirk_id"
           :created-at="blog.time"
           :author-id="blog.foodsaver_id"
+          :may-edit="mayAdministrateBlog"
           @remove-blogpost-from-list="removeListItem"
         />
       </div>
@@ -55,7 +55,7 @@ import BlogListItem from './BlogListItem.vue'
 export default {
   components: { BlogListItem },
   props: {
-    canWriteNewBlog: { type: Boolean, default: false },
+    mayAdministrateBlog: { type: Boolean, required: true },
     blogList: { type: Array, default: () => { return [] } },
   },
   data () {
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-header.can-write {
+.card-header {
   padding-top: 0;
   padding-bottom: 0;
 }

@@ -85,14 +85,14 @@ export default {
     createdAt: { type: String, required: true },
     authorId: { type: Number, required: true },
     lastEditorId: { type: Number, default: null },
-    mayPublish: { type: Boolean, default: true }, // this actually depends on the regionId...
-    mayEdit: { type: Boolean, default: true },
-    mayDelete: { type: Boolean, default: true },
+    mayEdit: { type: Boolean, default: false },
   },
   data () {
     return {
       isPublished: this.published,
       when: dateFnsParseISO(this.createdAt.replace(' ', 'T')),
+      mayPublish: this.mayEdit,
+      mayDelete: this.mayEdit,
     }
   },
   methods: {

@@ -34,7 +34,7 @@ class BlogControl extends Control
 
 		parent::__construct();
 		if ($id = $this->identificationHelper->getActionId('delete')) {
-			if ($this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($id))) {
+			if ($this->blogPermissions->mayEdit($id)) {
 				if ($this->blogGateway->del_blog_entry($id)) {
 					$this->flashMessageHelper->success($this->translator->trans('blog.success.delete'));
 				} else {
@@ -154,9 +154,8 @@ class BlogControl extends Control
 		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
-			$regionId = intval($g_data['bezirk_id']);
 
-			if ($this->blogGateway->add_blog_entry($g_data) && $this->blogPermissions->mayAdd($regionId)) {
+			if ($this->blogGateway->add_blog_entry($g_data) && $this->blogPermissions->mayAdd()) {
 				$this->flashMessageHelper->success($this->translator->trans('blog.success.new'));
 				$this->routeHelper->goPage();
 			} else {
@@ -167,7 +166,8 @@ class BlogControl extends Control
 
 	public function edit(): void
 	{
-		if ($this->blogPermissions->mayAdministrateBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
+		$blogId = $_GET['id'] ?? null;
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->blogPermissions->mayEdit($blogId) && ($data = $this->blogGateway->getOne_blog_entry($blogId))) {
 			$this->handle_edit();
 
 			$this->pageHelper->addBread($this->translator->trans('blog.all'), '/?page=blog&sub=manage');
@@ -194,7 +194,7 @@ class BlogControl extends Control
 
 			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
 				$this->flashMessageHelper->success($this->translator->trans('blog.success.edit'));
-				$this->routeHelper->goPage();
+				$this->routeHelper->goPage('blog&sub=manage');
 			} else {
 				$this->flashMessageHelper->error($this->translator->trans('blog.failure.edit'));
 			}

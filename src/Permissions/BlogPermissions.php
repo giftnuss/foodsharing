@@ -13,42 +13,33 @@ final class BlogPermissions
 		$this->session = $session;
 	}
 
-	public function mayAdd(int $regionId): bool
+	public function mayAdd(): bool
 	{
-		if ($this->session->may('orga')) {
-			return true;
-		}
-
-		return $this->session->isAdminFor($regionId);
+		return $this->mayAdministrateBlog();
 	}
 
-	public function mayPublish(int $regionId): bool
+	public function mayPublish(int $blogId): bool
 	{
-		return $this->mayAdd($regionId);
+		return $this->mayAdd();
 	}
 
-	public function mayEdit(array $authorOfPost): bool
+	public function mayEdit(int $blogId): bool
 	{
-		if ($this->session->may('orga')) {
-			return true;
-		}
-		if (!$authorOfPost) {
-			return false;
-		}
-		if ($this->session->id() == $authorOfPost['foodsaver_id']) {
-			return true;
-		}
-
-		return $this->session->isAdminFor($authorOfPost['bezirk_id']);
+		return $this->mayAdministrateBlog();
 	}
 
-	public function mayDelete(array $authorOfPost): bool
+	public function mayDelete(int $blogId): bool
 	{
-		return $this->mayEdit($authorOfPost);
+		return $this->mayEdit($blogId);
 	}
 
 	public function mayAdministrateBlog(): bool
 	{
-		return $this->session->isAdminForAWorkGroup() || $this->session->may('orga');
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		// return $this->session->isAdminFor(RegionIDs:: whichever workgroup wants this );
+		return false;
 	}
 }

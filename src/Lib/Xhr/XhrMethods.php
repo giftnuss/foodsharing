@@ -117,6 +117,7 @@ class XhrMethods
 
 	public function xhr_activeSwitch($data)
 	{
+		// TODO move this to Rest and check BlogPermissions:mayPublish instead
 		if (!$this->session->may()) {
 			return 0;
 		}

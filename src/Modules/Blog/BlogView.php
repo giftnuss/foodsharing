@@ -55,7 +55,8 @@ class BlogView extends View
 	public function blogpostOverview(array $data): string
 	{
 		return $this->vueComponent('vue-blog-overview', 'BlogOverview', [
-			'canWriteNewBlog' => $this->blogPermissions->mayAdministrateBlog(),
+			'mayAdministrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
+			'managedRegions' => $this->session->getMyAmbassadorRegionIds(),
 			'blogList' => $data,
 		]);
 	}

@@ -52,8 +52,8 @@ class BlogpostController extends AbstractFOSRestController
 		if ($author === false) {
 			throw new NotFoundHttpException('Blogpost not found.');
 		}
-		if (!$this->blogPermissions->mayEdit($author)) {
-			throw new AccessDeniedHttpException('');
+		if (!$this->blogPermissions->mayDelete($blogId)) {
+			throw new AccessDeniedHttpException();
 		}
 
 		$this->blogGateway->del_blog_entry($blogId);
