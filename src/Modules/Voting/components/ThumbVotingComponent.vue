@@ -14,6 +14,7 @@
             value="-1"
             button
             button-variant="outline-secondary"
+            :disabled="!enabled"
           >
             <i class="fas fa-thumbs-down" />
           </b-form-radio>
@@ -22,6 +23,7 @@
             value="0"
             button
             button-variant="outline-secondary"
+            :disabled="!enabled"
           >
             <i class="fas fa-meh" />
           </b-form-radio>
@@ -30,6 +32,7 @@
             value="1"
             button
             button-variant="outline-secondary"
+            :disabled="!enabled"
           >
             <i class="fas fa-thumbs-up" />
           </b-form-radio>
@@ -49,6 +52,10 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    enabled: {
+      type: Boolean,
+      default: true,
     },
   },
   data () {

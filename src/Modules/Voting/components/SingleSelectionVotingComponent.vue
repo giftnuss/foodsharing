@@ -6,6 +6,7 @@
         :key="option.optionIndex"
         v-model="selected"
         :value="option.optionIndex"
+        :disabled="!enabled"
       >
         {{ option.text }}
       </b-form-radio>
@@ -23,6 +24,10 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    enabled: {
+      type: Boolean,
+      default: true,
     },
   },
   data () {

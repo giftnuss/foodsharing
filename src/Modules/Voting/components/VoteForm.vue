@@ -6,24 +6,28 @@
       <SingleSelectionVotingComponent
         v-if="poll.type===0"
         :options="shuffledOptions"
+        :enabled="mayVote"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <MultiSelectionVotingComponent
         v-else-if="poll.type===1"
         :options="shuffledOptions"
+        :enabled="mayVote"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <ThumbVotingComponent
         v-else-if="poll.type===2"
         :options="shuffledOptions"
+        :enabled="mayVote"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />
       <ScoreVotingComponent
         v-else-if="poll.type===3"
         :options="shuffledOptions"
+        :enabled="mayVote"
         @updateValidSelection="updateValidSelection"
         @updateVotingRequestValues="updateVotingRequestValues"
       />

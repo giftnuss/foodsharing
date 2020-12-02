@@ -15,6 +15,7 @@
           :marks="marks"
           :adsorb="true"
           class="mt-2"
+          :disabled="!enabled"
         />
       </div>
     </b-form-group>
@@ -35,6 +36,7 @@
             :value="0"
             :marks="marks"
             :adsorb="true"
+            :disabled="!enabled"
           />
         </b-col>
       </b-form-row>
@@ -54,6 +56,10 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    enabled: {
+      type: Boolean,
+      default: true,
     },
   },
   data () {
