@@ -130,9 +130,7 @@ class VotingTransactions
 				$users = $this->storeGateway->getStoreManagersOf($regionId);
 				break;
 			case VotingScope::AMBASSADORS:
-				$users = array_map(function ($x) {
-					return $x['id'];
-				}, $this->foodsaverGateway->getAdminsOrAmbassadors($regionId));
+				$users = $this->votingGateway->getAmbassadorsIDsOfSubregions($regionId);
 				break;
 			default:
 				throw new Exception('invalid voting scope');
