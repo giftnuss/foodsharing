@@ -66,6 +66,7 @@
 Also, get rid of two more classes that are now unused:
     - fURL
     - fUTF8
+- 2020-12-01: slimmed down fUpload
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes

@@ -33,8 +33,6 @@ class fUpload
 {
 	// The following constants allow for nice looking callbacks to static methods
 	const check = 'fUpload::check';
-	const count = 'fUpload::count';
-	const filter = 'fUpload::filter';
 
 	/**
 	 * Checks to see if the field specified is a valid file upload field.
@@ -72,34 +70,6 @@ class fUpload
 	}
 
 	/**
-	 * Returns the number of files uploaded to a file upload array field.
-	 *
-	 * @throws fValidationException  If the form is not properly configured for file uploads
-	 *
-	 * @param  string  $field  The field to get the number of files for
-	 *
-	 * @return int  The number of uploaded files
-	 */
-	public static function count($field)
-	{
-		if (!self::check($field)) {
-			throw new fValidationException(
-				'The field specified, %s, does not appear to be a file upload field',
-				$field
-			);
-		}
-
-		if (!is_array($_FILES[$field]['name'])) {
-			throw new fValidationException(
-				'The field specified, %s, does not appear to be an array file upload field',
-				$field
-			);
-		}
-
-		return sizeof($_FILES[$field]['name']);
-	}
-
-	/**
 	 * Composes text using fText if loaded.
 	 *
 	 * @param  string  $message    The message to compose
@@ -116,79 +86,6 @@ class fUpload
 	}
 
 	/**
-	 * Removes individual file upload entries from an array of file inputs in `$_FILES` when no file was uploaded.
-	 *
-	 * @throws fValidationException  If the form is not properly configured for file uploads
-	 *
-	 * @param  string  $field  The field to filter
-	 *
-	 * @return array  The indexes of the files that were uploaded
-	 */
-	public static function filter($field)
-	{
-		$indexes = array();
-		$columns = array('name', 'type', 'tmp_name', 'error', 'size');
-
-		if (!self::count($field)) {
-			return;
-		}
-
-		foreach (array_keys($_FILES[$field]['name']) as $index) {
-			if ($_FILES[$field]['error'][$index] == UPLOAD_ERR_NO_FILE) {
-				foreach ($columns as $column) {
-					unset($_FILES[$field][$column][$index]);
-				}
-			} else {
-				$indexes[] = $index;
-			}
-		}
-
-		return $indexes;
-	}
-
-	/**
-	 * If files starting with `.` can be uploaded.
-	 *
-	 * @var bool
-	 */
-	private $allow_dot_files = false;
-
-	/**
-	 * If PHP files can be uploaded.
-	 *
-	 * @var bool
-	 */
-	private $allow_php = false;
-
-	/**
-	 * The dimension restrictions for uploaded images.
-	 *
-	 * @var array
-	 */
-	private $image_dimensions = array();
-
-	/**
-	 * The dimension ratio restriction for uploaded images.
-	 *
-	 * @var array
-	 */
-	private $image_ratio = array();
-
-	/**
-	 * If existing files of the same name should be overwritten.
-	 *
-	 * @var bool
-	 */
-	private $enable_overwrite = false;
-
-	/**
-	 * The maximum file size in bytes.
-	 *
-	 * @var int
-	 */
-	private $max_size = 0;
-
-	/**
 	 * The error message to display if the mime types do not match.
 	 *
 	 * @var string
@@ -203,13 +100,6 @@ class fUpload
 	private $mime_types = array();
 
 	/**
-	 * If the file upload is required.
-	 *
-	 * @var bool
-	 */
-	private $required = true;
-
-	/**
 	 * All requests that hit this method should be requests for callbacks.
 	 *
 	 * @internal
@@ -221,33 +111,6 @@ class fUpload
 	public function __get($method)
 	{
 		return array($this, $method);
-	}
-
-	/**
-	 * Sets the upload class to allow files starting with a `.`.
-	 *
-	 * Files starting with `.` may change the behaviour of web servers,
-	 * for instance `.htaccess` files for Apache.
-	 */
-	public function allowDotFiles()
-	{
-		$this->allow_dot_files = true;
-	}
-
-	/**
-	 * Sets the upload class to allow PHP files.
-	 */
-	public function allowPHP()
-	{
-		$this->allow_php = true;
-	}
-
-	/**
-	 * Set the class to overwrite existing files in the destination directory instead of renaming the file.
-	 */
-	public function enableOverwrite()
-	{
-		$this->enable_overwrite = true;
 	}
 
 	/**
@@ -334,9 +197,7 @@ class fUpload
 		$file_name = fFilesystem::makeURLSafe($file_array['name']);
 
 		$file_name = $directory->getPath() . $file_name;
-		if (!$this->enable_overwrite) {
-			$file_name = fFilesystem::makeUniqueName($file_name);
-		}
+		$file_name = fFilesystem::makeUniqueName($file_name);
 
 		if (!move_uploaded_file($file_array['tmp_name'], $file_name)) {
 			throw new fEnvironmentException('There was an error moving the uploaded file');
@@ -347,137 +208,6 @@ class fUpload
 		}
 
 		return fFilesystem::createObject($file_name);
-	}
-
-	/**
-	 * Sets the allowable dimensions for an uploaded image.
-	 *
-	 * @param  int $min_width   The minimum width - `0` for no minimum
-	 * @param  int $min_height  The minimum height - `0` for no minimum
-	 * @param  int $max_width   The maximum width - `0` for no maximum
-	 * @param  int $max_height  The maximum height - `0` for no maximum
-	 */
-	public function setImageDimensions($min_width, $min_height, $max_width = 0, $max_height = 0)
-	{
-		if (!is_numeric($min_width) || $min_width < 0) {
-			throw new fProgrammerException(
-				'The minimum width specified, %s, is not an integer, or is less than 0',
-				$min_width
-			);
-		}
-		if (!is_numeric($min_height) || $min_height < 0) {
-			throw new fProgrammerException(
-				'The minimum height specified, %s, is not an integer, or is less than 0',
-				$min_height
-			);
-		}
-		if (!is_numeric($max_width) || $max_width < 0) {
-			throw new fProgrammerException(
-				'The maximum width specified, %s, is not an integer, or is less than 0',
-				$max_width
-			);
-		}
-		if (!is_numeric($max_height) || $max_height < 0) {
-			throw new fProgrammerException(
-				'The maximum height specified, %s, is not an integer, or is less than 0',
-				$max_height
-			);
-		}
-
-		settype($min_width, 'int');
-		settype($min_height, 'int');
-		settype($max_width, 'int');
-		settype($max_height, 'int');
-
-		// If everything is 0 then there are no restrictions
-		if (!$min_width && !$min_height && !$max_width && !$max_height) {
-			$this->image_dimensions = array();
-
-			return;
-		}
-
-		$this->image_dimensions = array(
-			'min_width' => $min_width,
-			'min_height' => $min_height,
-			'max_width' => $max_width,
-			'max_height' => $max_height
-		);
-	}
-
-	/**
-	 * Sets the allowable dimensions for an uploaded image.
-	 *
-	 * @param  numeric $width                   The minimum ratio width
-	 * @param  numeric $height                  The minimum ratio height
-	 * @param  string  $allow_excess_dimension  The dimension that should allow for excess pixels
-	 */
-	public function setImageRatio($width, $height, $allow_excess_dimension)
-	{
-		if (!is_numeric($width) || $width <= 0) {
-			throw new fProgrammerException(
-				'The width specified, %s, is not a number, or is less than or equal to 0',
-				$width
-			);
-		}
-		if (!is_numeric($height) || $height <= 0) {
-			throw new fProgrammerException(
-				'The height specified, %s, is not a number, or is less than or equal to 0',
-				$height
-			);
-		}
-
-		$valid_dimensions = array('width', 'height');
-		if (!in_array($allow_excess_dimension, $valid_dimensions)) {
-			throw new fProgrammerException(
-				'The allow excess dimension specified, %1$s, is not valid. Must be one of: %2$s.',
-				$allow_excess_dimension,
-				$valid_dimensions
-			);
-		}
-
-		$this->image_ratio = array(
-			'width' => $width,
-			'height' => $height,
-			'allow_excess_dimension' => $allow_excess_dimension
-		);
-	}
-
-	/**
-	 * Sets the maximum size the uploaded file may be.
-	 *
-	 * This method should be used with the
-	 * [http://php.net/file-upload.post-method `MAX_FILE_SIZE`] hidden form
-	 * input since the hidden form input will reject a file that is too large
-	 * before the file completely uploads, while this method will wait until the
-	 * whole file has been uploaded. This method should always be used since it
-	 * is very easy for the `MAX_FILE_SIZE` post field to be manipulated on the
-	 * client side.
-	 *
-	 * This method can only further restrict the
-	 * [http://php.net/upload_max_filesize `upload_max_filesize` ini setting],
-	 * it can not increase that setting. `upload_max_filesize` must be set
-	 * in the php.ini (or an Apache configuration) since file uploads are
-	 * handled before the request is handed off to PHP.
-	 *
-	 * @param  string $size  The maximum file size (e.g. `1MB`, `200K`, `10.5M`) - `0` for no limit
-	 */
-	public function setMaxSize($size)
-	{
-		$ini_max_size = ini_get('upload_max_filesize');
-		$ini_max_size = (!is_numeric($ini_max_size)) ? fFilesystem::convertToBytes($ini_max_size) : $ini_max_size;
-
-		$size = fFilesystem::convertToBytes($size);
-
-		if ($size && $size > $ini_max_size) {
-			throw new fEnvironmentException(
-				'The requested max file upload size, %1$s, is larger than the %2$s ini setting, which is currently set at %3$s. The ini setting must be increased to allow files of this size.',
-				$size,
-				'upload_max_filesize',
-				$ini_max_size
-			);
-		}
-
-		$this->max_size = $size;
 	}
 
 	/**
@@ -493,51 +223,6 @@ class fUpload
 	}
 
 	/**
-	 * Sets the file upload to be optional instead of required.
-	 */
-	public function setOptional()
-	{
-		$this->required = false;
-	}
-
-	/**
-	 * Validates the uploaded file, ensuring a file was actually uploaded and that is matched the restrictions put in place.
-	 *
-	 * @throws fValidationException  When the form is not configured for file uploads, no file is uploaded or the uploaded file violates the options set for this object
-	 *
-	 * @param  string  $field           The field the file was uploaded through
-	 * @param  mixed   $index           If the field was an array of file uploads, this specifies which one to validate
-	 * @param  bool $return_message  If any validation error should be returned as a string instead of being thrown as an fValidationException
-	 * @param  string  |$field
-	 * @param  bool |$return_message
-	 *
-	 * @return null|string  If `$return_message` is not `TRUE` or if no error occurs, `NULL`, otherwise a string error message
-	 */
-	public function validate($field, $index = null, $return_message = null)
-	{
-		if (is_bool($index) && $return_message === null) {
-			$return_message = $index;
-			$index = null;
-		}
-
-		if (!self::check($field)) {
-			throw new fValidationException(
-				'The field specified, %s, does not appear to be a file upload field',
-				$field
-			);
-		}
-
-		$file_array = $this->extractFileUploadArray($field, $index);
-		$error = $this->validateField($file_array);
-		if ($error) {
-			if ($return_message) {
-				return $error;
-			}
-			throw new fValidationException($error);
-		}
-	}
-
-	/**
 	 * Validates a $_FILES array against the upload configuration.
 	 *
 	 * @param array $file_array  The $_FILES array for a single file
@@ -547,11 +232,7 @@ class fUpload
 	private function validateField($file_array)
 	{
 		if (empty($file_array['name'])) {
-			if ($this->required) {
-				return self::compose('Please upload a file');
-			}
-
-			return null;
+			return self::compose('Please upload a file');
 		}
 
 		if ($file_array['error'] == UPLOAD_ERR_FORM_SIZE || $file_array['error'] == UPLOAD_ERR_INI_SIZE) {
@@ -563,19 +244,9 @@ class fUpload
 				fFilesystem::formatFilesize($max_size)
 			);
 		}
-		if ($this->max_size && $file_array['size'] > $this->max_size) {
-			return self::compose(
-				'The file uploaded is over the limit of %s',
-				fFilesystem::formatFilesize($this->max_size)
-			);
-		}
 
 		if (empty($file_array['tmp_name']) || empty($file_array['size'])) {
-			if ($this->required) {
-				return self::compose('Please upload a file');
-			}
-
-			return null;
+			return self::compose('Please upload a file');
 		}
 
 		if (!empty($this->mime_types) && file_exists($file_array['tmp_name'])) {
@@ -585,73 +256,13 @@ class fUpload
 			}
 		}
 
-		if (!$this->allow_php) {
-			$file_info = fFilesystem::getPathInfo($file_array['name']);
-			if (in_array(strtolower($file_info['extension']), array('php', 'php4', 'php5'))) {
-				return self::compose('The file uploaded is a PHP file, but those are not permitted');
-			}
+		$file_info = fFilesystem::getPathInfo($file_array['name']);
+		if (in_array(strtolower($file_info['extension']), array('php', 'php4', 'php5'))) {
+			return self::compose('The file uploaded is a PHP file, but those are not permitted');
 		}
 
-		if (!$this->allow_dot_files) {
-			if (substr($file_array['name'], 0, 1) == '.') {
-				return self::compose('The name of the uploaded file may not being with a .');
-			}
-		}
-
-		if ($this->image_dimensions && file_exists($file_array['tmp_name'])) {
-			if (fImage::isImageCompatible($file_array['tmp_name'])) {
-				list($width, $height, $other) = getimagesize($file_array['tmp_name']);
-
-				if ($this->image_dimensions['min_width'] && $width < $this->image_dimensions['min_width']) {
-					return self::compose(
-						'The uploaded image is narrower than the minimum width of %spx',
-						$this->image_dimensions['min_width']
-					);
-				}
-
-				if ($this->image_dimensions['min_height'] && $height < $this->image_dimensions['min_height']) {
-					return self::compose(
-						'The uploaded image is shorter than the minimum height of %spx',
-						$this->image_dimensions['min_height']
-					);
-				}
-
-				if ($this->image_dimensions['max_width'] && $width > $this->image_dimensions['max_width']) {
-					return self::compose(
-						'The uploaded image is wider than the maximum width of %spx',
-						$this->image_dimensions['max_width']
-					);
-				}
-
-				if ($this->image_dimensions['max_height'] && $height > $this->image_dimensions['max_height']) {
-					return self::compose(
-						'The uploaded image is taller than the maximum height of %spx',
-						$this->image_dimensions['max_height']
-					);
-				}
-			}
-		}
-
-		if ($this->image_ratio && file_exists($file_array['tmp_name'])) {
-			if (fImage::isImageCompatible($file_array['tmp_name'])) {
-				list($width, $height, $other) = getimagesize($file_array['tmp_name']);
-
-				if ($this->image_ratio['allow_excess_dimension'] == 'width' && $width / $height < $this->image_ratio['width'] / $this->image_ratio['height']) {
-					return self::compose(
-						'The uploaded image is too narrow for its height. The required ratio is %1$sx%2$s or wider.',
-						$this->image_ratio['width'],
-						$this->image_ratio['height']
-					);
-				}
-
-				if ($this->image_ratio['allow_excess_dimension'] == 'height' && $width / $height > $this->image_ratio['width'] / $this->image_ratio['height']) {
-					return self::compose(
-						'The uploaded image is too short for its width. The required ratio is %1$sx%2$s or taller.',
-						$this->image_ratio['width'],
-						$this->image_ratio['height']
-					);
-				}
-			}
+		if (substr($file_array['name'], 0, 1) == '.') {
+			return self::compose('The name of the uploaded file may not being with a .');
 		}
 	}
 }
