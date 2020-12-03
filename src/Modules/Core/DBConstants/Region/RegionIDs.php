@@ -16,7 +16,6 @@ class RegionIDs
 	public const PR_PARTNER_AND_TEAM_WORK_GROUP = 1811;
 	public const PR_START_PAGE = 2287;
 	public const EUROPE_REPORT_TEAM = 432;
-	public const VOTING_BETA = 2937;
 
 	// region and ambassador groups
 	public const EUROPE_BOT_GROUP = 881;
