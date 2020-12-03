@@ -5,7 +5,6 @@ namespace Foodsharing\Permissions;
 use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
