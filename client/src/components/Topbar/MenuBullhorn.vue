@@ -21,8 +21,8 @@ export default {
           heading: 'menu.entry.fundraising',
           menuItems: [
             { url: 'donations', menuTitle: 'menu.entry.donations' },
-            { url: 'selfservice', menuTitle: 'menu.entry.friendcircle' },
-            { url: 'circle_of_friends', menuTitle: 'menu.entry.selfservice' },
+            { url: 'circle_of_friends', menuTitle: 'menu.entry.friendcircle' },
+            { url: 'selfservice', menuTitle: 'menu.entry.selfservice' },
           ],
         },
         {
