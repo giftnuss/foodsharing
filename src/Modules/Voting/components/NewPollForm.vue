@@ -167,7 +167,7 @@
             id="input-num-options"
             v-model="numOptions"
             min="2"
-            max="10"
+            max="200"
             class="m-1 mb-3 mr-3"
             style="width:120px"
             size="sm"
