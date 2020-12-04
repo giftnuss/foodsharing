@@ -132,7 +132,7 @@ class MessageTransactions
 				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
 					$conversationName = $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $members);
 					$pushNotification = new MessagePushNotification(
-						$author['name'],
+						$author['name'] ?? '?',
 						$message->body,
 						new \DateTime(),
 						$conversationId,

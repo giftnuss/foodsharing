@@ -38,6 +38,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - If Ambassador removes user from District verification is not removed and history is not written !1803 @fs_k
 - Fix a possible crash with reactions to deleted forum posts !1797 !1802 @ChrisOelmueller
 - Check if mail addresses are verified, allow sending out new verification mails #564 !1334 !1817 @pfaufisch @chriswalg
+- Fix a rare problem with push notification data !1798 @ChrisOelmueller
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
