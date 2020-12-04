@@ -73,6 +73,14 @@
           @vote-callback="userJustVoted"
         />
 
+        <b-alert
+          v-if="userVoteDate"
+          show
+          variant="dark"
+        >
+          {{ $i18n('poll.untraceable') }}
+        </b-alert>
+
         <ResultsTable
           v-if="isPollInPast"
           :options="poll.options"

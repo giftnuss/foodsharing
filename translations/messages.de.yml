@@ -1988,6 +1988,7 @@ poll:
   submit_vote: Abstimmen
   error_cannot_vote: Du kannst an dieser Abstimmung nicht teilnehmen
   vote_success: Du hast erfolgreich abgestimmt.
+  untraceable: Die Information, wie du für welche Option abgestimmt hast, lässt sich nicht zurückverfolgen und kann daher auch nicht mehr hier angezeigt werden.
   new_poll:
     title: Neue Abstimmung
     name: Name der Abstimmung
