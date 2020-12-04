@@ -155,6 +155,12 @@ class UserApiCest
 		$testUser = $I->createFoodsaver();
 		$I->login($this->user[self::EMAIL]);
 		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->createRandomText(100, 150)]);
+		$I->seeInDatabase('fs_bell', ['name' => 'banana_given_title']);
+		$id = $I->grabFromDatabase('fs_bell', 'id', ['name' => 'banana_given_title']);
+		$I->seeInDatabase('fs_foodsaver_has_bell', [
+			'foodsaver_id' => $testUser['id'],
+			'bell_id' => $id,
+		]);
 		$I->seeResponseCodeIs(Http::OK);
 	}
 
