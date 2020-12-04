@@ -34,7 +34,7 @@
         >
           <b-alert
             show
-            variant="info"
+            variant="dark"
           >
             {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
           </b-alert>
@@ -45,7 +45,7 @@
         >
           <b-alert
             show
-            variant="info"
+            variant="dark"
           >
             {{ $i18n('poll.may_not_yet_vote') }}
           </b-alert>
@@ -56,7 +56,7 @@
         >
           <b-alert
             show
-            variant="info"
+            variant="dark"
           >
             {{ $i18n('poll.may_not_vote') }}
           </b-alert>
