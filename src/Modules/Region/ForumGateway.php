@@ -215,9 +215,14 @@ class ForumGateway extends BaseGateway
 				ON		b.id = ht.bezirk_id';
 	}
 
-	private function getReactionsForPosts($postIds)
+	/**
+	 * This method is private because we currently trust the given postIds to exist as well as be not-harmful.
+	 */
+	private function getReactionsForPosts(array $postIds)
 	{
-		/* This message is private because we currently trust the given postIds to exist as well as be not-harmful */
+		if (empty($postIds)) {
+			return [];
+		}
 		$postIdClause = implode(',', $postIds);
 		$reactions = $this->db->fetchAll('
 			SELECT
@@ -289,6 +294,11 @@ class ForumGateway extends BaseGateway
 
 			ORDER BY 	p.`time`
 		', ['threadId' => $threadId]);
+
+		if (empty($posts)) {
+			return [];
+		}
+
 		$postIds = array_column($posts, 'id');
 		$reactions = $this->getReactionsForPosts($postIds);
 		$mergeReactions = function ($post) use ($reactions) {

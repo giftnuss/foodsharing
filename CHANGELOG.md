@@ -52,6 +52,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Rewrite store application screen in Vue !1756 @ChrisOelmueller
 - Some changes to Session and PageHelper group handling !1742 @ChrisOelmueller
 - Clean up IndexController and some related code !1775 @\_fridtjof_
+- Fix a possible crash with reactions to deleted forum posts !1797 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
