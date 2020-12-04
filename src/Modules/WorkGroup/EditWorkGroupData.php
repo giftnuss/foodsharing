@@ -15,9 +15,8 @@ class EditWorkGroupData
 
 	/**
 	 * @Assert\Type("string")
-	 * @Assert\NotBlank()
 	 */
-	public string $description;
+	public ?string $description;
 
 	/**
 	 * @Assert\Type("integer")
@@ -72,7 +71,7 @@ class EditWorkGroupData
 	{
 		$workGroupRequest = new self();
 		$workGroupRequest->name = $group['name'];
-		$workGroupRequest->description = $group['teaser'];
+		$workGroupRequest->description = $group['teaser'] ?? '';
 		$workGroupRequest->applyType = $group['apply_type'];
 		$workGroupRequest->bananaCount = $group['banana_count'];
 		$workGroupRequest->fetchCount = $group['fetch_count'];
@@ -119,7 +118,7 @@ class EditWorkGroupData
 
 		$res = [
 			'name' => $this->name,
-			'teaser' => $this->description,
+			'teaser' => $this->description ?? '',
 			'apply_type' => $this->applyType,
 			'banana_count' => $this->bananaCount,
 			'fetch_count' => $this->fetchCount,
