@@ -1100,6 +1100,9 @@ bell:
   workgroup_request_decline_title: "{name}"
   workgroup_request_decline: "Du wurdest nicht in die Arbeitsgruppe aufgenommen."
 
+  banana_given_title: "Neue Vertrauensbanane"
+  banana_given: "{name} hat dir eine Vertrauensbanane spendiert."
+
 list:
   filter_for: "Filtern nach..."
 

@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Modules\Profile\ProfileTransactions;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Modules\Register\RegisterTransactions;
 use Foodsharing\Permissions\ProfilePermissions;
@@ -33,6 +34,7 @@ class UserRestController extends AbstractFOSRestController
 	private ProfilePermissions $profilePermissions;
 	private EmailHelper $emailHelper;
 	private RegisterTransactions $registerTransactions;
+	private ProfileTransactions $profileTransactions;
 
 	private const MIN_RATING_MESSAGE_LENGTH = 100;
 	private const MIN_PASSWORD_LENGTH = 8;
@@ -47,7 +49,8 @@ class UserRestController extends AbstractFOSRestController
 		UserPermissions $userPermissions,
 		ProfilePermissions $profilePermissions,
 		EmailHelper $emailHelper,
-		RegisterTransactions $registerTransactions
+		RegisterTransactions $registerTransactions,
+		ProfileTransactions $profileTransactions
 	) {
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
@@ -58,6 +61,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->profilePermissions = $profilePermissions;
 		$this->emailHelper = $emailHelper;
 		$this->registerTransactions = $registerTransactions;
+		$this->profileTransactions = $profileTransactions;
 	}
 
 	/**
@@ -315,7 +319,7 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'text too short: ' . strlen($message) . ' < ' . self::MIN_RATING_MESSAGE_LENGTH);
 		}
 
-		$this->profileGateway->giveBanana($userId, $message, $this->session->id());
+		$this->profileTransactions->giveBanana($userId, $message, $this->session->id());
 
 		return $this->handleView($this->view([], 200));
 	}
