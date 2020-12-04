@@ -118,7 +118,7 @@ export default {
       try {
         await vote(this.poll.id, this.votingRequestValues)
         pulseSuccess(i18n('poll.vote_success'))
-        this.$emit('disableVoteForm')
+        this.$emit('vote-callback')
       } catch (e) {
         if (e.code === 403) {
           pulseError(i18n('poll.error_cannot_vote'))

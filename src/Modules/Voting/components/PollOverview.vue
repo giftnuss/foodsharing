@@ -29,14 +29,14 @@
         </ul>
 
         <div
-          v-if="userVoteDate !== null"
+          v-if="userAlreadyVoted"
           class="my-1 mt-3"
         >
           <b-alert
             show
             variant="dark"
           >
-            {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
+            {{ $i18n('poll.already_voted') }}: {{ $dateFormat(displayedVoteDate) }}
           </b-alert>
         </div>
         <div
@@ -51,7 +51,7 @@
           </b-alert>
         </div>
         <div
-          v-else-if="!mayVote && !isPollInPast"
+          v-else-if="!userMayVote && !isPollInPast"
           class="mt-3"
         >
           <b-alert
@@ -69,8 +69,8 @@
         <VoteForm
           v-if="!isPollInPast"
           :poll="poll"
-          :may-vote="mayVote"
-          @disableVoteForm="disableVoteForm"
+          :may-vote="userMayVote"
+          @vote-callback="userJustVoted"
         />
 
         <ResultsTable
@@ -115,6 +115,13 @@ export default {
       default: null,
     },
   },
+  data () {
+    return {
+      userMayVote: this.mayVote,
+      userAlreadyVoted: this.userVoteDate !== null,
+      displayedVoteDate: this.userVoteDate ? dateFnsParseISO(this.userVoteDate.date) : new Date(),
+    }
+  },
   computed: {
     startDate () {
       return dateFnsParseISO(this.poll.startDate.date)
@@ -130,11 +137,9 @@ export default {
     },
   },
   methods: {
-    disableVoteForm () {
-      this.mayVote = false
-    },
-    parseDate (date) {
-      return dateFnsParseISO(date)
+    userJustVoted () {
+      this.userAlreadyVoted = true
+      this.userMayVote = false
     },
   },
 }
