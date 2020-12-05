@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class StoreTransactions
 {
 	private MessageGateway $messageGateway;
+	private PickupGateway $pickupGateway;
 	private StoreGateway $storeGateway;
 	private TranslatorInterface $translator;
 	private BellGateway $bellGateway;
@@ -33,6 +34,7 @@ class StoreTransactions
 
 	public function __construct(
 		MessageGateway $messageGateway,
+		PickupGateway $pickupGateway,
 		StoreGateway $storeGateway,
 		TranslatorInterface $translator,
 		BellGateway $bellGateway,
@@ -41,6 +43,7 @@ class StoreTransactions
 		Session $session
 	) {
 		$this->messageGateway = $messageGateway;
+		$this->pickupGateway = $pickupGateway;
 		$this->storeGateway = $storeGateway;
 		$this->translator = $translator;
 		$this->bellGateway = $bellGateway;
@@ -57,17 +60,17 @@ class StoreTransactions
 	 */
 	public function changePickupSlots(int $storeId, \DateTimeInterface $date, int $newTotalSlots): bool
 	{
-		$occupiedSlots = count($this->storeGateway->getPickupSignupsForDate($storeId, $date));
-		$pickups = $this->storeGateway->getOnetimePickupsForRange($storeId, $date, $date);
+		$occupiedSlots = count($this->pickupGateway->getPickupSignupsForDate($storeId, $date));
+		$pickups = $this->pickupGateway->getOnetimePickupsForRange($storeId, $date, $date);
 		if (!$pickups) {
 			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->storeGateway->addOnetimePickup($storeId, $date, $newTotalSlots);
+				$this->pickupGateway->addOnetimePickup($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}
 		} else {
 			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->storeGateway->updateOnetimePickupTotalSlots($storeId, $date, $newTotalSlots);
+				$this->pickupGateway->updateOnetimePickupTotalSlots($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}
@@ -83,7 +86,7 @@ class StoreTransactions
 			return false;
 		}
 
-		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
+		$pickupSlots = $this->pickupGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
 		if (count($pickupSlots) == 1 && $pickupSlots[0]['isAvailable']) {
 			/* expect a free slot */
 			if ($fsId) {
@@ -114,7 +117,7 @@ class StoreTransactions
 			return null;
 		}
 
-		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, Carbon::now(), $maxDate, $maxDate);
+		$pickupSlots = $this->pickupGateway->getPickupSlots($storeId, Carbon::now(), $maxDate, $maxDate);
 
 		$minimumDate = null;
 		foreach ($pickupSlots as $slot) {
@@ -153,7 +156,7 @@ class StoreTransactions
 			throw new \DomainException('No pickup slot available');
 		}
 
-		$this->storeGateway->addFetcher($fsId, $storeId, $date, $confirmed);
+		$this->pickupGateway->addFetcher($fsId, $storeId, $date, $confirmed);
 
 		return $confirmed;
 	}

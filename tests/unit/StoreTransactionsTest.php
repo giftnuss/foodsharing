@@ -5,14 +5,14 @@ use Carbon\CarbonInterval;
 use Faker\Factory;
 use Faker\Generator;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
-use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
 
 class StoreTransactionsTest extends \Codeception\Test\Unit
 {
 	protected UnitTester $tester;
 	private StoreTransactions $transactions;
-	private StoreGateway $gateway;
+	private PickupGateway $gateway;
 	private Generator $faker;
 
 	private $region_id;
@@ -21,7 +21,7 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 	public function _before()
 	{
 		$this->transactions = $this->tester->get(StoreTransactions::class);
-		$this->gateway = $this->tester->get(StoreGateway::class);
+		$this->gateway = $this->tester->get(PickupGateway::class);
 		$this->faker = $this->faker = Factory::create('de_DE');
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region_id = $this->tester->createRegion()['id'];

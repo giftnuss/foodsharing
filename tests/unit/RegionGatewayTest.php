@@ -1,7 +1,6 @@
 <?php
 
 use Foodsharing\Modules\Region\RegionGateway;
-use UnitTester;
 
 class RegionGatewayTest extends \Codeception\Test\Unit
 {

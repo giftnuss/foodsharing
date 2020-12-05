@@ -33,7 +33,7 @@ parameters:
       message: '#expects (DateTime|Carbon\\Carbon)(\|null)?, (DateTimeInterface|Carbon\\CarbonInterface)(\|null)? given#'
       paths:
         - src/Modules/Store/StoreTransactions.php
-        - src/Modules/Store/StoreGateway.php
+        - src/Modules/Store/PickupGateway.php
     # LEVEL 5+ Weirdness with InputBag / ParameterBag, see https://github.com/symfony/symfony/issues/37100
     -
       message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Symfony\\Component\\HttpFoundation\\InputBag::get\(\) expects string\|null, int given#'

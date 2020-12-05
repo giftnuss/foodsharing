@@ -8,6 +8,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
@@ -19,6 +20,7 @@ class ProfileXhr extends Control
 	private MailboxGateway $mailboxGateway;
 	private RegionGateway $regionGateway;
 	private ProfileGateway $profileGateway;
+	private PickupGateway $pickupGateway;
 	private StoreGateway $storeGateway;
 	private ReportPermissions $reportPermissions;
 	private ProfilePermissions $profilePermissions;
@@ -29,6 +31,7 @@ class ProfileXhr extends Control
 		RegionGateway $regionGateway,
 		MailboxGateway $mailboxGateway,
 		ProfileGateway $profileGateway,
+		PickupGateway $pickupGateway,
 		StoreGateway $storeGateway,
 		ReportPermissions $reportPermissions,
 		ProfilePermissions $profilePermissions
@@ -38,6 +41,7 @@ class ProfileXhr extends Control
 		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
+		$this->pickupGateway = $pickupGateway;
 		$this->storeGateway = $storeGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->profilePermissions = $profilePermissions;
@@ -90,7 +94,7 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteAllDatesFromFoodsaver(): array
 	{
-		if ($this->session->may('orga') && $this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
+		if ($this->session->may('orga') && $this->pickupGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -114,7 +118,7 @@ class ProfileXhr extends Control
 		$pickupDate = Carbon::createFromTimestamp($_GET['date']);
 
 		if ($this->session->may('orga') || $this->session->isAdminFor($storeRegion)) {
-			if ($this->storeGateway->removeFetcher($userId, $storeId, $pickupDate)) {
+			if ($this->pickupGateway->removeFetcher($userId, $storeId, $pickupDate)) {
 				return [
 					'status' => 1,
 					'script' => '

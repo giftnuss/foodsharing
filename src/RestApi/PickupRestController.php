@@ -8,6 +8,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageTransactions;
+use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
 use Foodsharing\Permissions\StorePermissions;
@@ -23,6 +24,7 @@ final class PickupRestController extends AbstractFOSRestController
 {
 	private FoodsaverGateway $foodsaverGateway;
 	private Session $session;
+	private PickupGateway $pickupGateway;
 	private StoreGateway $storeGateway;
 	private StorePermissions $storePermissions;
 	private StoreTransactions $storeTransactions;
@@ -31,6 +33,7 @@ final class PickupRestController extends AbstractFOSRestController
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
 		Session $session,
+		PickupGateway $pickupGateway,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
 		StoreTransactions $storeTransactions,
@@ -38,6 +41,7 @@ final class PickupRestController extends AbstractFOSRestController
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->session = $session;
+		$this->pickupGateway = $pickupGateway;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
 		$this->storeTransactions = $storeTransactions;
@@ -90,7 +94,7 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'Cannot modify pickup in the past.');
 		}
 
-		if (!$this->storeGateway->removeFetcher($fsId, $storeId, $date)) {
+		if (!$this->pickupGateway->removeFetcher($fsId, $storeId, $date)) {
 			throw new HttpException(400, 'Failed to remove user from pickup');
 		}
 
@@ -138,7 +142,7 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		if ($paramFetcher->get('isConfirmed')) {
-			if (!$this->storeGateway->confirmFetcher($fsId, $storeId, $date)) {
+			if (!$this->pickupGateway->confirmFetcher($fsId, $storeId, $date)) {
 				throw new HttpException(400);
 			}
 			$this->storeGateway->addStoreLog(
@@ -196,7 +200,7 @@ final class PickupRestController extends AbstractFOSRestController
 			$fromTime = Carbon::today()->subHours(6);
 		}
 
-		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
+		$pickups = $this->pickupGateway->getPickupSlots($storeId, $fromTime);
 
 		return $this->handleView($this->view([
 			'pickups' => $this->enrichPickupSlots($pickups, $storeId)
@@ -221,7 +225,7 @@ final class PickupRestController extends AbstractFOSRestController
 		$to = $to->min(Carbon::now());
 
 		$pickups = [[
-			'occupiedSlots' => $this->storeGateway->getPickupHistory($storeId, $from, $to)
+			'occupiedSlots' => $this->pickupGateway->getPickupHistory($storeId, $from, $to)
 		]];
 
 		return $this->handleView($this->view([
