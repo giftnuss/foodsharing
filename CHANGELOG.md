@@ -68,6 +68,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - upgrade webpack-merge to v 5 !1744 @peter.toennies
 - Replaced gitbook v1 to mdbook !1738 @chriswalg
 - Improved the RegisterCest.php: This check the variants with and without newsletter now. !1779 @chriswalg
+- Make build/test CI interruptible when new commits are pushed !1799 @\_fridtjof_
 
 # 2020-10-23 Hotfix
 
