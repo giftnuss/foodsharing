@@ -33,17 +33,13 @@ class ProfileTransactions
 	 */
 	public function giveBanana(int $receiverId, string $message, int $giverId): int
 	{
-		$giver = $this->foodsaverGateway->getFoodsaverBasics($giverId);
 		$bell = Bell::create(
 			'banana_given_title',
 			'banana_given',
-			'bell_banana',
+			'fas fa-gifts',
 			['href' => '/profile/' . $receiverId],
-			[
-				'name' => $giver['name'],
-				'message' => $message,
-			],
-			'banana-' . $giverId
+			['name' => $this->foodsaverGateway->getFoodsaverName($giverId)],
+			'banana-' . $receiverId . '-' . $giverId
 		);
 		$this->bellGateway->addBell($receiverId, $bell);
 
