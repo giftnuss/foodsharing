@@ -14,7 +14,6 @@ use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -150,20 +149,6 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 		$debugBar = $this->get(DebugBar::class);
 		if ($debugBar->isEnabled()) {
 			$pageHelper->addHead($debugBar->renderHead());
-		}
-
-		// this can go, uc was introduced for some links in emails way back in 2014:
-		//	4f9f8e3e2389a2859de198a9d0eae12a8de997ee (/app/core/core.control.php, ctrl+f for 'uc=', if you're interested)
-		// i can't find it anywhere in the current codebase anymore, so it should be safe to get rid of
-		// its usage was finally removed in !1064 (manually merged in f3f79f90f0aa393fe7d8843d1dc28ba75b281569)
-		if ($session->may()) {
-			$uc = $request->query->get('uc');
-			if ($uc !== null) {
-				if ($session->id() != $uc) {
-					$this->get(Mem::class)->logout($session->id());
-					$this->get(RouteHelper::class)->goLogin();
-				}
-			}
 		}
 	}
 
