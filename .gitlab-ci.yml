@@ -68,6 +68,7 @@ build:backend-chat:
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
+  interruptible: true
   image: node:14.14.0-alpine3.12
   stage: build
   script:
@@ -88,6 +89,7 @@ build:frontend:
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
+  interruptible: true
   image: node:14.14.0-alpine3.12
   stage: build
   script:
@@ -109,6 +111,7 @@ build:backend:
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
+  interruptible: true
   image: registry.gitlab.com/foodsharing-dev/images/php:7.4.11
   stage: build
   script:
@@ -152,6 +155,7 @@ build:docs:
 
 test:
   <<: *defaults
+  interruptible: true
   variables:
     MYSQL_ROOT_PASSWORD: root
     MYSQL_INITDB_SKIP_TZINFO: 1
