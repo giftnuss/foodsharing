@@ -88,10 +88,6 @@ div.statdisplay a.item:hover {
   background: url("/img/banana.png") no-repeat center 22px;
 }
 
-.bell_banana {
-  background: url("/img/banana.png") no-repeat center;
-}
-
 .stat_bananacount.bouched {
   background-image: url("/img/bananan.png");
 }
