@@ -438,7 +438,7 @@ class ForumRestController extends AbstractFOSRestController
 	 *
 	 * @OA\Tag(name="forum")
 	 * @OA\Response(response="200", description="success")
-	 * @OA\Response(response="401", description="Not logged in.")
+	 * @OA\Response(response="401", description="Not logged in")
 	 * @OA\Response(response="403", description="Insufficient permissions")
 	 * @Rest\Post("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
@@ -463,14 +463,22 @@ class ForumRestController extends AbstractFOSRestController
 	 * Remove an emoji reaction the logged in user has given from a post.
 	 *
 	 * @OA\Tag(name="forum")
-	 * @OA\Response(response="200", description="success")
-	 * @OA\Response(response="401", description="Insufficient permissions")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 *
 	 * @Rest\Delete("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function deleteReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(401);
+		}
+
+		$threadId = $this->forumGateway->getThreadForPost($postId);
+
+		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
 		}
 
 		$this->forumTransactions->removeReaction($this->session->id(), $postId, $emoji);
