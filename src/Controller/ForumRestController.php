@@ -440,6 +440,8 @@ class ForumRestController extends AbstractFOSRestController
 	 * @OA\Response(response="200", description="success")
 	 * @OA\Response(response="401", description="Not logged in")
 	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="404", description="Post does not exist")
+	 *
 	 * @Rest\Post("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
 	public function addReactionAction(int $postId, string $emoji): SymfonyResponse
@@ -450,6 +452,9 @@ class ForumRestController extends AbstractFOSRestController
 
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 
+		if (is_null($threadId)) {
+			throw new HttpException(404);
+		}
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
@@ -466,6 +471,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @OA\Response(response="200", description="Success")
 	 * @OA\Response(response="401", description="Not logged in")
 	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Response(response="404", description="Post does not exist")
 	 *
 	 * @Rest\Delete("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
@@ -477,6 +483,9 @@ class ForumRestController extends AbstractFOSRestController
 
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 
+		if (is_null($threadId)) {
+			throw new HttpException(404);
+		}
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}

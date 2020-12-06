@@ -364,12 +364,16 @@ class ForumGateway extends BaseGateway
 		', ['threadId' => $threadId]);
 	}
 
-	public function getThreadForPost($postId)
+	public function getThreadForPost(int $postId): ?int
 	{
-		return $this->db->fetchValueByCriteria(
-			'fs_theme_post',
-			'theme_id',
+		$threadId = $this->db->fetchByCriteria('fs_theme_post',
+			['theme_id'],
 			['id' => $postId]
 		);
+		if (empty($threadId)) {
+			return null;
+		} else {
+			return $threadId['theme_id'];
+		}
 	}
 }
