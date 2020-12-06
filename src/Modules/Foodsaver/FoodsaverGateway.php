@@ -725,6 +725,10 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	/**
+	 * 	Deletes the foodsaver from a region.
+	 *  If the foodsaver is also the actor and removes himself from his home region
+	 *  the verification is removed.
+	 *
 	 * @param int $regionId regionId that foodsaverid is being deleted from
 	 * @param int|null $fsId foodsaverid that is being deleted from a region
 	 * @param int $actorId foodsaverid that is performing the action (either self or ambassador)
