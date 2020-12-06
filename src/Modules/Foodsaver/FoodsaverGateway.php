@@ -724,7 +724,7 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function deleteFromRegion(int $regionId, ?int $fsId): void
+	public function deleteFromRegion(int $regionId, ?int $fsId, ?int $actorId): void
 	{
 		if ($fsId === null) {
 			return;
@@ -738,7 +738,6 @@ final class FoodsaverGateway extends BaseGateway
 		if ($mainRegion_id === $regionId) {
 			$this->db->update('fs_foodsaver', [
 				'bezirk_id' => 0,
-				'verified' => 0
 			], [
 				'id' => $fsId
 			]);
@@ -747,21 +746,15 @@ final class FoodsaverGateway extends BaseGateway
 				[
 					'date' => $this->db->now(),
 					'fs_id' => $fsId,
-					'changer_id' => $fsId,
+					'changer_id' => $actorId,
 					'object_name' => 'bezirk_id',
 					'old_value' => $mainRegion_id,
 					'new_value' => 0
 				]
 			);
-			$this->db->insert(
-				'fs_verify_history',
-				[
-					'fs_id' => $fsId,
-					'date' => $this->db->now(),
-					'bot_id' => $fsId,
-					'change_status' => 0
-				]
-			);
+			if ($fsId === $actorId) {
+				changeUserVerification($fsId, $actorId, 0);
+			}
 		}
 	}
 
