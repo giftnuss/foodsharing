@@ -1,7 +1,6 @@
 <template>
   <fs-dropdown-menu
     id="dropdown-messages"
-    ref="dropdown"
     menu-title="menu.entry.messages"
     icon="fa-comments"
     class="topbar-messages list-with-actions"
@@ -24,17 +23,16 @@
           v-for="conversation in conversations"
           :key="conversation.id"
           :conversation="conversation"
-          @chatOpened="close"
         />
       </div>
     </div>
-    <template v-slot:actions>
+    <template #actions="{ hide }">
       <!-- <div class="btn-group special btn-group-sm"> -->
       <b-btn
         :disabled="!unread"
         secondary
         size="sm"
-        @click="markUnreadMessagesAsRead"
+        @click="markUnreadMessagesAsRead(); hide();"
       >
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
       </b-btn>
@@ -76,12 +74,8 @@ export default {
     return conversationStore.loadConversations()
   },
   methods: {
-    close () {
-      this.$refs.dropdown.visible = false
-    },
     markUnreadMessagesAsRead () {
       conversationStore.markUnreadMessagesAsRead()
-      this.close()
     },
   },
 }

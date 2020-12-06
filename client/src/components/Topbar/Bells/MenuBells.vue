@@ -34,12 +34,12 @@
         />
       </div>
     </div>
-    <template v-slot:actions>
+    <template #actions="{ hide }">
       <b-btn
         secondary
         size="sm"
         :disabled="!unread"
-        @click="markNewBellsAsRead"
+        @click="markNewBellsAsRead(); hide();"
       >
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
       </b-btn>

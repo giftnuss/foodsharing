@@ -1,6 +1,7 @@
 <template>
   <b-nav-item-dropdown
     v-if="show"
+    ref="dropdown-menu"
     v-b-tooltip="$i18n(menuTitle)"
     :right="right"
     :lazy="lazy"
@@ -42,7 +43,8 @@
       </slot>
     </div>
     <div class="d-flex actions">
-      <slot name="actions" />
+      <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+      <slot name="actions" :hide="closeDropdownMenu" />
     </div>
   </b-nav-item-dropdown>
 </template>
@@ -87,6 +89,11 @@ export default {
         return this.wXS || this.wSM
       }
       return true
+    },
+  },
+  methods: {
+    closeDropdownMenu () {
+      this.$refs['dropdown-menu'].hide()
     },
   },
 }

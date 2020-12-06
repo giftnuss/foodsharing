@@ -100,7 +100,6 @@ export default {
   methods: {
     openChat () {
       conv.chat(this.conversation.id)
-      this.$emit('chatOpened')
     },
   },
 }
