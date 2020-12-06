@@ -127,7 +127,7 @@ class RegionRestController extends AbstractFOSRestController
 			throw new HttpException(409, 'still an active store manager in that region');
 		}
 
-		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
+		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id(), $this->session->id());
 
 		return $this->handleView($this->view([], 200));
 	}

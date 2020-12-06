@@ -81,7 +81,7 @@ class FoodsaverXhr extends Control
 		if (!$this->regionPermissions->mayDeleteFoodsaverFromRegion($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$this->foodsaverGateway->deleteFromRegion($regionId, $foodsaverId);
+		$this->foodsaverGateway->deleteFromRegion($regionId, $foodsaverId, $this->session->id());
 
 		return [
 			'status' => 1,
