@@ -753,7 +753,7 @@ final class FoodsaverGateway extends BaseGateway
 				]
 			);
 			if ($fsId === $actorId) {
-				$this->changeUserVerification($fsId, $actorId, 0);
+				$this->changeUserVerification($fsId, $actorId, false);
 			}
 		}
 	}
