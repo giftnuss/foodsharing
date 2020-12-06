@@ -238,7 +238,7 @@ class ProfileView extends View
 
 		$showNotes = isset($this->foodsaver['note_count']);
 		if ($this->reportPermissions->mayHandleReports() && $showNotes) {
-			$opt .= '<li><a href="/profile/' . $fsId . '/notes/">'
+			$opt .= '<li><a href="/profile/' . $fsId . '/notes">'
 				. '<i class="far fa-file-alt fa-fw"></i>' . $this->translator->trans('profile.nav.notes', [
 					'{count}' => $this->foodsaver['note_count'],
 				]) . '</a></li>';

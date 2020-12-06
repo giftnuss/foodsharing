@@ -374,7 +374,7 @@ class DashboardControl extends Control
 			$out .= '
 			</ul>
 			<div class="all-baskets-link">
-				<a class="button" href="/essenskoerbe/find/">' . $this->translator->trans('basket.all') . '</a>
+				<a class="button" href="/essenskoerbe/find">' . $this->translator->trans('basket.all') . '</a>
 			</div>';
 
 			$this->pageHelper->addContent(
