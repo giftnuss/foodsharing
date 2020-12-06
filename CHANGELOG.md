@@ -33,6 +33,7 @@
 - Disabled session cookie checkbox in login form, until there is a solution in issue 956 !1785 @chriswalg
 - Disabled session cookie checkbox in login form and, until there is a solution in issue 956
 and persistent session disabled after each request, so that LastLogin is set correctly again !1785 @chriswalg
+- If Ambassador removes user from District verification is not removed and history is not written !1803 @fs_k
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
