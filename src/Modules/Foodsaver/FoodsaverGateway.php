@@ -727,11 +727,11 @@ final class FoodsaverGateway extends BaseGateway
 	/**
 	 * @param int $regionId regionId that foodsaverid is being deleted from
 	 * @param int|null $fsId foodsaverid that is being deleted from a region
-	 * @param int|null $actorId foodsaverid that is performing the action (either self or ambassador)
+	 * @param int $actorId foodsaverid that is performing the action (either self or ambassador)
 	 *
 	 * @throws \Exception
 	 */
-	public function deleteFromRegion(int $regionId, ?int $fsId, ?int $actorId): void
+	public function deleteFromRegion(int $regionId, ?int $fsId, int $actorId): void
 	{
 		if ($fsId === null) {
 			return;
