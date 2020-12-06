@@ -62,6 +62,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Clean up IndexController and some related code !1775 @\_fridtjof_
 - Fix a possible crash with reactions to deleted forum posts !1797 @ChrisOelmueller
 - Remove some unused global JS !1766 @ChrisOelmueller
+- Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg

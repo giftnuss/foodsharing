@@ -67,6 +67,7 @@ import $ from 'jquery'
 import { sendBanana } from '@/api/profile'
 import i18n from '@/i18n'
 import { pulseError, pulseInfo } from '@/script'
+import serverData from '@/server-data'
 
 import BananaListEntry from './BananaListEntry'
 
@@ -98,14 +99,15 @@ export default {
   methods: {
     async trySendBanana () {
       try {
-        const newBanana = await sendBanana(this.recipientId, this.bananaText.trim())
-        pulseInfo(i18n('profile.banana.sent'))
+        await sendBanana(this.recipientId, this.bananaText.trim())
 
         // Fake reactive update by inserting submitted data into the UI
-        newBanana.createdAt = new Date().toISOString()
-        this.bananaList.push(newBanana)
+        const fakeBanana = this.getFakeBanana()
+        this.bananaList.unshift(fakeBanana)
         this.bananaCount += 1
 
+        // Reset UI and component state
+        pulseInfo(i18n('profile.banana.sent'))
         this.bananaText = ''
         this.showTextarea = false
         this.hasGivenBanana = true
@@ -114,6 +116,7 @@ export default {
         if (err.code === 400) {
           pulseError(i18n('profile.banana.messageTooShort'))
         } else {
+          console.error(err)
           pulseError(i18n('error_unexpected'))
         }
       }
@@ -121,6 +124,19 @@ export default {
     toggleTextarea () {
       this.showTextarea = !this.showTextarea
       $.fancybox.update()
+    },
+    getFakeBanana () {
+      let profilePic = serverData.user.avatar['50']
+      if (profilePic === '/img/50_q_avatar.png') {
+        profilePic = null
+      }
+
+      return {
+        createdAt: new Date().toISOString(),
+        id: serverData.user.id,
+        photo: profilePic ? profilePic.substr('50_q_/images/'.length) : profilePic,
+        msg: this.bananaText.trim(),
+      }
     },
   },
 }
