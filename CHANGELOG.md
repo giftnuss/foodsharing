@@ -149,6 +149,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 - Increase phpstan analysis level to 4 and fix all issues !1672 @ChrisOelmueller
 - Fix `outdated` CI script #979 !1712 @ChrisOelmueller
+- Fix `script/clean` not removing test containers !1806 #1027 @muffelrudaijer
 
 # 2020-08-11 Hotfix
 
