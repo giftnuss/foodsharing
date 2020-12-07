@@ -13,17 +13,20 @@ class LoginControl extends Control
 	private LoginGateway $loginGateway;
 	private SettingsGateway $settingsGateway;
 	private ContentGateway $contentGateway;
+	private LoginService $loginService;
 
 	public function __construct(
 		LoginView $view,
 		LoginGateway $loginGateway,
 		ContentGateway $contentGateway,
-		SettingsGateway $settingsGateway
+		SettingsGateway $settingsGateway,
+		LoginService $loginService
 	) {
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
 		$this->contentGateway = $contentGateway;
+		$this->loginService = $loginService;
 
 		parent::__construct();
 	}
@@ -50,6 +53,19 @@ class LoginControl extends Control
 				$this->routeHelper->go('/?page=dashboard');
 			}
 		}
+	}
+
+	public function resendActivationMail()
+	{
+		$fsId = $this->session->id();
+
+		if ($this->loginService->newMailActivation($fsId)) {
+			$this->flashMessageHelper->info($this->translator->trans('dashboard.activation_mail_sent'));
+		} else {
+			$this->flashMessageHelper->error($this->translator->trans('dashboard.activation_mail_failure'));
+		}
+
+		$this->routeHelper->goPage('dashboard');
 	}
 
 	public function activate()

@@ -16,7 +16,6 @@ use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
-use Foodsharing\Utility\LoginService;
 use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
@@ -28,7 +27,6 @@ class DashboardControl extends Control
 	private StoreGateway $storeGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private EventGateway $eventGateway;
-	private LoginService $loginService;
 	private \Twig\Environment $twig;
 	private ProfileGateway $profileGateway;
 	private Sanitizer $sanitizerService;
@@ -46,7 +44,6 @@ class DashboardControl extends Control
 		MailsGateway $mailsGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		LoginService $loginService,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
@@ -62,7 +59,6 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
-		$this->loginService = $loginService;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
@@ -157,19 +153,6 @@ class DashboardControl extends Control
 		} else {
 			$this->dashFoodsharer();
 		}
-	}
-
-	public function activate()
-	{
-		$fsId = $this->session->id();
-
-		if ($this->loginService->newMailActivation($fsId)) {
-			$this->flashMessageHelper->info($this->translator->trans('dashboard.activation_mail_sent'));
-		} else {
-			$this->flashMessageHelper->error($this->translator->trans('dashboard.activation_mail_failure'));
-		}
-
-		$this->routeHelper->goPage('dashboard');
 	}
 
 	/**

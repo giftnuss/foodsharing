@@ -90,6 +90,7 @@ const urls = {
   bmlfuw: () => 'https://www.bmlrt.gv.at',
   denns: () => 'https://www.denns-biomarkt.at',
   activate: () => '/?page=dashboard&a=activate',
+  resendActivationMail: () => '/?page=login&a=resendActivationMail',
 }
 
 const url = (key, ...params) => {

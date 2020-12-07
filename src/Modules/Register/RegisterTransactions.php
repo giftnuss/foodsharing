@@ -4,9 +4,9 @@ namespace Foodsharing\Modules\Register;
 
 use Exception;
 use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Modules\Login\LoginService;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\LoginService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterTransactions
@@ -14,7 +14,7 @@ class RegisterTransactions
 	private LoginGateway $loginGateway;
 	private EmailHelper $emailHelper;
 	private TranslatorInterface $translator;
-	private $loginService;
+	private LoginService $loginService;
 
 	public function __construct(
 		LoginGateway $loginGateway,

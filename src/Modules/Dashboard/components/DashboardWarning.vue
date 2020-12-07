@@ -21,7 +21,7 @@
       >
         {{ $i18n('dashboard.mail_activation_error_body.part_1') }}
         <a
-          :href="$url('activate')"
+          :href="$url('resendActivationMail')"
         >
           {{ $i18n('dashboard.mail_activation_error_body.part_2') }}
         </a>

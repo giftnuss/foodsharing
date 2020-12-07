@@ -1,8 +1,8 @@
 <?php
 
-namespace Foodsharing\Utility;
+namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Utility\EmailHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginService
