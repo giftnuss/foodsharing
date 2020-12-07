@@ -97,7 +97,9 @@ class DashboardControl extends Control
 		$fsId = $this->session->id();
 		$isActivated = !$this->loginGateway->isActivated($fsId);
 		$emailIsBouncing = $this->mailsGateway->emailIsBouncing($email);
-		$this->pageHelper->addContent($this->view->dashboardWarning($email, $isActivated, $emailIsBouncing));
+		if ($emailIsBouncing || $isActivated) {
+			$this->pageHelper->addContent($this->view->dashboardWarning($email, $isActivated, $emailIsBouncing));
+		}
 
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
