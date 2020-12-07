@@ -16,6 +16,7 @@ echo "Removing local node_modules"
 
 echo "Removing containers"
 "$dir"/rm
+# shellcheck disable=SC2209
 FS_ENV=test "$dir"/rm
 
 echo "Removing directories"
