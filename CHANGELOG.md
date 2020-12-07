@@ -37,6 +37,7 @@
 and persistent session disabled after each request, so that LastLogin is set correctly again !1785 @chriswalg
 - If Ambassador removes user from District verification is not removed and history is not written !1803 @fs_k
 - Fix a possible crash with reactions to deleted forum posts !1797 !1802 @ChrisOelmueller
+- Check if mail addresses are verified, allow sending out new verification mails #564 !1334 @pfaufisch @chriswalg
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
@@ -122,7 +123,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Fix last creation date in pass generation table when creating multiple passes !1684 #686 @alex.simm 
 - Fix a page crash with unexpected URL parameters !1686 @ChrisOelmueller
 - Optimise the creation of many event invitations #958 !1710 @alex.simm
-- Check if mail addresses are verified, allow sending out new verification mails #564 !1334 @pfaufisch
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
