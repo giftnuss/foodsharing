@@ -7,6 +7,13 @@ set -o errexit
 
 dir=$(dirname "$0")
 
+# Export the current host operating system to FS_PLATFORM
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Darwin*)    export FS_PLATFORM=mac;;
+    *)          export FS_PLATFORM=default;;
+esac
+
 # shellcheck source=./inc.sh
 source "$dir"/inc.sh
 

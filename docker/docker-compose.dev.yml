@@ -37,7 +37,7 @@ services:
       - influxdb
     volumes:
       - ../:/app:delegated
-      - ${PWD}/docker/conf/app/php.dev.${FS_PLATFORM}.ini:/usr/local/etc/php/conf.d/dev-config.ini:cached
+      - ./conf/app/php.dev.${FS_PLATFORM}.ini:/usr/local/etc/php/conf.d/dev-config.ini:cached
     environment:
       FS_ENV: dev
 

@@ -2,13 +2,6 @@
 
 export FS_ENV=dev
 
-# Export the current host operating system to FS_PLATFORM
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Darwin*)    export FS_PLATFORM=mac;;
-    *)          export FS_PLATFORM=default;;
-esac
-
 # set -o errexit tells the shell to exit as soon as a command exits with non-zero status, i.e. fails
 set -o errexit
 
