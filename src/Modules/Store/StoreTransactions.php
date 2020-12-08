@@ -283,4 +283,27 @@ class StoreTransactions
 
 		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage . "\n\n" . $footer;
 	}
+
+	public function leaveStoreTeam(int $storeId, int $userId): void
+	{
+		$this->pickupGateway->deleteAllDatesFromAFoodsaver($storeId, $userId);
+		$this->storeGateway->removeUserFromTeam($storeId, $userId);
+
+		if ($teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId)) {
+			$this->messageGateway->deleteUserFromConversation($teamChatConversationId, $userId);
+		}
+
+		if ($jumperChatConversationId = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$this->messageGateway->deleteUserFromConversation($jumperChatConversationId, $userId);
+		}
+	}
+
+	public function leaveAllStoreTeams(int $userId): void
+	{
+		$ownStoreIds = $this->storeGateway->listStoreIds($userId);
+
+		foreach ($ownStoreIds as $storeId) {
+			$this->leaveStoreTeam($storeId, $userId);
+		}
+	}
 }

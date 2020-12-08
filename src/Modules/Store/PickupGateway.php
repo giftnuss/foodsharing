@@ -44,23 +44,23 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 		return $result;
 	}
 
-	public function deleteAllDatesFromAFoodsaver(int $fs_id)
+	/**
+	 * @param ?int $storeId if set, only remove pickup dates for the user in this store
+	 */
+	public function deleteAllDatesFromAFoodsaver(int $userId, ?int $storeId = null)
 	{
-		$storeIdsThatWillBeDeleted = $this->db->fetchAllValuesByCriteria(
-			'fs_abholer',
-			'betrieb_id',
-			[
-				'foodsaver_id' => $fs_id,
-				'date >' => $this->db->now(),
-			],
-		);
-
-		$result = $this->db->delete('fs_abholer', [
-			'foodsaver_id' => $fs_id,
+		$criteria = [
+			'foodsaver_id' => $userId,
 			'date >' => $this->db->now(),
-		]);
+		];
+		if (!is_null($storeId)) {
+			$criteria['betrieb_id'] = $storeId;
+		}
 
-		foreach ($storeIdsThatWillBeDeleted as $storeIdDel) {
+		$affectedStoreIds = $this->db->fetchAllValuesByCriteria('fs_abholer', 'betrieb_id', $criteria);
+		$result = $this->db->delete('fs_abholer', $criteria);
+
+		foreach ($affectedStoreIds as $storeIdDel) {
 			$this->updateBellNotificationForStoreManagers($storeIdDel);
 		}
 

@@ -671,7 +671,12 @@ class StoreGateway extends BaseGateway
 		return $stores;
 	}
 
-	public function listStoreIdsForBieb($fsId)
+	public function listStoreIds($fsId)
+	{
+		return $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'betrieb_id', ['foodsaver_id' => $fsId]);
+	}
+
+	public function listStoreIdsWhereResponsible($fsId)
 	{
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}

@@ -441,8 +441,8 @@ class Session
 			$_SESSION['client']['bezirke'] = $this->regionGateway->listForFoodsaver($fs['id']) ?? [];
 		}
 
-		if ($r = $this->storeGateway->listStoreIdsForBieb($fs['id'])) {
-			$_SESSION['client']['verantwortlich'] = $r;
+		if ($responsibleStoreIds = $this->storeGateway->listStoreIdsWhereResponsible($fs['id'])) {
+			$_SESSION['client']['verantwortlich'] = $responsibleStoreIds;
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);

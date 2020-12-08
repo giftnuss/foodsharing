@@ -31,21 +31,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function signout($storeId, $fsId)
-	{
-		$storeId = (int)$storeId;
-		$fsId = (int)$fsId;
-		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' ');
-		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
-
-		if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
-			$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
-		}
-		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageGateway->deleteUserFromConversation($scid, $fsId);
-		}
-	}
-
 	public function getOne_betrieb($storeId)
 	{
 		$out = $this->qRow('

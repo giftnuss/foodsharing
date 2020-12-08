@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
-use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Utility\DataHelper;
@@ -20,7 +19,6 @@ class FoodsaverControl extends Control
 	private ContentGateway $contentGateway;
 	private RegionGateway $regionGateway;
 	private SettingsGateway $settingsGateway;
-	private StoreModel $storeModel;
 	private ProfilePermissions $profilePermissions;
 	private RegionPermissions $regionPermissions;
 	private DataHelper $dataHelper;
@@ -33,7 +31,6 @@ class FoodsaverControl extends Control
 		ContentGateway $contentGateway,
 		RegionGateway $regionGateway,
 		SettingsGateway $settingsGateway,
-		StoreModel $storeModel,
 		ProfilePermissions $profilePermissions,
 		RegionPermissions $regionPermissions,
 		DataHelper $dataHelper,
@@ -45,7 +42,6 @@ class FoodsaverControl extends Control
 		$this->contentGateway = $contentGateway;
 		$this->regionGateway = $regionGateway;
 		$this->settingsGateway = $settingsGateway;
-		$this->storeModel = $storeModel;
 		$this->profilePermissions = $profilePermissions;
 		$this->regionPermissions = $regionPermissions;
 		$this->dataHelper = $dataHelper;
@@ -188,7 +184,7 @@ class FoodsaverControl extends Control
 		}
 
 		if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $data['rolle'] < $fs['rolle']) {
-			$downgradedRows = $this->foodsaverTransactions->downgradeAndBlockForQuizPermanently($fs['id'], $this->storeModel);
+			$downgradedRows = $this->foodsaverTransactions->downgradeAndBlockForQuizPermanently($fs['id']);
 		} else {
 			$downgradedRows = 0;
 		}
