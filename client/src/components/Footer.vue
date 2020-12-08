@@ -7,7 +7,6 @@
     <b-container>
       <b-row>
         <b-col
-          xl="3"
           sm="3"
           cols="12"
         >
@@ -17,7 +16,6 @@
               <a
                 :href="$url('infosCompany')"
                 :aria-label="$i18n('footer.infosCompany')"
-                class="nav-link"
               >
                 {{ $i18n('footer.infosCompany') }}
               </a>
@@ -26,7 +24,6 @@
               <a
                 :href="$url('joininfo')"
                 :aria-label="$i18n('footer.infosPrivatePersons')"
-                class="nav-link"
               >
                 {{ $i18n('footer.infosPrivatePersons') }}
               </a>
@@ -50,7 +47,6 @@
                   <a
                     :href="$url('team')"
                     :aria-label="$i18n('footer.team')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.team') }}
                   </a>
@@ -59,7 +55,6 @@
                   <a
                     :href="$url('partner')"
                     :aria-label="$i18n('footer.partner')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.partner') }}
                   </a>
@@ -68,7 +63,6 @@
                   <a
                     :href="$url('contact')"
                     :aria-label="$i18n('footer.contact')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.contact') }}
                   </a>
@@ -77,7 +71,6 @@
                   <a
                     :href="$url('press')"
                     :aria-label="$i18n('footer.press')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.press') }}
                   </a>
@@ -86,7 +79,6 @@
             </b-col>
             <b-col
               xl="2"
-              sm="3"
               cols="3"
             >
               <ul class="nav flex-column">
@@ -94,7 +86,6 @@
                   <a
                     :href="$url('statistics')"
                     :aria-label="$i18n('footer.statistics')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.statistics') }}
                   </a>
@@ -103,7 +94,6 @@
                   <a
                     :href="$url('wiki')"
                     :aria-label="$i18n('footer.wiki')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.wiki') }}
                   </a>
@@ -112,7 +102,6 @@
                   <a
                     :href="$url('blog')"
                     :aria-label="$i18n('footer.blog')"
-                    class="nav-link"
                   >
                     {{ $i18n('footer.blog') }}
                   </a>
@@ -232,8 +221,7 @@
                 :aria-label="$i18n('footer.imprint')"
                 class="pr-sm-4"
               >
-                {{ $i18n('footer.imprint') }}
-              </a>
+                {{ $i18n('footer.imprint') }}</a>
               <a
                 :href="$url('dataprivacy')"
                 :aria-label="$i18n('footer.dataprivacy')"
