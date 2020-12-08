@@ -2,12 +2,13 @@
   <!-- eslint-disable-next-line vue/max-attributes-per-line -->
   <b-container
     fluid
-    class="bootstrap bg-white pt-4 pb-5"
+    class="bootstrap bg-white pt-5 pb-5"
   >
     <b-container>
       <b-row>
         <b-col
-          sm="3"
+          xl="3"
+          sm="6"
           cols="12"
         >
           <h2>{{ $i18n('footer.call_to_action') }}</h2>
@@ -32,7 +33,7 @@
         </b-col>
         <b-col
           xl="3"
-          sm="4"
+          sm="6"
           cols="12"
           class="pt-5 pt-sm-0"
         >
@@ -112,7 +113,6 @@
         </b-col>
         <b-col
           xl="6"
-          sm="5"
           cols="12"
           class="pt-4 pt-xl-5 pt-sm-0"
         >
@@ -169,7 +169,7 @@
             </b-col>
             <b-col
               v-else
-              xl="6"
+              sm="6"
               cols="12"
             >
               <p>{{ $i18n('footer.hosting_info') }}</p>
@@ -182,7 +182,7 @@
               </a>
             </b-col>
             <b-col
-              xl="6"
+              sm="6"
               cols="12"
               class="pt-xl-0 pt-5"
             >
