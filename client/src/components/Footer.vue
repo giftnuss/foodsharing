@@ -369,7 +369,6 @@ h2 {
 }
 
 a, p, li {
-  font-family: Noto Sans;
   font-size: 1rem;
   line-height: 2rem;
   color: var(--fs-black);
