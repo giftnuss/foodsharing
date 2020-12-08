@@ -119,60 +119,92 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
-	public function getMyStores($fsId, $addFromRegionId = null): array
+	private function getStoreListQuery(): string
 	{
-		$betriebe = $this->db->fetchAll('
+		return '
 			SELECT 	s.id,
+					s.name,
 					s.betrieb_status_id,
-					s.plz,
 					s.kette_id,
+					s.betrieb_kategorie_id,
 
+					r.name AS region_name,
+
+					s.added,
 					s.ansprechpartner,
 					s.fax,
 					s.telefon,
 					s.email,
 
-					s.betrieb_kategorie_id,
-					s.name,
 					CONCAT(s.str," ",s.hsnr) AS anschrift,
 					s.str,
 					s.hsnr,
+					s.plz,
+					s.stadt,
+					CONCAT(s.lat,", ",s.lon) AS geo,
 					s.`betrieb_status_id`,
+
 					t.verantwortlich,
 					t.active
 
 			FROM 	fs_betrieb s
-					INNER JOIN fs_betrieb_team t
-			        ON s.id = t.betrieb_id
+					INNER JOIN      fs_bezirk r        ON  r.id = s.bezirk_id
+					LEFT OUTER JOIN fs_betrieb_team t  ON  t.betrieb_id = s.id
+		';
+	}
 
-            WHERE 	t.foodsaver_id = :fsId
+	/**
+	 * @param ?int $userId if set, include all own stores (from any region) in output
+	 * @param ?int $addFromRegionId if set, include all stores (own or otherwise) from given region in output
+	 * @param bool $sortByOwnTeamStatus if true, split the resulting stores into multiple categories (depending on own team status)
+	 */
+	public function getMyStores(?int $userId, ?int $addFromRegionId = null, bool $sortByOwnTeamStatus = true): array
+	{
+		$query = $this->getStoreListQuery();
 
-			ORDER BY t.verantwortlich DESC, s.name ASC
-		', [
-			':fsId' => $fsId
-		]);
+		$betriebe = [];
 
-		$result = [];
-		$result['verantwortlich'] = [];
-		$result['team'] = [];
-		$result['waitspringer'] = [];
-		$result['requested'] = [];
-		$result['sonstige'] = [];
+		if (!is_null($userId)) {
+			$betriebe = $this->db->fetchAll($query . '
+				WHERE    t.foodsaver_id = :userId
+
+				ORDER BY t.verantwortlich DESC, s.name ASC
+			', [
+				':userId' => $userId,
+			]);
+		}
+
+		if ($sortByOwnTeamStatus) {
+			$result = [
+				'verantwortlich' => [],
+				'team' => [],
+				'waitspringer' => [],
+				'requested' => [],
+				'sonstige' => [],
+			];
+		} else {
+			$result = [];
+		}
 
 		$already_in = [];
 
 		foreach ($betriebe as $b) {
 			$already_in[$b['id']] = true;
-			if ($b['verantwortlich'] == 0) {
-				if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
-					$result['requested'][] = $b;
-				} elseif ($b['active'] == MembershipStatus::MEMBER) {
-					$result['team'][] = $b;
-				} elseif ($b['active'] == MembershipStatus::JUMPER) {
-					$result['waitspringer'][] = $b;
+
+			if ($sortByOwnTeamStatus) {
+				if ($b['verantwortlich'] == 0) {
+					if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
+						$result['requested'][] = $b;
+					} elseif ($b['active'] == MembershipStatus::MEMBER) {
+						$result['team'][] = $b;
+					} elseif ($b['active'] == MembershipStatus::JUMPER) {
+						$result['waitspringer'][] = $b;
+					}
+				} else {
+					$result['verantwortlich'][] = $b;
 				}
 			} else {
-				$result['verantwortlich'][] = $b;
+				$result[$b['id']] = $b;
 			}
 		}
 
@@ -181,38 +213,19 @@ class StoreGateway extends BaseGateway
 			if (!empty($child_region_ids)) {
 				$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
-				$result['sonstige'] = [];
-				$betriebe = $this->db->fetchAll('
-					SELECT  b.id,
-							b.betrieb_status_id,
-							b.plz,
-							b.kette_id,
+				$betriebe = $this->db->fetchAll($query . '
+					WHERE    bezirk_id IN(' . $placeholders . ')
 
-							b.ansprechpartner,
-							b.fax,
-							b.telefon,
-							b.email,
-
-							b.betrieb_kategorie_id,
-							b.name,
-							CONCAT(b.str," ",b.hsnr) AS anschrift,
-							b.str,
-							b.hsnr,
-							b.`betrieb_status_id`,
-							bz.name AS bezirk_name
-
-					FROM 	fs_betrieb b
-							INNER JOIN fs_bezirk bz
-					        ON b.bezirk_id = bz.id
-
-					WHERE 	bezirk_id IN(' . $placeholders . ')
-
-					ORDER BY bz.name DESC
-					', $child_region_ids);
+					ORDER BY r.name DESC
+				', $child_region_ids);
 
 				foreach ($betriebe as $b) {
 					if (!isset($already_in[$b['id']])) {
-						$result['sonstige'][] = $b;
+						if ($sortByOwnTeamStatus) {
+							$result['sonstige'][] = $b;
+						} else {
+							$result[$b['id']] = $b;
+						}
 					}
 				}
 			}

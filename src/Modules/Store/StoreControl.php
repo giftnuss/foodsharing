@@ -149,7 +149,7 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
 
-			$stores = $this->storeGateway->listStoresInRegion($regionId, true);
+			$stores = $this->storeGateway->getMyStores(null, $regionId, false);
 
 			$storesMapped = array_map(function ($store) {
 				return [
@@ -158,7 +158,7 @@ class StoreControl extends Control
 					// status COOPERATION_STARTING and COOPERATION_ESTABLISHED are the same (in cooperation), always return COOPERATION_STARTING
 					'status' => $store['betrieb_status_id'] == CooperationStatus::COOPERATION_ESTABLISHED ? CooperationStatus::COOPERATION_STARTING : (int)$store['betrieb_status_id'],
 					'added' => $store['added'],
-					'region' => $store['bezirk_name'],
+					'region' => $store['region_name'],
 					'address' => $store['anschrift'],
 					'city' => $store['stadt'],
 					'zipcode' => $store['plz'],
@@ -170,7 +170,7 @@ class StoreControl extends Control
 				'regionName' => $region['name'],
 				'regionId' => $regionId,
 				'showCreateStore' => $this->storePermissions->mayCreateStore(),
-				'stores' => $storesMapped
+				'stores' => array_values($storesMapped),
 			]));
 		}
 	}

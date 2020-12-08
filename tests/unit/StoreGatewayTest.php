@@ -17,30 +17,28 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	private function storeData($status = 'none'): array
 	{
-		$data = [
+		return [
 			'id' => $this->store['id'],
-			'betrieb_status_id' => $this->store['betrieb_status_id'],
-			'plz' => $this->store['plz'],
+			'name' => $this->store['name'],
+			'region_name' => $this->region['name'],
+			'betrieb_kategorie_id' => $this->store['betrieb_kategorie_id'],
 			'kette_id' => $this->store['kette_id'],
+			'betrieb_status_id' => $this->store['betrieb_status_id'],
 			'ansprechpartner' => $this->store['ansprechpartner'],
 			'fax' => $this->store['fax'],
 			'telefon' => $this->store['telefon'],
 			'email' => $this->store['email'],
-			'betrieb_kategorie_id' => $this->store['betrieb_kategorie_id'],
-			'name' => $this->store['name'],
+			'geo' => implode(', ', [$this->store['lat'], $this->store['lon']]),
 			'anschrift' => implode(' ', [$this->store['str'], $this->store['hsnr']]),
 			'str' => $this->store['str'],
 			'hsnr' => (string)$this->store['hsnr'],
-			'bezirk_name' => $this->region['name']
+			'plz' => $this->store['plz'],
+			'stadt' => $this->store['stadt'],
+			# 'added' => date('Y-m-d', $this->store['added']),
+			'added' => (new \DateTime($this->store['added']))->format('Y-m-d'),
+			'verantwortlich' => ($status === 'team') ? 0 : null,
+			'active' => ($status === 'team') ? 1 : null,
 		];
-
-		if ($status === 'team') {
-			$data['verantwortlich'] = 0;
-			$data['active'] = 1;
-			unset($data['bezirk_name']);
-		}
-
-		return $data;
 	}
 
 	protected function _before()
