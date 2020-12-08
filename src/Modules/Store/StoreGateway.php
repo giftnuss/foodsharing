@@ -761,6 +761,13 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
+	public function updateStoreConversation(int $storeId, int $conversationId, bool $isStandby): int
+	{
+		$fieldToUpdate = $isStandby ? 'springer_conversation_id' : 'team_conversation_id';
+
+		return $this->db->update('fs_betrieb', [$fieldToUpdate => $conversationId], ['id' => $storeId]);
+	}
+
 	public function getStoreByConversationId(int $id): ?array
 	{
 		$store = $this->db->fetch('
@@ -833,7 +840,7 @@ class StoreGateway extends BaseGateway
 			'foodsaver_id' => $storeManagerId,
 			'betrieb_id' => $storeId,
 			'verantwortlich' => 1,
-			'active' => 1,
+			'active' => MembershipStatus::MEMBER,
 		];
 
 		return $this->db->insertOrUpdate('fs_betrieb_team', $data);

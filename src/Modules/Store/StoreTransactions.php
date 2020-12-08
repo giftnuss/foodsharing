@@ -306,4 +306,18 @@ class StoreTransactions
 			$this->leaveStoreTeam($storeId, $userId);
 		}
 	}
+
+	/**
+	 * creates an empty team conversation for the given store.
+	 * creates an empty standby-team conversation for the given store.
+	 * prefills both conversations with the given userId.
+	 */
+	private function createTeamConversations(int $storeId, int $managerId): void
+	{
+		$storeTeamChatId = $this->messageGateway->createConversation([$managerId], true);
+		$this->storeGateway->updateStoreConversation($storeId, $storeTeamChatId, false);
+
+		$standbyTeamChatId = $this->messageGateway->createConversation([$managerId], true);
+		$this->storeGateway->updateStoreConversation($storeId, $standbyTeamChatId, true);
+	}
 }

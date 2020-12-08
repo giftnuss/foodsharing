@@ -36,15 +36,17 @@ final class MessageGateway extends BaseGateway
 	public function createConversation(array $fsIds, bool $locked = false): int
 	{
 		$this->db->beginTransaction();
+
 		$conversationId = $this->db->insert('fs_conversation', [
-		'locked' => $locked ? 1 : 0
-	]);
+			'locked' => $locked ? 1 : 0,
+		]);
+
 		foreach ($fsIds as $fsId) {
 			$this->db->insert('fs_foodsaver_has_conversation', [
-			'foodsaver_id' => $fsId,
-			'conversation_id' => $conversationId,
-			'unread' => 0
-		]);
+				'foodsaver_id' => $fsId,
+				'conversation_id' => $conversationId,
+				'unread' => 0,
+			]);
 		}
 		/* todo: would expect foreign key constraints to fail when a conversation with non-existing users is added.
 		That constraint is not in place and previous behaviour of messages did not check either, so keep it for now... */

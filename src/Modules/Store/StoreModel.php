@@ -283,36 +283,6 @@ class StoreModel extends Db
 			)');
 	}
 
-	/* creates an empty team conversation for the given store */
-	private function createTeamConversation(int $storeId): int
-	{
-		$storeTeam = $this->storeGateway->getStoreTeam($storeId);
-		$storeTeamIds = array_column($storeTeam, 'id');
-		$storeTeamChatId = $this->messageGateway->createConversation($storeTeamIds, true);
-		$this->update('
-			UPDATE	`fs_betrieb`
-			SET		team_conversation_id = ' . (int)$storeTeamChatId . '
-			WHERE	id = ' . $storeId . '
-		');
-
-		return $storeTeamChatId;
-	}
-
-	/* creates an empty springer conversation for the given store */
-	private function createSpringerConversation(int $storeId): int
-	{
-		$standbyTeam = $this->storeGateway->getBetriebSpringer($storeId);
-		$standbyTeamIds = array_column($standbyTeam, 'id');
-		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamIds, true);
-		$this->update('
-			UPDATE	`fs_betrieb`
-			SET		springer_conversation_id = ' . (int)$standbyTeamChatId . '
-			WHERE	id = ' . $storeId . '
-		');
-
-		return $standbyTeamChatId;
-	}
-
 	public function addBetriebTeam(int $storeId, array $member, array $selectedManagers)
 	{
 		if (empty($member)) {
