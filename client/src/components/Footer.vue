@@ -194,6 +194,7 @@
                   <b-button
                     block
                     variant="secondary"
+                    class="w-75"
                     :href="$url('donations')"
                   >
                     {{ $i18n('footer.donate_now') }}
