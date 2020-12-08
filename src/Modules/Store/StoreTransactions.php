@@ -13,6 +13,7 @@ use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\DTO\CreateStoreData;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -51,6 +52,28 @@ class StoreTransactions
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+	}
+
+	public function createStore(array $legacyGlobalData): int
+	{
+		$store = new CreateStoreData();
+		$store->name = $legacyGlobalData['name'];
+		$store->regionId = $legacyGlobalData['bezirk_id'];
+		$store->lat = $legacyGlobalData['lat'];
+		$store->lon = $legacyGlobalData['lon'];
+		$store->str = $legacyGlobalData['str'];
+		$store->hsnr = $legacyGlobalData['hsnr'];
+		$store->plz = $legacyGlobalData['plz'];
+		$store->stadt = $legacyGlobalData['stadt'];
+		$store->createdAt = Carbon::now();
+
+		$storeId = $this->storeGateway->addStore($store);
+		$managerId = $this->session->id();
+
+		$this->storeGateway->addStoreManager($storeId, $managerId);
+		$this->createTeamConversations($storeId, $managerId);
+
+		return $storeId;
 	}
 
 	/**

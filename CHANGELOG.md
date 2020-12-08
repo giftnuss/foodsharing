@@ -29,6 +29,8 @@
 - Replace bell identifiers by enum class #987 !1764 @alex.simm
 - Replaced inline css style 'clear:both' with corresponding css class !1859 @scarya
 - Move map marker requests to a REST endpoint !1863 @alex.simm
+- Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
+- Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
@@ -105,7 +107,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Remove some unused global JS !1766 @ChrisOelmueller
 - Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
-- Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
 
 ## Dev/Test/CI stuff

@@ -34,7 +34,6 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 			'hsnr' => (string)$this->store['hsnr'],
 			'plz' => $this->store['plz'],
 			'stadt' => $this->store['stadt'],
-			# 'added' => date('Y-m-d', $this->store['added']),
 			'added' => (new \DateTime($this->store['added']))->format('Y-m-d'),
 			'verantwortlich' => ($status === 'team') ? 0 : null,
 			'active' => ($status === 'team') ? 1 : null,
