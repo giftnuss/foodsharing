@@ -11,7 +11,6 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -24,7 +23,6 @@ class Session
 	private $quizHelper;
 	private $regionGateway;
 	private $storeGateway;
-	private $loginGateway;
 	private $initialized = false;
 
 	private const ROLE_KEYS = [
@@ -42,8 +40,7 @@ class Session
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		StoreGateway $storeGateway,
-		LoginGateway $loginGateway
+		StoreGateway $storeGateway
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -51,7 +48,6 @@ class Session
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
-		$this->loginGateway = $loginGateway;
 	}
 
 	public function initIfCookieExists()

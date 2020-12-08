@@ -2,7 +2,7 @@
   <div>
     <div class="head ui-widget-header bg-danger">
       <span v-if="emailIsBouncing"> {{ $i18n('profile.warning') }} </span>
-      <span v-else-if="isActivated"> {{ $i18n('dashboard.mail_activation_error_title') }} </span>
+      <span v-else-if="isNotActivated"> {{ $i18n('dashboard.mail_activation_error_title') }} </span>
     </div>
     <div class="ui-widget-content corner-bottom margin-bottom ui-padding">
       <div
@@ -17,7 +17,7 @@
         {{ $i18n('profile.mailBounceWarning_3') }}
       </div>
       <div
-        v-else-if="isActivated"
+        v-else-if="isNotActivated"
       >
         {{ $i18n('dashboard.mail_activation_error_body.part_1') }}
         <a
@@ -39,9 +39,9 @@
 <script>
 export default {
   props: {
-    emailIsBouncing: { type: Boolean, default: null },
+    emailIsBouncing: { type: Boolean, required: true },
     email: { type: String, default: '' },
-    isActivated: { type: Boolean, default: null },
+    isNotActivated: { type: Boolean, required: true },
   },
 }
 </script>

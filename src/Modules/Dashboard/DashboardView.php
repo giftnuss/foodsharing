@@ -246,12 +246,12 @@ class DashboardView extends View
 		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'ui-padding truncate-content']);
 	}
 
-	public function dashboardWarning(string $email, bool $isActivated, bool $emailIsBouncing)
+	public function dashboardWarning(string $email, bool $isNotActivated, bool $emailIsBouncing)
 	{
 		return $this->vueComponent('dashboard-warning', 'DashboardWarning', [
 			'emailIsBouncing' => $emailIsBouncing,
 			'email' => $email,
-			'isActivated' => $isActivated
+			'isNotActivated' => $isNotActivated
 		]);
 	}
 }
