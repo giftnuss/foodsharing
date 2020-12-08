@@ -18,13 +18,6 @@ import {
   GET,
 } from '@/script'
 import '@/tablesorter' // Remove after replacing u_storeList
-
-import {
-  u_betrieb_sign_out,
-  acceptRequest,
-  warteRequest,
-  denyRequest,
-} from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupHistory from './components/PickupHistory'
 import PickupList from './components/PickupList'
@@ -35,10 +28,11 @@ import StoreTeam from './components/StoreTeam'
 
 expose({
   u_betrieb_sign_out,
-  acceptRequest,
-  warteRequest,
-  denyRequest,
 })
+
+function u_betrieb_sign_out (bid) {
+  $('#signout_shure').dialog('open')
+}
 
 $(document).ready(() => {
   $('.cb-verantwortlicher').on('click', function () {
