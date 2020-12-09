@@ -9,7 +9,7 @@ import 'jquery-ui-addons'
 
 import { GET, goTo, isMob } from '@/browser'
 import conv from '@/conv'
-import { removeStoreRequest } from '@/api/stores'
+import { requestStoreTeamMembership, removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
 import { u_printChildBezirke } from '@/becomeBezirk'
 
@@ -496,28 +496,29 @@ export function hideLoader () {
   $.fancybox.hideLoading()
 }
 
-export function betriebRequest (id) {
-  showLoader()
-  $.ajax({
-    url: '/xhr.php?f=betriebRequest',
-    data: { id: id },
-    dataType: 'json',
-    success: function (data) {
-      if (data.status == 1) {
-        pulseInfo(data.msg)
-      }
-    },
-    complete: function () {
-      hideLoader()
-    },
-  })
-}
-
-export async function withdrawStoreRequest (fsid, bid) {
+export async function wantToHelpStore (storeId, userId) {
   showLoader()
 
   try {
-    await removeStoreRequest(bid, fsid)
+    await requestStoreTeamMembership(storeId, userId)
+    pulseSuccess(i18n('store.request.got-it'))
+  } catch (e) {
+    if (e.code === 422) {
+      pulseInfo(i18n('store.request.no-duplicate'))
+    } else {
+      console.error(e.code)
+      pulseError(i18n('error_unexpected'))
+    }
+  }
+
+  hideLoader()
+}
+
+export async function withdrawStoreRequest (storeId, userId) {
+  showLoader()
+
+  try {
+    await removeStoreRequest(storeId, userId)
     pulseSuccess(i18n('store.request.withdrawn'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))

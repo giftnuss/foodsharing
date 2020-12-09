@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -142,27 +141,6 @@ class StoreModel extends Db
 				`prefetchtime` = ' . (int)$data['prefetchtime'] . '
 
 		WHERE 	`id` = ' . (int)$id);
-	}
-
-	public function teamRequest($fsid, $storeId)
-	{
-		$this->storeGateway->addStoreLog($storeId, $fsid, null, null, StoreLogAction::REQUEST_TO_JOIN);
-
-		return $this->insert('
-			REPLACE INTO `fs_betrieb_team`
-			(
-				`betrieb_id`,
-				`foodsaver_id`,
-				`verantwortlich`,
-				`active`
-			)
-			VALUES
-			(
-				' . (int)$storeId . ',
-				' . (int)$fsid . ',
-				0,
-				0
-			)');
 	}
 
 	public function addBetriebTeam(int $storeId, array $member, array $selectedManagers)

@@ -716,11 +716,9 @@ store:
   request:
     request: "In diesem Team würde ich gerne helfen."
     got-it: "Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden."
-    no-sm: "Für diesen Betrieb gibt es noch keine Verantwortlichen."
-    amb-instead: "Die Botschafter*innen wurden informiert."
-    orga-instead: "Das Orga-Team wurde informiert."
     withdraw: "Anfrage zurückziehen"
     withdrawn: "Die Anfrage wurde erfolgreich zurückgezogen."
+    no-duplicate: 'Es existiert bereits eine Anfrage.'
     title: "Anfragen für {storeTitle}"
     verified: "Nutzer*in ist verifiziert"
     to-team: "Aufnehmen"

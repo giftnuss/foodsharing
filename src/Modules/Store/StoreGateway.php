@@ -842,6 +842,16 @@ class StoreGateway extends BaseGateway
 		return $this->db->fetchAllByCriteria('fs_betrieb', ['id', 'name']);
 	}
 
+	public function addStoreRequest(int $storeId, int $userId): int
+	{
+		return $this->db->insertOrUpdate('fs_betrieb_team', [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId,
+			'verantwortlich' => 0,
+			'active' => MembershipStatus::APPLIED_FOR_TEAM,
+		]);
+	}
+
 	/**
 	 * Add store manager to a store and make her responsible for that store.
 	 *

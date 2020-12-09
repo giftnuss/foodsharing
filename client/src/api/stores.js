@@ -72,6 +72,10 @@ export async function listStoresForCurrentUser () {
   return get('/user/current/stores')
 }
 
+export async function requestStoreTeamMembership (storeId, userId) {
+  return post(`/stores/${storeId}/requests/${userId}`)
+}
+
 export async function acceptStoreRequest (storeId, userId, moveToStandby) {
   return patch(`/stores/${storeId}/requests/${userId}`, { moveToStandby })
 }

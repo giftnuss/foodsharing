@@ -1017,46 +1017,6 @@ class XhrMethods
 		return false;
 	}
 
-	public function xhr_betriebRequest($data)
-	{
-		$storeId = intval($data['id']);
-		if (!$this->storePermissions->mayJoinStoreRequest($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		$storeName = $this->model->getVal('name', 'betrieb', $storeId);
-
-		if ($bellRecipients = $this->storeGateway->getBiebsForStore($storeId)) {
-			$msg = $this->translator->trans('store.request.got-it');
-		} else {
-			$msg = $this->translator->trans('store.request.no-sm');
-
-			$regionId = $this->model->getVal('bezirk_id', 'betrieb', $storeId);
-			$bellRecipients = [];
-			if ($inform = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId)) {
-				foreach ($inform as $fs) {
-					$bellRecipients[] = $fs['id'];
-				}
-				$msg .= ' ' . $this->translator->trans('store.request.amb-instead');
-			} else {
-				$bellRecipients = $this->foodsaverGateway->getOrgaTeam();
-				$msg .= ' ' . $this->translator->trans('store.request.orga-instead');
-			}
-		}
-
-		$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
-			'href' => '/?page=fsbetrieb&id=' . $storeId,
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $storeName,
-		], BellType::createIdentifier(BellType::NEW_STORE_REQUEST, $storeId));
-		$this->bellGateway->addBell($bellRecipients, $bellData);
-
-		$this->storeModel->teamRequest($this->session->id(), $storeId);
-
-		return json_encode(['status' => 1, 'msg' => $msg]);
-	}
-
 	public function xhr_saveBezirk($data)
 	{
 		if (!$this->regionPermissions->mayAdministrateRegions()) {

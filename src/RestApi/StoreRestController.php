@@ -191,6 +191,41 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Request to join a store team.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="for which store to apply")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="user that wants to be accepted")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to be member of a store team")
+	 * @OA\Response(response="404", description="Store does not exist")
+	 * @OA\Response(response="422", description="Already applied or already member of this store team")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Post("stores/{storeId}/requests/{userId}")
+	 */
+	public function requestStoreTeamMembershipAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamMembershipStatus::NoMember) {
+			throw new HttpException(422, 'User has already applied or is already member of this store.');
+		}
+		if (!$this->storePermissions->mayJoinStoreRequest($storeId, $userId)) {
+			throw new AccessDeniedHttpException();
+		}
+		// TODO check store existence
+		// if (false) {
+		// 	throw new NotFoundHttpException('Store does not exist.');
+		// }
+
+		$this->storeTransactions->requestStoreTeamMembership($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Accepts a user's request for joining a store.
 	 *
 	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="for which store to accept a request")

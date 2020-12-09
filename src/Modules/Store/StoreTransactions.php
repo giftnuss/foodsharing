@@ -225,6 +225,34 @@ class StoreTransactions
 		return $filteredStoresForUser;
 	}
 
+	public function requestStoreTeamMembership(int $storeId, int $userId): void
+	{
+		$this->storeGateway->addStoreRequest($storeId, $userId);
+		$this->storeGateway->addStoreLog($storeId, $userId, null, null, StoreLogAction::REQUEST_TO_JOIN);
+
+		// notify people who can do something with the request: store managers, region ambassadors, or orga
+		$bellRecipients = $this->storeGateway->getBiebsForStore($storeId);
+		if (!$bellRecipients) {
+			$regionId = $this->storeGateway->getStoreRegionId($storeId);
+			$ambassadors = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
+
+			if ($ambassadors) {
+				$bellRecipients = array_column($ambassadors, 'id');
+			} else {
+				$bellRecipients = $this->foodsaverGateway->getOrgaTeam();
+			}
+		}
+
+		$storeName = $this->storeGateway->getStoreName($storeId);
+		$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
+			'href' => '/?page=fsbetrieb&id=' . $storeId,
+		], [
+			'user' => $this->session->user('name'),
+			'name' => $storeName,
+		], BellType::createIdentifier(BellType::NEW_STORE_REQUEST, $storeId));
+		$this->bellGateway->addBell($bellRecipients, $bellData);
+	}
+
 	/**
 	 * Accepts a user's request to join a store, and moves the user to the standby team.
 	 * This creates a bell notification for that user, adds an entry to the store log,

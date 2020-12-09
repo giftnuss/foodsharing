@@ -68,6 +68,7 @@
 - Allow users to see their own registration date !1907 @alex.simm
 - activate all workgroup functions. Restrict certain functions in self-management (report, arbitration, fs-management) #1046 !1909 @fs_k
 - Sort list of past polls and allow filtering them #975 !1901 @alex.simm
+- Edit Team in stores is no more, functionality moved to team management mode !1810 @ChrisOelmueller
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
@@ -98,6 +99,7 @@
 - Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
 - Use more general queries in the nightly stats calculation for stores !1871 #622 #9 @alex.simm
+- Reimplement store-team management actions in REST, remove more StoreModel parts !1810 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 !1882 @\_fridtjof_
