@@ -304,7 +304,6 @@ class StoreGateway extends BaseGateway
 			$result['springer'] = $this->getBetriebSpringer($storeId);
 			$result['requests'] = $this->getApplications($storeId);
 			$result['verantwortlich'] = false;
-			$result['team_js'] = [];
 			$result['team'] = [];
 			$result['jumper'] = false;
 
@@ -319,7 +318,6 @@ class StoreGateway extends BaseGateway
 			if (!empty($result['foodsaver'])) {
 				$result['team'] = [];
 				foreach ($result['foodsaver'] as $v) {
-					$result['team_js'][] = $v['id'];
 					$result['team'][] = [
 						'id' => $v['id'],
 						'value' => $v['name']
@@ -334,7 +332,6 @@ class StoreGateway extends BaseGateway
 			} else {
 				$result['foodsaver'] = [];
 			}
-			$result['team_js'] = implode(',', $result['team_js']);
 		}
 
 		return $result;
