@@ -43,13 +43,13 @@
         <b-button-group class="request-actions my-1" size="sm">
           <b-button
             variant="secondary"
-            @click="acceptRequest(storeId, r.id, index)"
+            @click="acceptRequest(storeId, r.id, false, index)"
           >
             <i class="fas fa-user-check" /> {{ $i18n('store.request.to-team') }}
           </b-button>
           <b-button
             variant="outline-primary"
-            @click="jumperRequest(storeId, r.id, index)"
+            @click="acceptRequest(storeId, r.id, true, index)"
           >
             <i class="fas fa-user-tag" /> {{ $i18n('store.request.to-jumper') }}
           </b-button>
@@ -67,8 +67,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
-
 import { acceptStoreRequest, removeStoreRequest } from '@/api/stores'
 import Avatar from '@/components/Avatar'
 import i18n from '@/i18n'
@@ -88,26 +86,16 @@ export default {
     }
   },
   methods: {
-    async acceptRequest (storeId, userId, index) {
+    async acceptRequest (storeId, userId, moveToStandby, index) {
       showLoader()
       try {
-        await acceptStoreRequest(storeId, userId)
+        await acceptStoreRequest(storeId, userId, moveToStandby)
         this.$delete(this.requests, index)
       } catch (e) {
         pulseError(i18n('error_unexpected'))
       } finally {
         hideLoader()
       }
-    },
-    async jumperRequest (storeId, userId, index) {
-      showLoader()
-      $.ajax({
-        dataType: 'json',
-        data: 'fsid=' + userId + '&bid=' + storeId,
-        url: '/xhr.php?f=warteRequest',
-        success: () => { this.$delete(this.requests, index) },
-        complete: () => { hideLoader() },
-      })
     },
     async denyRequest (storeId, userId, index) {
       showLoader()

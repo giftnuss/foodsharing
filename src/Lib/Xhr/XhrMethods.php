@@ -1017,17 +1017,6 @@ class XhrMethods
 		return false;
 	}
 
-	public function xhr_warteRequest($data)
-	{
-		if (!$this->storePermissions->mayAcceptRequests($data['bid'])) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		$this->storeModel->warteRequest($data['fsid'], $data['bid']);
-
-		return json_encode(['status' => 1]);
-	}
-
 	public function xhr_betriebRequest($data)
 	{
 		$storeId = intval($data['id']);

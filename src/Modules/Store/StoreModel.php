@@ -4,8 +4,6 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Bell\DTO\Bell;
-use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -144,33 +142,6 @@ class StoreModel extends Db
 				`prefetchtime` = ' . (int)$data['prefetchtime'] . '
 
 		WHERE 	`id` = ' . (int)$id);
-	}
-
-	public function warteRequest($fsid, $storeId)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $storeId);
-
-		$bellData = Bell::create('store_request_accept_wait_title', 'store_request_accept_wait', 'fas fa-user-tag', [
-			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $betrieb
-		], BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, (int)$fsid));
-		$this->bellGateway->addBell((int)$fsid, $bellData);
-
-		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageGateway->addUserToConversation($scid, $fsid);
-		}
-
-		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::REQUEST_APPROVED);
-		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::MOVED_TO_JUMPER);
-
-		return $this->update('
-					UPDATE 	 	`fs_betrieb_team`
-					SET 		`active` = 2
-					WHERE 		`betrieb_id` = ' . (int)$storeId . '
-					AND 		`foodsaver_id` = ' . (int)$fsid . '
-		');
 	}
 
 	public function teamRequest($fsid, $storeId)

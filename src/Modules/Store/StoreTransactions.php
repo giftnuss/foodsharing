@@ -226,18 +226,27 @@ class StoreTransactions
 	}
 
 	/**
-	 * Accepts a user's request to join a store. This creates a bell notification for that user, adds an entry
-	 * to the store log and the store's wall, and makes sure the user is in the store's region.
+	 * Accepts a user's request to join a store, and moves the user to the standby team.
+	 * This creates a bell notification for that user, adds an entry to the store log,
+	 * and makes sure the user is in the store's region.
+	 *
+	 * @param bool $moveToStandby if true, place the new member on the standby list instead of the regular store team
 	 */
-	public function acceptStoreRequest(int $storeId, int $userId): void
+	public function acceptStoreRequest(int $storeId, int $userId, bool $moveToStandby = false): void
 	{
-		// add user to the team and to the team's conversation
+		// add user to the team
 		$this->storeGateway->addUserToTeam($storeId, $userId);
-		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageGateway->deleteUserFromConversation($scid, $userId);
-		}
-		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
-			$this->messageGateway->addUserToConversation($tcid, $userId);
+
+		// and user to the team's conversation (the standby case is handled by its own transaction)
+		if (!$moveToStandby) {
+			$teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId);
+			if ($teamChatConversationId) {
+				$this->messageGateway->deleteUserFromConversation($teamChatConversationId, $userId);
+			}
+			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
+			if ($standbyTeamChatId) {
+				$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
+			}
 		}
 
 		// add an entry to the store log and a note the store wall
@@ -250,14 +259,31 @@ class StoreTransactions
 			'milestone' => Milestone::ACCEPTED,
 		]);
 
+		if ($moveToStandby) {
+			$this->moveMemberToStandbyTeam($storeId, $userId);
+		}
+
 		// create bell for the user who is accepted
+		if ($moveToStandby) {
+			$bellTitle = 'store_request_accept_wait_title';
+			$bellMsg = 'store_request_accept_wait';
+			$bellIcon = 'fas fa-user-tag';
+			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, $userId);
+		} else {
+			$bellTitle = 'store_request_accept_title';
+			$bellMsg = 'store_request_accept';
+			$bellIcon = 'fas fa-user-check';
+			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId);
+		}
+		$bellLink = '/?page=fsbetrieb&id=' . $storeId;
+
 		$storeName = $this->storeGateway->getStoreName($storeId);
-		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'fas fa-user-check', [
-			'href' => '/?page=fsbetrieb&id=' . $storeId
+		$bellData = Bell::create($bellTitle, $bellMsg, $bellIcon, [
+			'href' => $bellLink,
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName
-		], BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId));
+		], $bellId);
 		$this->bellGateway->addBell($userId, $bellData);
 
 		// add the user to the store's region
@@ -336,10 +362,14 @@ class StoreTransactions
 		$this->storeGateway->setUserMembershipStatus($storeId, $userId, MembershipStatus::JUMPER);
 
 		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
-		$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
+		if ($standbyTeamChatId) {
+			$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
+		}
 
 		$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
-		$this->messageGateway->deleteUserFromConversation($teamChatId, $userId);
+		if ($teamChatId) {
+			$this->messageGateway->deleteUserFromConversation($teamChatId, $userId);
+		}
 
 		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::MOVED_TO_JUMPER);
 	}
