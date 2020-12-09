@@ -33,13 +33,6 @@
         </div>
       </div>
 
-      <div
-        v-if="managementModeEnabled"
-        class="bg-white p-2 team-management"
-      >
-        <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
-      </div>
-
       <!-- preparation for more store-management features -->
       <StoreManagementPanel
         v-if="managementModeEnabled"
@@ -57,6 +50,7 @@
           primary-key="id"
           thead-class="d-none"
           sort-by="ava"
+          :busy="isBusy"
           :sort-desc.sync="sortdesc"
           :sort-compare="sortfun"
           show-empty
@@ -198,10 +192,13 @@ import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import compareAsc from 'date-fns/compareAsc'
 
-import { demoteAsStoreManager, promoteToStoreManager } from '@/api/stores'
+import {
+  demoteAsStoreManager, promoteToStoreManager,
+  moveMemberToStandbyTeam, moveMemberToRegularTeam,
+} from '@/api/stores'
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
-import { chat, pulseSuccess } from '@/script'
+import { chat, pulseSuccess, pulseError } from '@/script'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 import { legacyXhrCall } from './legacy'
@@ -226,6 +223,7 @@ export default {
       sortdesc: true,
       managementModeEnabled: false,
       displayMembers: true,
+      isBusy: false,
     }
   },
   computed: {
@@ -281,19 +279,24 @@ export default {
     openChat (fsId) {
       chat(fsId)
     },
-    // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
-    async changeMembershipStatus (fsId, newStatus) {
-      const fData = {
-        bid: this.storeId,
-        fsid: fsId,
-        action: newStatus,
+    async toggleStandbyState (fsId, newStatusIsStandby) {
+      this.isBusy = true
+      try {
+        if (newStatusIsStandby) {
+          await moveMemberToStandbyTeam(this.storeId, fsId)
+        } else {
+          await moveMemberToRegularTeam(this.storeId, fsId)
+        }
+      } catch (e) {
+        console.error(e)
+        pulseError(i18n('error_unexpected'))
       }
-      await legacyXhrCall('bcontext', fData)
+      this.isBusy = false
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
-        fs.isJumper = (newStatus === 'tojumper')
-        fs.isActive = !fs.isJumper
+        fs.isJumper = newStatusIsStandby
+        fs.isActive = !newStatusIsStandby
         fs._showDetails = false
         this.$set(this.team, index, fs)
       }

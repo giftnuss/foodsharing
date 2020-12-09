@@ -1233,32 +1233,16 @@ class XhrMethods
 	{
 		$storeId = (int)$data['bid'];
 		if ($this->storePermissions->mayEditStoreTeam($storeId)) {
-			$check = false;
 			$foodsaverId = (int)$data['fsid'];
 			$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
 			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
-			if ($data['action'] == 'toteam') {
-				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
-				$this->messageGateway->addUserToConversation($teamChatId, $foodsaverId);
-				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
-				$this->storeGateway->addStoreLog($data['bid'], $this->session->id(), $data['fsid'], null, StoreLogAction::MOVED_TO_TEAM);
-			} elseif ($data['action'] == 'tojumper') {
-				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
-				$this->messageGateway->addUserToConversation($standbyTeamChatId, $foodsaverId);
-				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
-				$this->storeGateway->addStoreLog($data['bid'], $this->session->id(), $data['fsid'], null, StoreLogAction::MOVED_TO_JUMPER);
-			} elseif ($data['action'] == 'delete') {
-				$check = true;
+			if ($data['action'] == 'delete') {
 				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
 				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $foodsaverId . ' AND `date` > NOW()');
 				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
 				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
 				$this->storeGateway->addStoreLog($data['bid'], $this->session->id(), $data['fsid'], null, StoreLogAction::REMOVED_FROM_STORE);
-			}
 
-			if ($check) {
 				return json_encode(['status' => 1]);
 			}
 		}

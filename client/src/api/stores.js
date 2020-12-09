@@ -82,10 +82,18 @@ export async function removeStoreRequest (storeId, userId) {
 
 export async function promoteToStoreManager (storeId, userId) {
   console.warn('promoteToStoreManager', { storeId, userId })
-  return post(`/stores/${storeId}/managers/${userId}`)
+  return patch(`/stores/${storeId}/managers/${userId}`)
 }
 
 export async function demoteAsStoreManager (storeId, userId) {
   console.warn('demoteAsStoreManager', { storeId, userId })
   return remove(`/stores/${storeId}/managers/${userId}`)
+}
+
+export async function moveMemberToStandbyTeam (storeId, userId) {
+  return patch(`/stores/${storeId}/team/${userId}/standby`)
+}
+
+export async function moveMemberToRegularTeam (storeId, userId) {
+  return remove(`/stores/${storeId}/team/${userId}/standby`)
 }

@@ -870,6 +870,17 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
+	/**
+	 * @param int $newStatus a Core\DBConstants\StoreTeam\MembershipStatus
+	 */
+	public function setUserMembershipStatus(int $storeId, int $userId, int $newStatus): void
+	{
+		$this->db->update('fs_betrieb_team', ['active' => $newStatus], [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId
+		]);
+	}
+
 	public function removeUserFromTeam(int $storeId, int $userId): void
 	{
 		$this->db->delete('fs_betrieb_team', [

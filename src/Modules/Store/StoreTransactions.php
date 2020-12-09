@@ -10,6 +10,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
+use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -328,6 +329,32 @@ class StoreTransactions
 		foreach ($ownStoreIds as $storeId) {
 			$this->leaveStoreTeam($storeId, $userId);
 		}
+	}
+
+	public function moveMemberToStandbyTeam(int $storeId, int $userId): void
+	{
+		$this->storeGateway->setUserMembershipStatus($storeId, $userId, MembershipStatus::JUMPER);
+
+		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
+		$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
+
+		$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
+		$this->messageGateway->deleteUserFromConversation($teamChatId, $userId);
+
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::MOVED_TO_JUMPER);
+	}
+
+	public function moveMemberToRegularTeam(int $storeId, int $userId): void
+	{
+		$this->storeGateway->setUserMembershipStatus($storeId, $userId, MembershipStatus::MEMBER);
+
+		$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
+		$this->messageGateway->addUserToConversation($teamChatId, $userId);
+
+		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
+		$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $userId);
+
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::MOVED_TO_TEAM);
 	}
 
 	/**

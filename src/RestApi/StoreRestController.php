@@ -10,7 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
-use Foodsharing\Modules\Store\TeamStatus;
+use Foodsharing\Modules\Store\TeamStatus as TeamMembershipStatus;
 use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -211,7 +211,7 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayAcceptRequests($storeId)) {
 			throw new HttpException(403);
 		}
-		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamStatus::Applied) {
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamMembershipStatus::Applied) {
 			throw new HttpException(404);
 		}
 
@@ -242,7 +242,7 @@ class StoreRestController extends AbstractFOSRestController
 		if ($sessionId !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new HttpException(403);
 		}
-		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamStatus::Applied) {
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== TeamMembershipStatus::Applied) {
 			throw new HttpException(404);
 		}
 
@@ -271,16 +271,17 @@ class StoreRestController extends AbstractFOSRestController
 	 * @OA\Response(response="409", description="User cannot become manager of this store")
 	 * @OA\Tag(name="stores")
 	 *
-	 * @Rest\Post("stores/{storeId}/managers/{userId}")
+	 * @Rest\Patch("stores/{storeId}/managers/{userId}")
 	 */
 	public function addStoreManagerAction(int $storeId, int $userId): Response
 	{
-		if (!$this->session->may()) {
+		if (!$this->session->id()) {
 			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
 		}
 		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new AccessDeniedHttpException();
 		}
+
 		$store = $this->storeGateway->getBetrieb($storeId);
 		if (!$store || !isset($store['id'])) {
 			throw new NotFoundHttpException('Store does not exist.');
@@ -288,21 +289,9 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayBecomeStoreManager($storeId, $userId)) {
 			throw new ConflictHttpException();
 		}
-		/*
-		// also handle bells etc here:
-		$this->storeTransactions->addStoreManager($storeId, $userId);
-
-		// or quick&dirty gateway call:
-		$this->storeGateway->addStoreManager($storeId, $userId);
-		*/
-
-		/*
-		$this->storeGateway->addStoreLog($storeId, ...);
-		*/
 
 		return $this->handleView($this->view([], 200));
 	}
-
 
 	/**
 	 * Demotes a user from store manager to regular store team member.
@@ -320,12 +309,13 @@ class StoreRestController extends AbstractFOSRestController
 	 */
 	public function removeStoreManagerAction(int $storeId, int $userId): Response
 	{
-		if (!$this->session->may()) {
+		if (!$this->session->id()) {
 			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
 		}
 		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new AccessDeniedHttpException();
 		}
+
 		$store = $this->storeGateway->getBetrieb($storeId);
 		if (!$store || !isset($store['id'])) {
 			throw new NotFoundHttpException('Store does not exist.');
@@ -333,17 +323,69 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayLoseStoreManagement($storeId, $userId)) {
 			throw new ConflictHttpException();
 		}
-		/*
-		// also handle bells etc here:
-		$this->storeTransactions->removeStoreManager($storeId, $userId);
 
-		// or quick&dirty gateway call:
-		$this->storeGateway->removeStoreManager($storeId, $userId);
-		*/
+		return $this->handleView($this->view([], 200));
+	}
 
-		/*
-		$this->storeGateway->addStoreLog($storeId, ...);
-		*/
+	/**
+	 * Moves a store-team member from the regular team to the standby team.
+	 * Will also succeed if the member was already part of the standby team.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="team of which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="who should be moved to the standby team")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="404", description="User is not a member of this store")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Patch("stores/{storeId}/team/{userId}/standby")
+	 */
+	public function moveMemberToStandbyTeamAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) === TeamMembershipStatus::NoMember) {
+			throw new NotFoundHttpException('User is not a member of this store.');
+		}
+
+		$this->storeTransactions->moveMemberToStandbyTeam($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Moves a store-team member from the standby team to the regular team.
+	 * Will also succeed if the member was already part of the regular team.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="team of which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="who should be moved to the regular store team")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="404", description="User is not a member of this store")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Delete("stores/{storeId}/team/{userId}/standby")
+	 */
+	public function moveUserToRegularTeamAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) === TeamMembershipStatus::NoMember) {
+			throw new NotFoundHttpException('User is not a member of this store.');
+		}
+
+		$this->storeTransactions->moveMemberToRegularTeam($storeId, $userId);
 
 		return $this->handleView($this->view([], 200));
 	}
