@@ -130,7 +130,7 @@
                 size="sm"
                 variant="primary"
                 :block="!(wXS || wSM)"
-                @click="changeMembershipStatus(data.item.id, 'toteam')"
+                @click="toggleStandbyState(data.item.id, false)"
               >
                 <i class="fas fa-fw fa-clipboard-check" />
                 {{ $i18n('store.sm.makeRegularTeamMember') }}
@@ -141,7 +141,7 @@
                 size="sm"
                 variant="primary"
                 :block="!(wXS || wSM)"
-                @click="changeMembershipStatus(data.item.id, 'tojumper')"
+                @click="toggleStandbyState(data.item.id, true)"
               >
                 <i class="fas fa-fw fa-mug-hot" />
                 {{ $i18n('store.sm.makeJumper') }}
@@ -174,7 +174,7 @@
                 size="sm"
                 variant="danger"
                 :block="!(wXS || wSM)"
-                @click="removeFromTeam(data.item)"
+                @click="removeFromTeam(data.item.id, data.item.name)"
               >
                 <i class="fas fa-fw fa-user-times" />
                 {{ $i18n('store.sm.removeFromTeam') }}
@@ -195,6 +195,7 @@ import compareAsc from 'date-fns/compareAsc'
 import {
   demoteAsStoreManager, promoteToStoreManager,
   moveMemberToStandbyTeam, moveMemberToRegularTeam,
+  removeStoreMember,
 } from '@/api/stores'
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
@@ -219,6 +220,7 @@ export default {
   },
   data () {
     return {
+      foodsaver: _.map(this.team, this.foodsaverData),
       sortfun: this.tableSortFunction,
       sortdesc: true,
       managementModeEnabled: false,
@@ -227,9 +229,6 @@ export default {
     }
   },
   computed: {
-    foodsaver () {
-      return _.map(this.team, this.foodsaverData)
-    },
     tableFields () {
       const fields = [
         { key: 'ava', class: 'col-ava', sortable: true },
@@ -302,26 +301,26 @@ export default {
         this.$set(this.team, index, fs)
       }
     },
-    // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
-    async removeFromTeam (fs) {
-      if (!fs || !fs.id) {
+    async removeFromTeam (fsId, fsName) {
+      if (!fsId) {
         return
       }
-      if (!confirm(i18n('store.sm.reallyRemove', { name: fs.name }))) {
+      if (!confirm(i18n('store.sm.reallyRemove', { name: fsName }))) {
         return
       }
-      const fsId = fs.id
-      const fData = {
-        bid: this.storeId,
-        fsid: fsId,
-        action: 'delete',
+
+      this.isBusy = true
+      try {
+        await removeStoreMember(this.storeId, fsId)
+      } catch (e) {
+        console.error(e)
+        pulseError(i18n('error_unexpected'))
       }
-      await legacyXhrCall('bcontext', fData)
       const index = this.foodsaver.findIndex(member => member.id === fsId)
       if (index >= 0) {
         this.foodsaver.splice(index, 1)
-        this.$refs.teamlist.refresh()
       }
+      this.isBusy = false
     },
     async promoteToManager (fsId) {
       if (!fsId) {

@@ -882,12 +882,11 @@ class StoreGateway extends BaseGateway
 
 	public function addUserToTeam(int $storeId, int $userId): void
 	{
-		$this->db->update('fs_betrieb_team', [
-			'active' => MembershipStatus::MEMBER,
-			'stat_add_date' => $this->db->now()
-		], [
+		$this->db->insertOrUpdate('fs_betrieb_team', [
 			'betrieb_id' => $storeId,
-			'foodsaver_id' => $userId
+			'foodsaver_id' => $userId,
+			'stat_add_date' => $this->db->now(),
+			'active' => MembershipStatus::MEMBER,
 		]);
 	}
 

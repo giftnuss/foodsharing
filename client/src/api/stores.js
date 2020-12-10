@@ -85,19 +85,25 @@ export async function declineStoreRequest (storeId, userId) {
 }
 
 export async function promoteToStoreManager (storeId, userId) {
-  console.warn('promoteToStoreManager', { storeId, userId })
   return patch(`/stores/${storeId}/managers/${userId}`)
 }
 
 export async function demoteAsStoreManager (storeId, userId) {
-  console.warn('demoteAsStoreManager', { storeId, userId })
   return remove(`/stores/${storeId}/managers/${userId}`)
 }
 
+export async function addStoreMember (storeId, userId) {
+  return post(`/stores/${storeId}/members/${userId}`)
+}
+
+export async function removeStoreMember (storeId, userId) {
+  return remove(`/stores/${storeId}/members/${userId}`)
+}
+
 export async function moveMemberToStandbyTeam (storeId, userId) {
-  return patch(`/stores/${storeId}/team/${userId}/standby`)
+  return patch(`/stores/${storeId}/members/${userId}/standby`)
 }
 
 export async function moveMemberToRegularTeam (storeId, userId) {
-  return remove(`/stores/${storeId}/team/${userId}/standby`)
+  return remove(`/stores/${storeId}/members/${userId}/standby`)
 }

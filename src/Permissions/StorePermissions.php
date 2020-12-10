@@ -293,4 +293,10 @@ class StorePermissions
 		// TODO FIXME this should check the relevant cases that would prevent a demotion
 		return true;
 	}
+
+	public function mayLeaveStoreTeam(int $storeId, int $userId, array $store): bool
+	{
+		// TODO FIXME this should check the relevant cases that would prevent leaving
+		return true;
+	}
 }

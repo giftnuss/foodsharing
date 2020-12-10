@@ -25,6 +25,19 @@
       </b-input-group-append>
     </b-input-group>
 
+    <div v-if="requireReload">
+      <span class="text-muted d-inline-block py-2">{{ $i18n('store.sm.reloadRequired') }}</span>
+      <b-button
+        variant="secondary"
+        block
+        class="reload-page"
+        @click.prevent="reload"
+      >
+        <i class="fas fa-fw fa-sync-alt" />
+        {{ $i18n('store.sm.reloadPage') }}
+      </b-button>
+    </div>
+
     <hr>
 
     <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
@@ -109,6 +122,9 @@
 </template>
 
 <script>
+import { addStoreMember } from '@/api/stores'
+import { reload } from '@/script'
+
 export default {
   props: {
     classes: { type: String, default: '' },
@@ -119,12 +135,22 @@ export default {
       newUserId: '',
       // active sorting controls
       // active filtering controls
+      requireReload: false,
     }
   },
   methods: {
+    reload,
     async addNewTeamMember () {
       const userId = parseInt(this.newUserId)
-      await console.warn('addNewTeamMember', { userId, storeId: this.storeId })
+      try {
+        await addStoreMember(this.storeId, userId)
+        this.newUserId = ''
+      } catch (e) {
+        console.error(e)
+        // pulseError(i18n('error_unexpected'))
+      }
+      // convince user to trigger page reload for server refresh of teamlist
+      this.requireReload = true
     },
   },
 }

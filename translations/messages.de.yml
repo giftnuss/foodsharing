@@ -713,6 +713,8 @@ store:
     promoteToManager: "Verantwortlich machen"
     demoteAsManager: "Als BV entfernen"
     reallyDemote: "Möchtest du wirklich {name} die Verantwortung für diesen Betrieb entziehen?"
+    reloadRequired: "Zum Aktualisieren der Team-Infos:"
+    reloadPage: "Neu laden"
   request:
     request: "In diesem Team würde ich gerne helfen."
     got-it: "Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden."

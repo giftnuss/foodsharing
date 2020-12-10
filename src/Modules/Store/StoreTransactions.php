@@ -299,6 +299,8 @@ class StoreTransactions
 		$this->pickupGateway->deleteAllDatesFromAFoodsaver($userId, $storeId);
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
 
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::REMOVED_FROM_STORE);
+
 		if ($teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId)) {
 			$this->messageGateway->deleteUserFromConversation($teamChatConversationId, $userId);
 		}

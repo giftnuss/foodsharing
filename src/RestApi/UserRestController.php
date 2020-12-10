@@ -283,10 +283,12 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
+		// needs the session ID, so we can't log out just yet
+		$this->foodsaverTransactions->deleteFoodsaver($userId);
+
 		if ($userId === $this->session->id()) {
 			$this->session->logout();
 		}
-		$this->foodsaverTransactions->deleteFoodsaver($userId);
 
 		return $this->handleView($this->view());
 	}

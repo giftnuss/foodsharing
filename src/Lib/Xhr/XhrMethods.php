@@ -14,7 +14,6 @@ use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
-use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -1175,25 +1174,6 @@ class XhrMethods
 		$mailOwnerId = $this->emailGateway->getOne_send_email($data['id'])['foodsaver_id'];
 		if ($this->session->id() == $mailOwnerId) {
 			$this->emailGateway->setEmailStatus($data['id'], $mailOwnerId, EmailStatus::STATUS_CANCELED);
-		}
-	}
-
-	public function xhr_bcontext($data)
-	{
-		$storeId = (int)$data['bid'];
-		if ($this->storePermissions->mayEditStoreTeam($storeId)) {
-			$foodsaverId = (int)$data['fsid'];
-			$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
-			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
-			if ($data['action'] == 'delete') {
-				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
-				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $foodsaverId . ' AND `date` > NOW()');
-				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
-				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
-				$this->storeGateway->addStoreLog($data['bid'], $this->session->id(), $data['fsid'], null, StoreLogAction::REMOVED_FROM_STORE);
-
-				return json_encode(['status' => 1]);
-			}
 		}
 	}
 }

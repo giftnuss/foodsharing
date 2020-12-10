@@ -296,6 +296,65 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Adds user to store team, without a request to join from that user.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to add to the store team")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Post("stores/{storeId}/members/{userId}")
+	 */
+	public function addStoreMemberAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+		// FIXME check store-join permissions for target user here!
+
+		$this->storeTransactions->addStoreMember($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Removes user from store team.
+	 *
+	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="which store to manage")
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to remove from the store team")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="409", description="User cannot currently leave this team")
+	 * @OA\Tag(name="stores")
+	 *
+	 * @Rest\Delete("stores/{storeId}/members/{userId}")
+	 */
+	public function removeStoreMemberAction(int $storeId, int $userId): Response
+	{
+		if (!$this->session->id()) {
+			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+		// FIXME check some stuff here
+		$store = [];
+		if (!$this->storePermissions->mayLeaveStoreTeam($storeId, $userId, $store)) {
+			throw new ConflictHttpException();
+		}
+
+		$this->storeTransactions->removeStoreMember($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Promotes a user to store manager.
 	 *
 	 * @OA\Parameter(name="storeId", in="path", @OA\Schema(type="integer"), description="which store to manage")
@@ -379,7 +438,7 @@ class StoreRestController extends AbstractFOSRestController
 	 * @OA\Response(response="404", description="User is not a member of this store")
 	 * @OA\Tag(name="stores")
 	 *
-	 * @Rest\Patch("stores/{storeId}/team/{userId}/standby")
+	 * @Rest\Patch("stores/{storeId}/members/{userId}/standby")
 	 */
 	public function moveMemberToStandbyTeamAction(int $storeId, int $userId): Response
 	{
@@ -410,7 +469,7 @@ class StoreRestController extends AbstractFOSRestController
 	 * @OA\Response(response="404", description="User is not a member of this store")
 	 * @OA\Tag(name="stores")
 	 *
-	 * @Rest\Delete("stores/{storeId}/team/{userId}/standby")
+	 * @Rest\Delete("stores/{storeId}/members/{userId}/standby")
 	 */
 	public function moveUserToRegularTeamAction(int $storeId, int $userId): Response
 	{
