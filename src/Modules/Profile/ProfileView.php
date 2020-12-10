@@ -77,9 +77,10 @@ class ProfileView extends View
 
 		if ($maySeeBounceWarning) {
 			if ($this->foodsaver['emailIsBouncing']) {
-				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning', [
+				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning_1', [
 					'{email}' => $this->foodsaver['email'],
-				]) . '</h1>';
+				]) . '<a href="/?page=settings"> ' . $this->translator->trans('profile.mailBounceWarning_2') . ' </a>'
+				. $this->translator->trans('profile.mailBounceWarning_3') . '</h1>';
 				$warningContainer = '<div>'
 					. $this->v_utils->v_info($warningMessage, '', '<i class="fas fa-exclamation-triangle"></i>')
 					. '</div>';
