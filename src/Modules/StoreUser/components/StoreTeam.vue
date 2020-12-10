@@ -152,7 +152,7 @@
                 size="sm"
                 variant="warning"
                 :block="!(wXS || wSM)"
-                @click="promoteToManager(data.item)"
+                @click="promoteToManager(data.item.id)"
               >
                 <i class="fas fa-fw fa-cog" />
                 {{ $i18n('store.sm.promoteToManager') }}
@@ -163,7 +163,7 @@
                 size="sm"
                 variant="outline-primary"
                 :block="!(wXS || wSM)"
-                @click="demoteAsManager(data.item)"
+                @click="demoteAsManager(data.item.id, data.item.name)"
               >
                 <i class="fas fa-fw fa-cog" />
                 {{ $i18n('store.sm.demoteAsManager') }}
@@ -295,6 +295,7 @@ export default {
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
+        fs.isWaiting = newStatusIsStandby
         fs.isJumper = newStatusIsStandby
         fs.isActive = !newStatusIsStandby
         fs._showDetails = false
@@ -322,20 +323,50 @@ export default {
         this.$refs.teamlist.refresh()
       }
     },
-    async promoteToManager (fs) {
-      if (!fs || !fs.id) {
+    async promoteToManager (fsId) {
+      if (!fsId) {
         return
       }
-      await promoteToStoreManager(this.storeId, fs.id)
+      this.isBusy = true
+      try {
+        await promoteToStoreManager(this.storeId, fsId)
+      } catch (e) {
+        console.error(e)
+        pulseError(i18n('error_unexpected'))
+      }
+      this.isBusy = false
+      const index = this.team.findIndex(fs => fs.id === fsId)
+      if (index >= 0) {
+        const fs = this.foodsaver[index]
+        fs.isManager = true
+        fs._rowVariant = 'warning'
+        fs._showDetails = false
+        this.$set(this.team, index, fs)
+      }
     },
-    async demoteAsManager (fs) {
-      if (!fs || !fs.id) {
+    async demoteAsManager (fsId, fsName) {
+      if (!fsId) {
         return
       }
-      if (!confirm(i18n('store.sm.reallyDemote', { name: fs.name }))) {
+      if (!confirm(i18n('store.sm.reallyDemote', { name: fsName }))) {
         return
       }
-      await demoteAsStoreManager(this.storeId, fs.id)
+      this.isBusy = true
+      try {
+        await demoteAsStoreManager(this.storeId, fsId)
+      } catch (e) {
+        console.error(e)
+        pulseError(i18n('error_unexpected'))
+      }
+      this.isBusy = false
+      const index = this.team.findIndex(fs => fs.id === fsId)
+      if (index >= 0) {
+        const fs = this.foodsaver[index]
+        fs.isManager = false
+        fs._rowVariant = ''
+        fs._showDetails = false
+        this.$set(this.team, index, fs)
+      }
     },
     /* eslint-disable brace-style */
     pickupSortFunction (a, b, key, directionDesc) {

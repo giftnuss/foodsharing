@@ -407,12 +407,42 @@ class StoreTransactions
 		$this->storeGateway->setUserMembershipStatus($storeId, $userId, MembershipStatus::MEMBER);
 
 		$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
-		$this->messageGateway->addUserToConversation($teamChatId, $userId);
+		if ($teamChatId) {
+			$this->messageGateway->addUserToConversation($teamChatId, $userId);
+		}
 
 		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
-		$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $userId);
+		if ($standbyTeamChatId) {
+			$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $userId);
+		}
 
 		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::MOVED_TO_TEAM);
+	}
+
+	public function makeMemberResponsible(int $storeId, int $userId): void
+	{
+		// check if there is room for one more
+		// check $fs['rolle'] >= Role::STORE_MANAGER
+		// check $fs['quiz_rolle'] or unify those two..........
+
+		$this->storeGateway->addStoreManager($storeId, $userId);
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::APPOINT_STORE_MANAGER);
+
+		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
+		if ($standbyTeamChatId) {
+			$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
+		}
+	}
+
+	public function downgradeResponsibleMember(int $storeId, int $userId): void
+	{
+		/* check if other managers exist (cannot leave as last manager) */
+		$this->storeGateway->removeStoreManager($storeId, $userId);
+
+		$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
+		if ($standbyTeamChatId) {
+			$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $userId);
+		}
 	}
 
 	/**

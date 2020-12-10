@@ -39,6 +39,11 @@ class StoreGateway extends BaseGateway
 		]);
 	}
 
+	public function storeExists(int $storeId): bool
+	{
+		return $this->db->exists('fs_betrieb', ['id' => $storeId]);
+	}
+
 	public function getBetrieb($storeId): array
 	{
 		$result = $this->db->fetch('
@@ -854,19 +859,25 @@ class StoreGateway extends BaseGateway
 
 	/**
 	 * Add store manager to a store and make her responsible for that store.
-	 *
-	 * @return int	Last insert ID
 	 */
-	public function addStoreManager(int $storeId, int $storeManagerId): int
+	public function addStoreManager(int $storeId, int $userId): int
 	{
-		$data = [
-			'foodsaver_id' => $storeManagerId,
+		return $this->db->insertOrUpdate('fs_betrieb_team', [
 			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId,
 			'verantwortlich' => 1,
 			'active' => MembershipStatus::MEMBER,
-		];
+		]);
+	}
 
-		return $this->db->insertOrUpdate('fs_betrieb_team', $data);
+	public function removeStoreManager(int $storeId, int $userId): int
+	{
+		return $this->db->update('fs_betrieb_team', [
+			'verantwortlich' => 0,
+		], [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId,
+		]);
 	}
 
 	public function addUserToTeam(int $storeId, int $userId): void

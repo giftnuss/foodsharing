@@ -215,10 +215,9 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayJoinStoreRequest($storeId, $userId)) {
 			throw new AccessDeniedHttpException();
 		}
-		// TODO check store existence
-		// if (false) {
-		// 	throw new NotFoundHttpException('Store does not exist.');
-		// }
+		if (!$this->storeGateway->storeExists($storeId)) {
+			throw new NotFoundHttpException('Store does not exist.');
+		}
 
 		$this->storeTransactions->requestStoreTeamMembership($storeId, $userId);
 
@@ -323,9 +322,11 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$store || !isset($store['id'])) {
 			throw new NotFoundHttpException('Store does not exist.');
 		}
-		if (!$this->storePermissions->mayBecomeStoreManager($storeId, $userId)) {
+		if (!$this->storePermissions->mayBecomeStoreManager($store, $userId)) {
 			throw new ConflictHttpException();
 		}
+
+		$this->storeTransactions->makeMemberResponsible($storeId, $userId);
 
 		return $this->handleView($this->view([], 200));
 	}
@@ -360,6 +361,8 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayLoseStoreManagement($storeId, $userId)) {
 			throw new ConflictHttpException();
 		}
+
+		$this->storeTransactions->downgradeResponsibleMember($storeId, $userId);
 
 		return $this->handleView($this->view([], 200));
 	}

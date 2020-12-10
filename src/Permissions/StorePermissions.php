@@ -254,8 +254,14 @@ class StorePermissions
 
 	public function mayChatWithRegularTeam(array $store): bool
 	{
-		return (!$store['jumper'] || $store['verantwortlich'])
-			&& $store['team_conversation_id'] !== null;
+		if ($store['jumper']) {
+			return false;
+		}
+		if (!$store['verantwortlich']) {
+			return false;
+		}
+
+		return $store['team_conversation_id'] !== null;
 	}
 
 	public function mayChatWithJumperWaitingTeam(array $store): bool
@@ -263,10 +269,22 @@ class StorePermissions
 		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
 	}
 
-	public function mayBecomeStoreManager(int $storeId, int $userId): bool
+	/**
+	 * This permission roughly assumes that both user and store exist.
+	 * If that is not guaranteed, you will need to check existence in the callers!
+	 */
+	public function mayBecomeStoreManager(array $store, int $userId): bool
 	{
-		// TODO FIXME this should check the relevant cases that would prevent a promotion
-		// (user doesn't exist? may(BV)? already managing this store? not member of team? limit of managers reached? etc)
+		// at most three managers are allowed right now
+		if (count($store['verantwortlicher']) >= 3) {
+			return false;
+		}
+
+		$alreadyManager = in_array($userId, $store['verantwortlicher'], true);
+		if ($alreadyManager) {
+			return false;
+		}
+
 		return $this->session->may('bieb');
 	}
 
