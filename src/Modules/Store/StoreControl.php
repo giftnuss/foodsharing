@@ -123,13 +123,16 @@ class StoreControl extends Control
 
 				$this->dataHelper->setEditData($data);
 
-				$region = $this->storeModel->getValues(['id', 'name'], 'bezirk', $data['bezirk_id']);
+				$regionId = $data['bezirk_id'];
+				$regionName = $this->regionGateway->getRegionName($regionId);
+
+				// TODO check where this is still needed for editing (not creating) stores:
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->storeGateway->getStoreManagers($_GET['id']);
 				}
 
 				$this->pageHelper->addContent($this->view->betrieb_form(
-					$region,
+					['id' => $regionId, 'name' => $regionName],
 					'',
 					$this->storeGateway->getBasics_groceries(),
 					$this->storeGateway->getBasics_chain(),
