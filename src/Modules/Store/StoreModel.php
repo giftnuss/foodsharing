@@ -3,31 +3,9 @@
 namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Message\MessageGateway;
-use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreModel extends Db
 {
-	private $bellGateway;
-	private $storeGateway;
-	private $regionGateway;
-	private $messageGateway;
-
-	public function __construct(
-		BellGateway $bellGateway,
-		StoreGateway $storeGateway,
-		RegionGateway $regionGateway,
-		MessageGateway $messageGateway
-	) {
-		$this->bellGateway = $bellGateway;
-		$this->storeGateway = $storeGateway;
-		$this->regionGateway = $regionGateway;
-		$this->messageGateway = $messageGateway;
-
-		parent::__construct();
-	}
-
 	public function getOne_betrieb($storeId)
 	{
 		$out = $this->qRow('
