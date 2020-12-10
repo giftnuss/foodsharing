@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Profile;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
@@ -13,7 +12,6 @@ use Foodsharing\Permissions\ReportPermissions;
 final class ProfileControl extends Control
 {
 	private $foodsaver;
-	private MailsGateway $mailsGateway;
 	private RegionGateway $regionGateway;
 	private ProfileGateway $profileGateway;
 	private BasketGateway $basketGateway;
@@ -22,7 +20,6 @@ final class ProfileControl extends Control
 	private ProfilePermissions $profilePermissions;
 
 	public function __construct(
-		MailsGateway $mailsGateway,
 		ProfileView $view,
 		RegionGateway $regionGateway,
 		ProfileGateway $profileGateway,
@@ -32,7 +29,6 @@ final class ProfileControl extends Control
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
-		$this->mailsGateway = $mailsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
 		$this->basketGateway = $basketGateway;
@@ -64,7 +60,7 @@ final class ProfileControl extends Control
 		$this->foodsaver = $data;
 		$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $viewerId);
 		if ($this->profilePermissions->maySeeBounceWarning($profileId)) {
-			$this->foodsaver['emailIsBouncing'] = $this->mailsGateway->emailIsBouncing($this->foodsaver['email']);
+			$this->foodsaver['emailIsBouncing'] = $this->session->isEmailBouncing($this->foodsaver['email']);
 		}
 		$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets($this->foodsaver['id']);
 		if ((int)$this->foodsaver['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($profileId)) {

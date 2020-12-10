@@ -11,6 +11,8 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -23,6 +25,8 @@ class Session
 	private $quizHelper;
 	private $regionGateway;
 	private $storeGateway;
+	private $mailsGateway;
+	private $loginGateway;
 	private $initialized = false;
 
 	private const ROLE_KEYS = [
@@ -40,7 +44,9 @@ class Session
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		StoreGateway $storeGateway
+		StoreGateway $storeGateway,
+		MailsGateway $mailsGateway,
+		LoginGateway $loginGateway
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -48,6 +54,8 @@ class Session
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
+		$this->mailsGateway = $mailsGateway;
+		$this->loginGateway = $loginGateway;
 	}
 
 	public function initIfCookieExists()
@@ -507,5 +515,15 @@ class Session
 	public function isMob(): bool
 	{
 		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
+	}
+
+	public function isActivated(int $fsId): bool
+	{
+		return $this->loginGateway->isActivated($fsId);
+	}
+
+	public function isEmailBouncing(string $email): bool
+	{
+		return $this->mailsGateway->emailIsBouncing($email);
 	}
 }

@@ -10,8 +10,6 @@ use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Login\LoginGateway;
-use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -32,8 +30,6 @@ class DashboardControl extends Control
 	private Sanitizer $sanitizerService;
 	private ImageHelper $imageService;
 	private QuizSessionGateway $quizSessionGateway;
-	private LoginGateway $loginGateway;
-	private MailsGateway $mailsGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -41,18 +37,15 @@ class DashboardControl extends Control
 		ContentGateway $contentGateway,
 		BasketGateway $basketGateway,
 		StoreGateway $storeGateway,
-		MailsGateway $mailsGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
-		QuizSessionGateway $quizSessionGateway,
-		LoginGateway $loginGateway
+		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
-		$this->mailsGateway = $mailsGateway;
 		$this->dashboardGateway = $dashboardGateway;
 		$this->contentGateway = $contentGateway;
 		$this->basketGateway = $basketGateway;
@@ -64,7 +57,6 @@ class DashboardControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
-		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 
@@ -95,8 +87,8 @@ class DashboardControl extends Control
 		// Dashboard warning
 		$email = $this->session->get('user')['email'];
 		$fsId = $this->session->id();
-		$isNotActivated = !$this->loginGateway->isActivated($fsId);
-		$emailIsBouncing = $this->mailsGateway->emailIsBouncing($email);
+		$isNotActivated = !$this->session->isActivated($fsId);
+		$emailIsBouncing = $this->session->isEmailBouncing($email);
 		if ($emailIsBouncing || $isNotActivated) {
 			$this->pageHelper->addContent($this->view->dashboardWarning($email, $isNotActivated, $emailIsBouncing));
 		}
