@@ -1130,6 +1130,8 @@ bell:
   store_request_accept_wait: "Du bist nun auf der Springer-/Warteliste."
   store_request_deny_title: "{name}"
   store_request_deny: "Deine Anfrage wurde abgelehnt."
+  store_request_imposed_title: "{name}"
+  store_request_imposed: "Du wurdest zum Team hinzugefügt."
   poll_new_title: "Neue Abstimmung"
   poll_new: "{title}"
 

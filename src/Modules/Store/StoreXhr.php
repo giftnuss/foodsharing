@@ -218,7 +218,7 @@ class StoreXhr extends Control
 			if (is_null($userId)) {
 				return XhrResponses::PERMISSION_DENIED;
 			}
-			$this->storeTransactions->leaveStoreTeam($storeId, $userId);
+			$this->storeTransactions->removeStoreMember($storeId, $userId);
 			$this->storeGateway->addStoreLog($storeId, $userId, null, null, StoreLogAction::LEFT_STORE);
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {

@@ -228,29 +228,10 @@ class StoreTransactions
 	public function requestStoreTeamMembership(int $storeId, int $userId): void
 	{
 		$this->storeGateway->addStoreRequest($storeId, $userId);
+
 		$this->storeGateway->addStoreLog($storeId, $userId, null, null, StoreLogAction::REQUEST_TO_JOIN);
 
-		// notify people who can do something with the request: store managers, region ambassadors, or orga
-		$bellRecipients = $this->storeGateway->getBiebsForStore($storeId);
-		if (!$bellRecipients) {
-			$regionId = $this->storeGateway->getStoreRegionId($storeId);
-			$ambassadors = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
-
-			if ($ambassadors) {
-				$bellRecipients = array_column($ambassadors, 'id');
-			} else {
-				$bellRecipients = $this->foodsaverGateway->getOrgaTeam();
-			}
-		}
-
-		$storeName = $this->storeGateway->getStoreName($storeId);
-		$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
-			'href' => '/?page=fsbetrieb&id=' . $storeId,
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $storeName,
-		], BellType::createIdentifier(BellType::NEW_STORE_REQUEST, $storeId));
-		$this->bellGateway->addBell($bellRecipients, $bellData);
+		$this->notifyStoreManagersAboutRequest($storeId, $userId);
 	}
 
 	/**
@@ -262,57 +243,12 @@ class StoreTransactions
 	 */
 	public function acceptStoreRequest(int $storeId, int $userId, bool $moveToStandby = false): void
 	{
-		// add user to the team
-		$this->storeGateway->addUserToTeam($storeId, $userId);
+		$this->addUserToStore($storeId, $userId, $moveToStandby);
 
-		// and user to the team's conversation (the standby case is handled by its own transaction)
-		if (!$moveToStandby) {
-			$teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId);
-			if ($teamChatConversationId) {
-				$this->messageGateway->deleteUserFromConversation($teamChatConversationId, $userId);
-			}
-			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
-			if ($standbyTeamChatId) {
-				$this->messageGateway->addUserToConversation($standbyTeamChatId, $userId);
-			}
-		}
-
-		// add an entry to the store log and a note the store wall
 		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::REQUEST_APPROVED);
-		$this->storeGateway->add_betrieb_notiz([
-			'foodsaver_id' => $userId,
-			'betrieb_id' => $storeId,
-			'text' => '{ACCEPT_REQUEST}',
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => Milestone::ACCEPTED,
-		]);
 
-		if ($moveToStandby) {
-			$this->moveMemberToStandbyTeam($storeId, $userId);
-		}
-
-		// create bell for the user who is accepted
-		if ($moveToStandby) {
-			$bellTitle = 'store_request_accept_wait_title';
-			$bellMsg = 'store_request_accept_wait';
-			$bellIcon = 'fas fa-user-tag';
-			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, $userId);
-		} else {
-			$bellTitle = 'store_request_accept_title';
-			$bellMsg = 'store_request_accept';
-			$bellIcon = 'fas fa-user-check';
-			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId);
-		}
-		$bellLink = '/?page=fsbetrieb&id=' . $storeId;
-
-		$storeName = $this->storeGateway->getStoreName($storeId);
-		$bellData = Bell::create($bellTitle, $bellMsg, $bellIcon, [
-			'href' => $bellLink,
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $storeName
-		], $bellId);
-		$this->bellGateway->addBell($userId, $bellData);
+		$actionType = $moveToStandby ? StoreLogAction::MOVED_TO_JUMPER : StoreLogAction::REQUEST_APPROVED;
+		$this->triggerBellForJoining($storeId, $userId, $actionType);
 
 		// add the user to the store's region
 		$regionId = $this->storeGateway->getStoreRegionId($storeId);
@@ -324,26 +260,13 @@ class StoreTransactions
 	 */
 	public function declineStoreRequest(int $storeId, int $userId): void
 	{
+		$this->storeGateway->removeUserFromTeam($storeId, $userId);
+
 		// userId = affected user, sessionId = active user
 		// => don't add a bell notification if the request was withdrawn by the user
 		if ($userId !== $this->session->id()) {
-			$this->createBellNotificationForRejectedApplication($storeId, $userId);
+			$this->triggerBellForJoining($storeId, $userId, StoreLogAction::REQUEST_DECLINED);
 		}
-
-		$this->storeGateway->removeUserFromTeam($storeId, $userId);
-	}
-
-	private function createBellNotificationForRejectedApplication(int $storeId, int $userId): void
-	{
-		$storeName = $this->storeGateway->getStoreName($storeId);
-
-		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
-			'href' => '/?page=fsbetrieb&id=' . $storeId
-		], [
-			'name' => $storeName,
-		], BellType::createIdentifier(BellType::STORE_REQUEST_REJECTED, $userId));
-
-		$this->bellGateway->addBell($userId, $bellData);
 	}
 
 	public function createKickMessage(int $foodsaverId, int $storeId, DateTime $pickupDate, ?string $message = null): string
@@ -362,7 +285,16 @@ class StoreTransactions
 		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage . "\n\n" . $footer;
 	}
 
-	public function leaveStoreTeam(int $storeId, int $userId): void
+	public function addStoreMember(int $storeId, int $userId, bool $moveToStandby = false): void
+	{
+		$this->addUserToStore($storeId, $userId, $moveToStandby);
+
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::ADDED_WITHOUT_REQUEST);
+
+		$this->triggerBellForJoining($storeId, $userId, StoreLogAction::ADDED_WITHOUT_REQUEST);
+	}
+
+	public function removeStoreMember(int $storeId, int $userId): void
 	{
 		$this->pickupGateway->deleteAllDatesFromAFoodsaver($userId, $storeId);
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
@@ -381,7 +313,7 @@ class StoreTransactions
 		$ownStoreIds = $this->storeGateway->listStoreIds($userId);
 
 		foreach ($ownStoreIds as $storeId) {
-			$this->leaveStoreTeam($storeId, $userId);
+			$this->removeStoreMember($storeId, $userId);
 		}
 	}
 
@@ -445,6 +377,33 @@ class StoreTransactions
 		}
 	}
 
+	private function addUserToStore(int $storeId, int $userId, bool $moveToStandby): void
+	{
+		// add user to the team
+		$this->storeGateway->addUserToTeam($storeId, $userId);
+
+		// and user to the team's conversation (the standby case is handled by its own transaction)
+		if (!$moveToStandby) {
+			$teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId);
+			if ($teamChatConversationId) {
+				$this->messageGateway->addUserToConversation($teamChatConversationId, $userId);
+			}
+		}
+
+		// add a note the store wall
+		$this->storeGateway->add_betrieb_notiz([
+			'foodsaver_id' => $userId,
+			'betrieb_id' => $storeId,
+			'text' => '{ACCEPT_REQUEST}',
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => Milestone::ACCEPTED,
+		]);
+
+		if ($moveToStandby) {
+			$this->moveMemberToStandbyTeam($storeId, $userId);
+		}
+	}
+
 	/**
 	 * creates an empty team conversation for the given store.
 	 * creates an empty standby-team conversation for the given store.
@@ -457,5 +416,70 @@ class StoreTransactions
 
 		$standbyTeamChatId = $this->messageGateway->createConversation([$managerId], true);
 		$this->storeGateway->updateStoreConversation($storeId, $standbyTeamChatId, true);
+	}
+
+	// notify people who can do something with the request: store managers, region ambassadors, or orga
+	private function notifyStoreManagersAboutRequest(int $storeId, int $userId): void
+	{
+		$bellRecipients = $this->storeGateway->getBiebsForStore($storeId);
+		if (!$bellRecipients) {
+			$regionId = $this->storeGateway->getStoreRegionId($storeId);
+			$ambassadors = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
+
+			if ($ambassadors) {
+				$bellRecipients = array_column($ambassadors, 'id');
+			} else {
+				$bellRecipients = $this->foodsaverGateway->getOrgaTeam();
+			}
+		}
+
+		$storeName = $this->storeGateway->getStoreName($storeId);
+
+		$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
+			'href' => '/?page=fsbetrieb&id=' . $storeId,
+		], [
+			'user' => $this->session->user('name'),
+			'name' => $storeName,
+		], 'store-request-' . $storeId);
+
+		$this->bellGateway->addBell($bellRecipients, $bellData);
+	}
+
+	private function triggerBellForJoining(int $storeId, int $userId, int $actionType): void
+	{
+		if ($actionType === StoreLogAction::ADDED_WITHOUT_REQUEST) {
+			$bellTitle = 'store_request_imposed_title';
+			$bellMsg = 'store_request_imposed';
+			$bellIcon = 'fas fa-user-plus';
+			$bellId = 'store-imposed-' . $storeId . '-' . $userId;
+		} elseif ($actionType === StoreLogAction::MOVED_TO_JUMPER) {
+			$bellTitle = 'store_request_accept_wait_title';
+			$bellMsg = 'store_request_accept_wait';
+			$bellIcon = 'fas fa-user-tag';
+			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, $userId);
+		} elseif ($actionType === StoreLogAction::REQUEST_APPROVED) {
+			$bellTitle = 'store_request_accept_title';
+			$bellMsg = 'store_request_accept';
+			$bellIcon = 'fas fa-user-check';
+			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId);
+		} elseif ($actionType === StoreLogAction::REQUEST_DECLINED) {
+			$bellTitle = 'store_request_deny_title';
+			$bellMsg = 'store_request_deny';
+			$bellIcon = 'fas fa-user-times';
+			$bellId = BellType::createIdentifier(BellType::STORE_REQUEST_REJECTED, $userId);
+		} else {
+			throw new \DomainException('Unknown store-team action: ' . $actionType);
+		}
+		$bellLink = '/?page=fsbetrieb&id=' . $storeId;
+
+		$storeName = $this->storeGateway->getStoreName($storeId);
+
+		$bellData = Bell::create($bellTitle, $bellMsg, $bellIcon, [
+			'href' => $bellLink,
+		], [
+			'user' => $this->session->user('name'),
+			'name' => $storeName,
+		], $bellId);
+		$this->bellGateway->addBell($userId, $bellData);
 	}
 }
