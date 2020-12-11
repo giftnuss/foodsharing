@@ -1981,7 +1981,7 @@ buddy:
   request_accepted: Jetzt kennt Ihr Euch!
 
 polls:
-  beta: Das Abstimmungstool befindet sich noch in der Testphase. Damit dies zur Einführung fehlerfrei funktioniert, brauchen wir noch Menschen, die es testen. Kontaktiere dafür bitte unsere AG "Abstimmungen - Betatest".
+  hint : Das Abstimmungstool kann in der überregionalen AG "Abstimmungen - Test" getestet werden.
   title: Titel
   start_date: von
   end_date: bis
@@ -2043,4 +2043,4 @@ poll:
     option_text: Option
     average: Mittelwert
   submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
-  eligible_votes : Stimmberechtigt
+  eligible_votes : Anzahl Stimmberechtigter

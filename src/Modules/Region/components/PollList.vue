@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="msg-inside info mb-3">
       <i class="fas fa-info-circle" />
-      {{ $i18n('polls.beta') }}
+      {{ $i18n('polls.hint') }}
     </div>
 
     <div class="card mb-3 rounded">
