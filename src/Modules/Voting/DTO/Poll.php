@@ -69,6 +69,11 @@ class Poll
 	public ?int $votes;
 
 	/**
+	 * Number of users who are eligible to vote.
+	 */
+	public int $eligible_to_vote;
+
+	/**
 	 * Options of the poll. The array maps the option indices to the object and the indices will always be ascending
 	 * integers starting at 0.
 	 *
@@ -89,6 +94,7 @@ class Poll
 		$this->authorId = -1;
 		$this->numValues = 0;
 		$this->votes = null;
+		$this->eligible_to_vote = 0;
 		$this->options = [];
 	}
 
@@ -104,6 +110,7 @@ class Poll
 		int $authorId,
 		int $numValues,
 		?int $votes,
+		int $eligible_to_vote,
 		array $options
 	) {
 		$poll = new Poll();
@@ -118,6 +125,7 @@ class Poll
 		$poll->authorId = $authorId;
 		$poll->numValues = $numValues;
 		$poll->votes = $votes;
+		$poll->eligible_to_vote = $eligible_to_vote;
 		$poll->options = $options;
 
 		return $poll;

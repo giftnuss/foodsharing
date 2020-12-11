@@ -2016,7 +2016,7 @@ poll:
     name: Name der Abstimmung
     name_required: Bitte gib einen Namen ein.
     scope: Wer darf abstimmen?
-    type: Wahlmodus
+    type: Abstimmungsmodus
     time: Uhrzeit
     start_date: Abstimmungsbeginn
     start_date_required: Bitte wähle den Abstimmungsbeginn aus.
@@ -2043,3 +2043,4 @@ poll:
     option_text: Option
     average: Mittelwert
   submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
+  eligible_votes : Stimmberechtigt
