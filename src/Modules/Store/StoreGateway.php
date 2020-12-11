@@ -90,6 +90,53 @@ class StoreGateway extends BaseGateway
 		return $result;
 	}
 
+	public function getEditStoreData(int $storeId): array
+	{
+		$result = $this->db->fetch('
+			SELECT	`id`,
+					`betrieb_status_id`,
+					`bezirk_id`,
+					`plz`,
+					`stadt`,
+					`lat`,
+					`lon`,
+					`kette_id`,
+					`betrieb_kategorie_id`,
+					`name`,
+					`str`,
+					`hsnr`,
+					`status_date`,
+					`status`,
+					`ansprechpartner`,
+					`telefon`,
+					`fax`,
+					`email`,
+					`begin`,
+					`besonderheiten`,
+					`ueberzeugungsarbeit`,
+					`presse`,
+					`sticker`,
+					`abholmenge`,
+					`prefetchtime`,
+					`public_info`,
+					`public_time`
+
+			FROM 	`fs_betrieb`
+
+			WHERE 	`id` = :storeId
+		', [
+			':storeId' => $storeId,
+		]);
+
+		if ($result) {
+			$result['lebensmittel'] = array_column($this->getGroceries($storeId), 'id');
+			// TODO check if/where this is still needed (see also StoreControl)
+			// $result['foodsaver'] = $this->getStoreTeam($storeId);
+		}
+
+		return $result;
+	}
+
 	public function getMapsStores(int $regionId): array
 	{
 		return $this->db->fetchAll('

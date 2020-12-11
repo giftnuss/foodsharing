@@ -113,7 +113,7 @@ class StoreControl extends Control
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
 			$this->pageHelper->addBread($this->translator->trans('storeedit.bread'));
-			$data = $this->storeModel->getOne_betrieb($id);
+			$data = $this->storeGateway->getEditStoreData($id);
 
 			$this->pageHelper->addTitle($data['name']);
 			$this->pageHelper->addTitle($this->translator->trans('storeedit.bread'));

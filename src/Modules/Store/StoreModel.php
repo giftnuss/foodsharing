@@ -6,59 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 class StoreModel extends Db
 {
-	public function getOne_betrieb($storeId)
-	{
-		$out = $this->qRow('
-			SELECT
-			`id`,
-			`betrieb_status_id`,
-			`bezirk_id`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`status`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`begin`,
-			`besonderheiten`,
-			`ueberzeugungsarbeit`,
-			`presse`,
-			`sticker`,
-			`abholmenge`,
-			`prefetchtime`,
-			`public_info`,
-			`public_time`
-
-			FROM 		`fs_betrieb`
-
-			WHERE 		`id` = ' . (int)$storeId);
-
-		$out['lebensmittel'] = $this->qCol('
-				SELECT 		`lebensmittel_id`
-
-				FROM 		`fs_betrieb_has_lebensmittel`
-				WHERE 		`betrieb_id` = ' . (int)$storeId . '
-			');
-		$out['foodsaver'] = $this->qCol('
-				SELECT 		`foodsaver_id`
-
-				FROM 		`fs_betrieb_team`
-				WHERE 		`betrieb_id` = ' . (int)$storeId . '
-				AND 		`active` = 1
-			');
-
-		return $out;
-	}
-
 	public function update_betrieb($id, $data)
 	{
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
