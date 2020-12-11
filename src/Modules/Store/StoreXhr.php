@@ -14,21 +14,18 @@ use Foodsharing\Utility\Sanitizer;
 
 class StoreXhr extends Control
 {
-	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $storeTransactions;
 	private $sanitizerService;
 
 	public function __construct(
-		StoreModel $model,
 		StoreView $view,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
 		StoreTransactions $storeTransactions,
 		Sanitizer $sanitizerService
 	) {
-		$this->storeModel = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
@@ -139,7 +136,7 @@ class StoreXhr extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betriebe = $this->storeModel->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+				if ($betriebe = $this->storeGateway->setbezirkids($ids)) {
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');

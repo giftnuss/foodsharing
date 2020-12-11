@@ -19,7 +19,6 @@ use Foodsharing\Utility\WeightHelper;
 class StoreControl extends Control
 {
 	private $bellGateway;
-	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $storeTransactions;
@@ -30,7 +29,6 @@ class StoreControl extends Control
 	private $weightHelper;
 
 	public function __construct(
-		StoreModel $model,
 		StorePermissions $storePermissions,
 		StoreTransactions $storeTransactions,
 		StoreView $view,
@@ -42,7 +40,6 @@ class StoreControl extends Control
 		DataHelper $dataHelper,
 		WeightHelper $weightHelper
 	) {
-		$this->storeModel = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
