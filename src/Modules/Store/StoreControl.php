@@ -187,13 +187,12 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 			$g_data['str'] = $g_data['anschrift'];
 
-			if ($this->storeModel->update_betrieb($id, $g_data)) {
-				$this->storeTransactions->setStoreNameInConversations($id, $g_data['name']);
-				$this->flashMessageHelper->success($this->translator->trans('storeedit.edit_success'));
-				$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
-			} else {
-				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
-			}
+			$this->storeTransactions->updateAllStoreData($id, $g_data);
+
+			$this->storeTransactions->setStoreNameInConversations($id, $g_data['name']);
+
+			$this->flashMessageHelper->success($this->translator->trans('storeedit.edit_success'));
+			$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
 		}
 	}
 

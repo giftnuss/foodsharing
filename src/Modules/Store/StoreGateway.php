@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\CreateStoreData;
+use Foodsharing\Modules\Store\DTO\Store;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 
 class StoreGateway extends BaseGateway
@@ -135,6 +136,46 @@ class StoreGateway extends BaseGateway
 		}
 
 		return $result;
+	}
+
+	public function updateStoreData(int $storeId, Store $store): int
+	{
+		return $this->db->update('fs_betrieb', [
+			'name' => $store->name,
+			'bezirk_id' => $store->regionId,
+
+			'lat' => $store->lat,
+			'lon' => $store->lon,
+			'str' => $store->str,
+			'hsnr' => $store->hsnr, // deprecated
+			'plz' => $store->zip,
+			'stadt' => $store->city,
+
+			'public_info' => $store->publicInfo,
+			'public_time' => $store->publicTime,
+
+			'betrieb_kategorie_id' => $store->categoryId,
+			'kette_id' => $store->chainId,
+			'betrieb_status_id' => $store->cooperationStatus,
+
+			'besonderheiten' => $store->description,
+
+			'ansprechpartner' => $store->contactName,
+			'telefon' => $store->contactPhone,
+			'fax' => $store->contactFax,
+			'email' => $store->contactEmail,
+			// 'begin' => $store->cooperationStart,
+
+			'prefetchtime' => $store->calendarInterval,
+			'abholmenge' => $store->weight,
+			'ueberzeugungsarbeit' => $store->effort,
+			'presse' => $store->publicity,
+			'sticker' => $store->sticker,
+
+			// 'status_date' => $store->updatedAt,
+		], [
+			'id' => $storeId,
+		]);
 	}
 
 	public function getMapsStores(int $regionId): array
@@ -405,6 +446,17 @@ class StoreGateway extends BaseGateway
         ', [
 			':storeId' => $storeId
 		]);
+	}
+
+	public function setGroceries(int $storeId, array $foodTypeIds): void
+	{
+		$this->db->delete('fs_betrieb_has_lebensmittel', ['betrieb_id' => $storeId]);
+
+		$newFoodData = array_map(function ($foodId) use ($storeId) {
+			return ['betrieb_id' => $storeId, 'lebensmittel_id' => $foodId];
+		}, $foodTypeIds);
+
+		$this->db->insertMultiple('fs_betrieb_has_lebensmittel', $newFoodData);
 	}
 
 	private function getApplications(int $storeId): array

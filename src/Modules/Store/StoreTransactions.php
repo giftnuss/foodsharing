@@ -15,6 +15,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\CreateStoreData;
+use Foodsharing\Modules\Store\DTO\Store;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -75,6 +76,54 @@ class StoreTransactions
 		$this->createTeamConversations($storeId, $managerId);
 
 		return $storeId;
+	}
+
+	public function updateAllStoreData(int $storeId, array $legacyGlobalData): bool
+	{
+		$this->storeGateway->setGroceries($storeId, $legacyGlobalData['lebensmittel']);
+
+		$store = new Store();
+
+		$store->id = $storeId;
+		$store->name = $legacyGlobalData['name'];
+		$store->regionId = intval($legacyGlobalData['bezirk_id']);
+
+		$address = $legacyGlobalData['str'];
+		if ($legacyGlobalData['hsnr']) {
+			$address .= ' ' . $legacyGlobalData['hsnr'];
+		}
+		$store->lat = $legacyGlobalData['lat'];
+		$store->lon = $legacyGlobalData['lon'];
+		$store->str = $address;
+		$store->zip = $legacyGlobalData['plz'];
+		$store->city = $legacyGlobalData['stadt'];
+
+		$store->publicInfo = $legacyGlobalData['public_info'];
+		$store->publicTime = intval($legacyGlobalData['public_time']);
+
+		$store->categoryId = intval($legacyGlobalData['betrieb_kategorie_id']);
+		$store->chainId = intval($legacyGlobalData['kette_id']);
+		$store->cooperationStatus = intval($legacyGlobalData['betrieb_status_id']);
+
+		$store->description = $legacyGlobalData['besonderheiten'];
+
+		$store->contactName = $legacyGlobalData['ansprechpartner'];
+		$store->contactPhone = $legacyGlobalData['telefon'];
+		$store->contactFax = $legacyGlobalData['fax'];
+		$store->contactEmail = $legacyGlobalData['email'];
+		// $store->cooperationStart = $legacyGlobalData['begin'];
+
+		$store->calendarInterval = intval($legacyGlobalData['prefetchtime']);
+		$store->weight = intval($legacyGlobalData['abholmenge']);
+		$store->effort = intval($legacyGlobalData['ueberzeugungsarbeit']);
+		$store->publicity = intval($legacyGlobalData['presse']);
+		$store->sticker = intval($legacyGlobalData['sticker']);
+
+		// $store->updatedAt = $legacyGlobalData['status_date'] ?? date('Y-m-d H:i:s');
+
+		$this->storeGateway->updateStoreData($store->id, $store);
+
+		return true;
 	}
 
 	/**
