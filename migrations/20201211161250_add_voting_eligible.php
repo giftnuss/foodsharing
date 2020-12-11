@@ -8,7 +8,7 @@ class AddVotingEligible extends AbstractMigration
 	{
 		// poll table
 		$this->table('fs_poll')
-			->addColumn('eligible_to_vote', 'integer', [
+			->addColumn('eligible_votes_count', 'integer', [
 				'null' => false,
 				'signed' => false,
 				'limit' => 10,

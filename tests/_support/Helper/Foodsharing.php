@@ -905,7 +905,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
 			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s'),
 			'votes' => $this->faker->numberBetween(0, 1000),
-			'eligible_to_vote' => 0
+			'eligible_votes_count' => 0
 		], $extraParams);
 		$params['author'] = $authorId;
 		$params['region_id'] = $regionId;
@@ -946,9 +946,9 @@ class Foodsharing extends \Codeception\Module\Db
 			]);
 		}
 
-		$previousValue = $this->grabFromDatabase('fs_poll', 'eligible_to_vote', ['id' => $pollId]);
+		$previousValue = $this->grabFromDatabase('fs_poll', 'eligible_votes_count', ['id' => $pollId]);
 		$this->updateInDatabase('fs_poll', [
-			'eligible_to_vote' => $previousValue + count($userIds)
+			'eligible_votes_count' => $previousValue + count($userIds)
 		]);
 	}
 

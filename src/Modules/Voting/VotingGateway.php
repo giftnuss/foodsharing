@@ -24,7 +24,7 @@ class VotingGateway extends BaseGateway
 	public function getPoll(int $pollId, bool $includeResults): ?Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
-			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes', 'eligible_to_vote'],
+			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes', 'eligible_votes_count'],
 			['id' => $pollId]
 		);
 		if (empty($data)) {
@@ -37,7 +37,7 @@ class VotingGateway extends BaseGateway
 			new DateTime($data['start']), new DateTime($data['end']),
 			$data['region_id'], $data['scope'], $data['type'], $data['author'],
 			VotingType::getNumberOfValues($data['type']),
-			$includeResults ? $data['votes'] : null, $data['eligible_to_vote'], $options);
+			$includeResults ? $data['votes'] : null, $data['eligible_votes_count'], $options);
 	}
 
 	/**
@@ -90,7 +90,7 @@ class VotingGateway extends BaseGateway
 	public function listPolls(int $regionId): array
 	{
 		$data = $this->db->fetchAllByCriteria('fs_poll',
-			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'eligible_to_vote'],
+			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'eligible_votes_count'],
 			['region_id' => $regionId]
 		);
 
@@ -100,7 +100,7 @@ class VotingGateway extends BaseGateway
 			$polls[] = Poll::create($d['id'], $d['name'], $d['description'],
 				new DateTime($d['start']), new DateTime($d['end']),
 				$d['region_id'], $d['scope'], $d['type'], $d['author'],
-				VotingType::getNumberOfValues($d['type']), null, $d['eligible_to_vote'], $options);
+				VotingType::getNumberOfValues($d['type']), null, $d['eligible_votes_count'], $options);
 		}
 
 		return $polls;
@@ -194,7 +194,7 @@ class VotingGateway extends BaseGateway
 			'end' => $poll->endDate->format('Y-m-d H:i:s'),
 			'author' => $poll->authorId,
 			'votes' => 0,
-			'eligible_to_vote' => count($voterIds),
+			'eligible_votes_count' => count($voterIds),
 		]);
 
 		// insert all options
