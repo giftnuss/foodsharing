@@ -22,6 +22,7 @@
 - Replaced in topbar donation page to twingle pages !1773 @chriswalg
 - Complete redesign of the footer !1769 !1805 @chriswalg
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
+- Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
