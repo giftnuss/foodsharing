@@ -24,7 +24,7 @@
             <b>{{ $i18n('poll.allowed_voters') }}:</b> {{ $i18n('poll.scope_description_'+poll.scope) }}
           </li>
           <li class="poll-scope">
-            <b>{{ $i18n('poll.eligible_votes_count') }}:</b> {{ poll.eligible_votes_count }}
+            <b>{{ $i18n('poll.eligible_votes_count') }}:</b> {{ poll.eligibleVotesCount }}
           </li>
           <li class="poll-type">
             <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
