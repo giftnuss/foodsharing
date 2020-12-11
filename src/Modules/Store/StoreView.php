@@ -74,10 +74,6 @@ class StoreView extends View
 
 		$regionPicker = $this->v_utils->v_regionPicker($region ?: [], $this->translator->trans('terminology.region'));
 
-		if (!isset($g_data['foodsaver'])) {
-			$g_data['foodsaver'] = [$this->session->id()];
-		}
-
 		if (isset($g_data['stadt'])) {
 			$g_data['ort'] = $g_data['stadt'];
 		}
@@ -86,6 +82,7 @@ class StoreView extends View
 		}
 		if (isset($g_data['hsnr'])) {
 			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
+			$g_data['hsnr'] = '';
 		}
 
 		$this->pageHelper->addJs('$("textarea").css("height","70px");$("textarea").autosize();');

@@ -64,10 +64,10 @@ class StoreTransactions
 		$store->lat = $legacyGlobalData['lat'];
 		$store->lon = $legacyGlobalData['lon'];
 		$store->str = $legacyGlobalData['str'];
-		$store->hsnr = $legacyGlobalData['hsnr'];
-		$store->plz = $legacyGlobalData['plz'];
-		$store->stadt = $legacyGlobalData['stadt'];
+		$store->zip = $legacyGlobalData['plz'];
+		$store->city = $legacyGlobalData['stadt'];
 		$store->createdAt = Carbon::now();
+		$store->updatedAt = $store->createdAt;
 
 		$storeId = $this->storeGateway->addStore($store);
 		$managerId = $this->session->id();
@@ -80,7 +80,7 @@ class StoreTransactions
 
 	public function updateAllStoreData(int $storeId, array $legacyGlobalData): bool
 	{
-		$this->storeGateway->setGroceries($storeId, $legacyGlobalData['lebensmittel']);
+		$this->storeGateway->setGroceries($storeId, $legacyGlobalData['lebensmittel'] ?? []);
 
 		$store = new Store();
 
@@ -89,7 +89,7 @@ class StoreTransactions
 		$store->regionId = intval($legacyGlobalData['bezirk_id']);
 
 		$address = $legacyGlobalData['str'];
-		if ($legacyGlobalData['hsnr']) {
+		if ($legacyGlobalData['hsnr'] ?? '') {
 			$address .= ' ' . $legacyGlobalData['hsnr'];
 		}
 		$store->lat = $legacyGlobalData['lat'];
@@ -111,15 +111,17 @@ class StoreTransactions
 		$store->contactPhone = $legacyGlobalData['telefon'];
 		$store->contactFax = $legacyGlobalData['fax'];
 		$store->contactEmail = $legacyGlobalData['email'];
-		// $store->cooperationStart = $legacyGlobalData['begin'];
-
+		$store->cooperationStart = null;
+		if (!empty($legacyGlobalData['begin'])) {
+			$store->cooperationStart = Carbon::createFromFormat('Y-m-d', $legacyGlobalData['begin']);
+		}
 		$store->calendarInterval = intval($legacyGlobalData['prefetchtime']);
 		$store->weight = intval($legacyGlobalData['abholmenge']);
 		$store->effort = intval($legacyGlobalData['ueberzeugungsarbeit']);
 		$store->publicity = intval($legacyGlobalData['presse']);
 		$store->sticker = intval($legacyGlobalData['sticker']);
 
-		// $store->updatedAt = $legacyGlobalData['status_date'] ?? date('Y-m-d H:i:s');
+		$store->updatedAt = Carbon::now();
 
 		$this->storeGateway->updateStoreData($store->id, $store);
 

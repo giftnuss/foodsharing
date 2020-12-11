@@ -33,10 +33,11 @@ class StoreGateway extends BaseGateway
 			'lat' => $store->lat,
 			'lon' => $store->lon,
 			'str' => $store->str,
-			'hsnr' => $store->hsnr,
-			'plz' => $store->plz,
-			'stadt' => $store->stadt,
+			'hsnr' => $store->hsnr, // deprecated
+			'plz' => $store->zip,
+			'stadt' => $store->city,
 			'added' => $store->createdAt,
+			'status_date' => $store->updatedAt,
 		]);
 	}
 
@@ -131,8 +132,6 @@ class StoreGateway extends BaseGateway
 
 		if ($result) {
 			$result['lebensmittel'] = array_column($this->getGroceries($storeId), 'id');
-			// TODO check if/where this is still needed (see also StoreControl)
-			// $result['foodsaver'] = $this->getStoreTeam($storeId);
 		}
 
 		return $result;
@@ -164,7 +163,7 @@ class StoreGateway extends BaseGateway
 			'telefon' => $store->contactPhone,
 			'fax' => $store->contactFax,
 			'email' => $store->contactEmail,
-			// 'begin' => $store->cooperationStart,
+			'begin' => $store->cooperationStart,
 
 			'prefetchtime' => $store->calendarInterval,
 			'abholmenge' => $store->weight,
@@ -172,7 +171,7 @@ class StoreGateway extends BaseGateway
 			'presse' => $store->publicity,
 			'sticker' => $store->sticker,
 
-			// 'status_date' => $store->updatedAt,
+			'status_date' => $store->updatedAt,
 		], [
 			'id' => $storeId,
 		]);
@@ -410,7 +409,9 @@ class StoreGateway extends BaseGateway
 				}
 			}
 
-			if (!empty($result['foodsaver'])) {
+			if (empty($result['foodsaver'])) {
+				$result['foodsaver'] = [];
+			} else {
 				$result['team'] = [];
 				foreach ($result['foodsaver'] as $v) {
 					$result['team'][] = [
@@ -424,8 +425,6 @@ class StoreGateway extends BaseGateway
 						}
 					}
 				}
-			} else {
-				$result['foodsaver'] = [];
 			}
 		}
 

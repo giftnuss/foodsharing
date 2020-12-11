@@ -47,18 +47,6 @@ class StoreUserView extends View
 		);
 	}
 
-	public function u_getVerantwortlicher($storeData)
-	{
-		$out = [];
-		foreach ($storeData['foodsaver'] as $fs) {
-			if ($fs['verantwortlich'] == 1) {
-				$out[] = $fs;
-			}
-		}
-
-		return $out;
-	}
-
 	public function u_legacyStoreTeamStatus(array $storeData): string
 	{
 		$this->pageHelper->addJs('

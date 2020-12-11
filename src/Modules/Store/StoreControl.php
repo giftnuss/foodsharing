@@ -84,10 +84,6 @@ class StoreControl extends Control
 				$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
 				$this->pageHelper->addBread($this->translator->trans('storeedit.add-new'));
 
-				if (isset($_GET['id'])) {
-					$g_data['foodsaver'] = $this->storeGateway->getStoreManagers($_GET['id']);
-				}
-
 				$chosenRegion = ($regionId > 0 && Type::isAccessibleRegion($this->regionGateway->getType($regionId))) ? $region : null;
 				$this->pageHelper->addContent($this->view->betrieb_form(
 					$chosenRegion,
@@ -122,11 +118,6 @@ class StoreControl extends Control
 
 				$regionId = $data['bezirk_id'];
 				$regionName = $this->regionGateway->getRegionName($regionId);
-
-				// TODO check where this is still needed for editing (not creating) stores:
-				if (isset($_GET['id'])) {
-					$g_data['foodsaver'] = $this->storeGateway->getStoreManagers($_GET['id']);
-				}
 
 				$this->pageHelper->addContent($this->view->betrieb_form(
 					['id' => $regionId, 'name' => $regionName],
@@ -181,7 +172,6 @@ class StoreControl extends Control
 		if ($this->submitted()) {
 			$id = (int)$_GET['id'];
 			$g_data['stadt'] = $g_data['ort'];
-			$g_data['hsnr'] = '';
 			$g_data['str'] = $g_data['anschrift'];
 
 			$this->storeTransactions->updateAllStoreData($id, $g_data);
@@ -200,11 +190,8 @@ class StoreControl extends Control
 			return;
 		}
 
-		$g_data['status_date'] = date('Y-m-d H:i:s');
+		$g_data['bezirk_id'] ??= $this->session->getCurrentRegionId();
 
-		if (!isset($g_data['bezirk_id'])) {
-			$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
-		}
 		if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
 			$this->flashMessageHelper->error($this->translator->trans('storeedit.not-in-region'));
 			$this->routeHelper->goPage();
@@ -215,11 +202,9 @@ class StoreControl extends Control
 		if (isset($g_data['ort'])) {
 			$g_data['stadt'] = $g_data['ort'];
 		}
-		$g_data['foodsaver'] = [$coordinator];
 		if (isset($g_data['anschrift'])) {
 			$g_data['str'] = $g_data['anschrift'];
 		}
-		$g_data['hsnr'] = '';
 
 		$storeId = $this->storeTransactions->createStore($g_data);
 

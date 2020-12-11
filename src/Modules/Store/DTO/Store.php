@@ -29,7 +29,7 @@ class Store
 	public string $contactPhone;
 	public string $contactFax;
 	public string $contactEmail;
-	// public ?\DateTime $cooperationStart = null; // TODO!!
+	public ?\DateTime $cooperationStart;
 
 	public int $calendarInterval;
 	public int $weight;
