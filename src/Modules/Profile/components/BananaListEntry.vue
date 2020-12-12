@@ -1,5 +1,4 @@
 <template>
-  <!-- eslint-disable vue/max-attributes-per-line -->
   <div class="banana-container d-flex my-1 py-2">
     <a
       v-b-tooltip.hover="$i18n('profile.go')"
@@ -20,6 +19,7 @@
         <i class="fas fa-fw fa-angle-right" />
         {{ $dateFormat(when, 'full-long') }}
       </div>
+      <!-- For whitespace and layout reasons, the text needs to be enclosed directly: -->
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <div class="msg ml-1 p-1 pl-2">{{ text }}</div>
     </div>
