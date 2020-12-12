@@ -4,6 +4,11 @@
     <h3>
       {{ $i18n('profile.banana.title', { count: (bananaCount ? bananaCount : '') }) }}
     </h3>
+
+    <div v-if="!bananaCount" class="no-banana my-1">
+      {{ $i18n('profile.banana.none', { name: recipientName }) }}
+    </div>
+
     <div v-if="canGiveBanana && !hasGivenBanana" class="give-banana mb-2">
       <div v-if="showTextarea">
         <b-alert variant="success" show>
@@ -23,6 +28,7 @@
           class="mb-2"
           max-rows="8"
           size="sm"
+          :state="canSendBanana ? true : null"
         />
 
         <div class="d-flex justify-content-between">

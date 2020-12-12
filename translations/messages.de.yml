@@ -1381,10 +1381,10 @@ profile:
   mailBounceWarning_3: wird diese Sperre wieder entfernt.
   banana:
     title: '{count} Vertrauensbananen'
-    by: '{date} von {name}'
+    none: '{name} hat bislang noch keine Vertrauensbanane erhalten.'
     give: Schenke {name} eine Banane
     details: |
-      Hier kannst du etwas dazu schreiben, warum du {name} gerne eine Banane schenken möchtest.
+      Hier kannst du in mindestens 100 Zeichen beschreiben, warum du {name} gerne eine Banane schenken möchtest.
     undo: 'Vertrauensbananen können nicht verändert oder zurückgenommen werden.'
     vouch: |
       Bitte vergib die Vertrauensbanane daher nur an dir persönlich bekannte Menschen,
