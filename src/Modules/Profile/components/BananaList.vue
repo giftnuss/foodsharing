@@ -121,6 +121,8 @@ export default {
       } catch (err) {
         if (err.code === 400) {
           pulseError(i18n('profile.banana.messageTooShort'))
+        } else if (err.code === 403) {
+          pulseError(i18n('profile.banana.alreadyGiven', { name: this.recipientName }))
         } else {
           console.error(err)
           pulseError(i18n('error_unexpected'))

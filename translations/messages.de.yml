@@ -1393,6 +1393,7 @@ profile:
     placeholder: 'min. 100 Zeichen...'
     sent: Banane wurde gesendet!
     messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein.
+    alreadyGiven: '{name} hat bereits eine Banane von dir erhalten!'
   nav:
     edit: Profil bearbeiten
     buddy: 'Ich kenne {name}'
