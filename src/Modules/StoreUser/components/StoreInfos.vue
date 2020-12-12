@@ -1,68 +1,82 @@
 <template>
-  <div class="store-desc">
-    <div
-      v-if="storeTitle != null"
-      class="head ui-widget-header ui-corner-top"
-    >
-      {{ storeTitle }}
-    </div>
-    <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
+  <div class="bootstrap store-desc w-100">
+    <div class="card rounded mb-2">
       <div
-        id="inputAdress"
-        class="desc-block mb-1 py-1"
+        v-if="storeTitle != null"
+        class="card-header text-white bg-primary d-flex justify-content-between"
+        @click.prevent="toggleInfoDisplay"
       >
-        <div class="desc-block-title mb-2 py-1">
-          {{ $i18n('store.address') }}
-        </div>
-        <div>
-          {{ street }} <br>
-          {{ postcode }} {{ city }}
-        </div>
+        {{ storeTitle }}
+
+        <b-link
+          class="px-1 text-light"
+          @click.prevent.stop="toggleInfoDisplay"
+        >
+          <i :class="['fas fa-fw', `fa-chevron-${displayInfos ? 'down' : 'left'}`]" />
+        </b-link>
       </div>
+
       <div
-        id="inputParticularities"
-        class="desc-block mb-1 py-1"
+        v-show="displayInfos"
+        class="card-body bg-white ui-padding"
       >
-        <div class="desc-block-title mb-2 py-1">
-          {{ $i18n('store.particularities') }}
+        <div
+          id="inputAdress"
+          class="desc-block mb-1 py-1"
+        >
+          <div class="desc-block-title mb-2 py-1">
+            {{ $i18n('store.address') }}
+          </div>
+          <div>
+            {{ street }} <br>
+            {{ postcode }} {{ city }}
+          </div>
         </div>
-        <Markdown :source="particularitiesDescription" />
-      </div>
-      <div
-        id="inputAverageCollectionQuantity"
-        class="desc-block mb-1 py-1"
-      >
-        <div class="desc-block-title mb-2 py-1">
-          {{ $i18n('store.average_collection_quantity') }}
+        <div
+          id="inputParticularities"
+          class="desc-block mb-1 py-1"
+        >
+          <div class="desc-block-title mb-2 py-1">
+            {{ $i18n('store.particularities') }}
+          </div>
+          <Markdown :source="particularitiesDescription" />
         </div>
-        <div>
-          {{ collectionQuantity }}
+        <div
+          id="inputAverageCollectionQuantity"
+          class="desc-block mb-1 py-1"
+        >
+          <div class="desc-block-title mb-2 py-1">
+            {{ $i18n('store.average_collection_quantity') }}
+          </div>
+          <div>
+            {{ collectionQuantity }}
+          </div>
         </div>
-      </div>
-      <div
-        id="inputAttribution"
-        class="desc-block mb-1 py-1"
-      >
-        <div class="desc-block-title mb-2 py-1">
-          {{ $i18n('store.attribution') }}
+        <div
+          id="inputAttribution"
+          class="desc-block mb-1 py-1"
+        >
+          <div class="desc-block-title mb-2 py-1">
+            {{ $i18n('store.attribution') }}
+          </div>
+          <span v-if="allowedToMentionInPublic">{{ $i18n('store.may_referred_to_in_public') }}</span>
+          <span v-else>{{ $i18n('store.may_not_referred_to_in_public') }}</span>
         </div>
-        <span v-if="allowedToMentionInPublic">{{ $i18n('store.may_referred_to_in_public') }}</span>
-        <span v-else>{{ $i18n('store.may_not_referred_to_in_public') }}</span>
-      </div>
-      <div
-        v-if="lastFetchDate !== null"
-        id="inputMyLastPickup"
-        class="desc-block mb-1 py-1"
-      >
-        <div class="desc-block-title mb-2 py-1">
-          {{ $i18n('store.my_last_pickup') }}
+        <div
+          v-if="lastFetchDate !== null"
+          id="inputMyLastPickup"
+          class="desc-block mb-1 py-1"
+        >
+          <div class="desc-block-title mb-2 py-1">
+            {{ $i18n('store.my_last_pickup') }}
+          </div>
+          <span>
+            {{ formatLastFetchDate() }}
+          </span>
+          <span v-if="distanceInDays() > 1">
+            ({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})
+          </span>
         </div>
-        <span>
-          {{ formatLastFetchDate() }}
-        </span>
-        <span v-if="distanceInDays() > 1">
-          ({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})
-        </span>
       </div>
     </div>
   </div>
@@ -113,6 +127,11 @@ export default {
       default: 0,
     },
   },
+  data () {
+    return {
+      displayInfos: true,
+    }
+  },
   computed: {
     allowedToMentionInPublic () {
       return this.press === 1
@@ -125,6 +144,10 @@ export default {
 
     distanceInDays () {
       return differenceInCalendarDays(new Date(), new Date(this.lastFetchDate))
+    },
+
+    toggleInfoDisplay () {
+      this.displayInfos = !this.displayInfos
     },
   },
 }
