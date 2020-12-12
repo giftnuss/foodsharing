@@ -2,13 +2,16 @@
 <template>
   <div class="store-view bootstrap">
     <div class="card rounded mb-2">
-      <div class="card-header text-white bg-primary d-flex justify-content-between">
+      <div
+        class="card-header text-white bg-primary d-flex justify-content-between"
+        @click.prevent="toggleWallDisplay"
+      >
         {{ $i18n('wall.name') }}
 
         <a
           class="px-1 text-light"
           href="#"
-          @click.prevent="toggleWallDisplay"
+          @click.prevent.stop="toggleWallDisplay"
         >
           <i :class="['fas fa-fw', `fa-chevron-${displayWall ? 'down' : 'left'}`]" />
         </a>
