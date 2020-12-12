@@ -19,11 +19,12 @@
 
       <div class="card-body p-0">
         <StoreWall
-          v-show="displayWall"
           :store-id="storeId"
+          :compact="!displayWall"
           :managers="storeManagers"
           :may-write-post="mayWritePost"
           :may-delete-everything="mayDeleteEverything"
+          @toggle-compact="toggleWallDisplay"
         />
       </div>
     </div>
@@ -40,10 +41,11 @@ export default {
     storeManagers: { type: Array, default: () => [] },
     mayWritePost: { type: Boolean, required: true },
     mayDeleteEverything: { type: Boolean, required: true },
+    expandWallByDefault: { type: Boolean, default: true },
   },
   data () {
     return {
-      displayWall: true,
+      displayWall: this.expandWallByDefault,
     }
   },
   methods: {

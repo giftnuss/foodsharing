@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div class="store-wall">
     <div
@@ -27,9 +26,13 @@
       </div>
     </div>
 
-    <ul class="posts list-unstyled">
+    <ul
+      v-if="displayedPosts"
+      class="posts list-unstyled"
+      :class="{'has-more-posts': hasMorePosts}"
+    >
       <WallPost
-        v-for="p in posts"
+        v-for="p in displayedPosts"
         :key="p.id"
         :post="p"
         :managers="managers"
@@ -38,6 +41,13 @@
         @deletePost="deletePost"
       />
     </ul>
+    <b-link
+      v-if="hasMorePosts"
+      class="d-block text-muted text-center py-2"
+      @click="$emit('toggle-compact')"
+    >
+      {{ $i18n('wall.see-more') }}
+    </b-link>
   </div>
 </template>
 
@@ -47,10 +57,13 @@ import WallPost from '../../WallPost/components/WallPost'
 import { showLoader, hideLoader, pulseError } from '@/script'
 import i18n from '@/i18n'
 
+const COMPACT_LENGTH = 3
+
 export default {
   components: { WallPost },
   props: {
     storeId: { type: Number, required: true },
+    compact: { type: Boolean, default: false },
     managers: { type: Array, default: () => [] },
     mayWritePost: { type: Boolean, required: true },
     mayDeleteEverything: { type: Boolean, required: true },
@@ -64,6 +77,12 @@ export default {
   computed: {
     newPostExists () {
       return this.newPostText.trim().length > 0
+    },
+    displayedPosts () {
+      return this.compact ? (this.posts || []).slice(0, COMPACT_LENGTH) : this.posts
+    },
+    hasMorePosts () {
+      return this.compact ? (this.posts && this.posts.length > COMPACT_LENGTH) : false
     },
   },
   async created () {
@@ -120,5 +139,10 @@ export default {
 
 ul.posts {
   margin: 0;
+
+  &.has-more-posts {
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+  }
 }
 </style>
