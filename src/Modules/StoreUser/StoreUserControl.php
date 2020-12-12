@@ -210,15 +210,6 @@ class StoreUserControl extends Control
 						'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');',
 					];
 				}
-
-				if ($this->storePermissions->maySeePickupHistory($storeId)) {
-					$this->pageHelper->addContent(
-						$this->view->vueComponent('vue-pickup-history', 'PickupHistory', [
-							'storeId' => $storeId,
-							'coopStart' => $store['begin'],
-						])
-					);
-				}
 				if ($this->storePermissions->mayEditStore($storeId)) {
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.bread'),
@@ -285,6 +276,15 @@ class StoreUserControl extends Control
 							'storeTitle' => $store['name'] ?? '',
 							'storeRequests' => $store['requests'] ?? [],
 							'requestCount' => count($store['requests'] ?? []),
+						])
+					);
+				}
+
+				if ($this->storePermissions->maySeePickupHistory($storeId)) {
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-pickup-history', 'PickupHistory', [
+							'storeId' => $storeId,
+							'coopStart' => $store['begin'],
 						])
 					);
 				}
