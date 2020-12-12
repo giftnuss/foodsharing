@@ -8,162 +8,164 @@
   Sleeping team members will come last in each of those sections.
   Check `tableSortFunction` (and StoreGateway:getStoreTeam) for details.
   -->
-  <div :class="['bootstrap store-team', `team-${storeId}`]">
-    <div class="head ui-widget-header ui-corner-top d-flex justify-content-between">
-      <span>{{ $i18n('store.teamName', { storeTitle }) }}</span>
+  <div :class="['bootstrap store-team w-100', `team-${storeId}`]">
+    <div class="card rounded mb-2">
+      <div class="card-header text-white bg-primary d-flex justify-content-between">
+        <span>{{ $i18n('store.teamName', { storeTitle }) }}</span>
 
-      <div class="align-self-center">
-        <a
-          v-if="mayEditStore"
-          v-b-tooltip.hover.top="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
-          :class="['px-1', managementModeEnabled ? 'text-warning' : 'text-light']"
-          href="#"
-          @click.prevent="toggleManageControls"
-        >
-          <i class="fas fa-fw fa-cog" />
-        </a>
-        <a
-          class="px-1 d-md-none text-light"
-          href="#"
-          @click.prevent="toggleTeamDisplay"
-        >
-          <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
-        </a>
-      </div>
-    </div>
-
-    <div
-      v-if="managementModeEnabled"
-      class="bg-white ui-corner-top p-2 team-management"
-    >
-      <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
-    </div>
-
-    <!-- preparation for more store-management features -->
-    <StoreManagementPanel
-      v-if="false && managementModeEnabled"
-      classes="p-2 team-management"
-    />
-
-    <div class="corner-bottom margin-bottom team-list">
-      <b-table
-        ref="teamlist"
-        :items="foodsaver"
-        :fields="tableFields"
-        :class="{'d-none': !displayMembers}"
-        details-td-class="col-actions"
-        primary-key="id"
-        thead-class="d-none"
-        sort-by="ava"
-        :sort-desc.sync="sortdesc"
-        :sort-compare="sortfun"
-        show-empty
-        sort-null-last
-      >
-        <template v-slot:cell(ava)="data">
-          <StoreTeamAvatar :user="data.item" />
-        </template>
-
-        <template v-slot:cell(info)="data">
-          <StoreTeamInfo
-            :user="data.item"
-            :store-manager-view="managementModeEnabled"
-            @toggle-details="toggleActions(data)"
-          />
-        </template>
-
-        <template v-slot:cell(mobinfo)="data">
-          <StoreTeamInfotext
-            :member="data.item"
-            :may-edit-store="mayEditStore"
-          />
-        </template>
-
-        <template v-slot:cell(call)="data">
-          <b-button
-            v-if="data.item.callable || !data.item.copyNumber"
-            variant="link"
-            class="member-call"
-            :href="data.item.callable"
-            :disabled="!data.item.callable"
-          >
-            <i class="fas fa-fw fa-phone" />
-          </b-button>
-          <b-button
-            v-else-if="data.item.copyNumber && canCopy"
-            variant="link"
-            class="member-call copy-clipboard"
+        <div class="align-self-center">
+          <a
+            v-if="mayEditStore"
+            v-b-tooltip.hover.top="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
+            :class="['px-1', managementModeEnabled ? 'text-warning' : 'text-light']"
             href="#"
-            @click.prevent="copyIntoClipboard(data.item.copyNumber)"
+            @click.prevent="toggleManageControls"
           >
-            <i class="fas fa-fw fa-clone" />
-          </b-button>
-        </template>
+            <i class="fas fa-fw fa-cog" />
+          </a>
+          <a
+            class="px-1 d-md-none text-light"
+            href="#"
+            @click.prevent="toggleTeamDisplay"
+          >
+            <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
+          </a>
+        </div>
+      </div>
 
-        <template v-slot:row-details="data">
-          <StoreTeamInfotext
-            v-if="wXS"
-            :member="data.item"
-            :may-edit-store="mayEditStore"
-            classes="text-center"
-          />
+      <div
+        v-if="managementModeEnabled"
+        class="bg-white p-2 team-management"
+      >
+        <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
+      </div>
 
-          <div class="member-actions">
+      <!-- preparation for more store-management features -->
+      <StoreManagementPanel
+        v-if="false && managementModeEnabled"
+        classes="p-2 team-management"
+      />
+
+      <div class="card-body team-list">
+        <b-table
+          ref="teamlist"
+          :items="foodsaver"
+          :fields="tableFields"
+          :class="{'d-none': !displayMembers}"
+          details-td-class="col-actions"
+          primary-key="id"
+          thead-class="d-none"
+          sort-by="ava"
+          :sort-desc.sync="sortdesc"
+          :sort-compare="sortfun"
+          show-empty
+          sort-null-last
+        >
+          <template v-slot:cell(ava)="data">
+            <StoreTeamAvatar :user="data.item" />
+          </template>
+
+          <template v-slot:cell(info)="data">
+            <StoreTeamInfo
+              :user="data.item"
+              :store-manager-view="managementModeEnabled"
+              @toggle-details="toggleActions(data)"
+            />
+          </template>
+
+          <template v-slot:cell(mobinfo)="data">
+            <StoreTeamInfotext
+              :member="data.item"
+              :may-edit-store="mayEditStore"
+            />
+          </template>
+
+          <template v-slot:cell(call)="data">
             <b-button
-              v-if="(wXS || wSM)"
-              size="sm"
-              :href="`/profile/${data.item.id}`"
+              v-if="data.item.callable || !data.item.copyNumber"
+              variant="link"
+              class="member-call"
+              :href="data.item.callable"
+              :disabled="!data.item.callable"
             >
-              <i class="fas fa-fw fa-user" />
-              {{ $i18n('pickup.open_profile') }}
+              <i class="fas fa-fw fa-phone" />
             </b-button>
-
             <b-button
-              v-if="data.item.id !== fsId"
-              size="sm"
-              variant="secondary"
-              :block="!(wXS || wSM)"
-              @click="openChat(data.item.id)"
+              v-else-if="data.item.copyNumber && canCopy"
+              variant="link"
+              class="member-call copy-clipboard"
+              href="#"
+              @click.prevent="copyIntoClipboard(data.item.copyNumber)"
             >
-              <i class="fas fa-fw fa-comment" />
-              {{ $i18n('chat.open_chat') }}
+              <i class="fas fa-fw fa-clone" />
             </b-button>
+          </template>
 
-            <b-button
-              v-if="mayEditStore && data.item.isJumper"
-              size="sm"
-              variant="primary"
-              :block="!(wXS || wSM)"
-              @click="changeMembershipStatus(data.item.id, 'toteam')"
-            >
-              <i class="fas fa-fw fa-clipboard-check" />
-              {{ $i18n('store.sm.makeRegularTeamMember') }}
-            </b-button>
+          <template v-slot:row-details="data">
+            <StoreTeamInfotext
+              v-if="wXS"
+              :member="data.item"
+              :may-edit-store="mayEditStore"
+              classes="text-center"
+            />
 
-            <b-button
-              v-if="mayEditStore && data.item.isActive && !data.item.isManager"
-              size="sm"
-              variant="primary"
-              :block="!(wXS || wSM)"
-              @click="changeMembershipStatus(data.item.id, 'tojumper')"
-            >
-              <i class="fas fa-fw fa-mug-hot" />
-              {{ $i18n('store.sm.makeJumper') }}
-            </b-button>
+            <div class="member-actions">
+              <b-button
+                v-if="(wXS || wSM)"
+                size="sm"
+                :href="`/profile/${data.item.id}`"
+              >
+                <i class="fas fa-fw fa-user" />
+                {{ $i18n('pickup.open_profile') }}
+              </b-button>
 
-            <b-button
-              v-if="mayEditStore && !data.item.isManager"
-              size="sm"
-              variant="danger"
-              :block="!(wXS || wSM)"
-              @click="removeFromTeam(data.item)"
-            >
-              <i class="fas fa-fw fa-user-times" />
-              {{ $i18n('store.sm.removeFromTeam') }}
-            </b-button>
-          </div>
-        </template>
-      </b-table>
+              <b-button
+                v-if="data.item.id !== fsId"
+                size="sm"
+                variant="secondary"
+                :block="!(wXS || wSM)"
+                @click="openChat(data.item.id)"
+              >
+                <i class="fas fa-fw fa-comment" />
+                {{ $i18n('chat.open_chat') }}
+              </b-button>
+
+              <b-button
+                v-if="mayEditStore && data.item.isJumper"
+                size="sm"
+                variant="primary"
+                :block="!(wXS || wSM)"
+                @click="changeMembershipStatus(data.item.id, 'toteam')"
+              >
+                <i class="fas fa-fw fa-clipboard-check" />
+                {{ $i18n('store.sm.makeRegularTeamMember') }}
+              </b-button>
+
+              <b-button
+                v-if="mayEditStore && data.item.isActive && !data.item.isManager"
+                size="sm"
+                variant="primary"
+                :block="!(wXS || wSM)"
+                @click="changeMembershipStatus(data.item.id, 'tojumper')"
+              >
+                <i class="fas fa-fw fa-mug-hot" />
+                {{ $i18n('store.sm.makeJumper') }}
+              </b-button>
+
+              <b-button
+                v-if="mayEditStore && !data.item.isManager"
+                size="sm"
+                variant="danger"
+                :block="!(wXS || wSM)"
+                @click="removeFromTeam(data.item)"
+              >
+                <i class="fas fa-fw fa-user-times" />
+                {{ $i18n('store.sm.removeFromTeam') }}
+              </b-button>
+            </div>
+          </template>
+        </b-table>
+      </div>
     </div>
   </div>
 </template>
@@ -369,12 +371,13 @@ export default {
 }
 
 .store-team .team-list {
-  background: var(--white);
+  padding: 0;
 }
 
 .store-team ::v-deep table {
   display: flex;
   flex-direction: row;
+  margin-bottom: 0;
 
   thead, tbody {
     width: 100%;
