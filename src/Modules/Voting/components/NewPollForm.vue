@@ -229,14 +229,14 @@
       content-class="pr-3 pt-3"
       @ok="submitPoll"
     >
-      {{ $i18n('poll.new_poll.submit_question') }}
+      {{ $i18n('poll.new_poll.submit_question', { 'date': formattedEditTime }) }}
     </b-modal>
   </div>
 </template>
 
 <script>
 
-import { parse } from 'date-fns'
+import { parse, format } from 'date-fns'
 import {
   BForm,
   BFormGroup,
@@ -256,12 +256,15 @@ import { pulseError } from '@/script'
 import i18n from '@/i18n'
 import { required, minLength } from 'vuelidate/lib/validators'
 
+const EDIT_TIME_HOURS = 1
+const DEFAULT_START_TIME_HOURS = 2
+
 function isAfterStart (dateTime) {
   return dateTime > this.startDateTime
 }
 
-function isInOneHour (dateTime) {
-  return dateTime > new Date(new Date().getTime() + 60 * 60 * 1000)
+function isAfterEditTime (dateTime) {
+  return dateTime > new Date(new Date().getTime() + EDIT_TIME_HOURS * 60 * 60 * 1000)
 }
 
 export default {
@@ -344,7 +347,7 @@ export default {
         minLength: minLength(1),
       },
     },
-    startDateTime: { required, isInOneHour },
+    startDateTime: { required, isAfterEditTime },
     endDateTime: { required, isAfterStart },
   },
   computed: {
@@ -362,6 +365,15 @@ export default {
         return [1, 2, 3, 4, 5]
       }
     },
+    formattedEditTime () {
+      const editDate = new Date(new Date().getTime() + EDIT_TIME_HOURS * 60 * 60 * 1000)
+      return format(editDate, 'HH:mm')
+    },
+  },
+  mounted () {
+    const defaultStart = new Date(new Date().getTime() + DEFAULT_START_TIME_HOURS * 60 * 60 * 1000)
+    this.startDate = format(defaultStart, 'yyyy-MM-dd')
+    this.startTime = format(defaultStart, 'HH:mm:ss')
   },
   methods: {
     updateDateStartTimes () {

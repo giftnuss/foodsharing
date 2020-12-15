@@ -2031,7 +2031,7 @@ poll:
     submit: Abstimmung speichern
     submit_success: Die Abstimmung wurde angelegt
     missing_fields: Es müssen alle Felder ausgefüllt werden
-    submit_question: Die Umfrage kann nur noch innerhalb einer Stunde geändert werden. Möchtest du sie wirklich jetzt anlegen?
+    submit_question: Die Umfrage kann nur noch innerhalb einer Stunde (bis {date}) geändert werden. Möchtest du sie wirklich jetzt anlegen?
   ended_at: lief bis
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen
