@@ -84,7 +84,6 @@
                 v-model="startTime"
                 :locale="locale"
                 v-bind="labelsTimepicker[locale] || {}"
-                now-button
                 :state="$v.startDateTime.$error ? false : null"
                 @input="updateDateStartTimes"
               />
@@ -316,7 +315,6 @@ export default {
           labelSelected: i18n('timepicker.labelSelected'),
           labelNoTimeSelected: i18n('timepicker.labelNoTimeSelected'),
           labelCloseButton: i18n('timepicker.labelCloseButton'),
-          labelNowButton: i18n('timepicker.labelNowButton'),
         },
       },
       labelsCalendar: {
