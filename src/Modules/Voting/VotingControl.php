@@ -40,8 +40,13 @@ class VotingControl extends Control
 				$this->pageHelper->addBread($poll->name);
 				$this->pageHelper->addTitle($poll->name);
 
-				if (isset($_GET['sub']) && $_GET['sub'] === 'edit' && $this->votingPermissions->mayEditPoll($poll)) {
-					$this->pageHelper->addContent($this->view->editPollForm($poll));
+				if (isset($_GET['sub']) && $_GET['sub'] === 'edit') {
+					if ($this->votingPermissions->mayEditPoll($poll)) {
+						$this->pageHelper->addContent($this->view->editPollForm($poll));
+					} else {
+						$this->flashMessageHelper->error($this->translator->trans('poll.may_not_edit'));
+						$this->routeHelper->go('/?page=poll&id=' . $poll->id);
+					}
 				} else {
 					$mayVote = $this->votingPermissions->mayVote($poll);
 					try {

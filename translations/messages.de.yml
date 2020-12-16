@@ -2048,3 +2048,4 @@ poll:
     title: Abstimmung bearbeiten
     submit: Abstimmung speichern
     submit_question: Möchtest du die Änderungen an der Abstimmung wirklich speichern?
+  may_not_edit: Du hast nicht die Rechte, um diese Abstimmung zu bearbeiten, oder der Bearbeitungszeitraum ist abgelaufen.
