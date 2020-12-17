@@ -420,6 +420,9 @@ class Session
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);
+
+		$this->set('email_is_activated', $this->loginGateway->isActivated($fs['id']));
+		$this->set('email_is_bouncing', $this->mailsGateway->emailIsBouncing($fs['email']));
 	}
 
 	private function rolleWrapInt($roleInt)
@@ -515,15 +518,5 @@ class Session
 	public function isMob(): bool
 	{
 		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
-	}
-
-	public function isActivated(int $fsId): bool
-	{
-		return $this->loginGateway->isActivated($fsId);
-	}
-
-	public function isEmailBouncing(string $email): bool
-	{
-		return $this->mailsGateway->emailIsBouncing($email);
 	}
 }

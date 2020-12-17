@@ -8,7 +8,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class LoginService
 {
 	public const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
-	public const MAIL_TOKEN_LENGTH = 24;
+	private const MAIL_TOKEN_LENGTH_COMPATIBILIY = 24;
 
 	private LoginGateway $loginGateway;
 	private EmailHelper $emailHelper;
@@ -65,7 +65,7 @@ class LoginService
 	private function extractTokenData(string $token): array
 	{
 		// Old style tokens should return valid data
-		if (strlen($token) <= self::MAIL_TOKEN_LENGTH) {
+		if (strlen($token) <= self::MAIL_TOKEN_LENGTH_COMPATIBILIY) {
 			return [
 				'date' => date('Ymd'),
 				'count' => 0,

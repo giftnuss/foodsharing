@@ -71,6 +71,7 @@ class LoginControl extends Control
 	public function activate()
 	{
 		if ($this->loginGateway->activate($_GET['e'], $_GET['t'])) {
+			$this->session->set('email_is_activated', true);
 			$this->flashMessageHelper->success($this->translator->trans('register.activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {

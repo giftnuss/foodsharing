@@ -87,8 +87,8 @@ class DashboardControl extends Control
 		// Dashboard warning
 		$email = $this->session->get('user')['email'];
 		$fsId = $this->session->id();
-		$isNotActivated = !$this->session->isActivated($fsId);
-		$emailIsBouncing = $this->session->isEmailBouncing($email);
+		$isNotActivated = !$this->session->get('email_is_activated');
+		$emailIsBouncing = $this->session->get('email_is_bouncing');
 		if ($emailIsBouncing || $isNotActivated) {
 			$this->pageHelper->addContent($this->view->dashboardWarning($email, $isNotActivated, $emailIsBouncing));
 		}
