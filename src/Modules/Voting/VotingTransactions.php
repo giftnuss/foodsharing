@@ -173,9 +173,9 @@ class VotingTransactions
 	/**
 	 * Cancels a poll by movin its end date into the past and removes all bell notifications for it.
 	 */
-	public function cancelPoll(int $pollId): void
+	public function deletePoll(int $pollId): void
 	{
-		$this->votingGateway->cancelPoll($pollId, $this->session->id());
+		$this->votingGateway->deletePoll($pollId);
 		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::NEW_POLL, $pollId));
 	}
 

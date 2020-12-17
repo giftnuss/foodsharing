@@ -19,6 +19,13 @@
         >
           {{ $i18n('poll.edit.title') }}
         </b-link>
+        <b-link
+          v-if="mayEdit && !isPollInPast"
+          class="btn btn-sm btn-secondary mb-3"
+          @click="showCancelConfirmDialog"
+        >
+          {{ $i18n('poll.cancel.title') }}
+        </b-link>
         <ul class="poll-properties">
           <li class="poll-date">
             <b>{{ $i18n('poll.time_period') }}:</b>
@@ -104,6 +111,18 @@
         />
       </div>
     </div>
+    <b-modal
+      ref="confirmCancelModal"
+      :title="$i18n('poll.cancel.title')"
+      :cancel-title="$i18n('no')"
+      :ok-title="$i18n('yes')"
+      modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="cancelThisPoll"
+    >
+      {{ $i18n('poll.cancel.question') }}
+    </b-modal>
   </div>
 </template>
 
@@ -113,10 +132,13 @@ import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
-import { BAlert, BLink, BBadge } from 'bootstrap-vue'
+import { BAlert, BLink, BBadge, BModal } from 'bootstrap-vue'
+import { cancelPoll } from '@/api/voting'
+import { pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
-  components: { ResultsTable, VoteForm, Markdown, BAlert, BLink, BBadge },
+  components: { ResultsTable, VoteForm, Markdown, BAlert, BLink, BBadge, BModal },
   props: {
     poll: {
       type: Object,
@@ -168,6 +190,22 @@ export default {
     userJustVoted () {
       this.userAlreadyVoted = true
       this.userMayVote = false
+    },
+    showCancelConfirmDialog (e) {
+      e.preventDefault()
+      this.$refs.confirmCancelModal.show()
+    },
+    async cancelThisPoll (e) {
+      this.isLoading = true
+      try {
+        // cancel poll and redirect to poll list
+        await cancelPoll(this.poll.id)
+        window.location.href = this.$url('polls', this.poll.regionId)
+      } catch (e) {
+        pulseError(i18n('error_unexpected'))
+      }
+
+      this.isLoading = false
     },
   },
 }

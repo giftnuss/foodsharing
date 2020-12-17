@@ -231,19 +231,15 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Sets a poll's end date to the past and logs who cancelled it.
+	 * Removes a poll. All options and user invitations will be deleted, too.
 	 *
 	 * @param int $pollId a valid poll ID
-	 * @param int $userId ID of the user who cancelled the poll
 	 *
 	 * @throws Exception
 	 */
-	public function cancelPoll(int $pollId, int $userId): void
+	public function deletePoll(int $pollId): void
 	{
-		$this->db->update('fs_poll', [
-			'end' => $this->db->date(Carbon::now()->subMinute()),
-			'cancelled_by' => $userId
-		], ['id' => $pollId]);
+		$this->db->delete('fs_poll', ['id' => $pollId]);
 	}
 
 	/**
