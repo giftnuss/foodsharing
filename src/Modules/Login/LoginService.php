@@ -106,7 +106,7 @@ class LoginService
 			'name' => $data['name'],
 			'link' => $activationUrl,
 			'anrede' => $this->translator->trans('salutation.' . $data['geschlecht'])
-		]);
+		], false, true);
 
 		return true;
 	}
