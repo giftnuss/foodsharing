@@ -13,11 +13,15 @@ import { pulseSuccess, pulseError } from '@/script'
 
 vueRegister({
   ActivityOverview,
-  DashboardWarning,
 })
-
 vueApply('#activity-overview')
-vueApply('#dashboard-warning')
+
+if (document.querySelector('#dashboard-warning') !== null) {
+  vueRegister({
+    DashboardWarning,
+  })
+  vueApply('#dashboard-warning')
+}
 
 // Push Notification Banner
 const pushnotificationsBanner = document.querySelector('#top-banner-pushnotifications')
