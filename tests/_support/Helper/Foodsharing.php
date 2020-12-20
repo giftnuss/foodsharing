@@ -12,6 +12,7 @@ use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus as STATUS;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 
@@ -338,7 +339,7 @@ class Foodsharing extends \Codeception\Module\Db
 			$v = [
 				'betrieb_id' => $store_id,
 				'foodsaver_id' => $fs_id,
-				'active' => $is_confirmed ? ($is_waiting ? 2 : 1) : 0,
+				'active' => $is_confirmed ? ($is_waiting ? STATUS::JUMPER : STATUS::MEMBER) : STATUS::APPLIED_FOR_TEAM,
 				'verantwortlich' => $is_coordinator ? 1 : 0,
 			];
 			$res = $this->countInDatabase('fs_betrieb_team', $v);

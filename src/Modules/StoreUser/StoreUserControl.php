@@ -342,7 +342,7 @@ class StoreUserControl extends Control
 	 * Certain users will be able to manage a store even if not explicitly listed as manager:
 	 * - all members of the 'store coordination' workgroup of the store's region
 	 * - all (direct) ambassadors of the region attached to the store
-	 * - members of the global orga team
+	 * - members of the global orga team.
 	 */
 	private function isResponsibleForThisStoreAnyways($storeId): bool
 	{

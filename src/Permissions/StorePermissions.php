@@ -30,10 +30,10 @@ class StorePermissions
 		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
-	public function mayJoinStoreRequest(int $storeId, int $userId): bool
+	public function mayJoinStoreRequest(int $storeId, ?int $userId = null): bool
 	{
-		$fsId = $this->session->id();
-		if (!$fsId) {
+		$userId ??= $this->session->id();
+		if (is_null($userId)) {
 			return false;
 		}
 
@@ -45,7 +45,7 @@ class StorePermissions
 		}
 
 		// already in team?
-		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) !== UserTeamStatus::NoMember) {
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== UserTeamStatus::NoMember) {
 			return false;
 		}
 

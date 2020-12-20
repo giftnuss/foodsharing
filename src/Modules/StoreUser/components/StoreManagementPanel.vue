@@ -5,8 +5,9 @@
   >
     <span class="text-muted">{{ $i18n('store.sm.makeRegularTeamMember') }}</span>
 
-    <b-input-group class="m-1">
+    <b-input-group class="m-1 add-to-team">
       <b-form-input
+        id="new-foodsaver-id"
         v-model="newUserId"
         class="with-border"
         :placeholder="$i18n('profile.infos.foodsaverId')"

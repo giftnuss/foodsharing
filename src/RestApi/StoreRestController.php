@@ -53,7 +53,7 @@ class StoreRestController extends AbstractFOSRestController
 	 * Returns details of the store with the given ID. Returns 200 and the
 	 * store, 404 if the store does not exist, or 401 if not logged in.
 	 *
-	 * @Rest\Get("stores/{storeId}", requirements={"basketId" = "\d+"})
+	 * @Rest\Get("stores/{storeId}", requirements={"storeId" = "\d+"})
 	 */
 	public function getStoreAction(int $storeId): Response
 	{
@@ -303,6 +303,7 @@ class StoreRestController extends AbstractFOSRestController
 	 * @OA\Response(response="200", description="Success")
 	 * @OA\Response(response="401", description="Not logged in")
 	 * @OA\Response(response="403", description="Insufficient permissions to manage this store team")
+	 * @OA\Response(response="404", description="Store does not exist")
 	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Post("stores/{storeId}/members/{userId}")
@@ -311,6 +312,9 @@ class StoreRestController extends AbstractFOSRestController
 	{
 		if (!$this->session->id()) {
 			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
+		}
+		if (!$this->storeGateway->storeExists($storeId)) {
+			throw new NotFoundHttpException('Store does not exist.');
 		}
 		if (!$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new AccessDeniedHttpException();
