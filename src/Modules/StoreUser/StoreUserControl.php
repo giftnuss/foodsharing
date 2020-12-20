@@ -91,35 +91,7 @@ class StoreUserControl extends Control
 
 			if ($this->storePermissions->mayAccessStore($storeId)) {
 				if (!$store['verantwortlich']) {
-					if ($this->storePermissions->mayEditStore($storeId)) {
-						$extraResponsibility = true;
-						$extraMessage = "";
-
-						// this is duplicated from mayEditStore.
-						// mayEditStore does not tell us why we can edit the store,
-						// so to display the correct message, we have to do it all over again. Not ideal.
-						$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-						$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES_COORDINATION);
-						if (empty($storeGroup)) {
-							if ($this->session->isAdminFor($storeRegion)) {
-								$extraMessage = $this->translator->trans('storeedit.team.amb');
-							}
-						} elseif ($this->session->isAdminFor($storeGroup)) {
-							$extraMessage = $this->translator->trans('storeedit.team.coordinator');
-						}
-					} elseif ($this->session->may('orga')) {
-						$extraResponsibility = true;
-						$extraMessage = $this->translator->trans('storeedit.team.orga');
-					} else {
-						$extraResponsibility = false;
-					}
-
-					if ($extraResponsibility) {
-						$store['verantwortlich'] = true;
-						$this->flashMessageHelper->info(
-							'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
-							. $extraMessage);
-					}
+					$store['verantwortlich'] = $this->isResponsibleForThisStoreAnyways($storeId);
 				}
 
 				$this->dataHelper->setEditData($store);
@@ -364,5 +336,47 @@ class StoreUserControl extends Control
 			) . '
 		</div>'
 		);
+	}
+
+	/**
+	 * Certain users will be able to manage a store even if not explicitly listed as manager:
+	 * - all members of the 'store coordination' workgroup of the store's region
+	 * - all (direct) ambassadors of the region attached to the store
+	 * - members of the global orga team
+	 */
+	private function isResponsibleForThisStoreAnyways($storeId): bool
+	{
+		if ($this->storePermissions->mayEditStore($storeId)) {
+			$extraResponsibility = true;
+			$extraMessageKey = '';
+
+			// this is duplicated from mayEditStore.
+			// mayEditStore does not tell us why we can edit the store,
+			// so to display the correct message, we have to do it all over again. Not ideal.
+			$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+			$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES_COORDINATION);
+			if (empty($storeGroup)) {
+				if ($this->session->isAdminFor($storeRegion)) {
+					$extraMessageKey = 'storeedit.team.amb';
+				}
+			} elseif ($this->session->isAdminFor($storeGroup)) {
+				$extraMessageKey = 'storeedit.team.coordinator';
+			}
+		} elseif ($this->session->may('orga')) {
+			$extraResponsibility = true;
+			$extraMessageKey = 'storeedit.team.orga';
+		} else {
+			$extraResponsibility = false;
+			$extraMessageKey = '';
+		}
+
+		if ($extraResponsibility) {
+			$store['verantwortlich'] = true;
+			$this->flashMessageHelper->info(
+				'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
+				. $this->translator->trans($extraMessageKey));
+		}
+
+		return $extraResponsibility;
 	}
 }
