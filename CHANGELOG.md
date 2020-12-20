@@ -65,6 +65,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Fix a possible crash with reactions to deleted forum posts !1797 @ChrisOelmueller
 - Remove some unused global JS !1766 @ChrisOelmueller
 - Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
+- Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 @\_fridtjof_
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
