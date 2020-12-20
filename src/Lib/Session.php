@@ -29,6 +29,12 @@ class Session
 	private $loginGateway;
 	private $initialized = false;
 
+	// update this whenever adding new fields to the session!!!
+	// this should be a unix timestamp, together with a human readable date in a comment.
+	const LAST_SESSION_SCHEMA_CHANGE = 1608472800; // 2020-12-20 14:00:00 UTC
+
+	private const SESSION_TIMESTAMP_FIELD_NAME = 'last_updated_ts';
+
 	private const ROLE_KEYS = [
 		Role::FOODSHARER => 'user',
 		Role::FOODSAVER => 'fs',
@@ -62,6 +68,17 @@ class Session
 	{
 		if (isset($_COOKIE[session_name()]) && !$this->initialized) {
 			$this->init();
+
+			// to handle cases where (mainly, but this could help with other cases too)
+			// new fields get added to the session, this will force an update from the database
+			// if the session is older than the last time something was changed about the session fields
+			// an example for this: https://gitlab.com/foodsharing-dev/foodsharing/-/issues/1031
+			$last_update = $this->get(self::SESSION_TIMESTAMP_FIELD_NAME);
+			// $last_update can be 'false' if the session is older than when this mechanism was introduce
+			// - there will not be any timestamp to check
+			if ($last_update === false || $last_update < self::LAST_SESSION_SCHEMA_CHANGE) {
+				$this->refreshFromDatabase();
+			}
 		}
 	}
 
@@ -312,9 +329,15 @@ class Session
 		$this->refreshFromDatabase($fs_id);
 	}
 
+	/*
+	 * NOTE: if you change (or add) something in here, update LAST_SESSION_SCHEMA_CHANGE at the top of this class!
+	 */
 	public function refreshFromDatabase($fs_id = null): void
 	{
 		$this->checkInitialized();
+
+		// used by Session::initIfCookieExists to determine if it should call this method to update session data
+		$this->set(self::SESSION_TIMESTAMP_FIELD_NAME, time());
 
 		if ($fs_id === null) {
 			$fs_id = $this->id();
