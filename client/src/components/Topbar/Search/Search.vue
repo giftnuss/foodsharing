@@ -167,6 +167,8 @@ export default {
   #search-results {
     display: block;
     width: 250px;
+    max-height: 420px;
+    overflow-y: auto;
   }
   #topbar-search {
     .input-group {
