@@ -40,6 +40,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Fix a possible crash with reactions to deleted forum posts !1797 !1802 @ChrisOelmueller
 - Check if mail addresses are verified, allow sending out new verification mails #564 !1334 !1817 !1818 @pfaufisch @chriswalg
 - Fix a rare problem with push notification data !1798 @ChrisOelmueller
+- Fix javascript error when closing a chatbox before the conversation is loaded !1823 @alex.simm
 
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller

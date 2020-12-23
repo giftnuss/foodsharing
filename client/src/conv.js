@@ -223,7 +223,9 @@ const conv = {
 
   hideLoader: function (cid) {
     const key = this.getKey(cid)
-    this.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').removeClass('fa-spinner fa-spin').addClass('fa-comment fa-flip-horizontal')
+    if (key >= 0 && this.chatboxes[key] !== undefined) {
+      this.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').children('i').removeClass('fa-spinner fa-spin').addClass('fa-comment fa-flip-horizontal')
+    }
   },
 
   /**
@@ -286,10 +288,12 @@ const conv = {
   */
     let ownMessageClass = ''
     if (message.authorId === serverData.user.id) { ownMessageClass = ' my-message' }
-    conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(
-      `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`,
-    )
+    if (key >= 0 && conv.chatboxes[key] !== undefined) {
+      conv.chatboxes[key].last_mid = parseInt(message.id)
+      conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(
+        `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`,
+      )
+    }
   },
 
   /**
@@ -324,7 +328,9 @@ const conv = {
         title = title.join(', ')
       }
 
-      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
+      if (key >= 0 && conv.chatboxes[key] !== undefined) {
+        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
+      }
 
       /*
        * now append all arrived messages
