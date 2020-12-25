@@ -287,10 +287,10 @@ export default {
           await moveMemberToRegularTeam(this.storeId, fsId)
         }
       } catch (e) {
-        console.error(e)
         pulseError(i18n('error_unexpected'))
+        this.isBusy = false
+        return
       }
-      this.isBusy = false
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
@@ -300,6 +300,7 @@ export default {
         fs._showDetails = false
         this.$set(this.team, index, fs)
       }
+      this.isBusy = false
     },
     async removeFromTeam (fsId, fsName) {
       if (!fsId) {
@@ -313,8 +314,9 @@ export default {
       try {
         await removeStoreMember(this.storeId, fsId)
       } catch (e) {
-        console.error(e)
         pulseError(i18n('error_unexpected'))
+        this.isBusy = false
+        return
       }
       const index = this.foodsaver.findIndex(member => member.id === fsId)
       if (index >= 0) {
@@ -330,10 +332,10 @@ export default {
       try {
         await promoteToStoreManager(this.storeId, fsId)
       } catch (e) {
-        console.error(e)
         pulseError(i18n('error_unexpected'))
+        this.isBusy = false
+        return
       }
-      this.isBusy = false
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
@@ -342,6 +344,7 @@ export default {
         fs._showDetails = false
         this.$set(this.team, index, fs)
       }
+      this.isBusy = false
     },
     async demoteAsManager (fsId, fsName) {
       if (!fsId) {
@@ -354,10 +357,10 @@ export default {
       try {
         await demoteAsStoreManager(this.storeId, fsId)
       } catch (e) {
-        console.error(e)
         pulseError(i18n('error_unexpected'))
+        this.isBusy = false
+        return
       }
-      this.isBusy = false
       const index = this.team.findIndex(fs => fs.id === fsId)
       if (index >= 0) {
         const fs = this.foodsaver[index]
@@ -366,6 +369,7 @@ export default {
         fs._showDetails = false
         this.$set(this.team, index, fs)
       }
+      this.isBusy = false
     },
     /* eslint-disable brace-style */
     pickupSortFunction (a, b, key, directionDesc) {
