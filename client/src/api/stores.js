@@ -80,7 +80,7 @@ export async function acceptStoreRequest (storeId, userId, moveToStandby) {
   return patch(`/stores/${storeId}/requests/${userId}`, { moveToStandby })
 }
 
-export async function removeStoreRequest (storeId, userId) {
+export async function declineStoreRequest (storeId, userId) {
   return remove(`/stores/${storeId}/requests/${userId}`)
 }
 

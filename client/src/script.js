@@ -9,7 +9,7 @@ import 'jquery-ui-addons'
 
 import { GET, goTo, isMob } from '@/browser'
 import conv from '@/conv'
-import { requestStoreTeamMembership, removeStoreRequest } from '@/api/stores'
+import { requestStoreTeamMembership, declineStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
 import { u_printChildBezirke } from '@/becomeBezirk'
 
@@ -518,7 +518,7 @@ export async function withdrawStoreRequest (storeId, userId) {
   showLoader()
 
   try {
-    await removeStoreRequest(storeId, userId)
+    await declineStoreRequest(storeId, userId)
     pulseSuccess(i18n('store.request.withdrawn'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))

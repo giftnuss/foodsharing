@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { acceptStoreRequest, removeStoreRequest } from '@/api/stores'
+import { acceptStoreRequest, declineStoreRequest } from '@/api/stores'
 import Avatar from '@/components/Avatar'
 import i18n from '@/i18n'
 import { hideLoader, showLoader, pulseError, reload } from '@/script'
@@ -100,7 +100,7 @@ export default {
     async denyRequest (storeId, userId, index) {
       showLoader()
       try {
-        await removeStoreRequest(storeId, userId)
+        await declineStoreRequest(storeId, userId)
         this.$delete(this.requests, index)
       } catch (e) {
         pulseError(i18n('error_unexpected'))

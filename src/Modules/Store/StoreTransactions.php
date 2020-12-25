@@ -320,9 +320,9 @@ class StoreTransactions
 	}
 
 	/**
-	 * Removes (denies) a user's request for a store and creates a bell notification for that user.
+	 * Rejects (denies) a user's request for a store and creates a bell notification for that user.
 	 */
-	public function removeStoreRequest(int $storeId, int $userId): void
+	public function declineStoreRequest(int $storeId, int $userId): void
 	{
 		// userId = affected user, sessionId = active user
 		// => don't add a bell notification if the request was withdrawn by the user

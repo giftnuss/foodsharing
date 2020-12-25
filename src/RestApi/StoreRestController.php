@@ -270,7 +270,7 @@ class StoreRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("stores/{storeId}/requests/{userId}")
 	 */
-	public function removeStoreRequestAction(int $storeId, int $userId): Response
+	public function declineStoreRequestAction(int $storeId, int $userId): Response
 	{
 		$sessionId = $this->session->id();
 		if (!$sessionId) {
@@ -283,7 +283,7 @@ class StoreRestController extends AbstractFOSRestController
 			throw new HttpException(404);
 		}
 
-		$this->storeTransactions->removeStoreRequest($storeId, $userId);
+		$this->storeTransactions->declineStoreRequest($storeId, $userId);
 
 		if ($this->session->id() == $userId) {
 			$LogAction = StoreLogAction::REQUEST_CANCELLED;
