@@ -30,6 +30,7 @@
 - New look for event header panels and dashboard invitations including the event's region #992 !1717 #1079 !1940 #1075 !1943 @chriswalg @ChrisOelmueller @fs_k
 - Use new upload API for profile photos !1916 !1929 !1932 !1933 @alex.simm
 - Request region children for the region picker from a new endpoint !1934 !1949 #823 @alex.simm
+- Remove StoreModel remains, introduce DTO for editing stores !1814 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update some frontend dependencies !1892 @chriswalg
@@ -121,11 +122,7 @@
 - Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
 - Use more general queries in the nightly stats calculation for stores !1871 #622 #9 @alex.simm
-- Reimplement store-team management actions in REST, remove more StoreModel parts !1810 @ChrisOelmueller
-- Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
-- Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
-- Reimplement store-team management actions in REST, remove more StoreModel parts !1810 !1811 @ChrisOelmueller
-- Remove StoreModel remains, introduce DTO for editing stores !1814 @ChrisOelmueller
+
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 !1882 @\_fridtjof_

@@ -286,7 +286,7 @@ class StoreTransactions
 	}
 
 	/**
-	 * Accepts a user's request to join a store, and moves the user to the standby team.
+	 * Accepts a user's request to join a store, and moves the user to the standby team if desired.
 	 * This creates a bell notification for that user, adds an entry to the store log,
 	 * and makes sure the user is in the store's region.
 	 *
@@ -428,18 +428,14 @@ class StoreTransactions
 
 	private function addUserToStore(int $storeId, int $userId, bool $moveToStandby): void
 	{
-		// add user to the team
 		$this->storeGateway->addUserToTeam($storeId, $userId);
 
-		// and user to the team's conversation (the standby case is handled by its own transaction)
-		if (!$moveToStandby) {
-			$teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId);
-			if ($teamChatConversationId) {
-				$this->messageGateway->addUserToConversation($teamChatConversationId, $userId);
-			}
+		if ($moveToStandby) {
+			$this->moveMemberToStandbyTeam($storeId, $userId);
+		} else {
+			$this->moveMemberToRegularTeam($storeId, $userId);
 		}
 
-		// add a note the store wall
 		$this->storeGateway->add_betrieb_notiz([
 			'foodsaver_id' => $userId,
 			'betrieb_id' => $storeId,
@@ -447,10 +443,6 @@ class StoreTransactions
 			'zeit' => date('Y-m-d H:i:s'),
 			'milestone' => Milestone::ACCEPTED,
 		]);
-
-		if ($moveToStandby) {
-			$this->moveMemberToStandbyTeam($storeId, $userId);
-		}
 	}
 
 	/**
