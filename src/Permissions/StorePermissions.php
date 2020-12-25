@@ -4,6 +4,7 @@ namespace Foodsharing\Permissions;
 
 use Carbon\Carbon;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus as StoreTeamStatus;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
@@ -30,6 +31,10 @@ class StorePermissions
 		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
+	/**
+	 * Assumes that the given user is a foodsaver (i.e. can join store teams).
+	 * Just the additional permissions for the given, specific store are checked.
+	 */
 	public function mayJoinStoreRequest(int $storeId, ?int $userId = null): bool
 	{
 		$userId ??= $this->session->id();
@@ -50,6 +55,30 @@ class StorePermissions
 		}
 
 		return true;
+	}
+
+	public function mayAddUserToStoreTeam(int $storeId, int $userId, int $userRole): bool
+	{
+		if (!$this->mayEditStoreTeam($storeId)) {
+			return false;
+		}
+		if ($this->storeGateway->getUserTeamStatus($userId, $storeId) !== UserTeamStatus::NoMember) {
+			return false;
+		}
+
+		return $userRole >= Role::FOODSAVER;
+	}
+
+	/**
+	 * Does not check if the given user is part of the store team.
+	 * If that is not guaranteed, you will need to verify membership yourself.
+	 */
+	public function mayLeaveStoreTeam(int $storeId, int $userId): bool
+	{
+		$currentManagers = $this->storeGateway->getStoreManagers($storeId);
+		$isManager = in_array($userId, $currentManagers, true);
+
+		return !$isManager;
 	}
 
 	public function mayAccessStore(int $storeId): bool
@@ -273,30 +302,36 @@ class StorePermissions
 	 * This permission roughly assumes that both user and store exist.
 	 * If that is not guaranteed, you will need to check existence in the callers!
 	 */
-	public function mayBecomeStoreManager(array $store, int $userId): bool
+	public function mayBecomeStoreManager(int $storeId, int $userId, int $userRole): bool
 	{
+		$currentManagers = $this->storeGateway->getStoreManagers($storeId);
+
 		// at most three managers are allowed right now
-		if (count($store['verantwortlicher']) >= 3) {
+		if (count($currentManagers) >= 3) {
 			return false;
 		}
 
-		$alreadyManager = in_array($userId, $store['verantwortlicher'], true);
-		if ($alreadyManager) {
+		$isAlreadyManager = in_array($userId, $currentManagers, true);
+		if ($isAlreadyManager) {
 			return false;
 		}
 
-		return $this->session->may('bieb');
+		return $userRole >= Role::STORE_MANAGER;
 	}
 
 	public function mayLoseStoreManagement(int $storeId, int $userId): bool
 	{
-		// TODO FIXME this should check the relevant cases that would prevent a demotion
-		return true;
-	}
+		$currentManagers = $this->storeGateway->getStoreManagers($storeId);
+		$isManager = in_array($userId, $currentManagers, true);
+		if (!$isManager) {
+			return false;
+		}
 
-	public function mayLeaveStoreTeam(int $storeId, int $userId, array $store): bool
-	{
-		// TODO FIXME this should check the relevant cases that would prevent leaving
+		// at least one other manager needs to remain after leaving
+		if (count($currentManagers) <= 1) {
+			return false;
+		}
+
 		return true;
 	}
 }

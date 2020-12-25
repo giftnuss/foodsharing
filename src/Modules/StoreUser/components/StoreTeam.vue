@@ -171,7 +171,7 @@
               </b-button>
 
               <b-button
-                v-if="mayEditStore && !data.item.isManager"
+                v-if="mayRemoveFromStore(data.item)"
                 size="sm"
                 variant="danger"
                 :block="!(wXS || wSM)"
@@ -261,6 +261,11 @@ export default {
           pulseSuccess(i18n('pickup.copiedNumber', { number: text }))
         })
       }
+    },
+    mayRemoveFromStore (user) {
+      if (user.isManager) return false
+      if (user.id === this.fsId) return true
+      return this.mayEditStore
     },
     toggleActions (row) {
       const wasOpen = row.detailsShowing

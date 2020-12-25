@@ -840,6 +840,11 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function getRole(int $fsId): int
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'rolle', ['id' => $fsId]);
+	}
+
 	public function getSubscriptions(int $fsId): array
 	{
 		return $this->db->fetchByCriteria(

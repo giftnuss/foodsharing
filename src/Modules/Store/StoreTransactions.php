@@ -355,10 +355,6 @@ class StoreTransactions
 
 	public function makeMemberResponsible(int $storeId, int $userId): void
 	{
-		// check if there is room for one more
-		// check $fs['rolle'] >= Role::STORE_MANAGER
-		// check $fs['quiz_rolle'] or unify those two..........
-
 		$this->storeGateway->addStoreManager($storeId, $userId);
 		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, StoreLogAction::APPOINT_STORE_MANAGER);
 

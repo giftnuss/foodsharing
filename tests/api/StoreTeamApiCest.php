@@ -60,15 +60,12 @@ class StoreTeamApiCest
 	/**
 	 * Test removing regular team members and standby team members.
 	 *
-	 * @example { "isManager": false, "isStandby": false }
-	 * @example { "isManager": false, "isStandby": true }
-	 * Because the store still has another manager, $this->manager, other managers can also be removed:
-	 * @example { "isManager": true, "isStandby": false }
-	 * @example { "isManager": true, "isStandby": true }
+	 * @example { "isStandby": false }
+	 * @example { "isStandby": true }
 	 */
 	public function canRemoveTeamMember(ApiTester $I, Example $example): void
 	{
-		$I->addStoreTeam($this->store['id'], $this->user['id'], $example['isManager'], $example['isStandby']);
+		$I->addStoreTeam($this->store['id'], $this->user['id'], false, $example['isStandby']);
 
 		$I->login($this->manager['email']);
 		$I->sendDELETE(self::API_STORES . $this->store['id'] . '/members/' . $this->user['id']);
@@ -80,22 +77,33 @@ class StoreTeamApiCest
 		]);
 	}
 
-	public function cannotRemoveLastManager(ApiTester $I): void
+	/**
+	 * @example { "isStandby": false }
+	 * @example { "isStandby": true }
+	 */
+	public function cannotRemoveManager(ApiTester $I, Example $example): void
 	{
+		$I->addStoreTeam($this->store['id'], $this->manager2['id'], true, $example['isStandby']);
+
 		$I->login($this->manager['email']);
-		$I->sendDELETE(self::API_STORES . $this->store['id'] . '/members/' . $this->manager['id']);
-		$I->seeResponseCodeIs(Http::CONFLICT);
+		$I->sendDELETE(self::API_STORES . $this->store['id'] . '/members/' . $this->manager2['id']);
+		$I->seeResponseCodeIs(Http::UNPROCESSABLE_ENTITY);
 
 		$I->seeInDatabase('fs_betrieb_team', [
 			'betrieb_id' => $this->store['id'],
-			'foodsaver_id' => $this->user['id'],
+			'foodsaver_id' => $this->manager2['id'],
 			'verantwortlich' => 1,
-			'active' => STATUS::MEMBER,
 		]);
 	}
 
-	public function canPromoteToManager(ApiTester $I): void
+	/**
+	 * @example { "isStandby": false }
+	 * @example { "isStandby": true }
+	 */
+	public function canPromoteToManager(ApiTester $I, Example $example): void
 	{
+		$I->addStoreTeam($this->store['id'], $this->manager2['id'], false, $example['isStandby']);
+
 		$I->login($this->manager['email']);
 		$I->sendPATCH(self::API_STORES . $this->store['id'] . '/managers/' . $this->manager2['id']);
 		$I->seeResponseCodeIs(Http::OK);
@@ -110,9 +118,11 @@ class StoreTeamApiCest
 
 	public function cannotPromoteToManager(ApiTester $I): void
 	{
+		$I->addStoreTeam($this->store['id'], $this->user['id'], false, false);
+
 		$I->login($this->manager['email']);
 		$I->sendPATCH(self::API_STORES . $this->store['id'] . '/managers/' . $this->user['id']);
-		$I->seeResponseCodeIs(Http::CONFLICT);
+		$I->seeResponseCodeIs(Http::UNPROCESSABLE_ENTITY);
 
 		$I->seeInDatabase('fs_betrieb_team', [
 			'betrieb_id' => $this->store['id'],
@@ -142,11 +152,11 @@ class StoreTeamApiCest
 	{
 		$I->login($this->manager['email']);
 		$I->sendDELETE(self::API_STORES . $this->store['id'] . '/managers/' . $this->manager['id']);
-		$I->seeResponseCodeIs(Http::CONFLICT);
+		$I->seeResponseCodeIs(Http::UNPROCESSABLE_ENTITY);
 
 		$I->seeInDatabase('fs_betrieb_team', [
 			'betrieb_id' => $this->store['id'],
-			'foodsaver_id' => $this->user['id'],
+			'foodsaver_id' => $this->manager['id'],
 			'verantwortlich' => 1,
 			'active' => STATUS::MEMBER,
 		]);
