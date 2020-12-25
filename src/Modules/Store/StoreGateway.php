@@ -527,12 +527,10 @@ class StoreGateway extends BaseGateway
 					ON fs.id = t.foodsaver_id
 
 			WHERE 	t.`betrieb_id` = :storeId
-					AND t.active = :membershipStatus
 					AND t.verantwortlich = 1
 					AND fs.deleted_at IS NULL
 		', [
 			':storeId' => $storeId,
-			':membershipStatus' => MembershipStatus::MEMBER
 		]);
 	}
 

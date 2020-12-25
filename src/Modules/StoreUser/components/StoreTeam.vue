@@ -149,7 +149,7 @@
               </b-button>
 
               <b-button
-                v-if="managementModeEnabled && data.item.mayManage && !data.item.isManager"
+                v-if="managementModeEnabled && mayBecomeManager(data.item)"
                 size="sm"
                 variant="warning"
                 :block="!(wXS || wSM)"
@@ -160,7 +160,7 @@
               </b-button>
 
               <b-button
-                v-if="managementModeEnabled && data.item.mayManage && data.item.isManager"
+                v-if="managementModeEnabled && data.item.isManager"
                 size="sm"
                 variant="outline-primary"
                 :block="!(wXS || wSM)"
@@ -266,6 +266,11 @@ export default {
       if (user.isManager) return false
       if (user.id === this.fsId) return true
       return this.mayEditStore
+    },
+    mayBecomeManager (user) {
+      if (!user.mayManage) return false
+      if (user.isJumper) return false
+      return !user.isManager
     },
     toggleActions (row) {
       const wasOpen = row.detailsShowing
