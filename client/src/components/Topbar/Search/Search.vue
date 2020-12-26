@@ -2,8 +2,7 @@
   <div
     id="topbar-search"
     class="form flex-grow-1"
-    :class="{'d-none d-md-flex': !showOnMobile,
-             'my-2': showOnMobile}"
+    :class="[showOnMobile ? 'my-2' : 'd-none d-md-flex']"
   >
     <div
       ref="inputgroup"
@@ -167,8 +166,9 @@ export default {
   #search-results {
     display: block;
     width: 250px;
-    max-height: 420px;
+    max-height: 80vh;
     overflow-y: auto;
+    box-shadow: 0 2px 3px 1px var(--border);
   }
   #topbar-search {
     .input-group {
