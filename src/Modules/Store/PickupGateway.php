@@ -229,7 +229,7 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->getOnetimePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getOnetimePickupsForRange(int $storeId, \DateTime $from, ?\DateTime $to)
+	private function getOnetimePickupsForRange(int $storeId, \DateTime $from, ?\DateTime $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,

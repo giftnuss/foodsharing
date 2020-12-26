@@ -136,20 +136,23 @@ class StoreTransactions
 	 */
 	public function changePickupSlots(int $storeId, \DateTimeInterface $date, int $newTotalSlots): bool
 	{
+		if ($newTotalSlots < 0 || $newTotalSlots > self::MAX_SLOTS_PER_PICKUP) {
+			return false;
+		}
+
 		$occupiedSlots = count($this->pickupGateway->getPickupSignupsForDate($storeId, $date));
-		$pickups = $this->pickupGateway->getOnetimePickupsForRange($storeId, $date, $date);
-		if (!$pickups) {
-			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->pickupGateway->addOnetimePickup($storeId, $date, $newTotalSlots);
-			} else {
-				return false;
-			}
+
+		// cannot remove excess slots if people are signed into them
+		if ($newTotalSlots < $occupiedSlots) {
+			return false;
+		}
+
+		$filledOnetimeSlots = $this->pickupGateway->getOnetimePickups($storeId, $date);
+
+		if ($filledOnetimeSlots) {
+			$this->pickupGateway->updateOnetimePickupTotalSlots($storeId, $date, $newTotalSlots);
 		} else {
-			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->pickupGateway->updateOnetimePickupTotalSlots($storeId, $date, $newTotalSlots);
-			} else {
-				return false;
-			}
+			$this->pickupGateway->addOnetimePickup($storeId, $date, $newTotalSlots);
 		}
 
 		return true;
