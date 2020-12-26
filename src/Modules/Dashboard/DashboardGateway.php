@@ -23,18 +23,4 @@ class DashboardGateway extends BaseGateway
 				WHERE id = :id
 			', [':id' => $id]);
 	}
-
-	/**
-	 * Returns if any store from the list of store IDs is not assigned to a valid district.
-	 */
-	public function hasStoresWithoutDistrict(array $storeIds): bool
-	{
-		return $this->db->exists('fs_betrieb', [
-			'id' => $storeIds,
-			'bezirk_id' => 0,
-		]) || $this->db->exists('fs_betrieb', [
-			'id' => $storeIds,
-			'bezirk_id' => null,
-		]);
-	}
 }

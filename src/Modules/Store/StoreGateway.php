@@ -870,11 +870,7 @@ class StoreGateway extends BaseGateway
 
 	public function updateStoreRegion(int $storeId, int $regionId): int
 	{
-		return $this->db->update('fs_betrieb', [
-			'bezirk_id' => $regionId
-		], [
-			'id' => $storeId
-		]);
+		return $this->db->update('fs_betrieb', ['bezirk_id' => $regionId], ['id' => $storeId]);
 	}
 
 	public function updateStoreConversation(int $storeId, int $conversationId, bool $isStandby): int

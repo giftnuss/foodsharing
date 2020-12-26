@@ -231,16 +231,7 @@ class DashboardControl extends Control
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 
-		/*
-		 * check if there are stores not bound to a region
-		 */
-		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$storeIds = array_column($_SESSION['client']['verantwortlich'], 'betrieb_id');
-			if ($this->dashboardGateway->hasStoresWithoutDistrict($storeIds)) {
-				$this->pageHelper->addJs('ajax.req("betrieb", "setbezirkids");');
-			}
-		}
-
+		/* Invitations */
 		if ($invites = $this->eventGateway->getEventInvitations($this->session->id())) {
 			$this->pageHelper->addContent($this->eventView->dashboardEventPanels($invites, true));
 		}
