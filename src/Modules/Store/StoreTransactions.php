@@ -166,20 +166,27 @@ class StoreTransactions
 		}
 
 		$pickupSlots = $this->pickupGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
-		if (count($pickupSlots) == 1 && $pickupSlots[0]['isAvailable']) {
-			/* expect a free slot */
-			if ($fsId) {
-				if (!empty(array_filter($pickupSlots[0]['occupiedSlots'],
-					function ($e) use ($fsId) { return $e['foodsaverId'] === $fsId; }))) {
-					/* when a user is provided, that user must not already be signed up */
-					return false;
-				}
-			}
 
-			return true;
+		// expect exactly one pickup for this "range" query
+		if (count($pickupSlots) === 1) {
+			$pickup = $pickupSlots[0];
+		} else {
+			return false;
 		}
 
-		return false;
+		// check if there are any free slots
+		if (!$pickup['isAvailable']) {
+			return false;
+		}
+
+		// when a user is provided, that user must not already be signed up
+		if ($fsId) {
+			$signedUpFoodsaverIds = array_column($pickup['occupiedSlots'], 'foodsaverId');
+
+			return !in_array($fsId, $signedUpFoodsaverIds);
+		}
+
+		return true;
 	}
 
 	/**
