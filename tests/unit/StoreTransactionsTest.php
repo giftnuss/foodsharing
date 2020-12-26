@@ -35,12 +35,18 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
 		$dow = $date->weekday();
 		$fetcher = 2;
+
 		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => $fetcher]);
-		$this->assertTrue($this->transactions->pickupSlotAvailable($store['id'], $date, $this->foodsaver['id']));
+
+		$this->assertEquals($fetcher, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date, $this->foodsaver['id']));
+
 		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
-		$this->assertTrue($this->transactions->pickupSlotAvailable($store['id'], $date, $foodsaver2['id']));
+
+		$this->assertEquals(0, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date, $this->foodsaver['id']));
+		$this->assertEquals($fetcher, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date, $foodsaver2['id']));
+
 		$this->tester->addCollector($foodsaver2['id'], $store['id'], ['date' => $date]);
-		$this->assertFalse($this->transactions->pickupSlotAvailable($store['id'], $date));
+		$this->assertEquals(0, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date));
 	}
 
 	public function testPickupSlotAvailableMixed()
@@ -48,23 +54,34 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$store = $this->tester->createStore($this->region_id);
 		$date = Carbon::now()->add('3 days')->hours(16)->minutes(40)->seconds(0)->microseconds(0);
 		$dow = $date->format('w');
-		$this->tester->addRecurringPickup($store['id'], ['time' => '16:40:00', 'dow' => $dow, 'fetcher' => 2]);
-		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => 1]);
-		$this->assertTrue($this->transactions->pickupSlotAvailable($store['id'], $date));
+
+		$fetcher = 2;
+		$this->tester->addRecurringPickup($store['id'], ['time' => '16:40:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+
+		$fetchercount = 1;
+		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetchercount]);
+		$this->assertEquals($fetchercount, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date));
+
 		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
-		$this->assertFalse($this->transactions->pickupSlotAvailable($store['id'], $date));
+
+		$this->assertEquals(0, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date, $this->foodsaver['id']));
+		$this->assertEquals(0, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date));
 	}
 
 	public function testSinglePickupTimeProperlyTakenIntoAccount()
 	{
 		$store = $this->tester->createStore($this->region_id);
 		$user = $this->tester->createFoodsaver();
+
 		$date = Carbon::instance($this->faker->dateTimeInInterval('+2 days', '+10 days'));
 		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => 1]);
+
 		$date2 = $date->copy()->addHours(1);
 		$this->tester->addPickup($store['id'], ['time' => $date2, 'fetchercount' => 1]);
+
 		$this->assertFalse($this->transactions->joinPickup($store['id'], $date, $this->foodsaver['id']));
 		$this->expectException(DomainException::class);
+
 		$this->transactions->joinPickup($store['id'], $date, $user['id']);
 	}
 
@@ -73,7 +90,7 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$store = $this->tester->createStore($this->region_id);
 		$date = Carbon::now()->add('1 day')->microseconds(0);
 
-		$this->assertFalse($this->transactions->pickupSlotAvailable($store['id'], $date));
+		$this->assertEquals(0, $this->transactions->totalSlotsIfPickupSlotAvailable($store['id'], $date));
 	}
 
 	public function testUserCanOnlySignupOncePerSlot()
@@ -82,9 +99,12 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$date = Carbon::now()->add('4 days')->hours(16)->minutes(20)->seconds(0)->microseconds(0);
 		$dow = $date->format('w');
 		$fetcher = 2;
+
 		$this->tester->addRecurringPickup($store['id'], ['time' => '16:20:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+
 		$this->assertFalse($this->transactions->joinPickup($store['id'], $date, $this->foodsaver['id']));
 		$this->expectException(DomainException::class);
+
 		$this->transactions->joinPickup($store['id'], $date, $this->foodsaver['id']);
 	}
 
@@ -92,8 +112,12 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 	{
 		$store = $this->tester->createStore($this->region_id);
 		$pickup = new Carbon('1 hour ago');
-		$this->tester->addPickup($store['id'], ['time' => $pickup, 'fetchercount' => 1]);
+		$fetchercount = 1;
+
+		$this->tester->addPickup($store['id'], ['time' => $pickup, 'fetchercount' => $fetchercount]);
+
 		$this->expectException(DomainException::class);
+
 		$this->transactions->joinPickup($store['id'], $pickup, $this->foodsaver['id']);
 	}
 
@@ -101,12 +125,22 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 	{
 		$interval = CarbonInterval::weeks(3);
 		$store = $this->tester->createStore($this->region_id, null, null, ['prefetchtime' => $interval->totalSeconds - 360]);
+
 		/* that pickup is now at least some minutes too much in the future to sign up */
 		$pickup = Carbon::tomorrow()->add($interval)->microseconds(0);
+
 		/* use recurring pickup here because signing up for single pickups should work indefinitely */
-		$this->tester->addRecurringPickup($store['id'], ['time' => $pickup->toTimeString(), 'dow' => $pickup->weekday(), 'fetcher' => 1]);
+		$fetcher = 1;
+		$this->tester->addRecurringPickup($store['id'], [
+			'time' => $pickup->toTimeString(),
+			'dow' => $pickup->weekday(),
+			'fetcher' => $fetcher,
+		]);
+
 		$this->expectException(DomainException::class);
+
 		$this->transactions->joinPickup($store['id'], $pickup, $this->foodsaver['id']);
+
 		$this->assertFalse($this->transactions->joinPickup($store['id'], $pickup->sub('1 week'), $this->foodsaver['id']));
 	}
 
@@ -114,10 +148,13 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 	{
 		$interval = CarbonInterval::weeks(3);
 		$store = $this->tester->createStore($this->region_id, null, null, ['prefetchtime' => $interval->totalSeconds - 360]);
+
 		/* that pickup is now at least some minutes too much in the future to sign up */
 		$pickup = Carbon::now()->add($interval)->microseconds(0);
+
 		/* use single pickup, which should work indefinitely */
 		$this->tester->addPickup($store['id'], ['time' => $pickup, 'fetchercount' => 1]);
+
 		$this->assertFalse($this->transactions->joinPickup($store['id'], $pickup, $this->foodsaver['id']));
 	}
 
@@ -147,11 +184,12 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 			'fs_bell',
 			['expiration' => '1970-01-01 00:00:00'],
 			['identifier' => BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $store['id'])]
-		); // outdate bell notification
-
+		);
+		// expire bell notification
 		$this->gateway->updateExpiredBells();
 
-		$this->tester->seeInDatabase('fs_bell', ['vars like' => '%"count";i:1;%']); // The bell should have a count of 1 now - vars are serialized, that's why it looks so strange
+		// The bell should have a count of 1 now - vars are serialized, that's why it looks so strange
+		$this->tester->seeInDatabase('fs_bell', ['vars like' => '%"count";i:1;%']);
 	}
 
 	/**

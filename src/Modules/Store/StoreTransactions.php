@@ -158,11 +158,18 @@ class StoreTransactions
 		return true;
 	}
 
-	public function pickupSlotAvailable(int $storeId, Carbon $pickupDate, int $fsId = null): bool
+	/**
+	 * Checks whether there are slots available to sign into for one specific pickupDate in a store.
+	 *
+	 * @param ?int $fsId Check whether this specific user could sign into a slot for this date
+	 *
+	 * @return int 0 if no available slot, else the number of *total* slots (NOT available slots) for this date
+	 */
+	public function totalSlotsIfPickupSlotAvailable(int $storeId, Carbon $pickupDate, ?int $fsId = null): int
 	{
+		// do not allow signing up for past pickups
 		if ($pickupDate < Carbon::now()) {
-			/* do not allow signing up for past pickups */
-			return false;
+			return 0;
 		}
 
 		$pickupSlots = $this->pickupGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
@@ -171,22 +178,23 @@ class StoreTransactions
 		if (count($pickupSlots) === 1) {
 			$pickup = $pickupSlots[0];
 		} else {
-			return false;
+			return 0;
 		}
 
 		// check if there are any free slots
 		if (!$pickup['isAvailable']) {
-			return false;
+			return 0;
 		}
 
 		// when a user is provided, that user must not already be signed up
 		if ($fsId) {
 			$signedUpFoodsaverIds = array_column($pickup['occupiedSlots'], 'foodsaverId');
-
-			return !in_array($fsId, $signedUpFoodsaverIds);
+			if (in_array($fsId, $signedUpFoodsaverIds)) {
+				return 0;
+			}
 		}
 
-		return true;
+		return $pickup['totalSlots'];
 	}
 
 	/**
@@ -238,11 +246,11 @@ class StoreTransactions
 		$confirmed = $this->pickupIsPreconfirmed($storeId, $issuerId);
 
 		/* Never occupy more slots than available */
-		if (!$this->pickupSlotAvailable($storeId, $date, $fsId)) {
+		if ($totalSlots = $this->totalSlotsIfPickupSlotAvailable($storeId, $date, $fsId)) {
+			$this->pickupGateway->addFetcher($fsId, $storeId, $date, $confirmed);
+		} else {
 			throw new \DomainException('No pickup slot available');
 		}
-
-		$this->pickupGateway->addFetcher($fsId, $storeId, $date, $confirmed);
 
 		return $confirmed;
 	}
