@@ -14,7 +14,6 @@ class Db
 	 * @var mysqli
 	 */
 	private $mysqli;
-	private $values;
 
 	/**
 	 * @var DebugBar
@@ -35,11 +34,6 @@ class Db
 	 * @var InfluxMetrics
 	 */
 	protected $influxMetrics;
-
-	public function __construct()
-	{
-		$this->values = [];
-	}
 
 	/**
 	 * @required
@@ -252,21 +246,5 @@ class Db
 			FROM 	`fs_' . $table . '`
 			WHERE 	`id` = ' . (int)$id . '
 		');
-	}
-
-	/**
-	 * @deprecated use db->fetchValueByCriteria instead if value is expected to exist, use db->fetchByCriteria instead
-	 */
-	public function getVal($field, $table, $id)
-	{
-		if (!isset($this->values[$field . '-' . $table . '-' . $id])) {
-			$this->values[$field . '-' . $table . '-' . $id] = $this->qOne('
-			SELECT 	`' . $field . '`
-			FROM 	`fs_' . $table . '`
-			WHERE 	`id` = ' . (int)$id . '
-		');
-		}
-
-		return $this->values[$field . '-' . $table . '-' . $id];
 	}
 }
