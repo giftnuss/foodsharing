@@ -25,12 +25,16 @@ class DashboardGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns the number of stores from the list of store IDs that are not assigned to a district.
+	 * Returns if any store from the list of store IDs is not assigned to a valid district.
 	 */
-	public function countStoresWithoutDistrict(array $storeIds): int
+	public function hasStoresWithoutDistrict(array $storeIds): bool
 	{
-		return (int)$this->db->fetchValue('SELECT COUNT(*) FROM fs_betrieb WHERE id IN('
-			. implode(',', $storeIds)
-			. ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)');
+		return $this->db->exists('fs_betrieb', [
+			'id' => $storeIds,
+			'bezirk_id' => 0,
+		]) || $this->db->exists('fs_betrieb', [
+			'id' => $storeIds,
+			'bezirk_id' => null,
+		]);
 	}
 }
