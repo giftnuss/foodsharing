@@ -248,6 +248,8 @@ class StoreTransactions
 		/* Never occupy more slots than available */
 		if ($totalSlots = $this->totalSlotsIfPickupSlotAvailable($storeId, $date, $fsId)) {
 			$this->pickupGateway->addFetcher($fsId, $storeId, $date, $confirmed);
+			// [#860] convert to manual slot, so they don't vanish when changing the schedule
+			$this->changePickupSlots($storeId, $date, $totalSlots);
 		} else {
 			throw new \DomainException('No pickup slot available');
 		}
