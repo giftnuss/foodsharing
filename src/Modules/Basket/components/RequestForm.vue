@@ -1,9 +1,7 @@
 <template>
-  <div
-    :class="{disabledLoading: isLoading}"
-  >
+  <div :class="{disabledLoading: isLoading}">
     <div class="ui-padding-bottom">
-      <h5>{{ $i18n('personal_data.label') }}:</h5>
+      <h3>{{ $i18n('personal_data.label') }}:</h3>
       <span
         v-if="mobileNumber"
       >

@@ -71,6 +71,11 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
 
     .card.rounded {
         background: none;
+
+        > * {
+            background-color: white;
+        }
+
         .card-header {
             font-family: Helvetica, Arial, "lucida grande", tahoma, verdana, arial, sans-serif;
             font-weight: bold;
@@ -86,28 +91,20 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
             border-radius: 6px;
         }
     }
-    .card.rounded > * {
-        background-color: #fff;
-    }
-
-    .btn {
-        cursor: pointer;
-    }
 
     .btn-sm, .btn-group-sm > .btn {
         font-size: 0.7rem;
     }
+
     .btn-secondary, a:not([href]):not([tabindex]).btn-secondary {
         color: white;
     }
 
-
     .input-group {
-
         .input-group-text {
-        background-color: white;
-        border: none;
-        font-size: 0.9rem;
+            background-color: white;
+            border: none;
+            font-size: 0.9rem;
         }
 
         input.form-control {
@@ -121,12 +118,9 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         }
     }
 
-   // exception to text-truncate class for message dropdown
-
+    // exception to text-truncate class for message dropdown
     .scroll-container > a > .row p.text-truncate {
-        text-overflow: ellipsis;
         white-space: normal;
-        overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -134,11 +128,16 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         line-height: 1.2em;
     }
 
-    // increases the priority of this position statement
-    // can be removed as soon we stop scoping bootstrap
-    .fixed-top {
-        position: fixed;
-    }
+    // bring headline sizes down to earth
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.3rem; }
+    h4 { font-size: 1.2rem; }
+    h5 { font-size: 1.1rem; }
+    h6 { font-size: 1rem; }
+    h1, h2 { font-weight: 800; }
+    h3, h4 { font-weight: 500; }
+    h1, h2, h3, h4, h5, h6 { margin: 0.25rem 0; }
 }
 
 // some components get created outside the scope (e.g. tooltip)

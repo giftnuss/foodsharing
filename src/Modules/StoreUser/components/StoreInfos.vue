@@ -18,7 +18,7 @@
 
       <div
         v-show="displayInfos"
-        class="card-body bg-white ui-padding"
+        class="card-body bg-white p-2"
       >
         <div
           id="inputAdress"
@@ -173,16 +173,19 @@ export default {
 
     ::v-deep .markdown {
       div, p, ul, ol, th, td, label {
+        margin-bottom: 0;
         font-size: inherit;
       }
 
       hr {
+        margin: 0.5rem 0;
         border: 0;
         border-top: 1px solid var(--border);
       }
 
       blockquote {
-        padding: 0.25rem 0.5rem;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
         border-left: 2px solid var(--border);
         background-color: var(--fs-white);
       }
