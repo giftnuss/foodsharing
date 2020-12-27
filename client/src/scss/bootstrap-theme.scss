@@ -81,6 +81,7 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
             font-weight: bold;
         }
 
+        .card-body,
         .card-header:first-child {
             border-radius: 6px;
         }
@@ -88,7 +89,6 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
             border-color: inherit;
             border-width: 1px;
             border-style: solid;
-            border-radius: 6px;
         }
     }
 
@@ -126,6 +126,12 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         -webkit-box-orient: vertical;
         height: 2.4em;
         line-height: 1.2em;
+    }
+
+    // increases the priority of this position statement
+    // can be removed as soon we stop scoping bootstrap
+    .fixed-top {
+        position: fixed;
     }
 
     // bring headline sizes down to earth
