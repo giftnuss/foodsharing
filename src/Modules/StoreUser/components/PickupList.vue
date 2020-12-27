@@ -63,7 +63,7 @@
 <script>
 import { VBTooltip } from 'bootstrap-vue'
 import Pickup from './Pickup'
-import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
+import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/pickups'
 import { sendMessage } from '@/api/conversations'
 import { user } from '@/server-data'
 import { ajreq, pulseError, pulseSuccess } from '@/script'

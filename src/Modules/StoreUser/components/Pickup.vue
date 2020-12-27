@@ -163,11 +163,12 @@
 <script>
 
 import { BFormTextarea, BModal, VBTooltip } from 'bootstrap-vue'
-import TakenSlot from './TakenSlot'
-import EmptySlot from './EmptySlot'
 import differenceInDays from 'date-fns/differenceInDays'
 import differenceInHours from 'date-fns/differenceInHours'
 import isPast from 'date-fns/isPast'
+
+import TakenSlot from './TakenSlot'
+import EmptySlot from './EmptySlot'
 
 export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },

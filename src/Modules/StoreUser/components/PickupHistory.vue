@@ -100,8 +100,7 @@ import endOfDay from 'date-fns/endOfDay'
 import min from 'date-fns/min'
 import max from 'date-fns/max'
 import sub from 'date-fns/sub'
-import { listPickupHistory } from '@/api/stores'
-import { listPastPickups } from '@/api/profile'
+import { listPastPickupsForUser, listPickupHistory } from '@/api/pickups'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
 import Pickup from './Pickup'
@@ -177,7 +176,7 @@ export default {
       this.isLoading = true
       try {
         if (this.fsId) {
-          this.pickupList = await listPastPickups(
+          this.pickupList = await listPastPickupsForUser(
             this.fsId,
             startOfDay(this.fromDate),
             min([new Date(), endOfDay(this.toDate)]),
