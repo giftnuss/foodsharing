@@ -513,11 +513,24 @@ class Database
 	}
 
 	/**
+	 * Use this where you would normally use CURDATE() in an SQL query.
+	 *
+	 * @return string the current day
+	 */
+	public function curdate(): string
+	{
+		return date('Y-m-d');
+	}
+
+	/**
 	 * @param Carbon|\DateTime $date
 	 */
-	public function date($date): string
+	public function date($date, $includeTime = true): string
 	{
-		return (clone $date)->setTimezone(new \DateTimeZone('Europe/Berlin'))->format('Y-m-d H:i:s');
+		return (clone $date)
+			->setTimezone(new \DateTimeZone('Europe/Berlin'))
+			->format($includeTime ? 'Y-m-d H:i:s' : 'Y-m-d')
+		;
 	}
 
 	public function parseDate(string $date): Carbon
