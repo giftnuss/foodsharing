@@ -70,6 +70,7 @@
         </ul>
       </p>
     </div>
+
     <b-modal
       ref="modal_join"
       v-model="showJoinModal"
@@ -96,6 +97,7 @@
     >
       <p>{{ $i18n('pickup.really_leave_date', slotDate) }}</p>
     </b-modal>
+
     <b-modal
       ref="modal_kick"
       :title="$i18n('pickup.signout_confirm')"
@@ -120,6 +122,7 @@
         <div>{{ $i18n('pickup.kick_message_footer') }}</div>
       </blockquote>
     </b-modal>
+
     <b-modal
       ref="modal_team_message"
       :title="$i18n('pickup.leave_team_message_title')"
@@ -134,6 +137,7 @@
         rows="4"
       />
     </b-modal>
+
     <b-modal
       ref="modal_delete_error"
       :title="$i18n('pickup.delete_title')"
@@ -142,6 +146,7 @@
     >
       <p>{{ $i18n('pickup.delete_not_empty', slotDate) }}</p>
     </b-modal>
+
     <b-modal
       ref="modal_delete"
       :title="$i18n('pickup.delete_title')"
