@@ -38,7 +38,7 @@
         <ul class="slots">
           <TakenSlot
             v-for="slot in occupiedSlots"
-            :key="slot.profile.id"
+            :key="`${slot.date}-${slot.profile.id}`"
             :profile="slot.profile"
             :confirmed="slot.isConfirmed"
             :allow-leave="slot.profile.id == user.id && !isInPast"
@@ -54,7 +54,7 @@
             :key="n"
             :allow-join="!isUserParticipant && isAvailable && n == 1"
             :allow-remove="isCoordinator && n == emptySlots && !isInPast"
-            @join="$refs.modal_join.show()"
+            @join="$refs.modal_join.show(); fetchSameDayPickups()"
             @remove="$emit('remove-slot', date)"
           />
           <div class="add-pickup-slot">
@@ -77,13 +77,43 @@
       :title="$i18n('pickup.join_title_date', slotDate)"
       :cancel-title="$i18n('pickup.join_cancel')"
       :ok-title="$i18n('pickup.join_agree')"
+      :ok-disabled="!loadedUserPickups"
       :hide-header-close="true"
       modal-class="bootstrap"
       header-class="d-flex"
+      lazy
       @ok="$emit('join', date)"
     >
-      {{ $i18n('pickup.really_join_date', slotDate) }}
+      <p>{{ $i18n('pickup.really_join_date', slotInfo) }}</p>
+
+      <div v-if="loadedUserPickups && sameDayPickups && sameDayPickups.length">
+        <b-alert variant="warning" show>
+          {{ $i18n('pickup.same_day_hint', { day: $dateFormat(date, 'day') } ) }}
+        </b-alert>
+        <b-list-group>
+          <b-list-group-item
+            v-for="pickup in sameDayPickups"
+            :key="`${pickup.storeId}-${pickup.date}`"
+            :href="$url('store', pickup.storeId)"
+            class="font-weight-bolder"
+          >
+            <i class="fas fa-fw" :class="[pickup.confirmed ? 'fa-check-circle text-secondary' : 'fa-clock text-danger']" />
+            {{
+              $i18n('pickup.same_day_entry', {
+                when: $dateFormat(pickup.date, 'time'),
+                name: pickup.storeName,
+              })
+            }}
+          </b-list-group-item>
+        </b-list-group>
+      </div>
+      <div v-else-if="!loadedUserPickups">
+        <b-alert variant="light" show>
+          <i class="fas fa-fw fa-sync fa-spin" />
+        </b-alert>
+      </div>
     </b-modal>
+
     <b-modal
       ref="modal_leave"
       :title="$i18n('pickup.really_leave_date_title', slotDate)"
@@ -167,6 +197,8 @@ import differenceInDays from 'date-fns/differenceInDays'
 import differenceInHours from 'date-fns/differenceInHours'
 import isPast from 'date-fns/isPast'
 
+import { listSameDayPickupsForUser } from '@/api/pickups'
+
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
 
@@ -193,6 +225,8 @@ export default {
           id: null,
         },
       },
+      loadedUserPickups: false,
+      sameDayPickups: [],
       // cannot use slotDate here since it's computed and needs to avoid circular data references:
       teamMessage: this.$i18n('pickup.leave_team_message_template', { date: this.$dateFormat(this.date, 'full-long') }),
       kickMessage: '',
@@ -227,6 +261,12 @@ export default {
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
+    },
+  },
+  methods: {
+    async fetchSameDayPickups () {
+      this.sameDayPickups = await listSameDayPickupsForUser(this.user.id, this.date)
+      this.loadedUserPickups = true
     },
   },
 }

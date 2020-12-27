@@ -59,3 +59,13 @@ export async function listPastPickupsForUser (fsId, fromDate, toDate) {
     date: dateFnsParseISO(s.date),
   })), (s) => { return s.storeId + '-' + s.date_ts })
 }
+
+export async function listSameDayPickupsForUser (fsId, onDate) {
+  const day = onDate.toISOString()
+  const res = await get(`/foodsaver/${fsId}/pickups/${day}`)
+
+  return res.map(p => ({
+    ...p,
+    date: dateFnsParseISO(p.date),
+  }))
+}

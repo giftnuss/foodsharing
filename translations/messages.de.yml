@@ -797,6 +797,8 @@ pickup:
   team_message_send_and_leave: "Senden und austragen"
   team_message_success: "Nachricht ans Team wurde erfolgreich versendet"
   join_title_date: "Sicher?"
+  same_day_hint: "Du bist am {day} für die folgenden Abholungen eingetragen:"
+  same_day_entry: "[{when} Uhr] {name}"
   really_join_date: "Möchtest du dich verbindlich für die Abholung am {date} eintragen?"
   join_cancel: "Doch nicht"
   join_agree: "Ja, verbindlich eintragen"

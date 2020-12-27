@@ -33,6 +33,20 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Get("foodsaver/{fsId}/pickups/{onDate}", requirements={"fsId" = "\d+", "onDate" = "[^/]+"})
+	 */
+	public function listSameDayPickupsAction(int $fsId, string $onDate): Response
+	{
+		// convert date string into datetime object
+		$day = TimeHelper::parsePickupDate($onDate);
+		if (is_null($day)) {
+			throw new HttpException(400, 'Invalid date format');
+		}
+
+		return $this->handleView($this->view([]));
+	}
+
+	/**
 	 * @Rest\Get("foodsaver/{fsId}/pickups/{fromDate}/{toDate}", requirements={"fsId" = "\d+", "fromDate" = "[^/]+", "toDate" = "[^/]+"})
 	 */
 	public function listPastPickupsAction(int $fsId, string $fromDate, string $toDate): Response
