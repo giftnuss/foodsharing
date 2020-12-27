@@ -79,6 +79,29 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 		return $deletedRows;
 	}
 
+	public function getSameDayPickupsForUser(int $fsId, \DateTime $day): array
+	{
+		return $this->db->fetchAll('
+			SELECT 	p.`date`,
+					p.confirmed AS confirmed,
+					s.name AS storeName,
+					s.id AS storeId
+
+			FROM            `fs_abholer` p
+			LEFT OUTER JOIN `fs_betrieb` s  ON  s.id = p.betrieb_id
+
+			WHERE    p.foodsaver_id = :fsId
+			AND      DATE(p.`date`) = DATE(:pickupDay)
+			AND      p.`date` >= :now
+
+			ORDER BY p.`date`
+		', [
+			':fsId' => $fsId,
+			':pickupDay' => $this->db->date($day, false),
+			':now' => $this->db->now(),
+		]);
+	}
+
 	/**
 	 * @param bool $markNotificationAsUnread:
 	 * if an older notification exists, that has already been marked as read,

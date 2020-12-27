@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -17,17 +18,20 @@ final class FoodsaverRestController extends AbstractFOSRestController
 {
 	private FoodsaverGateway $foodsaverGateway;
 	private ProfileGateway $profileGateway;
+	private PickupGateway $pickupGateway;
 	private ProfilePermissions $profilePermissions;
 	private Session $session;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
 		ProfileGateway $profileGateway,
+		PickupGateway $pickupGateway,
 		ProfilePermissions $profilePermissions,
 		Session $session
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
+		$this->pickupGateway = $pickupGateway;
 		$this->profilePermissions = $profilePermissions;
 		$this->session = $session;
 	}
@@ -42,8 +46,9 @@ final class FoodsaverRestController extends AbstractFOSRestController
 		if (is_null($day)) {
 			throw new HttpException(400, 'Invalid date format');
 		}
+		$pickups = $this->pickupGateway->getSameDayPickupsForUser($fsId, $day);
 
-		return $this->handleView($this->view([]));
+		return $this->handleView($this->view($pickups));
 	}
 
 	/**
