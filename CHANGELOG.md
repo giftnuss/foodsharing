@@ -167,6 +167,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
+- Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg

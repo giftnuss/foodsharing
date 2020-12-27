@@ -10,7 +10,6 @@ use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
-use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Group\GroupGateway;
@@ -128,8 +127,9 @@ class ProfileView extends View
 
 		if ($mayAdmin && $userStores) {
 			$page->addSectionLeft(
-				$this->sideInfosStores($userStores),
-				$this->translator->trans('profile.nav.storelist', ['{count}' => count($userStores)])
+				$this->vueComponent('vue-profile-storelist', 'ProfileStoreList', [
+					'stores' => $userStores,
+				])
 			);
 		}
 
@@ -374,42 +374,6 @@ class ProfileView extends View
 		return $out;
 	}
 
-	/**
-	 * Create HTML for list of stores on the profile.
-	 * Each store has a symbol in front indicating if the user is
-	 *  - waiting for approval (a question mark)
-	 *  - in store (the shopping basket used for stores)
-	 *  - Springer = waiting list (a coffee mug).
-	 *
-	 * @return string: HTML with the list
-	 */
-	private function sideInfosStores(array $userStores): string
-	{
-		$out = '';
-		foreach ($userStores as $store) {
-			switch ($store['active']) {
-				case MembershipStatus::APPLIED_FOR_TEAM:
-					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
-					break;
-				case MembershipStatus::MEMBER:
-					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
-					break;
-				case MembershipStatus::JUMPER:
-					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
-					break;
-				default:
-					$userStatusOfStore = '';
-					break;
-			}
-			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $store['id'] . '">' . $userStatusOfStore . $store['name'] . '</a></p>';
-		}
-
-		return '
-		<div>
-		    <div class="infos"> ' . $out . ' </div>
-		</div>';
-	}
-
 	public function userNotes(string $notes, array $userStores): void
 	{
 		$fsId = $this->foodsaver['id'];
@@ -428,10 +392,11 @@ class ProfileView extends View
 		$page->addSectionLeft($this->photo($mayAdmin, $maySeeHistory));
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
 
-		if ($this->profilePermissions->maySeeUserNotes($fsId)) {
+		if ($mayAdmin && $userStores) {
 			$page->addSectionLeft(
-				$this->sideInfosStores($userStores),
-				$this->translator->trans('profile.storelist', ['{count}' => count($userStores)])
+				$this->vueComponent('vue-profile-storelist', 'ProfileStoreList', [
+					'stores' => $userStores,
+				])
 			);
 		}
 
