@@ -22,8 +22,8 @@
 }
 
 #conversation-list li.active {
-background-color: #dbd7d1;
-border-radius: 4px;
+  background-color: #dbd7d1;
+  border-radius: 4px;
 }
 
 #conversation-list li.active a, #conversation-list li.active a:active, #conversation-list li.active a:focus {
@@ -154,7 +154,7 @@ ul.conversation-list > li.unread-1 {
   }
 
   #msg-conversation-wrapper {
-    height: 100vh;
+    max-height: 100vh;
     margin: 0;
     padding-top: 30px;
   }
@@ -168,8 +168,16 @@ ul.conversation-list > li.unread-1 {
     margin: 0;
   }
 
-  ul.bread {
+  ul.bread,
+  .inner.broadcast-message {
     display: none;
+  }
+
+  #msg_answer,
+  #conv_submit,
+  #msg-conversation-wrapper,
+  #msg-conversation.corner-all {
+    border-radius: 0;
   }
 
   #msg_answer-wrapper {
@@ -182,9 +190,11 @@ ul.conversation-list > li.unread-1 {
     height: auto;
   }
 
+  #msg-conversation-wrapper .field .ui-widget-header {
+    padding: 0.5rem 0.75rem;
+  }
   #msg-conversation-wrapper .field .ui-widget-content {
-    padding: 0 0 45px 0;
-    background-color: #dbd7d1;
+    padding: 15px 0;
   }
 
   #msg-conversation-wrapper .field .head {
@@ -199,6 +209,7 @@ ul.conversation-list > li.unread-1 {
   }
 
   #msg-conversation-wrapper .field .head .images {
+    padding-right: 0.75rem;
     max-width: 48px;
     overflow: hidden;
     height: 22px;
@@ -208,18 +219,12 @@ ul.conversation-list > li.unread-1 {
     color: var(--fs-brown);
   }
 
-  #msg-conversation-wrapper {
-    border-radius: 0;
-    background-color: #dbd7d1;
-  }
-
   #msg_answer {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 97%;
+    width: calc(100% - 2rem - 20px - 15px) !important;
     height: 34px;
-    border-radius: 0;
     z-index: 10;
   }
 
@@ -228,8 +233,8 @@ ul.conversation-list > li.unread-1 {
     bottom: 0;
     right: 0;
     z-index: 11;
-    border-radius: 0;
     margin: 0;
+    font-size: 2rem;
   }
 
   #msg-conversation ul li {
