@@ -27,14 +27,14 @@
       </div>
     </div>
     <template #actions="{ hide }">
-      <!-- <div class="btn-group special btn-group-sm"> -->
       <b-btn
         :disabled="!unread"
+        :title="$i18n('menu.entry.mark_as_read')"
         secondary
         size="sm"
         @click="markUnreadMessagesAsRead(); hide();"
       >
-        <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
+        <i class="fas fa-fw fa-check-double" />
       </b-btn>
       <b-btn
         :href="$url('conversations')"
@@ -43,7 +43,6 @@
       >
         <i class="fas fa-comments" /> {{ $i18n('menu.entry.all_messages') }}
       </b-btn>
-      <!-- </div> -->
     </template>
   </fs-dropdown-menu>
 </template>

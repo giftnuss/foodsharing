@@ -41,7 +41,8 @@
         :disabled="!unread"
         @click="markNewBellsAsRead(); hide();"
       >
-        <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
+        <i class="fas fa-fw fa-check-double" />
+        {{ $i18n('menu.entry.mark_as_read') }}
       </b-btn>
     </template>
   </fs-dropdown-menu>
