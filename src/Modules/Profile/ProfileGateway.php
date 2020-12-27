@@ -375,7 +375,8 @@ final class ProfileGateway extends BaseGateway
 			SELECT 	s.id,
 					s.name,
 					st.verantwortlich as isManager,
-					st.active
+					st.active,
+					s.betrieb_status_id as cooperationStatus
 
 			FROM             fs_betrieb_team st
 			LEFT OUTER JOIN  fs_betrieb s  ON  s.id = st.betrieb_id

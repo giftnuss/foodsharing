@@ -128,6 +128,8 @@
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
 - Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
 - Rewrite blogpost management list in Vue !1791 @ChrisOelmueller
+- Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
+- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg

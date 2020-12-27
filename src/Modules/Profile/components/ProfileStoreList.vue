@@ -37,6 +37,7 @@
           <span class="flex-grow-1 p-1 pl-2">
             {{ store.name }}
           </span>
+          <StoreStatusIcon :status="store.cooperationStatus" />
         </b-list-group-item>
       </b-list-group>
     </b-card>
@@ -44,7 +45,10 @@
 </template>
 
 <script>
+import StoreStatusIcon from '../../Store/components/StoreStatusIcon.vue'
+
 export default {
+  components: { StoreStatusIcon },
   props: {
     stores: { type: Array, default: () => { return [] } },
   },
@@ -57,6 +61,10 @@ export default {
 
   ::v-deep .list-group-item {
     padding: 0 0.5rem;
+  }
+
+  ::v-deep .status {
+    width: auto;
   }
 }
 </style>
