@@ -237,6 +237,10 @@ ul.conversation-list > li.unread-1 {
     font-size: 2rem;
   }
 
+  #msg-conversation ul {
+    margin-bottom: 45px;
+  }
+
   #msg-conversation ul li {
     padding: 0;
     margin: 10px 15px 0 8px;
