@@ -755,7 +755,7 @@ pickup:
   take_empty_slot: Hier eintragen
   delete_title: Abholtermin löschen
   really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
-  delete_not_empty: Aktuell sind noch Foodsaver eingetragen. Du kannst diese Aholung erst löschen, sobald sie leer ist.
+  delete_not_empty: Aktuell sind noch Foodsaver*innen eingetragen. Du kannst diesen Abholtermin erst löschen, wenn sich alle ausgetragen haben.
   edit_recurring_pickups: Regelmäßige Abholzeiten bearbeiten
   add_onetime_pickup: Zusatztermin eintragen
   slot_add: Slot hinzufügen

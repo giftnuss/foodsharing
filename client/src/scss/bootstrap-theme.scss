@@ -23,6 +23,12 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         box-shadow: none;
+
+        // correctly align bootstrap-vue b-modal action buttons
+        &.modal-footer {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 
     textarea {

@@ -70,7 +70,10 @@
       :id="`confirmDeletion-${post.id}`"
       modal-class="bootstrap"
       :hide-header="isOwn(post)"
-      hide-footer
+      :cancel-title="$i18n('button.cancel')"
+      :ok-title="$i18n('button.yes_i_am_sure')"
+      cancel-variant="primary"
+      ok-variant="outline-danger"
       centered
       hide-header-close
       @ok="$emit('deletePost', post.id)"
@@ -89,7 +92,7 @@
         </div>
       </template>
 
-      <template v-slot:default="{ cancel, ok }">
+      <template #default>
         <strong>
           {{ $i18n('wall.confirm-deletion', { name: post.author.name }) }}
         </strong>
@@ -98,12 +101,6 @@
             <Markdown :source="post.body" />
           </div>
         </blockquote>
-        <b-button class="float-left my-1" variant="primary" @click="cancel()">
-          {{ $i18n('button.cancel') }}
-        </b-button>
-        <b-button class="float-right my-1" variant="outline-danger" @click="ok()">
-          {{ $i18n('button.yes_i_am_sure') }}
-        </b-button>
       </template>
     </b-modal>
   </li>
