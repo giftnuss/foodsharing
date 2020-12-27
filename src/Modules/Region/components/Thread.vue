@@ -15,7 +15,7 @@
       class="card rounded above"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row m-1 pt-2">
+        <div class="row m-1">
           <h4 class="text-truncate">
             {{ title }}
           </h4>

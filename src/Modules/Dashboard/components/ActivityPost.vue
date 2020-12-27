@@ -207,8 +207,7 @@ export default {
 .activity-item {
   a,
   span a {
-    color: var(--fs-green) !important;
-    font-weight: bolder;
+    color: var(--fs-green);
     font-size: 0.875rem;
   }
 
@@ -275,7 +274,6 @@ export default {
 
     small {
       float: right;
-      font-weight: bolder;
       font-size: 0.875rem;
       opacity: 0.5;
     }
