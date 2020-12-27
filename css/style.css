@@ -160,15 +160,23 @@
 }
 
 a,
+.bootstrap a,
+.bootstrap .markdown a,
 .ui-widget-content a {
   color: var(--fs-green);
   text-decoration: none;
 }
 
 a:hover,
+.bootstrap a:hover,
+.bootstrap .markdown a:hover,
 .ui-widget-content a:hover {
   color: var(--fs-green);
   text-decoration: underline;
+}
+
+.bootstrap .markdown a {
+  font-weight: bold;
 }
 
 .ui-dialog,

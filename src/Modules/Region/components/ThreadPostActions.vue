@@ -71,6 +71,8 @@
       :title="$i18n('forum.post.delete')"
       :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
+      cancel-variant="primary"
+      ok-variant="outline-danger"
       modal-class="bootstrap"
       @ok="$emit('delete')"
     >
