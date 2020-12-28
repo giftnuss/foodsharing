@@ -60,10 +60,13 @@ export default {
   },
   data () {
     return {
-      selected: Array(this.options.length).fill(0),
+      selected: Array(this.options.length).fill(null),
     }
   },
   computed: {
+    isValidSelection: function () {
+      return !this.selected.includes(null)
+    },
     votingRequestValues: function () {
       const v = {}
       for (let i = 0; i < this.selected.length; i++) {
@@ -73,10 +76,11 @@ export default {
     },
   },
   watch: {
+    isValidSelection () { this.$emit('updateValidSelection', this.isValidSelection) },
     votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) },
   },
   mounted () {
-    this.$emit('updateValidSelection', true)
+    this.$emit('updateValidSelection', this.isValidSelection)
     this.$emit('updateVotingRequestValues', this.votingRequestValues)
   },
 }
