@@ -2053,7 +2053,7 @@ poll:
     number_of_votes: Abgegebene Stimmen
     votes: Stimmen
     option_text: Option
-    average: Mittelwert
+    sum: Summe
   submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
   eligible_votes_count: Anzahl der Stimmberechtigten
   edit:

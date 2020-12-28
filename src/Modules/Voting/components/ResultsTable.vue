@@ -39,8 +39,8 @@
       <template v-slot:head(value-1)>
         <i class="fas fa-thumbs-down" />
       </template>
-      <template v-slot:head(average)="row">
-        {{ row.label }} (<i class="fas fa-thumbs-up" /> - <i class="fas fa-thumbs-down" />)
+      <template v-slot:head(sum)="row">
+        {{ row.label }} (<i class="fas fa-thumbs-up" /> = +1, <i class="fas fa-thumbs-down" /> = -1)
       </template>
     </b-table>
 
@@ -96,7 +96,6 @@ export default {
           label: v[0],
           sortable: true,
           sortByFormatted: 'true',
-          class: 'align-middle',
           formatter: (value, key, item) => {
             return item.values[v[0]]
           },
@@ -105,13 +104,13 @@ export default {
 
       if (this.numValues > 1) {
         result.push({
-          key: 'average',
-          label: this.$i18n('poll.results.average'),
+          key: 'sum',
+          label: this.$i18n('poll.results.sum'),
           sortable: true,
           sortByFormatted: 'true',
-          class: 'align-middle',
+          class: 'text-center',
           formatter: (value, key, item) => {
-            return this.averageVotes(item)
+            return this.sumVotes(item)
           },
         })
       }
@@ -119,12 +118,12 @@ export default {
     },
   },
   methods: {
-    averageVotes (option) {
-      let average = 0
+    sumVotes (option) {
+      let sum = 0
       for (const v in option.values) {
-        average += v * option.values[v]
+        sum += v * option.values[v]
       }
-      return average
+      return sum
     },
   },
 }
