@@ -3,6 +3,13 @@
     <b-form
       @submit="showConfirmDialog"
     >
+      <b-alert
+        show
+        variant="dark"
+        class="mt-5"
+      >
+        {{ $i18n("poll.hint_random_order") }}
+      </b-alert>
       <SingleSelectionVotingComponent
         v-if="poll.type===0"
         :options="shuffledOptions"
@@ -35,7 +42,7 @@
       <b-alert
         v-if="mayVote"
         show
-        variant="warning"
+        variant="dark"
         class="mt-5"
       >
         {{ $i18n('poll.submit_vote_warning') }}

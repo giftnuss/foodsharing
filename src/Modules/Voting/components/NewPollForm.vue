@@ -8,6 +8,12 @@
         :class="{disabledLoading: isLoading, 'card-body': true}"
         @submit="showConfirmDialog"
       >
+        <b-alert
+          show
+          variant="dark"
+        >
+          {{ $i18n('polls.hint_2') }}: <a :href="$url('wiki_voting')">{{ $url('wiki_voting') }}</a>
+        </b-alert>
         <b-form-group
           :label="$i18n('poll.new_poll.name')"
           label-for="input-name"
@@ -249,6 +255,7 @@ import {
   BFormRow,
   BCol,
   BModal,
+  BAlert,
 } from 'bootstrap-vue'
 import { createPoll } from '@/api/voting'
 import { pulseError } from '@/script'
@@ -280,6 +287,7 @@ export default {
     BFormRow,
     BCol,
     BModal,
+    BAlert,
   },
   props: {
     region: {

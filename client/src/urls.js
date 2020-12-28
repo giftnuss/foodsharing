@@ -77,6 +77,7 @@ const urls = {
   upgradeToFs: () => '/?page=settings&sub=upgrade/up_fs',
   wall: (regionId) => `/?page=bezirk&bid=${regionId}&sub=wall`,
   wiki: () => 'https://wiki.foodsharing.de/',
+  wiki_voting: () => 'https://wiki.foodsharing.de/Abstimmungs-Modul',
   workingGroupEdit: (groupId) => `/?page=groups&sub=edit&id=${groupId}`,
   workingGroups: (regionId = null) => regionId ? `/?page=groups&p=${regionId}` : '/?page=groups',
   workshops: () => '/?page=content&sub=workshops',

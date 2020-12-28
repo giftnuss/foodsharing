@@ -6,6 +6,12 @@
         {{ poll.name }}
       </div>
       <div class="card-body">
+        <b-alert
+          show
+          variant="dark"
+        >
+          {{ $i18n('polls.hint_2') }}: <a :href="$url('wiki_voting')">{{ $url('wiki_voting') }}</a>
+        </b-alert>
         <b-link
           v-if="mayEdit"
           :href="$url('pollEdit', poll.id)"
@@ -107,10 +113,10 @@ import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
-import { BAlert, BLink } from 'bootstrap-vue'
+import { BAlert, BLink, BBadge } from 'bootstrap-vue'
 
 export default {
-  components: { ResultsTable, VoteForm, Markdown, BAlert, BLink },
+  components: { ResultsTable, VoteForm, Markdown, BAlert, BLink, BBadge },
   props: {
     poll: {
       type: Object,
