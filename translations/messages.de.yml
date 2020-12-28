@@ -1993,7 +1993,7 @@ buddy:
   request_accepted: Jetzt kennt Ihr Euch!
 
 polls:
-  hint : Das Abstimmungstool kann in der überregionalen AG "Abstimmungen - Test" getestet werden.
+  hint: Das Abstimmungs-Modul kann in der überregionalen AG "Abstimmungen - Test" getestet werden.
   hint_2: Hinweise zur Benutzung der Abstimmungen findest du im Wiki
   title: Titel
   start_date: von
@@ -2038,7 +2038,7 @@ poll:
     description: Beschreibung
     description_placeholder: Was ist das für eine Abstimmung?
     description_required: Bitte gib eine Beschreibung ein.
-    options: Optionen, die zur Auswahl stehen sollen. Die Reihenfolge der Optionen wird in der Abstimmung zufällig ausgewählt.
+    options: Optionen, die zur Auswahl stehen sollen. Beim Abstimmen werden sie jeweils in einer zufälligen Reihenfolge angezeigt.
     option: Option
     option_texts_required: Bitte gib für jede Option einen Text ein.
     submit: Abstimmung speichern
