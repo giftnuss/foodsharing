@@ -77,7 +77,11 @@ class Session
 			// $last_update can be 'false' if the session is older than when this mechanism was introduce
 			// - there will not be any timestamp to check
 			if ($last_update === false || $last_update < self::LAST_SESSION_SCHEMA_CHANGE) {
-				$this->refreshFromDatabase();
+				// anonymous users can? also have an open session, but it does not actually store an ID.
+				// This will cause problems in refreshFromDatabase, so only proceed if there is an ID.
+				if ($this->id() !== null) {
+					$this->refreshFromDatabase();
+				}
 			}
 		}
 	}
