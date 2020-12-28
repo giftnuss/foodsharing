@@ -16,6 +16,7 @@ const urls = {
   baskets: () => '/essenskoerbe',
   blog: () => '/news',
   blogEdit: () => '/?page=blog&sub=manage',
+  changelog: () => '/?page=content&sub=changelog',
   claims: () => '/?page=content&sub=forderungen',
   communitiesAustria: () => '/?page=content&sub=communitiesAustria',
   communitiesGermany: () => '/?page=content&sub=communitiesGermany',

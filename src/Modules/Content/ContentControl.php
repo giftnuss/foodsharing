@@ -324,16 +324,30 @@ class ContentControl extends Control
 
 	public function releaseNotes(): void
 	{
-		$this->pageHelper->addBread($this->translator->trans('menu.entry.release-notes'));
-		$this->pageHelper->addTitle($this->translator->trans('menu.entry.release-notes'));
-		$markdown = $this->parseGitlabLinks(file_get_contents('release-notes.md'));
-		$Parsedown = new Parsedown();
-		$cl['changelog'] = '<a class="float-right" href="/?page=content&sub=changelog">'
-			. $this->translator->trans('content.changelog') .
-		'</a>';
-		$cl['title'] = $this->translator->trans('menu.entry.release-notes');
-		$cl['body'] = $Parsedown->parse($markdown);
-		$this->pageHelper->addContent($this->view->releaseNotes($cl));
+		$releaseList = [
+			[
+				'id' => '2020-12',
+				'title' => 'Release "Dragonfruit" (Dezember 2020)',
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-12.md')),
+				'visible' => true,
+			], [
+				'id' => '2020-10',
+				'title' => 'Release "Cranberry" (Oktober 2020)',
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-10.md')),
+			], [
+				'id' => '2020-08',
+				'title' => 'Release "Birne" (August 2020)',
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-08.md')),
+			], [
+				'id' => '2020-05',
+				'title' => 'Release "Apfelsine" (Mai 2020)',
+				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-05.md')),
+			],
+		];
+
+		$this->pageHelper->addContent($this->view->vueComponent('vue-release-notes', 'ReleaseNotes', [
+			'releaseList' => $releaseList,
+		]));
 	}
 
 	public function changelog(): void
@@ -392,5 +406,16 @@ class ContentControl extends Control
 				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
+	}
+
+	private function parseGitlabLinks($markdown)
+	{
+		$markdown = preg_replace('/\W@(\S+)/', ' [@\1](https://gitlab.com/\1)', $markdown);
+		$markdown = preg_replace('/(android)!([0-9]+)/', '[\1!\2](https://gitlab.com/foodsharing-dev/foodsharing-android/merge_requests/\2)', $markdown);
+		$markdown = preg_replace('/(android)#([0-9]+)/', '[\1#\2](https://gitlab.com/foodsharing-dev/foodsharing-android/issues/\2))', $markdown);
+		$markdown = preg_replace('/\W!([0-9]+)/', ' [!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
+		$markdown = preg_replace('/\W#([0-9]+)/', ' [#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+
+		return $markdown;
 	}
 }

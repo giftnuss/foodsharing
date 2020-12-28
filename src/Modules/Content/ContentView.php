@@ -15,16 +15,6 @@ class ContentView extends View
 		</div>';
 	}
 
-	public function releaseNotes($cnt)
-	{
-		return '
-		<div class="page ui-padding ui-widget-content corner-all">
-			' . $cnt['changelog'] . '
-			<h1>' . $cnt['title'] . '</h1>
-			' . $cnt['body'] . '
-		</div>';
-	}
-
 	public function partner($cnt)
 	{
 		return '
