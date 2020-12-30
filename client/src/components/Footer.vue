@@ -268,10 +268,12 @@
           class="d-flex justify-content-end"
         >
           <p>
-            {{ $i18n('footer.it_slogan') }}
-            <i class="fas fa-heart social_icons" />
+            <a :href="$url('releaseNotes')">
+              {{ $i18n('releases.2020-12') }}
+              <i class="fas fa-magic social_icons" />
+            </a>
             <a :href="$url('devdocs')">
-              {{ $i18n('footer.it_slogan_from') }}
+              {{ $i18n('footer.it_devdocs') }}
             </a>
           </p>
         </b-col>

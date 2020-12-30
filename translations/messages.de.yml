@@ -1745,11 +1745,16 @@ footer:
     Du möchtest foodsharing
     unterstützen?
   donate_now: Jetzt spenden
-  it_slogan: Made with
-  it_slogan_from: by foodsharing IT
+  it_devdocs: by foodsharing IT
   wiener_tafel_alt_text: Wiener Tafel
   lebensministerium_alt_text: Lebensministerium
   denns_at_alt_text: 'Denns´s Bio-Markt'
+
+releases:
+  2020-12: Release 'Drachenfrucht' (Dezember 2020)
+  2020-10: Release 'Cranberry' (Oktober 2020)
+  2020-08: Release 'Birne' (August 2020)
+  2020-05: Release 'Apfelsine' (Mai 2020)
 
 storestatus:
   0: Status unklar
