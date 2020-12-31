@@ -114,7 +114,7 @@ Außerdem wurde im Dropdown-Menü zum Filtern der Status "existiert nicht mehr" 
 ## Botschafter\*innen
 
 <img class="pageImage right clear" src="./img/releasenotes/2020-12-voting.png" title="Auswertung einer beendeten Abstimmung">
-Das Abstimmungs-Modul ist online und es gibt eine Anleitung dazu im Wiki: [**Abstimmungs-Modul**](https://wiki.foodsharing.de/Abstimmungs-Modul). Wenn ihr diese neue Funktion testen möchtet oder technische Fragen zum Einsatz habt: tretet einfach der überregionale AG "Abstimmungen - Test".  
+Das Abstimmungs-Modul ist online und es gibt eine Anleitung dazu im Wiki: [**Abstimmungs-Modul**](https://wiki.foodsharing.de/Abstimmungs-Modul). Wenn ihr diese neue Funktion testen möchtet oder technische Fragen zum Einsatz habt: einfach der überregionale AG "Abstimmungen - Test" beitreten.  
 (Referenz: !1633, !1668, !1687 und !1691 sowie !1711, !1726, !1780, !1786 und !1792)
 
 Der Menüeintrag "Gruppe verwalten" für AGs erscheint jetzt auch in der oberen Menüleiste, wenn ihr zwar keine Adminrechte der AG besitzt, dafür aber Botschafter\*innenrechte für den Bezirk der AG.
