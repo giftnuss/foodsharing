@@ -1,144 +1,136 @@
 ## Release "Dragonfruit", December 2020 - English, highly abridged Version:
 
 Main features and important changes:
-- we improved the search bar 
-- gave a new layout to some sections of the page (especially the store wall: old comments can now be deleted!)
-- stopped mails to fs, who didn't log in for 6 months and longer, also
-- the voting tool is now online (see: https://wiki.foodsharing.de/Abstimmungs-Modul)
+- we modernized the top bar and improved the global search
+- several other pages were modernized (e.g. the store wall now allows managers to delete old comments)
+- the voting tool is now available! For more information, see [https://wiki.foodsharing.de/Abstimmungs-Modul]
+- our system no longer sends mail to people with most recent login of 6 months (or more) ago
 
 
 # "Release 'Dragonfruit' (Dezember 2020)
 
-Mit dem Release der neuen Software-Version sind weitere Funktionen verfügbar. Allerdings wirst du gar nicht alle Änderungen merken, auch wenn einige wirklich viel Arbeit gemacht haben. Zum Beispiel sind wir Fehlermeldungen angegangen, haben den Software-Code modernisiert und Layout-Verbesserungen vorgenommen.
-Im Changelog findest du viele Einträge, die sich um 'refactoring' oder 'bugfixing' drehen, aber relativ wenig neue Funktionen - das ist der aktuelle Weg der aktiven Programmierer\*innen, das Arbeiten an der Seite für neue Leute attraktiv zu machen. Aktuell ist unser ehrenamtliches Team sehr ausgelastet und freut sich stets über Unterstützung. Wenn es ein Feature gibt, das du gerne programmiert sehen willst, ist es am besten, du findest selbst Entwickler\*innen, die Lust haben, dieses zu implementieren.
+Mit dem Release der neuen Software-Version sind auch diesmal wieder einige neue Funktionen verfügbar. Allerdings wirst du gar nicht alle Änderungen merken, selbst wenn manche davon wirklich viel Arbeit gemacht haben. Zum Beispiel sind wir Fehlermeldungen angegangen, haben den Software-Code modernisiert und Layout-Verbesserungen vorgenommen.
+Im Changelog findest du dementsprechend viele Einträge, die sich um 'refactoring' oder 'bugfixing' drehen - das ist die beste Möglichkeit, wie wir im Team der aktiven Programmierer\*innen dafür sorgen können, das Arbeiten an der Seite auch für neue Leute attraktiv zu machen. Weiterhin ist unser kleines ehrenamtliches Team sehr ausgelastet und freut sich stets über Unterstützung. Wenn es also ein Feature gibt, das du gerne programmiert sehen willst, ist es am besten, du findest selbst Entwickler\*innen, die Lust haben, dieses zu implementieren.
 
-Die großen Herausforderungen seit dem letzten Release waren das testen und finalisieren vom **Abstimmungs-Modul**.
+Die großen Herausforderungen seit dem letzten Release waren das Testen und Finalisieren vom **Abstimmungs-Modul** sowie einige neue Design-Ansätze (siehe unten).
 
-Wir haben [Notizen im Changelog](https://foodsharing.de/?page=content&sub=changelog) gesichtet, diskutiert und formuliert. Nun haben wir bündig zusammengefasst, was sich für dich ändert, wenn du Foodsaver\*in, Gruppenadmin, BIEB oder BOT bist.
+Wir haben [Notizen im Changelog](?page=content&sub=changelog) gesichtet, diskutiert und formuliert. Nun haben wir bündig zusammengefasst, was sich für dich ändert, wenn du Foodsaver\*in, Gruppenadmin, BIEB oder BOT bist.
 
 ---
+<img class="pageImage left clear" src="./img/releasenotes/2020-12-pickup-history.png" title="Eigene Abholhistorie im Profil einsehen">
 ## Allgemein
-
-Im globalen Suchfeld (im oberen Menü) lassen sich nun auch Benutzerprofile nach Profil-ID auffinden. Das funktioniert genauso wie in den anderen Text-Suchfeldern: Einfach die vollständige Zahl eingeben!
-[Referenz: 1783](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1783)
-
 In deinem eigenen Profil kannst du nun alle Abholungen einsehen, die du im vergangenen Monat durchgeführt hast. Gerade in Zeiten der Kontaktnachverfolgung erleichtert das hoffentlich einigen Menschen diese Aufgabe.
 In den Profilen von anderen Foodsaver\*innen sind diese Informationen nur für dich zugänglich, wenn du Botschafter\*in für den Stammbezirk der Person bist oder dem globalen Orgateam angehörst
-[Referenz: 1715](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1715)
+(Referenz: !1715)
 
+<img class="pageImage right" src="./img/releasenotes/2020-12-store-wall.jpg" title="Neue Pinnwand in Betrieben">
 Die Pinnwand in Betrieben wurde grundlegend erneuert.
 Sie zeigt nun ausschließlich Textbeiträge an, welche mit [Markdown](https://markdown.de/) formatiert werden können.
-Pinnwand-Einträge von Betriebsverantwortlichen erhalten eine farbige Markierung.
+Pinnwand-Einträge von Betriebsverantwortlichen erhalten eine kleine farbige Markierung.  
 Außerdem können Betriebsverantwortliche nun Einträge entfernen, die älter als ein Monat sind.
-Das entfernen der Beiträge wird protokolliert.
-[Referenz: 1690](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1690)
+Das Entfernen der Beiträge wird protokolliert.
+(Referenz: !1690)
 
 ### Benachrichtigungen & E-Mail
 
+Die Cookie-Funktion, die es ermöglichte, auch nach Neustart vom Browser eingeloggt bleibt, musste leider deaktiviert werden. Hintergrund ist, dass sich dadurch das Datum vom letzten Login länger nicht aktualisiert hat.
+An einigen Stellen wird dieses Datum verwendet, z. B. um anzuzeigen, ob Foodsaver\*innen sich länger als sechs Monate nicht mehr eingeloggt haben. Auch in der Android-App ist daher nach zwei Wochen Inaktivität ein erneuter Login nötig.  
+Wir möchten die Funktion "eingeloggt bleiben" sehr gerne wieder aktivieren, sobald wir für das Aktualisieren des Login-Datum eine Lösung gefunden haben.
+(Referenz: !1785)
+
+<img class="pageImage left" src="./img/releasenotes/2020-12-verify-mail.jpg" title="Hinweis bei unverifizierter Mail-Adresse">
 Die Funktion der E-Mail-Bestätigung wurde überarbeitet. Auf dem Dashboard erscheint jetzt eine Warnung, wenn die hinterlegte E-Mail-Adresse nicht bestätigt wurde.
-Dort kannst du über einen Link den Bestätigungslink erneut per Mail anfordern und somit deine E-Mail-Adresse bestätigen.
+Dort kannst du über einen Link den Bestätigungslink erneut per Mail anfordern und somit deine E-Mail-Adresse bestätigen.  
+Außerdem wird eine Warnung angezeigt, wenn deine persönliche Mail-Adresse auf unserer Sperr-Liste gelandet ist.
+Wenn du sie angezeigt bekommst, findest du im [Support-Artikel entsprechende Hilfe](https://foodsharing.freshdesk.com/support/solutions/articles/77000299947-e-mail-sperre-im-profil)
+(Referenz: !1334)
 
-Außerdem wird eine Warnung angezeigt, wenn deine persönliche Mail-Adresse auf unserer Sperr-Liste gelandet ist. Hilfe findest du dazu unter folgendem Artikel:
-https://foodsharing.freshdesk.com/support/solutions/articles/77000299947-e-mail-sperre-im-profil
-<br>[Referenz: 1334](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1334)
+Bei der Newsletteranmeldung wurde ein Fehler korrigiert und die Newsletter-Einstellungen neuer Nutzer (seit 16. Mai 2020) wurden zurückgesetzt. Wenn euch das betrifft: meldet euch gern im Optionsmenü erneut für den Newsletter an.
+(Referenz: !1779)
 
+<img class="pageImage right clear" src="./img/releasenotes/2020-12-banana.jpg" title="Benachrichtigung über neue Vertrauensbanane">
+Ab sofort kannst du mithilfe der neu hinzugefügten Buttons Glocken- und Chatbenachrichtungen "Alle als gelesen markieren" alle ungelesenen Nachrichten und/oder Benachrichtigungen als gelesen markieren.
+(Referenz: !1673)
 
-Die Cookie-Funktion, die ermöglicht, dass man auch nach Neustart vom Browser eingeloggt bleibt, musste leider komplett deaktiviert werden. Hintergrund ist, dass dadurch das Datum vom letzten Login länger nicht aktualisiert wurde.
-An einigen Stellen wurde dies verwendet, z. B. um anzuzeigen, ob Foodsaver\*innen sich länger als sechs Monate nicht mehr eingeloggt haben. Dadurch muss man sich jetzt leider in der Android-App nach zwei Wochen Inaktivität erneut einloggen.
-Wir wollen die Funktion wieder aktivieren, sobald wir für das Aktualisieren vom Login-Datum eine Lösung gefunden haben.
-[Referenz: 1785](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1785)
-
-Es wurde die Newsletteranmeldung korrigiert. Newsletteranmeldungen neuer Nutzer seit 16. Mai 2020 wurden zurückgesetzt. Betroffene Nutzer können sich erneut für den Newsletter im Optionsmenü anmelden.
-[Referenz: 1779](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1779)
-
-Der Empfänger einer Vertrauensbanane wird nun auch über die Glocke benachrichtigt.
-[Referenz: 1795](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1795)
+Wenn du eine neue Vertrauensbanane erhalten hast, wirst du darüber nun per Glocke benachrichtigt. Außerdem haben wir die Anzeige der vergebenen Bananen weiter modernisiert.
+(Referenz: !1795 und !1770)
 
 Wenn du dich für eine Arbeitsgruppe beworben hast, wirst du nach der Aufnahme oder Ablehnung eine Glocken-Benachrichtung erhalten.
-[Referenz: 1721](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1721)
-[1708](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1708)
+(Referenz: !1721 und !1708)
 
-Beim Anlegen neuer Forenthemen ist die voreingestellte Benachrichtigung nun ausschließlich die Glocke, statt wie vorher Glocke und E-Mail. Natürlich kann bei Bedarf jederzeit auch die Mail-Option aktiviert werden.
-[Referenz: 1676](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1676)
-
-Ab sofort kannst du mithilfe der neu hinzugefügten Buttons Glocken- und Chatbenachrichtungen "Alle als gelesen markieren" alle ungelesenen Nachrichten und/oder Benachrichtigungen als gelesen markieren.
-[Referenz: 1673](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1673)
+Wenn du ein neues Thema im Forum startest, ist die voreingestellte Benachrichtigung nun ausschließlich die Glocke, statt wie vorher Glocke und E-Mail. Damit ist das Verhalten identisch zum Antworten in Themen.  
+Natürlich kann bei Bedarf jederzeit auch die Mail-Option aktiviert werden.
+(Referenz: !1676)
 
 Sollte ein Nutzer länger als 6 Monate ausgeloggt sein, werden diesem keine Chat-Benachrichtigung mehr per Mail gesendet. Nach einem erneuten Login werden diese dann wieder verschickt.
-[Referenz: 1623](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1623)
+(Referenz: !1623)
 
 ### Design
+<img class="pageImage clear" src="./img/releasenotes/2020-12-topbar.png" title="Neues Farbschema der Menüleiste">
 
-Wir haben die Menüleiste oben auf der Seite versuchsweise in ein helleres und freundlicheres Farbschema gebracht. Je nachdem, wie die Erfahrungen damit in den nächsten Wochen und Monaten ausfallen, sind weitere Änderungen oder auch eine Rückkehr zum dunkelbraunen Design denkbar. Unsere Designer\*innen freuen sich über Input, falls ihr dabei mithelfen wollt! (Am besten in Slack: slackin.yunity.org, und zwar im Kanal #foodsharing-design)
-[Referenz: 1762](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1762)
+Wir haben die Menüleiste oben auf der Seite versuchsweise in ein helleres und freundlicheres Farbschema gebracht. Je nachdem, wie die Erfahrungen damit in den nächsten Wochen und Monaten ausfallen, sind weitere Änderungen oder auch eine Rückkehr zum dunkelbraunen Design denkbar. Unsere Designer\*innen freuen sich über Input, falls ihr dabei mithelfen wollt! (Am besten in Slack: https://slackin.yunity.org/ und dort im Kanal `#foodsharing-design`)
+Außerdem ist sie jetzt **responsive**, also kann auf kleinen Displays viel besser dargestellt werden als zuvor.  
+(Referenz: !1532 und !1762)  
 
-Mit dem foodsharing Freundeskreis gibt es seit dem 12.12.2020 neue Möglichkeiten, unsere Bewegung finanziell zu unterstützen. Dazu gehört nicht nur eine umfassend erneuerte Spendenseite, sondern auch ein spannendes Crowdfunding-Konzept, um nachhaltig, fair und transparent mit Spendengeldern umgehen zu können.
-Bei Klick auf 'Aktionen' (das Megafon-Symbol) sind unter dem neuen Menüpunkt 'Fundraising' nun drei Links gesetzt: 'Spenden' führt auf die neue Spendenseite mit verschiedenen Optionen zur Einmal- und Dauerspende, 'Freundeskreis' zu einer Erklärung des neuen Konzepts und unter 'Selfservice' können Spender\*innen ihre Dauerspende verwalten oder Spendenbescheinigungen generieren.
-[Referenz: 1773](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1773)
+<img class="pageImage left clear" src="./img/releasenotes/2020-12-topbar-search.jpg" title="Profilsuche nach foodsaver-ID">
+Im globalen Suchfeld der Menüleiste lassen sich nun auch Benutzerprofile nach Profil-ID auffinden.
+Das funktioniert genauso wie in den anderen Text-Suchfeldern: Einfach die vollständige Zahl eingeben!
+(Referenz: !1783)
+
+Unsere Fußzeile (Footer) wurde ebenfalls vollständig in einem neuen Design gestaltet.
+(Referenz: !1769)
+
+Und schließlich wurde noch das aktuelle [Favicon](https://de.wikipedia.org/wiki/Favicon) (Browser-Icon) ersetzt und für alle Browser und Plattformen angepasst.
+(Referenz: !1720)
 
 Die Anzeige von Updates auf dem Dashboard ist jetzt visuell strukturierter als zuvor. Dir wird sicher der fett gedruckte Text für die Informationen in der Kopfzeile auffallen. Es gab an der Stelle Verbesserungswünsche, da der recht helle Text teils zu dünn präsentiert wurde und nicht so gut lesbar war. Sehr wahrscheinlich passen wir in Zukunft das Aussehen dieser Texte nochmal ein wenig an.
-[Referenz: 1753](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1753)
+(Referenz: !1753)
+<img class="pageImage right" width="250" src="https://cloud.foodsharing.network/s/ceyBM94sWKnC8ro/preview" title="foodsharing Freundeskreis">
 
-Das aktuelle [Favicon](https://de.wikipedia.org/wiki/Favicon) (Browser-Icon) wurde ersetzt und für alle Browser und Plattformen angepasst.
-[Referenz: 1720](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1720)
-
-Die Navigationsleiste am oberen Rand wurde überarbeitet und ist jetzt responsive, also kann auf kleinen Displays besser dargestellt werden.
-[Referenz: 1532](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1532)
-
-Unsere Fußzeile (Footer) wurde vollständig in einem neuen Design gestaltet.
-[Referenz: 1769](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1769)
-
-Das Layout und das Verhalten beim Erstellen einer Vertrauensbanane wurde verbessert.
-[Referenz: 1770](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1770)
+Mit dem foodsharing Freundeskreis gibt es seit dem 12.12.2020 neue Möglichkeiten, unsere Bewegung finanziell zu unterstützen. Dazu gehört nicht nur eine umfassend erneuerte Spendenseite, sondern auch ein spannendes Crowdfunding-Konzept, um nachhaltig, fair und transparent mit Spendengeldern umgehen zu können.  
+Bei Klick auf 'Aktionen' (das Megafon-Symbol) sind unter dem neuen Menüpunkt 'Fundraising' nun drei Links gesetzt: 'Spenden' führt auf die neue Spendenseite mit verschiedenen Optionen zur Einmal- und Dauerspende, 'Freundeskreis' zu einer Erklärung des neuen Konzepts und unter 'Selfservice' können Spender\*innen ihre Dauerspende verwalten oder Spendenbescheinigungen generieren.
+(Referenz: !1773)
 
 ## Betriebsverantwortliche
 
-Die Tooltip-Texte von Betrieben, die bisher fälschlicherweise andere Texte enthielten, wurden korrigiert:
-* Wenn der Status in der Betriebsliste auf "existiert nicht mehr" gesetzt wurde, zeigte der Tooltip  "möchte nicht kooperieren" an.
-* Wenn der Status in der Betriebsliste auf "Es besteht noch kein Kontakt", zeigte die Tooltip "Verhandlungen laufen" an.
+**Änderung:** Die Auto-Vervollständigung im "Team Bearbeiten"-Dialog ist vorerst auf den Betriebsbezirk beschränkt, um den Server zu entlasten. Wenn ihr also manuell Teammitglieder hinzufügen wollt, müssen diese also zuvor dem Bezirk des Betriebs beitreten (oder natürlich bereits beigetreten sein), damit sie euch im Auswahlfeld vorgeschlagen werden.
+(Referenz: !1812)
 
+<img class="pageImage left clear" src="./img/releasenotes/2020-12-store-request.png" title="Anfragen für einen Betrieb bearbeiten">
+Die Liste der Anfragen, um einem Betrieb beizutreten, wurde modernisiert.
+Sie lässt sich nun besser bedienen und lädt nicht mehr nach jeder Aktion die Seite neu (lediglich einmal zum Abschluss).
+(Referenz: !1756)
+
+In manchen Browsern wurde beim Bearbeiten von Abholzeiten die Uhrzeit nicht vollständig dargestellt.
+Das haben wir behoben.
+(Referenz: !1754)
+
+Die Tooltip-Texte von Betrieben, die bisher fälschlicherweise andere Texte enthielten, wurden korrigiert.
+Dies betraf den Status "existiert nicht mehr" sowie "möchte nicht kooperieren".  
 Außerdem wurde im Dropdown-Menü zum Filtern der Status "existiert nicht mehr" hinzugefügt.
-[Referenz: 1714](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1714)
-
-Die Liste der Anfragen, um einem Betrieb beizutreten, wurde ebenfalls modernisiert. Sie lässt sich nun besser bedienen und lädt nicht mehr nach jeder Aktion die Seite neu.
-[Referenz: 1756](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1756)
-
-In manchen Browsern wurde beim Bearbeiten von Abholzeiten die Uhrzeit nicht vollständig dargestellt. Das haben wir behoben.
-[Referenz: 1754](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1754)
-
-Die Auto-Vervollständigung im "Team Bearbeiten"-Dialog ist vorerst beschränkt worden, um den Server zu entlasten. Wenn ihr also manuell Teammitglieder hinzufügen wollt, werden zuerst Menschen aus dem Bezirk vorgeschlagen, in dem der Betrieb angelegt ist.
-[Referenz: 1812](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1812)
+(Referenz: !1714)
 
 
 ## Botschafter\*innen
 
-Das Abstimmungs-Modul ist online und im Wiki könnt ihr eine Anleitung hier https://wiki.foodsharing.de/Abstimmungs-Modul finden. Zum Testen des Moduls und für technische Fragen einfach der überregionale AG "Abstimmungen - Test" beitreten.
+<img class="pageImage right clear" src="./img/releasenotes/2020-12-voting.png" title="Auswertung einer beendeten Abstimmung">
+Das Abstimmungs-Modul ist online und es gibt eine Anleitung dazu im Wiki: [**Abstimmungs-Modul**](https://wiki.foodsharing.de/Abstimmungs-Modul). Wenn ihr diese neue Funktion testen möchtet oder technische Fragen zum Einsatz habt: tretet einfach der überregionale AG "Abstimmungen - Test".  
+(Referenz: !1633, !1668, !1687 und !1691 sowie !1711, !1726, !1780, !1786 und !1792)
 
-[Referenz: 1633](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1633)
-[1668](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1668)
-[1691](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1691)
-[1687](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1687)
-[1711](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1711)
-[1792](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1792)
-[1786](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1786)
-[1780](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1780)
-[1726](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1726)
+Der Menüeintrag "Gruppe verwalten" für AGs erscheint jetzt auch in der oberen Menüleiste, wenn ihr zwar keine Adminrechte der AG besitzt, dafür aber Botschafter\*innenrechte für den Bezirk der AG.
+(Referenz: !1742)
 
-
-Der Menüeintrag "Gruppe verwalten" erscheint jetzt auch im Menü einer Arbeitsgruppe mit Botschafter\*innenrechten.
-[Referenz: 1742](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1742)
-
-Wenn Botschafter\*innen Foodsaver\*innen über die "Foodsaver"-Übersicht aus dem Bezirk entfernt, verlieren diese nicht mehr die Verifizierung und es wird keine falsche Historie geschrieben.
-[Referenz: 1803](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1803)
+Entfernen Botschafter\*innen über die "Foodsaver"-Übersicht Foodsaver\*innen aus einem Bezirk, verlieren diese nicht mehr die Verifizierung und es wird keine falsche Historie geschrieben.
+(Referenz: !1803)
 
 ---
-# Danke für deine Aufmerksamkeit
+# Danke für deine Aufmerksamkeit :)
 
 Wir hoffen, die Veränderungen sind für dich eine Bereicherung.
 
 Danke auch an die fleißigen Programmierer\*innen der IT, die das alles durch ehrenamtliche Arbeit ermöglicht haben!
 
-Wenn etwas unklar geblieben ist, schau gerne im Changelog nach und klicke auf die Ausrufezeichen (!) und Rauten (#), die du dort findest. Und wenn dann noch Fragen sind, frag gerne über unserem [Support-Formular](https://foodsharing.freshdesk.com/support/home).
+Wenn etwas unklar geblieben ist, schau gerne im Changelog nach und klicke auf die Ausrufezeichen (!) und Rauten (#), die du dort findest. Und wenn dann noch Fragen sind, melde dich gerne über unser [Support-Formular](https://foodsharing.freshdesk.com/support/home)!
 
 Falls dich interessiert, was in der letzten Zeit noch passiert ist: Hier im [Blog](https://devblog.foodsharing.de/) gibt es mehr von foodsharing.
 
@@ -146,6 +138,8 @@ PS: Vielleicht bist ja du, werte lesende Person, ein\*e begeisterte\*r Nutzer\*i
 
 Weiterhin frohes Retten!
 
+---
+---
 
 ## Release "Cranberry", October 2020 - English, highly abridged Version:
 
