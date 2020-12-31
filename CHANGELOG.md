@@ -84,6 +84,8 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Improved the RegisterCest.php: This check the variants with and without newsletter now. !1779 @chriswalg
 - Make build/test CI interruptible when new commits are pushed !1799 @\_fridtjof_
 - Fix an incredibly unlikely potential crash when editing a workgroup !1796 @ChrisOelmueller
+# 2020-11-25 Hotfix
+- Fix the CSP to make the map work again !1776 @\_fridtjof_
 
 # 2020-10-23 Hotfix
 
