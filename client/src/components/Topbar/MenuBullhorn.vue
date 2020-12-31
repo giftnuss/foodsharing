@@ -23,6 +23,7 @@ export default {
             { url: 'donations', menuTitle: 'menu.entry.donations' },
             { url: 'circle_of_friends', menuTitle: 'menu.entry.friendcircle' },
             { url: 'selfservice', menuTitle: 'menu.entry.selfservice' },
+            { url: 'transparency', menuTitle: 'menu.entry.transparency' },
           ],
         },
         {

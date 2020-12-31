@@ -46,7 +46,6 @@ export default {
             { url: 'wiki', menuTitle: 'menu.entry.wiki' },
             { url: 'guide', menuTitle: 'menu.entry.guide', target: '_blank' },
             { url: 'statistics', menuTitle: 'menu.entry.statistics' },
-            { url: 'transparency', menuTitle: 'menu.entry.transparency' },
             { url: 'dataprivacy', menuTitle: 'menu.entry.dataprivacy' },
             { url: 'releaseNotes', menuTitle: 'menu.entry.release-notes' },
           ],
