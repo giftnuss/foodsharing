@@ -1,4 +1,4 @@
-# Release "Dragonfruit", unreleased
+# Release "Dragonfruit", 2020-31-12
 
 ## Features
 - Add button that marks emails as unread !1681 @alex.simm
@@ -33,7 +33,6 @@
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
 - Resolved newsletter flag: Disable the default value to false !1779 @chriswalg
 - Resolved the user registration: Removed adding the accepted_date to getPnVersion !1779 @chriswalg
-- Disabled session cookie checkbox in login form, until there is a solution in issue 956 !1785 @chriswalg
 - Disabled session cookie checkbox in login form and, until there is a solution in issue 956
 and persistent session disabled after each request, so that LastLogin is set correctly again !1785 @chriswalg
 - If Ambassador removes user from District verification is not removed and history is not written !1803 @fs_k
@@ -55,7 +54,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Deprecate / remove some obsolete view helpers !1693 @ChrisOelmueller
 - Deprecate both `v_form_recip_chooser` variants !1699 @ChrisOelmueller
 - Reimplement user verification as REST endpoints !1696 @ChrisOelmueller
-- Rewrite store wall with REST and Vue !1690 @ChrisOelmueller
 - Move xhr functions for store requests to REST !1755 @alex.simm
 - Replace isOrgaTeam checks with may(orga) #883 !1680 @ChrisOelmueller
 - Rewrite store wall with REST and Vue !1690 !1750 @ChrisOelmueller
@@ -75,7 +73,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
 - Increase phpstan analysis level to 5 and fix all issues !1674 !1729 @ChrisOelmueller
 - Remove the abandoned deployer/recipes package and deployer/phar-update and update deployer to v 7 !1743 @peter.toennies
-- Remove the abandoned deployer recipes package !1743 @peter.toennies
 - Annotate some variables in unit tests, streamline namespace "imports" !1748 @ChrisOelmueller
 - Remove unused `triage` CI script #979 !1750 @ChrisOelmueller
 - Update Nelmio API doc bundle to 4.0.1 !1747 @alex.simm
@@ -84,6 +81,8 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Improved the RegisterCest.php: This check the variants with and without newsletter now. !1779 @chriswalg
 - Make build/test CI interruptible when new commits are pushed !1799 @\_fridtjof_
 - Fix an incredibly unlikely potential crash when editing a workgroup !1796 @ChrisOelmueller
+- Update docker images to node:14.14.0-alpine3.12, redis:6.0.8-alpine and ruby:2.7.2-alpine3.12 !1724 @chriswalg
+
 # 2020-11-25 Hotfix
 - Fix the CSP to make the map work again !1776 @\_fridtjof_
 
@@ -91,7 +90,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 
 ## Bugfixes
 - Fix komoot's URL for address search !1727 @alex.simm
-- Update docker images to node:14.14.0-alpine3.12, redis:6.0.8-alpine and ruby:2.7.2-alpine3.12 !1724 @chriswalg
 
 # Release "Cranberry", 2020-10-11
 
