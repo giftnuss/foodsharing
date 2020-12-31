@@ -5,7 +5,7 @@
       id="requests"
       :visible="!!requests.length"
       :title="$i18n('store.request.title', { storeTitle })"
-      hide-header-close
+      header-class="d-flex"
       hide-footer
       static
       centered
