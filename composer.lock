@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d18005a0076670b68455b18e4af3e79",
+    "content-hash": "d40ee842dbaa44ec8dc2d576712f1b88",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -147,31 +147,31 @@
         },
         {
             "name": "ddeboer/imap",
-            "version": "1.10.1",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/imap.git",
-                "reference": "d439d09376dd53209788cddb6e2ea277f8ddc8a6"
+                "reference": "a089dfcb9d177f921eb5dadc8d4144a44dff22ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/imap/zipball/d439d09376dd53209788cddb6e2ea277f8ddc8a6",
-                "reference": "d439d09376dd53209788cddb6e2ea277f8ddc8a6",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/a089dfcb9d177f921eb5dadc8d4144a44dff22ee",
+                "reference": "a089dfcb9d177f921eb5dadc8d4144a44dff22ee",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "ext-imap": "*",
                 "ext-mbstring": "*",
-                "php": "^7.2"
+                "php": "^7.3 || ^8.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "laminas/laminas-mail": "^2.10",
-                "phpstan/phpstan": "^0.12",
-                "phpstan/phpstan-phpunit": "^0.12",
-                "phpstan/phpstan-strict-rules": "^0.12",
-                "phpunit/phpunit": "^8.5"
+                "friendsofphp/php-cs-fixer": "^2.16.7",
+                "laminas/laminas-mail": "^2.12.3",
+                "phpstan/phpstan": "^0.12.57",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "phpstan/phpstan-strict-rules": "^0.12.5",
+                "phpunit/phpunit": "^9.4.3"
             },
             "type": "library",
             "autoload": {
@@ -205,7 +205,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ddeboer/imap/issues",
-                "source": "https://github.com/ddeboer/imap/tree/1.10.1"
+                "source": "https://github.com/ddeboer/imap/tree/1.11.0"
             },
             "funding": [
                 {
@@ -217,7 +217,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-26T07:12:55+00:00"
+            "time": "2020-11-30T14:52:49+00:00"
         },
         {
             "name": "doctrine/annotations",
