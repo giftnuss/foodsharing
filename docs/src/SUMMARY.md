@@ -43,6 +43,7 @@
     - [Tables, columns](database-tables-columns.md)
   - [Tests](tests.md)
   - [Release](release.md)
+    - [Hotfix](hotfix.md)
   - [Update Dependencies](update-dependencies.md)
   - [Glossary](GLOSSARY.md)
 
