@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31de51c43bfeb33f82d512b4d204da3a",
+    "content-hash": "07e228fbffe7c2d651dfdcc89e4dcf25",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -3595,21 +3595,21 @@
         },
         {
             "name": "setasign/fpdi",
-            "version": "v2.3.4",
+            "version": "v2.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI.git",
-                "reference": "2b5fb811c04f937ef257ef3f798cebeded33c136"
+                "reference": "f2246c8669bd25834f5c264425eb0e250d7a9312"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/2b5fb811c04f937ef257ef3f798cebeded33c136",
-                "reference": "2b5fb811c04f937ef257ef3f798cebeded33c136",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/f2246c8669bd25834f5c264425eb0e250d7a9312",
+                "reference": "f2246c8669bd25834f5c264425eb0e250d7a9312",
                 "shasum": ""
             },
             "require": {
                 "ext-zlib": "*",
-                "php": "^5.6 || ^7.0"
+                "php": "^5.6 || ^7.0 || ^8.0"
             },
             "conflict": {
                 "setasign/tfpdf": "<1.31"
@@ -3655,7 +3655,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Setasign/FPDI/issues",
-                "source": "https://github.com/Setasign/FPDI/tree/master"
+                "source": "https://github.com/Setasign/FPDI/tree/v2.3.5"
             },
             "funding": [
                 {
@@ -3663,7 +3663,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-27T06:55:47+00:00"
+            "time": "2020-12-03T13:40:03+00:00"
         },
         {
             "name": "spomky-labs/base64url",
