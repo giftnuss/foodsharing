@@ -976,6 +976,34 @@ class XhrMethods
 						'id' => WorkgroupFunction::FSP,
 						'name' => $this->translator->trans('group.function.fsp'),
 					],
+					[
+						'id' => WorkgroupFunction::STORES,
+						'name' => $this->translator->trans('group.function.stores'),
+					],
+					[
+						'id' => WorkgroupFunction::REPORT,
+						'name' => $this->translator->trans('group.function.report'),
+					],
+					[
+						'id' => WorkgroupFunction::MEDIATION,
+						'name' => $this->translator->trans('group.function.mediation'),
+					],
+					[
+						'id' => WorkgroupFunction::ARBIRTATION,
+						'name' => $this->translator->trans('group.function.arbitration'),
+					],
+					[
+						'id' => WorkgroupFunction::FSMANAGEMENT,
+						'name' => $this->translator->trans('group.function.fsmanagement'),
+					],
+					[
+						'id' => WorkgroupFunction::PR,
+						'name' => $this->translator->trans('group.function.pr'),
+					],
+					[
+						'id' => WorkgroupFunction::MODERATION,
+						'name' => $this->translator->trans('group.function.moderation'),
+					],
 				],
 			]),
 			$this->v_utils->v_input_wrapper(
@@ -1182,6 +1210,62 @@ class XhrMethods
 				return json_encode([
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_fsp_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::STORES);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_stores_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::REPORT);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_report_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::MEDIATION);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_mediation_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::ARBIRTATION);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_arbitration_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::FSMANAGEMENT);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_fsmanagement_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::PR);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_pr_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::MODERATION);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_moderation_team') . '");',
 				]);
 			}
 		}

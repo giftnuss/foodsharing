@@ -33,6 +33,64 @@
     {% endembed %}
 {% endif %}
 
+{% if isRegion and region.storesAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.storesAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'stores-list', 'entries': region.storesAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.reportAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.reportAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'report-list', 'entries': region.reportAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.mediationAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.mediationAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'mediation-list', 'entries': region.mediationAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.arbitrationAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.arbitrationAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'arbitration-list', 'entries': region.arbitrationAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.fsManagementAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.fsManagementAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'fsmanagement-list', 'entries': region.fsManagementAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.prAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.prAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'pr-list', 'entries': region.prAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+{% if isRegion and region.moderationAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.moderationAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'stores-list', 'entries': region.moderationAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
+
+
 <div id="signout_sure" title="{{ 'are_you_sure'|trans }}">
     {% include 'partials/info.twig' with {'msg': (region.isWorkGroup ? 'group.really_quit_workgroup' : (region.isHomeDistrict ? 'group.quitting_home_district_warning': 'group.really_quit_district')) |trans({'%name%': region.name})} %}
     <input type="hidden" name="bid" class="bid" value="{{ region.id }}" />

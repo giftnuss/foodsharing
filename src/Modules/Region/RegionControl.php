@@ -178,6 +178,13 @@ final class RegionControl extends Control
 			'welcomeAdmins' => array_map($avatarListEntry, array_slice($this->region['welcomeAdmins'], 0, self::DisplayAvatarListEntries)),
 			'votingAdmins' => array_map($avatarListEntry, array_slice($this->region['votingAdmins'], 0, self::DisplayAvatarListEntries)),
 			'fspAdmins' => array_map($avatarListEntry, array_slice($this->region['fspAdmins'], 0, self::DisplayAvatarListEntries)),
+			'storesAdmins' => array_map($avatarListEntry, array_slice($this->region['storesAdmins'], 0, self::DisplayAvatarListEntries)),
+			'reportAdmins' => array_map($avatarListEntry, array_slice($this->region['reportAdmins'], 0, self::DisplayAvatarListEntries)),
+			'mediationAdmins' => array_map($avatarListEntry, array_slice($this->region['mediationAdmins'], 0, self::DisplayAvatarListEntries)),
+			'arbitrationAdmins' => array_map($avatarListEntry, array_slice($this->region['arbitrationAdmins'], 0, self::DisplayAvatarListEntries)),
+			'fsManagementAdmins' => array_map($avatarListEntry, array_slice($this->region['fsManagementAdmins'], 0, self::DisplayAvatarListEntries)),
+			'prAdmins' => array_map($avatarListEntry, array_slice($this->region['prAdmins'], 0, self::DisplayAvatarListEntries)),
+			'moderationAdmins' => array_map($avatarListEntry, array_slice($this->region['moderationAdmins'], 0, self::DisplayAvatarListEntries)),
 		];
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 

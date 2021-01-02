@@ -323,6 +323,90 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln(' done');
 
+		// Create STORESAdmins Group
+		$this->output->writeln('- create store coordination group');
+		$storesGroup = $I->createWorkingGroup('Betriebskoordination Göttingen', ['parent_id' => $region1, 'email_name' => 'betriebskoordination.Goettingen', 'teaser' => 'Hier sind die Betriebskoordinationsansprechpartner für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $storesGroup['id'], 'function_id' => WorkgroupFunction::STORES, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
+			$I->addRegionMember($storesGroup['id'], $random_user);
+			$I->addRegionAdmin($storesGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $storesGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create REPORTAdmins Group
+		$this->output->writeln('- create report group');
+		$reportGroup = $I->createWorkingGroup('Meldungsbearbeitung Göttingen', ['parent_id' => $region1, 'email_name' => 'meldungsbearbeitung.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $reportGroup['id'], 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
+			$I->addRegionMember($reportGroup['id'], $random_user);
+			$I->addRegionAdmin($reportGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $reportGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create MediationAdmins Group
+		$this->output->writeln('- create mediation group');
+		$mediationGroup = $I->createWorkingGroup('Mediation Göttingen', ['parent_id' => $region1, 'email_name' => 'mediation.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $mediationGroup['id'], 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
+			$I->addRegionMember($mediationGroup['id'], $random_user);
+			$I->addRegionAdmin($mediationGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $mediationGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create ArbitrationAdmins Group
+		$this->output->writeln('- create arbitration group');
+		$arbitrationGroup = $I->createWorkingGroup('Schiedsstelle Göttingen', ['parent_id' => $region1, 'email_name' => 'schiedstelle.Goettingen', 'teaser' => 'Hier ist das Schiedsstellenteam für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $arbitrationGroup['id'], 'function_id' => WorkgroupFunction::ARBIRTATION, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
+			$I->addRegionMember($arbitrationGroup['id'], $random_user);
+			$I->addRegionAdmin($arbitrationGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $arbitrationGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create FSMANAGEMENT Group
+		$this->output->writeln('- create fsmanagement group');
+		$fsmanagementGroup = $I->createWorkingGroup('Verwaltung Göttingen', ['parent_id' => $region1, 'email_name' => 'verwaltung.Goettingen', 'teaser' => 'Hier ist das Verwaltungsteam für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $fsmanagementGroup['id'], 'function_id' => WorkgroupFunction::FSMANAGEMENT, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
+			$I->addRegionMember($fsmanagementGroup['id'], $random_user);
+			$I->addRegionAdmin($fsmanagementGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $fsmanagementGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create PR Group
+		$this->output->writeln('- create pr group');
+		$prGroup = $I->createWorkingGroup('Öffentlichkeitsarbeit Göttingen', ['parent_id' => $region1, 'email_name' => 'oeffentlichkeitsarbeit.Goettingen', 'teaser' => 'Hier ist das Öffentlichkeitsarbeitsteam für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $prGroup['id'], 'function_id' => WorkgroupFunction::PR, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 12) as $random_user) {
+			$I->addRegionMember($prGroup['id'], $random_user);
+			$I->addRegionAdmin($prGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $prGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create MODERATION Group
+		$this->output->writeln('- create moderation group');
+		$moderationGroup = $I->createWorkingGroup('Moderation Göttingen', ['parent_id' => $region1, 'email_name' => 'moderation.Goettingen', 'teaser' => 'Hier ist das Moderationsteam für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $moderationGroup['id'], 'function_id' => WorkgroupFunction::MODERATION, 'target_id' => $region1]);
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
+			$I->addRegionMember($moderationGroup['id'], $random_user);
+			$I->addRegionAdmin($moderationGroup['id'], $random_user);
+			$this->output->writeln(' User ' . $random_user . ' added to ' . $moderationGroup['id']);
+		}
+		$this->output->writeln(' done');
+
 		// create more stores and collect their ids in a list
 		$this->output->writeln('Create some stores');
 		$this->stores = [$store['id']];

@@ -340,10 +340,24 @@ group:
     welcome: Begrüßung
     voting: Abstimmung
     fsp: Fairteiler
+    stores: Betriebe
+    report: Meldungen
+    mediation : Mediation
+    arbitration: Schiedstelle
+    fsmanagement: Verwaltung
+    pr : Öffentlichkeitsarbeit
+    moderation: Moderation
     invalid: 'Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden.'
     duplicate_welcome_team: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
     duplicate_voting_team: 'Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben.'
     duplicate_fsp_team: 'Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben.'
+    duplicate_stores_team: 'Betriebskoordinationsteam schon angelegt ! Pro Bezirk kann es nur ein Betriebskoordinationsteam geben.'
+    duplicate_report_team: 'Meldungsteam schon angelegt ! Pro Bezirk kann es nur ein Meldungsteam geben.'
+    duplicate_mediation_team: 'Mediatoinsteam schon angelegt ! Pro Bezirk kann es nur ein Mediatoinsteam geben.'
+    duplicate_arbitration_team: 'Schiedstelle schon angelegt ! Pro Bezirk kann es nur ein Schiedstelle geben.'
+    duplicate_fsmanagement_team: 'Verwaltungsteam schon angelegt ! Pro Bezirk kann es nur ein Verwaltungsteam geben.'
+    duplicate_pr_team: 'Öffentlichkeitsarbeitsteam schon angelegt ! Pro Bezirk kann es nur ein Öffentlichkeitsarbeitsteam geben.'
+    duplicate_moderation_team: 'Moderationsteam schon angelegt ! Pro Bezirk kann es nur ein Moderationsteam geben.'
   show-all: Alle anzeigen
 
 legal:
@@ -492,6 +506,13 @@ terminology:
   welcomeAdmins: Begrüßungsteam
   votingAdmins: Abstimmungsteam
   fspAdmins: Fairteilerteam
+  storesAdmins: Betriebskooperationsteam
+  reportAdmins: Meldebearbeitungsteam
+  mediationAdmins: Mediationsteam
+  arbitrationAdmins: Schiedsstelle
+  fsManagementAdmins: Verwaltung
+  prAdmins: Öffentlichkeitsarbeitsteam
+  moderationAdmins: Moderationsteam
   wall: Pinnwand
   statistic: Statistik
   reports: Regelverletzungen (Preview)

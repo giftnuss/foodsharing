@@ -331,6 +331,55 @@ class RegionGateway extends BaseGateway
 			$region['fspAdmins'] = [];
 		}
 
+		if ($storesGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::STORES)) {
+			$region['storesAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($storesGroupId);
+			shuffle($region['storesAdmins']);
+		} else {
+			$region['storesAdmins'] = [];
+		}
+
+		if ($reportGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT)) {
+			$region['reportAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($reportGroupId);
+			shuffle($region['reportAdmins']);
+		} else {
+			$region['reportAdmins'] = [];
+		}
+
+		if ($mediationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::MEDIATION)) {
+			$region['mediationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($mediationGroupId);
+			shuffle($region['mediationAdmins']);
+		} else {
+			$region['mediationAdmins'] = [];
+		}
+
+		if ($arbitrationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBIRTATION)) {
+			$region['arbitrationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($arbitrationGroupId);
+			shuffle($region['arbitrationAdmins']);
+		} else {
+			$region['arbitrationAdmins'] = [];
+		}
+
+		if ($fsManagementGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSMANAGEMENT)) {
+			$region['fsManagementAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($fsManagementGroupId);
+			shuffle($region['fsManagementAdmins']);
+		} else {
+			$region['fsManagementAdmins'] = [];
+		}
+
+		if ($prGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::PR)) {
+			$region['prAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($prGroupId);
+			shuffle($region['prAdmins']);
+		} else {
+			$region['prAdmins'] = [];
+		}
+
+		if ($moderationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::MODERATION)) {
+			$region['moderationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($moderationGroupId);
+			shuffle($region['moderationAdmins']);
+		} else {
+			$region['moderationAdmins'] = [];
+		}
+
 		return $region;
 	}
 
