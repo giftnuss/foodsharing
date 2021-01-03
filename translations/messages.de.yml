@@ -848,7 +848,7 @@ forum:
       Hier kannst du es freischalten und alle Foodsaver darüber informieren.
     stick: Thema fixieren
     title: Titel
-  hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
+  hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt.
   no_posts: Bisher keine Beiträge vorhanden
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
@@ -1996,7 +1996,7 @@ email_template:
   login: Einloggen zum Antworten
   confirm_topic: 'Thema muss bestätigt werden:'
   confirm_link: möchte das Thema
-  confirm_BOT: absenden. Da Du Botschafter für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird.
+  confirm_BOT: absenden. Da Du Botschafter*in / Moderator*in für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird.
   foodsharepoint: -- Fair-Teiler
   reply: Antworten
   warning: Warnung

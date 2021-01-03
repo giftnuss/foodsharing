@@ -4,28 +4,38 @@ namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\ForumGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumPermissions
 {
 	private ForumGateway $forumGateway;
 	private Session $session;
+	private RegionGateway $regionGateway;
 
-	public function __construct(ForumGateway $forumGateway, Session $session)
+	public function __construct(
+		ForumGateway $forumGateway,
+		RegionGateway $regionGateway,
+		Session $session)
 	{
 		$this->forumGateway = $forumGateway;
+		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 	}
 
-	public function mayStartUnmoderatedThread(array $region, $ambassadorForum): bool
+	public function mayStartUnmoderatedThread(array $region): bool
 	{
 		if (!$this->session->user('verified')) {
 			return false;
 		}
 		$regionId = $region['id'];
-		if (!$this->mayPostToRegion($regionId, $ambassadorForum)) {
-			return false;
-		}
-		if ($this->session->isAmbassadorForRegion([$regionId])) {
+
+		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
+
+		if (empty($moderationGroup)) {
+			if ($this->session->isAmbassadorForRegion($regionId)) {
+				return true;
+			}
+		} elseif ($this->session->isAdminFor($moderationGroup)) {
 			return true;
 		}
 
@@ -37,6 +47,7 @@ class ForumPermissions
 		if ($this->session->may('orga')) {
 			return true;
 		}
+
 		if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
 			return false;
 		}
@@ -77,8 +88,14 @@ class ForumPermissions
 			return true;
 		}
 		$forums = $this->forumGateway->getForumsForThread($threadId);
+
 		foreach ($forums as $forum) {
-			if ($this->mayAccessForum($forum['forumId'], 1)) {
+			$moderationGroup = $this->regionGateway->getRegionModerationGroupId($forum['forumId']);
+			if (empty($moderationGroup)) {
+				if ($this->session->isAmbassadorForRegion($regionId)) {
+					return true;
+				}
+			} elseif ($this->session->isAdminFor($moderationGroup)) {
 				return true;
 			}
 		}
@@ -96,14 +113,23 @@ class ForumPermissions
 		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayActivateThreads(int $regionId): bool
-	{
-		return $this->mayPostToRegion($regionId, true);
-	}
-
 	public function mayChangeStickiness(int $regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, true);
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
+
+		if (empty($moderationGroup)) {
+			if ($this->session->isAmbassadorForRegion($regionId)) {
+				return true;
+			}
+		} elseif ($this->session->isAdminFor($moderationGroup)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public function mayDeletePost(array $post): bool

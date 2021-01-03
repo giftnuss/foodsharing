@@ -583,6 +583,22 @@ class RegionGateway extends BaseGateway
 		}
 	}
 
+	public function getRegionModerationGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::MODERATION
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	public function getRegionFunctionGroupId(int $parentId, int $function): ?int
 	{
 		try {

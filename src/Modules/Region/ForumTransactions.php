@@ -152,8 +152,13 @@ class ForumTransactions
 	{
 		$thread = $this->forumGateway->getThread($threadId);
 		$posterName = $this->foodsaverGateway->getFoodsaverName($thread['creator_id']);
-
-		if ($foodsaver = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id'])) {
+		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($region['id']);
+		if (empty($moderationGroup)) {
+			$moderators = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id']);
+		} else {
+			$moderators = $this->foodsaverGateway->getAdminsOrAmbassadors($moderationGroup);
+		}
+		if ($moderators) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
 				'thread' => $thread['title'],
@@ -162,7 +167,7 @@ class ForumTransactions
 				'bezirk' => $region['name'],
 			];
 
-			$this->notificationMail($foodsaver, 'forum/activation', $data);
+			$this->notificationMail($moderators, 'forum/activation', $data);
 		}
 	}
 
