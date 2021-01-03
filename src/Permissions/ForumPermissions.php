@@ -92,7 +92,7 @@ class ForumPermissions
 		foreach ($forums as $forum) {
 			$moderationGroup = $this->regionGateway->getRegionModerationGroupId($forum['forumId']);
 			if (empty($moderationGroup)) {
-				if ($this->session->isAmbassadorForRegion($regionId)) {
+				if ($this->session->isAdminFor($forum['forumId'])) {
 					return true;
 				}
 			} elseif ($this->session->isAdminFor($moderationGroup)) {
@@ -122,7 +122,7 @@ class ForumPermissions
 		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
 
 		if (empty($moderationGroup)) {
-			if ($this->session->isAmbassadorForRegion($regionId)) {
+			if ($this->session->isAdminFor($regionId)) {
 				return true;
 			}
 		} elseif ($this->session->isAdminFor($moderationGroup)) {
