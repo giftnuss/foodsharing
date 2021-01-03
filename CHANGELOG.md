@@ -1,3 +1,17 @@
+# Unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+- Remove unused code from the Flourish library !1789 @\_fridtjof_
+
+## Dev/Test/CI stuff
+
+
 # Release "Dragonfruit", 2020-31-12
 
 ## Features
