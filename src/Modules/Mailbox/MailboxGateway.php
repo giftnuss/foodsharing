@@ -72,7 +72,7 @@ class MailboxGateway extends BaseGateway
 		return $this->db->insert('fs_mailbox', ['name' => strip_tags($name), 'member' => $member]);
 	}
 
-	private function getMailboxesWithUnreadCount(array $mailboxIds): array
+	public function getMailboxesWithUnreadCount(array $mailboxIds): array
 	{
 		return $this->db->fetchAll('
 			SELECT	mb.id,
@@ -87,16 +87,6 @@ class MailboxGateway extends BaseGateway
 
 			WHERE	mb.id IN(' . implode(',', $mailboxIds) . ');
 		');
-	}
-
-	public function getNewCount(array $boxes): array
-	{
-		$mailboxIds = [];
-		foreach ($boxes as $b) {
-			$mailboxIds[] = $b['id'];
-		}
-
-		return $this->getMailboxesWithUnreadCount($mailboxIds);
 	}
 
 	public function setAnswered(int $message_id): int

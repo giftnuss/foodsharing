@@ -92,9 +92,10 @@ class MailboxControl extends Control
 				}
 			}
 
+			$mailboxIds = array_column($boxes, 'id');
 			$this->pageHelper->addContent($this->view->vueComponent('vue-mailbox', 'Mailbox', [
 				'hostname' => PLATFORM_MAILBOX_HOST,
-				'mailboxes' => $this->mailboxGateway->getNewCount($boxes),
+				'mailboxes' => $this->mailboxGateway->getMailboxesWithUnreadCount($mailboxIds),
 			]), CNT_LEFT);
 
 			$mailadresses = $this->mailboxGateway->getMailAdresses($this->session->id());
