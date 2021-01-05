@@ -16,7 +16,7 @@
     
 - The `sub` parameter
     - does the controller use the `sub` parameter?
-    Telltale signs are: `$_GET['sub']`, `$request->query->get('sub')`, `$this->sub` and `$this->sub_func`.
+    Telltale signs are: `$_GET['sub']`, `$request->query->get('sub')` and `$this->sub`.
     In the first iteration of the `FoodsharingController` compatibility layer, there is no support for porting this yet.
 
 ## Porting

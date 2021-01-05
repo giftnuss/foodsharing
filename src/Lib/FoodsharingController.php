@@ -35,8 +35,8 @@ abstract class FoodsharingController extends AbstractController
 	protected ContainerInterface $fullServiceContainer;
 
 	protected View $view;
-	// $sub and $sub_func were deliberately left out in this compatibility layer for the time being.
-	// However, a replacement or better solution for their behavior will be necessary for porting some controllers.
+	// $sub was deliberately left out in this compatibility layer for the time being.
+	// However, a replacement or better solution for its behavior will be necessary for porting some controllers.
 
 	protected PageHelper $pageHelper;
 	protected Mem $mem;
@@ -74,8 +74,8 @@ abstract class FoodsharingController extends AbstractController
 		$reflection = new ReflectionClass($this);
 		$className = $reflection->getShortName();
 
-		// $sub, $sub_func would be set up here.
-		// as mentioned above, they and their behavior are not implemented
+		// $sub would be set up here.
+		// as mentioned above, it and its behavior are not implemented
 
 		/*
 		 * This will make sure all controllers are suffixed 'Controller'.
