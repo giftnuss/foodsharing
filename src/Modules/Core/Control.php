@@ -128,15 +128,6 @@ abstract class Control
 		return $this->sub;
 	}
 
-	public function setSub($sub, $func = false)
-	{
-		if ($func === false) {
-			$func = $sub;
-		}
-		$this->sub = $sub;
-		$this->sub_func = $func;
-	}
-
 	public function getRequest($name)
 	{
 		if (isset($_REQUEST[$name])) {
