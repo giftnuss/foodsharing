@@ -396,11 +396,11 @@ class QuizXhr extends Control
 		$dia->addAbortButton();
 
 		if ($this->session->get('hastodoquiz-id') == Role::FOODSAVER) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen', 'goTo(\'/?page=settings&sub=up_fs\');');
 		} elseif ($this->session->get('hastodoquiz-id') == Role::STORE_MANAGER) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen', 'goTo(\'/?page=settings&sub=up_bip\');');
 		} elseif ($this->session->get('hastodoquiz-id') == Role::AMBASSADOR) {
-			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=up_bot\');');
 		}
 
 		$content = $this->contentGateway->get(36);
@@ -420,11 +420,11 @@ class QuizXhr extends Control
 				$dia->addAbortButton();
 
 				if ($nextRole == Role::FOODSAVER) {
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=up_fs\');');
 				} elseif ($nextRole == Role::STORE_MANAGER) {
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=up_bip\');');
 				} elseif ($nextRole == Role::AMBASSADOR) {
-					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
+					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=up_bot\');');
 				}
 
 				$content = $this->contentGateway->get(18);

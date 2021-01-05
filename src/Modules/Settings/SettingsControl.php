@@ -92,9 +92,9 @@ class SettingsControl extends Control
 		];
 
 		if ($this->foodsaver['rolle'] == Role::FOODSHARER) {
-			$menu[] = ['name' => $this->translator->trans('foodsaver.upgrade.to_fs'), 'href' => '/?page=settings&sub=upgrade/up_fs'];
+			$menu[] = ['name' => $this->translator->trans('foodsaver.upgrade.to_fs'), 'href' => '/?page=settings&sub=up_fs'];
 		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
-			$menu[] = ['name' => $this->translator->trans('foodsaver.upgrade.to_sm'), 'href' => '/?page=settings&sub=upgrade/up_bip'];
+			$menu[] = ['name' => $this->translator->trans('foodsaver.upgrade.to_sm'), 'href' => '/?page=settings&sub=up_bip'];
 		}
 
 		$menu[] = [
@@ -144,7 +144,7 @@ class SettingsControl extends Control
 					$fsId = $this->session->id();
 					if (!$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 						$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_fs_quiz'));
-						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
+						$this->routeHelper->go('/?page=settings&sub=up_fs');
 					}
 
 					$this->handleQuizStatus($quiz, $quizRole);
@@ -171,12 +171,12 @@ class SettingsControl extends Control
 			switch ($this->foodsaver['rolle']) {
 				case Role::FOODSHARER:
 					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_fs'));
-					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
+					$this->routeHelper->go('/?page=settings&sub=up_fs');
 					break;
 
 				case Role::FOODSAVER:
 					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_sm'));
-					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
+					$this->routeHelper->go('/?page=settings&sub=up_bip');
 					break;
 
 				default:

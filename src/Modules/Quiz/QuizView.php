@@ -363,19 +363,19 @@ class QuizView extends View
 		if ($failurePoints < $maxFailurePoints) {
 			switch ($this->session->get('quiz-id')) {
 				case Role::FOODSAVER:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">'
+					$out .= '<a href="/?page=settings&sub=up_fs" class="button">'
 						. 'Jetzt die Foodsaver-Anmeldung abschließen.' .
 					'</a>';
 					break;
 
 				case Role::STORE_MANAGER:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">'
+					$out .= '<a href="/?page=settings&sub=up_bip" class="button">'
 						. 'Jetzt die Betriebsverantwortlichenanmeldung abschließen.' .
 					'</a>';
 					break;
 
 				case Role::AMBASSADOR:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">'
+					$out .= '<a href="/?page=settings&sub=up_bot" class="button">'
 						. 'Jetzt die Botschafteranmeldung abschließen.'
 					. '</a>';
 					break;

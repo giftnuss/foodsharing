@@ -64,7 +64,7 @@ class DashboardView extends View
 		<div class="msg-inside info">
 			<i class="fas fa-info-circle"></i>
 			<strong>
-				<a href="/?page=settings&sub=upgrade/up_fs">
+				<a href="/?page=settings&sub=up_fs">
 				' . $this->translator->trans('foodsaver.upgrade.ad_fs') . '
 				</a>
 			</strong>

@@ -32,7 +32,7 @@ class MailboxControl extends Control
 		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			$this->pageHelper->addContent($this->v_utils->v_info($this->translator->trans('mailbox.not-available', [
 				'{role}' => '<a href="https://wiki.foodsharing.de/Betriebsverantwortliche*r">' . $this->translator->trans('terminology.storemanager.d') . '</a>',
-				'{quiz}' => '<a href="/?page=settings&sub=upgrade/up_bip">' . $this->translator->trans('mailbox.sm-quiz') . '</a>',
+				'{quiz}' => '<a href="/?page=settings&sub=up_bip">' . $this->translator->trans('mailbox.sm-quiz') . '</a>',
 			])));
 		}
 	}

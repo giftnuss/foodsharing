@@ -102,7 +102,7 @@ class FoodsharingUrl extends \Codeception\Module\Db
 
 	public function upgradeQuizUrl(int $quizRole): string
 	{
-		$result = '/?page=settings&sub=upgrade/up_';
+		$result = '/?page=settings&sub=up_';
 		switch ($quizRole) {
 			case Role::STORE_MANAGER:
 				return $result . 'bip';

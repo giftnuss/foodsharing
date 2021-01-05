@@ -17,4 +17,4 @@ $I->dontSee('Neuen Betrieb eintragen');
 // check if foodsaver without bieb-quiz can add new stores
 
 $I->amOnPage('/?page=betrieb&a=new&bid=903');
-$I->seeCurrentUrlEquals('/?page=settings&sub=upgrade/up_bip'); // it redirects
+$I->seeCurrentUrlEquals('/?page=settings&sub=up_bip'); // it redirects

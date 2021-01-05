@@ -106,7 +106,7 @@ class StoreControl extends Control
 				]), $this->translator->trans('storeedit.actions')), CNT_RIGHT);
 			} else {
 				$this->flashMessageHelper->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
-				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
+				$this->routeHelper->go('?page=settings&sub=up_bip');
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {

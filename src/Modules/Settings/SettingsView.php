@@ -231,11 +231,11 @@ class SettingsView extends View
 			$btn = '';
 			switch ($session['quiz_id']) {
 				case 1:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen!</a>';
 					break;
 
 				case 2:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen!</a>';
 					break;
 
 				default:
@@ -537,7 +537,7 @@ class SettingsView extends View
 	public function confirmBip($cnt, $rv)
 	{
 		$out = '
-			<form action="/?page=settings&amp;sub=upgrade/up_bip" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
+			<form action="/?page=settings&amp;sub=up_bip" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
 				<input type="hidden" value="confirmfs" name="form_submit">';
 
 		if ($cnt) {
@@ -562,7 +562,7 @@ class SettingsView extends View
 	public function confirmFs($cnt, $rv)
 	{
 		$out = '
-			<form action="/?page=settings&amp;sub=upgrade/up_fs" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
+			<form action="/?page=settings&amp;sub=up_fs" enctype="multipart/form-data" class="validate" id="confirmfs-form" method="post">
 				<input type="hidden" value="confirmfs" name="form_submit">';
 
 		if ($cnt) {

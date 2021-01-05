@@ -77,7 +77,7 @@ const urls = {
   stores: (regionId) => `/?page=betrieb&bid=${regionId}`,
   team: () => '/team',
   transparency: () => '/?page=content&sub=transparency',
-  upgradeToFs: () => '/?page=settings&sub=upgrade/up_fs',
+  upgradeToFs: () => '/?page=settings&sub=up_fs',
   wall: (regionId) => `/?page=bezirk&bid=${regionId}&sub=wall`,
   wiki: () => 'https://wiki.foodsharing.de/',
   wiki_voting: () => 'https://wiki.foodsharing.de/Abstimmungs-Modul',
