@@ -16,8 +16,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class View
 {
-	private $sub;
-
 	protected Session $session;
 	protected Utils $v_utils;
 
@@ -59,11 +57,6 @@ class View
 		$this->timeHelper = $timeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->translator = $translator;
-	}
-
-	public function setSub($sub)
-	{
-		$this->sub = $sub;
 	}
 
 	public function topbar(string $title, string $subtitle = '', string $icon = ''): string
