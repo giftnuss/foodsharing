@@ -4,6 +4,7 @@ namespace Foodsharing\Entrypoint;
 
 use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Routing;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,6 +44,8 @@ class IndexController extends AbstractController
 		try {
 			global $container;
 			$container = $this->fullServiceContainer;
+
+			/** @var Control $obj */
 			$obj = $container->get(ltrim($controller, '\\'));
 		} catch (ServiceNotFoundException $e) {
 		}
