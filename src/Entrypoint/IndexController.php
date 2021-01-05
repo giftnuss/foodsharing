@@ -54,7 +54,7 @@ class IndexController extends AbstractController
 			} else {
 				$obj->index($request, $response);
 			}
-			$sub = $sub = $obj->getSub();
+			$sub = $obj->getSub();
 			if ($sub !== false && is_callable([$obj, $sub])) {
 				$obj->$sub($request, $response);
 			}
