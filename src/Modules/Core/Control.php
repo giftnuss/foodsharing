@@ -20,7 +20,6 @@ abstract class Control
 	protected bool $isXhrControl = false;
 	protected $view;
 	private $sub;
-	private $sub_func;
 
 	protected PageHelper $pageHelper;
 	protected Mem $mem;
@@ -55,20 +54,11 @@ abstract class Control
 		$className = $reflection->getShortName();
 
 		$this->sub = false;
-		$this->sub_func = false;
 		if (isset($_GET['sub'])) {
-			$parts = explode('/', $_GET['sub']);
-			foreach ($parts as $i => $p) {
-				if (empty($p)) {
-					unset($parts[$i]);
-				}
-			}
-			$sub = $parts[0];
-			$sub_func = end($parts);
+			$sub = $_GET['sub'];
 
-			if (method_exists($this, $sub) && method_exists($this, $sub_func)) {
+			if (method_exists($this, $sub)) {
 				$this->sub = $sub;
-				$this->sub_func = $sub_func;
 			}
 		}
 
@@ -116,11 +106,6 @@ abstract class Control
 	{
 		global $g_template;
 		$g_template = $template;
-	}
-
-	public function getSubFunc()
-	{
-		return $this->sub_func;
 	}
 
 	public function getSub()
