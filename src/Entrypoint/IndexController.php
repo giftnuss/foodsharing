@@ -55,6 +55,9 @@ class IndexController extends AbstractController
 			if ($action !== null && is_callable([$obj, $action])) {
 				$obj->$action($request, $response);
 			} else {
+				// In practice, every class inheriting from Control has an index method,
+				// but it does not exist in Control itself, which is why PHPStan complains here.
+				/* @phpstan-ignore-next-line */
 				$obj->index($request, $response);
 			}
 			$sub = $obj->getSub();
