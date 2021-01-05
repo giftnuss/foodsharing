@@ -500,11 +500,6 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function upgrade()
-	{
-		/* This needs to be here for routing of upgrade/ to work. Do not remove! */
-	}
-
 	/**
 	 * Creates and saves a new API token for given user.
 	 */
