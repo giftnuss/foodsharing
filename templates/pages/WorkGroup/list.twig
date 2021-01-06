@@ -21,7 +21,8 @@
                 |join('\n')
             %}
             {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding'],
-                'icon': 'fa-info-circle', 'icon_tooltip': icon_tooltip } %}
+                'icon': group.functions is empty ? null : 'fa-info-circle',
+                'icon_tooltip': icon_tooltip } %}
                 {% block content %}
                     <div class="members">
                         {% for leader in group.leaders %}
