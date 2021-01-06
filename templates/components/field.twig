@@ -1,7 +1,13 @@
 <div class="field">
     {% set classes = classes |default([]) %}
     {% if title is defined and title %}
-        <div class="head ui-widget-header ui-corner-top">{{ title }}</div>
+        <div class="head ui-widget-header ui-corner-top">
+            {{ title }}
+            {# optional font-awesome icon with a tooltip #}
+            {% if icon is defined and icon_tooltip is defined %}
+                <i class="fas {{ icon }} fa-fw" title="{{ icon_tooltip }}"></i>
+            {% endif %}
+        </div>
         {% set classes = classes|merge(['corner-bottom']) %}
     {% else %}
         {%  set classes = classes|merge(['corner-all']) %}

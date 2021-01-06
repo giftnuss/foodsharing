@@ -15,7 +15,13 @@
 {% block main %}
     <div class="groups">
         {% for group in groups %}
-            {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding']} %}
+            {# creates a multi-line tooltip with all functions that this group has #}
+            {% set icon_tooltip = group.functions
+                |map(x => ('group.function.tooltip_function_'~x)|trans)
+                |join('\n')
+            %}
+            {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding'],
+                'icon': 'fa-info-circle', 'icon_tooltip': icon_tooltip } %}
                 {% block content %}
                     <div class="members">
                         {% for leader in group.leaders %}

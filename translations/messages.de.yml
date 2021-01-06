@@ -359,6 +359,9 @@ group:
     duplicate_pr_team: 'Öffentlichkeitsarbeitsteam schon angelegt! Pro Bezirk kann es nur ein Öffentlichkeitsarbeitsteam geben.'
     duplicate_moderation_team: 'Moderationsteam schon angelegt! Pro Bezirk kann es nur ein Moderationsteam geben.'
     restricted_workgroup_function: 'Diese Arbeitsgruppenfunktion kann nur von der Überregionalen AG Anlegen bearbeitet werden'
+    tooltip_function_1: "Admins dieser AG werden bei neuen Mitgliedern im Bezirk benachrichtigt"
+    tooltip_function_2: "Admins dieser AG können Abstimmungen anlegen"
+    tooltip_function_3: "Admins dieser AG können Fairteiler bearbeiten"
   show-all: "Alle anzeigen"
 
 legal:
