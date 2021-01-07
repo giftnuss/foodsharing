@@ -202,8 +202,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addRegionAdmin($id, $userbot['id']);
 		}
 
-
-
 		// Create store team conversations
 		$this->output->writeln('- create store team conversations');
 		$conv1 = $I->createConversation([$userbot['id'], $user2['id'], $userStoreManager['id']], ['name' => 'betrieb_bla', 'locked' => 1]);

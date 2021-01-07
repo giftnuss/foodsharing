@@ -666,6 +666,11 @@ class RegionGateway extends BaseGateway
 		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
 	}
 
+	public function existRegionReportGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $target_id]);
+	}
+
 	public function genderCountRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(

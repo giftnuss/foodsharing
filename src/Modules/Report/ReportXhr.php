@@ -116,6 +116,7 @@ class ReportXhr extends Control
 
 		return null;
 	}
+
 	// TODO : Modernisieren
 	public function reportDialog(): array
 	{
@@ -199,7 +200,6 @@ class ReportXhr extends Control
 
 	public function betriebReport(): array
 	{
-
 		$reason_id = 1;
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
@@ -218,8 +218,10 @@ class ReportXhr extends Control
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
 		];
+
 		return ['status' => 0];
 	}
+
 	// TODO : POC - Eigene Klasse für Mediationsdialog
 	public function mediationDialog(): array
 	{

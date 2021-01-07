@@ -4,14 +4,19 @@ namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Region\RegionGateway;
 
 final class WorkGroupPermissions
 {
 	private Session $session;
+	private RegionGateway $regionGateway;
 
-	public function __construct(Session $session)
+	public function __construct(
+		Session $session,
+		RegionGateway $regionGateway)
 	{
 		$this->session = $session;
+		$this->regionGateway = $regionGateway;
 	}
 
 	public function mayEdit(array $group): bool
@@ -21,6 +26,9 @@ final class WorkGroupPermissions
 			return true;
 		}
 
+		if ($this->regionGateway->existRegionReportGroup($group['id'], $group['parent_id'])) {
+			return false;
+		}
 		// Workgroup admins
 		$regionId = $group['id'];
 		if ($this->session->isAdminFor($regionId)) {
@@ -44,6 +52,10 @@ final class WorkGroupPermissions
 		$regionId = $group['id'];
 		if ($this->session->mayBezirk($regionId)) {
 			return true;
+		}
+
+		if ($this->regionGateway->existRegionReportGroup($group['id'], $group['parent_id'])) {
+			return false;
 		}
 
 		// Ambassadors of _direct parents_ (not all hierarchical parents)
