@@ -145,6 +145,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$userStoreManager2 = $I->createStoreCoordinator($password, ['email' => 'storemanager2@example.com', 'name' => 'Four', 'bezirk_id' => $region1]);
 		$this->writeUser($userStoreManager2, $password, 'store coordinator2');
 
+		$reportUser = $I->createStoreCoordinator($password, ['email' => 'report@example.com', 'name' => 'Franz', 'bezirk_id' => $region1]);
+		$this->writeUser($reportUser, $password, 'report user');
+
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
 			'name' => 'Bot',
@@ -354,6 +357,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addRegionAdmin($reportGroup['id'], $foodSaver_id);
 			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $reportGroup['id']);
 		}
+		$I->addRegionMember($reportGroup['id'], $reportUser['id']);
+		$I->addRegionAdmin($reportGroup['id'], $reportUser['id']);
 		$this->output->writeln(' done');
 
 		// Create MediationAdmins Group

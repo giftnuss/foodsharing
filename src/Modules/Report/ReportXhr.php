@@ -195,7 +195,7 @@ class ReportXhr extends Control
 
 		return $dialog->xhrout();
 
-		return ['status' => 0];
+		//return ['status' => 0];
 	}
 
 	public function betriebReport(): array
@@ -219,7 +219,7 @@ class ReportXhr extends Control
 				$("#reportreason ~ div.cb").hide();'
 		];
 
-		return ['status' => 0];
+		//return ['status' => 0];
 	}
 
 	// TODO : POC - Eigene Klasse für Mediationsdialog
@@ -262,6 +262,6 @@ class ReportXhr extends Control
 
 		return $dialog->xhrout();
 
-		return ['status' => 0];
+		//return ['status' => 0];
 	}
 }
