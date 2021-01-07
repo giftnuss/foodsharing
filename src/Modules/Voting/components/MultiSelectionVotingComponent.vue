@@ -7,6 +7,7 @@
         v-model="selected"
         :value="option.optionIndex"
         :disabled="!enabled"
+        @change="votingRequestValues.update"
       >
         {{ option.text }}
       </b-form-checkbox>
@@ -36,11 +37,11 @@ export default {
     }
   },
   computed: {
-    // only the selected options is needed for the REST request
+    // only the selected options are needed for the REST request
     votingRequestValues: function () {
       const v = {}
-      for (const x in this.selected) {
-        v[x.toString()] = 1
+      for (let i = 0; i < this.selected.length; i++) {
+        v[this.selected[i]] = 1
       }
       return v
     },

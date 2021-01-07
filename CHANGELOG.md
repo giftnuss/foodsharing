@@ -6,6 +6,7 @@
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 
 ## Bugfixes
+- Fix transmitted choices in checkbox voting !1847 @alex.simm
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
