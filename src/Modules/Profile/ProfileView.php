@@ -286,7 +286,8 @@ class ProfileView extends View
 		return '
 		<ul class="linklist">
 			' . $writeMessage . $opt . '
-			<li><a href="#disabledreports" id="disabledreports-link" onclick="return false;" class="item"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
+			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
+<!--			<li><a href="#" onclick="ajreq(\'mediationDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li> -->
 		</ul>';
 	}
 

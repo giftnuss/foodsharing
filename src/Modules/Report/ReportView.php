@@ -21,6 +21,7 @@ class ReportView extends View
 		]);
 	}
 
+	// TODO Modernisieren
 	public function reportDialog(): string
 	{
 		return $this->v_utils->v_input_wrapper('Warum möchtest Du ' . $this->foodsaver['name'] . ' melden?', '
@@ -32,7 +33,7 @@ class ReportView extends View
 				[
 					'id' => 2,
 					'name' => 'Ist gar nicht zum Abholen gekommen'],
-				[
+				/*[
 					'id' => 3,
 					'name' => 'Hat sich unhöflich oder respektlos verhalten'],
 				[
@@ -64,13 +65,13 @@ class ReportView extends View
 					'name' => 'Nimmt nicht alle zur Abholung vorgesehenen Lebensmittel mit'],
 				[
 					'id' => 14,
-					'name' => 'Hat sich außerhalb seiner/ihrer Abholzeit beim Betrieb zu rettende Lebensmittel genommen oder nachgefragt'],
+					'name' => 'Hat sich außerhalb seiner/ihrer Abholzeit beim Betrieb zu rettende Lebensmittel genommen oder nachgefragt'],*/
 				[
 					'id' => 15,
-					'name' => 'Verkauft gerettete Lebensmittel'],
+					'name' => 'Verkauft gerettete Lebensmittel']/*,
 				[
 					'id' => 16,
-					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)']]
+					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)']*/]
 			]) . '<br />
 			<div id="reportreason_3" class="cb" style="margin:5px 0;">
 			' . $this->v_utils->v_form_checkbox('reportreason_3', ['nowrapper' => true, 'value' => 1, 'values' => [

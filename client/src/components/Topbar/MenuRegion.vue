@@ -121,7 +121,7 @@
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
         <a
-          v-if="region.isAdmin"
+          v-if="region.mayAccessReportsForRegion"
           :href="$url('reports', region.id)"
           role="menuitem"
           class="dropdown-item sub"

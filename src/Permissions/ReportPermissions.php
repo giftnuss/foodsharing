@@ -3,15 +3,21 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ReportPermissions
 {
 	private Session $session;
+	private RegionGateway $regionGateway;
 
-	public function __construct(Session $session)
+	public function __construct(
+		Session $session,
+		RegionGateway $regionGateway)
 	{
 		$this->session = $session;
+		$this->regionGateway = $regionGateway;
 	}
 
 	/** Reports list on region level: accessible for orga and for the AMBs of that exact region
@@ -25,8 +31,13 @@ class ReportPermissions
 		if ($this->session->may('orga')) {
 			return true;
 		}
-		if ($this->session->isAdminFor($regionId)) {
-			return true;
+
+		$reportGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
+
+		if (!empty($reportGroup)) {
+			if ($this->session->isAdminFor($reportGroup)) {
+				return true;
+			}
 		}
 
 		// ToDo: Need to check that regionId is a subgroup of europe. implied for now.

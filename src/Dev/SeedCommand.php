@@ -202,32 +202,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addRegionAdmin($id, $userbot['id']);
 		}
 
-		// Create a welcome Group
-		$this->output->writeln('- create welcome group');
-		$welcomeGroup = $I->createWorkingGroup('Begrüßung Göttingen', ['parent_id' => $region1, 'email_name' => 'Begruessung.Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
-		$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
-		$welcomeGroup['id'];
-		$this->output->writeln('- make foodsaver responsible for welcome group');
-		$I->addRegionMember($welcomeGroup['id'], $user2['id']);
-		$I->addRegionAdmin($welcomeGroup['id'], $user2['id']);
 
-		// Create voting Group
-		$this->output->writeln('- create voting group');
-		$votingGroup = $I->createWorkingGroup('Abstimmungen Göttingen', ['parent_id' => $region1, 'email_name' => 'Abstimmung.Göttingen', 'teaser' => 'Hier sind die Abstimmungen für unseren Bezirk']);
-		$I->haveInDatabase('fs_region_function', ['region_id' => $votingGroup['id'], 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $region1]);
-		$I->addRegionMember($votingGroup['id'], $userStoreManager['id']);
-		$I->addRegionAdmin($votingGroup['id'], $userStoreManager['id']);
-		$I->addRegionMember($votingGroup['id'], $userbot['id']);
-		$I->addRegionAdmin($votingGroup['id'], $userbot['id']);
-
-		// Create fsp Group
-		$this->output->writeln('- create fsp group');
-		$fspGroup = $I->createWorkingGroup('Fairteiler Göttingen', ['parent_id' => $region1, 'email_name' => 'Fairteiler.Göttingen', 'teaser' => 'Hier sind die Fairteileransprechpartner für unseren Bezirk']);
-		$I->haveInDatabase('fs_region_function', ['region_id' => $fspGroup['id'], 'function_id' => WorkgroupFunction::FSP, 'target_id' => $region1]);
-		$I->addRegionMember($fspGroup['id'], $userStoreManager['id']);
-		$I->addRegionAdmin($fspGroup['id'], $userStoreManager['id']);
-		$I->addRegionMember($fspGroup['id'], $userbot['id']);
-		$I->addRegionAdmin($fspGroup['id'], $userbot['id']);
 
 		// Create store team conversations
 		$this->output->writeln('- create store team conversations');
@@ -323,15 +298,51 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln(' done');
 
+		// Create a welcome Group
+		$this->output->writeln('- create welcome group');
+		$welcomeGroup = $I->createWorkingGroup('Begrüßung Göttingen', ['parent_id' => $region1, 'email_name' => 'Begruessung.Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
+		for ($k = 0; $k <= 4; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($welcomeGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($welcomeGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $welcomeGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create voting Group
+		$this->output->writeln('- create voting group');
+		$votingGroup = $I->createWorkingGroup('Abstimmungen Göttingen', ['parent_id' => $region1, 'email_name' => 'Abstimmung.Goettingen', 'teaser' => 'Hier sind die Abstimmungen für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $votingGroup['id'], 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $region1]);
+		for ($k = 0; $k <= 3; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($votingGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($votingGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $votingGroup['id']);
+		}
+		$this->output->writeln(' done');
+
+		// Create fsp Group
+		$this->output->writeln('- create fsp group');
+		$fspGroup = $I->createWorkingGroup('Fairteiler Göttingen', ['parent_id' => $region1, 'email_name' => 'Fairteiler.Goettingen', 'teaser' => 'Hier sind die Fairteileransprechpartner für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $fspGroup['id'], 'function_id' => WorkgroupFunction::FSP, 'target_id' => $region1]);
+		for ($k = 0; $k <= 2; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($fspGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($fspGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $fspGroup['id']);
+		}
+		$this->output->writeln(' done');
+
 		// Create STORESAdmins Group
 		$this->output->writeln('- create store coordination group');
 		$storesGroup = $I->createWorkingGroup('Betriebskoordination Göttingen', ['parent_id' => $region1, 'email_name' => 'betriebskoordination.Goettingen', 'teaser' => 'Hier sind die Betriebskoordinationsansprechpartner für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $storesGroup['id'], 'function_id' => WorkgroupFunction::STORES, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
-			$I->addRegionMember($storesGroup['id'], $random_user);
-			$I->addRegionAdmin($storesGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $storesGroup['id']);
+		for ($k = 0; $k <= 3; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($storesGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($storesGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $storesGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -339,11 +350,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create report group');
 		$reportGroup = $I->createWorkingGroup('Meldungsbearbeitung Göttingen', ['parent_id' => $region1, 'email_name' => 'meldungsbearbeitung.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $reportGroup['id'], 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
-			$I->addRegionMember($reportGroup['id'], $random_user);
-			$I->addRegionAdmin($reportGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $reportGroup['id']);
+		for ($k = 0; $k <= 3; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($reportGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($reportGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $reportGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -351,11 +362,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create mediation group');
 		$mediationGroup = $I->createWorkingGroup('Mediation Göttingen', ['parent_id' => $region1, 'email_name' => 'mediation.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $mediationGroup['id'], 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
-			$I->addRegionMember($mediationGroup['id'], $random_user);
-			$I->addRegionAdmin($mediationGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $mediationGroup['id']);
+		for ($k = 0; $k <= 4; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($mediationGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($mediationGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $mediationGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -363,11 +374,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create arbitration group');
 		$arbitrationGroup = $I->createWorkingGroup('Schiedsstelle Göttingen', ['parent_id' => $region1, 'email_name' => 'schiedstelle.Goettingen', 'teaser' => 'Hier ist das Schiedsstellenteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $arbitrationGroup['id'], 'function_id' => WorkgroupFunction::ARBIRTATION, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
-			$I->addRegionMember($arbitrationGroup['id'], $random_user);
-			$I->addRegionAdmin($arbitrationGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $arbitrationGroup['id']);
+		for ($k = 0; $k <= 3; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($arbitrationGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($arbitrationGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $arbitrationGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -375,11 +386,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create fsmanagement group');
 		$fsmanagementGroup = $I->createWorkingGroup('Verwaltung Göttingen', ['parent_id' => $region1, 'email_name' => 'verwaltung.Goettingen', 'teaser' => 'Hier ist das Verwaltungsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $fsmanagementGroup['id'], 'function_id' => WorkgroupFunction::FSMANAGEMENT, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 6) as $random_user) {
-			$I->addRegionMember($fsmanagementGroup['id'], $random_user);
-			$I->addRegionAdmin($fsmanagementGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $fsmanagementGroup['id']);
+		for ($k = 0; $k <= 2; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($fsmanagementGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($fsmanagementGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $fsmanagementGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -387,11 +398,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create pr group');
 		$prGroup = $I->createWorkingGroup('Öffentlichkeitsarbeit Göttingen', ['parent_id' => $region1, 'email_name' => 'oeffentlichkeitsarbeit.Goettingen', 'teaser' => 'Hier ist das Öffentlichkeitsarbeitsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $prGroup['id'], 'function_id' => WorkgroupFunction::PR, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 12) as $random_user) {
-			$I->addRegionMember($prGroup['id'], $random_user);
-			$I->addRegionAdmin($prGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $prGroup['id']);
+		for ($k = 0; $k <= 5; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($prGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($prGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $prGroup['id']);
 		}
 		$this->output->writeln(' done');
 
@@ -399,11 +410,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create moderation group');
 		$moderationGroup = $I->createWorkingGroup('Moderation Göttingen', ['parent_id' => $region1, 'email_name' => 'moderation.Goettingen', 'teaser' => 'Hier ist das Moderationsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $moderationGroup['id'], 'function_id' => WorkgroupFunction::MODERATION, 'target_id' => $region1]);
-		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
-		foreach ($this->getRandomIDOfArray($randomFsList, 8) as $random_user) {
-			$I->addRegionMember($moderationGroup['id'], $random_user);
-			$I->addRegionAdmin($moderationGroup['id'], $random_user);
-			$this->output->writeln(' User ' . $random_user . ' added to ' . $moderationGroup['id']);
+		for ($k = 0; $k <= 1; ++$k) {
+			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+			$I->addRegionMember($moderationGroup['id'], $foodSaver_id);
+			$I->addRegionAdmin($moderationGroup['id'], $foodSaver_id);
+			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $moderationGroup['id']);
 		}
 		$this->output->writeln(' done');
 

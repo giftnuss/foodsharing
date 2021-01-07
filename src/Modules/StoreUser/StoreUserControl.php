@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\StoreUser;
 use Carbon\Carbon;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -112,12 +113,22 @@ class StoreUserControl extends Control
 			$this->pageHelper->addTitle($store['name']);
 
 			if ($this->storePermissions->mayAccessStore($storeId)) {
-				if ((!$store['verantwortlich'] && $this->session->isAdminFor($store['bezirk_id']))) {
+				if ((!$store['verantwortlich'] && $this->storePermissions->mayEditStore($storeId))) {
 					$store['verantwortlich'] = true;
-					$this->flashMessageHelper->info(
-						'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
-						. $this->translator->trans('storeedit.team.amb')
-					);
+
+					$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
+					$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+					if (empty($storeGroup)) {
+						if ($this->session->isAdminFor($storeRegion)) {
+							$this->flashMessageHelper->info(
+								'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
+								. $this->translator->trans('storeedit.team.amb'));
+						}
+					} elseif ($this->session->isAdminFor($storeGroup)) {
+						$this->flashMessageHelper->info(
+							'<strong>' . $this->translator->trans('storeedit.team.note') . '</strong> '
+							. $this->translator->trans('storeedit.team.coordinator'));
+					}
 				} elseif (!$store['verantwortlich'] && $this->session->may('orga')) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info(

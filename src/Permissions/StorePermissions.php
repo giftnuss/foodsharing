@@ -7,18 +7,23 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus as StoreTeamStatus;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus as UserTeamStatus;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class StorePermissions
 {
 	private StoreGateway $storeGateway;
 	private Session $session;
+	private RegionGateway $regionGateway;
 
 	public function __construct(
 		StoreGateway $storeGateway,
-		Session $session
+		Session $session,
+		RegionGateway $regionGateway
 	) {
 		$this->storeGateway = $storeGateway;
 		$this->session = $session;
+		$this->regionGateway = $regionGateway;
 	}
 
 	public function mayJoinStoreRequest(int $storeId): bool
@@ -58,7 +63,12 @@ class StorePermissions
 		}
 
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		if ($this->session->isAdminFor($storeRegion)) {
+		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		if (empty($storeGroup)) {
+			if ($this->session->isAdminFor($storeRegion)) {
+				return true;
+			}
+		} elseif ($this->session->isAdminFor($storeGroup)) {
 			return true;
 		}
 
@@ -80,7 +90,12 @@ class StorePermissions
 		}
 
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		if ($this->session->isAdminFor($storeRegion)) {
+		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		if (empty($storeGroup)) {
+			if ($this->session->isAdminFor($storeRegion)) {
+				return true;
+			}
+		} elseif ($this->session->isAdminFor($storeGroup)) {
 			return true;
 		}
 
@@ -150,7 +165,12 @@ class StorePermissions
 			return true;
 		}
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		if ($this->session->isAdminFor($storeRegion)) {
+		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		if (empty($storeGroup)) {
+			if ($this->session->isAdminFor($storeRegion)) {
+				return true;
+			}
+		} elseif ($this->session->isAdminFor($storeGroup)) {
 			return true;
 		}
 

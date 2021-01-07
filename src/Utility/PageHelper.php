@@ -227,10 +227,11 @@ final class PageHelper
 			$groupType = $group['type'];
 			$group = array_merge($group, [
 				'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($groupId),
-				'hasConference' => $this->regionPermissions->hasConference($groupType),
+				'hasConference' => $this->regionPermissions->hasConference($groupType)
 			]);
 			if (Type::isRegion($groupType)) {
 				$group['isAdmin'] = $this->session->isAdminFor($groupId);
+				$group['mayAccessReportsForRegion'] = $this->reportPermissions->mayAccessReportsForRegion($groupId);
 				$regions[] = $group;
 			} else {
 				$group['isAdmin'] = $this->workGroupPermissions->mayEdit($group);

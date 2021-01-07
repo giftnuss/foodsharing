@@ -116,11 +116,11 @@ class ReportXhr extends Control
 
 		return null;
 	}
-
+	// TODO : Modernisieren
 	public function reportDialog(): array
 	{
-		// disabled until reports are fixed
-		/*
+		// Only show Dialog when a local report group exists
+
 		$dialog = new XhrDialog();
 		$dialog->setTitle($this->foodsaver['name'] . ' melden');
 
@@ -193,14 +193,14 @@ class ReportXhr extends Control
 		$dialog->noOverflow();
 
 		return $dialog->xhrout();
-		*/
+
 		return ['status' => 0];
 	}
 
 	public function betriebReport(): array
 	{
-		// disabled until reports are fixed
-		/*$reason_id = 1;
+
+		$reason_id = 1;
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
 		}
@@ -217,7 +217,49 @@ class ReportXhr extends Control
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
-		];*/
+		];
+		return ['status' => 0];
+	}
+	// TODO : POC - Eigene Klasse für Mediationsdialog
+	public function mediationDialog(): array
+	{
+		// Only show Dialog when a local report group exists
+
+		$dialog = new XhrDialog();
+		$dialog->setTitle(' Mediation anfragen für ' . $this->foodsaver['name']);
+
+		global $g_data;
+		$g_data['reportreason'] = 0;
+
+		$dialog->addContent($this->v_utils->v_form_textarea('', [
+			'desc' => $this->translator->trans('mediation.info'),
+		]));
+		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
+		$dialog->addOpt('width', '$(window).width()*0.9', false);
+		$dialog->addAbortButton();
+
+//		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
+		$dialog->addButton('Mediation anfragen', '
+
+		if ($("#reportreason").val() == 0) {
+			pulseError("Gib gib deine Erreichbarkeit für die Mediation an!");
+		} else {
+			var reason = $("#reportreason option:selected").text();
+
+			ajreq("betriebReport", {
+				app: "report",
+				bid: $("#reportbid").val(),
+				fsid: $("#reportfsid").val(),
+				reason_id: $("#reportreason").val(),
+				reason: reason,
+				msg: $("#reportmessage").val()
+			});
+		}
+		');
+		$dialog->noOverflow();
+
+		return $dialog->xhrout();
+
 		return ['status' => 0];
 	}
 }

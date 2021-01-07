@@ -722,6 +722,9 @@ storeedit:
       In diesem Betrieb gibt es aktuell keine Verantwortliche!
       Bitte füge bis zu drei Betriebsverantwortliche hinzu, die diesen Betrieb in Zukunft betreuen.
     note: 'Hinweis:'
+    coordinator: |
+      Du bist nicht verantwortlich für diesen Betrieb.
+      Du hast jedoch weitreichende Rechte als Teil des Betriebskoordinationsteams.
     amb: |
       Du bist nicht verantwortlich für diesen Betrieb.
       Du hast jedoch weitreichende Rechte als Botschafter*in.
@@ -1060,15 +1063,27 @@ reports:
   in-store: 'Betrifft die Meldung einen bestimmten Betrieb, in dem {user} abholt?'
   when: Zeitpunkt
   info: |
-    Es ist wichtig alle Fälle, die gegen die Verhaltensregeln verstoßen, zu melden,
-    damit erst gar keine schlechte Stimmung unter den Foodsavern bzw. Betrieben entsteht.
-    So können sich die Verantwortlichen rechtzeitig um Problemfälle kümmern und
-    bei mehrfachem nicht angebrachtem Verhalten die Personen von der Plattform ausschließen.
-    Bitte schildere den Vorfall in mindestens 120 Zeichen, damit die Verantwortlichen
-    bzw. das Mediationsteam sich angemessen um den Fall kümmern können.
-    Nenne dabei Häufigkeit des Vorfalls, Ort, Zeitpunkt und ggf. andere anwesende Foodsaver!
+    Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit
+    bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an
+    wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.
+
+  #|
+  #  Es ist wichtig alle Fälle, die gegen die Verhaltensregeln verstoßen, zu melden,
+  #  damit erst gar keine schlechte Stimmung unter den Foodsavern bzw. Betrieben entsteht.
+  #  So können sich die Verantwortlichen rechtzeitig um Problemfälle kümmern und
+  #  bei mehrfachem nicht angebrachtem Verhalten die Personen von der Plattform ausschließen.
+  #  Bitte schildere den Vorfall in mindestens 120 Zeichen, damit die Verantwortlichen
+  #  bzw. das Mediationsteam sich angemessen um den Fall kümmern können.
+  #  Nenne dabei Häufigkeit des Vorfalls, Ort, Zeitpunkt und ggf. andere anwesende Foodsaver!
 # For legacy UI reasons (ReportXhr), needs to be toplevel with this exact key:
-reportmessage: Beschreibe den Vorfall noch etwas genauer!
+  reportmessage: Gib kurz an wie du bei Rückfragen erreicht werden kannst!
+
+mediation:
+  info: |
+    Wir finden es toll das du dir Unterstützung suchst um ein Thema mit dem foodsaver
+    anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das
+    eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden.
+  reportmessage: Gib kurz an wie du bei Rückfragen erreicht werden kannst!
 
 bell:
   no_bells: Du hast derzeit keine Benachrichtigungen
