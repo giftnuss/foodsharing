@@ -1,20 +1,7 @@
-# Release "Dragonfruit", 2020-31-12
-# Release "Erdbeere", Unreleased
-
-## Features
-
-## Changes
-- New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
+# 2020-10-23 Hotfix
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
-
-## Refactoring
-- Remove unused code from the Flourish library !1789 @\_fridtjof_
-- Initial preparations for migrating controllers to Symfony !1784 @\_fridtjof_
-
-## Dev/Test/CI stuff
-
 
 # Release "Dragonfruit", 2020-12-31
 
