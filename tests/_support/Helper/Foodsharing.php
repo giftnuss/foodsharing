@@ -582,7 +582,12 @@ class Foodsharing extends \Codeception\Module\Db
 			'bezirk_id' => $region_id,
 			'foodsaver_id' => $fs_id,
 		];
-		$this->haveInDatabase('fs_botschafter', $v);
+		$result = $this->countInDatabase('fs_botschafter', $v);
+		if ($result > 0) {
+			return;
+		} else {
+			$this->haveInDatabase('fs_botschafter', $v);
+		}
 	}
 
 	public function addRegionMember($region_id, $fs_id, $is_active = true)
@@ -597,7 +602,12 @@ class Foodsharing extends \Codeception\Module\Db
 				'foodsaver_id' => $fs_id,
 				'active' => $is_active ? 1 : 0,
 			];
-			$this->haveInDatabase('fs_foodsaver_has_bezirk', $v);
+			$result = $this->countInDatabase('fs_foodsaver_has_bezirk', $v);
+			if ($result > 0) {
+				return;
+			} else {
+				$this->haveInDatabase('fs_foodsaver_has_bezirk', $v);
+			}
 		}
 	}
 

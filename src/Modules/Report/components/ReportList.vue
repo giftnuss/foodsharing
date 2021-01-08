@@ -40,19 +40,17 @@
           </template>
 
           <template
-            slot="actions"
-            slot-scope="row"
+            v-slot:cell(actions)="row"
           >
             <b-button
               size="sm"
               @click.stop="row.toggleDetails"
             >
-              {{ row.detailsShowing ? 'Hide' : 'Show' }}
+              {{ row.detailsShowing ? 'x' : 'Details' }}
             </b-button>
           </template>
           <template
-            slot="row-details"
-            slot-scope="row"
+            v-slot:row-details="row"
           >
             <div class="report">
               <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>
@@ -136,7 +134,7 @@ export default {
           sortable: true,
         },
         {
-          key: 'name',
+          key: 'fs_name',
           label: this.$i18n('reports.about_first_name'),
           sortable: true,
         },
