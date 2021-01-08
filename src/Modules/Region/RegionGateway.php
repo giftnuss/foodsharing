@@ -459,16 +459,25 @@ class RegionGateway extends BaseGateway
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 
+	/**
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
+	 */
 	public function getRegionWelcomeGroupId(int $parentId): ?int
 	{
 		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::WELCOME);
 	}
 
+	/**
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
+	 */
 	public function getRegionFoodsharepointGroupId(int $parentId): ?int
 	{
 		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::FSP);
 	}
 
+	/**
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
+	 */
 	public function getRegionVotingGroupId(int $parentId): ?int
 	{
 		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::VOTING);

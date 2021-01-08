@@ -92,22 +92,7 @@ class GroupFunctionGateway extends BaseGateway
 		return $this->db->delete('fs_region_function', ['target_id' => $targetId]);
 	}
 
-	public function existRegionWelcomeGroup(int $region_id, int $target_id): bool
-	{
-		return $this->existRegionFunctionGroup($region_id, $target_id, WorkgroupFunction::WELCOME);
-	}
-
-	public function existRegionVotingGroup(int $region_id, int $target_id): bool
-	{
-		return $this->existRegionFunctionGroup($region_id, $target_id, WorkgroupFunction::VOTING);
-	}
-
-	public function existRegionFSPGroup(int $region_id, int $target_id): bool
-	{
-		return $this->existRegionFunctionGroup($region_id, $target_id, WorkgroupFunction::FSP);
-	}
-
-	private function existRegionFunctionGroup(int $region_id, int $target_id, int $function_id): bool
+	public function existRegionFunctionGroup(int $region_id, int $target_id, int $function_id): bool
 	{
 		return $this->db->exists('fs_region_function', [
 			'region_id' => $region_id,
