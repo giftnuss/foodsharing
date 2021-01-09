@@ -40,7 +40,7 @@
 
       <b-button-group vertical size="lg">
         <b-button variant="primary" :href="$url('login') + '&ref=' + $url('urlencode', `/profile/${fsId}`)">
-          <i class="fas fa-fw fa-user" />
+          <i class="fas fa-fw fa-sign-in-alt" />
           {{ $i18n('profile.public.login') }}
         </b-button>
         <b-button variant="secondary" :href="$url('joininfo')">

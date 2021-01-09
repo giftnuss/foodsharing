@@ -28,7 +28,7 @@
           <menu-item
             id="login"
             :url="$url('login')"
-            icon="fa-rocket"
+            icon="fa-sign-in-alt"
             :title="$i18n('login.topbar')"
             :show-title-always="true"
           />
