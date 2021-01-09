@@ -23,6 +23,7 @@
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
 - Added Xdebug config for macOS !1804 #932 @muffelrudaijer
+- Several more PHP7 annotations !1760 @ChrisOelmueller
 
 # Release "Dragonfruit", 2020-12-31
 
