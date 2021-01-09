@@ -5,7 +5,7 @@
     <menu-item
       v-if="!hasFsRole"
       :url="$url('upgradeToFs')"
-      icon="fa-rocket"
+      icon="fa-hands-helping"
       :title="$i18n('foodsaver.upgrade.to_fs')"
       :hide-title-mobile="true"
     />

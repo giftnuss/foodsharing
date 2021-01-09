@@ -44,7 +44,7 @@
           {{ $i18n('profile.public.login') }}
         </b-button>
         <b-button variant="secondary" :href="$url('joininfo')">
-          <i class="fas fa-fw fa-rocket" />
+          <i class="fas fa-fw fa-hands-helping" />
           {{ $i18n('profile.public.join') }}
         </b-button>
       </b-button-group>

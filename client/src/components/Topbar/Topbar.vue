@@ -21,7 +21,7 @@
         >
           <menu-item
             :url="$url('joininfo')"
-            icon="fa-rocket"
+            icon="fa-hands-helping"
             :title="$i18n('register.topbar')"
             :show-title-always="true"
           />
