@@ -231,7 +231,7 @@
               </a>
             </b-col>
             <b-col
-              xl="2"
+              xl="3"
               sm="4"
             >
               <a
@@ -241,7 +241,7 @@
                 target="_blank"
                 :rel="externalLink"
               >
-                <i class="fab fa-twitter-square" />
+                <i class="fab fa-twitter-square pr-2" />
               </a>
               <a
                 class="social_icons"
@@ -249,7 +249,7 @@
                 target="_blank"
                 :rel="externalLink"
               >
-                <i class="fab fa-facebook-square pl-2" />
+                <i class="fab fa-facebook-square pr-2" />
               </a>
               <a
                 class="social_icons"
@@ -257,7 +257,23 @@
                 target="_blank"
                 :rel="externalLink"
               >
-                <i class="fab fa-instagram-square pl-2" />
+                <i class="fab fa-instagram-square pr-2" />
+              </a>
+              <a
+                class="social_icons"
+                :href="linkedinUrl"
+                target="_blank"
+                :rel="externalLink"
+              >
+                <i class="fab fa-linkedin pr-2" />
+              </a>
+              <a
+                class="social_icons"
+                :href="youtubeUrl"
+                target="_blank"
+                :rel="externalLink"
+              >
+                <i class="fab fa-youtube-square" />
               </a>
             </b-col>
           </b-row>
@@ -324,6 +340,12 @@ export default {
     },
     twitterUrl () {
       return 'https://twitter.com/FoodsharingDE'
+    },
+    linkedinUrl () {
+      return 'https://www.linkedin.com/company/foodsharingde'
+    },
+    youtubeUrl () {
+      return 'https://www.youtube.com/user/foodsharingtv'
     },
     externalLink () {
       return 'nofollow noreferrer noopener'

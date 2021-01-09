@@ -6,6 +6,7 @@
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
