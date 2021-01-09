@@ -59,11 +59,12 @@ class ReportRestController extends AbstractFOSRestController
 			$addReportsAgainstAmbassadorsForRegions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId, false);
 		}
 
-		$reports = array_merge(
-			$this->reportGateway->getReportsByReporteeRegions($regions, $this->session->id()),
-			$this->reportGateway->getReportsForRegionlessByReporterRegion($regions, $this->session->id()),
-			$this->reportGateway->getReportsByReporteeRegions($addReportsAgainstAmbassadorsForRegions, $this->session->id(), true)
-		);
+		$reportGroup = $this->regionGateway->getRegionReportGroupId($regionId);
+		if (!empty($reportGroup)){
+			$reportAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($reportGroup);
+		}
+
+		$reports = $this->reportGateway->getReportsByReporteeRegions($regions, $reportAdminIDs);
 
 		return $this->handleView($this->view(['data' => $reports], 200));
 	}

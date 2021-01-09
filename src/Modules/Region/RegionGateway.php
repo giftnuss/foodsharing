@@ -203,6 +203,13 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
+	public function getFsAdminIdsFromRegion(?int $regionID): array
+	{
+		return $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id',
+			['bezirk_id' => $regionID]
+		);
+	}
+
 	public function listIdsForDescendantsAndSelf(int $regionId, bool $includeSelf = true, bool $includeWorkgroups = true): array
 	{
 		if ($regionId == RegionIDs::ROOT) {
@@ -576,6 +583,22 @@ class RegionGateway extends BaseGateway
 				[
 					'target_id' => $parentId,
 					'function_id' => WorkgroupFunction::VOTING
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	public function getRegionReportGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::REPORT
 				]
 			);
 		} catch (\Exception $e) {

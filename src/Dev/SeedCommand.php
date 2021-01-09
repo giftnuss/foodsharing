@@ -473,7 +473,11 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln(' done');
 
 		$this->output->writeln('Create reports');
-		foreach (range(0, 4) as $_) {
+		$I->addReport($reportUser['id'], $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $reportUser['id'], 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+
+/*		foreach (range(0, 4) as $_) {
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
 			$this->output->write('.');
 		}
@@ -482,7 +486,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
 			$this->output->write('.');
 		}
-		$this->output->writeln(' done');
+*/		$this->output->writeln(' done');
 
 		$this->output->writeln('Create quizzes');
 		foreach (range(1, 3) as $quizRole) {

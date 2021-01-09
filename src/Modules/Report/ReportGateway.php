@@ -33,7 +33,7 @@ class ReportGateway extends BaseGateway
 			FROM 	fs_betrieb_team t,
 					fs_betrieb b
 			WHERE 	t.betrieb_id = b.id
-			AND 	t.foodsaver_id = :foodsaver_id				
+			AND 	t.foodsaver_id = :foodsaver_id
 		';
 
 		return $this->db->fetchAll($stm, [':foodsaver_id' => (int)$fsId]);
@@ -60,14 +60,14 @@ class ReportGateway extends BaseGateway
 					fs.sleep_status,
 					COUNT(rp.foodsaver_id) AS count,
 					CONCAT("/?page=report&sub=foodsaver&id=",fs.id) AS `href`
-				
+
 			FROM 	fs_foodsaver fs,
 					fs_report rp
-				
+
 			WHERE 	rp.foodsaver_id = fs.id
-				
+
 			GROUP 	BY rp.foodsaver_id
-				
+
 			ORDER BY count DESC, fs.name
 		'
 		);
@@ -109,39 +109,39 @@ class ReportGateway extends BaseGateway
 					sleep_status
 
 			FROM 	`fs_foodsaver`
-				
+
 			WHERE 	id = :id
 		';
 		if ($fs = $this->db->fetch($stm, [':id' => (int)$id])
 		) {
 			$stm = '
-				SELECT 
+				SELECT
 					r.id,
 	            	r.`msg`,
 	            	r.`tvalue`,
 	            	r.`reporttype`,
 					r.`time`,
 					UNIX_TIMESTAMP(r.`time`) AS time_ts,
-					
+
 					rp.id AS rp_id,
 					rp.name AS rp_name,
 					rp.nachname AS rp_nachname,
-					rp.photo AS rp_photo					
-          
+					rp.photo AS rp_photo
+
 				FROM
 	            	`fs_report` r
-					
+
 	         	LEFT JOIN
-	            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
-					
+	            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id
+
 				LEFT JOIN
-	            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
-				
+	            	`fs_foodsaver` rp ON r.reporter_id = rp.id
+
 				WHERE
 					r.foodsaver_id = :id
-					
-	          	ORDER BY 
-					r.`time` DESC					
+
+	          	ORDER BY
+					r.`time` DESC
 			';
 			$fs['reports'] = $this->db->fetchAll($stm, [':id' => (int)$id]);
 
@@ -158,7 +158,7 @@ class ReportGateway extends BaseGateway
 	public function getReport($id): ?array
 	{
 		$stm = '
-			SELECT 
+			SELECT
 				r.id,
             	r.`msg`,
             	r.`tvalue`,
@@ -167,25 +167,25 @@ class ReportGateway extends BaseGateway
 				r.committed,
 				r.betrieb_id,
 				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-				
+
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.nachname AS fs_nachname,
 				fs.photo AS fs_photo,
-				
+
 				rp.id AS rp_id,
 				rp.name AS rp_name,
 				rp.nachname AS rp_nachname,
-				rp.photo AS rp_photo				
-          
+				rp.photo AS rp_photo
+
 			FROM
             	`fs_report` r
-				
+
          	LEFT JOIN
-            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id 
-				
+            	`fs_foodsaver` fs ON r.foodsaver_id = fs.id
+
 			LEFT JOIN
-            	`fs_foodsaver` rp ON r.reporter_id = rp.id 
+            	`fs_foodsaver` rp ON r.reporter_id = rp.id
 
 			WHERE
 				r.`id` = :id
@@ -220,18 +220,18 @@ class ReportGateway extends BaseGateway
 				r.`betrieb_id`,
 				s.`name` as betrieb_name,
 				UNIX_TIMESTAMP(r.`time`) AS time_ts,
-					
+
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.nachname AS fs_nachname,
 				fs.photo AS fs_photo,
 				fs.stadt AS fs_stadt,
-	
+
 				rp.id AS rp_id,
 				rp.name AS rp_name,
 				rp.nachname AS rp_nachname,
 				rp.photo AS rp_photo,
-				
+
 				b.name AS b_name')
 			->leftJoin('fs_foodsaver fs ON r.foodsaver_id = fs.id')
 			->leftJoin('fs_foodsaver rp ON r.reporter_id = rp.id')
@@ -242,7 +242,7 @@ class ReportGateway extends BaseGateway
 		return $query;
 	}
 
-	public function getReportsByReporteeRegions($regions, $excludeReportsAboutUser = null, $includeOnlyAdminsOfSelectedGroups = false)
+	public function getReportsByReporteeRegions($regions, array $excludeReportsAboutUsers , $includeOnlyAdminsOfSelectedGroups = false)
 	{
 		$query = $this->reportSelect();
 
@@ -254,13 +254,13 @@ class ReportGateway extends BaseGateway
 				return [];
 			}
 		}
-		if ($excludeReportsAboutUser !== null) {
-			$query = $query->where('fs.id != ?', $excludeReportsAboutUser);
-		}
-		if ($includeOnlyAdminsOfSelectedGroups) {
-			$query = $query->innerJoin('fs_botschafter admin ON admin.foodsaver_id = fs.id AND admin.bezirk_id = fs.bezirk_id');
+		if ($excludeReportsAboutUsers !== null) {
+			$in = str_repeat('?,', count($excludeReportsAboutUsers) - 1) . '?';
+			$query = $query->where('r.reporter_id not in (' . $in. ')', $excludeReportsAboutUsers);
+			$query = $query->where('r.foodsaver_id not in (' . $in. ')', $excludeReportsAboutUsers);
 		}
 
+		//return ($query->getQuery());
 		return $query->fetchAll();
 	}
 
