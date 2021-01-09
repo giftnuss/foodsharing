@@ -1,11 +1,9 @@
-/* eslint-disable eqeqeq,camelcase */
+/* eslint-disable eqeqeq */
 import $ from 'jquery'
 import i18n from '@/i18n'
 import { expose } from '@/utils'
 
-expose({ u_delPost, mb_finishImage })
-
-export function u_delPost (postId, module, wallId) {
+function delWallpost (postId, module, wallId) {
   $.ajax({
     url: `/xhrapp.php?app=wallpost&m=delpost&table=${module}&id=${wallId}&post=${postId}`,
     dataType: 'JSON',
@@ -17,22 +15,22 @@ export function u_delPost (postId, module, wallId) {
   })
 }
 
-export function mb_finishImage (file) {
+function finishImage (file) {
   $('#wallpost-attach').append(`<input type="hidden" name="attach[]" value="image-${file}" />`)
   $('#attach-preview div:last').remove()
   $('.attach-load').remove()
   $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/${file}"><img src="images/wallpost/thumb_${file}" height="60" /></a>`)
   $('#attach-preview').append('<div style="clear:both;"></div>')
   $('#attach-preview a').fancybox()
-  mb_clear()
+  resetUploader()
 }
 
-function mb_clear () {
+function resetUploader () {
   $('#wallpost-loader').html('')
   $('a.attach-load').remove()
 }
 
-export function init (module, wallId) {
+export function initWall (module, wallId) {
   $('#wallpost-text').autosize()
   $('#wallpost-text').on('focus', function () {
     $('#wallpost-submit').show()
@@ -118,4 +116,6 @@ export function init (module, wallId) {
         }
       },
   })
+  // these are needed in global namespace because of legacy XHR code relying on them:
+  expose({ delWallpost, finishImage, resetUploader })
 }

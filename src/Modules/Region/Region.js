@@ -9,7 +9,6 @@ import {
 } from '@/script'
 import i18n from '@/i18n'
 import './Region.css'
-import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
 import MemberList from './components/MemberList'
@@ -19,6 +18,9 @@ import AgeBandList from './components/AgeBandList'
 import ThreadList from './components/ThreadList'
 import PollList from './components/PollList'
 import { leaveRegion } from '@/api/regions'
+// Wallpost
+import '../WallPost/WallPost.css'
+import { initWall } from '@/wall'
 
 $(document).ready(() => {
   $('a[href=\'#signout\']').on('click', function () {
@@ -53,7 +55,7 @@ $(document).ready(() => {
   })
 
   if (GET('sub') == 'wall') {
-    wall.init('bezirk', GET('bid'))
+    initWall('bezirk', GET('bid'))
   } else if (GET('sub') === 'members') {
     vueRegister({
       MemberList,

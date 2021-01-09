@@ -209,9 +209,9 @@ class WallPostXhr extends Control
 			$image->resize(75, 75);
 			$image->saveChanges();
 
-			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
+			$init = 'window.parent.finishImage("' . $new_filename . '");';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->translator->trans('mailbox.filesize') . '\'); window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->translator->trans('mailbox.filesize') . '\'); window.parent.resetUploader();';
 		}
 
 		echo '<html><head>

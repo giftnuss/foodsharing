@@ -7,7 +7,6 @@ import 'jquery-jcrop'
 import { attachAddressPicker } from '@/addressPicker'
 import { vueApply, vueRegister } from '@/vue'
 import FileUploadVForm from '@/components/upload/FileUploadVForm'
-
 import {
   pictureCrop,
   pictureReady,
@@ -16,6 +15,10 @@ import { expose } from '@/utils'
 import { GET } from '@/browser'
 
 import './FoodSharePoint.css'
+
+// Wallpost
+import '../WallPost/WallPost.css'
+import { initWall } from '@/wall'
 
 vueRegister({
   FileUploadVForm,
@@ -30,4 +33,6 @@ const sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
   vueApply('#image-upload')
+} else {
+  initWall('fairteiler', GET('id'))
 }

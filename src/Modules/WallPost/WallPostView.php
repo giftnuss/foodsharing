@@ -34,14 +34,8 @@ class WallPostView extends View
 		$out = '
 		<table class="pintable">
 			<tbody>';
-		$odd = 'odd';
-		foreach ($posts as $p) {
-			if ($odd === 'odd') {
-				$odd = 'even';
-			} else {
-				$odd = 'odd';
-			}
 
+		foreach ($posts as $p) {
 			$gallery = '';
 			$gal_col = '';
 			if (isset($p['gallery'])) {
@@ -57,11 +51,11 @@ class WallPostView extends View
 			}
 			$del = '';
 			if ($mayDelete || $p['foodsaver_id'] == $this->session->id()) {
-				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->translator->trans('wall.delete') . '</a>';
+				$del = '<span class="dot">·</span><a onclick="delWallpost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->translator->trans('wall.delete') . '</a>';
 			}
 
 			$out .= '
-				<tr class="' . $odd . ' bpost wallpost-' . $p['id'] . '">
+				<tr class="odd bpost wallpost-' . $p['id'] . '">
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
 						<a href="/profile/' . $p['foodsaver_id'] . '">

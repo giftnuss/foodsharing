@@ -26,3 +26,9 @@ export function GET (v) {
   if (!HTTP_GET_VARS[v]) { return undefined }
   return HTTP_GET_VARS[v]
 }
+
+const URL_PARTS = document.location.pathname.substring(1).split('/')
+export function URL_PART (index) {
+  if (!URL_PARTS[index]) { return undefined }
+  return URL_PARTS[index]
+}

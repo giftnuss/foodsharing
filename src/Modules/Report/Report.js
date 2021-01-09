@@ -5,6 +5,11 @@ import { vueRegister, vueApply } from '@/vue'
 
 import ReportList from './components/ReportList.vue'
 import { GET } from '@/script'
+// Wallpost
+import '../WallPost/WallPost.css'
+import { initWall } from '@/wall'
+
+initWall('fsreport', GET('id'))
 
 if (GET('a') === 'undefined') {
   // The container for the report list only exists if a region specific page is requested
