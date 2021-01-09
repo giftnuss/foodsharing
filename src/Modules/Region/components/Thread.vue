@@ -29,6 +29,10 @@
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
+        @positiv="closeThreadPositiv"
+        @negativ="closeThreadNegativ"
+        @neutral="closeThreadNeutral"
+        @open="openThreadAgain"
       />
       <div
         v-if="!isActive && mayModerate"
@@ -93,6 +97,10 @@
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
+        @positiv="closeThreadPositiv"
+        @negativ="closeThreadNegativ"
+        @neutral="closeThreadNeutral"
+        @open="openThreadAgain"
       />
     </div>
 
@@ -168,6 +176,8 @@ export default {
       isLoading: false,
       loadingPosts: [],
       errorMessage: null,
+
+      isClosed: false,
     }
   },
   computed: {
@@ -358,6 +368,38 @@ export default {
         window.location = this.$url('forum', this.regionId, this.regionSubId)
       } catch (err) {
         this.isLoading = false
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async closeThreadPositiv (threadID) {
+      this.isClosed = true
+      try {
+
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async closeThreadNegativ (threadID) {
+      this.isClosed = true
+      try {
+
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async closeThreadNeutral (threadID) {
+      this.isClosed = true
+      try {
+
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async openThreadAgain (threadID) {
+      this.isClosed = false
+      try {
+
+      } catch (err) {
         pulseError(i18n('error_unexpected'))
       }
     },

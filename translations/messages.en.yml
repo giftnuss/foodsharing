@@ -2233,3 +2233,11 @@ date_short:
   Wednesday: Thu
   Tuesday: Tu
   Monday: Mo
+
+forum:
+  close:
+    header: "Close Thread:"
+    positiv: "Close positiv"
+    negativ: "Close negativ"
+    neutral: "Close neutral"
+  open: "Open thread again"

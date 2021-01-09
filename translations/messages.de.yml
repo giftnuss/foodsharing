@@ -855,6 +855,12 @@ timepicker:
   labelNowButton: "Jetzt"
 
 forum:
+  close:
+    header: "Thread schließen:"
+    positiv: "Positiv schließen"
+    negativ: "Negativ schließen"
+    neutral: "Neutral schließen"
+  open: "Thread wieder öffnen"
   from: "Von {name}"
   threads: "Themen"
   new_thread: "Neues Thema verfassen"

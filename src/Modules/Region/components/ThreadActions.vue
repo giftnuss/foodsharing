@@ -3,7 +3,7 @@
     <span class="legend font-italic">
       {{ $i18n('forum.follow.header') }}
     </span>
-    <div class="d-inline-block">
+    <div class="d-lg-inline-block">
       <b-form-checkbox
         :checked="isFollowingBell"
         class="bell"
@@ -36,6 +36,44 @@
         </a>
       </b-form-checkbox>
     </div>
+    <div>
+      <span class="legend font-italic mr-2">
+        {{ $i18n('forum.close.header') }}
+      </span>
+      <b-button
+        data-toggle="tooltip"
+        data-placement="bottom"
+        :title="$i18n('forum.close.positiv')"
+        @click="$emit('positiv')"
+      >
+        <i class="fas fa-folder-plus" />
+      </b-button>
+      <b-button
+        v-if="!isClosed"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        :title="$i18n('forum.close.negativ')"
+        @click="$emit('negativ')"
+      >
+        <i class="fas fa-folder-minus" />
+      </b-button>
+      <b-button
+        data-toggle="tooltip"
+        data-placement="bottom"
+        :title="$i18n('forum.close.neutral')"
+        @click="$emit('neutral')"
+      >
+        <i class="fas fa-folder" />
+      </b-button>
+      <b-button
+        data-toggle="tooltip"
+        data-placement="bottom"
+        :title="$i18n('forum.open')"
+        @click="$emit('open')"
+      >
+        <i class="fas fa-folder-open" />
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -48,6 +86,7 @@ export default {
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
     showSticky: { type: Boolean, default: null },
+    isClosed: { type: Boolean, default: null },
   },
 }
 </script>
