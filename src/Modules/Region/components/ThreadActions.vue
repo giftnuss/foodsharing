@@ -41,6 +41,7 @@
         {{ $i18n('forum.close.header') }}
       </span>
       <b-button
+        v-if="status === OPEN"
         data-toggle="tooltip"
         data-placement="bottom"
         :title="$i18n('forum.close.positiv')"
@@ -49,7 +50,7 @@
         <i class="fas fa-folder-plus" />
       </b-button>
       <b-button
-        v-if="!isClosed"
+        v-if="status === OPEN"
         data-toggle="tooltip"
         data-placement="bottom"
         :title="$i18n('forum.close.negativ')"
@@ -58,6 +59,7 @@
         <i class="fas fa-folder-minus" />
       </b-button>
       <b-button
+        v-if="status === OPEN"
         data-toggle="tooltip"
         data-placement="bottom"
         :title="$i18n('forum.close.neutral')"
@@ -66,6 +68,7 @@
         <i class="fas fa-folder" />
       </b-button>
       <b-button
+        v-if="status === CLOSED"
         data-toggle="tooltip"
         data-placement="bottom"
         :title="$i18n('forum.open')"
@@ -86,7 +89,7 @@ export default {
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
     showSticky: { type: Boolean, default: null },
-    isClosed: { type: Boolean, default: null },
+    status: { type: String, default: null },
   },
 }
 </script>
