@@ -41,18 +41,11 @@ class RegionGateway extends BaseGateway
 			['id' => $regionId]
 		);
 
-		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
-			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
+		$function_id = $this->getRegionGroupIdFunction($out['parent_id'], $out['id']);
+		if (empty($function_id)) {
+			$out['workgroup_function'] = [];
 		} else {
-			if ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
-				$out['workgroup_function'] = WorkgroupFunction::VOTING;
-			} else {
-				if ($this->existRegionFSPGroup($out['id'], $out['parent_id'])) {
-					$out['workgroup_function'] = WorkgroupFunction::FSP;
-				} else {
-					$out['workgroup_function'] = [];
-				}
-			}
+			$out['workgroup_function'] = $function_id;
 		}
 
 		$out['botschafter'] = $this->db->fetchAll('
@@ -359,7 +352,7 @@ class RegionGateway extends BaseGateway
 			$region['mediationAdmins'] = [];
 		}
 
-		if ($arbitrationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBIRTATION)) {
+		if ($arbitrationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION)) {
 			$region['arbitrationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($arbitrationGroupId);
 			shuffle($region['arbitrationAdmins']);
 		} else {
@@ -558,6 +551,10 @@ class RegionGateway extends BaseGateway
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 
+	/**
+	 * @param int $parentId Look if for this specific regionId an workgroup with this function exists
+	 * @return int|null Return regionId (workgroup) that has this function for this specific parentId
+	 */
 	public function getRegionWelcomeGroupId(int $parentId): ?int
 	{
 		try {
@@ -606,6 +603,22 @@ class RegionGateway extends BaseGateway
 		}
 	}
 
+	public function getRegionArbitrationGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::ARBITRATION
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	public function getRegionModerationGroupId(int $parentId): ?int
 	{
 		try {
@@ -631,6 +644,22 @@ class RegionGateway extends BaseGateway
 				[
 					'target_id' => $parentId,
 					'function_id' => $function
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	public function getRegionGroupIdFunction(int $workgroup_id, int $parentId ): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'function_id',
+				[
+					'target_id' => $parentId,
+					'region_id' => $workgroup_id
 				]
 			);
 		} catch (\Exception $e) {
@@ -670,28 +699,39 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function existRegionWelcomeGroup(int $region_id, int $target_id): bool
+	/**
+	 * @param int $target_id Is the Region_id of the district that the workgroup is assigned to
+	 * @param int|null $group_id Is the region_id of the workgroup that the functionality is assigned to
+	 * @return bool If the function with $region_id = null is called it checks if in generall this district has a workgroup with this function
+	 * 				If all parameter are set it checks if this specific workgroup towards this specific district with this specific function exists.
+	 * 				(used in permission class)
+	 * @throws \Exception
+	 */
+	public function existRegionReportGroup(int $target_id, int $group_id = null): bool
 	{
-		return  $this->db->exists('fs_region_function',
-			['region_id' => $region_id,
-			 'function_id' => WorkgroupFunction::WELCOME,
-			 'target_id' => $target_id]
-		);
+		if (empty($group_id))
+		{
+			return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => WorkgroupFunction::REPORT]);
+		} else {
+			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $target_id]);
+		}
 	}
 
-	public function existRegionVotingGroup(int $region_id, int $target_id): bool
+	/**
+	 * @param int $target_id Is the Region_id of the district that the workgroup is assigned to
+	 * @param int|null $region_id Is the region_id of the workgroup that the functionality is assigned to
+	 * @return bool If the function with $region_id = null is called it checks if in generall this district has a workgroup with this function
+	 * 				If all parameter are set it checks if this specific workgroup towards this specific district with this specific function exists.
+	 * 				(used in permission class)
+	 * @throws \Exception
+	 */
+	public function existRegionMediationGroup(int $target_id, int $group_id = null): bool
 	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
-	}
-
-	public function existRegionFSPGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
-	}
-
-	public function existRegionReportGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $target_id]);
+		if (empty($group_id )) {
+			return  $this->db->exists('fs_region_function', ['target_id' => $group_id, 'function_id' => WorkgroupFunction::MEDIATION]);
+		} else {
+			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $target_id]);
+		}
 	}
 
 	public function genderCountRegion(int $regionId): array

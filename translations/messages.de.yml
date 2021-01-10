@@ -515,7 +515,7 @@ terminology:
   moderationAdmins: Moderationsteam
   wall: Pinnwand
   statistic: Statistik
-  reports: Regelverletzungen (Preview)
+  reports: Regelverletzungen
   fsp: Fairteiler
   basket: Essenskorb
   baskets: Essenskörbe
@@ -1062,10 +1062,13 @@ reports:
   store: Zugeordneter Betrieb
   in-store: 'Betrifft die Meldung einen bestimmten Betrieb, in dem {user} abholt?'
   when: Zeitpunkt
-  info: |
+  info: '
+    <br>
+    <BR>
+    !! Bitte gebe das <b>Datum</b> , den <b>Ort</b> und die <b>Uhrzeit</b> des Vorfalles an !! <br>
     Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit
     bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an
-    wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.
+    wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.'
 
   #|
   #  Es ist wichtig alle Fälle, die gegen die Verhaltensregeln verstoßen, zu melden,
@@ -1140,6 +1143,9 @@ bell:
 
   banana_given_title: "Neue Vertrauensbanane"
   banana_given: "{name} hat dir eine Vertrauensbanane spendiert."
+
+  new_report_title: "Neue Meldung über {name}"
+  report_reason: "{reason}"
 
 list:
   filter_for: "Filtern nach..."

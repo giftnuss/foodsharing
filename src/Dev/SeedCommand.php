@@ -376,7 +376,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		// Create ArbitrationAdmins Group
 		$this->output->writeln('- create arbitration group');
 		$arbitrationGroup = $I->createWorkingGroup('Schiedsstelle Göttingen', ['parent_id' => $region1, 'email_name' => 'schiedstelle.Goettingen', 'teaser' => 'Hier ist das Schiedsstellenteam für unseren Bezirk']);
-		$I->haveInDatabase('fs_region_function', ['region_id' => $arbitrationGroup['id'], 'function_id' => WorkgroupFunction::ARBIRTATION, 'target_id' => $region1]);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $arbitrationGroup['id'], 'function_id' => WorkgroupFunction::ARBITRATION, 'target_id' => $region1]);
 		for ($k = 0; $k <= 3; ++$k) {
 			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
 			$I->addRegionMember($arbitrationGroup['id'], $foodSaver_id);

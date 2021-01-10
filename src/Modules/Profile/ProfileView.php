@@ -21,12 +21,14 @@ use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfileView extends View
 {
 	private array $foodsaver;
 	private ProfilePermissions $profilePermissions;
 	private ReportPermissions $reportPermissions;
+	private RegionGateway $regionGateway;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -42,7 +44,8 @@ class ProfileView extends View
 		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
 		TranslationHelper $translationHelper,
-		TranslatorInterface $translator
+		TranslatorInterface $translator,
+		RegionGateway $regionGateway
 	) {
 		parent::__construct(
 			$twig,
@@ -56,11 +59,13 @@ class ProfileView extends View
 			$sanitizerService,
 			$timeHelper,
 			$translationHelper,
-			$translator
+			$translator,
+			$regionGateway
 		);
 
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;
+		$this->regionGateway = $regionGateway;
 	}
 
 	public function profile(string $wallPosts, array $userStores = [], array $fetchDates = []): void
@@ -253,6 +258,18 @@ class ProfileView extends View
 				]) . '</a></li>';
 		}
 
+		if ($this->regionGateway->existRegionReportGroup($this->foodsaver['bezirk_id']))
+		{
+			$opt .= '<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
+					<i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>';
+		}
+
+		if ($this->regionGateway->existRegionMediationGroup($this->foodsaver['bezirk_id']))
+		{
+			$opt .= '<li><a href="#" onclick="ajreq(\'mediationDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
+					 <i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li> ';
+		}
+
 		$writeMessage = '';
 		if ($fsId != $this->session->id()) {
 			$writeMessage = '<li><a href="#" onclick="chat(' . $fsId . ');return false;">'
@@ -260,34 +277,9 @@ class ProfileView extends View
 			. '</a></li>';
 		}
 
-		$this->pageHelper->addJs('
-			$("#disabledreports-link").fancybox({
-				closeClick: false,
-				closeBtn: true,
-			});
-		');
-
-		$this->pageHelper->addHidden('
-			<div id="disabledreports" class="popbox bootstrap">
-				<h3>Regelverletzung melden</h3>
-				<hr>
-				<p>
-					Aktuell werden Regelverletzungen nicht an dieser Stelle gemeldet.
-					<br>
-					Wendet euch bei Bedarf an die lokale Meldegruppe in eurem Bezirk.
-				</p>
-				<p>
-					Mehr Infos zum Meldesystem findet ihr
-					<a href="https://foodsharing.de/?page=blog&sub=read&id=255">in diesem Blogeintrag</a>.
-				</p>
-			</div>
-		');
-
 		return '
 		<ul class="linklist">
 			' . $writeMessage . $opt . '
-			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
-<!--			<li><a href="#" onclick="ajreq(\'mediationDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li> -->
 		</ul>';
 	}
 

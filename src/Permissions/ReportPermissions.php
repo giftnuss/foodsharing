@@ -40,6 +40,14 @@ class ReportPermissions
 			}
 		}
 
+		$arbitrationGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
+
+		if (!empty($arbitrationGroup)) {
+			if ($this->session->isAdminFor($arbitrationGroup)) {
+				return true;
+			}
+		}
+
 		// ToDo: Need to check that regionId is a subgroup of europe. implied for now.
 		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}

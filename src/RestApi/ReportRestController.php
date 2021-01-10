@@ -60,11 +60,34 @@ class ReportRestController extends AbstractFOSRestController
 		}
 
 		$reportGroup = $this->regionGateway->getRegionReportGroupId($regionId);
+		$onlyWithIds = null;
 		if (!empty($reportGroup)){
 			$reportAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($reportGroup);
+			if (in_array($this->session->id(),$reportAdminIDs)){
+				$excludeIDs = $reportAdminIDs;
+			}
+		}
+		$arbitrationGroup = $this->regionGateway->getRegionArbitrationGroupId($regionId);
+		if (!empty($arbitrationGroup)){
+			$arbitrationAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($arbitrationGroup);
+			if (in_array($this->session->id(),$arbitrationAdminIDs)) {
+				$excludeIDs = $arbitrationAdminIDs;
+				if (!empty($reportAdminIDs)) {
+					$onlyWithIds = $reportAdminIDs;
+				}
+			}
 		}
 
-		$reports = $this->reportGateway->getReportsByReporteeRegions($regions, $reportAdminIDs);
+		if (!empty($reportGroup) &&
+			!empty($arbitrationGroup)) {
+			if (in_array($this->session->id(),$arbitrationAdminIDs) &&
+				in_array($this->session->id(),$reportAdminIDs))	{
+				throw new HttpException(403);
+			}
+
+		}
+
+		$reports = $this->reportGateway->getReportsByReporteeRegions($regions, $excludeIDs, $onlyWithIds);
 
 		return $this->handleView($this->view(['data' => $reports], 200));
 	}

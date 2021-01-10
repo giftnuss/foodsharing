@@ -53,10 +53,10 @@ class ReportView extends View
 					'name' => 'Hat Sachen mitgenommen die nicht für ihn/sie bestimmt waren'],
 				[
 					'id' => 9,
-					'name' => 'Hat Pfandflaschen/-kisten etc. nicht zurückgebracht'],
+					'name' => 'Hat Pfandflaschen/-kisten etc. nicht zurückgebracht'],*/
 				[
 					'id' => 10,
-					'name' => 'Häufiges kurzfristiges Absagen der Abholungen'],
+					'name' => 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche'],/*
 				[
 					'id' => 12,
 					'name' => 'Schmeißt gerettete Lebensmittel weg'],

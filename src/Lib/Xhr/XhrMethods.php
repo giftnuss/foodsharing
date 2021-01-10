@@ -989,7 +989,7 @@ class XhrMethods
 						'name' => $this->translator->trans('group.function.mediation'),
 					],
 					[
-						'id' => WorkgroupFunction::ARBIRTATION,
+						'id' => WorkgroupFunction::ARBITRATION,
 						'name' => $this->translator->trans('group.function.arbitration'),
 					],
 					[
@@ -1237,7 +1237,7 @@ class XhrMethods
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
-			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::ARBIRTATION);
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::ARBITRATION);
 			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
 				return json_encode([
 					'status' => 1,

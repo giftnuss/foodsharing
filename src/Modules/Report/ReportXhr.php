@@ -8,6 +8,9 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class ReportXhr extends Control
 {
@@ -17,6 +20,8 @@ class ReportXhr extends Control
 	private $sanitizerService;
 	private $timeHelper;
 	private $reportPermissions;
+	private $bellGateway;
+	private $regionGateway;
 
 	public function __construct(
 		ReportGateway $reportGateway,
@@ -24,7 +29,9 @@ class ReportXhr extends Control
 		FoodsaverGateway $foodsaverGateway,
 		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
-		ReportPermissions $reportPermissions
+		ReportPermissions $reportPermissions,
+		BellGateway $bellGateway,
+		RegionGateway $regionGateway
 	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
@@ -32,6 +39,8 @@ class ReportXhr extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
 		$this->reportPermissions = $reportPermissions;
+		$this->bellGateway = $bellGateway;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -206,6 +215,33 @@ class ReportXhr extends Control
 		}
 		$this->reportGateway->addBetriebReport($_GET['fsid'], $this->session->id(), $reason_id, $_GET['reason'], $_GET['msg'], (int)$_GET['bid']);
 
+		$reportedFs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid']);
+		$bellData = Bell::create(
+			'new_report_title',
+			'report_reason',
+			'far fa-life-ring fa-fw',
+			['href' => '/?page=report&bid=' . $reportedFs['bezirk_id'] ],
+			[
+					'name' => $reportedFs['name'] . ' ' . $reportedFs['nachname'],
+					'reason' => $_GET['reason']
+			],
+			'new-report-'. $reportedFs['id'],
+			true
+			);
+
+		$regionReportGroupId = $this->regionGateway->getRegionReportGroupId($reportedFs['bezirk_id']);
+		if ($regionReportGroupId) {
+			$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionReportGroupId);
+			if (!in_array($reportedFs['id'],$reportBellRecipients))
+			{
+				$this->bellGateway->addBell($reportBellRecipients, $bellData);
+			} else {
+				$regionArbitrationGroupId = $this->regionGateway->getRegionArbitrationGroupId($reportedFs['bezirk_id']);
+				$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionArbitrationGroupId);
+				$this->bellGateway->addBell($reportBellRecipients, $bellData);
+			}
+		}
+
 		return [
 			'status' => 1,
 			'script' => '
@@ -222,7 +258,7 @@ class ReportXhr extends Control
 		//return ['status' => 0];
 	}
 
-	// TODO : POC - Eigene Klasse für Mediationsdialog
+	// TODO : POC - Eigene Klasse für Mediationsdialog ?
 	public function mediationDialog(): array
 	{
 		// Only show Dialog when a local report group exists
