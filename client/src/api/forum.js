@@ -45,6 +45,12 @@ export function activateThread (threadId) {
   })
 }
 
+export function setThreadStatus (threadId, status) {
+  return patch(`/forum/thread/${threadId}`, {
+    status: status,
+  })
+}
+
 export function createPost (threadId, body) {
   return post(`/forum/thread/${threadId}/posts`, {
     body: body,

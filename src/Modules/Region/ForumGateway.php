@@ -364,6 +364,15 @@ class ForumGateway extends BaseGateway
 		', ['threadId' => $threadId]);
 	}
 
+	/**
+	 * Returns whether the status was set successfully.
+	 */
+	public function setThreadStatus(int $threadId, string $status): bool
+	{
+		return $this->db->update('fs_theme', ['status' => $status], ['id' => $threadId]) > 0;
+	}
+
+
 	public function getThreadForPost(int $postId): ?int
 	{
 		$threadId = $this->db->fetchByCriteria('fs_theme_post',
