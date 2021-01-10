@@ -10,6 +10,7 @@ use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 
 class PickupGateway extends BaseGateway implements BellUpdaterInterface
 {
@@ -86,7 +87,7 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 	public function updateBellNotificationForStoreManagers(int $storeId, bool $markNotificationAsUnread = false): void
 	{
 		$storeName = $this->getStoreName($storeId);
-		$messageIdentifier = 'store-fetch-unconfirmed-' . $storeId;
+		$messageIdentifier = BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $storeId);
 		$messageCount = $this->getUnconfirmedFetchesCount($storeId);
 		$messageVars = ['betrieb' => $storeName, 'count' => $messageCount];
 		$messageTimestamp = $this->getNextUnconfirmedFetchTime($storeId);
@@ -122,10 +123,10 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function updateExpiredBells(): void
 	{
-		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-fetch-unconfirmed-%');
+		$expiredBells = $this->bellGateway->getExpiredByIdentifier(str_replace('%d', '%', BellType::STORE_UNCONFIRMED_PICKUP));
 
 		foreach ($expiredBells as $bell) {
-			$storeId = substr($bell->identifier, strlen('store-fetch-unconfirmed-'));
+			$storeId = substr($bell->identifier, strrpos($bell->identifier, '-') + 1);
 			$this->updateBellNotificationForStoreManagers(intval($storeId));
 		}
 	}
