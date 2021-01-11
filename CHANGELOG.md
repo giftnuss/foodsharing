@@ -14,6 +14,7 @@
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
 - Initial preparations for migrating controllers to Symfony !1784 @\_fridtjof_
 - Vue component for release notes, split into 1 file per release !1832 @ChrisOelmueller
+- Simplify controller logic for the `sub` query parameter !1845 @\_fridtjof_
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 @\_fridtjof_
