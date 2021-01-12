@@ -15,6 +15,7 @@
 - Vue component for release notes, split into 1 file per release !1832 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
+- Made ForumPostCest more reliable !1853 @\_fridtjof_
 
 
 # Release "Dragonfruit", 2020-12-31
