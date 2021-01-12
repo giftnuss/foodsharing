@@ -29,7 +29,7 @@ class Maildev extends \Codeception\Module
 		$this->client->delete('/email/all');
 	}
 
-	public function expectNumMails($num, $timeout = 0)
+	public function expectNumMails($num, $timeout = 5)
 	{
 		if ($timeout) {
 			do {
