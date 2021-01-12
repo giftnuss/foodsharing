@@ -47,7 +47,6 @@ class ReportRestController extends AbstractFOSRestController
 		  -> remove reports of the person visiting from output
 		*/
 
-		$addReportsAgainstAmbassadorsForRegions = [];
 		if ($this->reportPermissions->mayAccessReportsForSubRegions()) {
 			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 		// this path implicitly includes reports against ambassadors for subregions as it includes all of them anyway.
@@ -59,18 +58,21 @@ class ReportRestController extends AbstractFOSRestController
 			$addReportsAgainstAmbassadorsForRegions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId, false);
 		}
 
+		$excludeIDs = null;
 		$reportGroup = $this->regionGateway->getRegionReportGroupId($regionId);
 		$onlyWithIds = null;
-		if (!empty($reportGroup)){
+		$reportAdminIDs = null;
+		if (!empty($reportGroup)) {
 			$reportAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($reportGroup);
-			if (in_array($this->session->id(),$reportAdminIDs)){
+			if (in_array($this->session->id(), $reportAdminIDs)) {
 				$excludeIDs = $reportAdminIDs;
 			}
 		}
+		$arbitrationAdminIDs = null;
 		$arbitrationGroup = $this->regionGateway->getRegionArbitrationGroupId($regionId);
-		if (!empty($arbitrationGroup)){
+		if (!empty($arbitrationGroup)) {
 			$arbitrationAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($arbitrationGroup);
-			if (in_array($this->session->id(),$arbitrationAdminIDs)) {
+			if (in_array($this->session->id(), $arbitrationAdminIDs)) {
 				$excludeIDs = $arbitrationAdminIDs;
 				if (!empty($reportAdminIDs)) {
 					$onlyWithIds = $reportAdminIDs;
@@ -80,11 +82,10 @@ class ReportRestController extends AbstractFOSRestController
 
 		if (!empty($reportGroup) &&
 			!empty($arbitrationGroup)) {
-			if (in_array($this->session->id(),$arbitrationAdminIDs) &&
-				in_array($this->session->id(),$reportAdminIDs))	{
+			if (in_array($this->session->id(), $arbitrationAdminIDs) &&
+				in_array($this->session->id(), $reportAdminIDs)) {
 				throw new HttpException(403);
 			}
-
 		}
 
 		$reports = $this->reportGateway->getReportsByReporteeRegions($regions, $excludeIDs, $onlyWithIds);

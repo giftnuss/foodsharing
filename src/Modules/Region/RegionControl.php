@@ -125,8 +125,11 @@ final class RegionControl extends Control
 			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=fairteiler'];
 			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . $regionId];
 			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=statistic'];
-			if ($this->reportPermissions->mayAccessReportsForRegion($regionId)) {
+			if ($this->reportPermissions->mayAccessReportGroupReports($regionId)) {
 				$menu[] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
+			}
+			if ($this->reportPermissions->mayAccessArbitrationReports($regionId)) {
+				$menu[] = ['name' => 'terminology.arbitration', 'href' => '/?page=report&bid=' . $regionId];
 			}
 		}
 

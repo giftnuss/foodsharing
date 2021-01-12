@@ -56,7 +56,7 @@ class ReportView extends View
 					'name' => 'Hat Pfandflaschen/-kisten etc. nicht zurückgebracht'],*/
 				[
 					'id' => 10,
-					'name' => 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche'],/*
+					'name' => 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche'], /*
 				[
 					'id' => 12,
 					'name' => 'Schmeißt gerettete Lebensmittel weg'],

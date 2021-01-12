@@ -52,6 +52,42 @@ class ReportPermissions
 		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
+	public function mayAccessArbitrationReports(int $regionId): bool
+	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		$arbitrationGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
+
+		if (!empty($arbitrationGroup)) {
+			if ($this->session->isAdminFor($arbitrationGroup)) {
+				return true;
+			}
+		}
+
+		// ToDo: Need to check that regionId is a subgroup of europe. implied for now.
+		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
+	}
+
+	public function mayAccessReportGroupReports(int $regionId): bool
+	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		$reportGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
+
+		if (!empty($reportGroup)) {
+			if ($this->session->isAdminFor($reportGroup)) {
+				return true;
+			}
+		}
+
+		// ToDo: Need to check that regionId is a subgroup of europe. implied for now.
+		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
+	}
+
 	public function mayAccessReportsForSubRegions(): bool
 	{
 		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);

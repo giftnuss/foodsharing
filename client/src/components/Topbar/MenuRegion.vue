@@ -121,12 +121,20 @@
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
         <a
-          v-if="region.mayAccessReportsForRegion"
+          v-if="region.mayAccessReportGroupReports"
           :href="$url('reports', region.id)"
           role="menuitem"
           class="dropdown-item sub"
         >
           <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
+        </a>
+        <a
+          v-if="region.mayAccessArbitrationGroupReports"
+          :href="$url('reports', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-poo" />{{ $i18n('terminology.arbitration') }}
         </a>
       </b-collapse>
     </div>

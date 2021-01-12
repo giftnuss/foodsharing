@@ -10,6 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Utility\DataHelper;
@@ -21,7 +22,6 @@ use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfileView extends View
 {
@@ -59,13 +59,12 @@ class ProfileView extends View
 			$sanitizerService,
 			$timeHelper,
 			$translationHelper,
-			$translator,
-			$regionGateway
+			$translator
 		);
 
+		$this->regionGateway = $regionGateway;
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;
-		$this->regionGateway = $regionGateway;
 	}
 
 	public function profile(string $wallPosts, array $userStores = [], array $fetchDates = []): void
@@ -258,14 +257,12 @@ class ProfileView extends View
 				]) . '</a></li>';
 		}
 
-		if ($this->regionGateway->existRegionReportGroup($this->foodsaver['bezirk_id']))
-		{
+		if ($this->regionGateway->existRegionReportGroup($this->foodsaver['bezirk_id'])) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
 					<i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>';
 		}
 
-		if ($this->regionGateway->existRegionMediationGroup($this->foodsaver['bezirk_id']))
-		{
+		if ($this->regionGateway->existRegionMediationGroup($this->foodsaver['bezirk_id'])) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'mediationDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
 					 <i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li> ';
 		}

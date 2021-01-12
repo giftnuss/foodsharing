@@ -256,14 +256,13 @@ class ReportGateway extends BaseGateway
 		}
 		if ($excludeReportsWithUsers !== null) {
 			$in = str_repeat('?,', count($excludeReportsWithUsers) - 1) . '?';
-			$query = $query->where('r.reporter_id not in (' . $in. ')', $excludeReportsWithUsers);
-			$query = $query->where('r.foodsaver_id not in (' . $in. ')', $excludeReportsWithUsers);
+			$query = $query->where('r.reporter_id not in (' . $in . ')', $excludeReportsWithUsers);
+			$query = $query->where('r.foodsaver_id not in (' . $in . ')', $excludeReportsWithUsers);
 		}
-		if ($onlyReportsWithUsers !== null)
-		{
+		if ($onlyReportsWithUsers !== null) {
 			$in = str_repeat('?,', count($onlyReportsWithUsers) - 1) . '?';
-			$query = $query->where('r.reporter_id in (' . $in. ')', $onlyReportsWithUsers);
-			$query = $query->where('r.foodsaver_id in (' . $in. ')', $onlyReportsWithUsers, 'OR');
+			$query = $query->where('r.reporter_id in (' . $in . ')', $onlyReportsWithUsers);
+			$query = $query->where('r.foodsaver_id in (' . $in . ')', $onlyReportsWithUsers, 'OR');
 		}
 
 		//return ($query->getQuery());

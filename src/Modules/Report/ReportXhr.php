@@ -3,14 +3,14 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
-use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\Bell\DTO\Bell;
-use Foodsharing\Modules\Region\RegionGateway;
 
 class ReportXhr extends Control
 {
@@ -220,20 +220,19 @@ class ReportXhr extends Control
 			'new_report_title',
 			'report_reason',
 			'far fa-life-ring fa-fw',
-			['href' => '/?page=report&bid=' . $reportedFs['bezirk_id'] ],
+			['href' => '/?page=report&bid=' . $reportedFs['bezirk_id']],
 			[
 					'name' => $reportedFs['name'] . ' ' . $reportedFs['nachname'],
 					'reason' => $_GET['reason']
 			],
-			'new-report-'. $reportedFs['id'],
+			'new-report-' . $reportedFs['id'],
 			true
 			);
 
 		$regionReportGroupId = $this->regionGateway->getRegionReportGroupId($reportedFs['bezirk_id']);
 		if ($regionReportGroupId) {
 			$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionReportGroupId);
-			if (!in_array($reportedFs['id'],$reportBellRecipients))
-			{
+			if (!in_array($reportedFs['id'], $reportBellRecipients)) {
 				$this->bellGateway->addBell($reportBellRecipients, $bellData);
 			} else {
 				$regionArbitrationGroupId = $this->regionGateway->getRegionArbitrationGroupId($reportedFs['bezirk_id']);

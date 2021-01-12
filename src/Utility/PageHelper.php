@@ -232,6 +232,8 @@ final class PageHelper
 			if (Type::isRegion($groupType)) {
 				$group['isAdmin'] = $this->session->isAdminFor($groupId);
 				$group['mayAccessReportsForRegion'] = $this->reportPermissions->mayAccessReportsForRegion($groupId);
+				$group['mayAccessReportGroupReports'] = $this->reportPermissions->mayAccessReportGroupReports($groupId);
+				$group['mayAccessArbitrationGroupReports'] = $this->reportPermissions->mayAccessArbitrationReports($groupId);
 				$regions[] = $group;
 			} else {
 				$group['isAdmin'] = $this->workGroupPermissions->mayEdit($group);

@@ -515,7 +515,8 @@ terminology:
   moderationAdmins: Moderationsteam
   wall: Pinnwand
   statistic: Statistik
-  reports: Regelverletzungen
+  reports: Regelverletzungsansicht (LMG)
+  arbitration: Regelverletzungsansicht (LS)
   fsp: Fairteiler
   basket: Essenskorb
   baskets: Essenskörbe

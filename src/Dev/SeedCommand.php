@@ -33,6 +33,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 	protected $foodsavers = [];
 	protected $stores = [];
+	protected $reportAdmins = [];
+	protected $arbitrationAdmins = [];
+	protected $mediationAdmins = [];
 
 	/**
 	 * @var WorkGroupGateway
@@ -144,9 +147,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$userStoreManager2 = $I->createStoreCoordinator($password, ['email' => 'storemanager2@example.com', 'name' => 'Four', 'bezirk_id' => $region1]);
 		$this->writeUser($userStoreManager2, $password, 'store coordinator2');
-
-		$reportUser = $I->createStoreCoordinator($password, ['email' => 'report@example.com', 'name' => 'Franz', 'bezirk_id' => $region1]);
-		$this->writeUser($reportUser, $password, 'report user');
 
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
@@ -351,14 +351,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create report group');
 		$reportGroup = $I->createWorkingGroup('Meldungsbearbeitung Göttingen', ['parent_id' => $region1, 'email_name' => 'meldungsbearbeitung.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $reportGroup['id'], 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $region1]);
-		for ($k = 0; $k <= 3; ++$k) {
-			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
-			$I->addRegionMember($reportGroup['id'], $foodSaver_id);
-			$I->addRegionAdmin($reportGroup['id'], $foodSaver_id);
-			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $reportGroup['id']);
+		foreach (range(1, 4) as $i) {
+			$user = $I->createStoreCoordinator($password, ['email' => 'userreport' . $i . '@example.com', 'bezirk_id' => $region1]);
+			$I->addRegionMember($reportGroup['id'], $user['id']);
+			$I->addRegionAdmin($reportGroup['id'], $user['id']);
+			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $reportGroup['id']);
+			$this->reportAdmins[] = $user['id'];
 		}
-		$I->addRegionMember($reportGroup['id'], $reportUser['id']);
-		$I->addRegionAdmin($reportGroup['id'], $reportUser['id']);
 		$this->output->writeln(' done');
 
 		// Create MediationAdmins Group
@@ -377,11 +376,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create arbitration group');
 		$arbitrationGroup = $I->createWorkingGroup('Schiedsstelle Göttingen', ['parent_id' => $region1, 'email_name' => 'schiedstelle.Goettingen', 'teaser' => 'Hier ist das Schiedsstellenteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $arbitrationGroup['id'], 'function_id' => WorkgroupFunction::ARBITRATION, 'target_id' => $region1]);
-		for ($k = 0; $k <= 3; ++$k) {
-			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
-			$I->addRegionMember($arbitrationGroup['id'], $foodSaver_id);
-			$I->addRegionAdmin($arbitrationGroup['id'], $foodSaver_id);
-			$this->output->writeln(' User ' . $foodSaver_id . ' added to ' . $arbitrationGroup['id']);
+		foreach (range(1, 4) as $i) {
+			$user = $I->createStoreCoordinator($password, ['email' => 'userarbitration' . $i . '@example.com', 'bezirk_id' => $region1]);
+			$I->addRegionMember($arbitrationGroup['id'], $user['id']);
+			$I->addRegionAdmin($arbitrationGroup['id'], $user['id']);
+			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $arbitrationGroup['id']);
+			$this->arbitrationAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
 
@@ -473,20 +473,16 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln(' done');
 
 		$this->output->writeln('Create reports');
-		$I->addReport($reportUser['id'], $this->getRandomIDOfArray($this->foodsavers), 0, 0);
-		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $reportUser['id'], 0, 0);
+
+		$I->addReport($this->getRandomIDOfArray($this->reportAdmins), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->reportAdmins), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->arbitrationAdmins), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->arbitrationAdmins), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->reportAdmins), $this->getRandomIDOfArray($this->arbitrationAdmins), 0, 0);
+		$I->addReport($this->getRandomIDOfArray($this->arbitrationAdmins), $this->getRandomIDOfArray($this->reportAdmins), 0, 0);
 		$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
 
-/*		foreach (range(0, 4) as $_) {
-			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
-			$this->output->write('.');
-		}
-
-		foreach (range(0, 3) as $_) {
-			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
-			$this->output->write('.');
-		}
-*/		$this->output->writeln(' done');
+		$this->output->writeln(' done');
 
 		$this->output->writeln('Create quizzes');
 		foreach (range(1, 3) as $quizRole) {
