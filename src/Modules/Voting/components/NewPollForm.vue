@@ -116,7 +116,7 @@
                 :locale="locale"
                 :min="startDate"
                 :state="$v.endDateTime.$error ? false : null"
-                @blur="updateDateEndTimes"
+                @input="updateDateEndTimes"
               />
             </b-col>
             <b-col>
@@ -126,7 +126,7 @@
                 :locale="locale"
                 v-bind="labelsTimepicker[locale] || {}"
                 :state="$v.endDateTime.$error ? false : null"
-                @blur="updateDateEndTimes"
+                @input="updateDateEndTimes"
               />
             </b-col>
           </b-form-row>
@@ -223,6 +223,8 @@
         </div>
       </b-form>
     </div>
+
+    <div>{{ $v.options.$error }}</div>
 
     <b-modal
       ref="newPollConfirmModal"
@@ -389,12 +391,12 @@ export default {
       this.$v.endDateTime.$touch()
     },
     updateNumOptions () {
-      // keeps the length of options in sync for the validation
-      const oldLength = this.options.length
-      this.options.length = this.numOptions
-      if (this.numOptions > oldLength) {
-        this.options.fill('', oldLength, this.numOptions)
+      // the options array must be assigned with a new object for the validation to work
+      const newOptions = Array(this.numOptions).fill('')
+      for (let i = 0; i < this.options.length; i++) {
+        newOptions[i] = this.options[i]
       }
+      this.options = newOptions
       this.$v.options.$touch()
     },
     showConfirmDialog (e) {
