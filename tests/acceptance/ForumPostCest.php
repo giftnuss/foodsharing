@@ -228,6 +228,7 @@ class ForumPostCest
 		$sendEmail = false;
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, $emailPossible, $sendEmail);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
+		$I->waitForActiveAPICalls();
 		$I->see($title);
 		$I->expectNumMails(0);
 	}
@@ -244,6 +245,7 @@ class ForumPostCest
 		$sendEmail = true;
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, $emailPossible, $sendEmail);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
+		$I->waitForActiveAPICalls();
 		$I->see($title);
 		$numMails = count($I->getMails());
 		/* one could assume, there should be 3 mail, because there are 3 people in the region,
@@ -263,6 +265,7 @@ class ForumPostCest
 		$title = 'TestAmbassadorThreadTitle';
 		$this->_createThread($I, $this->testBezirk['id'], $title, true);
 		$I->amOnPage($I->forumUrl($this->testBezirk['id']));
+		$I->waitForActiveAPICalls();
 		$I->see($title);
 	}
 
@@ -289,6 +292,7 @@ class ForumPostCest
 			$I->waitForActiveAPICalls();
 		});
 		$I->amOnPage($I->forumUrl($this->moderatedTestBezirk['id']));
+		$I->waitForActiveAPICalls();
 		$I->see($title);
 		/* There should have been notification mails - they are missing... */
 		/* ...missing because thread activation currently doesn't send emails :( */
@@ -334,8 +338,8 @@ class ForumPostCest
 		$I->waitForElementVisible($confirmButton);
 		$I->click($confirmButton);
 		$I->waitForElementNotVisible($confirmButton);
-		$I->waitForActiveAPICalls();
 		$I->seeCurrentUrlEquals($I->forumUrl($this->{$example[1]}['id']));
+		$I->waitForActiveAPICalls();
 		$I->cantSee($title);
 	}
 }
