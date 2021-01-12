@@ -393,7 +393,7 @@ export default {
     updateNumOptions () {
       // the options array must be assigned with a new object for the validation to work
       const newOptions = Array(this.numOptions).fill('')
-      for (let i = 0; i < this.options.length; i++) {
+      for (let i = 0; i < Math.min(this.options.length, this.numOptions); i++) {
         newOptions[i] = this.options[i]
       }
       this.options = newOptions
