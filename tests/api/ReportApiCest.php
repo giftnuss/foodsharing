@@ -38,7 +38,6 @@ class ReportApiCest
 		$I->addRegionMember($this->arbitrationGroup['id'], $this->arbitrationGroupAdmin['id']);
 		$I->addRegionAdmin($this->arbitrationGroup['id'], $this->arbitrationGroupAdmin['id']);
 
-
 		$this->foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
 		$this->subRegionFoodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->subRegion['id']]);
 		$this->foodsharer = $I->createFoodsharer();
