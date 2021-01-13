@@ -1530,6 +1530,7 @@ dashboard:
     title: "Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen."
     info: "Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren."
     button: "Push-Benachrichtigungen aktivieren"
+  deleted_user: "abgemeldeter Benutzer"
 
 home:
   title: "Startseite"

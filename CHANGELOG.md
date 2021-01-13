@@ -9,6 +9,7 @@
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
 - Fix frontend validation in new poll form !1854 #975 @alex.simm
+- Fix loading of dashboard updates that contain wall posts from deleted users !1858 @alex.simm
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
