@@ -8,13 +8,11 @@ use Foodsharing\Utility\WeightHelper;
 
 class StatsModel extends Db
 {
-	private $weightHelper;
+	private WeightHelper $weightHelper;
 
 	public function __construct(WeightHelper $weightHelper)
 	{
 		$this->weightHelper = $weightHelper;
-
-		parent::__construct();
 	}
 
 	public function getTotalKilosFetchedByFoodsaver(int $fs_id)
