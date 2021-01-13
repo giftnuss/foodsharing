@@ -321,7 +321,7 @@ final class RegionControl extends Control
 		if ($threadId = $request->query->getInt('tid')) {
 			$viewdata['threadId'] = $threadId; // this triggers the rendering of the vue component `Thread`
 		} elseif ($request->query->has('newthread')) {
-			$postActiveWithoutModeration = $this->forumPermissions->mayStartUnmoderatedThread($region);
+			$postActiveWithoutModeration = $this->forumPermissions->mayStartUnmoderatedThread($region, $ambassadorForum);
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
 			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {

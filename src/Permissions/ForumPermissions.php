@@ -22,12 +22,16 @@ class ForumPermissions
 		$this->session = $session;
 	}
 
-	public function mayStartUnmoderatedThread(array $region): bool
+	public function mayStartUnmoderatedThread(array $region, $ambassadorForum): bool
 	{
 		if (!$this->session->user('verified')) {
 			return false;
 		}
 		$regionId = $region['id'];
+
+		if ($ambassadorForum) {
+			return $this->mayPostToRegion($regionId, $ambassadorForum);
+		}
 
 		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
 
