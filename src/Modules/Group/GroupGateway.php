@@ -9,6 +9,16 @@ use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 /* Group gateway meant to collect queries common for regions as well as working groups */
 class GroupGateway extends BaseGateway
 {
+	private GroupFunctionGateway $groupFunctionGateway;
+
+	public function __construct(
+		Database $db,
+		GroupFunctionGateway $groupFunctionGateway
+	) {
+		parent::__construct($db);
+		$this->groupFunctionGateway = $groupFunctionGateway;
+	}
+
 	public function getGroupLegacy(int $groupId): array
 	{
 		$out = $this->db->fetchByCriteria('fs_bezirk',
