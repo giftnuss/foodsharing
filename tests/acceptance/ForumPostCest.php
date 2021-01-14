@@ -211,7 +211,7 @@ class ForumPostCest
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, $emailPossible);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->dontSee($title);
-		$I->wait(5);
+		$I->wait(2);
 		$mail = $I->getMails()[0];
 		$I->assertStringContainsString($title, $mail->text);
 		$I->assertStringContainsString('tigt werden', $mail->subject);
@@ -248,7 +248,7 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->waitForActiveAPICalls();
 		$I->see($title);
-		$I->wait(5); // wait a bit for the mails to arrive
+		$I->wait(2); // wait a bit for the mails to arrive
 		$numMails = count($I->getMails());
 		/* one could assume, there should be 3 mail, because there are 3 people in the region,
 		but the number of recieved mails fluctuates.
@@ -315,7 +315,7 @@ class ForumPostCest
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, false);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 
-		$I->wait(5);
+		$I->wait(2);
 		$mail = $I->getMails()[0];
 		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
 		$link = html_entity_decode($matches[1]);
