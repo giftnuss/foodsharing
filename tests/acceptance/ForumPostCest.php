@@ -211,6 +211,7 @@ class ForumPostCest
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, $emailPossible);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->dontSee($title);
+		$I->wait(5);
 		$mail = $I->getMails()[0];
 		$I->assertStringContainsString($title, $mail->text);
 		$I->assertStringContainsString('tigt werden', $mail->subject);
