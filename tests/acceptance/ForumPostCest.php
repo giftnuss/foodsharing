@@ -315,6 +315,7 @@ class ForumPostCest
 		$this->_createThread($I, $this->{$example[1]}['id'], $title, false);
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 
+		$I->wait(5);
 		$mail = $I->getMails()[0];
 		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
 		$link = html_entity_decode($matches[1]);
