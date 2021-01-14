@@ -620,6 +620,22 @@ class RegionGateway extends BaseGateway
 		}
 	}
 
+	public function getRegionMediationGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::MEDIATION
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	public function getRegionModerationGroupId(int $parentId): ?int
 	{
 		try {
@@ -732,7 +748,7 @@ class RegionGateway extends BaseGateway
 	public function existRegionMediationGroup(int $target_id, int $group_id = null): bool
 	{
 		if (empty($group_id)) {
-			return  $this->db->exists('fs_region_function', ['target_id' => $group_id, 'function_id' => WorkgroupFunction::MEDIATION]);
+			return  $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => WorkgroupFunction::MEDIATION]);
 		} else {
 			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $target_id]);
 		}
