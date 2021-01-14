@@ -285,7 +285,7 @@ final class RegionControl extends Control
 		) {
 			$threadId = $this->forumTransactions->createThread(
 				$this->session->id(), $data->title, $data->body, $region,
-				$ambassadorForum, $postActiveWithoutModeration, $data->sendMail
+				$ambassadorForum, $postActiveWithoutModeration, $postActiveWithoutModeration ? $data->sendMail : null
 			);
 
 			$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);
