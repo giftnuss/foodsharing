@@ -247,11 +247,13 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->waitForActiveAPICalls();
 		$I->see($title);
+		$I->wait(5); // wait a bit for the mails to arrive
 		$numMails = count($I->getMails());
 		/* one could assume, there should be 3 mail, because there are 3 people in the region,
 		but the number of recieved mails fluctuates.
 		This also happens if you try it in the test setup.
 		Thus the test is only for more than 0 mails.
+		Because expectNumMails checks for an exact amount of emails (assertCount), it is not used here.
 		*/
 		$I->assertGreaterThan(0, $numMails);
 	}
