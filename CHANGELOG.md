@@ -16,6 +16,7 @@
 - Vue component for release notes, split into 1 file per release !1832 @ChrisOelmueller
 - Simplify controller logic for the `sub` query parameter !1845 @\_fridtjof_
 - Unify and move workgroup-function handling to own gateway !1730 @ChrisOelmueller
+- Made most current translation .yaml weblate compliant !1835 @tinuthir
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 @\_fridtjof_
