@@ -6,7 +6,9 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\FlashMessageHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -24,6 +26,7 @@ class ForumTransactions
 	private EmailHelper $emailHelper;
 	private FlashMessageHelper $flashMessageHelper;
 	private TranslatorInterface $translator;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -35,7 +38,8 @@ class ForumTransactions
 		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
 		FlashMessageHelper $flashMessageHelper,
-		TranslatorInterface $translator
+		TranslatorInterface $translator,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -47,6 +51,7 @@ class ForumTransactions
 		$this->emailHelper = $emailHelper;
 		$this->flashMessageHelper = $flashMessageHelper;
 		$this->translator = $translator;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null): string
@@ -152,7 +157,7 @@ class ForumTransactions
 	{
 		$thread = $this->forumGateway->getThread($threadId);
 		$posterName = $this->foodsaverGateway->getFoodsaverName($thread['creator_id']);
-		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($region['id']);
+		$moderationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($region['id'], WorkgroupFunction::MODERATION);
 		if (empty($moderationGroup)) {
 			$moderators = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id']);
 		} else {

@@ -5,7 +5,9 @@ namespace Foodsharing\RestApi;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -28,6 +30,7 @@ class RegionRestController extends AbstractFOSRestController
 	private Session $session;
 	private ImageHelper $imageHelper;
 	private SettingsGateway $settingsGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		SettingsGateway $settingsGateway,
@@ -37,7 +40,8 @@ class RegionRestController extends AbstractFOSRestController
 		RegionGateway $regionGateway,
 		StoreGateway $storeGateway,
 		Session $session,
-		ImageHelper $imageHelper
+		ImageHelper $imageHelper,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->settingsGateway = $settingsGateway;
 		$this->bellGateway = $bellGateway;
@@ -47,6 +51,7 @@ class RegionRestController extends AbstractFOSRestController
 		$this->storeGateway = $storeGateway;
 		$this->session = $session;
 		$this->imageHelper = $imageHelper;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	/**
@@ -74,7 +79,7 @@ class RegionRestController extends AbstractFOSRestController
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
-		$regionWelcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($regionId);
+		$regionWelcomeGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::WELCOME);
 		if ($regionWelcomeGroupId) {
 			$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionWelcomeGroupId);
 		} else {

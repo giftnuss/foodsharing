@@ -9,6 +9,8 @@ use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
@@ -20,17 +22,20 @@ final class VotingPermissions
 	private VotingGateway $votingGateway;
 	private RegionGateway $regionGateway;
 	private StoreGateway $storeGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Session $session,
 		VotingGateway $votingGateway,
 		RegionGateway $regionGateway,
-		StoreGateway $storeGateway)
-	{
+		StoreGateway $storeGateway,
+		GroupFunctionGateway $groupFunctionGateway
+	) {
 		$this->session = $session;
 		$this->votingGateway = $votingGateway;
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function maySeePoll(Poll $poll): bool
@@ -79,7 +84,7 @@ final class VotingPermissions
 		if ($type == Type::WORKING_GROUP) {
 			return $this->session->isAdminFor($regionId);
 		} else {
-			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
+			$votingGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::VOTING);
 
 			return !empty($votingGroup) && $this->session->isAdminFor($votingGroup);
 		}

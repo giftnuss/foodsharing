@@ -6,7 +6,9 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ReportPermissions;
@@ -24,6 +26,7 @@ class ReportXhr extends Control
 	private $bellGateway;
 	private $regionGateway;
 	private $mailboxGateway;
+	private $groupFunctionGateway;
 
 	public function __construct(
 		ReportGateway $reportGateway,
@@ -34,7 +37,8 @@ class ReportXhr extends Control
 		ReportPermissions $reportPermissions,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
-		MailboxGateway $mailboxGateway
+		MailboxGateway $mailboxGateway,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
@@ -45,6 +49,8 @@ class ReportXhr extends Control
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
 		$this->mailboxGateway = $mailboxGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
+
 		parent::__construct();
 
 		if (isset($_GET['fsid'])) {
@@ -232,13 +238,13 @@ class ReportXhr extends Control
 			true
 			);
 
-		$regionReportGroupId = $this->regionGateway->getRegionReportGroupId($reportedFs['bezirk_id']);
+		$regionReportGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::REPORT);
 		if ($regionReportGroupId) {
 			$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionReportGroupId);
 			if (!in_array($reportedFs['id'], $reportBellRecipients)) {
 				$this->bellGateway->addBell($reportBellRecipients, $bellData);
 			} else {
-				$regionArbitrationGroupId = $this->regionGateway->getRegionArbitrationGroupId($reportedFs['bezirk_id']);
+				$regionArbitrationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::ARBITRATION);
 				$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionArbitrationGroupId);
 				$this->bellGateway->addBell($reportBellRecipients, $bellData);
 			}

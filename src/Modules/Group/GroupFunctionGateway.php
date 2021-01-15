@@ -92,12 +92,22 @@ class GroupFunctionGateway extends BaseGateway
 		return $this->db->delete('fs_region_function', ['target_id' => $targetId]);
 	}
 
-	public function existRegionFunctionGroup(int $region_id, int $target_id, int $function_id): bool
+	/**
+	 * @param int $target_id Is the Region_id of the district that the workgroup is assigned to
+	 * @param int|null $group_id Is the region_id of the workgroup that the functionality is assigned to
+	 *
+	 * @return bool If the function with $region_id = null is called it checks if in generall this district has a workgroup with this function
+	 * 				If all parameter are set it checks if this specific workgroup towards this specific district with this specific function exists.
+	 * 				(used in permission class)
+	 *
+	 * @throws \Exception
+	 */
+	public function existRegionFunctionGroup(int $target_id, int $function_id, int $group_id = null): bool
 	{
-		return $this->db->exists('fs_region_function', [
-			'region_id' => $region_id,
-			'target_id' => $target_id,
-			'function_id' => $function_id,
-		]);
+		if (empty($group_id)) {
+			return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => $function_id]);
+		} else {
+			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => $function_id, 'target_id' => $target_id]);
+		}
 	}
 }

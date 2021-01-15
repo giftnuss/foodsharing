@@ -3,6 +3,8 @@
 namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Report\ReportGateway;
 use Foodsharing\Permissions\ReportPermissions;
@@ -17,17 +19,20 @@ class ReportRestController extends AbstractFOSRestController
 	private RegionGateway $regionGateway;
 	private ReportGateway $reportGateway;
 	private ReportPermissions $reportPermissions;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Session $session,
 		RegionGateway $regionGateway,
 		ReportGateway $reportGateway,
-		ReportPermissions $reportPermissions
+		ReportPermissions $reportPermissions,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;
 		$this->reportPermissions = $reportPermissions;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	/**
@@ -59,7 +64,7 @@ class ReportRestController extends AbstractFOSRestController
 		}
 
 		$excludeIDs = null;
-		$reportGroup = $this->regionGateway->getRegionReportGroupId($regionId);
+		$reportGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
 		$onlyWithIds = null;
 		$reportAdminIDs = null;
 		if (!empty($reportGroup)) {
@@ -69,7 +74,7 @@ class ReportRestController extends AbstractFOSRestController
 			}
 		}
 		$arbitrationAdminIDs = null;
-		$arbitrationGroup = $this->regionGateway->getRegionArbitrationGroupId($regionId);
+		$arbitrationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
 		if (!empty($arbitrationGroup)) {
 			$arbitrationAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($arbitrationGroup);
 			if (in_array($this->session->id(), $arbitrationAdminIDs)) {

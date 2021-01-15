@@ -274,70 +274,70 @@ class RegionGateway extends BaseGateway
 		$region['botschafter'] = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
-		if ($welcomeGroupId = $this->getRegionWelcomeGroupId($regionId)) {
+		if ($welcomeGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::WELCOME)) {
 			$region['welcomeAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($welcomeGroupId);
 			shuffle($region['welcomeAdmins']);
 		} else {
 			$region['welcomeAdmins'] = [];
 		}
 
-		if ($votingGroupId = $this->getRegionVotingGroupId($regionId)) {
+		if ($votingGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::VOTING)) {
 			$region['votingAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($votingGroupId);
 			shuffle($region['votingAdmins']);
 		} else {
 			$region['votingAdmins'] = [];
 		}
 
-		if ($fspGroupId = $this->getRegionFoodsharepointGroupId($regionId)) {
+		if ($fspGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP)) {
 			$region['fspAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($fspGroupId);
 			shuffle($region['fspAdmins']);
 		} else {
 			$region['fspAdmins'] = [];
 		}
 
-		if ($storesGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::STORES)) {
+		if ($storesGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::STORES)) {
 			$region['storesAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($storesGroupId);
 			shuffle($region['storesAdmins']);
 		} else {
 			$region['storesAdmins'] = [];
 		}
 
-		if ($reportGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT)) {
+		if ($reportGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT)) {
 			$region['reportAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($reportGroupId);
 			shuffle($region['reportAdmins']);
 		} else {
 			$region['reportAdmins'] = [];
 		}
 
-		if ($mediationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::MEDIATION)) {
+		if ($mediationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::MEDIATION)) {
 			$region['mediationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($mediationGroupId);
 			shuffle($region['mediationAdmins']);
 		} else {
 			$region['mediationAdmins'] = [];
 		}
 
-		if ($arbitrationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION)) {
+		if ($arbitrationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION)) {
 			$region['arbitrationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($arbitrationGroupId);
 			shuffle($region['arbitrationAdmins']);
 		} else {
 			$region['arbitrationAdmins'] = [];
 		}
 
-		if ($fsManagementGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSMANAGEMENT)) {
+		if ($fsManagementGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSMANAGEMENT)) {
 			$region['fsManagementAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($fsManagementGroupId);
 			shuffle($region['fsManagementAdmins']);
 		} else {
 			$region['fsManagementAdmins'] = [];
 		}
 
-		if ($prGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::PR)) {
+		if ($prGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::PR)) {
 			$region['prAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($prGroupId);
 			shuffle($region['prAdmins']);
 		} else {
 			$region['prAdmins'] = [];
 		}
 
-		if ($moderationGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::MODERATION)) {
+		if ($moderationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::MODERATION)) {
 			$region['moderationAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($moderationGroupId);
 			shuffle($region['moderationAdmins']);
 		} else {
@@ -513,196 +513,6 @@ class RegionGateway extends BaseGateway
 	public function updateMasterRegions(array $regionIds, int $masterId): void
 	{
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
-	}
-
-	/**
-	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
-	 */
-	public function getRegionWelcomeGroupId(int $parentId): ?int
-	{
-		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::WELCOME);
-	}
-
-	/**
-	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
-	 */
-	public function getRegionFoodsharepointGroupId(int $parentId): ?int
-	{
-		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::FSP);
-	}
-
-	/**
-	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
-	 */
-	public function getRegionVotingGroupId(int $parentId): ?int
-	{
-		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::VOTING);
-	}
-
-	public function getRegionReportGroupId(int $parentId): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::REPORT
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function getRegionArbitrationGroupId(int $parentId): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::ARBITRATION
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function getRegionMediationGroupId(int $parentId): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::MEDIATION
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function getRegionModerationGroupId(int $parentId): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::MODERATION
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function getRegionFunctionGroupId(int $parentId, int $function): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => $function
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function getRegionGroupIdFunction(int $workgroup_id, int $parentId): ?int
-	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'function_id',
-				[
-					'target_id' => $parentId,
-					'region_id' => $workgroup_id
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
-	}
-
-	public function deleteRegionFunction($regionId, $functionId)
-	{
-		return $this->db->delete('fs_region_function',
-			['region_id' => $regionId,
-			 'function_id' => $functionId]
-		);
-	}
-
-	public function deleteTargetFunctions($targetId)
-	{
-		return $this->db->delete('fs_region_function',
-			['target_id' => $targetId]
-		);
-	}
-
-	public function addRegionFunction(int $regionId, int $functionId, int $targetId)
-	{
-		return $this->db->insert('fs_region_function',
-			['region_id' => $regionId,
-			'function_id' => $functionId,
-			'target_id' => $targetId]
-			);
-	}
-
-	public function RegionFunctionGroup(int $region_id, int $target_id): bool
-	{
-		return  $this->db->fetchValueByCriteria('fs_region_function', 'function_id',
-			['region_id' => $region_id,
-			 'target_id' => $target_id]
-		);
-	}
-
-	/**
-	 * @param int $target_id Is the Region_id of the district that the workgroup is assigned to
-	 * @param int|null $group_id Is the region_id of the workgroup that the functionality is assigned to
-	 *
-	 * @return bool If the function with $region_id = null is called it checks if in generall this district has a workgroup with this function
-	 * 				If all parameter are set it checks if this specific workgroup towards this specific district with this specific function exists.
-	 * 				(used in permission class)
-	 *
-	 * @throws \Exception
-	 */
-	public function existRegionReportGroup(int $target_id, int $group_id = null): bool
-	{
-		if (empty($group_id)) {
-			return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => WorkgroupFunction::REPORT]);
-		} else {
-			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => WorkgroupFunction::REPORT, 'target_id' => $target_id]);
-		}
-	}
-
-	/**
-	 * @param int $target_id Is the Region_id of the district that the workgroup is assigned to
-	 * @param int|null $group_id Is the region_id of the workgroup that the functionality is assigned to
-	 *
-	 * @return bool If the function with $region_id = null is called it checks if in generall this district has a workgroup with this function
-	 * 				If all parameter are set it checks if this specific workgroup towards this specific district with this specific function exists.
-	 * 				(used in permission class)
-	 *
-	 * @throws \Exception
-	 */
-	public function existRegionMediationGroup(int $target_id, int $group_id = null): bool
-	{
-		if (empty($group_id)) {
-			return  $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => WorkgroupFunction::MEDIATION]);
-		} else {
-			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $target_id]);
-		}
 	}
 
 	public function genderCountRegion(int $regionId): array

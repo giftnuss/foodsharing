@@ -26,11 +26,11 @@ class GroupGateway extends BaseGateway
 			['id' => $groupId]
 		);
 
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($out['id'], $out['parent_id'], WorkgroupFunction::WELCOME)) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::WELCOME, $out['id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
-		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['id'], $out['parent_id'], WorkgroupFunction::VOTING)) {
+		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::VOTING, $out['id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::VOTING;
-		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['id'], $out['parent_id'], WorkgroupFunction::FSP)) {
+		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::FSP, $out['id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::FSP;
 		} else {
 			$out['workgroup_function'] = [];
@@ -125,33 +125,6 @@ class GroupGateway extends BaseGateway
 	{
 		return $this->db->exists('fs_fairteiler', [
 			'bezirk_id' => $groupId
-		]);
-	}
-
-	private function existRegionWelcomeGroup(int $region_id, int $target_id): bool
-	{
-		return $this->db->exists('fs_region_function', [
-			'region_id' => $region_id,
-			'function_id' => WorkgroupFunction::WELCOME,
-			'target_id' => $target_id,
-		]);
-	}
-
-	private function existRegionVotingGroup(int $region_id, int $target_id): bool
-	{
-		return $this->db->exists('fs_region_function', [
-			'region_id' => $region_id,
-			'function_id' => WorkgroupFunction::VOTING,
-			'target_id' => $target_id,
-		]);
-	}
-
-	private function existRegionFSPGroup(int $region_id, int $target_id): bool
-	{
-		return $this->db->exists('fs_region_function', [
-			'region_id' => $region_id,
-			'function_id' => WorkgroupFunction::FSP,
-			'target_id' => $target_id
 		]);
 	}
 }

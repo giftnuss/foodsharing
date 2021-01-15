@@ -5,19 +5,23 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class ReportPermissions
 {
 	private Session $session;
 	private RegionGateway $regionGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Session $session,
-		RegionGateway $regionGateway)
-	{
+		RegionGateway $regionGateway,
+		GroupFunctionGateway $groupFunctionGateway
+	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	/** Reports list on region level: accessible for orga and for the AMBs of that exact region
@@ -32,7 +36,7 @@ class ReportPermissions
 			return true;
 		}
 
-		$reportGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
+		$reportGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
 
 		if (!empty($reportGroup)) {
 			if ($this->session->isAdminFor($reportGroup)) {
@@ -40,7 +44,7 @@ class ReportPermissions
 			}
 		}
 
-		$arbitrationGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
+		$arbitrationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
 
 		if (!empty($arbitrationGroup)) {
 			if ($this->session->isAdminFor($arbitrationGroup)) {
@@ -58,7 +62,7 @@ class ReportPermissions
 			return true;
 		}
 
-		$arbitrationGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
+		$arbitrationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
 
 		if (!empty($arbitrationGroup)) {
 			if ($this->session->isAdminFor($arbitrationGroup)) {
@@ -76,7 +80,7 @@ class ReportPermissions
 			return true;
 		}
 
-		$reportGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
+		$reportGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
 
 		if (!empty($reportGroup)) {
 			if ($this->session->isAdminFor($reportGroup)) {

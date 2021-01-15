@@ -8,21 +8,26 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
 {
 	private RegionGateway $regionGateway;
 	private BellGateway $bellGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Database $db,
 		RegionGateway $regionGateway,
-		BellGateway $bellGateway
+		BellGateway $bellGateway,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		parent::__construct($db);
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function getEmailFollower(int $id): array
@@ -435,7 +440,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$region = $this->regionGateway->getRegion($foodSharePoint['bezirk_id']);
 
-		$fspWGId = $this->regionGateway->getRegionFoodsharepointGroupId($region['id']);
+		$fspWGId = $this->groupFunctionGateway->getRegionFunctionGroupId($region['id'], WorkgroupFunction::FSP);
 		if (empty($fspWGId)) {
 			$fspBellRecipients = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 		} else {

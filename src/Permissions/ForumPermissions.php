@@ -3,6 +3,8 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -11,15 +13,18 @@ class ForumPermissions
 	private ForumGateway $forumGateway;
 	private Session $session;
 	private RegionGateway $regionGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		ForumGateway $forumGateway,
 		RegionGateway $regionGateway,
-		Session $session)
-	{
+		Session $session,
+		GroupFunctionGateway $groupFunctionGateway
+	) {
 		$this->forumGateway = $forumGateway;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function mayStartUnmoderatedThread(array $region, $ambassadorForum): bool
@@ -33,7 +38,7 @@ class ForumPermissions
 			return $this->mayPostToRegion($regionId, $ambassadorForum);
 		}
 
-		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
+		$moderationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::MODERATION);
 
 		if (empty($moderationGroup)) {
 			if ($this->session->isAmbassadorForRegion($regionId)) {
@@ -94,7 +99,7 @@ class ForumPermissions
 		$forums = $this->forumGateway->getForumsForThread($threadId);
 
 		foreach ($forums as $forum) {
-			$moderationGroup = $this->regionGateway->getRegionModerationGroupId($forum['forumId']);
+			$moderationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($forum['forumId'], WorkgroupFunction::MODERATION);
 			if (empty($moderationGroup)) {
 				if ($this->session->isAdminFor($forum['forumId'])) {
 					return true;
@@ -123,7 +128,7 @@ class ForumPermissions
 			return true;
 		}
 
-		$moderationGroup = $this->regionGateway->getRegionModerationGroupId($regionId);
+		$moderationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::MODERATION);
 
 		if (empty($moderationGroup)) {
 			if ($this->session->isAdminFor($regionId)) {

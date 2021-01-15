@@ -73,6 +73,8 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_conversation;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_mailbox;
+			DELETE FROM fs_mailbox_message;
 			DELETE FROM fs_region_function;
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ') and type = 7;
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ') and id in (SELECT bez.id as id FROM `fs_bezirk` bez

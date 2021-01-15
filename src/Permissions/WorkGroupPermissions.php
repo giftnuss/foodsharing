@@ -4,19 +4,24 @@ namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 final class WorkGroupPermissions
 {
 	private Session $session;
 	private RegionGateway $regionGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Session $session,
-		RegionGateway $regionGateway)
-	{
+		RegionGateway $regionGateway,
+		GroupFunctionGateway $groupFunctionGateway
+	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function mayEdit(array $group): bool
@@ -26,7 +31,7 @@ final class WorkGroupPermissions
 			return true;
 		}
 
-		if ($this->regionGateway->existRegionReportGroup($group['id'], $group['parent_id'])) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])) {
 			return false;
 		}
 		// Workgroup admins
@@ -53,8 +58,7 @@ final class WorkGroupPermissions
 		if ($this->session->mayBezirk($regionId)) {
 			return true;
 		}
-
-		if ($this->regionGateway->existRegionReportGroup($group['id'], $group['parent_id'])) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])) {
 			return false;
 		}
 

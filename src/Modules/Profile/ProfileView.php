@@ -8,8 +8,11 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
+use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
@@ -31,6 +34,8 @@ class ProfileView extends View
 	private ReportPermissions $reportPermissions;
 	private RegionGateway $regionGateway;
 	private MailboxGateway $mailboxGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
+	private GroupGateway $groupGateway;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -48,7 +53,9 @@ class ProfileView extends View
 		TranslationHelper $translationHelper,
 		TranslatorInterface $translator,
 		RegionGateway $regionGateway,
-		MailboxGateway $mailboxGateway
+		MailboxGateway $mailboxGateway,
+		GroupFunctionGateway $groupFunctionGateway,
+		GroupGateway $groupGateway
 	) {
 		parent::__construct(
 			$twig,
@@ -69,6 +76,8 @@ class ProfileView extends View
 		$this->regionGateway = $regionGateway;
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;
+		$this->groupFunctionGateway = $groupFunctionGateway;
+		$this->groupGateway = $groupGateway;
 	}
 
 	public function profile(string $wallPosts, array $userStores = [], array $fetchDates = []): void
@@ -261,7 +270,7 @@ class ProfileView extends View
 				]) . '</a></li>';
 		}
 
-		if ($this->regionGateway->existRegionReportGroup($this->foodsaver['bezirk_id'])) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($this->foodsaver['bezirk_id'], WorkgroupFunction::REPORT)) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
 					<i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>';
 		}
@@ -549,9 +558,9 @@ class ProfileView extends View
 		}
 
 		$mbName = '';
-		if ($this->regionGateway->existRegionMediationGroup($bezirk_id)) {
-			$mediationGroupId = $this->regionGateway->getRegionMediationGroupId($bezirk_id);
-			$mediationGroupDetails = $this->regionGateway->getOne_bezirk($mediationGroupId);
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::MEDIATION)) {
+			$mediationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($bezirk_id, WorkgroupFunction::MEDIATION);
+			$mediationGroupDetails = $this->groupGateway->getGroupLegacy($mediationGroupId);
 			$mbName = $this->mailboxGateway->getMailboxname($mediationGroupDetails['mailbox_id']);
 		}
 
@@ -566,7 +575,7 @@ class ProfileView extends View
 			$this->vueComponent('mediation-Request', 'MediationRequest', [
 				'foodSaverName' => $this->foodsaver['name'],
 				'mediationGroupEmail' => $mbName,
-				'hasLocalMediationGroup' => $this->regionGateway->existRegionMediationGroup($bezirk_id),
+				'hasLocalMediationGroup' => $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::MEDIATION),
 			])
 		);
 

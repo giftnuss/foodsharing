@@ -3,19 +3,24 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointPermissions
 {
 	private Session $session;
 	private RegionGateway $regionGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Session $session,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function mayFollow(): bool
@@ -35,7 +40,7 @@ class FoodSharePointPermissions
 			return true;
 		}
 
-		$fspGroup = $this->regionGateway->getRegionFoodsharepointGroupId($regionId);
+		$fspGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
 		if (!empty($fspGroup)) {
 			return $this->session->isAdminFor($fspGroup);
 		}
@@ -71,7 +76,7 @@ class FoodSharePointPermissions
 			return true;
 		}
 
-		$fspGroup = $this->regionGateway->getRegionFoodsharepointGroupId($regionId);
+		$fspGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
 		if (!empty($fspGroup)) {
 			return $this->session->isAdminFor($fspGroup);
 		}

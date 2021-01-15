@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus as StoreTeamStatus;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus as UserTeamStatus;
@@ -15,15 +16,18 @@ class StorePermissions
 	private StoreGateway $storeGateway;
 	private Session $session;
 	private RegionGateway $regionGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		StoreGateway $storeGateway,
 		Session $session,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->storeGateway = $storeGateway;
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function mayJoinStoreRequest(int $storeId): bool
@@ -63,7 +67,7 @@ class StorePermissions
 		}
 
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
 		if (empty($storeGroup)) {
 			if ($this->session->isAdminFor($storeRegion)) {
 				return true;
@@ -90,7 +94,7 @@ class StorePermissions
 		}
 
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
 		if (empty($storeGroup)) {
 			if ($this->session->isAdminFor($storeRegion)) {
 				return true;
@@ -165,7 +169,7 @@ class StorePermissions
 			return true;
 		}
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-		$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+		$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
 		if (empty($storeGroup)) {
 			if ($this->session->isAdminFor($storeRegion)) {
 				return true;
