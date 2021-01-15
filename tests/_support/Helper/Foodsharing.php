@@ -565,7 +565,12 @@ class Foodsharing extends \Codeception\Module\Db
 			'type' => Type::PART_OF_TOWN],
 			$extra_params);
 		$v['id'] = $this->haveInDatabase('fs_bezirk', $v);
-		$mailbox = $this->createMailbox('region-' . $v['id']);
+		if (empty($v['email'])) {
+			$mailbox = $this->createMailbox('region-' . $v['id']);
+		} else {
+			$mailbox = $this->createMailbox($v['email']);
+		}
+
 		$this->updateInDatabase('fs_bezirk', ['mailbox_id' => $mailbox['id']], ['id' => $v['id']]);
 		/* Add to closure table for hierarchies */
 		$this->_getDriver()->executeQuery('INSERT INTO `fs_bezirk_closure`

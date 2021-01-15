@@ -362,7 +362,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		// Create MediationAdmins Group
 		$this->output->writeln('- create mediation group');
-		$mediationGroup = $I->createWorkingGroup('Mediation Göttingen', ['parent_id' => $region1, 'email_name' => 'mediation.Goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
+		$mediationGroup = $I->createWorkingGroup('Mediation Göttingen', ['parent_id' => $region1, 'email_name' => 'Mediation Göttingen', 'email' =>'mediation.goettingen', 'teaser' => 'Hier sind die Meldungsbearbeiter für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $mediationGroup['id'], 'function_id' => WorkgroupFunction::MEDIATION, 'target_id' => $region1]);
 		for ($k = 0; $k <= 4; ++$k) {
 			$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);

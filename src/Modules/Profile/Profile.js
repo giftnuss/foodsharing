@@ -7,6 +7,7 @@ import { sendBuddyRequest } from '@/api/buddy'
 import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
+import MediationRequest from './components/MediationRequest'
 import BananaList from './components/BananaList'
 import PublicProfile from './components/PublicProfile'
 import PickupHistory from '../StoreUser/components/PickupHistory'
@@ -27,8 +28,10 @@ vueRegister({
   BananaList,
   PickupHistory,
   PublicProfile,
+  MediationRequest,
 })
 
 vueApply('#vue-profile-bananalist', true) // BananaList
 vueApply('#vue-pickup-history', true) // PickupHistory
 vueApply('#profile-public', true) // PublicProfile
+vueApply('#mediation-Request', true) // MediationRequest

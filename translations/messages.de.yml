@@ -1082,14 +1082,6 @@ reports:
 # For legacy UI reasons (ReportXhr), needs to be toplevel with this exact key:
   reportmessage: Gib kurz an wie du bei Rückfragen erreicht werden kannst!
 
-mediation:
-  info: |
-    Wir finden es toll das du dir Unterstützung suchst um ein Thema mit dem foodsaver
-    anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das
-    eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden.
-    Du kannst die Mediations-AG unter folgender e-mail erreichen : {email}@foodsharing.network
-  reportmessage: Gib kurz an wie du bei Rückfragen erreicht werden kannst!
-
 bell:
   no_bells: Du hast derzeit keine Benachrichtigungen
   forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
@@ -1498,6 +1490,10 @@ profile:
     cta: 'Das vollständige Profil von {name} ist nach Anmeldung zugänglich:'
     login: Zum Login
     join: Mitmachen & Registrieren
+  mediation:
+    title: 'Mediationsanfrage für {name}'
+    info: 'Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender Emailadresse : {email}@foodsharing.network'
+    no_group: 'Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird.'
 
 search:
   title: Suche

@@ -257,28 +257,5 @@ class ReportXhr extends Control
 				$("#reportreason ~ div.cb").hide();'
 		];
 
-		//return ['status' => 0];
-	}
-
-	// TODO : POC - Eigene Klasse für Mediationsdialog ?
-	public function mediationDialog(): array
-	{
-		$dialog = new XhrDialog();
-		$dialog->setTitle(' Mediation anfragen für ' . $this->foodsaver['name']);
-		global $g_data;
-		$g_data['reportreason'] = 0;
-
-		$mediationGroupId = $this->regionGateway->getRegionMediationGroupId($this->foodsaver['bezirk_id']);
-		$mediationGroupDetails = $this->regionGateway->getOne_bezirk($mediationGroupId);
-		$mbName = $this->mailboxGateway->getMailboxname($mediationGroupDetails['mailbox_id']);
-
-		$dialog->addContent($this->v_utils->v_info($this->translator->trans('mediation.info', ['{email}' => $mbName]), '', ''));
-		$dialog->addOpt('width', '$(window).width()*0.9', false);
-
-		$dialog->noOverflow();
-
-		return $dialog->xhrout();
-
-		//return ['status' => 0];
 	}
 }

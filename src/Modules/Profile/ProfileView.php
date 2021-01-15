@@ -22,6 +22,7 @@ use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 
 class ProfileView extends View
 {
@@ -29,6 +30,7 @@ class ProfileView extends View
 	private ProfilePermissions $profilePermissions;
 	private ReportPermissions $reportPermissions;
 	private RegionGateway $regionGateway;
+	private MailboxGateway $mailboxGateway;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -45,7 +47,8 @@ class ProfileView extends View
 		TimeHelper $timeHelper,
 		TranslationHelper $translationHelper,
 		TranslatorInterface $translator,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		MailboxGateway $mailboxGateway
 	) {
 		parent::__construct(
 			$twig,
@@ -62,6 +65,7 @@ class ProfileView extends View
 			$translator
 		);
 
+		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;
@@ -262,10 +266,8 @@ class ProfileView extends View
 					<i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>';
 		}
 
-		if ($this->regionGateway->existRegionMediationGroup($this->foodsaver['bezirk_id'])) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'mediationDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
-					 <i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li> ';
-		}
+		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
+
 
 		$writeMessage = '';
 		if ($fsId != $this->session->id()) {
@@ -538,6 +540,41 @@ class ProfileView extends View
 				<span class="val">' . $bananaCount . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
+		';
+	}
+
+	private function renderMediationRequest(int $bezirk_id): string
+	{
+		if (!$this->session->may('fs')) {
+			return '';
+		}
+
+		$mbName = '';
+		if ($this->regionGateway->existRegionMediationGroup($bezirk_id)) {
+			$mediationGroupId = $this->regionGateway->getRegionMediationGroupId($bezirk_id);
+			$mediationGroupDetails = $this->regionGateway->getOne_bezirk($mediationGroupId);
+			$mbName = $this->mailboxGateway->getMailboxname($mediationGroupDetails['mailbox_id']);
+		}
+
+		$this->pageHelper->addJs('
+			$(".mediation_request").fancybox({
+				closeClick: false,
+				closeBtn: true,
+			});
+		');
+
+		$this->pageHelper->addHidden(
+			$this->vueComponent('mediation-Request', 'MediationRequest', [
+				'foodSaverName' => $this->foodsaver['name'],
+				'mediationGroupEmail' => $mbName,
+				'hasLocalMediationGroup' => $this->regionGateway->existRegionMediationGroup($bezirk_id),
+			])
+		);
+
+		return '
+			<li><a href="#mediation_request" onclick="return false;" class="item mediation_request">
+				<i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li>
+			</a></li>
 		';
 	}
 
