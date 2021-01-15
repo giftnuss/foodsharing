@@ -26,15 +26,7 @@ class GroupGateway extends BaseGateway
 			['id' => $groupId]
 		);
 
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::WELCOME, $out['id'])) {
-			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
-		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::VOTING, $out['id'])) {
-			$out['workgroup_function'] = WorkgroupFunction::VOTING;
-		} elseif ($this->groupFunctionGateway->existRegionFunctionGroup($out['parent_id'], WorkgroupFunction::FSP, $out['id'])) {
-			$out['workgroup_function'] = WorkgroupFunction::FSP;
-		} else {
-			$out['workgroup_function'] = [];
-		}
+		$out['workgroup_function'] = $this->groupFunctionGateway->getRegionGroupFunctionId($out['id'], $out['parent_id'] );
 
 		$out['botschafter'] = $this->db->fetchAll('
 			SELECT  `fs_foodsaver`.`id`,

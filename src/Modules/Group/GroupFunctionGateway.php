@@ -14,6 +14,22 @@ use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
  */
 class GroupFunctionGateway extends BaseGateway
 {
+	public function getRegionGroupFunctionId(int $group, int $target_id): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'function_id',
+				[
+					'target_id' => $target_id,
+					'region_id' => $group,
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	/**
 	 * Finds the working group in the specified region that has a certain function.
 	 *
