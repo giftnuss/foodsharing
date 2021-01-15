@@ -9,17 +9,21 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 
 class RegionGateway extends BaseGateway
 {
 	private FoodsaverGateway $foodsaverGateway;
+	private GroupFunctionGateway $groupFunctionGateway;
 
 	public function __construct(
 		Database $db,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		parent::__construct($db);
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function getRegion(int $regionId): ?array
@@ -30,46 +34,6 @@ class RegionGateway extends BaseGateway
 
 		return $this->db->fetchByCriteria('fs_bezirk',
 			['name', 'id', 'email', 'email_name', 'has_children', 'parent_id', 'mailbox_id', 'type'],
-			['id' => $regionId]
-		);
-	}
-
-	public function getOne_bezirk(int $regionId): array
-	{
-		$out = $this->db->fetchByCriteria('fs_bezirk',
-			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
-			['id' => $regionId]
-		);
-
-		$function_id = $this->getRegionGroupIdFunction($out['parent_id'], $out['id']);
-		if (empty($function_id)) {
-			$out['workgroup_function'] = [];
-		} else {
-			$out['workgroup_function'] = $function_id;
-		}
-
-		$out['botschafter'] = $this->db->fetchAll('
-				SELECT 		`fs_foodsaver`.`id`,
-							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
-
-				FROM 		`fs_botschafter`,
-							`fs_foodsaver`
-
-				WHERE 		`fs_foodsaver`.`id` = `fs_botschafter`.`foodsaver_id`
-				AND 		`fs_botschafter`.`bezirk_id` = ' . $regionId . '
-			');
-
-		$out['foodsaver'] = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id',
-			['bezirk_id' => $regionId]
-		);
-
-		return $out;
-	}
-
-	public function getMailBezirk(int $regionId): array
-	{
-		return $this->db->fetchByCriteria('fs_bezirk',
-			['id', 'name', 'email', 'email_name', 'email_pass'],
 			['id' => $regionId]
 		);
 	}
@@ -310,21 +274,21 @@ class RegionGateway extends BaseGateway
 		$region['botschafter'] = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
-		if ($welcomeGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::WELCOME)) {
+		if ($welcomeGroupId = $this->getRegionWelcomeGroupId($regionId)) {
 			$region['welcomeAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($welcomeGroupId);
 			shuffle($region['welcomeAdmins']);
 		} else {
 			$region['welcomeAdmins'] = [];
 		}
 
-		if ($votingGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::VOTING)) {
+		if ($votingGroupId = $this->getRegionVotingGroupId($regionId)) {
 			$region['votingAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($votingGroupId);
 			shuffle($region['votingAdmins']);
 		} else {
 			$region['votingAdmins'] = [];
 		}
 
-		if ($fspGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP)) {
+		if ($fspGroupId = $this->getRegionFoodsharepointGroupId($regionId)) {
 			$region['fspAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($fspGroupId);
 			shuffle($region['fspAdmins']);
 		} else {
@@ -552,40 +516,27 @@ class RegionGateway extends BaseGateway
 	}
 
 	/**
-	 * @param int $parentId Look if for this specific regionId an workgroup with this function exists
-	 *
-	 * @return int|null Return regionId (workgroup) that has this function for this specific parentId
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
 	 */
 	public function getRegionWelcomeGroupId(int $parentId): ?int
 	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::WELCOME
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
+		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::WELCOME);
 	}
 
+	/**
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
+	 */
+	public function getRegionFoodsharepointGroupId(int $parentId): ?int
+	{
+		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::FSP);
+	}
+
+	/**
+	 * @deprecated replace with {@see GroupFunctionGateway::getRegionFunctionGroupId()}
+	 */
 	public function getRegionVotingGroupId(int $parentId): ?int
 	{
-		try {
-			return $this->db->fetchValueByCriteria(
-				'fs_region_function',
-				'region_id',
-				[
-					'target_id' => $parentId,
-					'function_id' => WorkgroupFunction::VOTING
-				]
-			);
-		} catch (\Exception $e) {
-			return null;
-		}
+		return $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::VOTING);
 	}
 
 	public function getRegionReportGroupId(int $parentId): ?int

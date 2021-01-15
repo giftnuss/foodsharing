@@ -3,7 +3,6 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointPermissions
@@ -13,8 +12,8 @@ class FoodSharePointPermissions
 
 	public function __construct(
 		Session $session,
-		RegionGateway $regionGateway)
-	{
+		RegionGateway $regionGateway
+	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 	}
@@ -36,25 +35,24 @@ class FoodSharePointPermissions
 			return true;
 		}
 
-		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
-
-		if (empty($fspGroup)) {
-			if ($this->session->isAdminFor($regionId)) {
-				return true;
-			}
-		} elseif ($this->session->isAdminFor($fspGroup)) {
-			return true;
+		$fspGroup = $this->regionGateway->getRegionFoodsharepointGroupId($regionId);
+		if (!empty($fspGroup)) {
+			return $this->session->isAdminFor($fspGroup);
 		}
 
-		return false;
+		return $this->session->isAdminFor($regionId);
 	}
 
 	public function mayEdit(int $regionId, array $follower): bool
 	{
-		return $this->mayAdd($regionId) || (
-			isset($follower['all'][$this->session->id()]) &&
-			$follower['all'][$this->session->id()] === 'fsp_manager'
-		);
+		if ($this->mayAdd($regionId)) {
+			return true;
+		}
+		if (isset($follower['all'][$this->session->id()])) {
+			return $follower['all'][$this->session->id()] === 'fsp_manager';
+		}
+
+		return false;
 	}
 
 	public function mayDeleteFoodSharePointOfRegion(int $regionId): bool
@@ -73,11 +71,9 @@ class FoodSharePointPermissions
 			return true;
 		}
 
-		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
+		$fspGroup = $this->regionGateway->getRegionFoodsharepointGroupId($regionId);
 		if (!empty($fspGroup)) {
-			if ($this->session->isAdminFor($fspGroup)) {
-				return true;
-			}
+			return $this->session->isAdminFor($fspGroup);
 		}
 
 		return false;

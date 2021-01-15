@@ -2,355 +2,355 @@
 #
 # FORM DATA KEYS: Global
 # --
-geb_datum: Geburtsdatum
-name: Name
-add: hinzufügen # StoreUserView
-nachname: Nachname
-subject: Betreff # at least EmailControl
-message: Nachricht
-address: Adresse
-edit: bearbeiten # StoreControl
-desc: Beschreibung
-description: Beschreibung
-plz: 'Postleitzahl (automatisch aus Karte oben!)'
-email: E-Mail-Adresse
-attachement: Anhang # EmailControl
-telefon: Festnetznummer
-handy: Handynummer
-anschrift: 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)'
-geschlecht: Geschlecht
-botschafter: Botschafter
-options: Optionen # FoodSharePointControl FoodSharePointView foodSharePoint.twig
-picture: Bild # BlogView and maybe more
-parent_id: Elternbezirk # at least XhrMethods and RegionAdminControl
-fs_id: foodsharing-ID
-lat: Längengrad
-lon: Breitengrad
-stadt: 'Deine Stadt oder Gemeinde' # DashboardControl
-bezirk: Bezirk
-betrieb: Kooperationsbetrieb/e
-active: Aktiviert # TODO check this
-mailbox_name: Mailbox-Name # XhrMethods
-rolle: Benutzerrolle # FoodsaverView
-last_login: 'Letzter Login'
-title: Überschrift
-body: Nachricht
-status: 'Aktueller Status'
-info: Informationen
-photo: Foto
-ort: 'Stadt/Gemeinde (automatisch aus Karte oben!)'
-daterange: Zeitraum
-regions: Bezirke # TODO check if used anywhere else
-message_text_to_group_admin_workgroup: 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>'
+geb_datum: "Geburtsdatum"
+name: "Name"
+add: "hinzufügen" # StoreUserView
+nachname: "Nachname"
+subject: "Betreff" # at least EmailControl
+message: "Nachricht"
+address: "Adresse"
+edit: "bearbeiten" # StoreControl
+desc: "Beschreibung"
+description: "Beschreibung"
+plz: "Postleitzahl (automatisch aus Karte oben!)"
+email: "E-Mail-Adresse"
+attachement: "Anhang" # EmailControl
+telefon: "Festnetznummer"
+handy: "Handynummer"
+anschrift: "Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)"
+geschlecht: "Geschlecht"
+botschafter: "Botschafter"
+options: "Optionen" # FoodSharePointControl FoodSharePointView foodSharePoint.twig
+picture: "Bild" # BlogView and maybe more
+parent_id: "Elternbezirk" # at least XhrMethods and RegionAdminControl
+fs_id: "foodsharing-ID"
+lat: "Längengrad"
+lon: "Breitengrad"
+stadt: "Deine Stadt oder Gemeinde" # DashboardControl
+bezirk: "Bezirk"
+betrieb: "Kooperationsbetrieb/e"
+active: "Aktiviert" # TODO check this
+mailbox_name: "Mailbox-Name" # XhrMethods
+rolle: "Benutzerrolle" # FoodsaverView
+last_login: "Letzter Login"
+title: "Überschrift"
+body: "Nachricht"
+status: "Aktueller Status"
+info: "Informationen"
+photo: "Foto"
+ort: "Stadt/Gemeinde (automatisch aus Karte oben!)"
+daterange: "Zeitraum"
+regions: "Bezirke" # TODO check if used anywhere else
+message_text_to_group_admin_workgroup: "Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: \"<a href=\"https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum\" target=\"_blank\">Klicke hier um zur zur Region/AG zu gehen</a>"
 #
 # FORM DATA KEYS: SettingsView
 # --
-about_me_public: 'Öffentliche Kurzbeschreibung'
-about_me_intern: Kurzbeschreibung
+about_me_public: "Öffentliche Kurzbeschreibung"
+about_me_intern: "Kurzbeschreibung"
 #
 # FORM DATA KEYS: BasketView + BasketXhr
 # --
-weight: 'Geschätztes Gewicht'
-food_type: 'Welche Arten von Lebensmitteln sind dabei?'
-food_art: 'Was trifft auf die Lebensmittel zu?'
-fetchstate: 'Hat alles gut geklappt?'
-contact_type: 'Wie möchtest du kontaktiert werden?'
-lifetime: 'Wie lange soll dein Essenskorb gültig sein?'
+weight: "Geschätztes Gewicht"
+food_type: "Welche Arten von Lebensmitteln sind dabei?"
+food_art: "Was trifft auf die Lebensmittel zu?"
+fetchstate: "Hat alles gut geklappt?"
+contact_type: "Wie möchtest du kontaktiert werden?"
+lifetime: "Wie lange soll dein Essenskorb gültig sein?"
 #
 # FORM DATA KEYS: BlogView
 # --
-teaser: Teaser
-bezirk_id: 'Für welche Region ist der Artikel relevant?'
+teaser: "Teaser"
+bezirk_id: "Für welche Region ist der Artikel relevant?"
 #
 # FORM DATA KEYS: BusinessCardView
 # --
-opt: Optionen
+opt: "Optionen"
 #
 # FORM DATA KEYS: EmailControl
 # --
-testemail: Test-E-Mail-Adresse
-mailbox_id: Absender-E-Mail-Adresse
+testemail: "Test-E-Mail-Adresse"
+mailbox_id: "Absender-E-Mail-Adresse"
 #
 # FORM DATA KEYS: EventView
 # --
-location_name: 'Veranstaltungsort / Konferenzraum'
-online_type: 'Findet das Event offline oder online statt?'
-dateend: Enddatum
+location_name: "Veranstaltungsort / Konferenzraum"
+online_type: "Findet das Event offline oder online statt?"
+dateend: "Enddatum"
 #
 # FORM DATA KEYS: FoodsaverView
 # --
-orgateam: 'Bundesweite Orga'
-position: 'Position bei foodsharing (öffentlich)'
+orgateam: "Bundesweite Orga"
+position: "Position bei foodsharing (öffentlich)"
 #
 # FORM DATA KEYS: FoodSharePoint
 # --
-infotype: Benachrichtigung
-fsp_bezirk_id: 'In welchem Bezirk ist der Fairteiler?'
-fspmanagers: 'Foodsaver, die Ansprechpartner für den Fairteiler sind'
+infotype: "Benachrichtigung"
+fsp_bezirk_id: "In welchem Bezirk ist der Fairteiler?"
+fspmanagers: "Foodsaver, die Ansprechpartner für den Fairteiler sind"
 #
 # FORM DATA KEYS: LoginView
 # --
-pass1: 'Dein neues gewünschtes Passwort'
-pass2: Passwortwiederholung
-#login_location: 'Deine Adresse' # TODO check if used anywhere
+pass1: "Dein neues gewünschtes Passwort"
+pass2: "Passwortwiederholung"
+#login_location: "Deine Adresse" # TODO check if used anywhere
 #
 # FORM DATA KEYS: MessageView
 # --
-compose_body: Nachricht
+compose_body: "Nachricht"
 #
 # FORM DATA KEYS: SettingsView
 # --
-newsletter: Newsletter
-# comment: 'Anregungen, Kritik und Kommentare' # this looks very unused
-infomail_message: 'Benachrichtigung über Chat-Nachrichten auf foodsharing'
-newmail: 'Gib hier deine neue E-Mail-Adresse ein'
-passcheck: 'Bestätige die Änderung bitte mit deinem Passwort'
-sleep_status: 'Dein aktueller Status'
-sleep_msg: 'Hier kannst du eine kurze Nachricht hinterlassen, warum du gerade keine Zeit hast.'
-homepage: 'Deine Webseite'
+newsletter: "Newsletter"
+# comment: "Anregungen, Kritik und Kommentare" # this looks very unused
+infomail_message: "Benachrichtigung über Chat-Nachrichten auf foodsharing"
+newmail: "Gib hier deine neue E-Mail-Adresse ein"
+passcheck: "Bestätige die Änderung bitte mit deinem Passwort"
+sleep_status: "Dein aktueller Status"
+sleep_msg: "Hier kannst du eine kurze Nachricht hinterlassen, warum du gerade keine Zeit hast."
+homepage: "Deine Webseite"
 #
 # FORM DATA KEYS: StoreView (team + pickup time management)
 # --
-verantwortlicher: 'Verantwortliche Mitglieder'
-storemanagers: Betriebsverantwortliche
-team_status: Teamstatus
-fetchercount: 'Anzahl der Abholer*innen'
+verantwortlicher: "Verantwortliche Mitglieder"
+storemanagers: "Betriebsverantwortliche"
+team_status: "Teamstatus"
+fetchercount: "Anzahl der Abholer*innen"
 #
 # FORM DATA KEYS: StoreView (betrieb_form)
 # --
-kette_id: Betriebskette
-betrieb_kategorie_id: Kategorie
-betrieb_status_id: Status
-store_status_impact_explanation: 'Bitte aktualisiere nach jedem Betriebskontakt (<a href="https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste" target="_blank">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href="https://wiki.foodsharing.de/Betrieb" target="_blank">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt.'
-ansprechpartner: 'Betriebsansprechpartner (Filialleiter etc.)'
-fax: Fax
-lebensmittel: 'Welche Lebensmittel dürfen abgeholt werden?'
-begin: 'Beginn der Kooperation'
-besonderheiten: Besonderheiten
-public_info: 'Öffentliche Infos zum Betrieb'
-public_time: 'Ungefähre Tageszeit der Abholung'
-first_post: 'Erster Pinnwandeintrag'
-ueberzeugungsarbeit: 'War es einfach, eine/n Verantwortliche/n zu überzeugen, mit foodsharing zu kooperieren?'
-presse: 'Ist der Betrieb/Laden/Verein bereit, bei der Presse und foodsharing.de genannt zu werden?'
-sticker: 'Ist der Betrieb/Laden/Verein etc. gewillt, einen Sticker beim Eingang oder anderswo sichtbar anzubringen?'
-prefetchtime: 'Wie viele Wochen im Voraus können sich Foodsaver mittels automatischer Slots eintragen?'
-abholmenge: 'Wie viel Kilogramm werden pro Abholung ungefähr mitgenommen?'
+kette_id: "Betriebskette"
+betrieb_kategorie_id: "Kategorie"
+betrieb_status_id: "Status"
+store_status_impact_explanation: "Bitte aktualisiere nach jedem Betriebskontakt (<a href=\"https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste\" target=\"_blank\">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href=\"https://wiki.foodsharing.de/Betrieb\" target=\"_blank\">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt."
+ansprechpartner: "Betriebsansprechpartner (Filialleiter etc.)"
+fax: "Fax"
+lebensmittel: "Welche Lebensmittel dürfen abgeholt werden?"
+begin: "Beginn der Kooperation"
+besonderheiten: "Besonderheiten"
+public_info: "Öffentliche Infos zum Betrieb"
+public_time: "Ungefähre Tageszeit der Abholung"
+first_post: "Erster Pinnwandeintrag"
+ueberzeugungsarbeit: "War es einfach, eine/n Verantwortliche/n zu überzeugen, mit foodsharing zu kooperieren?"
+presse: "Ist der Betrieb/Laden/Verein bereit, bei der Presse und foodsharing.de genannt zu werden?"
+sticker: "Ist der Betrieb/Laden/Verein etc. gewillt, einen Sticker beim Eingang oder anderswo sichtbar anzubringen?"
+prefetchtime: "Wie viele Wochen im Voraus können sich Foodsaver mittels automatischer Slots eintragen?"
+abholmenge: "Wie viel Kilogramm werden pro Abholung ungefähr mitgenommen?"
 #
 # FORM DATA KEYS: WorkGroup
 # --
-member: Mitglieder
-leader: Gruppen-Admins
-apply_type: 'Wer kann sich für diese Gruppe eintragen?'
-banana_count: 'Wie viele Vertrauensbananen braucht ein Mitglied?'
-fetch_count: 'Wie viele Abholungen sollte ein Bewerber gemacht haben?'
-week_num: 'Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?'
+member: "Mitglieder"
+leader: "Gruppen-Admins"
+apply_type: "Wer kann sich für diese Gruppe eintragen?"
+banana_count: "Wie viele Vertrauensbananen braucht ein Mitglied?"
+fetch_count: "Wie viele Abholungen sollte ein Bewerber gemacht haben?"
+week_num: "Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?"
 #
 # FORM DATA KEYS: QuizView QuizXhr
 # --
-right: 'Wertung'
-text: 'Text'
-fp: 'Fehlerpunkte'
-explanation: 'Erklärung'
-duration: 'Zeit zum Antworten'
-answers: 'Welche Antworten sind richtig?'
-maxfp: 'Maximale Anzahl von Fehlerpunkten um zu bestehen'
-questcount: 'Wie viele Fragen sollen bei Klausur gestellt werden?'
-wikilink: 'Link zur Wiki-Seite'
+right: "Wertung"
+text: "Text"
+fp: "Fehlerpunkte"
+explanation: "Erklärung"
+duration: "Zeit zum Antworten"
+answers: "Welche Antworten sind richtig?"
+maxfp: "Maximale Anzahl von Fehlerpunkten um zu bestehen"
+questcount: "Wie viele Fragen sollen bei Klausur gestellt werden?"
+wikilink: "Link zur Wiki-Seite"
 
-# quiz: Quiz
+# quiz: "Quiz
 # For legacy UI reasons (QuizView), needs to be toplevel with this exact key:
 quizusercomment: |
     Gib uns Feedback zu dieser Frage!
     War sie zu leicht, zu schwer, unverständlich?
     Oder sind einzelne Antworten bzw. Erklärungen nicht richtig?
 
-image: Bild
+image: "Bild"
 picture_upload_widget:
-  picture_upload: Foto-Upload
-  choose_picture: Wähle ein Bild von deinem Rechner!
+  picture_upload: "Foto-Upload"
+  choose_picture: "Wähle ein Bild von deinem Rechner!"
 
 upload:
-  no_image: 'Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!'
-  no_image_yet: Noch kein Bild hochgeladen
-  no_image_chosen: Noch keine Datei ausgewählt
-  preview_image: Vorschau
-  image: Bild hochladen
-  new_image: Neues Bild hochladen
-  edit_image: Bild bearbeiten
-  file: Datei hochladen
-  choose_file: Datei hochladen
-  new_file: Neue Datei hochladen
-  crop_dialog_title: Bild ausschneiden
-  image-problem: Deine Datei scheint nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild
+  no_image: "Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!"
+  no_image_yet: "Noch kein Bild hochgeladen"
+  no_image_chosen: "Noch keine Datei ausgewählt"
+  preview_image: "Vorschau"
+  image: "Bild hochladen"
+  new_image: "Neues Bild hochladen"
+  edit_image: "Bild bearbeiten"
+  file: "Datei hochladen"
+  choose_file: "Datei hochladen"
+  new_file: "Neue Datei hochladen"
+  crop_dialog_title: "Bild ausschneiden"
+  image-problem: "Deine Datei scheint nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild"
 
 button:
-  save: Speichern
-  next: Weiter
-  change_picture: Bild ändern
-  attach_image: Bild anhängen
-  rotate_right: im Uhrzeigersinn drehen
-  upload: Hochladen
-  new: Neu
-  edit: Bearbeiten
-  delete: Löschen
-  permadelete: Unwiderruflich löschen
-  yes_i_am_sure: Ja, ich bin mir sicher
-  apply: Übernehmen
-  cancel: Abbrechen
-  send: Senden
-  answer: Antworten
-  create: Anlegen
-  clear_filter: Filter leeren
+  save: "Speichern"
+  next: "Weiter"
+  change_picture: "Bild ändern"
+  attach_image: "Bild anhängen"
+  rotate_right: "im Uhrzeigersinn drehen"
+  upload: "Hochladen"
+  new: "Neu"
+  edit: "Bearbeiten"
+  delete: "Löschen"
+  permadelete: "Unwiderruflich löschen"
+  yes_i_am_sure: "Ja, ich bin mir sicher"
+  apply: "Übernehmen"
+  cancel: "Abbrechen"
+  send: "Senden"
+  answer: "Antworten"
+  create: "Anlegen"
+  clear_filter: "Filter leeren"
 
 bread:
-  backToOverview: zurück zur Übersicht
+  backToOverview: "zurück zur Übersicht"
 
 ui:
   switch:
-    on: veröffentlicht
-    off: inaktiv
+    on: "veröffentlicht"
+    off: "inaktiv"
 
 pass:
-  bread: Pass-Generator
-  none: '- noch nicht erstellt -'
-  photo: Foto
-  name: Name
-  date: Zuletzt erstellt
-  verified: Verifiziert?
+  bread: "Pass-Generator"
+  none: "- noch nicht erstellt -"
+  photo: "Foto"
+  name: "Name"
+  date: "Zuletzt erstellt"
+  verified: "Verifiziert?"
   nav:
-    options: Optionen
-    select: Alle markieren
-    deselect: Keine markieren
-    title: Und los!
-    generate: Markierte Ausweise generieren
-  hint: Hinweise
+    options: "Optionen"
+    select: "Alle markieren"
+    deselect: "Keine markieren"
+    title: "Und los!"
+    generate: "Markierte Ausweise generieren"
+  hint: "Hinweise"
   hintSelect: |
     Mit einem Klick auf das Erstellungsdatum werden alle Foodsaver mit dem gleichen Datum bzw. ohne Erstellungsdatum markiert.
   hintVerify: |
     Foodsaver, die einen Ausweis bekommen haben und die Richtigkeit ihrer Persodaten bestätigt haben, können verifiziert werden.
-  claim: Teile Lebensmittel, anstatt sie wegzuwerfen!
+  claim: "Teile Lebensmittel, anstatt sie wegzuwerfen!"
   verify:
-    do: 'Account von {name} verifizieren'
-    undo: 'Verifizierung von {name} aufheben'
-    confirm: Sicher?
+    do: "Account von {name} verifizieren"
+    undo: "Verifizierung von {name} aufheben"
+    confirm: "Sicher?"
     text: |
       Persodaten gecheckt? <br/>
       Ausweis übergeben?
-    failed: Es ist ein Problem aufgetreten
-    hasPickup: Noch für Abholungen eingetragen
-    checkPickups: Vor dem Entverifizieren musst du die eingetragenen Abholtermine prüfen!
+    failed: "Es ist ein Problem aufgetreten"
+    hasPickup: "Noch für Abholungen eingetragen"
+    checkPickups: "Vor dem Entverifizieren musst du die eingetragenen Abholtermine prüfen!"
   button:
-    verify: Verifizieren
-    check: Termine prüfen
-  noPhoto: 'Die folgenden Personen haben noch kein Foto hochgeladen:'
-  notGenerated: 'Ihr Ausweis konnte daher nicht erstellt werden.'
+    verify: "Verifizieren"
+    check: "Termine prüfen"
+  noPhoto: "Die folgenden Personen haben noch kein Foto hochgeladen:"
+  notGenerated: "Ihr Ausweis konnte daher nicht erstellt werden."
 
 bcard:
-  title: Visitenkarten-Generator
-  card: Deine foodsharing Visitenkarte
-  claim: 'Hier easy generieren, ausdrucken und ausschneiden...'
-  for: '{role} für {region}'
-  actions: Optionen
-  desc: 'Wähle hier, für welchen Bezirk bzw. für welche Rolle du deine Visitenkarte erstellen möchtest!'
-  choose: Du musst eine Option wählen
+  title: "Visitenkarten-Generator"
+  card: "Deine foodsharing Visitenkarte"
+  claim: "Hier easy generieren, ausdrucken und ausschneiden..."
+  for: "{role} für {region}"
+  actions: "Optionen"
+  desc: "Wähle hier, für welchen Bezirk bzw. für welche Rolle du deine Visitenkarte erstellen möchtest!"
+  choose: "Du musst eine Option wählen"
   error:
-    length: 'Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.'
-    phone: 'Du musst eine gültige Telefonnummer angegeben haben, um deine Visitenkarte zu generieren.'
-    verified: 'Du musst verifiziert sein, um deine Visitenkarte generieren zu können.'
-  generate: Visitenkarten erstellen
+    length: "Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben."
+    phone: "Du musst eine gültige Telefonnummer angegeben haben, um deine Visitenkarte zu generieren."
+    verified: "Du musst verifiziert sein, um deine Visitenkarte generieren zu können."
+  generate: "Visitenkarten erstellen"
 
 group:
-  name: Name
-  description: Beschreibung
-  photo: Foto
-  applications: Bewerbungen
-  applications_for: Bewerbungen für %name%
-  edit: '{group} bearbeiten'
-  saved: Änderungen wurden gespeichert
+  name: "Name"
+  description: "Beschreibung"
+  photo: "Foto"
+  applications: "Bewerbungen"
+  applications_for: "Bewerbungen für %name%"
+  edit: "{group} bearbeiten"
+  saved: "Änderungen wurden gespeichert"
   mail_link_title:
-    workgroup: AG-Postfach
-    region: Bezirks-Postfach
+    workgroup: "AG-Postfach"
+    region: "Bezirks-Postfach"
   contact:
-    title: '{group} kontaktieren'
-    admins: '{count} Ansprechpartner:'
+    title: "{group} kontaktieren"
+    admins: "{count} Ansprechpartner:"
     disclaimer: |
       Durch Senden einer Nachricht an diese Arbeitsgruppe
       sehen alle Administratoren der Arbeitsgruppe deine E-Mail-Adresse,
       welche du auf deinem foodsharing-Profil angegeben hast.
       Dir wird eine Kopie dieser Nachricht als E-Mail zugeschickt.
-    empty: Schreib doch erst einmal etwas ;)
-    send: Nachricht senden
-    sent: Nachricht wurde erfolgreich versendet!
+    empty: "Schreib doch erst einmal etwas ;)"
+    send: "Nachricht senden"
+    sent: "Nachricht wurde erfolgreich versendet!"
   apply:
-    title: 'Bewerbung für {group}'
-    summary: '{name} möchte gerne in der Arbeitsgruppe {group} mitmachen.'
-    motivation: Was ist deine Motivation, in der Gruppe {group} mitzuwirken?
-    faehigkeit: Was sind deine Fähigkeiten, die du in diesem Bereich hast?
+    title: "Bewerbung für {group}"
+    summary: "{name} möchte gerne in der Arbeitsgruppe {group} mitmachen."
+    motivation: "Was ist deine Motivation, in der Gruppe {group} mitzuwirken?"
+    faehigkeit: "Was sind deine Fähigkeiten, die du in diesem Bereich hast?"
     erfahrung: |
       Kannst du in der Gruppe auf Erfahrungen, die du woanders gesammelt hast zurückgreifen?
       Wenn ja, wo bzw. was?
-    zeit: Wie viele Stunden hast du pro Woche Zeit und Lust dafür aufzuwenden?
+    zeit: "Wie viele Stunden hast du pro Woche Zeit und Lust dafür aufzuwenden?"
     time:
-      1: 1-2 Stunden
-      2: 2-3 Stunden
-      3: 3-4 Stunden
-      5: 5 oder mehr Stunden
-    send: Bewerbung absenden
-    sent: Bewerbung wurde abgeschickt!
-    accepted: Bewerbung angenommen
-    declined: Bewerbung abgelehnt
+      "1": "1-2 Stunden"
+      "2": "2-3 Stunden"
+      "3": "3-4 Stunden"
+      "5": "5 oder mehr Stunden"
+    send: "Bewerbung absenden"
+    sent: "Bewerbung wurde abgeschickt!"
+    accepted: "Bewerbung angenommen"
+    declined: "Bewerbung abgelehnt"
   application_requirements:
-    requirements: Wer kann sich für diese Gruppe eintragen?
-    nobody: Niemand (geschlossene Gruppe)
-    requires_properties: Jeder, der bestimmte Vertrauenspunkte erfüllt
-    everybody: Jeder darf sich bewerben
-    open: Jeder kann sich ohne Bewerbung einklinken
-    fetch_count: Wie viele Abholungen sollte ein Bewerber gemacht haben?
-    banana_count: Wie viele Vertrauensbananen braucht ein Mitglied?
+    requirements: "Wer kann sich für diese Gruppe eintragen?"
+    nobody: "Niemand (geschlossene Gruppe)"
+    requires_properties: "Jeder, der bestimmte Vertrauenspunkte erfüllt"
+    everybody: "Jeder darf sich bewerben"
+    open: "Jeder kann sich ohne Bewerbung einklinken"
+    fetch_count: "Wie viele Abholungen sollte ein Bewerber gemacht haben?"
+    banana_count: "Wie viele Vertrauensbananen braucht ein Mitglied?"
     banana_count_errors:
-      min: Niemand kann weniger als {{ limit }} Vertrauensbananen haben!
-      max: Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen!
-    member_since_weeks: Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?
-    not_fulfilled: Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben.
-  members: Mitglieder
-  administrators: Gruppen-Admins
-  title: foodsharing-Arbeitsgruppen
-  subtitle: hier findest du Hilfe und viel zu tun...
-  member_count: '{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende'
-  admin_count: '{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren'
-  image: Titelbild für %name%
-  already_applied: Für diese Gruppe hast du dich bereits beworben
+      min: "Niemand kann weniger als {{ limit }} Vertrauensbananen haben!"
+      max: "Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen!"
+    member_since_weeks: "Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?"
+    not_fulfilled: "Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben."
+  members: "Mitglieder"
+  administrators: "Gruppen-Admins"
+  title: "foodsharing-Arbeitsgruppen"
+  subtitle: "hier findest du Hilfe und viel zu tun..."
+  member_count: "{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende"
+  admin_count: "{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren"
+  image: "Titelbild für %name%"
+  already_applied: "Für diese Gruppe hast du dich bereits beworben"
   actions:
-    contact: Gruppe kontaktieren
-    edit: Gruppe bearbeiten
-    go: Zur Gruppe
-    apply: Für diese Arbeitsgruppe bewerben
-    join: Dieser Arbeitsgruppe beitreten
-    safe: Änderungen speichern
-  no_groups: Hier gibt es noch keine Arbeitsgruppen
-  quit_name_workgroup: Team %name% verlassen
-  quit_name_district: Bezirk %name% verlassen
-  quit: Verlassen
-  really_quit_workgroup: Möchtest du wirklich die Arbeitsgruppe %name% verlassen?
-  really_quit_district: Möchtest du wirklich den Bezirk %name% verlassen?
-  quitting_home_district_warning: Möchtest du wirklich deinen Stammbezirk %name% verlassen? Du verlierst deine Verifizierung und musst dich später beim Botschafter-Team deines neuen Stammbezirks melden!
-  delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
+    contact: "Gruppe kontaktieren"
+    edit: "Gruppe bearbeiten"
+    go: "Zur Gruppe"
+    apply: "Für diese Arbeitsgruppe bewerben"
+    join: "Dieser Arbeitsgruppe beitreten"
+    safe: "Änderungen speichern"
+  no_groups: "Hier gibt es noch keine Arbeitsgruppen"
+  quit_name_workgroup: "Team %name% verlassen"
+  quit_name_district: "Bezirk %name% verlassen"
+  quit: "Verlassen"
+  really_quit_workgroup: "Möchtest du wirklich die Arbeitsgruppe %name% verlassen?"
+  really_quit_district: "Möchtest du wirklich den Bezirk %name% verlassen?"
+  quitting_home_district_warning: "Möchtest du wirklich deinen Stammbezirk %name% verlassen? Du verlierst deine Verifizierung und musst dich später beim Botschafter-Team deines neuen Stammbezirks melden!"
+  delete_group_sure: "Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?"
   function:
-    title: Arbeitsgruppenfunktion
-    welcome: Begrüßung
-    voting: Abstimmung
-    fsp: Fairteiler
-    stores: Betriebe
-    report: Meldungen
-    mediation : Mediation
-    arbitration: Schiedstelle
-    fsmanagement: Verwaltung
-    pr : Öffentlichkeitsarbeit
-    moderation: Moderation
-    invalid: 'Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden.'
-    duplicate_welcome_team: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
-    duplicate_voting_team: 'Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben.'
-    duplicate_fsp_team: 'Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben.'
+    title: "Arbeitsgruppenfunktion"
+    welcome: "Begrüßung"
+    voting: "Abstimmung"
+    fsp: "Fairteiler"
+    stores: "Betriebe"
+    report: "Meldungen"
+    mediation: "Mediation"
+    arbitration: "Schiedstelle"
+    fsmanagement: "Verwaltung"
+    pr: "Öffentlichkeitsarbeit"
+    moderation: "Moderation"
+    invalid: "Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden."
+    duplicate_welcome_team: "Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben."
+    duplicate_voting_team: "Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben."
+    duplicate_fsp_team: "Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben."
     duplicate_stores_team: 'Betriebskoordinationsteam schon angelegt ! Pro Bezirk kann es nur ein Betriebskoordinationsteam geben.'
     duplicate_report_team: 'Meldungsteam schon angelegt ! Pro Bezirk kann es nur ein Meldungsteam geben.'
     duplicate_mediation_team: 'Mediatoinsteam schon angelegt ! Pro Bezirk kann es nur ein Mediatoinsteam geben.'
@@ -358,371 +358,371 @@ group:
     duplicate_fsmanagement_team: 'Verwaltungsteam schon angelegt ! Pro Bezirk kann es nur ein Verwaltungsteam geben.'
     duplicate_pr_team: 'Öffentlichkeitsarbeitsteam schon angelegt ! Pro Bezirk kann es nur ein Öffentlichkeitsarbeitsteam geben.'
     duplicate_moderation_team: 'Moderationsteam schon angelegt ! Pro Bezirk kann es nur ein Moderationsteam geben.'
-  show-all: Alle anzeigen
+  show-all: "Alle anzeigen"
 
 legal:
-  pp: Datenschutzerklärung
-  acknowledge: Nimmst du die Vereinbarung zur Kenntnis?
-  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst du die beschriebene Datenschutzerklärung zur Kenntnis nehmen.
-  dont_agree: Ich bin nicht einverstanden mit der Verarbeitung meiner Daten und
-  agree_privacy_policy: Ich habe die Datenschutzvereinbarung zur Kenntnis genommen.
-  delete_account: Ich möchte meinen Account löschen.
+  pp: "Datenschutzerklärung"
+  acknowledge: "Nimmst du die Vereinbarung zur Kenntnis?"
+  not_acknowledge_pp_description: "Um die foodsharing-Plattform benutzen zu können, musst du die beschriebene Datenschutzerklärung zur Kenntnis nehmen."
+  dont_agree: "Ich bin nicht einverstanden mit der Verarbeitung meiner Daten und"
+  agree_privacy_policy: "Ich habe die Datenschutzvereinbarung zur Kenntnis genommen."
+  delete_account: "Ich möchte meinen Account löschen."
   actions:
-    safe: Einstellungen übernehmen
-  must_accept_pp: Um bei foodsharing mitzumachen, musst du den Datenschutzbedingungen zustimmen.
-  privacy_notice: Datenschutzbelehrung
-  agree_privacy_notice: Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail für meine Unterlagen an die von mir angegebene Adresse.
+    safe: "Einstellungen übernehmen"
+  must_accept_pp: "Um bei foodsharing mitzumachen, musst du den Datenschutzbedingungen zustimmen."
+  privacy_notice: "Datenschutzbelehrung"
+  agree_privacy_notice: "Über die Verpflichtung zur Vertraulichkeit personenbezogener Daten und die sich daraus ergebenden Verhaltensweisen wurde ich unterrichtet. Eine Bestätigung hierüber erhalte ich per E-Mail für meine Unterlagen an die von mir angegebene Adresse."
   privacy_notice_agree:
-    select: Bitte auswählen
-    acknowledge: Ich stimme zu
-    not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
-  not_acknowledge_pn_description: Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*in von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
-  legal_agreement: Rechtsvereinbarung
-  are_you_sure_to_downgrade: 'Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?'
+    select: "Bitte auswählen"
+    acknowledge: "Ich stimme zu"
+    not_acknowledge: "Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden"
+  not_acknowledge_pn_description: "Wenn du mit der Belehrung nicht einverstanden bist, wirst du zum Foodsaver herabgestuft. Das bedeutet, dass du kein*e Botschafter*in von Bezirken mehr bist, deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst."
+  legal_agreement: "Rechtsvereinbarung"
+  are_you_sure_to_downgrade: "Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?"
 
 pronoun:
-  0: 'er/sie'
-  1: 'er'
-  2: 'sie'
-  3: 'er*sie'
+  "0": "er/sie"
+  "1": "er"
+  "2": "sie"
+  "3": "er*sie"
 
 salutation:
-  0: 'Liebe/r'
-  1: 'Lieber'
-  2: 'Liebe'
-  3: 'Liebe*r'
+  "0": "Liebe/r"
+  "1": "Lieber"
+  "2": "Liebe"
+  "3": "Liebe*r"
 
 login:
-  submit_btn: Login
-  topbar: Login
-  form_title: Anmelden
-  email_address: E-Mail-Adresse
-  password: Passwort
-  forgotten_password_label: Passwort vergessen?
-  login_button_label: Anmelden
-  save_password: Passwort speichern
-  steady_login: Eingeloggt bleiben (verwendet Cookies)
-  error_no_email: Bitte gib deine E-Mail-Adresse an!
-  error_no_password: Bitte gib dein Passwort an!
-  error_no_auth: E-Mail-Adresse oder Passwort sind falsch
-  success: <b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.
-  logout: Logout
+  submit_btn: "Login"
+  topbar: "Login"
+  form_title: "Anmelden"
+  email_address: "E-Mail-Adresse"
+  password: "Passwort"
+  forgotten_password_label: "Passwort vergessen?"
+  login_button_label: "Anmelden"
+  save_password: "Passwort speichern"
+  steady_login: "Eingeloggt bleiben (verwendet Cookies)"
+  error_no_email: "Bitte gib deine E-Mail-Adresse an!"
+  error_no_password: "Bitte gib dein Passwort an!"
+  error_no_auth: "E-Mail-Adresse oder Passwort sind falsch"
+  success: "<b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet."
+  logout: "Logout"
   pwreset:
-    bread: Password zurücksetzen
-    wrongMail: Sorry! Hast du dich vielleicht bei deiner E-Mail-Adresse vertippt?
-    mailSent: Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.
-    success: Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt einloggen.
-    tooShort: Sorry, Dein gewähltes Passwort ist zu kurz.
-    expired: Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage erneut ein neues Passwort!
-    error: Sorry, es gibt ein Problem mit Deinen Daten.
-    mismatch: Sorry, die Passwörter stimmen nicht überein.
+    bread: "Password zurücksetzen"
+    wrongMail: "Sorry! Hast du dich vielleicht bei deiner E-Mail-Adresse vertippt?"
+    mailSent: "Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt."
+    success: "Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt einloggen."
+    tooShort: "Sorry, Dein gewähltes Passwort ist zu kurz."
+    expired: "Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage erneut ein neues Passwort!"
+    error: "Sorry, es gibt ein Problem mit Deinen Daten."
+    mismatch: "Sorry, die Passwörter stimmen nicht überein."
 
 register:
-  topbar: Mach mit!
-  title: Registrierung
-  register_button_label: Registrieren
-  mail_hint: WICHTIG - Achte auf korrekte Schreibweise!
-  requiredFields: Pflichteingabe
-  birthdate_hint: Nähere Information findest du in der <a href="?page=legal" target="_blank">Datenschutzerklärung</a> in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver.
-  login_email: Deine E-Mail-Adresse
-  email_required: Eine E-Mail-Adresse wird benötigt.
-  email_invalid: Die E-Mail-Adresse ist ungültig.
-  login_passwd1: Passwort (mind. 8 Zeichen)
-  login_passwd2: Passwortwiederholung
-  password_required: Es wird ein Passwort benötigt.
-  password_minLength: Das Passwort muss mindestens aus 8 Zeichen bestehen.
-  confirmPassword_required: Bitte wiederhole das Passwort.
-  confirmPassword_sameAsPassword: Das Passwort muss übereinstimmen.
-  geb_datum: Dein Geburtsdatum
-  login_mobile_phone: Deine Handynummer
-  login_location: Deine Adresse
-  login_name: Dein Vorname
-  login_surname: Dein Nachname
-  firstname_required: Bitte gib deinen Vornamen ein.
-  firstname_minLength: Der Vorname muss aus mindestens 2 Zeichen bestehen.
-  lastname_required: Bitte gib deinen Nachnamen ein.
-  lastname_minLength: Der Nachname muss aus mindestens 2 Zeichen bestehen.
-  login_phone_info: Es kann hilfreich sein, deine Telefonnummer mit anderen Foodsharern zu teilen
-  phone_example: Beispiel +4917912345678
-  phone_not_valid: Die eingegebene Telefonnummer ist nicht gültig.
-  forgotten_password: Passwort vergessen?
-  have_read_the_legal_stuff1: Ich habe die
-  have_read_the_legal_stuff2: zur Kenntnis genommen
-  prev: zurück
-  next: weiter
-  finish: Anmeldung absenden
-  join_success: Deine Registrierung war erfolgreich.
-  join_success_message: Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner Email und deinem Passwort einloggen.
-  join_error: Deine Registrierung war nicht erfolgreich.
-  check_mail: Schau jetzt in dein E-Mail-Postfach, um die Anmeldung abzuschließen!
-  select_your_gender: Für die Anrede...
-  woman: weiblich
-  man: männlich
-  other: divers
-  error: Es ist ein Fehler aufgetreten
-  error_email_exist: Deine E-Mail-Adresse existiert bereits.
-  error_birthdate: Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
-  account-exists: 'Du bist bereits registriert. Bitte logge dich aus, wenn du dich erneut registrieren möchtest.'
-  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge dich jetzt mit deiner E-Mail-Adresse und deinem gewählten Passwort ein.'
-  activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
-  change-password: 'Jetzt kannst du dein Passwort ändern.'
-  pass1: Dein neues gewünschtes Passwort
-  pass2: Passwortwiederholung
-  set-password: Neues Passwort setzen
-  signup_newsletter: Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten
+  topbar: "Mach mit!"
+  title: "Registrierung"
+  register_button_label: "Registrieren"
+  mail_hint: "WICHTIG - Achte auf korrekte Schreibweise!"
+  requiredFields: "Pflichteingabe"
+  birthdate_hint: "Nähere Information findest du in der <a href=\"?page=legal\" target=\"_blank\">Datenschutzerklärung</a> in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver."
+  login_email: "Deine E-Mail-Adresse"
+  email_required: "Eine E-Mail-Adresse wird benötigt."
+  email_invalid: "Die E-Mail-Adresse ist ungültig."
+  login_passwd1: "Passwort (mind. 8 Zeichen)"
+  login_passwd2: "Passwortwiederholung"
+  password_required: "Es wird ein Passwort benötigt."
+  password_minLength: "Das Passwort muss mindestens aus 8 Zeichen bestehen."
+  confirmPassword_required: "Bitte wiederhole das Passwort."
+  confirmPassword_sameAsPassword: "Das Passwort muss übereinstimmen."
+  geb_datum: "Dein Geburtsdatum"
+  login_mobile_phone: "Deine Handynummer"
+  login_location: "Deine Adresse"
+  login_name: "Dein Vorname"
+  login_surname: "Dein Nachname"
+  firstname_required: "Bitte gib deinen Vornamen ein."
+  firstname_minLength: "Der Vorname muss aus mindestens 2 Zeichen bestehen."
+  lastname_required: "Bitte gib deinen Nachnamen ein."
+  lastname_minLength: "Der Nachname muss aus mindestens 2 Zeichen bestehen."
+  login_phone_info: "Es kann hilfreich sein, deine Telefonnummer mit anderen Foodsharern zu teilen"
+  phone_example: "Beispiel +4917912345678"
+  phone_not_valid: "Die eingegebene Telefonnummer ist nicht gültig."
+  forgotten_password: "Passwort vergessen?"
+  have_read_the_legal_stuff1: "Ich habe die"
+  have_read_the_legal_stuff2: "zur Kenntnis genommen"
+  prev: "zurück"
+  next: "weiter"
+  finish: "Anmeldung absenden"
+  join_success: "Deine Registrierung war erfolgreich."
+  join_success_message: "Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner Email und deinem Passwort einloggen."
+  join_error: "Deine Registrierung war nicht erfolgreich."
+  check_mail: "Schau jetzt in dein E-Mail-Postfach, um die Anmeldung abzuschließen!"
+  select_your_gender: "Für die Anrede..."
+  woman: "weiblich"
+  man: "männlich"
+  other: "divers"
+  error: "Es ist ein Fehler aufgetreten"
+  error_email_exist: "Deine E-Mail-Adresse existiert bereits."
+  error_birthdate: "Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen."
+  account-exists: "Du bist bereits registriert. Bitte logge dich aus, wenn du dich erneut registrieren möchtest."
+  activation_success: "<strong>Aktivierung erfolgreich.</strong> Logge dich jetzt mit deiner E-Mail-Adresse und deinem gewählten Passwort ein."
+  activation_failed: "<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?"
+  change-password: "Jetzt kannst du dein Passwort ändern."
+  pass1: "Dein neues gewünschtes Passwort"
+  pass2: "Passwortwiederholung"
+  set-password: "Neues Passwort setzen"
+  signup_newsletter: "Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten"
 
 gender:
-  m: Mann
-  f: Frau
-  d: Beides oder Sonstiges
+  m: "Mann"
+  f: "Frau"
+  d: "Beides oder Sonstiges"
 
 terminology:
-  forum: Forum
-  events: Termine
-  stores: Betriebe
+  forum: "Forum"
+  events: "Termine"
+  stores: "Betriebe"
   foodsharer:
-    m: Foodsharer
-    f: Foodsharerin
-    d: Foodsharer*in
+    m: "Foodsharer"
+    f: "Foodsharerin"
+    d: "Foodsharer*in"
   foodsaver:
-    m: Foodsaver
-    f: Foodsaverin
-    d: Foodsaver*in
+    m: "Foodsaver"
+    f: "Foodsaverin"
+    d: "Foodsaver*in"
   storemanager:
-    m: Betriebsverantwortlicher
-    f: Betriebsverantwortliche
-    d: Betriebsverantwortliche*r
+    m: "Betriebsverantwortlicher"
+    f: "Betriebsverantwortliche"
+    d: "Betriebsverantwortliche*r"
   ambassador:
-    m: Botschafter
-    f: Botschafterin
-    d: Botschafter*in
+    m: "Botschafter"
+    f: "Botschafterin"
+    d: "Botschafter*in"
   orga:
-    m: Orgamensch
-    f: Orgamensch
-    d: Orgamensch
-  ambassadors: Botschafter
-  ambassador_forum: BotschafterInnenforum
-  admins: Administratoren
-  welcomeAdmins: Begrüßungsteam
-  votingAdmins: Abstimmungsteam
-  fspAdmins: Fairteilerteam
-  storesAdmins: Betriebskoordinationssteam
-  reportAdmins: Meldebearbeitungsteam
-  mediationAdmins: Mediationsteam
-  arbitrationAdmins: Schiedsstelle
-  fsManagementAdmins: Verwaltung
-  prAdmins: Öffentlichkeitsarbeitsteam
-  moderationAdmins: Moderationsteam
-  wall: Pinnwand
-  statistic: Statistik
-  reports: Regelverletzungsansicht (LMG)
-  arbitration: Regelverletzungsansicht (LS)
-  fsp: Fairteiler
-  basket: Essenskorb
-  baskets: Essenskörbe
-  groups: Arbeitsgruppen
-  group: Arbeitsgruppe
-  subgroups: Untergruppen
-  settings: Einstellungen
-  mailboxes: Mailboxen
-  n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
-  n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
-  n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
-  n_stores: 'Ein Betrieb|%count% Betriebe'
-  n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
-  profile_picture: 'Profilbild'
-  region: Bezirk
-  regions: Bezirke
-  threads: Themen
-  homeRegion: Stammbezirk
-  message: Nachricht
-  polls: Abstimmungen
-  buddies: Bekannte
+    m: "Orgamensch"
+    f: "Orgamensch"
+    d: "Orgamensch"
+  ambassadors: "Botschafter"
+  ambassador_forum: "BotschafterInnenforum"
+  admins: "Administratoren"
+  welcomeAdmins: "Begrüßungsteam"
+  votingAdmins: "Abstimmungsteam"
+  fspAdmins: "Fairteilerteam"
+  storesAdmins: "Betriebskoordinationssteam"
+  reportAdmins: "Meldebearbeitungsteam"
+  mediationAdmins: "Mediationsteam"
+  arbitrationAdmins: "Schiedsstelle"
+  fsManagementAdmins: "Verwaltung"
+  prAdmins: "Öffentlichkeitsarbeitsteam"
+  moderationAdmins: "Moderationsteam"
+  wall: "Pinnwand"
+  statistic: "Statistik"
+  reports: "Regelverletzungsansicht (LMG)"
+  arbitration: "Regelverletzungsansicht (LS)"
+  fsp: "Fairteiler"
+  basket: "Essenskorb"
+  baskets: "Essenskörbe"
+  groups: "Arbeitsgruppen"
+  group: "Arbeitsgruppe"
+  subgroups: "Untergruppen"
+  settings: "Einstellungen"
+  mailboxes: "Mailboxen"
+  n_foodsaver: "Ein Foodsaver|%count% Foodsaver"
+  n_sleeping: "Eine Schlafmütze|%count% Schlafmützen"
+  n_ambassadors: "Ein(e) BotschafterIn|%count% BotschafterInnen"
+  n_stores: "Ein Betrieb|%count% Betriebe"
+  n_cooperating_stores: "Eine laufende Kooperation|%count% laufende Kooperationen"
+  profile_picture: "Profilbild"
+  region: "Bezirk"
+  regions: "Bezirke"
+  threads: "Themen"
+  homeRegion: "Stammbezirk"
+  message: "Nachricht"
+  polls: "Abstimmungen"
+  buddies: "Bekannte"
 
 statistics:
-  kg_food_saved: '%count% kg Lebensmittel gerettet'
-  num_fetches: 'Bei einem Rettungseinsatz|Bei %count% Rettungseinsätzen'
+  kg_food_saved: "%count% kg Lebensmittel gerettet"
+  num_fetches: "Bei einem Rettungseinsatz|Bei %count% Rettungseinsätzen"
 
-are_you_sure: Bist du sicher?
-really_delete: Wirklich löschen?
-yes: Ja
-no: Nein
-back: Zurück
-success: Erfolgreich abgeschlossen
-error_permissions: 'Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang.'
-error_unexpected: Es ist ein Fehler aufgetreten
+are_you_sure: "Bist du sicher?"
+really_delete: "Wirklich löschen?"
+yes: "Ja"
+no: "Nein"
+back: "Zurück"
+success: "Erfolgreich abgeschlossen"
+error_permissions: "Du hast leider nicht die notwendigen Berechtigungen für diesen Vorgang."
+error_unexpected: "Es ist ein Fehler aufgetreten"
 error_ajax: |
   Das hat leider nicht geklappt.
   Vielleicht funktioniert deine Internetverbindung gerade nicht.
   Lade die Seite neu und probiere es noch mal.
-delete: Löschen
-notice: Hinweis!
+delete: "Löschen"
+notice: "Hinweis!"
 validate:
-  required: '{it} darf nicht leer sein'
-select: Bitte auswählen
-time: Uhrzeit
-day: Tag
+  required: "{it} darf nicht leer sein"
+select: "Bitte auswählen"
+time: "Uhrzeit"
+day: "Tag"
 
 formatting:
-  md: Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.
+  md: "Du kannst zur Formatierung <a href=\"http://markdown.de/\">Markdown</a> verwenden."
 
 fsp:
-  yours: Fairteiler in deinen Bezirken
-  inRegion: Alle Fairteiler in {region}
-  summary: Es gibt {count} Fairteiler in allen Bezirken, in denen du aktiv bist
-  summaryRegion: Es gibt {count} Fairteiler in {region} und allen Unterbezirken
-  follow: Diesem Fairteiler folgen
-  followName: Fairteiler {name} folgen
-  unfollow: Fairteiler nicht mehr folgen
-  managers: Ansprechpartner
-  followers: Follower
-  description: Beschreibung
-  new: Neuer Fairteiler
-  add: Fairteiler eintragen
-  addError: Fairteiler konnte nicht eingetragen werden. Hast du alles richtig ausgefüllt?
-  addSuccess: Fairteiler wurde erfolgreich eingetragen
-  suggest: Fairteiler vorschlagen
-  suggestSuccess: Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter / Fairteilerverantwortlichen bestätigt werden.
-  accept: Fairteiler freischalten
-  acceptName: '{name} freischalten'
-  acceptSuccess: Fairteiler ist jetzt aktiv
-  reject: Fairteiler ablehnen
-  rejectConfirm: Achtung! Wenn du den Fairteiler löschst, kannst du dies nicht mehr rückgängig machen. Fortfahren?
-  edit: Fairteiler bearbeiten
-  editName: 'Fairteiler "{name}" bearbeiten'
-  editSuccess: Fairteiler wurde erfolgreich bearbeitet
-  address: Adresse
-  street: Anschrift
-  location: PLZ / Ort
-  pic: Foto
-  addedOn: Hinzugefügt am
-  addedBy: Hinzugefügt von
-  descLabel: Schreibe hier ein paar grundsätzliche Infos über den Fairteiler! Insbesondere wann er zugänglich/geöffnet ist.
-  noManager: Es muss mindestens einen Verantwortlichen für diesen Fairteiler geben!
-  publicwall: Beachte, dass deine Beiträge auf der Fairteiler-Pinnwand öffentlich einsehbar sind.
-  delete: Fairteiler löschen
-  deleteConfirm: Möchtest du wirklich diesen Fairteiler löschen?
-  deleteSuccess: Fairteiler wurde gelöscht
-  none: Noch keine Fairteiler eingetragen
+  yours: "Fairteiler in deinen Bezirken"
+  inRegion: "Alle Fairteiler in {region}"
+  summary: "Es gibt {count} Fairteiler in allen Bezirken, in denen du aktiv bist"
+  summaryRegion: "Es gibt {count} Fairteiler in {region} und allen Unterbezirken"
+  follow: "Diesem Fairteiler folgen"
+  followName: "Fairteiler {name} folgen"
+  unfollow: "Fairteiler nicht mehr folgen"
+  managers: "Ansprechpartner"
+  followers: "Follower"
+  description: "Beschreibung"
+  new: "Neuer Fairteiler"
+  add: "Fairteiler eintragen"
+  addError: "Fairteiler konnte nicht eingetragen werden. Hast du alles richtig ausgefüllt?"
+  addSuccess: "Fairteiler wurde erfolgreich eingetragen"
+  suggest: "Fairteiler vorschlagen"
+  suggestSuccess: "Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter / Fairteilerverantwortlichen bestätigt werden."
+  accept: "Fairteiler freischalten"
+  acceptName: "{name} freischalten"
+  acceptSuccess: "Fairteiler ist jetzt aktiv"
+  reject: "Fairteiler ablehnen"
+  rejectConfirm: "Achtung! Wenn du den Fairteiler löschst, kannst du dies nicht mehr rückgängig machen. Fortfahren?"
+  edit: "Fairteiler bearbeiten"
+  editName: "Fairteiler \"{name}\" bearbeiten"
+  editSuccess: "Fairteiler wurde erfolgreich bearbeitet"
+  address: "Adresse"
+  street: "Anschrift"
+  location: "PLZ / Ort"
+  pic: "Foto"
+  addedOn: "Hinzugefügt am"
+  addedBy: "Hinzugefügt von"
+  descLabel: "Schreibe hier ein paar grundsätzliche Infos über den Fairteiler! Insbesondere wann er zugänglich/geöffnet ist."
+  noManager: "Es muss mindestens einen Verantwortlichen für diesen Fairteiler geben!"
+  publicwall: "Beachte, dass deine Beiträge auf der Fairteiler-Pinnwand öffentlich einsehbar sind."
+  delete: "Fairteiler löschen"
+  deleteConfirm: "Möchtest du wirklich diesen Fairteiler löschen?"
+  deleteSuccess: "Fairteiler wurde gelöscht"
+  none: "Noch keine Fairteiler eingetragen"
   info:
-    from: 'Updates vom Fairteiler "{name}"'
-    bell: nur interne Infomeldungen (Glocke)
-    mail: Glocke und E-Mail-Benachrichtigung
-    none: gar nicht mehr
-    descModal: Wie möchtest du über Updates (z.B. Essenslieferungen) informiert werden?
-    descSettings: 'Du folgst allen Informationen des Fairteilers "{name}". Auf welche Art möchtest du diese Benachrichtigungen bekommen?'
-    manager: Du bist verantwortlich für diesen Fairteiler und somit verpflichtet, die Updates entgegenzunehmen!
+    from: "Updates vom Fairteiler \"{name}\""
+    bell: "nur interne Infomeldungen (Glocke)"
+    mail: "Glocke und E-Mail-Benachrichtigung"
+    none: "gar nicht mehr"
+    descModal: "Wie möchtest du über Updates (z.B. Essenslieferungen) informiert werden?"
+    descSettings: "Du folgst allen Informationen des Fairteilers \"{name}\". Auf welche Art möchtest du diese Benachrichtigungen bekommen?"
+    manager: "Du bist verantwortlich für diesen Fairteiler und somit verpflichtet, die Updates entgegenzunehmen!"
   twig:
-    n_in_region: '{0} Keine Fairteiler in %name%| {1} Ein Fairteiler in %name%| [2, Inf[ %count% Fairteiler in %name%'
+    n_in_region: "{0} Keine Fairteiler in %name%| {1} Ein Fairteiler in %name%| [2, Inf[ %count% Fairteiler in %name%"
 
 storeview:
-  store: Betrieb
-  info: Informationen
-  teamInfo: 'Es sind <strong>{active}</strong> Aktive und <strong>{jumper}</strong> Springer im Team.'
-  counter: '<strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>'
-  pickupCount: 'Bei diesem Betrieb wurde {pickupCount} abgeholt.'
-  pickupWeight: 'Es wurden {pickupWeight} gerettet.'
-  cooperation: 'Kooperation seit {startTime}.'
-  frequency: 'Es wird in etwa {freq} abgeholt. Geh bitte niemals ohne Absprache zum Laden!'
-  frequency1: morgens
-  frequency2: mittags/nachmittags
-  frequency3: abends
-  frequency4: nachts
-  status: Aktueller Status
-  managers: Verantwortliche Foodsaver
-  specials: Besonderheiten
-  want_to_fetch: 'In diesem Team würde ich gerne helfen.'
+  store: "Betrieb"
+  info: "Informationen"
+  teamInfo: "Es sind <strong>{active}</strong> Aktive und <strong>{jumper}</strong> Springer im Team."
+  counter: "<strong>{count}<span style=\"white-space:nowrap\"> </span>{suffix}</strong>"
+  pickupCount: "Bei diesem Betrieb wurde {pickupCount} abgeholt."
+  pickupWeight: "Es wurden {pickupWeight} gerettet."
+  cooperation: "Kooperation seit {startTime}."
+  frequency: "Es wird in etwa {freq} abgeholt. Geh bitte niemals ohne Absprache zum Laden!"
+  frequency1: "morgens"
+  frequency2: "mittags/nachmittags"
+  frequency3: "abends"
+  frequency4: "nachts"
+  status: "Aktueller Status"
+  managers: "Verantwortliche Foodsaver"
+  specials: "Besonderheiten"
+  want_to_fetch: "In diesem Team würde ich gerne helfen."
 
 store:
-  bread: Alle Betriebe
-  actions: Optionen
+  bread: "Alle Betriebe"
+  actions: "Optionen"
   chat:
-    team: Nachricht ans Team
-    jumper: Nachricht an Springer
-  not-in-team: 'Du bist noch nicht im Team dieses Betriebes.'
-  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von deinen BIEBs vorgesehen ist. Versuche es also bitte zu einem späteren Zeitpunkt erneut.
-  all_of_my_stores: Alle meine Betriebe
-  tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
-  tooltip_orange: Offene Abholungen in den nächsten drei Tagen
-  tooltip_red: Offene Abholungen heute oder morgen
-  tooltip_managing: Du bist verantwortlich für diesen Betrieb
-  allStoresOfRegion: Alle Betriebe aus dem Bezirk
-  addNewStoresButton: Neuen Betrieb eintragen
-  noStores: Es sind noch keine Betriebe eingetragen
-  go: Zur Teamseite
-  error: 'Betrieb konnte nicht geladen werden.'
-  teamName: '{storeTitle}-Team'
-  memberSince: 'Im Team seit: {date}'
-  jumperSince: 'Springer seit: {date}'
-  lastPickup: 'Letzte Abholung: {date}'
-  lastPickupShort: 'zuletzt {date}'
-  unknownDate: unbekannt
-  isManager: Verantwortlich für diesen Betrieb.
-  noPickup: Hat noch nie hier abgeholt.
-  isJumper: Ist auf der Springerliste.
-  isNotVerified: Ist noch nicht verifiziert.
-  fetchCount: 'Hat {count}× hier abgeholt.'
-  mayAmb: Hat das BOT-Quiz bestanden.
-  mayManage: Hat das BV-Quiz bestanden.
-  particularities: Besonderheiten
-  average_collection_quantity: Abholmenge im Schnitt
-  attribution: Namensnennung
-  may_referred_to_in_public: Dieser Betrieb darf öffentlich genannt werden.
-  may_not_referred_to_in_public: Bitte diesen Betrieb niemals öffentlich (z.B. bei Essenskörben, Facebook oder Presseanfragen) nennen!
-  address: Adresse
-  my_last_pickup: Meine letzte Abholung
-  days: Tagen
-  days_before: vor
-  team_conversation_name: 'Team {name}'
-  springer_conversation_name: 'Springer {name}'
+    team: "Nachricht ans Team"
+    jumper: "Nachricht an Springer"
+  not-in-team: "Du bist noch nicht im Team dieses Betriebes."
+  pickup_slot_unavailable: "Dieser Abhol-Slot liegt weiter in der Zukunft als von deinen BIEBs vorgesehen ist. Versuche es also bitte zu einem späteren Zeitpunkt erneut."
+  all_of_my_stores: "Alle meine Betriebe"
+  tooltip_yellow: "Offene Abholungen in den nächsten fünf Tagen"
+  tooltip_orange: "Offene Abholungen in den nächsten drei Tagen"
+  tooltip_red: "Offene Abholungen heute oder morgen"
+  tooltip_managing: "Du bist verantwortlich für diesen Betrieb"
+  allStoresOfRegion: "Alle Betriebe aus dem Bezirk"
+  addNewStoresButton: "Neuen Betrieb eintragen"
+  noStores: "Es sind noch keine Betriebe eingetragen"
+  go: "Zur Teamseite"
+  error: "Betrieb konnte nicht geladen werden."
+  teamName: "{storeTitle}-Team"
+  memberSince: "Im Team seit: {date}"
+  jumperSince: "Springer seit: {date}"
+  lastPickup: "Letzte Abholung: {date}"
+  lastPickupShort: "zuletzt {date}"
+  unknownDate: "unbekannt"
+  isManager: "Verantwortlich für diesen Betrieb."
+  noPickup: "Hat noch nie hier abgeholt."
+  isJumper: "Ist auf der Springerliste."
+  isNotVerified: "Ist noch nicht verifiziert."
+  fetchCount: "Hat {count}× hier abgeholt."
+  mayAmb: "Hat das BOT-Quiz bestanden."
+  mayManage: "Hat das BV-Quiz bestanden."
+  particularities: "Besonderheiten"
+  average_collection_quantity: "Abholmenge im Schnitt"
+  attribution: "Namensnennung"
+  may_referred_to_in_public: "Dieser Betrieb darf öffentlich genannt werden."
+  may_not_referred_to_in_public: "Bitte diesen Betrieb niemals öffentlich (z.B. bei Essenskörben, Facebook oder Presseanfragen) nennen!"
+  address: "Adresse"
+  my_last_pickup: "Meine letzte Abholung"
+  days: "Tagen"
+  days_before: "vor"
+  team_conversation_name: "Team {name}"
+  springer_conversation_name: "Springer {name}"
   sm:
-    managementToggleOn: BV-Ansicht aktivieren
-    managementToggleOff: Zurück zur Standard-Ansicht
-    managementEffect: 'Sortierung nach letztem Abholdatum:'
-    managementActions: BV-Aktionen
-    byLastPickup: Nach letzter Abholung sortieren
-    pickupDesc: Neueste zuerst
-    pickupAsc: Neueste zuletzt
-    pickupReset: Standard-Sortierung
-    filter: 'Zeige nur an:'
-    filterUnverified: Unverifizierte
-    filterJumper: Springer
-    filterQuizSM: BV-Quiz bestanden
-    removeFromTeam: Aus dem Team entfernen
-    reallyRemove: Möchtest du wirklich {name} aus diesem Betriebs-Team entfernen?
-    makeJumper: Auf die Springerliste
-    makeRegularTeamMember: In das Team aufnehmen
+    managementToggleOn: "BV-Ansicht aktivieren"
+    managementToggleOff: "Zurück zur Standard-Ansicht"
+    managementEffect: "Sortierung nach letztem Abholdatum:"
+    managementActions: "BV-Aktionen"
+    byLastPickup: "Nach letzter Abholung sortieren"
+    pickupDesc: "Neueste zuerst"
+    pickupAsc: "Neueste zuletzt"
+    pickupReset: "Standard-Sortierung"
+    filter: "Zeige nur an:"
+    filterUnverified: "Unverifizierte"
+    filterJumper: "Springer"
+    filterQuizSM: "BV-Quiz bestanden"
+    removeFromTeam: "Aus dem Team entfernen"
+    reallyRemove: "Möchtest du wirklich {name} aus diesem Betriebs-Team entfernen?"
+    makeJumper: "Auf die Springerliste"
+    makeRegularTeamMember: "In das Team aufnehmen"
   request:
-    request: 'In diesem Team würde ich gerne helfen.'
-    got-it: 'Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden.'
-    no-sm: 'Für diesen Betrieb gibt es noch keine Verantwortlichen.'
-    amb-instead: 'Die Botschafter*innen wurden informiert.'
-    orga-instead: 'Das Orga-Team wurde informiert.'
-    withdraw: Anfrage zurückziehen
-    withdrawn: 'Die Anfrage wurde erfolgreich zurückgezogen.'
-    title: Anfragen für {storeTitle}
-    verified: Nutzer*in ist verifiziert
-    to-team: Aufnehmen
-    to-jumper: Springerliste
-    to-nowhere: Ablehnen
+    request: "In diesem Team würde ich gerne helfen."
+    got-it: "Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden."
+    no-sm: "Für diesen Betrieb gibt es noch keine Verantwortlichen."
+    amb-instead: "Die Botschafter*innen wurden informiert."
+    orga-instead: "Das Orga-Team wurde informiert."
+    withdraw: "Anfrage zurückziehen"
+    withdrawn: "Die Anfrage wurde erfolgreich zurückgezogen."
+    title: "Anfragen für {storeTitle}"
+    verified: "Nutzer*in ist verifiziert"
+    to-team: "Aufnehmen"
+    to-jumper: "Springerliste"
+    to-nowhere: "Ablehnen"
 
 storeedit:
-  bread: Betrieb bearbeiten
-  add-new: Neuen Betrieb anlegen
-  not-in-region: 'Du kannst Betriebe nur in Regionen anlegen, in denen du Mitglied bist.'
-  actions: Optionen
+  bread: "Betrieb bearbeiten"
+  add-new: "Neuen Betrieb anlegen"
+  not-in-region: "Du kannst Betriebe nur in Regionen anlegen, in denen du Mitglied bist."
+  actions: "Optionen"
   team:
-    bread: Team bearbeiten
-    foodsaver: Foodsaver
-    leave: Aus Betrieb austragen
-    cannot-leave: Du bist noch verantwortlich für diesen Betrieb und kannst ihn daher nicht verlassen!
-    empty: Das Team darf nicht leer sein
-    need-sm: Es muss mindestens eine verantwortliche Person für den Betrieb geben!
-    max-sm: Bitte wähle maximal drei Betriebsverantwortliche
+    bread: "Team bearbeiten"
+    foodsaver: "Foodsaver"
+    leave: "Aus Betrieb austragen"
+    cannot-leave: "Du bist noch verantwortlich für diesen Betrieb und kannst ihn daher nicht verlassen!"
+    empty: "Das Team darf nicht leer sein"
+    need-sm: "Es muss mindestens eine verantwortliche Person für den Betrieb geben!"
+    max-sm: "Bitte wähle maximal drei Betriebsverantwortliche"
     unmanaged: |
       In diesem Betrieb gibt es aktuell keine Verantwortliche!
       Bitte füge bis zu drei Betriebsverantwortliche hinzu, die diesen Betrieb in Zukunft betreuen.
-    note: 'Hinweis:'
+    note: "Hinweis:"
     coordinator: |
       Du bist nicht verantwortlich für diesen Betrieb.
       Du hast jedoch weitreichende Rechte als Teil des Betriebskoordinationsteams.
@@ -733,67 +733,67 @@ storeedit:
       Du bist nicht verantwortlich für diesen Betrieb.
       Du hast jedoch weitreichende Rechte als Teil des globalen Orgateams.
   store:
-    status: Status
+    status: "Status"
   fetch:
-    teamStatus: Teamstatus
-    teamStatus0: Dieses Team ist voll und sucht z.Z. keine weiteren Helfer
-    teamStatus1: Es werden noch Helfer gesucht
-    teamStatus2: Es werden dringend noch Helfer gesucht
-  add_success: Kooperationsbetrieb wurde eingetragen
-  edit_success: Änderungen wurden gespeichert
+    teamStatus: "Teamstatus"
+    teamStatus0: "Dieses Team ist voll und sucht z.Z. keine weiteren Helfer"
+    teamStatus1: "Es werden noch Helfer gesucht"
+    teamStatus2: "Es werden dringend noch Helfer gesucht"
+  add_success: "Kooperationsbetrieb wurde eingetragen"
+  edit_success: "Änderungen wurden gespeichert"
   milestone:
-    statuschanged: 'Statusänderung am {date}'
-    created: '{user} hat den Betrieb am {date} eingetragen'
-    accepted: '{user} ist jetzt im Team'
-    dropped: '{user} ist jetzt nicht mehr im Team'
+    statuschanged: "Statusänderung am {date}"
+    created: "{user} hat den Betrieb am {date} eingetragen"
+    accepted: "{user} ist jetzt im Team"
+    dropped: "{user} ist jetzt nicht mehr im Team"
 
 pickup:
-  dates: Abholtermine
-  call: Anrufen
-  confirm: Bestätigen
-  kick: Austragen
-  leave: Austragen
-  open_profile: Profil aufrufen
-  copyNumber: Nummer kopieren
-  copiedNumber: '"{number}" wurde in die Zwischenablage kopiert.'
-  signout_sure: Möchtest du dieses Team verlassen?
-  signout_info: Sämtliche deiner Abholtermine werden gelöscht.
-  signout_confirm: Bist du dir sicher?
-  really_leave_date_title: Für {date} austragen?
+  dates: "Abholtermine"
+  call: "Anrufen"
+  confirm: "Bestätigen"
+  kick: "Austragen"
+  leave: "Austragen"
+  open_profile: "Profil aufrufen"
+  copyNumber: "Nummer kopieren"
+  copiedNumber: "\"{number}\" wurde in die Zwischenablage kopiert."
+  signout_sure: "Möchtest du dieses Team verlassen?"
+  signout_info: "Sämtliche deiner Abholtermine werden gelöscht."
+  signout_confirm: "Bist du dir sicher?"
+  really_leave_date_title: "Für {date} austragen?"
   really_kick_user_info: |
     Möchtest du {name} wirklich aus der Abholung am {date} austragen?
     {name} wird die folgende Nachricht dazu erhalten:
-  kick_message: 'wir haben dich aus der {storeName}-Abholung am {date} ausgetragen.'
-  kick_message_placeholder: 'Optional hier Informationen ergänzen...'
-  kick_message_footer: 'Liebe Grüße, deine Betriebsverantwortlichen'
-  really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere dich eigenständig um Ersatz.
-  leave_pickup_ok: Ich habe bereits Ersatz
-  leave_pickup_message_team: Team benachrichtigen
-  leave_team_message_title: Nachricht ans Team
-  leave_team_message_template: Ihr Lieben, {date} ...
-  team_message_send_and_leave: Senden und austragen
-  team_message_success: Nachricht ans Team wurde erfolgreich versendet
-  join_title_date: Sicher?
-  really_join_date: Möchtest du dich verbindlich für die Abholung am {date} eintragen?
-  join_cancel: Doch nicht
-  join_agree: Ja, verbindlich eintragen
-  take_empty_slot: Hier eintragen
-  delete_title: Abholtermin löschen
-  really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
-  delete_not_empty: Aktuell sind noch Foodsaver*innen eingetragen. Du kannst diesen Abholtermin erst löschen, wenn sich alle ausgetragen haben.
-  edit_recurring_pickups: Regelmäßige Abholzeiten bearbeiten
-  add_onetime_pickup: Zusatztermin eintragen
-  slot_add: Slot hinzufügen
-  slot_remove: Slot entfernen
+  kick_message: "wir haben dich aus der {storeName}-Abholung am {date} ausgetragen."
+  kick_message_placeholder: "Optional hier Informationen ergänzen..."
+  kick_message_footer: "Liebe Grüße, deine Betriebsverantwortlichen"
+  really_leave_date: "Du bist für diese Abholung verantwortlich. Bitte kümmere dich eigenständig um Ersatz."
+  leave_pickup_ok: "Ich habe bereits Ersatz"
+  leave_pickup_message_team: "Team benachrichtigen"
+  leave_team_message_title: "Nachricht ans Team"
+  leave_team_message_template: "Ihr Lieben, {date} ..."
+  team_message_send_and_leave: "Senden und austragen"
+  team_message_success: "Nachricht ans Team wurde erfolgreich versendet"
+  join_title_date: "Sicher?"
+  really_join_date: "Möchtest du dich verbindlich für die Abholung am {date} eintragen?"
+  join_cancel: "Doch nicht"
+  join_agree: "Ja, verbindlich eintragen"
+  take_empty_slot: "Hier eintragen"
+  delete_title: "Abholtermin löschen"
+  really_delete_date: "Möchtest du die Abholung am {date} wirklich löschen?"
+  delete_not_empty: "Aktuell sind noch Foodsaver*innen eingetragen. Du kannst diesen Abholtermin erst löschen, wenn sich alle ausgetragen haben."
+  edit_recurring_pickups: "Regelmäßige Abholzeiten bearbeiten"
+  add_onetime_pickup: "Zusatztermin eintragen"
+  slot_add: "Slot hinzufügen"
+  slot_remove: "Slot entfernen"
   history:
-    title: Abholungshistorie
-    search: Abholungen anzeigen
+    title: "Abholungshistorie"
+    search: "Abholungen anzeigen"
   edit:
-    bread: Abholzeiten bearbeiten
-    add: Abholzeiten eintragen
-    more: Termin hinzufügen
-    slotcount: 1 Abholer*in
-    slotscount: '{count} Abholer*innen'
+    bread: "Abholzeiten bearbeiten"
+    add: "Abholzeiten eintragen"
+    more: "Termin hinzufügen"
+    slotcount: "1 Abholer*in"
+    slotscount: "{count} Abholer*innen"
     many-people: |
       Du hast mehr als zwei Personen zum Abholen angegeben.
       <br />
@@ -803,116 +803,116 @@ pickup:
       Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab!
       Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
       außer Sichtweite des Betriebes warten.
-    added: Abholtermin wurde eingetragen!
+    added: "Abholtermin wurde eingetragen!"
 
 calendar:
-  locale: de
-  labelPrevYear: Vorheriges Jahr
-  labelPrevMonth: Vorheriger Monat
-  labelCurrentMonth: Aktueller Monat
-  labelNextMonth: Nächster Monat
-  labelNextYear: Nächstes Jahr
-  labelToday: Heute
-  labelSelected: Ausgewähltes Datum
-  labelNoDateSelected: Datum wählen
-  labelCalendar: Kalender
-  labelNav: Kalendernavigation
-  labelHelp: Navigation ist auch mit Pfeiltasten möglich
+  locale: "de"
+  labelPrevYear: "Vorheriges Jahr"
+  labelPrevMonth: "Vorheriger Monat"
+  labelCurrentMonth: "Aktueller Monat"
+  labelNextMonth: "Nächster Monat"
+  labelNextYear: "Nächstes Jahr"
+  labelToday: "Heute"
+  labelSelected: "Ausgewähltes Datum"
+  labelNoDateSelected: "Datum wählen"
+  labelCalendar: "Kalender"
+  labelNav: "Kalendernavigation"
+  labelHelp: "Navigation ist auch mit Pfeiltasten möglich"
 
 timepicker:
-  labelHours: Stunden
-  labelMinutes: Minuten
-  labelSeconds: Sekunden
-  labelIncrement: Erhöhen
-  labelDecrement: Verringern
-  labelSelected: Ausgewählte Zeit
-  labelNoTimeSelected: Keine Zeit ausgewählt
-  labelCloseButton: Schließen
-  labelNowButton: Jetzt
+  labelHours: "Stunden"
+  labelMinutes: "Minuten"
+  labelSeconds: "Sekunden"
+  labelIncrement: "Erhöhen"
+  labelDecrement: "Verringern"
+  labelSelected: "Ausgewählte Zeit"
+  labelNoTimeSelected: "Keine Zeit ausgewählt"
+  labelCloseButton: "Schließen"
+  labelNowButton: "Jetzt"
 
 forum:
-  from: 'Von {name}'
-  threads: Themen
-  new_thread: Neues Thema verfassen
+  from: "Von {name}"
+  threads: "Themen"
+  new_thread: "Neues Thema verfassen"
   follow:
     header: "Benachrichtigung bei neuen Antworten:"
     bell: "als Glocke"
     email: "als E-Mail"
   post:
-    delete: Beitrag löschen
-    body: Nachricht
+    delete: "Beitrag löschen"
+    body: "Nachricht"
   thread:
-    with_mail: Thema eröffnet und alle per Mail darüber informiert
-    no_mail: Das Thema wurde eröffnet, ohne Mails zu versenden
-    too_big_to_mail: 'Für das Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.'
-    activate: Thema aktivieren
-    delete: Thema löschen
+    with_mail: "Thema eröffnet und alle per Mail darüber informiert"
+    no_mail: "Das Thema wurde eröffnet, ohne Mails zu versenden"
+    too_big_to_mail: "Für das Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt."
+    activate: "Thema aktivieren"
+    delete: "Thema löschen"
     inactive: |
       Dieses Thema ist noch nicht aktiv.
       Hier kannst du es freischalten und alle Foodsaver darüber informieren.
-    stick: Thema fixieren
-    title: Titel
-  hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt.
-  no_posts: Bisher keine Beiträge vorhanden
-  no_threads: Noch keine Themen gepostet
-  sending_error: Beim Senden ist ein Fehler aufgetreten
-  markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
-  inform_per_email: Alle in den letzten sechs Monaten aktiven Forenmitglieder über die Erstellung dieses neuen Themas per E-Mail informieren, nur in unmoderierten Foren möglich
+    stick: "Thema fixieren"
+    title: "Titel"
+  hold_back_for_moderation: "Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt."
+  no_posts: "Bisher keine Beiträge vorhanden"
+  no_threads: "Noch keine Themen gepostet"
+  sending_error: "Beim Senden ist ein Fehler aufgetreten"
+  markdown_description: "Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href=\"https://de.wikipedia.org/wiki/Markdown\" target=\"_blank\">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\\*innen."
+  inform_per_email: "Alle in den letzten sechs Monaten aktiven Forenmitglieder über die Erstellung dieses neuen Themas per E-Mail informieren, nur in unmoderierten Foren möglich"
   quickreply:
-    success: 'Prima! Deine Antwort wurde gespeichert.'
-    error: 'Post konnte nicht gespeichert werden.'
+    success: "Prima! Deine Antwort wurde gespeichert."
+    error: "Post konnte nicht gespeichert werden."
 
 chat:
-  open_chat: Nachricht schreiben
-  new_message: Neue Nachricht
-  conversations: Unterhaltungen
-  empty: Noch keine Unterhaltungen
-  placeholder: Schreibe etwas!
-  notification_unnamed_conversation: '{foodsaver} hat dir geschrieben.'
-  notification_named_conversation: '{foodsaver} hat in {conversation} geschrieben.'
-  error_loading_messages: Das Nachladen von Nachrichten ist fehlgeschlagen.
-  error_sending_message: Das Senden der Nachricht ist fehlgeschlagen.
-  empty_message: Du musst erst eine Nachricht eingeben.
-  empty_recipients: Du musst erst noch Empfänger*Innen auswählen.
+  open_chat: "Nachricht schreiben"
+  new_message: "Neue Nachricht"
+  conversations: "Unterhaltungen"
+  empty: "Noch keine Unterhaltungen"
+  placeholder: "Schreibe etwas!"
+  notification_unnamed_conversation: "{foodsaver} hat dir geschrieben."
+  notification_named_conversation: "{foodsaver} hat in {conversation} geschrieben."
+  error_loading_messages: "Das Nachladen von Nachrichten ist fehlgeschlagen."
+  error_sending_message: "Das Senden der Nachricht ist fehlgeschlagen."
+  empty_message: "Du musst erst eine Nachricht eingeben."
+  empty_recipients: "Du musst erst noch Empfänger*Innen auswählen."
   confirm_draft_discard: |
     Du wechselst zu einer neuen Unterhaltung. Der Text im Antwortfeld wird dabei verworfen.
 
     Wenn du diesen Dialog abbrichst, wird dein Entwurf stattdessen in die neue Unterhaltung mitgenommen.
 
 wall:
-  name: Pinnwand
-  message_placeholder: Nachricht schreiben...
-  see-more: Mehr Beiträge anzeigen
-  delete: Eintrag löschen
-  confirm-deletion: 'Soll der folgende Pinnwand-Eintrag von {name} wirklich entfernt werden?'
-  info-somebody-else: 'Dieser Eintrag ist älter als ein Monat, daher kannst du ihn als Verantwortliche*r bei Bedarf entfernen.'
-  info-logging: 'Beachte bitte, dass zur Vermeidung von Konflikten der Inhalt und die ausführende Person protokolliert werden.'
-  error-delete: 'Diesen Eintrag kannst du nicht entfernen.'
-  created: 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
-  error-create: 'Dein Pinnwandeintrag konnte nicht gespeichert werden.'
+  name: "Pinnwand"
+  message_placeholder: "Nachricht schreiben..."
+  see-more: "Mehr Beiträge anzeigen"
+  delete: "Eintrag löschen"
+  confirm-deletion: "Soll der folgende Pinnwand-Eintrag von {name} wirklich entfernt werden?"
+  info-somebody-else: "Dieser Eintrag ist älter als ein Monat, daher kannst du ihn als Verantwortliche*r bei Bedarf entfernen."
+  info-logging: "Beachte bitte, dass zur Vermeidung von Konflikten der Inhalt und die ausführende Person protokolliert werden."
+  error-delete: "Diesen Eintrag kannst du nicht entfernen."
+  created: "Klasse! Dein Pinnwandeintrag wurde gespeichert."
+  error-create: "Dein Pinnwandeintrag konnte nicht gespeichert werden."
 
 events:
-  bread: Termine
-  add_new_event: Jetzt neuen Termin eintragen
-  add_event: Neuer Termin
+  bread: "Termine"
+  add_new_event: "Jetzt neuen Termin eintragen"
+  add_event: "Neuer Termin"
   create:
-    date: Datum
-    title: Neue Veranstaltung eintragen
-    public: Ist die Veranstaltung öffentlich?
-    isPublic: Ja, die Veranstaltung ist öffentlich
-    who: Für welchen Bezirk oder welche AG soll die Veranstaltung angelegt werden?
-    groups: Deine Arbeitsgruppen
-    regions: Deine Bezirke
-    inviteAll: Gesamte(n) Gruppe/Bezirk zum Termin einladen?
-    cascading: Alle untergeordneten Gruppen/Bezirke einschließen?
-    delinvites: Vorhandene Einladungen löschen?
-    multiday: Das Event geht über mehrere Tage
-    starttime: Uhrzeit Beginn
-    endtime: Uhrzeit Ende
-    desc: Was ist das für ein Event?
-    offline: Ganz normal im echten Leben
-    online: Per Video- oder Telefonkonferenz
-    mumble: Multilokal auf mumble.foodsharing.de
+    date: "Datum"
+    title: "Neue Veranstaltung eintragen"
+    public: "Ist die Veranstaltung öffentlich?"
+    isPublic: "Ja, die Veranstaltung ist öffentlich"
+    who: "Für welchen Bezirk oder welche AG soll die Veranstaltung angelegt werden?"
+    groups: "Deine Arbeitsgruppen"
+    regions: "Deine Bezirke"
+    inviteAll: "Gesamte(n) Gruppe/Bezirk zum Termin einladen?"
+    cascading: "Alle untergeordneten Gruppen/Bezirke einschließen?"
+    delinvites: "Vorhandene Einladungen löschen?"
+    multiday: "Das Event geht über mehrere Tage"
+    starttime: "Uhrzeit Beginn"
+    endtime: "Uhrzeit Ende"
+    desc: "Was ist das für ein Event?"
+    offline: "Ganz normal im echten Leben"
+    online: "Per Video- oder Telefonkonferenz"
+    mumble: "Multilokal auf mumble.foodsharing.de"
     info: |
       <b>Bitte beachten:</b>
       <br>
@@ -921,148 +921,148 @@ events:
       <br>
       Um den Termin auch zwischenzeitlichen Neuzugängen auf dem Dashboard anzuzeigen,
       speichere ihn zu einem späteren Zeitpunkt erneut ab.
-  duration: '{from} bis {until}'
-  description: Beschreibung
+  duration: "{from} bis {until}"
+  description: "Beschreibung"
   mumble:
-    title: Online-Termin (Mumble)
-    text: 'Online-Sprachkonferenzen führen wir mit <em>Mumble</em> durch.'
-    location: 'Unser Mumble-Server: <br><strong>mumble.foodsharing.de</strong>'
-    guide: 'Anleitung: <strong><a href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></strong>'
-  created: Event wurde erfolgreich eingetragen!
-  edited: Event wurde erfolgreich geändert!
-  goto: Zum Termin
-  notFound: 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.'
-  acceptedCount: '{count} sind dabei'
-  maybeCount: '{count} kommen vielleicht'
-  invitedCount: '{count} Einladungen'
-  morePeople: '… und {count} weitere'
+    title: "Online-Termin (Mumble)"
+    text: "Online-Sprachkonferenzen führen wir mit <em>Mumble</em> durch."
+    location: "Unser Mumble-Server: <br><strong>mumble.foodsharing.de</strong>"
+    guide: "Anleitung: <strong><a href=\"https://wiki.foodsharing.de/Mumble\">wiki.foodsharing.de/Mumble</a></strong>"
+  created: "Event wurde erfolgreich eingetragen!"
+  edited: "Event wurde erfolgreich geändert!"
+  goto: "Zum Termin"
+  notFound: "Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden."
+  acceptedCount: "{count} sind dabei"
+  maybeCount: "{count} kommen vielleicht"
+  invitedCount: "{count} Einladungen"
+  morePeople: "… und {count} weitere"
   button:
-    yes: Annehmen
-    maybe: Vielleicht
-    no: Kann nicht
+    yes: "Annehmen"
+    maybe: "Vielleicht"
+    no: "Kann nicht"
   menu:
-    options: Eventoptionen
-    edit: Event bearbeiten
-    yes: Einladung annehmen
-    maybe: Ich kann vielleicht
-    no: Ich kann nicht
+    options: "Eventoptionen"
+    edit: "Event bearbeiten"
+    yes: "Einladung annehmen"
+    maybe: "Ich kann vielleicht"
+    no: "Ich kann nicht"
   rsvp:
-    yes: 'Lieben Dank! Du hast die Einladung angenommen.'
-    maybe: 'Schön, dass du vielleicht dabei bist!'
-    no: 'Einladungsstatus geändert: du nimmst nun nicht teil.'
+    yes: "Lieben Dank! Du hast die Einladung angenommen."
+    maybe: "Schön, dass du vielleicht dabei bist!"
+    no: "Einladungsstatus geändert: du nimmst nun nicht teil."
 
 recipients:
-  bread: Newsletter-Verteiler
-  prepare: Vorbereiten zum Versand
-  recipients: Empfänger
-  all: Alle Foodsaver weltweit
-  active_ambassadors: Alle Botschafter bundesweit
-  orga_team: Orgateam bundesweit
-  newsletter: Alle Newsletter-Abonnenten (mindestens Foodsaver)
-  newsletter_all: Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)
-  newsletter_only_foodsharer: NUR die Foodsharer unter allen Newsletter-Abonnenten
-  all_no_botschafter: Alle Foodsaver ohne Botschafter
-  storemanagers: Alle Betriebsverantwortlichen weltweit
-  storemanagers_and_ambs: Alle Betriebsverantwortlichen + Botschafter
-  choose: Bezirke einzeln auswählen
-  manual: Manuelle Eingabe
+  bread: "Newsletter-Verteiler"
+  prepare: "Vorbereiten zum Versand"
+  recipients: "Empfänger"
+  all: "Alle Foodsaver weltweit"
+  active_ambassadors: "Alle Botschafter bundesweit"
+  orga_team: "Orgateam bundesweit"
+  newsletter: "Alle Newsletter-Abonnenten (mindestens Foodsaver)"
+  newsletter_all: "Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)"
+  newsletter_only_foodsharer: "NUR die Foodsharer unter allen Newsletter-Abonnenten"
+  all_no_botschafter: "Alle Foodsaver ohne Botschafter"
+  storemanagers: "Alle Betriebsverantwortlichen weltweit"
+  storemanagers_and_ambs: "Alle Betriebsverantwortlichen + Botschafter"
+  choose: "Bezirke einzeln auswählen"
+  manual: "Manuelle Eingabe"
   region-hint: |
     <strong>Hinweis:</strong>
     Um untergeordnete Bezirke zu markieren, musst du den Ordner erst öffnen!
     In alle nicht sichtbaren Bezirke werden keine Mails versendet.
-  empty-region: In den ausgewählten Bezirken gibt es noch keine Foodsaver
-  body: Nachricht
-  send: E-Mail senden
-  confirm: E-Mail senden?
-  test: Newsletter testen
-  testmail: Test-Mail senden
-  test_email_sent: E-Mail wurde versendet!
-  test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
-  variables: Persönliche Anrede
+  empty-region: "In den ausgewählten Bezirken gibt es noch keine Foodsaver"
+  body: "Nachricht"
+  send: "E-Mail senden"
+  confirm: "E-Mail senden?"
+  test: "Newsletter testen"
+  testmail: "Test-Mail senden"
+  test_email_sent: "E-Mail wurde versendet!"
+  test_email_invalid: "Mit der E-Mail-Adresse stimmt etwas nicht!"
+  variables: "Persönliche Anrede"
   variable-info: |
     Um die Mail persönlicher zu gestalten, kannst du <strong>{NAME}</strong> anstelle des Namens einfügen
     und <strong>{ANREDE}</strong> für die Anrede verwenden.
-    <p>{ANREDE} {NAME} ergibt beispielsweise: Lieber Peter
-  doublecheck: Alles gechecked? Soll die E-Mail an die gewählte Zielgruppe gesendet werden?
-  sent: Die E-Mail wurde erfolgreich an {count} E-Mail-Adressen gesendet
-  history: Von dir gesendete Mails
-  pending: 'Es sind noch {count} E-Mails zu versenden'
-  continue: Mit dem Senden weitermachen
-  abort: Versand abbrechen
-  permission: Du bist nicht berechtigt, E-Mails zu versenden
-  status: 'Versende E-Mails ... (aktuelle E-Mail-Adresse: {current})'
-  unknown: unbekannt
-  done: Es wurden alle E-Mails verschickt
+    <p>{ANREDE} {NAME} ergibt beispielsweise: "Lieber Peter"
+  doublecheck: "Alles gechecked? Soll die E-Mail an die gewählte Zielgruppe gesendet werden?"
+  sent: "Die E-Mail wurde erfolgreich an {count} E-Mail-Adressen gesendet"
+  history: "Von dir gesendete Mails"
+  pending: "Es sind noch {count} E-Mails zu versenden"
+  continue: "Mit dem Senden weitermachen"
+  abort: "Versand abbrechen"
+  permission: "Du bist nicht berechtigt, E-Mails zu versenden"
+  status: "Versende E-Mails ... (aktuelle E-Mail-Adresse: {current})"
+  unknown: "unbekannt"
+  done: "Es wurden alle E-Mails verschickt"
 
 addresspicker:
-  label: Adress-/Standort-Suche
-  placeholder: Bitte hier die Adresse suchen! Falls nötig, danach unten korrigieren.
-  infobox: Bitte gib die Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.
-  infobox_profile: '<a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenskörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.'
+  label: "Adress-/Standort-Suche"
+  placeholder: "Bitte hier die Adresse suchen! Falls nötig, danach unten korrigieren."
+  infobox: "Bitte gib die Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte."
+  infobox_profile: "<a href=\"https://wiki.foodsharing.de/Foodsharer\">Foodsharer</a> benötigen die Adresse, um Essenskörbe über die Webseite anbieten zu können. Um als <a href=\"https://wiki.foodsharing.de/Foodsaver\">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig."
 
 date:
-  time: '{time} Uhr'
-  from: von
-  to: bis
-  Today: Heute
-  today: heute
-  -- Tomorrow: Morgen
-  tomorrow: morgen
-  -- Yesterday: Gestern
-  yesterday: gestern
-  monday: Montag
-  tuesday: Dienstag
-  wednesday: Mittwoch
-  thursday: Donnerstag
-  friday: Freitag
-  saturday: Samstag
-  sunday: Sonntag
+  time: "{time} Uhr"
+  from: "von"
+  to: "bis"
+  Today: "Heute"
+  today: "heute"
+  -- Tomorrow: "Morgen"
+  tomorrow: "morgen"
+  -- Yesterday: "Gestern"
+  yesterday: "gestern"
+  monday: "Montag"
+  tuesday: "Dienstag"
+  wednesday: "Mittwoch"
+  thursday: "Donnerstag"
+  friday: "Freitag"
+  saturday: "Samstag"
+  sunday: "Sonntag"
 
 month:
-  1: Januar
-  2: Februar
-  3: März
-  4: April
-  5: Mai
-  6: Juni
-  7: Juli
-  8: August
-  9: September
-  10: Oktober
-  11: November
-  12: Dezember
+  "1": "Januar"
+  "2": "Februar"
+  "3": "März"
+  "4": "April"
+  "5": "Mai"
+  "6": "Juni"
+  "7": "Juli"
+  "8": "August"
+  "9": "September"
+  "10": "Oktober"
+  "11": "November"
+  "12": "Dezember"
   short:
-    1: 'Jan.'
-    2: 'Feb.'
-    3: 'März'
-    4: 'Apr.'
-    5: 'Mai'
-    6: 'Juni'
-    7: 'Juli'
-    8: 'Aug.'
-    9: 'Sep.'
-    10: 'Okt.'
-    11: 'Nov.'
-    12: 'Dez.'
+    "1": "Jan."
+    "2": "Feb."
+    "3": "März"
+    "4": "Apr."
+    "5": "Mai"
+    "6": "Juni"
+    "7": "Juli"
+    "8": "Aug."
+    "9": "Sep."
+    "10": "Okt."
+    "11": "Nov."
+    "12": "Dez."
 
 reports:
-  about: Über
-  about_first_name: Über Name
-  about_last_name: Über Nachname
-  all_reports: Alle Meldungen
-  city: Stadt
-  from: Von
-  from_first_name: Von Name
-  from_last_name: Von Nachname
-  message: Beschreibung
-  reason: Grund
-  region: Stammbezirk
-  report_id: Meldungs-ID
-  time: Zeitpunkt
-  no_reports_fallback: Es sind noch keine Meldungen vorhanden
-  store: Zugeordneter Betrieb
-  in-store: 'Betrifft die Meldung einen bestimmten Betrieb, in dem {user} abholt?'
-  when: Zeitpunkt
+  about: "Über"
+  about_first_name: "Über Name"
+  about_last_name: "Über Nachname"
+  all_reports: "Alle Meldungen"
+  city: "Stadt"
+  from: "Von"
+  from_first_name: "Von Name"
+  from_last_name: "Von Nachname"
+  message: "Beschreibung"
+  reason: "Grund"
+  region: "Stammbezirk"
+  report_id: "Meldungs-ID"
+  time: "Zeitpunkt"
+  no_reports_fallback: "Es sind noch keine Meldungen vorhanden"
+  store: "Zugeordneter Betrieb"
+  in-store: "Betrifft die Meldung einen bestimmten Betrieb, in dem {user} abholt?"
+  when: "Zeitpunkt"
   info: '
     <br>
     <BR>
@@ -1080,10 +1080,11 @@ reports:
   #  bzw. das Mediationsteam sich angemessen um den Fall kümmern können.
   #  Nenne dabei Häufigkeit des Vorfalls, Ort, Zeitpunkt und ggf. andere anwesende Foodsaver!
 # For legacy UI reasons (ReportXhr), needs to be toplevel with this exact key:
-  reportmessage: Gib kurz an wie du bei Rückfragen erreicht werden kannst!
+
+  reportmessage: "Gib kurz an wie du bei Rückfragen erreicht werden kannst!"
 
 bell:
-  no_bells: Du hast derzeit keine Benachrichtigungen
+  no_bells: "Du hast derzeit keine Benachrichtigungen"
   forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
   forum_reply_title: "{forum}: {title}"
   forum_answer: "{user} hat Dir geantwortet"
@@ -1173,15 +1174,15 @@ pickuplist:
   NumberOfAppointments_table_header: "Anzahl Termine"
   NumberOfSlots_table_header: "Anzahl Abhol-Slots"
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
-  tooslow: Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.
-  tryagain: Versuche es nach einem neu laden einfach noch mal.
+  tooslow: "Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war."
+  tryagain: "Versuche es nach einem neu laden einfach noch mal."
   error_loadingPickup: "Abholslots laden fehlgeschlagen: "
   error_leave: "Verlassen fehlgeschlagen: "
   error_kick: "Entfernen fehlgeschlagen: "
   error_changeSlotCount: "Ändern der Slotanzahl fehlgeschlagen: "
   error_confirm: "Bestätigung fehlgeschlagen: "
-  error_whileSending: Fehler während dem Senden der Nachricht
-  unclear: Status unklar
+  error_whileSending: "Fehler während dem Senden der Nachricht"
+  unclear: "Status unklar"
 
 ageBandList:
   header_for_district: "Altersgruppen in {bezirk} "
@@ -1191,29 +1192,29 @@ ageBandList:
   NumberOfAgeband: "Anzahl"
 
 foodsaver:
-  bread: Alle Foodsaver
-  title: Foodsaver
-  actions: Aktionen
-  edit: Foodsaver bearbeiten
-  editName: '{name} bearbeiten'
-  edit_success: Änderungen wurden gespeichert
-  edit_failure: Es wurde nichts verändert oder Änderungen wurden nicht gespeichert
-  profileBack: Zurück zum Profil
-  delete_account: ⚠️ Account löschen
-  delete_account_sure: 'Soll der Account von {name} wirklich gelöscht werden?'
-  delete_account_now: Account jetzt löschen
-  your_account: dir
+  bread: "Alle Foodsaver"
+  title: "Foodsaver"
+  actions: "Aktionen"
+  edit: "Foodsaver bearbeiten"
+  editName: "{name} bearbeiten"
+  edit_success: "Änderungen wurden gespeichert"
+  edit_failure: "Es wurde nichts verändert oder Änderungen wurden nicht gespeichert"
+  profileBack: "Zurück zum Profil"
+  delete_account: "⚠️ Account löschen"
+  delete_account_sure: "Soll der Account von {name} wirklich gelöscht werden?"
+  delete_account_now: "Account jetzt löschen"
+  your_account: "dir"
   delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
-  url_error: Mit deiner Homepage-URL stimmt etwas nicht
-  mailchange_error: Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!
+  url_error: "Mit deiner Homepage-URL stimmt etwas nicht"
+  mailchange_error: "Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!"
   manage:
-    photo: Foto
-    name: Name
-    role: Rolle
-    last-login: Letzter Login
-    actions: Optionen
-    remove: Aus Bezirk löschen
-    orga: ist im bundesweiten Orgateam dabei
+    photo: "Foto"
+    name: "Name"
+    role: "Rolle"
+    last-login: "Letzter Login"
+    actions: "Optionen"
+    remove: "Aus Bezirk löschen"
+    orga: "ist im bundesweiten Orgateam dabei"
   about_me_public: |
     Diese Kurzbeschreibung wird für alle auf der <a href="https://foodsharing.de/team">Team-</a>
     und der <a href="https://foodsharing.de/team/ehemalige">Ehemaligenseite</a> aufgeführten
@@ -1222,102 +1223,102 @@ foodsaver:
     Diese Kurzbeschreibung wird auf deiner Profilseite angezeigt
     und ist dort für alle in der foodsharing-Community sichtbar.
   upgrade:
-    ad_fs: 'Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver*in werden!'
-    to_fs: Werde Foodsaver*in
-    needs_fs: Du musst erst Foodsaver werden
-    needs_sm: Du musst erst BetriebsverantwortlicheR werden
-    needs_fs_quiz: Du darfst zunächst das Foodsaver Quiz machen
-    to_sm: Werde Betriebsverantwortliche*r
-    to_amb: Werde Botschafter*in
-    amb_region: In welcher Region möchtest du Botschafter werden?
-    needs_publicinfo: Deine Kurzbeschreibung ist leer
-    needs_region: Wähle bitte aus, in welchem Bezirk du Botschafter*in werden möchtest
-    rv: Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.
-    needs_rv: Du musst die Rechtsvereinbarung akzeptieren!
-    quiz_error: 'Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:'
-    fs_success: Danke! Du bist jetzt Foodsaver
-    sm_success: Danke! Du bist jetzt Betriebsverantwortlicher
-    amb_requested: Anfrage erfolgreich versendet!
-    amb_success: Danke dir für deine Motivation, mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.
-  restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
+    ad_fs: "Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver*in werden!"
+    to_fs: "Werde Foodsaver*in"
+    needs_fs: "Du musst erst Foodsaver werden"
+    needs_sm: "Du musst erst BetriebsverantwortlicheR werden"
+    needs_fs_quiz: "Du darfst zunächst das Foodsaver Quiz machen"
+    to_sm: "Werde Betriebsverantwortliche*r"
+    to_amb: "Werde Botschafter*in"
+    amb_region: "In welcher Region möchtest du Botschafter werden?"
+    needs_publicinfo: "Deine Kurzbeschreibung ist leer"
+    needs_region: "Wähle bitte aus, in welchem Bezirk du Botschafter*in werden möchtest"
+    rv: "Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie."
+    needs_rv: "Du musst die Rechtsvereinbarung akzeptieren!"
+    quiz_error: "Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:"
+    fs_success: "Danke! Du bist jetzt Foodsaver"
+    sm_success: "Danke! Du bist jetzt Betriebsverantwortlicher"
+    amb_requested: "Anfrage erfolgreich versendet!"
+    amb_success: "Danke dir für deine Motivation, mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet."
+  restricted: "Du hast leider keine Berechtigung, diese Daten einzusehen."
   addresschange:
-    title: Warnung bzgl. Adressänderung
-    text: Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert.
+    title: "Warnung bzgl. Adressänderung"
+    text: "Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert."
   list:
-    summary: '{count} Foodsaver in {region}'
-    inactive: ', die sich 6 Monate nicht eingeloggt haben:'
-  kicked: Foodsaver wurde entfernt
+    summary: "{count} Foodsaver in {region}"
+    inactive: ", die sich 6 Monate nicht eingeloggt haben:"
+  kicked: "Foodsaver wurde entfernt"
 
 content:
-  bread: Alle Seiten
-  public: Öffentliche Seiten
-  actions: Aktionen
-  new: Neue Seite anlegen
-  new_success: Seite wurde angelegt
-  edit: Seite bearbeiten
-  edit_success: Seite wurde gespeichert!
-  delete: Soll {name} wirklich gelöscht werden?
-  delete_success: Seite wurde gelöscht
-  name: Eindeutiger Name
-  content: Inhalt
-  empty: 'Bisher wurde keine Seite eingetragen.'
-  changelog: Aktuelles Changelog
+  bread: "Alle Seiten"
+  public: "Öffentliche Seiten"
+  actions: "Aktionen"
+  new: "Neue Seite anlegen"
+  new_success: "Seite wurde angelegt"
+  edit: "Seite bearbeiten"
+  edit_success: "Seite wurde gespeichert!"
+  delete: "Soll {name} wirklich gelöscht werden?"
+  delete_success: "Seite wurde gelöscht"
+  name: "Eindeutiger Name"
+  content: "Inhalt"
+  empty: "Bisher wurde keine Seite eingetragen."
+  changelog: "Aktuelles Changelog"
 
 map:
-  title: Karte
+  title: "Karte"
 
 messages:
-  bread: Nachrichten
+  bread: "Nachrichten"
 
 mailbox:
-  mail: E-Mails
-  title: Mailboxen
-  inbox: Posteingang
-  sent: Gesendet
-  trash: Papierkorb
-  empty: Noch keine Nachrichten in dieser Mailbox
-  reply: Antworten
-  delete: In die Tonne
-  sender: Absender
-  recipient: Empfänger
-  date: Datum
-  subject: Betreff
-  actions: Optionen
-  member: Mailbox-Benutzer
-  refresh: Aktualisieren
-  write: Neue E-Mail
-  attach: 'Datei anhängen (max. 1,2 MB)'
-  claim: 'foodsharing.de - verwenden statt verschwenden'
-  signature: 'Nachricht vom {date}'
-  manage: Mailbox-Manager
-  create: Neue Mailbox anlegen
-  new: Neue Mailbox
-  hostinfo: 'Nur den Namen der Mailbox eintragen! Also ohne @{host}'
-  add_success: 'Mailbox wurde erfolgreich angelegt.'
-  saved: Änderungen wurden gespeichert
-  already_exists: Eine Mailbox mit diesem Namen gibt es schon
-  name: Angezeigter Name
+  mail: "E-Mails"
+  title: "Mailboxen"
+  inbox: "Posteingang"
+  sent: "Gesendet"
+  trash: "Papierkorb"
+  empty: "Noch keine Nachrichten in dieser Mailbox"
+  reply: "Antworten"
+  delete: "In die Tonne"
+  sender: "Absender"
+  recipient: "Empfänger"
+  date: "Datum"
+  subject: "Betreff"
+  actions: "Optionen"
+  member: "Mailbox-Benutzer"
+  refresh: "Aktualisieren"
+  write: "Neue E-Mail"
+  attach: "Datei anhängen (max. 1,2 MB)"
+  claim: "foodsharing.de - verwenden statt verschwenden"
+  signature: "Nachricht vom {date}"
+  manage: "Mailbox-Manager"
+  create: "Neue Mailbox anlegen"
+  new: "Neue Mailbox"
+  hostinfo: "Nur den Namen der Mailbox eintragen! Also ohne @{host}"
+  add_success: "Mailbox wurde erfolgreich angelegt."
+  saved: "Änderungen wurden gespeichert"
+  already_exists: "Eine Mailbox mit diesem Namen gibt es schon"
+  name: "Angezeigter Name"
   not-available: |
       Du musst {role} sein, um auf E-Mail-Postfächer zugreifen zu können.
       Löse hier das {quiz}, wenn du bereit bist.
-  sm-quiz: Quiz für Betriebsverantwortliche
-  not-allowed: 'Du hast nicht die nötigen Rechte, dies zu tun.'
-  okay: 'E-Mail wurde erfolgreich versendet.'
-  failed: 'Die E-Mail konnte nicht gesendet werden.'
-  recipients: Zu viele Empfänger
-  ratelimit: 'Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...'
-  filetype: Dieser Dateityp ist nicht erlaubt
-  filesize: 'Sorry! Die Datei ist zu groß.'
-  mark_as_unread: Als ungelesen markieren
+  sm-quiz: "Quiz für Betriebsverantwortliche"
+  not-allowed: "Du hast nicht die nötigen Rechte, dies zu tun."
+  okay: "E-Mail wurde erfolgreich versendet."
+  failed: "Die E-Mail konnte nicht gesendet werden."
+  recipients: "Zu viele Empfänger"
+  ratelimit: "Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick..."
+  filetype: "Dieser Dateityp ist nicht erlaubt"
+  filesize: "Sorry! Die Datei ist zu groß."
+  mark_as_unread: "Als ungelesen markieren"
 
 settings:
-  title: Einstellungen
-  header: Deine Daten/Einstellungen
-  notifications: Benachrichtigungen
+  title: "Einstellungen"
+  header: "Deine Daten/Einstellungen"
+  notifications: "Benachrichtigungen"
   follow:
-    thread: 'Über das Forenthema "{thread}" auf dem Laufenden bleiben?'
-    mail: 'Ja, ich möchte per E-Mail über neue Posts informiert werden.'
-    none: 'Bitte nicht mehr per E-Mail über neue Posts informieren.'
+    thread: "Über das Forenthema \"{thread}\" auf dem Laufenden bleiben?"
+    mail: "Ja, ich möchte per E-Mail über neue Posts informiert werden."
+    none: "Bitte nicht mehr per E-Mail über neue Posts informieren."
   newsletter: |
     Ca. 1x im Monat versenden wir aktuelle Informationen
     rund um die Lebensmittelretterbewegung in einem Newsletter.
@@ -1326,11 +1327,11 @@ settings:
     Wenn du auf der foodsharing-Homepage eine interne Nachricht geschickt bekommst,
     aber gerade nicht eingeloggt bist, kannst du per E-Mail darüber informiert werden.
     Möchtest du das?
-  businesscard: Persönliche Visitenkarte
-  account: Account-Optionen
+  businesscard: "Persönliche Visitenkarte"
+  account: "Account-Optionen"
   sleep:
-    title: Schlafmütze
-    header: Schlafmützenfunktion
+    title: "Schlafmütze"
+    header: "Schlafmützenfunktion"
     info: |
       Mit der Schlafmützenfunktion teilst du der Community mit, dass du zur Zeit verreist bist
       oder aus anderen Gründen gerade keine Zeit für das Retten von Lebensmitteln hast.
@@ -1340,46 +1341,46 @@ settings:
       Mit der Nutzung dieser Funktion bist du damit einverstanden, dass dein Status,
       deine Abwesenheitsdauer und deine Nachricht auf deiner Profilseite angezeigt
       und ein "Schlafmützensymbol" über dein Profilbild gesetzt wird.
-    missing-date: Bitte gib für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!
-    none: Ich bin aktiv und voll dabei
-    temp: Ich bin für folgenden Zeitraum nicht verfügbar
-    full: Ich tauche erstmal auf unbestimmte Zeit ab
-    range: 'Gib an, für welchen Zeitraum du in etwa nicht zur Verfügung stehen wirst:'
-    saved: Die Einstellungen wurden gespeichert
-    tooltip: '{name} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus'
-  email: E-Mail-Adresse ändern
+    missing-date: "Bitte gib für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!"
+    none: "Ich bin aktiv und voll dabei"
+    temp: "Ich bin für folgenden Zeitraum nicht verfügbar"
+    full: "Ich tauche erstmal auf unbestimmte Zeit ab"
+    range: "Gib an, für welchen Zeitraum du in etwa nicht zur Verfügung stehen wirst:"
+    saved: "Die Einstellungen wurden gespeichert"
+    tooltip: "{name} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus"
+  email: "E-Mail-Adresse ändern"
   changemail:
-    passcheck: Bestätige die Änderung bitte mit deinem Passwort
-    passfail: Das Passwort stimmt nicht, vertippt?
-    invalid: 'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.'
-    domain: 'Bitte verwende eine andere E-Mail-Adresse, damit du dein Passwort jederzeit wiederherstellen kannst.'
-    occupied: Die E-Mail-Adresse konnte nicht geändert werden, irgendwer benutzt sie schon!
-    sent: Gehe jetzt zu deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!
-    done: Deine E-Mail-Adresse wurde geändert!
-  saved: Änderungen wurden gespeichert.
+    passcheck: "Bestätige die Änderung bitte mit deinem Passwort"
+    passfail: "Das Passwort stimmt nicht, vertippt?"
+    invalid: "Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht."
+    domain: "Bitte verwende eine andere E-Mail-Adresse, damit du dein Passwort jederzeit wiederherstellen kannst."
+    occupied: "Die E-Mail-Adresse konnte nicht geändert werden, irgendwer benutzt sie schon!"
+    sent: "Gehe jetzt zu deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!"
+    done: "Deine E-Mail-Adresse wurde geändert!"
+  saved: "Änderungen wurden gespeichert."
   calendar:
-    menu: Kalendar
-    title: Dein Abholkalender
+    menu: "Kalendar"
+    title: "Dein Abholkalender"
     teaser: |
       Du kannst deinen Abholkalender mit einem Kalenderprogramm deiner Wahl ansehen.
-      Abonniere dir dazu einen der beiden folgenden Kalender-Links:
+      Abonniere dir dazu einen der beiden folgenden Kalender-Links.
     token-warning: |
       Wichtig: Halte den Link unbedingt geheim!
       Er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.
     sync: |
       Dein Kalenderprogramm muss diesen Kalender regelmäßig neu synchronisieren.
       Nur dann tauchen neue Abholtermine auf oder abgesagte Termine nicht mehr.
-    link_title: 'ICS/ICAL/WebCal:'
-    event_link_desc: (inkl. Events)
+    link_title: "ICS/ICAL/WebCal:"
+    event_link_desc: "(inkl. Events)"
   photo:
-    title: Dein Foto
+    title: "Dein Foto"
     info: |
       Dein Gesicht sollte auf dem Profilfoto <a href="{link_photo}">erkennbar</a> sein,
       da es für den Foodsharing-<a href="{link_id}">Ausweis</a> verwendet wird, wenn du
       später <a href="{link_fs}">Foodsaver</a> wirst und Lebensmittel in Betrieben rettest.
   push:
-    title: Push-Benachrichtigungen
-    not-supported: 'Dein Browser unterstützt leider keine Push-Benarichtigungen.'
+    title: "Push-Benachrichtigungen"
+    not-supported: "Dein Browser unterstützt leider keine Push-Benarichtigungen."
     denied: |
       Du hast das Anzeigen von Push-Benachrichtigungen durch foodsharing in deinem Browser abgelehnt.
       Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für foodsharing
@@ -1390,16 +1391,16 @@ settings:
       auch dann, wenn du nicht eingeloggt bist.
       Dein Gerät zeigt dann eine entprechende Benachrichtigung
       bzw. reagiert mit einem Ton oder einer Vibration.
-    enable: Push-Benachrichtigungen aktivieren
-    success: Push-Benachrichtigungen erfolgreich aktiviert
+    enable: "Push-Benachrichtigungen aktivieren"
+    success: "Push-Benachrichtigungen erfolgreich aktiviert"
     info-off: |
       Auf diesem Gerät sind die Push-Benachrichtigungen von foodsharing eingeschaltet.
       Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig
       nicht mehr direkt an dein Gerät zugestellt.
       Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist
       und reagiert auch nicht mehr mit einem Ton oder einer Vibration.
-    disable: Push-Benachrichtigungen deaktivieren
-    disabled: Push-Benachrichtigungen erfolgreich deaktiviert
+    disable: "Push-Benachrichtigungen deaktivieren"
+    disabled: "Push-Benachrichtigungen erfolgreich deaktiviert"
 
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"
@@ -1408,112 +1409,112 @@ index:
   confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
 
 profile:
-  title: Profil
-  go: Profil aufrufen
-  notFound: Dieses Nutzerprofil gibt es nicht oder nicht mehr
-  warning: Warnung
-  mailBounceWarning_1: 'Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das'
-  mailBounceWarning_2: Ändern der Mail-Adresse
-  mailBounceWarning_3: wird diese Sperre wieder entfernt.
+  title: "Profil"
+  go: "Profil aufrufen"
+  notFound: "Dieses Nutzerprofil gibt es nicht oder nicht mehr"
+  warning: "Warnung"
+  mailBounceWarning_1: "Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
+  mailBounceWarning_2: "Ändern der Mail-Adresse"
+  mailBounceWarning_3: "wird diese Sperre wieder entfernt."
   banana:
-    title: '{count} Vertrauensbananen'
-    none: '{name} hat bislang noch keine Vertrauensbanane erhalten.'
-    give: Schenke {name} eine Banane
+    title: "{count} Vertrauensbananen"
+    none: "{name} hat bislang noch keine Vertrauensbanane erhalten."
+    give: "Schenke {name} eine Banane"
     details: |
       Hier kannst du in mindestens 100 Zeichen beschreiben, warum du {name} gerne eine Banane schenken möchtest.
-    undo: 'Vertrauensbananen können nicht verändert oder zurückgenommen werden.'
+    undo: "Vertrauensbananen können nicht verändert oder zurückgenommen werden."
     vouch: |
       Bitte vergib die Vertrauensbanane daher nur an dir persönlich bekannte Menschen,
       welche die Verhaltensregeln und die Rechtsvereinbarung einhalten
       und für deren Zuverlässigkeit und Engagement du einstehen kannst.
-    placeholder: 'min. 100 Zeichen...'
-    sent: Banane wurde gesendet!
-    messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein.
-    alreadyGiven: '{name} hat bereits eine Banane von dir erhalten!'
+    placeholder: "min. 100 Zeichen..."
+    sent: "Banane wurde gesendet!"
+    messageTooShort: "Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein."
+    alreadyGiven: "{name} hat bereits eine Banane von dir erhalten!"
   nav:
-    edit: Profil bearbeiten
-    buddy: 'Ich kenne {name}'
-    history: Passhistorie
-    verificationHistory: Verifizierungshistorie
-    notes: Notizen <strong>({count})</strong>
-    violations: Meldungen <strong>({count})</strong>
-    storelist: Betriebe ({count})
+    edit: "Profil bearbeiten"
+    buddy: "Ich kenne {name}"
+    history: "Passhistorie"
+    verificationHistory: "Verifizierungshistorie"
+    notes: "Notizen <strong>({count})</strong>"
+    violations: "Meldungen <strong>({count})</strong>"
+    storelist: "Betriebe ({count})"
   history:
-    noActor: 'Es liegt keine Information über den Ersteller vor'
-    noData: 'Es liegen keine Daten vor.'
-    wasVerified: Verifiziert
-    lostVerification: Entverifiziert
+    noActor: "Es liegt keine Information über den Ersteller vor"
+    noData: "Es liegen keine Daten vor."
+    wasVerified: "Verifiziert"
+    lostVerification: "Entverifiziert"
   notes:
-    bread: Notizen
-    title: Notizen über {name}
+    bread: "Notizen"
+    title: "Notizen über {name}"
     info: |
       Bitte gehe gewissenhaft mit dieser Funktion um.
       Sie soll helfen, Vorgänge sichbar zu machen um uns Arbeit zu ersparen.
       Persönliches oder Wertendes zu einer Person hat hier nichts verloren.
-      Bleibe sachlich!
-  online: '{name} ist online!'
+      Bleibe sachlich!"
+  online: "{name} ist online!"
   infos:
-    title: Infos
-    lastLogin: Letzter Login
-    registrationDate: Registrierungsdatum
-    never: Noch nie
-    privateMail: Private E-Mail-Adresse
-    fsMail: Interne Mailbox
-    buddies: 'Bekannte'
-    buddycount: '{name} kennen {count} Foodsaver'
-    buddycount1: '{name} kennt {count} Foodsaver'
-    fetchrate: Abholquote
-    foodsaverId: Foodsaver-ID
-    foodsharerId: Foodsharer-ID
+    title: "Infos"
+    lastLogin: "Letzter Login"
+    registrationDate: "Registrierungsdatum"
+    never: "Noch nie"
+    privateMail: "Private E-Mail-Adresse"
+    fsMail: "Interne Mailbox"
+    buddies: "Bekannte"
+    buddycount: "{name} kennen {count} Foodsaver"
+    buddycount1: "{name} kennt {count} Foodsaver"
+    fetchrate: "Abholquote"
+    foodsaverId: "Foodsaver-ID"
+    foodsharerId: "Foodsharer-ID"
   stats:
-    weight: 'gerettet'
-    count: 'abgeholt'
-    baskets: 'Essenskörbe'
-    posts: 'Beiträge'
-  regions: '{name} ist Foodsaver in'
-  ambRegions: '{name} ist {role} für'
-  homeRegion: 'Stammbezirk von {name}'
-  workgroups: '{name} ist Ansprechperson für folgende Arbeitsgruppen'
-  sleeping: '{name} hat eine Schlafmütze auf unbestimmte Zeit'
-  sleepinfo: '{name} hat eine Schlafmütze auf vom {from} bis {until}'
-  about_me_intern: Über sich selbst
-  pinboard: 'Status-Updates von {name}'
-  signoutPickup: austragen
-  signoutAll: Aus allen austragen
-  signoutAllConfirmation: 'Wirklich {name} aus allen kommenden Abhol-Terminen austragen?'
+    weight: "gerettet"
+    count: "abgeholt"
+    baskets: "Essenskörbe"
+    posts: "Beiträge"
+  regions: "{name} ist Foodsaver in"
+  ambRegions: "{name} ist {role} für"
+  homeRegion: "Stammbezirk von {name}"
+  workgroups: "{name} ist Ansprechperson für folgende Arbeitsgruppen"
+  sleeping: "{name} hat eine Schlafmütze auf unbestimmte Zeit"
+  sleepinfo: "{name} hat eine Schlafmütze auf vom {from} bis {until}"
+  about_me_intern: "Über sich selbst"
+  pinboard: "Status-Updates von {name}"
+  signoutPickup: "austragen"
+  signoutAll: "Aus allen austragen"
+  signoutAllConfirmation: "Wirklich {name} aus allen kommenden Abhol-Terminen austragen?"
   public:
-    who: '{name} aus {from}'
-    may: aktiv
-    mayNot: nicht aktiv
-    textMay: 'und darf daher Lebensmittel im Namen von foodsharing entgegennehmen.'
-    textMayNot: 'und daher zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen.'
-    cta: 'Das vollständige Profil von {name} ist nach Anmeldung zugänglich:'
-    login: Zum Login
-    join: Mitmachen & Registrieren
+    who: "{name} aus {from}"
+    may: "aktiv"
+    mayNot: "nicht aktiv"
+    textMay: "und darf daher Lebensmittel im Namen von foodsharing entgegennehmen."
+    textMayNot: "und daher zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen."
+    cta: "Das vollständige Profil von {name} ist nach Anmeldung zugänglich:"
+    login: "Zum Login"
+    join: "Mitmachen & Registrieren"
   mediation:
-    title: 'Mediationsanfrage für {name}'
-    info: 'Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender Emailadresse : {email}@foodsharing.network'
-    no_group: 'Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird.'
+    title: "Mediationsanfrage für {name}"
+    info: "Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender Emailadresse : {email}@foodsharing.network"
+    no_group: "Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird."
 
 search:
-  title: Suche
-  placeholder: Suche...
-  forum: Nach Titel suchen...
-  thread-title-only: Es werden nur Titel durchsucht, nicht der Text von Beiträgen.
-  noresults: Es konnten keine Ergebnisse gefunden werden
-  mybuddies: Meine Buddies
-  mygroups: Meine Gruppen
-  mystores: Meine Betriebe
-  myregions: Meine Bezirke
-  groups: Gruppen
-  persons: Personen
+  title: "Suche"
+  placeholder: "Suche..."
+  forum: "Nach Titel suchen..."
+  thread-title-only: "Es werden nur Titel durchsucht, nicht der Text von Beiträgen."
+  noresults: "Es konnten keine Ergebnisse gefunden werden"
+  mybuddies: "Meine Buddies"
+  mygroups: "Meine Gruppen"
+  mystores: "Meine Betriebe"
+  myregions: "Meine Bezirke"
+  groups: "Gruppen"
+  persons: "Personen"
 
 dashboard:
-  title: Dashboard
+  title: "Dashboard"
   updates_title_all: "Updates-Übersicht"
   updates_title_some: "Updates-Übersicht ({0})"
-  display_all: Alle
-  settings_tooltip: Übersichts-Einstellungen
+  display_all: "Alle"
+  settings_tooltip: "Übersichts-Einstellungen"
   no_updates: "Keine Updates"
   no_more_updates_all: "Das war's!"
   no_more_updates_event: "Keine weiteren Termine"
@@ -1522,9 +1523,9 @@ dashboard:
   no_more_updates_friendWall: "Keine weiteren Status-Meldungen"
   no_more_updates_mailbox: "Keine weiteren Mailbox-Nachrichten"
   no_more_updates_store: "Keine weiteren Betriebs-Infos"
-  activity_filter_info: Hier kannst du einstellen, welche Updates auf deiner Startseite angezeigt werden sollen.
+  activity_filter_info: "Hier kannst du einstellen, welche Updates auf deiner Startseite angezeigt werden sollen."
   empty_section: "Du hast noch keine {type}"
-  save_selection: Einstellungen speichern
+  save_selection: "Einstellungen speichern"
   source_foodsharepoint: "Fairteiler {0}"
   source_friendWall: "Pinnwand von {0}"
   source_friendWall_own: "Deine Pinnwand"
@@ -1533,83 +1534,83 @@ dashboard:
   source_event: "Termin {0}"
   source_mailbox: "{0}"
   source_store: "Betriebe {0}"
-  activation_mail_sent: Aktivierungslink verschickt - bitte prüfe deine E-Mails
-  activation_mail_failure: Es konnte kein neuer Aktivierungslink verschickt werden
+  activation_mail_sent: "Aktivierungslink verschickt - bitte prüfe deine E-Mails"
+  activation_mail_failure: "Es konnte kein neuer Aktivierungslink verschickt werden"
   mail_activation_error_body:
-    part_1: Bitte bestätige deine E-Mail-Adresse, indem du auf den Link in der Aktivierungsmail klickst. Alternativ kannst du
-    part_2: hier eine neue Aktivierungsmail anfordern
-    part_3: oder
-    part_4: deine E-Mail-Adresse ändern
-  mail_activation_error_title: E-Mail-Adresse nicht bestätigt
-  checkAddress: 'Bitte überprüfe deine Adresse! Die Koordinaten konnten nicht ermittelt werden.'
-  homeRegion: 'Dein Stammbezirk ist {region}.'
-  chooseHomeRegion: 'Bitte wähle einen Stammbezirk aus.'
-  greeting: Hallo {name}! Schön, dass du hier bist.
-  foodsharer: Viel Spaß beim Retten!
-  foodsharer_amount: Du hast schon {weight} Kilos gerettet!
+    part_1: "Bitte bestätige deine E-Mail-Adresse, indem du auf den Link in der Aktivierungsmail klickst. Alternativ kannst du"
+    part_2: "hier eine neue Aktivierungsmail anfordern"
+    part_3: "oder"
+    part_4: "deine E-Mail-Adresse ändern"
+  mail_activation_error_title: "E-Mail-Adresse nicht bestätigt"
+  checkAddress: "Bitte überprüfe deine Adresse! Die Koordinaten konnten nicht ermittelt werden."
+  homeRegion: "Dein Stammbezirk ist {region}."
+  chooseHomeRegion: "Bitte wähle einen Stammbezirk aus."
+  greeting: "Hallo {name}! Schön, dass du hier bist."
+  foodsharer: "Viel Spaß beim Retten!"
+  foodsharer_amount: "Du hast schon {weight} Kilos gerettet!"
   foodsaver_amount: |
       Du hast <strong style="white-space:nowrap">{pickups}&thinsp;x</strong> Lebensmittel abgeholt
       und damit <strong style="white-space:nowrap">{weight}&thinsp;kg</strong> gerettet.
   my:
-    regions: Deine Bezirke
-    groups: Deine Gruppen
-    stores: Du holst Lebensmittel ab bei
-    pending: Anfragen gestellt bei
-    waiting: Du bist auf der Springerliste bei
-    managing: Du bist verantwortlich für
-    no-stores: 'Du bist bis jetzt in keinem Betriebsteam.'
-  invitations: Du wurdest eingeladen
-  event: Nächstes Event
-  events: 'Nächste Events ({count})'
-  pickupdates: Nächste Abholtermine
+    regions: "Deine Bezirke"
+    groups: "Deine Gruppen"
+    stores: "Du holst Lebensmittel ab bei"
+    pending: "Anfragen gestellt bei"
+    waiting: "Du bist auf der Springerliste bei"
+    managing: "Du bist verantwortlich für"
+    no-stores: "Du bist bis jetzt in keinem Betriebsteam."
+  invitations: "Du wurdest eingeladen"
+  event: "Nächstes Event"
+  events: "Nächste Events ({count})"
+  pickupdates: "Nächste Abholtermine"
   quiz:
-    ack: Hinweis gelesen und nicht mehr anzeigen
-    read: weiterlesen
-    go: Weiter zum Quiz
+    ack: "Hinweis gelesen und nicht mehr anzeigen"
+    read: "weiterlesen"
+    go: "Weiter zum Quiz"
   push:
-    title: Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen.
-    info: Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren.
-    button: Push-Benachrichtigungen aktivieren
+    title: "Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen."
+    info: "Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren."
+    button: "Push-Benachrichtigungen aktivieren"
 
 home:
-  title: Startseite
-  home: Home
+  title: "Startseite"
+  home: "Home"
 
 team:
-  current: Team
-  former: Ehemalige
-  name: Name
-  email: E-Mail-Adresse
-  contact: '{name} via foodsharing.de Kontaktformular'
-  contacted: Deine Nachricht wurde erfolgreich gesendet!
-  ratelimit: 'Bitte warte {minutes} Minuten, bis du die nächste Nachricht senden kannst.'
-  not-found: Page not found
+  current: "Team"
+  former: "Ehemalige"
+  name: "Name"
+  email: "E-Mail-Adresse"
+  contact: "{name} via foodsharing.de Kontaktformular"
+  contacted: "Deine Nachricht wurde erfolgreich gesendet!"
+  ratelimit: "Bitte warte {minutes} Minuten, bis du die nächste Nachricht senden kannst."
+  not-found: "Page not found"
 
 basket:
-  title: Essenskörbe
-  description: Beschreibung
-  my_list_empty: Du hast keine Essenskörbe eingetragen
-  all: Alle Essenskörbe
-  all_map: Alle Körbe auf der Karte
-  recent: Neueste Essenskörbe
-  nearby: Essenskörbe in deiner Nähe
-  nearby-short: In deiner Nähe
-  mapsearch: 'Adresssuche...'
-  go: zum Essenskorb
-  by: 'Essenskorb von {name}'
-  on: 'Essenskorb von {platform}'
-  add: Essenskorb anlegen
-  publish: Essenskorb veröffentlichen
-  edit: Essenskorb bearbeiten
-  delete: Essenskorb löschen
-  new: Neuer Essenskorb
-  date: Einstelldatum
-  created: 'Veröffentlicht am <strong>{date}</strong>'
-  expires: 'Gültig bis <strong>{date}</strong>'
-  updated: 'Aktualisiert am <strong>{date}</strong>'
-  where: Wo?
-  provider: Anbieter*in
-  requests: Anfragen ({count})
+  title: "Essenskörbe"
+  description: "Beschreibung"
+  my_list_empty: "Du hast keine Essenskörbe eingetragen"
+  all: "Alle Essenskörbe"
+  all_map: "Alle Körbe auf der Karte"
+  recent: "Neueste Essenskörbe"
+  nearby: "Essenskörbe in deiner Nähe"
+  nearby-short: "In deiner Nähe"
+  mapsearch: "Adresssuche..."
+  go: "zum Essenskorb"
+  by: "Essenskorb von {name}"
+  on: "Essenskorb von {platform}"
+  add: "Essenskorb anlegen"
+  publish: "Essenskorb veröffentlichen"
+  edit: "Essenskorb bearbeiten"
+  delete: "Essenskorb löschen"
+  new: "Neuer Essenskorb"
+  date: "Einstelldatum"
+  created: "Veröffentlicht am <strong>{date}</strong>"
+  expires: "Gültig bis <strong>{date}</strong>"
+  updated: "Aktualisiert am <strong>{date}</strong>"
+  where: "Wo?"
+  provider: "Anbieter*in"
+  requests: "Anfragen ({count})"
   howto: |
     <b>Information zur Benutzung von Essenskörben</b>
     <br>
@@ -1626,52 +1627,52 @@ basket:
     Dann klick oben auf <b>Mach mit!</b> um loszulegen oder stelle selbst einen Essenskorb ein!
     <br><br>
     Auf unserer Karte findest du gegebenenfalls weitere Essenskörbe in deiner Gegend.
-  no_requests: Bisher keine Anfragen
-  requested_by: angefragt von
-  request_close: Essenskorbanfrage abschließen
-  request: Essenskorb anfragen
-  request-fs: Essenskorb anfragen auf unserer foodsharing-Homepage
-  withdraw_request: Anfrage zurückziehen
-  n_requests: 'Bisherige Anfragen: <strong>{count}</strong>'
-  send_request: Anfrage absenden
-  sent_request: Anfrage wurde versendet
-  withdrawn_request: Anfrage wurde zurückgezogen
-  change-state: Essenskorbanfrage von {name} abschließen
+  no_requests: "Bisher keine Anfragen"
+  requested_by: "angefragt von"
+  request_close: "Essenskorbanfrage abschließen"
+  request: "Essenskorb anfragen"
+  request-fs: "Essenskorb anfragen auf unserer foodsharing-Homepage"
+  withdraw_request: "Anfrage zurückziehen"
+  n_requests: "Bisherige Anfragen: <strong>{count}</strong>"
+  send_request: "Anfrage absenden"
+  sent_request: "Anfrage wurde versendet"
+  withdrawn_request: "Anfrage wurde zurückgezogen"
+  change-state: "Essenskorbanfrage von {name} abschließen"
   state:
-    okay: 'Ja, {pronoun} hat den Essenskorb abgeholt.'
-    nope: 'Nein, {pronoun} ist leider nicht wie verabredet erschienen.'
-    gone: 'Die Lebensmittel wurden von jemand anderem abgeholt.'
-    deny: 'Ich möchte diese Anfrage ablehnen.'
-    finished: 'Danke Dir! Der Vorgang ist abgeschlossen.'
-  request_empty: Dein Anfragetext darf nicht leer sein.
-  image: Füge dem Essenskorb ein Foto hinzu!
+    okay: "Ja, {pronoun} hat den Essenskorb abgeholt."
+    nope: "Nein, {pronoun} ist leider nicht wie verabredet erschienen."
+    gone: "Die Lebensmittel wurden von jemand anderem abgeholt."
+    deny: "Ich möchte diese Anfrage ablehnen."
+    finished: "Danke Dir! Der Vorgang ist abgeschlossen."
+  request_empty: "Dein Anfragetext darf nicht leer sein."
+  image: "Füge dem Essenskorb ein Foto hinzu!"
   contact:
-    write: Per Nachricht
-    call: Per Telefonanruf
+    write: "Per Nachricht"
+    call: "Per Telefonanruf"
   valid:
-    1: einen Tag
-    2: zwei Tage
-    3: drei Tage
-    7: eine Woche
-    14: zwei Wochen
-    21: drei Wochen
+    "1": "einen Tag"
+    "2": "zwei Tage"
+    "3": "drei Tage"
+    "7": "eine Woche"
+    "14": "zwei Wochen"
+    "21": "drei Wochen"
   has:
-    bread: Backwaren
-    greens: Obst & Gemüse
-    dairy: Molkereiprodukte
-    dry: Trockenware
-    frozen: Tiefkühlware
-    prepared: Zubereitete Speisen
-    pet: Tierfutter
+    bread: "Backwaren"
+    greens: "Obst & Gemüse"
+    dairy: "Molkereiprodukte"
+    dry: "Trockenware"
+    frozen: "Tiefkühlware"
+    prepared: "Zubereitete Speisen"
+    pet: "Tierfutter"
   is:
-    organic: sind Bio
-    veggie: sind vegetarisch
-    vegan: sind vegan
-    gf: sind glutenfrei
-  error: Essenskorb konnte nicht geladen werden.
-  not_found: Der Essenskorb existiert nicht mehr.
-  request_denied: Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.
-  not_active: Essenskorb ist jetzt nicht mehr aktiv!
+    organic: "sind Bio"
+    veggie: "sind vegetarisch"
+    vegan: "sind vegan"
+    gf: "sind glutenfrei"
+  error: "Essenskorb konnte nicht geladen werden."
+  not_found: "Der Essenskorb existiert nicht mehr."
+  request_denied: "Deine Anfrage wurde vom Essenskorbanbieter abgelehnt."
+  not_active: "Essenskorb ist jetzt nicht mehr aktiv!"
   no-login: |
     Du bist nicht eingeloggt, vielleicht ist deine Session abgelaufen.
     Bitte logge dich ein und sende deine Anfrage erneut ab.
@@ -1681,430 +1682,430 @@ basket:
     Diese wird benötigt, um einen Essenskorb mittels Pinnadel auf der Karte darzustellen.
     <br><br>
     Die Postanschrift deiner Adresse ist dabei für EssenskorbnutzerInnen nicht sichtbar.
-  go-to-settings: Zu den Einstellungen
-  public-info: 'Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar.'
-  no-desc: Bitte gib eine Beschreibung ein!
-  not-allowed: 'Du bist nicht dazu berechtigt, diesen Essenskorb zu bearbeiten.'
-  publish_error: 'Es gab einen Fehler. Der Essenskorb konnte nicht veröffentlicht werden.'
-  published: Danke dir! Der Essenskorb wurde veröffentlicht!
+  go-to-settings: "Zu den Einstellungen"
+  public-info: "Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar."
+  no-desc: "Bitte gib eine Beschreibung ein!"
+  not-allowed: "Du bist nicht dazu berechtigt, diesen Essenskorb zu bearbeiten."
+  publish_error: "Es gab einen Fehler. Der Essenskorb konnte nicht veröffentlicht werden."
+  published: "Danke dir! Der Essenskorb wurde veröffentlicht!"
 
 personal_data:
-  label: Kontakt
-  mobile: Handynummer
-  landline: Festnetztelefon
+  label: "Kontakt"
+  mobile: "Handynummer"
+  landline: "Festnetztelefon"
 
 menu:
-  manage_regions: Bezirke verwalten
-  blog: Blogbeiträge bearbeiten
-  quiz: Quiz verwalten
-  reports: Meldungen
-  email: Newsletter versenden
-  manage_mailboxes: Mailboxen verwalten
-  content: Inhalte bearbeiten
+  manage_regions: "Bezirke verwalten"
+  blog: "Blogbeiträge bearbeiten"
+  quiz: "Quiz verwalten"
+  reports: "Meldungen"
+  email: "Newsletter versenden"
+  manage_mailboxes: "Mailboxen verwalten"
+  content: "Inhalte bearbeiten"
   entry:
-    activities: Aktionen
-    infos: Infos
-    mark_as_read: Alle als gelesen markieren
-    all_messages: Alle Nachrichten
-    messages: Nachrichten
-    your_groups: Deine Gruppen
-    groups: Gruppenübersicht
-    your_account: Dein Account
-    your_stores: Deine Betriebe
-    administration: Administration
-    notifications: Benachrichtigungen
-    contact: Kontakt
-    politics: Politik
-    fscities: foodsharing-Städte
-    demands: Forderungen
-    pastcampaigns: Vergangene Kampagnen
-    education: Bildung
-    academy: Akademie
-    talksandworkshops: Vorträge und Workshops
-    fsfestival: foodsharing Festival
-    mailbox: E-Mail-Postfach
-    press: Presse
-    forcompanies: Für Unternehmen
-    imprint: Impressum
-    regionalgroups: Ortsgruppen
-    Germany: Deutschland
-    Austria: Österreich
-    Swiss: Schweiz
-    international: International
-    forum: Forum
-    BOTforum: Bot-Forum
-    wall: Pinnwand
-    events: Termine
-    members: Mitglieder
-    workingGroupEdit: Gruppe verwalten
-    aboutUs: Über uns
-    mission: Mission
-    fundamentals: Grundsätze
-    blog: Blog
-    team: Team
-    partners: Partner
-    background: Hintergrund
-    support: Hilfe & Support
-    wiki: Wiki
-    guide: Hygiene-Ratgeber
-    statistics: Statistik
-    transparency: Transparenz
-    dataprivacy: Datenschutz
-    release-notes: Was ist neu?
-    stores: Betriebe
-    fs: Foodsaver
-    ids: Ausweise
-    joinregion: Einem Bezirk beitreten
-    conference: Videokonferenz
-    fundraising: Fundraising
-    donations: Spenden
-    selfservice: Selfservice
-    friendcircle: Freundeskreis
+    activities: "Aktionen"
+    infos: "Infos"
+    mark_as_read: "Alle als gelesen markieren"
+    all_messages: "Alle Nachrichten"
+    messages: "Nachrichten"
+    your_groups: "Deine Gruppen"
+    groups: "Gruppenübersicht"
+    your_account: "Dein Account"
+    your_stores: "Deine Betriebe"
+    administration: "Administration"
+    notifications: "Benachrichtigungen"
+    contact: "Kontakt"
+    politics: "Politik"
+    fscities: "foodsharing-Städte"
+    demands: "Forderungen"
+    pastcampaigns: "Vergangene Kampagnen"
+    education: "Bildung"
+    academy: "Akademie"
+    talksandworkshops: "Vorträge und Workshops"
+    fsfestival: "foodsharing Festival"
+    mailbox: "E-Mail-Postfach"
+    press: "Presse"
+    forcompanies: "Für Unternehmen"
+    imprint: "Impressum"
+    regionalgroups: "Ortsgruppen"
+    Germany: "Deutschland"
+    Austria: "Österreich"
+    Swiss: "Schweiz"
+    international: "International"
+    forum: "Forum"
+    BOTforum: "Bot-Forum"
+    wall: "Pinnwand"
+    events: "Termine"
+    members: "Mitglieder"
+    workingGroupEdit: "Gruppe verwalten"
+    aboutUs: "Über uns"
+    mission: "Mission"
+    fundamentals: "Grundsätze"
+    blog: "Blog"
+    team: "Team"
+    partners: "Partner"
+    background: "Hintergrund"
+    support: "Hilfe & Support"
+    wiki: "Wiki"
+    guide: "Hygiene-Ratgeber"
+    statistics: "Statistik"
+    transparency: "Transparenz"
+    dataprivacy: "Datenschutz"
+    release-notes: "Was ist neu?"
+    stores: "Betriebe"
+    fs: "Foodsaver"
+    ids: "Ausweise"
+    joinregion: "Einem Bezirk beitreten"
+    conference: "Videokonferenz"
+    fundraising: "Fundraising"
+    donations: "Spenden"
+    selfservice: "Selfservice"
+    friendcircle: "Freundeskreis"
 
 footer:
-  call_to_action: Mitmachen
-  about_us: Über uns
-  team: Team
-  imprint: Impressum
-  dataprivacy: Datenschutz
-  guide: Hygiene-Ratgeber
-  infosCompany: Für Unternehmen
-  infosPrivatePersons: Für Privatpersonen
-  partner: Partner
-  our_partner: Unsere Partner
-  contact: Kontakt
-  press: Presse
-  wiki: Wiki
-  blog: Blog
-  statistics: Statistik
-  hosting_info: CO2-neutral gehostet auf
-  hosting_tooltip: CO2-neutral gehostet auf manitu.
-  donate: Unterstützen
+  call_to_action: "Mitmachen"
+  about_us: "Über uns"
+  team: "Team"
+  imprint: "Impressum"
+  dataprivacy: "Datenschutz"
+  guide: "Hygiene-Ratgeber"
+  infosCompany: "Für Unternehmen"
+  infosPrivatePersons: "Für Privatpersonen"
+  partner: "Partner"
+  our_partner: "Unsere Partner"
+  contact: "Kontakt"
+  press: "Presse"
+  wiki: "Wiki"
+  blog: "Blog"
+  statistics: "Statistik"
+  hosting_info: "CO2-neutral gehostet auf"
+  hosting_tooltip: "CO2-neutral gehostet auf manitu."
+  donate: "Unterstützen"
   version: "Version: {version}"
   call_to_donate: |
     Du möchtest foodsharing
     unterstützen?
-  donate_now: Jetzt spenden
-  it_devdocs: by foodsharing IT
-  wiener_tafel_alt_text: Wiener Tafel
-  lebensministerium_alt_text: Lebensministerium
-  denns_at_alt_text: 'Denns´s Bio-Markt'
+  donate_now: "Jetzt spenden"
+  it_devdocs: "by foodsharing IT"
+  wiener_tafel_alt_text: "Wiener Tafel"
+  lebensministerium_alt_text: "Lebensministerium"
+  denns_at_alt_text: "Denns´s Bio-Markt"
 
 releases:
-  2020-12: Release 'Drachenfrucht' (Dezember 2020)
-  2020-10: Release 'Cranberry' (Oktober 2020)
-  2020-08: Release 'Birne' (August 2020)
-  2020-05: Release 'Apfelsine' (Mai 2020)
+  "2020-12": "Release 'Drachenfrucht' (Dezember 2020)"
+  "2020-10": "Release 'Cranberry' (Oktober 2020)"
+  "2020-08": "Release 'Birne' (August 2020)"
+  "2020-05": "Release 'Apfelsine' (Mai 2020)"
 
 storestatus:
-  0: Status unklar
-  1: Es besteht noch kein Kontakt
-  2: Verhandlungen laufen
-  3: Betrieb ist bereit zu kooperieren
-  4: Will nicht kooperieren
-  5: Betrieb kooperiert bereits
-  6: Spendet an Tafel etc. und wirft nichts weg
-  7: Betrieb existiert nicht mehr
+  "0": "Status unklar"
+  "1": "Es besteht noch kein Kontakt"
+  "2": "Verhandlungen laufen"
+  "3": "Betrieb ist bereit zu kooperieren"
+  "4": "Will nicht kooperieren"
+  "5": "Betrieb kooperiert bereits"
+  "6": "Spendet an Tafel etc. und wirft nichts weg"
+  "7": "Betrieb existiert nicht mehr"
 
 storelist:
  entered: "Eingetragen:"
- status: Status
- name: Name
- address: Straße
- addressdata: Anschrift
- zipcode: PLZ
- city: Ort
- added: Eingetragen
- region: Bezirk
- geo: geo
- nocontact: Noch kein Kontakt
- inprogress: Verhandlungen laufen
- cooperating: In Kooperation
- notcooperating: Will nicht kooperieren
- nowaste: Wirft nichts weg
- emptyfilters: Filter leeren
- map: Karte
- managing: Betriebe für die du verantwortlich bist
- fetching: Betriebe bei denen du Lebensmittel abholst
- others: 'Weitere Betriebe aus {region}'
+ status: "Status"
+ name: "Name"
+ address: "Straße"
+ addressdata: "Anschrift"
+ zipcode: "PLZ"
+ city: "Ort"
+ added: "Eingetragen"
+ region: "Bezirk"
+ geo: "geo"
+ nocontact: "Noch kein Kontakt"
+ inprogress: "Verhandlungen laufen"
+ cooperating: "In Kooperation"
+ notcooperating: "Will nicht kooperieren"
+ nowaste: "Wirft nichts weg"
+ emptyfilters: "Filter leeren"
+ map: "Karte"
+ managing: "Betriebe für die du verantwortlich bist"
+ fetching: "Betriebe bei denen du Lebensmittel abholst"
+ others: "Weitere Betriebe aus {region}"
 
 push_notifications:
-  test_notification_title: 'Push-Benachrichtigungen aktiviert'
-  test_notification_body: 'Super, das scheint geklappt zu haben :)'
+  test_notification_title: "Push-Benachrichtigungen aktiviert"
+  test_notification_body: "Super, das scheint geklappt zu haben :)"
 
 region:
-  change: Bezirk ändern
-  no-huge: 'Sorry, du kannst ein Land oder ein Bundesland nicht als Region auswählen.'
-  store_managers_cannot_leave: Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist.
-  not-member: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
-  restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
-  forum-redirect: 'Für Regionen gibt es keine Pinnwand. Du wurdest zum Forum weitergeleitet.'
-  bread: Bezirke verwalten
-  new: Neuer Bezirk
-  created: '{region} wurde angelegt'
-  edit: Bezirk bearbeiten
-  noParent: Ohne `Eltern` Bezirk
-  delete: Bezirk löschen
-  none: Noch kein Bezirk gewählt
+  change: "Bezirk ändern"
+  no-huge: "Sorry, du kannst ein Land oder ein Bundesland nicht als Region auswählen."
+  store_managers_cannot_leave: "Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist."
+  not-member: "Du bist nicht Teil dieser Region bzw. Arbeitsgruppe."
+  restricted: "Du hast leider keine Berechtigung, diese Daten einzusehen."
+  forum-redirect: "Für Regionen gibt es keine Pinnwand. Du wurdest zum Forum weitergeleitet."
+  bread: "Bezirke verwalten"
+  new: "Neuer Bezirk"
+  created: "{region} wurde angelegt"
+  edit: "Bezirk bearbeiten"
+  noParent: "Ohne `Eltern` Bezirk"
+  delete: "Bezirk löschen"
+  none: "Noch kein Bezirk gewählt"
   type:
-    title: Bezirkstyp
-    city: Stadt
-    bigcity: Großstadt (ohne Anmeldemöglichkeit)
-    townpart: Stadtteil
-    district: Bezirk
-    region: Region
-    state: Bundesland
-    country: Land
-    workgroup: Arbeitsgruppe
+    title: "Bezirkstyp"
+    city: "Stadt"
+    bigcity: "Großstadt (ohne Anmeldemöglichkeit)"
+    townpart: "Stadtteil"
+    district: "Bezirk"
+    region: "Region"
+    state: "Bundesland"
+    country: "Land"
+    workgroup: "Arbeitsgruppe"
   hull:
-    parent: Master-Bezirk
-    parent-info: Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde
-    title: Master-Update
-    closure: Bei allen Kindbezirken {region} als Master eintragen
-    start: Master-Update starten
-    confirm: Master-Update wirklich starten?
+    parent: "Master-Bezirk"
+    parent-info: "Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde"
+    title: "Master-Update"
+    closure: "Bei allen Kindbezirken {region} als Master eintragen"
+    start: "Master-Update starten"
+    confirm: "Master-Update wirklich starten?"
   mail:
-    name-info: 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.'
-    sender: Absendername
-  confirm: Sicher, dass du die Änderungen am Bezirk speichern möchtest?
-  save: Ja, speichern
-  cancel: Nein, doch nicht
-  edit_success: Bezirk wurde gespeichert!
-  still_contains_elements: Der Bezirk kann nicht gelöscht werden, da er noch Unterregionen, Betriebe oder Fairteiler enthält.
+    name-info: "Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert."
+    sender: "Absendername"
+  confirm: "Sicher, dass du die Änderungen am Bezirk speichern möchtest?"
+  save: "Ja, speichern"
+  cancel: "Nein, doch nicht"
+  edit_success: "Bezirk wurde gespeichert!"
+  still_contains_elements: "Der Bezirk kann nicht gelöscht werden, da er noch Unterregionen, Betriebe oder Fairteiler enthält."
 
 blog:
-  bread: Blog
-  go: Zum Blog
-  header: News aus der foodsharing-Welt
-  manage: Blogeinträge verwalten
-  title: Blogartikel
-  empty: 'Bisher sind keine Einträge vorhanden.'
-  actions: Aktionen
-  all: Alle Blogeinträge
-  new: Neuen Artikel schreiben
-  edit: Blogeintrag bearbeiten
-  newTitle: 'Neuer Artikel für {region}'
-  publish-info: Der Veröffentlichungs-Status des Artikels kann auf der Übersichtsseite angepasst werden.
-  content: Inhalt
-  author: Geschrieben von
-  last-editor: Zuletzt bearbeitet von
+  bread: "Blog"
+  go: "Zum Blog"
+  header: "News aus der foodsharing-Welt"
+  manage: "Blogeinträge verwalten"
+  title: "Blogartikel"
+  empty: "Bisher sind keine Einträge vorhanden."
+  actions: "Aktionen"
+  all: "Alle Blogeinträge"
+  new: "Neuen Artikel schreiben"
+  edit: "Blogeintrag bearbeiten"
+  newTitle: "Neuer Artikel für {region}"
+  publish-info: "Der Veröffentlichungs-Status des Artikels kann auf der Übersichtsseite angepasst werden."
+  content: "Inhalt"
+  author: "Geschrieben von"
+  last-editor: "Zuletzt bearbeitet von"
   status:
-    0: inaktiv
-    1: veröffentlicht
-  delete: Artikel löschen
-  confirmDelete: Soll {name} wirklich unwiderruflich gelöscht werden?
+    "0": "inaktiv"
+    "1": "veröffentlicht"
+  delete: "Artikel löschen"
+  confirmDelete: "Soll {name} wirklich unwiderruflich gelöscht werden?"
   success:
-    new: Artikel wurde angelegt
-    edit: Artikel wurde gespeichert
-    delete: Artikel gelöscht!
+    new: "Artikel wurde angelegt"
+    edit: "Artikel wurde gespeichert"
+    delete: "Artikel gelöscht!"
   failure:
-    new: Artikel konnte nicht angelegt werden
-    edit: Artikel konnte nicht gespeichert werden
-    delete: Artikel konnte nicht gelöscht werden
+    new: "Artikel konnte nicht angelegt werden"
+    edit: "Artikel konnte nicht gespeichert werden"
+    delete: "Artikel konnte nicht gelöscht werden"
   permissions:
-    new: Du darfst keine Artikel erstellen!
-    edit: Diesen Artikel kannst du nicht bearbeiten
-    delete: Diesen Artikel kannst du nicht löschen
+    new: "Du darfst keine Artikel erstellen!"
+    edit: "Diesen Artikel kannst du nicht bearbeiten"
+    delete: "Diesen Artikel kannst du nicht löschen"
 
 stats:
-  title: Gesamtstatistik
+  title: "Gesamtstatistik"
   total:
-    weight: 'Lebensmittel erfolgreich vor der Tonne gerettet.'
-    cooperations: 'Betriebe kooperieren kontinuierlich und zufrieden mit uns.'
-    foodsaver: 'Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.'
-    foodsharer: 'Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit.'
-    pickups: 'Rettungseinsätze haben unsere Foodsaver gemeistert.'
-    baskets: 'Essenskörbe wurden insgesamt online gestellt.'
-    fsp: 'Fairteiler werden zum Tausch von Lebensmitteln genutzt.'
+    weight: "Lebensmittel erfolgreich vor der Tonne gerettet."
+    cooperations: "Betriebe kooperieren kontinuierlich und zufrieden mit uns."
+    foodsaver: "Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung."
+    foodsharer: "Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit."
+    pickups: "Rettungseinsätze haben unsere Foodsaver gemeistert."
+    baskets: "Essenskörbe wurden insgesamt online gestellt."
+    fsp: "Fairteiler werden zum Tausch von Lebensmitteln genutzt."
   avg:
-    pickups: 'Rettungseinsätze gibt es derzeit durchschnittlich pro Tag.'
-    baskets: 'Essenskörbe werden derzeit durschnittlich pro Woche online gestellt.'
+    pickups: "Rettungseinsätze gibt es derzeit durchschnittlich pro Tag."
+    baskets: "Essenskörbe werden derzeit durschnittlich pro Woche online gestellt."
   leader:
-    regions: Aktivste Bezirke
-    users: Aktivste Foodsaver
+    regions: "Aktivste Bezirke"
+    users: "Aktivste Foodsaver"
 
 conference:
-  description_text: 'Hier kannst du einer Videokonferenz für die gewählte Gruppe beitreten. Die Videokonferenz öffnet BigBlueButton in einem neuen Fenster.'
-  privacy_notice: 'Hinweis: Videokonferenzen werden über den Konferenzserver des living utopia Kollektivs abgewickelt. Du wirst dort automatisch mit deinem bei foodsharing eingegebenen Vornamen eingeloggt.'
-  join_title: Konferenz beitreten
-  join: Konferenz beitreten
+  description_text: "Hier kannst du einer Videokonferenz für die gewählte Gruppe beitreten. Die Videokonferenz öffnet BigBlueButton in einem neuen Fenster."
+  privacy_notice: "Hinweis: Videokonferenzen werden über den Konferenzserver des living utopia Kollektivs abgewickelt. Du wirst dort automatisch mit deinem bei foodsharing eingegebenen Vornamen eingeloggt."
+  join_title: "Konferenz beitreten"
+  join: "Konferenz beitreten"
 
 page:
-  welcomeheader: Willkommen bei foodsharing!
-  welcome_main_1: Wir sind eine Initiative, die sich gegen Lebensmittelverschwendung engagiert. Wir “retten” ungewollte und überproduzierte Lebensmittel in privaten Haushalten sowie von kleinen und großen Betrieben.
-  welcome_main_2: Darüber hinaus verstehen wir uns als bildungspolitische Bewegung und fühlen uns nachhaltigen Umwelt- und Konsumzielen verpflichtet. Wir setzen uns unter anderem für einen Wegwerfstopp und gegen den Verpackungswahnsinn der Supermärkte ein. Mit diesen und anderen Themen sind wir auf Veranstaltungen oder in Medien präsent und starten eigene Aktionen.
-  welcome_main_3: Die Organisation unserer foodsharing-Community und unserer Aktivitäten läuft in erster Linie über die Online-Plattform foodsharing. Hier vernetzen und koordinieren sich die Lebensmittelretter*innen (Foodsharer/Foodsaver) in den einzelnen Städten und Regionen. Über die Plattform werden überregionale Themen, Veranstaltungen und Informationen veröffentlicht.
-  welcome_main_4: Unsere foodsharing-Initiative entstand 2012 in Berlin. Mittlerweile ist sie zu einer internationalen Bewegung mit über 200.000 registrierten Nutzern*innen in Deutschland, Österreich, der Schweiz und weiteren europäischen Ländern herangewachsen.
-  welcome_main_5: Die Mitglieder der foodsharing-Community arbeiten ehrenamtlich und unentgeltlich. Die Initiative foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei. Wir wollen die Plattform open source und weltweit leichter zugänglich machen – so wie es das foodsharing-Konzept des Lebensmittelrettens bereits ist.
-  howitworksheader: Wie funktioniert foodsharing?
-  howitworks_main: Was steckt hinter unserer Initiative und wie kannst Du Dich einbringen? Diese und weitere Fragen beantworten wir mit diesem Video.
-  joinheader: Werde aktiv und rette mit!
-  join_main_1: Wir laden Dich ein, bei foodsharing aktiv zu werden und Dich gemeinsam mit tausenden Gleichgesinnten gegen Lebensmittelverschwendung zu engagieren.
-  join_main_2: Registriere Dich bei foodsharing und werde Teil unserer Community. Du kannst hier unsere Aktivitäten und Mitglieder in Deinem Bezirk kennenlernen und Dich gemeinsam mit ihnen für eine gute Sache einsetzen.
-  join_button: Mitmachen
-  whatiswhat: Was ist das?
+  welcomeheader: "Willkommen bei foodsharing!"
+  welcome_main_1: "Wir sind eine Initiative, die sich gegen Lebensmittelverschwendung engagiert. Wir \"retten\" ungewollte und überproduzierte Lebensmittel in privaten Haushalten sowie von kleinen und großen Betrieben."
+  welcome_main_2: "Darüber hinaus verstehen wir uns als bildungspolitische Bewegung und fühlen uns nachhaltigen Umwelt- und Konsumzielen verpflichtet. Wir setzen uns unter anderem für einen Wegwerfstopp und gegen den Verpackungswahnsinn der Supermärkte ein. Mit diesen und anderen Themen sind wir auf Veranstaltungen oder in Medien präsent und starten eigene Aktionen."
+  welcome_main_3: "Die Organisation unserer foodsharing-Community und unserer Aktivitäten läuft in erster Linie über die Online-Plattform foodsharing. Hier vernetzen und koordinieren sich die Lebensmittelretter*innen (Foodsharer/Foodsaver) in den einzelnen Städten und Regionen. Über die Plattform werden überregionale Themen, Veranstaltungen und Informationen veröffentlicht."
+  welcome_main_4: "Unsere foodsharing-Initiative entstand 2012 in Berlin. Mittlerweile ist sie zu einer internationalen Bewegung mit über 200.000 registrierten Nutzern*innen in Deutschland, Österreich, der Schweiz und weiteren europäischen Ländern herangewachsen."
+  welcome_main_5: "Die Mitglieder der foodsharing-Community arbeiten ehrenamtlich und unentgeltlich. Die Initiative foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei. Wir wollen die Plattform open source und weltweit leichter zugänglich machen – so wie es das foodsharing-Konzept des Lebensmittelrettens bereits ist."
+  howitworksheader: "Wie funktioniert foodsharing?"
+  howitworks_main: "Was steckt hinter unserer Initiative und wie kannst Du Dich einbringen? Diese und weitere Fragen beantworten wir mit diesem Video."
+  joinheader: "Werde aktiv und rette mit!"
+  join_main_1: "Wir laden Dich ein, bei foodsharing aktiv zu werden und Dich gemeinsam mit tausenden Gleichgesinnten gegen Lebensmittelverschwendung zu engagieren."
+  join_main_2: "Registriere Dich bei foodsharing und werde Teil unserer Community. Du kannst hier unsere Aktivitäten und Mitglieder in Deinem Bezirk kennenlernen und Dich gemeinsam mit ihnen für eine gute Sache einsetzen."
+  join_button: "Mitmachen"
+  whatiswhat: "Was ist das?"
   fsvsfs:
-    header: Foodsharer und Foodsaver
-    main: Sobald Du Dich bei foodsharing registriert hast, gehörst Du als Lebensmittelretter*in (Foodsharer) zur Community.\n\nAls Foodsharer kannst Du Essenskörbe anbieten oder abholen, an foodsharing-Events teilnehmen und Lebensmittel zum Fairteiler bringen oder von dort mitnehmen. Wenn Du als Foodsharer von Betrieben Lebensmittel retten möchtest, musst Du zwei weitere Schritte tun:\n1. Du nimmst an einem foodsharing-Quiz teil.\n2. Du absolvierst drei betreute Einführungsabholungen bei einem Betrieb.\n\nAls Foodsaver handelst Du aktiv und freiwillig mit dem Ziel, gute Lebensmittel nicht in der Tonne enden zu lassen. Du wirst in Absprache mit anderen Foodsavern Lebensmittel von den kooperierenden Betrieben einsammeln und fair-teilen. Es ist natürlich sinnvoll und wünschenswert, wenn Du mit der Community in Kontakt stehst und an Events und Bezirkstreffen teilnimmst.\n\nFalls Du Interesse an einem weiterreichenden Engagement hast, findest Du bei uns auch verantwortungsvolle Tätigkeiten, etwa als Mitglied einer Arbeitsgruppe, als Betriebsverantwortliche*r oder Botschafter*in.
+    header: "Foodsharer und Foodsaver"
+    main: "Sobald Du Dich bei foodsharing registriert hast, gehörst Du als Lebensmittelretter*in (Foodsharer) zur Community.\n\nAls Foodsharer kannst Du Essenskörbe anbieten oder abholen, an foodsharing-Events teilnehmen und Lebensmittel zum Fairteiler bringen oder von dort mitnehmen. Wenn Du als Foodsharer von Betrieben Lebensmittel retten möchtest, musst Du zwei weitere Schritte tun:\n1. Du nimmst an einem foodsharing-Quiz teil.\n2. Du absolvierst drei betreute Einführungsabholungen bei einem Betrieb.\n\nAls Foodsaver handelst Du aktiv und freiwillig mit dem Ziel, gute Lebensmittel nicht in der Tonne enden zu lassen. Du wirst in Absprache mit anderen Foodsavern Lebensmittel von den kooperierenden Betrieben einsammeln und fair-teilen. Es ist natürlich sinnvoll und wünschenswert, wenn Du mit der Community in Kontakt stehst und an Events und Bezirkstreffen teilnimmst.\n\nFalls Du Interesse an einem weiterreichenden Engagement hast, findest Du bei uns auch verantwortungsvolle Tätigkeiten, etwa als Mitglied einer Arbeitsgruppe, als Betriebsverantwortliche*r oder Botschafter*in."
   basket:
-    header: Essenskörbe
-    main: Du kannst Deine eigenen überschüssigen Lebensmittel der lokalen foodsharing-Community anbieten und Lebensmittel bei anderen Community-Mitgliedern abholen. Über die Plattform könnt Ihr Kontakt aufnehmen, um die Übergabe zu organisieren.
+    header: "Essenskörbe"
+    main: "Du kannst Deine eigenen überschüssigen Lebensmittel der lokalen foodsharing-Community anbieten und Lebensmittel bei anderen Community-Mitgliedern abholen. Über die Plattform könnt Ihr Kontakt aufnehmen, um die Übergabe zu organisieren."
   foodsharepoints:
-    header: Fairteiler
-    main: Der Fairteiler ist wie ein „Umschlagplatz“ für Lebensmittel, zu dem Du Lebensmittel bringen und von dort gratis mitnehmen darfst. Als Fairteiler dient ein Regal und/oder ein Kühlschrank. Du findest unsere Fairteiler an gut zugänglichen Orten wie in privaten oder kommunalen Räumen, auf dem Uni-Gelände, in Vereinsräumen u. v. m. Die Fairteiler können auf unserer Plattform eingetragen und somit für alle Nutzer*innen auf einer Karte angezeigt werden.\n\nEs gibt Fairteiler mit geregelten Öffnungszeiten und solche, die rund um die Uhr zugänglich sind.\nUnsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.
-  necessities: Unsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.
+    header: "Fairteiler"
+    main: "Der Fairteiler ist wie ein „Umschlagplatz“ für Lebensmittel, zu dem Du Lebensmittel bringen und von dort gratis mitnehmen darfst. Als Fairteiler dient ein Regal und/oder ein Kühlschrank. Du findest unsere Fairteiler an gut zugänglichen Orten wie in privaten oder kommunalen Räumen, auf dem Uni-Gelände, in Vereinsräumen u. v. m. Die Fairteiler können auf unserer Plattform eingetragen und somit für alle Nutzer*innen auf einer Karte angezeigt werden.\n\nEs gibt Fairteiler mit geregelten Öffnungszeiten und solche, die rund um die Uhr zugänglich sind.\nUnsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten."
+  necessities: "Unsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten."
   cooperations:
-    header: Betriebe
-    main: Unsere kooperierenden Betriebe sind Bäckereien, Obst- und Gemüsehändler, Filialen von Supermärkten, Wochenmärkte, Restaurants, Kantinen, Cafés, Catering-Services, der Großhandel, Bauernhöfe u. v. m.\n\nFür jede Kooperation mit einem Betrieb gibt es einen betriebsverantwortlichen Foodsaver. Außerdem kümmert er/sie sich um die Organisation zuverlässiger Abholungen. Wir sind bestrebt, das Tagesgeschäft der Betriebe so wenig wie möglich zu beeinträchtigen. Die Abholungen bei Betrieben werden daher im Vorfeld abgestimmt und vereinbart.\n\nDie foodsharing-Kooperation ist nachhaltig und eine Win-Win-Situation. Die Betriebe können dabei ihre Lebensmittelabfälle und damit verbundene Entsorgungskosten reduzieren und bewusst ein Zeichen gegen Lebensmittelverschwendung setzen.
+    header: "Betriebe"
+    main: "Unsere kooperierenden Betriebe sind Bäckereien, Obst- und Gemüsehändler, Filialen von Supermärkten, Wochenmärkte, Restaurants, Kantinen, Cafés, Catering-Services, der Großhandel, Bauernhöfe u. v. m.\n\nFür jede Kooperation mit einem Betrieb gibt es einen betriebsverantwortlichen Foodsaver. Außerdem kümmert er/sie sich um die Organisation zuverlässiger Abholungen. Wir sind bestrebt, das Tagesgeschäft der Betriebe so wenig wie möglich zu beeinträchtigen. Die Abholungen bei Betrieben werden daher im Vorfeld abgestimmt und vereinbart.\n\nDie foodsharing-Kooperation ist nachhaltig und eine Win-Win-Situation. Die Betriebe können dabei ihre Lebensmittelabfälle und damit verbundene Entsorgungskosten reduzieren und bewusst ein Zeichen gegen Lebensmittelverschwendung setzen."
   presence:
-    header: Festivals
-    main: foodsharing ist regelmäßig auf vielen Veranstaltungen und Festivals präsent, um auch dort auf die Initiativen und unser Engagement aufmerksam zu machen. Wir nutzen auch diese Gelegenheiten, um ein klares Statement gegen Lebensmittel- und Ressourcenverschwendung und für Nachhaltigkeit in Umwelt- und Konsumfragen abzugeben. Dafür veranstalten wir auf dem Festivalgelände Workshops oder Vorträge, Filmvorführungen und Diskussionsrunden und sind an Infoständen (mit und ohne Essensverteilung) zu finden.\n\nEine Bedingung für unsere Präsenz ist, direkt mit Festivalbetreiber*innen zu kooperieren um auf dem Veranstaltungsgelände selbst "aktiv" werden zu können.\nWir retten auf Festivals überschüssige Lebensmittel von Besucher*innen oder von Essensständen. Am Ende eines Festivals bergen wir auch zurückgelassene Dinge, die noch brauchbar sind.
+    header: "Festivals"
+    main: "foodsharing ist regelmäßig auf vielen Veranstaltungen und Festivals präsent, um auch dort auf die Initiativen und unser Engagement aufmerksam zu machen. Wir nutzen auch diese Gelegenheiten, um ein klares Statement gegen Lebensmittel- und Ressourcenverschwendung und für Nachhaltigkeit in Umwelt- und Konsumfragen abzugeben. Dafür veranstalten wir auf dem Festivalgelände Workshops oder Vorträge, Filmvorführungen und Diskussionsrunden und sind an Infoständen (mit und ohne Essensverteilung) zu finden.\n\nEine Bedingung für unsere Präsenz ist, direkt mit Festivalbetreiber*innen zu kooperieren um auf dem Veranstaltungsgelände selbst \"aktiv\" werden zu können.\nWir retten auf Festivals überschüssige Lebensmittel von Besucher*innen oder von Essensständen. Am Ende eines Festivals bergen wir auch zurückgelassene Dinge, die noch brauchbar sind."
 
 tablesorter:
-  page: Seite
-  from: von
-  entriespp: Einträge pro Seite
+  page: "Seite"
+  from: "von"
+  entriespp: "Einträge pro Seite"
 
 password:
-  reset: Passwort zurücksetzen
-  insertmail: Bitte trage hier deine E-Mail-Adresse ein, mit welcher du auf foodsharing.de angemeldet bist!
+  reset: "Passwort zurücksetzen"
+  insertmail: "Bitte trage hier deine E-Mail-Adresse ein, mit welcher du auf foodsharing.de angemeldet bist!"
 
 sidenav:
-  superregional: Überregionale Gruppen
-  localgroups: Lokalgruppen
-  countryspecific: Länderspezifische Gruppen
-  yourgroups: Deine Gruppen
+  superregional: "Überregionale Gruppen"
+  localgroups: "Lokalgruppen"
+  countryspecific: "Länderspezifische Gruppen"
+  yourgroups: "Deine Gruppen"
 
 becomeregion:
-  chooseregion: Wähle den Bezirk aus, in dem Du aktiv werden möchtest!
+  chooseregion: "Wähle den Bezirk aus, in dem Du aktiv werden möchtest!"
   enterregion:
-    main: Deinem ersten Bezirk kannst Du beitreten, indem Du Dich über die Auswahl 'Europa' bis zu Deinem Bezirk durchklickst.<br> Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest Du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten. Lies Dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu
-    region_link_text: Bezirke gründen oder reaktivieren
-    text1: gut durch! Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an
-    text2: Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können Dir aber bei Fragen zu Bezirken weiterhelfen.
-  save: Speichern
+    main: "Deinem ersten Bezirk kannst Du beitreten, indem Du Dich über die Auswahl 'Europa' bis zu Deinem Bezirk durchklickst.<br> Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest Du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten. Lies Dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu"
+    region_link_text: "Bezirke gründen oder reaktivieren"
+    text1: "gut durch! Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an"
+    text2: "Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können Dir aber bei Fragen zu Bezirken weiterhelfen."
+  save: "Speichern"
 
 base:
-  whatfor: Auf foodsharing.de kannst du deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben
-  keywords: foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch
-  slogan: Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland
-  jsrequired: Ohne JavaScript läuft hier leider nichts.
+  whatfor: "Auf foodsharing.de kannst du deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben"
+  keywords: "foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch"
+  slogan: "Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland"
+  jsrequired: "Ohne JavaScript läuft hier leider nichts."
 
 email_template:
-  request_from: Anfrage von
-  from: -- Von
-  to: an
+  request_from: "Anfrage von"
+  from: "-- Von"
+  to: "an"
   dont_respond:
-    noreply: Bitte antworte nicht auf diese E-Mail. Diese Nachricht wurde von einer Adresse gesendet, hinter welcher kein Postfach existiert.
-    no_notification_link: Willst Du diese Art von Benachrichtigungen nicht mehr bekommen?
-    you_can: Du kannst unter
-    notification: Benachrichtigungen
-    nomail: einstellen, welche Mails Du erhältst.
+    noreply: "Bitte antworte nicht auf diese E-Mail. Diese Nachricht wurde von einer Adresse gesendet, hinter welcher kein Postfach existiert."
+    no_notification_link: "Willst Du diese Art von Benachrichtigungen nicht mehr bekommen?"
+    you_can: "Du kannst unter"
+    notification: "Benachrichtigungen"
+    nomail: "einstellen, welche Mails Du erhältst."
   newsletter:
-    unsubscribe: Möchtest Du keinen Newsletter mehr erhalten?
-    linktext: Klicke hier zum Abbestellen!
+    unsubscribe: "Möchtest Du keinen Newsletter mehr erhalten?"
+    linktext: "Klicke hier zum Abbestellen!"
   impress:
-    title: Impressum
-    general_information_requirements: Angaben gemäß § 5 TMG
-    address: 'foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Vertreten durch:\n\n Frank Bowinkelmann \n Kontakt:\n E-Mail: info@foodsharing.de\n Registereintrag:\n\n Eintragung im Vereinsregister\n Registergericht: Amtsgericht Köln\n Registernummer: VR 17439\n Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:\n  Frank Bowinkelmann'
-  unknown_email: Unbekannte E-Mail-Adresse
-  unknown_email2: Die E-Mail-Adresse %ADDRESS% ist nicht bekannt.
-  withlove: Alles Liebe,
-  yourFSteam: Dein foodsharing-Team.
-  in: in
-  login: Einloggen zum Antworten
-  confirm_topic: 'Thema muss bestätigt werden:'
-  confirm_link: möchte das Thema
-  confirm_BOT: absenden. Da Du Botschafter*in / Moderator*in für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird.
-  foodsharepoint: -- Fair-Teiler
-  reply: Antworten
-  warning: Warnung
-  slot_empty: Für die nächste Abholung bei %BETRIEB% hat sich noch niemand zum Abholen eingetragen
+    title: "Impressum"
+    general_information_requirements: "Angaben gemäß § 5 TMG"
+    address: "foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Vertreten durch:\n\n Frank Bowinkelmann \n Kontakt:\n E-Mail: info@foodsharing.de\n Registereintrag:\n\n Eintragung im Vereinsregister\n Registergericht: Amtsgericht Köln\n Registernummer: VR 17439\n Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:\n  Frank Bowinkelmann"
+  unknown_email: "Unbekannte E-Mail-Adresse"
+  unknown_email2: "Die E-Mail-Adresse %ADDRESS% ist nicht bekannt."
+  withlove: "Alles Liebe,"
+  yourFSteam: "Dein foodsharing-Team."
+  in: "in"
+  login: "Einloggen zum Antworten"
+  confirm_topic: "Thema muss bestätigt werden:"
+  confirm_link: "möchte das Thema"
+  confirm_BOT: "absenden. Da Du Botschafter*in / Moderator*in für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird."
+  foodsharepoint: "-- Fair-Teiler"
+  reply: "Antworten"
+  warning: "Warnung"
+  slot_empty: "Für die nächste Abholung bei %BETRIEB% hat sich noch niemand zum Abholen eingetragen"
   you_responsible:
-    part1: Du bist verantwortlich für
-    part2: Leider hat sich für den nächsten Termin noch niemand zum Abholen eingetragen.
-  find_someone: Bitte kümmere Dich schnellstmöglich um jemanden aus Deinem Betriebsteam, damit die Abholung stattfinden kann. Solltest du niemanden mobilisieren können, wäre es schön, wenn du die Abholung übernehmen könntest. Sollte dir das nicht möglich sein, dann sage den Termin bitte rechtzeitig beim Betrieb ab.
-  information: Info
-  manual_slots_get_ignored: Diese Benachrichtigung wird aktuell leider nur bei automatischen Abholterminen versendet. Manuell angelegte, überschriebene oder gelöschte Slots werden daher nicht berücksichtigt.
+    part1: "Du bist verantwortlich für"
+    part2: "Leider hat sich für den nächsten Termin noch niemand zum Abholen eingetragen."
+  find_someone: "Bitte kümmere Dich schnellstmöglich um jemanden aus Deinem Betriebsteam, damit die Abholung stattfinden kann. Solltest du niemanden mobilisieren können, wäre es schön, wenn du die Abholung übernehmen könntest. Sollte dir das nicht möglich sein, dann sage den Termin bitte rechtzeitig beim Betrieb ab."
+  information: "Info"
+  manual_slots_get_ignored: "Diese Benachrichtigung wird aktuell leider nur bei automatischen Abholterminen versendet. Manuell angelegte, überschriebene oder gelöschte Slots werden daher nicht berücksichtigt."
   help_needed:
-    main: Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus Deinem Bezirk
-    link: https://devdocs.foodsharing.network/it-tasks.html
-    or: oder
-    support_mail: it@foodsharing.network
-  foodbasket_request: Dein Essenskorb wurde von %SENDER% angefragt
+    main: "Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus Deinem Bezirk"
+    link: "https://devdocs.foodsharing.network/it-tasks.html"
+    or: "oder"
+    support_mail: "it@foodsharing.network"
+  foodbasket_request: "Dein Essenskorb wurde von %SENDER% angefragt"
 
 buddy:
-  request_sent: Anfrage versendet!
-  request_accepted: Jetzt kennt Ihr Euch!
+  request_sent: "Anfrage versendet!"
+  request_accepted: "Jetzt kennt Ihr Euch!"
 
 polls:
-  hint: Das Abstimmungs-Modul kann in der überregionalen AG "Abstimmungen - Test" getestet werden.
-  hint_2: Hinweise zur Benutzung der Abstimmungen findest du im Wiki
-  title: Titel
-  start_date: von
-  end_date: bis
-  new_poll: Neue Abstimmung erstellen
-  ongoing: Laufende Abstimmungen
-  ended: Vergangene Abstimmungen
-  future: Zukünftige Abstimmungen
+  beta: "Das Abstimmungs-Modul kann in der überregionalen AG \"Abstimmungen - Test\" getestet werden."
+  hint_2: "Hinweise zur Benutzung der Abstimmungen findest du im Wiki"
+  title: "Titel"
+  start_date: "von"
+  end_date: "bis"
+  new_poll: "Neue Abstimmung erstellen"
+  ongoing: "Laufende Abstimmungen"
+  ended: "Vergangene Abstimmungen"
+  future: "Zukünftige Abstimmungen"
 
 poll:
-  not_available: Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen.
-  time_period: Zeitraum
-  in_past: beendet
-  in_future: noch nicht gestartet
-  allowed_voters: Stimmberechtigt
-  scope_description_0: Alle verifizierten und nicht verifizierten Foodsaver*innen aus dem Bezirk / der Gruppe
-  scope_description_1: Alle verifizierten Foodsaver*innen aus dem Bezirk / der Gruppe
-  scope_description_2: Alle Betriebsverantwortlichen aus dem Bezirk, die momentan für einen Betrieb verantwortlich sind
-  scope_description_3: Alle Botschafter*innen aus dem Bezirk / der Gruppe
-  scope_description_4: Alle verifizierten Foodsaver*innen mit dem Stammbezirk der Abstimmung
-  type: Art der Abstimmung
-  type_description_0: Auswählen (nur eine Option kann gewählt werden)
-  type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
-  type_description_2: Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung
-  type_description_3: Bewertungswahl mit Werten zwischen -3 und +3
+  not_available: "Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen."
+  time_period: "Zeitraum"
+  in_past: "beendet"
+  in_future: "noch nicht gestartet"
+  allowed_voters: "Stimmberechtigt"
+  scope_description_0: "Alle verifizierten und nicht verifizierten Foodsaver aus dem Bezirk / der Gruppe"
+  scope_description_1: "Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe"
+  scope_description_2: "Alle Betriebsverantwortlichen aus dem Bezirk, die momentan für einen Betrieb verantwortlich sind"
+  scope_description_3: "Alle Botschafter aus dem Bezirk / der Gruppe"
+  scope_description_4: "Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung"
+  type: "Art der Abstimmung"
+  type_description_0: "Auswählen (nur eine Option kann gewählt werden)"
+  type_description_1: "Ankreuzen (mehrere Optionen können gewählt werden)"
+  type_description_2: "Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung"
+  type_description_3: "Bewertungswahl mit Werten zwischen -3 und +3"
   submit_vote_warning: "Achtung: die Abstimmung ist anonym und du kannst deine Auswahl nach dem Abstimmen nicht mehr ändern!"
-  submit_vote: Abstimmen
-  error_cannot_vote: Du kannst an dieser Abstimmung nicht teilnehmen
-  vote_success: Du hast erfolgreich abgestimmt.
-  untraceable: Die Information, wie du für welche Option abgestimmt hast, lässt sich nicht zurückverfolgen und kann daher auch nicht mehr hier angezeigt werden.
+  submit_vote: "Abstimmen"
+  error_cannot_vote: "Du kannst an dieser Abstimmung nicht teilnehmen"
+  vote_success: "Du hast erfolgreich abgestimmt."
+  untraceable: "Die Information, wie du für welche Option abgestimmt hast, lässt sich nicht zurückverfolgen und kann daher auch nicht mehr hier angezeigt werden."
   new_poll:
-    title: Neue Abstimmung
-    name: Name der Abstimmung
-    name_required: Bitte gib einen Namen ein.
-    scope: Wer darf abstimmen?
-    type: Abstimmungsmodus
-    time: Uhrzeit
-    start_date: Abstimmungsbeginn
-    start_date_required: Bitte wähle den Abstimmungsbeginn aus. Er muss mindestens eine Stunde in der Zukunft liegen.
-    end_date: Abstimmungsende
-    end_date_required: Bitte wähle das Abstimmungsende aus, das nach dem Beginn liegt.
-    description: Beschreibung
-    description_placeholder: Was ist das für eine Abstimmung?
-    description_required: Bitte gib eine Beschreibung ein.
-    options: Optionen, die zur Auswahl stehen sollen. Beim Abstimmen werden sie jeweils in einer zufälligen Reihenfolge angezeigt.
-    option: Option
-    option_texts_required: Bitte gib für jede Option einen Text ein.
-    submit: Abstimmung speichern
-    submit_success: Die Abstimmung wurde angelegt
-    missing_fields: Es müssen alle Felder ausgefüllt werden
-    submit_question: Die Umfrage kann nur noch innerhalb einer Stunde (bis {date}) geändert werden. Möchtest du sie wirklich jetzt anlegen?
-  ended_at: lief bis
-  begins_at: Beginn
-  already_voted: Du hast an dieser Abstimmung bereits teilgenommen
-  may_not_vote: Du kannst in dieser Abstimmung nicht abstimmen.
-  may_not_yet_vote: Diese Abstimmung hat noch nicht begonnen.
+    title: "Neue Abstimmung"
+    name: "Name der Abstimmung"
+    name_required: "Bitte gib einen Namen ein."
+    scope: "Wer darf abstimmen?"
+    type: "Abstimmungsmodus"
+    time: "Uhrzeit"
+    start_date: "Abstimmungsbeginn"
+    start_date_required: "Bitte wähle den Abstimmungsbeginn aus. Er muss mindestens eine Stunde in der Zukunft liegen."
+    end_date: "Abstimmungsende"
+    end_date_required: "Bitte wähle das Abstimmungsende aus, das nach dem Beginn liegt."
+    description: "Beschreibung"
+    description_placeholder: "Was ist das für eine Abstimmung?"
+    description_required: "Bitte gib eine Beschreibung ein."
+    options: "Optionen, die zur Auswahl stehen sollen. Beim Abstimmen werden sie jeweils in einer zufälligen Reihenfolge angezeigt."
+    option: "Option"
+    option_texts_required: "Bitte gib für jede Option einen Text ein."
+    submit: "Abstimmung speichern"
+    submit_success: "Die Abstimmung wurde angelegt"
+    missing_fields: "Es müssen alle Felder ausgefüllt werden"
+    submit_question: "Die Umfrage kann nur noch innerhalb einer Stunde (bis {date}) geändert werden. Möchtest du sie wirklich jetzt anlegen?"
+  ended_at: "lief bis"
+  begins_at: "Beginn"
+  already_voted: "Du hast an dieser Abstimmung bereits teilgenommen"
+  may_not_vote: "Du kannst in dieser Abstimmung nicht abstimmen."
+  may_not_yet_vote: "Diese Abstimmung hat noch nicht begonnen."
   results:
-    number_of_votes: Abgegebene Stimmen
-    votes: Stimmen
-    option_text: Option
-    sum: Summe
-  submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
-  eligible_votes_count: Anzahl der Stimmberechtigten
+    number_of_votes: "Abgegebene Stimmen"
+    votes: "Stimmen"
+    option_text: "Option"
+    sum: "Summe"
+  submit_vote_question: "Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden."
+  eligible_votes_count: "Anzahl der Stimmberechtigten"
   edit:
-    title: Abstimmung bearbeiten
-    submit: Abstimmung speichern
-    submit_question: Möchtest du die Änderungen an der Abstimmung wirklich speichern?
-  may_not_edit: Du hast nicht die Rechte, um diese Abstimmung zu bearbeiten, oder der Bearbeitungszeitraum ist abgelaufen.
-  hint_random_order: Die Reihenfolge der folgenden zur Auswahl stehenden Optionen ist zufällig gewählt.
+    title: "Abstimmung bearbeiten"
+    submit: "Abstimmung speichern"
+    submit_question: "Möchtest du die Änderungen an der Abstimmung wirklich speichern?"
+  may_not_edit: "Du hast nicht die Rechte, um diese Abstimmung zu bearbeiten, oder der Bearbeitungszeitraum ist abgelaufen."
+  hint_random_order: "Die Reihenfolge der folgenden zur Auswahl stehenden Optionen ist zufällig gewählt."

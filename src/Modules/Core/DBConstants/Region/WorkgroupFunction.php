@@ -14,4 +14,9 @@ class WorkgroupFunction
 	public const FSMANAGEMENT = 8; //Foodsaververwaltung
 	public const PR = 9; // Öffentlichkeitsarbeit
 	public const MODERATION = 10; // Moderationsteam
+
+	public static function isValidFunction(int $value): bool
+	{
+		return in_array($value, range(self::WELCOME, self::FSP));
+	}
 }
