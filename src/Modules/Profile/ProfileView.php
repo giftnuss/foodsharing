@@ -268,7 +268,6 @@ class ProfileView extends View
 
 		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
 
-
 		$writeMessage = '';
 		if ($fsId != $this->session->id()) {
 			$writeMessage = '<li><a href="#" onclick="chat(' . $fsId . ');return false;">'
