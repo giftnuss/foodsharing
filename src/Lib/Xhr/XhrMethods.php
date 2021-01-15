@@ -1235,7 +1235,7 @@ class XhrMethods
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::MODERATION) {
-			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::MODERATION);
+			$fspGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::MODERATION);
 			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
 				return json_encode([
 					'status' => 1,
