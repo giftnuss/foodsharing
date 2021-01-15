@@ -256,6 +256,5 @@ class ReportXhr extends Control
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
 		];
-
 	}
 }
