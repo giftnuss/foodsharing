@@ -19,7 +19,7 @@ function finishImage (file) {
   $('#wallpost-attach').append(`<input type="hidden" name="attach[]" value="image-${file}" />`)
   $('#attach-preview div:last').remove()
   $('.attach-load').remove()
-  $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/${file}"><img src="images/wallpost/thumb_${file}" height="60" /></a>`)
+  $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="/images/wallpost/${file}"><img src="/images/wallpost/thumb_${file}" height="60" /></a>`)
   $('#attach-preview').append('<div style="clear:both;"></div>')
   $('#attach-preview a').fancybox()
   resetUploader()
