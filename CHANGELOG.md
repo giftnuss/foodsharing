@@ -21,7 +21,7 @@
 - Modernize wallpost module initialization !1772 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
-- Made ForumPostCest more reliable !1853 !1856 @\_fridtjof_
+- Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
 - Added Xdebug config for macOS !1804 #932 @muffelrudaijer
 
 # Release "Dragonfruit", 2020-12-31
