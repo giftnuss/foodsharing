@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Group;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
-use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 
 /* Group gateway meant to collect queries common for regions as well as working groups */
 class GroupGateway extends BaseGateway
