@@ -26,7 +26,7 @@ class GroupGateway extends BaseGateway
 			['id' => $groupId]
 		);
 
-		$out['workgroup_function'] = $this->groupFunctionGateway->getRegionGroupFunctionId($out['id'], $out['parent_id'] );
+		$out['workgroup_function'] = $this->groupFunctionGateway->getRegionGroupFunctionId($out['id'], $out['parent_id']);
 
 		$out['botschafter'] = $this->db->fetchAll('
 			SELECT  `fs_foodsaver`.`id`,
