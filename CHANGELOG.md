@@ -19,6 +19,7 @@
 - Unify and move workgroup-function handling to own gateway !1730 @ChrisOelmueller
 - Made most current translation .yaml weblate compliant !1835 @tinuthir
 - Modernize wallpost module initialization !1772 @ChrisOelmueller
+- Replace bell identifiers by enum class #987 !1764 @alex.simm
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
@@ -96,7 +97,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
 - Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
-- Replace bell identifiers by enum class #987 !1764 @alex.simm
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
