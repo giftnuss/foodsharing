@@ -27,6 +27,14 @@
         <i class="fas fa-cog" /> {{ $i18n('settings.header') }}
       </a>
       <a
+        href="#"
+        role="menuitem"
+        class="dropdown-item"
+        @click="$refs.languageChooser.show()"
+      >
+        <i class="fas fa-language" /> {{ $i18n('menu.entry.language') }}
+      </a>
+      <a
         :href="$url('logout')"
         role="menuitem"
         class="dropdown-item"
@@ -34,13 +42,18 @@
         <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
     </fs-dropdown-menu>
+
+    <language-chooser
+      ref="languageChooser"
+    />
   </div>
 </template>
 <script>
 import FsDropdownMenu from './FsDropdownMenu'
+import LanguageChooser from './LanguageChooser'
 
 export default {
-  components: { FsDropdownMenu },
+  components: { LanguageChooser, FsDropdownMenu },
   props: {
     userId: {
       type: Number,

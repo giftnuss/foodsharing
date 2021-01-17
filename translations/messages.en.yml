@@ -107,6 +107,7 @@ menu:
     fs: Foodsaver
     ids: Passports
     joinregion: Join a region
+    language: "Choose language"
 
 profile:
   banana:
@@ -117,3 +118,7 @@ profile:
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
+
+language_chooser:
+  title: "Choose Language"
+  content: "Please choose a language"
