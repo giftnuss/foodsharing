@@ -1,12 +1,9 @@
-# 2020-10-23 Hotfix
-# Release "Erdbeere", Unreleased
-
-## Features
+# 2021-01-18 Hotfix
 
 ## Changes
-- New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
-- New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
+
+# 2020-10-23 Hotfix
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
