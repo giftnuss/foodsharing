@@ -2022,8 +2022,8 @@ poll:
   type: Art der Abstimmung
   type_description_0: Auswählen (nur eine Option kann gewählt werden)
   type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
-  type_description_2: Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung
-  type_description_3: Bewertungswahl mit Werten zwischen -3 und +3
+  type_description_2: Wahlmöglichkeiten jeweils Ablehnung / Enthaltung / Zustimmung
+  type_description_3: Bewertungswahl mit Werten zwischen -3 (Ablehnung) und +3 (Zustimmung)
   type_2:
     tooltip_negative: "Ablehnung"
     tooltip_neutral: "Enthaltung"
