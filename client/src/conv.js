@@ -291,7 +291,7 @@ const conv = {
     if (key >= 0 && conv.chatboxes[key] !== undefined) {
       conv.chatboxes[key].last_mid = parseInt(message.id)
       conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(
-        `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`,
+        `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div class="clear"></div></div>`,
       )
     }
   },

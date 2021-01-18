@@ -296,7 +296,7 @@ class DashboardControl extends Control
 				<p>'
 					. $pickup_text . $home_district_text .
 				'</p>
-				<div style="clear:both;"></div>
+				<div class="clear"></div>
 
             </div>
 
@@ -375,7 +375,7 @@ class DashboardControl extends Control
 						. '<strong style="float: right; margin: 0 0 0 3px;">(' . $distance . ')</strong>'
 						. $this->sanitizerService->tt($b['description'], 50)
 						. '</span>
-						<span style="clear: both;"></span>
+						<span class="clear"></span>
 					</a>
 				</li>';
 			}

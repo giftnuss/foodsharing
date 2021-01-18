@@ -365,7 +365,7 @@ class BasketXhr extends Control
 				<p>' . $this->translator->trans('Anfragezeitpunkt:', [
 					'{time}' => $this->timeHelper->niceDate($request['time_ts']),
 				]) . '</p>
-				<div style="clear: both;"></div>
+				<div class="clear"></div>
 			</div>'
 			. $this->v_utils->v_form_radio('fetchstate', [
 				'values' => [

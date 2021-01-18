@@ -20,6 +20,7 @@
 - Made most current translation .yaml weblate compliant !1835 @tinuthir
 - Modernize wallpost module initialization !1772 @ChrisOelmueller
 - Replace bell identifiers by enum class #987 !1764 @alex.simm
+- Replaced inline css style 'clear:both' with corresponding css class !1859 @scarya
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_

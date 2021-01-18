@@ -1080,7 +1080,7 @@ class XhrMethods
 					. '</h1>'
 					. '<p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p>'
 					. '<p>' . $this->sanitizerService->jsSafe($b['plz'] . ' ' . $b['stadt']) . '</p>'
-				. '</div><div style="clear: both;"></div>';
+				. '</div><div class="clear"></div>';
 			}
 		}
 

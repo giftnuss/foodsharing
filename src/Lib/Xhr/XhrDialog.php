@@ -136,7 +136,7 @@ class XhrDialog
 					<input type="hidden" name="inid" value="' . $in_id . '" />
 				</form>
 				<iframe frameborder="0" style="width: 1px; height: 1px; opacity: 0;" name="' . $in_id . '-iframe"></iframe>
-				<div style="clear: both;"></div>
+				<div class="clear"></div>
 			</div>'
 		));
 		$this->addJs('
@@ -144,7 +144,7 @@ class XhrDialog
 				$("#' . $in_id . '-form").trigger("submit");
 				$(".ui-dialog-buttonpane .ui-button").button("option", "disabled", true);
 				$(".attach-preview").show();
-				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear: both;"></div>\');
+				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div class="clear"></div>\');
 			});
 
 			$("#' . $in_id . '").button().on("click", function () {

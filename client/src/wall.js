@@ -20,7 +20,7 @@ function finishImage (file) {
   $('#attach-preview div:last').remove()
   $('.attach-load').remove()
   $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="/images/wallpost/${file}"><img src="/images/wallpost/thumb_${file}" height="60" /></a>`)
-  $('#attach-preview').append('<div style="clear:both;"></div>')
+  $('#attach-preview').append('<div class="clear"></div>')
   $('#attach-preview a').fancybox()
   resetUploader()
 }
@@ -39,7 +39,7 @@ export function initWall (module, wallId) {
   $('#wallpost-attach-trigger').on('change', function () {
     $('#attach-preview div:last').remove()
     $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>')
-    $('#attach-preview').append('<div style="clear:both;"></div>')
+    $('#attach-preview').append('<div class="clear"></div>')
     $('#wallpost-attachimage-form').trigger('submit')
   })
 

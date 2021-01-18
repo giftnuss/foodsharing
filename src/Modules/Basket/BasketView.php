@@ -115,7 +115,7 @@ class BasketView extends View
 						<strong style="float: right; margin: 0 0 0 3px;">(' . $distance . ')</strong>'
 						. $this->sanitizerService->tt($b['description'], 50) . '
 					</span>
-					<span style="clear: both;"></span>
+					<span class="clear"></span>
 				</a>
 			</li>';
 		}

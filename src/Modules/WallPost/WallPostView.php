@@ -46,7 +46,7 @@ class WallPostView extends View
 					$gallery .= '<a href="/' . $img['image'] . '" class="preview-thumb" rel="wallpost-gallery-' . $p['id'] . '"><img src="/' . $img['medium'] . '" /></a>';
 				}
 				$gallery .= '
-					<div style="clear:both"></div>
+					<div class="clear"></div>
 				</div>';
 			}
 			$del = '';

@@ -74,7 +74,7 @@ class View
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>
+			<div class="clear"></div>
 		</div>';
 	}
 
@@ -133,13 +133,13 @@ class View
 					<a href="' . $href . '"' . $click . ' class="ui-corner-all">
 						<span style="float:left;margin-right:7px;">' . $photo . '</span>
 						<span class="title">' . $fs['name'] . '</span>
-						<span style="clear:both;"></span>
+						<span class="clear"></span>
 					</a>
 				</li>';
 		}
 		$out .= '
 			</ul>
-			<div style="clear:both"></div>
+			<div class="clear"></div>
 		</div>';
 
 		if ($useScroller) {

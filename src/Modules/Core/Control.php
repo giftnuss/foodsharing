@@ -143,7 +143,7 @@ abstract class Control
 					</div>
 
 				</div>
-				<div style="clear: both;"></div>
+				<div class="clear"></div>
 				<div style="visibility: hidden;">
 				<iframe name="wallpost-frame" style="height: 1px;" frameborder="0"></iframe>
 				</div>
