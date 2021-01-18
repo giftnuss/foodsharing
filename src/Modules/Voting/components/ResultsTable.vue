@@ -88,7 +88,7 @@ export default {
       ]
 
       const entries = Object.entries(this.options[0].values).sort(function (a, b) {
-        return b[0] - a[0]
+        return a[0] - b[0]
       })
       entries.forEach(v => {
         result.push({
