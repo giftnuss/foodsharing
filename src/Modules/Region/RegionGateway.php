@@ -295,7 +295,7 @@ class RegionGateway extends BaseGateway
 			$region['fspAdmins'] = [];
 		}
 
-		if ($storesGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::STORES)) {
+		if ($storesGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::STORES_COORDINATION)) {
 			$region['storesAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($storesGroupId);
 			shuffle($region['storesAdmins']);
 		} else {

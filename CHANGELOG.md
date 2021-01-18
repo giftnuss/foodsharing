@@ -5,6 +5,7 @@
 ## Changes
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
+- New Workgroupunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

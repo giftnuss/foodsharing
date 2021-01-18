@@ -117,7 +117,7 @@ class StoreUserControl extends Control
 					$store['verantwortlich'] = true;
 
 					$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-					$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES);
+					$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES_COORDINATION);
 					if (empty($storeGroup)) {
 						if ($this->session->isAdminFor($storeRegion)) {
 							$this->flashMessageHelper->info(

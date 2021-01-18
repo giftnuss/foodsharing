@@ -971,7 +971,7 @@ class XhrMethods
 					['id' => WorkgroupFunction::WELCOME, 'name' => $this->translator->trans('group.function.welcome')],
 					['id' => WorkgroupFunction::VOTING, 'name' => $this->translator->trans('group.function.voting')],
 					['id' => WorkgroupFunction::FSP, 'name' => $this->translator->trans('group.function.fsp')],
-					['id' => WorkgroupFunction::STORES, 'name' => $this->translator->trans('group.function.stores')],
+					['id' => WorkgroupFunction::STORES_COORDINATION, 'name' => $this->translator->trans('group.function.stores')],
 					['id' => WorkgroupFunction::REPORT, 'name' => $this->translator->trans('group.function.report')],
 					['id' => WorkgroupFunction::MEDIATION, 'name' => $this->translator->trans('group.function.mediation')],
 					['id' => WorkgroupFunction::ARBITRATION, 'name' => $this->translator->trans('group.function.arbitration')],
@@ -1186,8 +1186,8 @@ class XhrMethods
 					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_fsp_team') . '");',
 				]);
 			}
-		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES) {
-			$fspGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::STORES);
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::STORES_COORDINATION) {
+			$fspGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::STORES_COORDINATION);
 			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
 				return json_encode([
 					'status' => 1,
