@@ -35,17 +35,9 @@ expose({
 
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
 
-const fsIcon = L.AwesomeMarkers.icon({
-  icon: 'smile',
-  markerColor: 'orange',
-})
 const bkIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-basket',
   markerColor: 'green',
-})
-const botIcon = L.AwesomeMarkers.icon({
-  icon: 'smile',
-  markerColor: 'red',
 })
 const bIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-cart',
@@ -209,7 +201,7 @@ async function loadMarker (types, loader) {
       }
     })
 
-    if (data.baskets !== undefined) {
+    if (data.baskets != undefined) {
       $('#map-control li a.baskets').addClass('active')
       for (let i = 0; i < data.baskets.length; i++) {
         const a = data.baskets[i]
@@ -218,16 +210,7 @@ async function loadMarker (types, loader) {
       }
     }
 
-    if (data.foodsaver !== undefined) {
-      $('#map-control li a.foodsaver').addClass('active')
-      for (let i = 0; i < data.foodsaver.length; i++) {
-        const a = data.foodsaver[i]
-        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: fsIcon, type: 'fs' })
-        markers.addLayer(marker)
-      }
-    }
-
-    if (data.betriebe !== undefined) {
+    if (data.betriebe != undefined) {
       $('#map-control li a.betriebe').addClass('active')
       for (let i = 0; i < data.betriebe.length; i++) {
         const a = data.betriebe[i]
@@ -243,20 +226,11 @@ async function loadMarker (types, loader) {
         const a = data.fairteiler[i]
         const marker = L.marker(new L.LatLng(a.lat, a.lon), {
           id: a.id,
-          bid: a.bezirk_id,
+          bid: a.regionId,
           icon: fIcon,
           type: 'f',
         })
 
-        markers.addLayer(marker)
-      }
-    }
-
-    if (data.botschafter != undefined) {
-      $('#map-control li a.botschafter').addClass('active')
-      for (let i = 0; i < data.botschafter.length; i++) {
-        const a = data.botschafter[i]
-        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: botIcon, type: 'fs' })
         markers.addLayer(marker)
       }
     }

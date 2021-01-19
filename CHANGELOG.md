@@ -22,6 +22,7 @@
 - Modernize wallpost module initialization !1772 @ChrisOelmueller
 - Replace bell identifiers by enum class #987 !1764 @alex.simm
 - Replaced inline css style 'clear:both' with corresponding css class !1859 @scarya
+- Move map marker requests to a REST endpoint !1863 @alex.simm
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
