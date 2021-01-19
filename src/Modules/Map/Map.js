@@ -247,7 +247,7 @@ function loadMarker (types, loader) {
             const a = data.fairteiler[i]
             const marker = L.marker(new L.LatLng(a.lat, a.lon), {
               id: a.id,
-              bid: a.bid,
+              bid: a.bezirk_id,
               icon: fIcon,
               type: 'f',
             })

@@ -14,6 +14,7 @@ use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
@@ -21,6 +22,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Modules\Map\MapGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -58,6 +60,7 @@ class XhrMethods
 	private FoodsaverGateway $foodsaverGateway;
 	private EmailGateway $emailGateway;
 	private MailboxGateway $mailboxGateway;
+	private MapGateway $mapGateway;
 	private ImageManager $imageManager;
 	private Sanitizer $sanitizerService;
 	private EmailHelper $emailHelper;
@@ -86,6 +89,7 @@ class XhrMethods
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
+		MapGateway $mapGateway,
 		ImageManager $imageManager,
 		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
@@ -113,6 +117,7 @@ class XhrMethods
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->mailboxGateway = $mailboxGateway;
+		$this->mapGateway = $mapGateway;
 		$this->imageManager = $imageManager;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
@@ -149,48 +154,26 @@ class XhrMethods
 			foreach ($data['types'] as $t) {
 				if ($t == 'betriebe' && $this->session->may('fs')) {
 					$team_status = [];
-					$hide_some = ' AND betrieb_status_id <> 7'; // CooperationStatus::PERMANENTLY_CLOSED
+					$excludedStoreTypes = [CooperationStatus::PERMANENTLY_CLOSED]; // CooperationStatus::PERMANENTLY_CLOSED
 					if (isset($data['options']) && is_array($data['options'])) {
 						foreach ($data['options'] as $opt) {
 							if ($opt == 'needhelpinstant') {
-								$team_status[] = 'team_status = 2'; // TeamStatus::OPEN_SEARCHING
+								$team_status[] = TeamStatus::OPEN_SEARCHING;
 							} elseif ($opt == 'needhelp') {
-								$team_status[] = 'team_status = 1'; // TeamStatus::OPEN
+								$team_status[] = TeamStatus::OPEN;
 							} elseif ($opt == 'nkoorp') {
-								// CooperationStatus::COOPERATION_STARTING
-								// CooperationStatus::COOPERATION_ESTABLISHED
-								$hide_some .= ' AND betrieb_status_id NOT IN(3,5)';
+								$excludedStoreTypes = array_merge($excludedStoreTypes, [
+									CooperationStatus::COOPERATION_STARTING, CooperationStatus::COOPERATION_ESTABLISHED
+								]);
 							}
 						}
 					}
 
-					if (!empty($team_status)) {
-						$team_status = ' AND (' . implode(' OR ', $team_status) . ')';
-					} else {
-						$team_status = '';
-					}
-
-					$out['betriebe'] = $this->model->q('
-						SELECT `id`, lat, lon
-						FROM fs_betrieb
-						WHERE lat != ""
-						' . $team_status . $hide_some
-					);
+					$out['betriebe'] = $this->mapGateway->getStoreMarkers($excludedStoreTypes, $team_status);
 				} elseif ($t == 'fairteiler') {
-					$out['fairteiler'] = $this->model->q('
-						SELECT `id`, lat, lon, bezirk_id AS bid
-						FROM fs_fairteiler
-						WHERE lat != ""
-						AND status = 1'
-					);
+					$out['fairteiler'] = $this->mapGateway->getFoodSharePointMarkers();
 				} elseif ($t == 'baskets') {
-					if ($baskets = $this->model->q('
-						SELECT id, lat, lon, location_type
-						FROM fs_basket
-						WHERE `status` = 1')
-					) {
-						$out['baskets'] = $baskets;
-					}
+					$out['baskets'] = $this->mapGateway->getBasketMarkers();
 				}
 			}
 		}
