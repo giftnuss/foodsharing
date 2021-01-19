@@ -1,4 +1,4 @@
-import { get, put } from './base'
+import { get, put, remove } from './base'
 import dateFnsParseISO from 'date-fns/parseISO'
 import _ from 'underscore'
 
@@ -17,4 +17,8 @@ export async function listPastPickups (fsId, fromDate, toDate) {
 
 export function sendBanana (id, message) {
   return put(`/user/${id}/banana`, { message: message })
+}
+
+export function deleteBanana (userId, senderId) {
+  return remove(`/user/${userId}/banana/${senderId}`)
 }

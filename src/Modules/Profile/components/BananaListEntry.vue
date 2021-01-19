@@ -23,6 +23,12 @@
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <div class="msg ml-1 p-1 pl-2">{{ text }}</div>
     </div>
+    <a
+      v-if="canRemoveBanana"
+      href="#"
+      @click="removeBanana"
+    ><i class="fas fa-trash" />
+    </a>
   </div>
 </template>
 
@@ -30,10 +36,14 @@
 import dateFnsParseISO from 'date-fns/parseISO'
 
 import Avatar from '@/components/Avatar'
+import { deleteBanana } from '@/api/profile'
+import { pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   components: { Avatar },
   props: {
+    userId: { type: Number, required: true },
     authorId: { type: Number, required: true },
     authorName: { type: String, default: '' },
     avatar: { type: String, default: '' },
@@ -44,6 +54,30 @@ export default {
     return {
       when: dateFnsParseISO(this.createdAt),
     }
+  },
+  computed: {
+    canRemoveBanana () {
+      return true
+    },
+  },
+  methods: {
+    async removeBanana () {
+      const remove = await this.$bvModal.msgBoxConfirm(i18n('conference.description_text') + '\n' + i18n('conference.privacy_notice'), {
+        modalClass: 'bootstrap',
+        title: i18n('conference.join_title'),
+        cancelTitle: i18n('button.cancel'),
+        okTitle: i18n('conference.join'),
+        headerClass: 'd-flex',
+        contentClass: 'pr-3 pt-3',
+      })
+      if (remove) {
+        try {
+          await deleteBanana(123, this.authorId)
+        } catch (e) {
+          pulseError(i18n('error_unexpected'))
+        }
+      }
+    },
   },
 }
 </script>

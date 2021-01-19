@@ -260,6 +260,14 @@ final class ProfileGateway extends BaseGateway
 		return $this->db->exists('fs_rating', ['foodsaver_id' => $userId, 'rater_id' => $raterId]);
 	}
 
+	/**
+	 * Deletes a banana. Returns whether it existed and was deleted.
+	 */
+	public function removeBanana(int $raterId, int $userId): bool
+	{
+		return $this->db->delete('fs_rating', ['foodsaver_id' => $userId, 'rater_id' => $raterId]) > 0;
+	}
+
 	public function getNextDates(int $fsId, int $limit = 10): array
 	{
 		$stm = '

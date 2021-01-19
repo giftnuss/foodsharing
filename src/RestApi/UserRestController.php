@@ -334,6 +334,34 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Deletes a banana.
+	 *
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="the owner of the banana")
+	 * @OA\Parameter(name="senderId", in="path", @OA\Schema(type="integer"), description="the sender of the banana")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="401", description="Not logged in.")
+	 * @OA\Response(response="403", description="Insufficient permissions to delete that banana.")
+	 * @OA\Response(response="404", description="Banana does not exist.")
+	 * @OA\Tag(name="user")
+	 *
+	 * @Rest\Delete("user/{userId}/banana/{senderId}", requirements={"userId" = "\d+"})
+	 */
+	public function deleteBanana(int $userId, int $senderId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		if (!$this->profilePermissions->mayDeleteBanana($userId, $senderId)) {
+			throw new HttpException(403);
+		}
+
+		$isDeleted = $this->profileGateway->removeBanana($userId, $senderId);
+
+		return $this->handleView($this->view([], $isDeleted ? 200 : 404));
+	}
+
+	/**
 	 * Sets a previously uploaded picture as the user's profile photo.
 	 *
 	 * @OA\RequestBody(description="UUID of the previously uploaded file")
