@@ -14,7 +14,6 @@ use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
-use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
@@ -143,42 +142,6 @@ class XhrMethods
 				'status' => 0
 			]);
 		}
-	}
-
-	public function xhr_loadMarker($data)
-	{
-		$out = [];
-		$out['status'] = 0;
-		if (isset($data['types']) && is_array($data['types'])) {
-			$out['status'] = 1;
-			foreach ($data['types'] as $t) {
-				if ($t == 'betriebe' && $this->session->may('fs')) {
-					$team_status = [];
-					$excludedStoreTypes = [CooperationStatus::PERMANENTLY_CLOSED]; // CooperationStatus::PERMANENTLY_CLOSED
-					if (isset($data['options']) && is_array($data['options'])) {
-						foreach ($data['options'] as $opt) {
-							if ($opt == 'needhelpinstant') {
-								$team_status[] = TeamStatus::OPEN_SEARCHING;
-							} elseif ($opt == 'needhelp') {
-								$team_status[] = TeamStatus::OPEN;
-							} elseif ($opt == 'nkoorp') {
-								$excludedStoreTypes = array_merge($excludedStoreTypes, [
-									CooperationStatus::COOPERATION_STARTING, CooperationStatus::COOPERATION_ESTABLISHED
-								]);
-							}
-						}
-					}
-
-					$out['betriebe'] = $this->mapGateway->getStoreMarkers($excludedStoreTypes, $team_status);
-				} elseif ($t == 'fairteiler') {
-					$out['fairteiler'] = $this->mapGateway->getFoodSharePointMarkers();
-				} elseif ($t == 'baskets') {
-					$out['baskets'] = $this->mapGateway->getBasketMarkers();
-				}
-			}
-		}
-
-		return json_encode($out);
 	}
 
 	public function xhr_uploadPictureRefactorMeSoon($data)
