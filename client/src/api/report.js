@@ -5,7 +5,7 @@ export async function getReportsByRegion (regionId) {
 }
 
 export function addReport (reportedId, reporterID, reasonID, reason, message, storeID) {
-  return post('/report/', {
+  return post('/report', {
     reportedId: reportedId,
     reporterID: reporterID,
     reasonID: reasonID,
