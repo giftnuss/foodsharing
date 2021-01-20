@@ -271,8 +271,7 @@ class ProfileView extends View
 		}
 
 		if ($this->groupFunctionGateway->existRegionFunctionGroup($this->foodsaver['bezirk_id'], WorkgroupFunction::REPORT)) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;">
-					<i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>';
+			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id']);
 		}
 
 		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
@@ -582,6 +581,35 @@ class ProfileView extends View
 		return '
 			<li><a href="#mediation_request" onclick="return false;" class="item mediation_request">
 				<i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li>
+			</a></li>
+		';
+	}
+
+	private function renderReportRequest(int $bezirk_id, int $fs_id): string
+	{
+		if (!$this->session->may('fs')) {
+			return '';
+		}
+
+
+		$this->pageHelper->addJs('
+			$(".report_request").fancybox({
+				closeClick: false,
+				closeBtn: true,
+			});
+		');
+
+		$this->pageHelper->addHidden(
+			$this->vueComponent('report-Request', 'ReportRequest', [
+				'foodSaverName' => $this->foodsaver['name'],
+				'reportedId' => $this->foodsaver['id'],
+				'reporterId' => $this->session->id(),
+			])
+		);
+
+		return '
+			<li><a href="#report_request" onclick="return false;" class="item report_request">
+				<i class="far fa-life-ring fa-fw"></i> Regelverletzung Melden</a></li>
 			</a></li>
 		';
 	}

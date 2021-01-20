@@ -10,8 +10,10 @@ use Foodsharing\Modules\Report\ReportGateway;
 use Foodsharing\Permissions\ReportPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use OpenApi\Annotations as OA;
 
 class ReportRestController extends AbstractFOSRestController
 {
@@ -21,13 +23,17 @@ class ReportRestController extends AbstractFOSRestController
 	private ReportPermissions $reportPermissions;
 	private GroupFunctionGateway $groupFunctionGateway;
 
+	// literal constants
+	private const NOT_LOGGED_IN = 'not logged in';
+
 	public function __construct(
 		Session $session,
 		RegionGateway $regionGateway,
 		ReportGateway $reportGateway,
 		ReportPermissions $reportPermissions,
 		GroupFunctionGateway $groupFunctionGateway
-	) {
+	)
+	{
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;
@@ -41,6 +47,10 @@ class ReportRestController extends AbstractFOSRestController
 	 */
 	public function listReportsForRegionAction(int $regionId): Response
 	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
 		if (!$this->reportPermissions->mayAccessReportsForRegion($regionId)) {
 			throw new HttpException(403);
 		}
@@ -54,7 +64,7 @@ class ReportRestController extends AbstractFOSRestController
 
 		if ($this->reportPermissions->mayAccessReportsForSubRegions()) {
 			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
-		// this path implicitly includes reports against ambassadors for subregions as it includes all of them anyway.
+			// this path implicitly includes reports against ambassadors for subregions as it includes all of them anyway.
 		} else {
 			$regions = [$regionId];
 			/* this path needs to add reports against ambassadors of subregions because they will not see themselves. Exclude $regionId
@@ -97,4 +107,38 @@ class ReportRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view(['data' => $reports], 200));
 	}
+
+	/**
+	 * Adds a new report. The reportedID must not be empty
+	 *
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Tag(name="report")
+	 *
+	 * @Rest\Post("report")
+	 * @Rest\RequestParam(name="reportedID", nullable=false)
+	 * @Rest\RequestParam(name="reporterID", nullable=true)
+	 * @Rest\RequestParam(name="reasonID", nullable=true)
+	 * @Rest\RequestParam(name="reason", nullable=true)
+	 * @Rest\RequestParam(name="message", nullable=true)
+	 * @Rest\RequestParam(name="storeID", nullable=true)
+	 */
+	public function addReportAction(ParamFetcher $paramFetcher): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
+/*		$this->reportGateway->addBetriebReport(
+			$paramFetcher->get('reportedId'),
+			$paramFetcher->get('$reporterID'),
+			$paramFetcher->get('$reasonID'),
+			$paramFetcher->get('$reason'),
+			$paramFetcher->get('$message'),
+			$paramFetcher->get('$storeID')
+		);*/
+
+		return $this->handleView($this->view(['RESULT'], 200));
+	}
+
 }
