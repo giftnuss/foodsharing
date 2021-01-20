@@ -21,7 +21,6 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Modules\Map\MapGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -59,7 +58,6 @@ class XhrMethods
 	private FoodsaverGateway $foodsaverGateway;
 	private EmailGateway $emailGateway;
 	private MailboxGateway $mailboxGateway;
-	private MapGateway $mapGateway;
 	private ImageManager $imageManager;
 	private Sanitizer $sanitizerService;
 	private EmailHelper $emailHelper;
@@ -88,7 +86,6 @@ class XhrMethods
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
-		MapGateway $mapGateway,
 		ImageManager $imageManager,
 		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
@@ -116,7 +113,6 @@ class XhrMethods
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->mailboxGateway = $mailboxGateway;
-		$this->mapGateway = $mapGateway;
 		$this->imageManager = $imageManager;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;

@@ -24,7 +24,6 @@ class XhrController extends AbstractController
 		// 'getPinPost',
 		// 'childBezirke',
 		// 'bBubble',
-		// 'loadMarker',
 		// 'uploadPictureRefactorMeSoon',
 		'uploadPicture',
 		// 'cropagain',
