@@ -29,6 +29,7 @@
 - Added Xdebug config for macOS !1804 #932 @muffelrudaijer
 - Several more PHP7 annotations !1760 @ChrisOelmueller
 - More annotations and correctness fixes !1761 @ChrisOelmueller
+- Bumped some container versions !1865 @\_fridtjof_
 
 # Release "Dragonfruit", 2020-12-31
 
