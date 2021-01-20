@@ -78,6 +78,21 @@
         {{ $i18n('polls.ended') }}
       </div>
       <div class="card-body">
+        <div class="form-row p-1 mb-2">
+          <label
+            for="filter-input"
+            class="col-form-label col-form-label-sm"
+          >
+            {{ $i18n('polls.filter_by') }}
+          </label>
+          <b-form-input
+            id="filter-input"
+            v-model="filterText"
+            type="text"
+            class="form-control form-control-sm col-8"
+            :placeholder="$i18n('name')"
+          />
+        </div>
         <ul>
           <li
             v-for="poll in endedPolls"
@@ -98,13 +113,13 @@
 </template>
 
 <script>
-import { BLink } from 'bootstrap-vue'
+import { BLink, BFormInput } from 'bootstrap-vue'
 import { optimizedCompare } from '@/utils'
-import { isBefore, isAfter, format } from 'date-fns'
+import { isBefore, isAfter, format, compareAsc } from 'date-fns'
 import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
-  components: { BLink },
+  components: { BLink, BFormInput },
   props: {
     regionId: {
       type: Number,
@@ -123,6 +138,7 @@ export default {
     return {
       currentPage: 1,
       perPage: 20,
+      filterText: null,
     }
   },
   computed: {
@@ -133,7 +149,17 @@ export default {
       return this.polls.filter(p => this.isPollInFuture(p))
     },
     endedPolls: function () {
-      return this.polls.filter(p => this.isPollInPast(p))
+      // select polls that ended in the past, filter by name, and sort as new-to-old
+      let filtered = this.polls.filter(p => this.isPollInPast(p))
+
+      const filterText = this.filterText ? this.filterText.toLowerCase() : null
+      if (filterText) {
+        filtered = filtered.filter(p => p.name.toLowerCase().indexOf(filterText) !== -1)
+      }
+
+      return filtered.sort((a, b) => {
+        return compareAsc(this.convertDate(b.endDate.date), this.convertDate(a.endDate.date))
+      })
     },
   },
   methods: {

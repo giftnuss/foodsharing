@@ -24,6 +24,7 @@
 - Regionoptions for profile mediation / report Buttons #1046 !1903 
 - Allow users to see their own registration date !1907 @alex.simm
 - activate all workgroup functions. Restrict certain functions in self-management (report, arbitration, fs-management) #1046 !1909 @fs_k
+- Sort list of past polls and allow filtering them #975 !1901 @alex.simm
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
