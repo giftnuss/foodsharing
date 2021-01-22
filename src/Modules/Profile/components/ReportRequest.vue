@@ -4,10 +4,20 @@
     <h3>
       {{ $i18n('profile.report.title', { name: foodSaverName }) }}
     </h3>
-    <div>{{ $i18n('profile.report.info') }}</div>
+    <b-alert variant="info" show>
+      <div>{{ $i18n('profile.report.info') }}</div>
+    </b-alert>
     <b-form-select
-      v-model="selected"
-      :options="options"
+      v-model="reportReason"
+      :options="reportReasonOptions"
+      class="mb-2"
+      align-v="stretch"
+    />
+    <b-form-select
+      v-model="storeList"
+      :options="storeListOptions"
+      class="mb-2"
+      align-v="stretch"
     />
     <b-form-textarea
       v-model="reportText"
@@ -38,26 +48,30 @@ export default {
     foodSaverName: { type: String, required: true },
     reportedId: { type: Number, required: true },
     reporterId: { type: Number, required: true },
+    storeListOptions: { type: Array, default: () => { return [] } },
   },
   data () {
     return {
       reportText: '',
-      selected: null,
-      options: [
+      reportReason: null,
+      storeList: null,
+      reportReasonOptions: [
         { value: null, text: 'Bitte wähle die Art der Meldung' },
         { value: '1', text: 'Ist zu spät gekommen' },
         { value: '2', text: 'Ist nicht zum abholen erschienen' },
+        { value: '10', text: 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche' },
+        { value: '15', text: 'Verkauft gerettete Lebensmittel' },
       ],
     }
   },
 
   methods: {
     async trySendReport () {
-      const selText = this.options.find(option => option.value === this.selected)
+      const reportReasonText = this.reportReasonOptions.find(reportReasonOptions => reportReasonOptions.value === this.reportReason)
       const message = this.reportText.trim()
       if (!message) return
       try {
-        await addReport(this.reportedId, this.reporterId, this.selected, selText.text, message)
+        await addReport(this.reportedId, this.reporterId, this.reportReason, reportReasonText.text, message, this.storeList)
         pulseInfo(i18n('profile.report.sent'))
         this.reportText = ''
         $.fancybox.close()
@@ -69,10 +83,9 @@ export default {
   },
 }
 </script>
-
 <style lang="scss" scoped>
 #mediation_request {
   min-width: 50vw;
-  max-width: 750px;
+  max-width: 550px;
 }
 </style>

@@ -119,9 +119,8 @@ class ProfileView extends View
 		if ($this->profilePermissions->maySeePickups($fsId)) {
 			$page->addSection($this->pastPickups(), $this->translator->trans('pickup.history.title'));
 		}
-
 		$page->addSectionLeft(
-			$this->photo($mayAdmin, $maySeeHistory)
+			$this->photo($mayAdmin, $maySeeHistory, $userStores)
 		);
 
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
@@ -210,7 +209,7 @@ class ProfileView extends View
 		return $out . '</div>';
 	}
 
-	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
+	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory, array $userStores = [] ): string
 	{
 		$online = '';
 		if ($this->foodsaver['online']) {
@@ -220,15 +219,14 @@ class ProfileView extends View
 				'<i class="fas fa-circle text-secondary"></i>'
 			) . '</div>';
 		}
-
-		$menu = $this->profileMenu($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory);
+		$menu = $this->profileMenu($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory, $userStores);
 
 		return '<div class="text-center">'
 			. $this->imageService->avatar($this->foodsaver, 130) . '
 		</div>' . $online . $menu;
 	}
 
-	private function profileMenu(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
+	private function profileMenu(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory, array $userStores = []): string
 	{
 		$fsId = intval($this->foodsaver['id']);
 		$opt = '';
@@ -269,9 +267,8 @@ class ProfileView extends View
 					'{count}' => $this->foodsaver['violation_count'],
 				]) . '</a></li>';
 		}
-
 		if ($this->groupFunctionGateway->existRegionFunctionGroup($this->foodsaver['bezirk_id'], WorkgroupFunction::REPORT)) {
-			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id']);
+			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
 		}
 
 		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
@@ -585,12 +582,16 @@ class ProfileView extends View
 		';
 	}
 
-	private function renderReportRequest(int $bezirk_id, int $fs_id): string
+	private function renderReportRequest(int $bezirk_id, int $fs_id, array $userStores = [] ): string
 	{
 		if (!$this->session->may('fs')) {
 			return '';
 		}
 
+		$storeListOptions = [['value' => null, 'text' => 'Bitte den betroffene Betrieb auswählen']];
+		foreach ($userStores as $store) {
+			$storeListOptions [] = ['value' => $store['id'], 'text' => $store['name']];
+		}
 
 		$this->pageHelper->addJs('
 			$(".report_request").fancybox({
@@ -604,6 +605,7 @@ class ProfileView extends View
 				'foodSaverName' => $this->foodsaver['name'],
 				'reportedId' => $this->foodsaver['id'],
 				'reporterId' => $this->session->id(),
+				'storeListOptions' => $storeListOptions,
 			])
 		);
 

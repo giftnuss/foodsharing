@@ -32,8 +32,7 @@ class ReportRestController extends AbstractFOSRestController
 		ReportGateway $reportGateway,
 		ReportPermissions $reportPermissions,
 		GroupFunctionGateway $groupFunctionGateway
-	)
-	{
+	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;
@@ -44,6 +43,15 @@ class ReportRestController extends AbstractFOSRestController
 	/**
 	 * @param int $regionId for which region the reports should be returned
 	 * @Rest\Get("report/region/{regionId}", requirements={"regionId" = "\d+"})
+	 *
+	 * An admin of a reportgroup gets all reports from the home district. Excluded are
+	 * reports with participation from same admins
+	 *
+	 * Admins of arbitrationgroup only gets the reports that have participation from
+	 * admins of report group.
+	 *
+	 * A user can't be admin of both groups.
+	 *
 	 */
 	public function listReportsForRegionAction(int $regionId): Response
 	{
@@ -55,23 +63,7 @@ class ReportRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296 with
-		  https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
-		  reports lists do show every report from that region excluding the child regions
-		  reports lists do only show the reports of the visitor if anonymity has been repealed by the reporter (feature yet to come)
-		  -> remove reports of the person visiting from output
-		*/
-
-		if ($this->reportPermissions->mayAccessReportsForSubRegions()) {
-			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
-			// this path implicitly includes reports against ambassadors for subregions as it includes all of them anyway.
-		} else {
-			$regions = [$regionId];
-			/* this path needs to add reports against ambassadors of subregions because they will not see themselves. Exclude $regionId
-			so no report is shown twice. */
-
-			$addReportsAgainstAmbassadorsForRegions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId, false);
-		}
+		$regions = [$regionId];
 
 		$excludeIDs = null;
 		$reportGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::REPORT);
@@ -109,7 +101,7 @@ class ReportRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Adds a new report. The reportedID must not be empty
+	 * Adds a new report. The reportedId must not be empty.
 	 *
 	 * @Rest\Post("report")
 	 * @Rest\RequestParam(name="reportedId", nullable=true)
