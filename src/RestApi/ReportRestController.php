@@ -13,7 +13,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use OpenApi\Annotations as OA;
 
 class ReportRestController extends AbstractFOSRestController
 {
@@ -51,7 +50,6 @@ class ReportRestController extends AbstractFOSRestController
 	 * admins of report group.
 	 *
 	 * A user can't be admin of both groups.
-	 *
 	 */
 	public function listReportsForRegionAction(int $regionId): Response
 	{
@@ -127,5 +125,4 @@ class ReportRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
-
 }

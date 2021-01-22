@@ -209,7 +209,7 @@ class ProfileView extends View
 		return $out . '</div>';
 	}
 
-	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory, array $userStores = [] ): string
+	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory, array $userStores = []): string
 	{
 		$online = '';
 		if ($this->foodsaver['online']) {
@@ -582,7 +582,7 @@ class ProfileView extends View
 		';
 	}
 
-	private function renderReportRequest(int $bezirk_id, int $fs_id, array $userStores = [] ): string
+	private function renderReportRequest(int $bezirk_id, int $fs_id, array $userStores = []): string
 	{
 		if (!$this->session->may('fs')) {
 			return '';
@@ -590,7 +590,7 @@ class ProfileView extends View
 
 		$storeListOptions = [['value' => null, 'text' => 'Bitte den betroffene Betrieb auswählen']];
 		foreach ($userStores as $store) {
-			$storeListOptions [] = ['value' => $store['id'], 'text' => $store['name']];
+			$storeListOptions[] = ['value' => $store['id'], 'text' => $store['name']];
 		}
 
 		$this->pageHelper->addJs('
