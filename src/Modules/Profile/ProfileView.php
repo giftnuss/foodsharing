@@ -609,7 +609,7 @@ class ProfileView extends View
 
 		return '
 			<li><a href="#report_request" onclick="return false;" class="item report_request">
-				<i class="far fa-life-ring fa-fw"></i> Regelverletzung Melden</a></li>
+				<i class="far fa-life-ring fa-fw"></i> Meldung absenden</a></li>
 			</a></li>
 		';
 	}

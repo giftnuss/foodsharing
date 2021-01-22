@@ -4,13 +4,13 @@ export async function getReportsByRegion (regionId) {
   return (await get(`/report/region/${regionId}`)).data
 }
 
-export function addReport (reportedId, reporterID, reasonID, reason, message, storeID) {
+export function addReport (reportedId, reporterId, reasonId, reason, message, storeId) {
   return post('/report', {
     reportedId: reportedId,
-    reporterID: reporterID,
-    reasonID: reasonID,
+    reporterId: reporterId,
+    reasonId: reasonId,
     reason: reason,
     message: message,
-    storeID: storeID,
+    storeId: storeId,
   })
 }

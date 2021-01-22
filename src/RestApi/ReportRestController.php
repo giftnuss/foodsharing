@@ -111,34 +111,29 @@ class ReportRestController extends AbstractFOSRestController
 	/**
 	 * Adds a new report. The reportedID must not be empty
 	 *
-	 * @OA\Response(response="200", description="Success")
-	 * @OA\Response(response="401", description="Not logged in")
-	 * @OA\Tag(name="report")
-	 *
 	 * @Rest\Post("report")
-	 * @Rest\RequestParam(name="reportedID", nullable=false)
-	 * @Rest\RequestParam(name="reporterID", nullable=true)
-	 * @Rest\RequestParam(name="reasonID", nullable=true)
+	 * @Rest\RequestParam(name="reportedId", nullable=true)
+	 * @Rest\RequestParam(name="reporterId", nullable=true)
+	 * @Rest\RequestParam(name="reasonId", nullable=true)
 	 * @Rest\RequestParam(name="reason", nullable=true)
 	 * @Rest\RequestParam(name="message", nullable=true)
-	 * @Rest\RequestParam(name="storeID", nullable=true)
+	 * @Rest\RequestParam(name="storeId", nullable=true)
 	 */
 	public function addReportAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
-
-/*		$this->reportGateway->addBetriebReport(
+		$this->reportGateway->addBetriebReport(
 			$paramFetcher->get('reportedId'),
-			$paramFetcher->get('$reporterID'),
-			$paramFetcher->get('$reasonID'),
-			$paramFetcher->get('$reason'),
-			$paramFetcher->get('$message'),
-			$paramFetcher->get('$storeID')
-		);*/
+			$paramFetcher->get('reporterId'),
+			$paramFetcher->get('reasonId'),
+			$paramFetcher->get('reason'),
+			$paramFetcher->get('message'),
+			$paramFetcher->get('storeId')
+		);
 
-		return $this->handleView($this->view(['RESULT'], 200));
+		return $this->handleView($this->view([], 200));
 	}
 
 }

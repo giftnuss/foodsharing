@@ -1497,8 +1497,9 @@ profile:
     no_group: "Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird."
   report:
     title: "Meldung über {name}"
+    info: "Bitte gib Datum, Ort und Uhrzeit des Vorfalles an. Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.'"
     send: "Meldung abschicken"
-
+    sent: "Meldung wurde versendet"
 
 search:
   title: "Suche"
