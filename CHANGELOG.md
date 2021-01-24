@@ -8,6 +8,8 @@
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
 - Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
+- Remove active baskets if a user is deleted !1867 #983 @alex.simm 
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

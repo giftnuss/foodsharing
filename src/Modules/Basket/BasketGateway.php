@@ -511,4 +511,17 @@ class BasketGateway extends BaseGateway
 				0, 10	
 		', [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
 	}
+
+	/**
+	 * Sets the status of all active baskets of a user to 'deleted'.
+	 */
+	public function removeActiveUserBaskets(int $userId): void
+	{
+		$this->db->update('fs_basket', [
+			'status' => BasketStatus::DELETED_OTHER_REASON
+		], [
+			'foodsaver_id' => $userId,
+			'status' => BasketStatus::REQUESTED_MESSAGE_READ
+		]);
+	}
 }

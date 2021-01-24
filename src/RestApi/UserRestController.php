@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverTransactions;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Profile\ProfileTransactions;
@@ -35,6 +36,7 @@ class UserRestController extends AbstractFOSRestController
 	private EmailHelper $emailHelper;
 	private RegisterTransactions $registerTransactions;
 	private ProfileTransactions $profileTransactions;
+	private FoodsaverTransactions $foodsaverTransactions;
 
 	private const MIN_RATING_MESSAGE_LENGTH = 100;
 	private const MIN_PASSWORD_LENGTH = 8;
@@ -50,7 +52,8 @@ class UserRestController extends AbstractFOSRestController
 		ProfilePermissions $profilePermissions,
 		EmailHelper $emailHelper,
 		RegisterTransactions $registerTransactions,
-		ProfileTransactions $profileTransactions
+		ProfileTransactions $profileTransactions,
+		FoodsaverTransactions $foodsaverTransactions
 	) {
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
@@ -62,6 +65,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->emailHelper = $emailHelper;
 		$this->registerTransactions = $registerTransactions;
 		$this->profileTransactions = $profileTransactions;
+		$this->foodsaverTransactions = $foodsaverTransactions;
 	}
 
 	/**
@@ -277,7 +281,7 @@ class UserRestController extends AbstractFOSRestController
 		if ($userId === $this->session->id()) {
 			$this->session->logout();
 		}
-		$this->foodsaverGateway->deleteFoodsaver($userId);
+		$this->foodsaverTransactions->deleteFoodsaver($userId);
 
 		return $this->handleView($this->view());
 	}
