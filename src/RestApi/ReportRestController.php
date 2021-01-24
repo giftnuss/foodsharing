@@ -68,7 +68,7 @@ class ReportRestController extends AbstractFOSRestController
 		$onlyWithIds = null;
 		$reportAdminIDs = null;
 		if (!empty($reportGroup)) {
-			$reportAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($reportGroup);
+			$reportAdminIDs = $this->groupFunctionGateway->getFsAdminIdsFromGroup($reportGroup);
 			if (in_array($this->session->id(), $reportAdminIDs)) {
 				$excludeIDs = $reportAdminIDs;
 			}
@@ -76,7 +76,7 @@ class ReportRestController extends AbstractFOSRestController
 		$arbitrationAdminIDs = null;
 		$arbitrationGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::ARBITRATION);
 		if (!empty($arbitrationGroup)) {
-			$arbitrationAdminIDs = $this->regionGateway->getFsAdminIdsFromRegion($arbitrationGroup);
+			$arbitrationAdminIDs = $this->groupFunctionGateway->getFsAdminIdsFromGroup($arbitrationGroup);
 			if (in_array($this->session->id(), $arbitrationAdminIDs)) {
 				$excludeIDs = $arbitrationAdminIDs;
 				if (!empty($reportAdminIDs)) {

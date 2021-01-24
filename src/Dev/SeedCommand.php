@@ -111,7 +111,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userwelcome' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($welcomeGroup['id'], $user['id']);
 			$I->addRegionAdmin($welcomeGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $welcomeGroup['id']);
 			$this->welcomeAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -124,7 +123,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'uservoting' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($votingGroup['id'], $user['id']);
 			$I->addRegionAdmin($votingGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $votingGroup['id']);
 			$this->votingAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -137,7 +135,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userfsp' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($fspGroup['id'], $user['id']);
 			$I->addRegionAdmin($fspGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $welcomeGroup['id']);
 			$this->fspAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -150,7 +147,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userstoregroup' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($storesGroup['id'], $user['id']);
 			$I->addRegionAdmin($storesGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $storesGroup['id']);
 			$this->storesGroupAdmin[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -163,7 +159,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userreport' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($reportGroup['id'], $user['id']);
 			$I->addRegionAdmin($reportGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $reportGroup['id']);
 			$this->reportAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -176,7 +171,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'usermediation' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($mediationGroup['id'], $user['id']);
 			$I->addRegionAdmin($mediationGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $mediationGroup['id']);
 			$this->mediationAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -189,7 +183,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userarbitration' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($arbitrationGroup['id'], $user['id']);
 			$I->addRegionAdmin($arbitrationGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $arbitrationGroup['id']);
 			$this->arbitrationAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -202,7 +195,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userpr' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($fsmanagementGroup['id'], $user['id']);
 			$I->addRegionAdmin($fsmanagementGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $fsmanagementGroup['id']);
 			$this->fsManagementAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -215,7 +207,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'userfsmanagement' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($prGroup['id'], $user['id']);
 			$I->addRegionAdmin($prGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $prGroup['id']);
 			$this->prGroup[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -228,7 +219,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'usermoderation' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($moderationGroup['id'], $user['id']);
 			$I->addRegionAdmin($moderationGroup['id'], $user['id']);
-//			$this->output->writeln(' User ' . $user['id'] . ' added to ' . $moderationGroup['id']);
 			$this->moderationAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');

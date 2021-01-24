@@ -577,7 +577,7 @@ class ProfileView extends View
 
 		return '
 			<li><a href="#mediation_request" onclick="return false;" class="item mediation_request">
-				<i class="far fa-handshake fa-fw"></i> Mediation anfragen</a></li>
+				<i class="far fa-handshake fa-fw"></i> ' . $this->translator->trans('profile.mediationRequest') . '</a></li>
 			</a></li>
 		';
 	}
@@ -593,6 +593,12 @@ class ProfileView extends View
 			$storeListOptions[] = ['value' => $store['id'], 'text' => $store['name']];
 		}
 
+		$isReportedIdReportAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::REPORT, $this->foodsaver['id']);
+		$isReporterIdReportAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::REPORT, $this->session->id());
+		$hasReportGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::REPORT);
+
+		$hasArbitrationGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::ARBITRATION);
+
 		$this->pageHelper->addJs('
 			$(".report_request").fancybox({
 				closeClick: false,
@@ -606,12 +612,16 @@ class ProfileView extends View
 				'reportedId' => $this->foodsaver['id'],
 				'reporterId' => $this->session->id(),
 				'storeListOptions' => $storeListOptions,
+				'isReportedIdReportAdmin' => $isReportedIdReportAdmin,
+				'hasReportGroup' => $hasReportGroup,
+				'hasArbitrationGroup' => $hasArbitrationGroup,
+				'isReporterIdReportAdmin' => $isReporterIdReportAdmin,
 			])
 		);
 
 		return '
 			<li><a href="#report_request" onclick="return false;" class="item report_request">
-				<i class="far fa-life-ring fa-fw"></i> Meldung absenden</a></li>
+				<i class="far fa-life-ring fa-fw"></i>' . $this->translator->trans('profile.reportRequest') . '</a></li>
 			</a></li>
 		';
 	}

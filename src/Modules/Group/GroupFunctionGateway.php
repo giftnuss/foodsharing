@@ -120,10 +120,34 @@ class GroupFunctionGateway extends BaseGateway
 	 */
 	public function existRegionFunctionGroup(int $target_id, int $function_id, int $group_id = null): bool
 	{
-		if (empty($group_id)) {
-			return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => $function_id]);
-		} else {
-			return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => $function_id, 'target_id' => $target_id]);
+		try {
+			if (empty($group_id)) {
+				return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => $function_id]);
+			} else {
+				return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => $function_id, 'target_id' => $target_id]);
+			}
+		} catch (\Exception $e) {
+			return false;
 		}
+	}
+
+	public function isRegionFunctionGroupAdmin(int $target_id, int $function_id, int $fs_id): bool
+	{
+		$functionGroup = $this->getRegionFunctionGroupId($target_id, $function_id);
+		if (!empty($functionGroup)) {
+			$functionGroupAdminIDs = $this->getFsAdminIdsFromGroup($functionGroup);
+			if (in_array($fs_id, $functionGroupAdminIDs)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function getFsAdminIdsFromGroup(?int $groupId): array
+	{
+		return $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id',
+			['bezirk_id' => $groupId]
+		);
 	}
 }
