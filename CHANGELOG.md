@@ -8,6 +8,7 @@
 - New Workgroupfunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
 - Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1868 #975 @alex.simm
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
 - Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg

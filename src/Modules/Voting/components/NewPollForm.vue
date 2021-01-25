@@ -224,8 +224,6 @@
       </b-form>
     </div>
 
-    <div>{{ $v.options.$error }}</div>
-
     <b-modal
       ref="newPollConfirmModal"
       :title="$i18n('poll.new_poll.submit')"

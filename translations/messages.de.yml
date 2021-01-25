@@ -2050,7 +2050,7 @@ buddy:
   request_accepted: "Jetzt kennt Ihr Euch!"
 
 polls:
-  beta: "Das Abstimmungs-Modul kann in der überregionalen AG \"Abstimmungen - Test\" getestet werden."
+  hint: "Das Abstimmungs-Modul kann in der überregionalen AG \"Abstimmungen - Test\" getestet werden."
   hint_2: "Hinweise zur Benutzung der Abstimmungen findest du im Wiki"
   title: "Titel"
   start_date: "von"
@@ -2074,8 +2074,8 @@ poll:
   type: "Art der Abstimmung"
   type_description_0: "Auswählen (nur eine Option kann gewählt werden)"
   type_description_1: "Ankreuzen (mehrere Optionen können gewählt werden)"
-  type_description_2: "Wahlmöglichkeiten jeweils Ablehnung / Enthaltung / Zustimmung"
-  type_description_3: "Bewertungswahl mit Werten zwischen -3 (Ablehnung) und +3 (Zustimmung)"
+  type_description_2: "Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung"
+  type_description_3: "Bewertungswahl mit Werten zwischen +3 (Zustimmung) und -3 (Ablehnung)"
   type_2:
     tooltip_negative: "Ablehnung"
     tooltip_neutral: "Enthaltung"
