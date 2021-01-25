@@ -9,7 +9,7 @@
       <div v-if="hasLocalMediationGroup">
         {{ $i18n('profile.mediation.info', { email: mediationGroupEmail }) }}
       </div>
-      <div v-if="!hasLocalMediationGroup">
+      <div v-else>
         {{ $i18n('profile.mediation.no_group') }}
       </div>
     </b-alert>
