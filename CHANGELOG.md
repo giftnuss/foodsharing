@@ -4,6 +4,17 @@
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1863 #975 @alex.simm
 
 # 2020-10-23 Hotfix
+- New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
+- New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
+- New Workgroupfunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
+- Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1868 #975 @alex.simm
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
+- Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
+- Remove active baskets if a user is deleted !1867 #983 @alex.simm 
+- Report and Mediation button is not visible against foodsharers !1874 @fs_k
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

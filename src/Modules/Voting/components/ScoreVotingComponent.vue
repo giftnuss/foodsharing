@@ -16,6 +16,7 @@
           :adsorb="true"
           class="mt-2"
           :disabled="!enabled"
+          direction="rtl"
         />
       </div>
     </b-form-group>
@@ -37,6 +38,7 @@
             :marks="marks"
             :adsorb="true"
             :disabled="!enabled"
+            direction="rtl"
           />
         </b-col>
       </b-form-row>

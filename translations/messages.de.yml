@@ -1998,32 +1998,32 @@ buddy:
   request_accepted: Jetzt kennt Ihr Euch!
 
 polls:
-  hint: Das Abstimmungs-Modul kann in der überregionalen AG "Abstimmungen - Test" getestet werden.
-  hint_2: Hinweise zur Benutzung der Abstimmungen findest du im Wiki
-  title: Titel
-  start_date: von
-  end_date: bis
-  new_poll: Neue Abstimmung erstellen
-  ongoing: Laufende Abstimmungen
-  ended: Vergangene Abstimmungen
-  future: Zukünftige Abstimmungen
+  hint: "Das Abstimmungs-Modul kann in der überregionalen AG \"Abstimmungen - Test\" getestet werden."
+  hint_2: "Hinweise zur Benutzung der Abstimmungen findest du im Wiki"
+  title: "Titel"
+  start_date: "von"
+  end_date: "bis"
+  new_poll: "Neue Abstimmung erstellen"
+  ongoing: "Laufende Abstimmungen"
+  ended: "Vergangene Abstimmungen"
+  future: "Zukünftige Abstimmungen"
 
 poll:
-  not_available: Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen.
-  time_period: Zeitraum
-  in_past: beendet
-  in_future: noch nicht gestartet
-  allowed_voters: Stimmberechtigt
-  scope_description_0: Alle verifizierten und nicht verifizierten Foodsaver*innen aus dem Bezirk / der Gruppe
-  scope_description_1: Alle verifizierten Foodsaver*innen aus dem Bezirk / der Gruppe
-  scope_description_2: Alle Betriebsverantwortlichen aus dem Bezirk, die momentan für einen Betrieb verantwortlich sind
-  scope_description_3: Alle Botschafter*innen aus dem Bezirk / der Gruppe
-  scope_description_4: Alle verifizierten Foodsaver*innen mit dem Stammbezirk der Abstimmung
-  type: Art der Abstimmung
-  type_description_0: Auswählen (nur eine Option kann gewählt werden)
-  type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
-  type_description_2: Wahlmöglichkeiten jeweils Ablehnung / Enthaltung / Zustimmung
-  type_description_3: Bewertungswahl mit Werten zwischen -3 (Ablehnung) und +3 (Zustimmung)
+  not_available: "Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen."
+  time_period: "Zeitraum"
+  in_past: "beendet"
+  in_future: "noch nicht gestartet"
+  allowed_voters: "Stimmberechtigt"
+  scope_description_0: "Alle verifizierten und nicht verifizierten Foodsaver aus dem Bezirk / der Gruppe"
+  scope_description_1: "Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe"
+  scope_description_2: "Alle Betriebsverantwortlichen aus dem Bezirk, die momentan für einen Betrieb verantwortlich sind"
+  scope_description_3: "Alle Botschafter aus dem Bezirk / der Gruppe"
+  scope_description_4: "Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung"
+  type: "Art der Abstimmung"
+  type_description_0: "Auswählen (nur eine Option kann gewählt werden)"
+  type_description_1: "Ankreuzen (mehrere Optionen können gewählt werden)"
+  type_description_2: "Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung"
+  type_description_3: "Bewertungswahl mit Werten zwischen +3 (Zustimmung) und -3 (Ablehnung)"
   type_2:
     tooltip_negative: "Ablehnung"
     tooltip_neutral: "Enthaltung"
