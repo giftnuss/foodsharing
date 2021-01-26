@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -31,6 +32,7 @@ class StoreUserControl extends Control
 	private $sanitizerService;
 	private $timeHelper;
 	private $weightHelper;
+	private $groupFunctionGateway;
 
 	public function __construct(
 		StoreUserView $view,
@@ -43,7 +45,8 @@ class StoreUserControl extends Control
 		DataHelper $dataHelper,
 		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
-		WeightHelper $weightHelper
+		WeightHelper $weightHelper,
+		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->view = $view;
 		$this->regionGateway = $regionGateway;
@@ -56,6 +59,7 @@ class StoreUserControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
 		$this->weightHelper = $weightHelper;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 
 		parent::__construct();
 
@@ -117,7 +121,7 @@ class StoreUserControl extends Control
 					$store['verantwortlich'] = true;
 
 					$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
-					$storeGroup = $this->regionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES_COORDINATION);
+					$storeGroup = $this->groupFunctionGateway->getRegionFunctionGroupId($storeRegion, WorkgroupFunction::STORES_COORDINATION);
 					if (empty($storeGroup)) {
 						if ($this->session->isAdminFor($storeRegion)) {
 							$this->flashMessageHelper->info(
