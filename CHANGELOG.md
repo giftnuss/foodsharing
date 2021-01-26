@@ -6,6 +6,7 @@
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
+- Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
 - Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg

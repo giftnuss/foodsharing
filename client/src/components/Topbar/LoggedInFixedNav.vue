@@ -28,7 +28,8 @@
       icon="fa-map-marker-alt"
       :title="$i18n('storelist.map')"
       :hide-on-mobile="true"
-      :hide-title-always="true"
+      :hide-title-always="hasFsRole"
+      :hide-title-mobile="true"
     />
     <menu-messages :show-only-on-mobile="true" />
     <menu-bells :show-only-on-mobile="true" />
