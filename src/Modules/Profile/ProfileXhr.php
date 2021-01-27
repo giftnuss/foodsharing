@@ -132,7 +132,7 @@ class ProfileXhr extends Control
 						'Removed through user Profile.'
 					);
 				} else {
-						$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied
+					$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied
 							$storeId,
 							$this->session->id(),
 							$userId,
@@ -142,7 +142,7 @@ class ProfileXhr extends Control
 							'Removed through user Profile.'
 						);
 
-						$this->storeGateway->addStoreLog(
+					$this->storeGateway->addStoreLog(
 						$storeId,
 						$this->session->id(),
 						$userId,
@@ -152,6 +152,7 @@ class ProfileXhr extends Control
 						'Removed through user Profile'
 					);
 				}
+
 				return [
 					'status' => 1,
 					'script' => '
