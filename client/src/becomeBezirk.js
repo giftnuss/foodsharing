@@ -16,7 +16,6 @@ import 'jquery-ui'
 
 import * as api from '@/api/regions'
 import { listRegionChildren } from '@/api/regions'
-import i18n from '@/i18n'
 
 $('#becomebezirkchooser-button').button().on('click', async function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
@@ -88,13 +87,18 @@ export async function u_printChildBezirke (element) {
   $(`#xv-childbezirk-${parent}`).remove()
 
   showLoader()
-  try {
-    const children = await listRegionChildren(parent)
-    console.error(children)
-    // $(`#becomebezirkchooser-childs-${parent}`).remove()
-    // $('#becomebezirkchooser-wrapper').append(data.html)
-  } catch (e) {
-    pulseError(i18n('error_unexpected'))
+  const children = await listRegionChildren(parent)
+  if (children !== undefined && children.length > 0) {
+    $(`#becomebezirkchooser-childs-${parent}`).remove()
+
+    let html = '<select class="select childChanger" id="xv-childbezirk-' + parent + '" onchange="u_printChildBezirke(this);">'
+    html += '<option value="-1:0" class="xv-childs-0">Bitte auswählen...</option>'
+    console.error('children: ' + children)
+    children.forEach(child => {
+      html += '<option value="' + child.id + ':' + child.type + '" class="xv-childs-' + child.id + '">' + child.name + '</option>'
+    })
+    html += '</select>'
+    $('#becomebezirkchooser-wrapper').append(html)
   }
 
   hideLoader()
