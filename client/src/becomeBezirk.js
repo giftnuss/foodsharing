@@ -93,7 +93,6 @@ export async function u_printChildBezirke (element) {
 
     let html = '<select class="select childChanger" id="xv-childbezirk-' + parent + '" onchange="u_printChildBezirke(this);">'
     html += '<option value="-1:0" class="xv-childs-0">Bitte auswählen...</option>'
-    console.error('children: ' + children)
     children.forEach(child => {
       html += '<option value="' + child.id + ':' + child.type + '" class="xv-childs-' + child.id + '">' + child.name + '</option>'
     })

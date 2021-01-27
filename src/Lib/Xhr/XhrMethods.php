@@ -45,7 +45,6 @@ class XhrMethods
 	private Mem $mem;
 	private Session $session;
 	private Utils $v_utils;
-	private ViewUtils $xhrViewUtils;
 	private StoreModel $storeModel;
 	private GroupFunctionGateway $groupFunctionGateway;
 	private GroupGateway $groupGateway;
@@ -73,7 +72,6 @@ class XhrMethods
 		Session $session,
 		Db $model,
 		Utils $viewUtils,
-		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
 		GroupFunctionGateway $groupFunctionGateway,
 		GroupGateway $groupGateway,
@@ -100,7 +98,6 @@ class XhrMethods
 		$this->session = $session;
 		$this->model = $model;
 		$this->v_utils = $viewUtils;
-		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
 		$this->groupFunctionGateway = $groupFunctionGateway;
 		$this->groupGateway = $groupGateway;
