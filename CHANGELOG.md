@@ -17,6 +17,7 @@
 - Fix frontend validation in new poll form !1854 #975 @alex.simm
 - Fix loading of dashboard updates that contain wall posts from deleted users !1858 @alex.simm
 - Set correct placeholder in automated response email for unknown email addresses !1866 @alex.simm
+- logging when user is removed from a pickup slot from the user profile !1870 @fs_k
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
