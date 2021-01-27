@@ -124,22 +124,6 @@ class XhrMethods
 		$this->translator = $translator;
 	}
 
-	public function xhr_childBezirke($data)
-	{
-		if (isset($data['parent'])) {
-			if ($children = $this->regionGateway->getBezirkByParent((int)$data['parent'], $this->session->may('orga'))) {
-				return json_encode([
-					'status' => 1,
-					'html' => $this->xhrViewUtils->childBezirke($children, $data['parent'])
-				]);
-			}
-
-			return json_encode([
-				'status' => 0
-			]);
-		}
-	}
-
 	public function xhr_uploadPictureRefactorMeSoon($data)
 	{
 		$request = Request::createFromGlobals();

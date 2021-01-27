@@ -21,7 +21,6 @@ class XhrController extends AbstractController
 	   NEVER ADD SOMETING TO THIS LIST!
 	*/
 	private const csrf_whitelist = [
-		// 'childBezirke',
 		// 'bBubble',
 		// 'uploadPictureRefactorMeSoon',
 		'uploadPicture',

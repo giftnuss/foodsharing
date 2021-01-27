@@ -32,19 +32,4 @@ class ViewUtils
 		$this->imageService = $imageService;
 		$this->translationHelper = $translationHelper;
 	}
-
-	public function childBezirke($childs, $parent_id)
-	{
-		$out = '
-	<select class="select childChanger" id="xv-childbezirk-' . (int)$parent_id . '" onchange="u_printChildBezirke(this);">
-		<option value="-1:0" class="xv-childs-0">Bitte auswählen...</option>';
-		foreach ($childs as $c) {
-			$out .= '
-		<option value="' . $c['id'] . ':' . (int)$c['type'] . '" class="xv-childs-' . $c['id'] . '">' . $c['name'] . '</option>';
-		}
-		$out .= '
-	</select>';
-
-		return $out;
-	}
 }

@@ -15,6 +15,8 @@ import {
 import 'jquery-ui'
 
 import * as api from '@/api/regions'
+import { listRegionChildren } from '@/api/regions'
+import i18n from '@/i18n'
 
 $('#becomebezirkchooser-button').button().on('click', async function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
@@ -51,7 +53,7 @@ $('#becomebezirkchooser-button').button().on('click', async function () {
   }
 })
 
-export function u_printChildBezirke (element) {
+export async function u_printChildBezirke (element) {
   const val = `${element.value}`
 
   const part = val.split(':')
@@ -86,19 +88,16 @@ export function u_printChildBezirke (element) {
   $(`#xv-childbezirk-${parent}`).remove()
 
   showLoader()
-  $.ajax({
-    dataType: 'json',
-    url: `/xhr.php?f=childBezirke&parent=${parent}`,
-    success: function (data) {
-      if (data.status == 1) {
-        $(`#becomebezirkchooser-childs-${parent}`).remove()
-        $('#becomebezirkchooser-wrapper').append(data.html)
-      }
-    },
-    complete: function () {
-      hideLoader()
-    },
-  })
+  try {
+    const children = await listRegionChildren(parent)
+    console.error(children)
+    // $(`#becomebezirkchooser-childs-${parent}`).remove()
+    // $('#becomebezirkchooser-wrapper').append(data.html)
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+
+  hideLoader()
 }
 
 $(() => {
