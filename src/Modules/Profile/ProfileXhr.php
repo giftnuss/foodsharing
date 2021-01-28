@@ -160,11 +160,11 @@ class ProfileXhr extends Control
 					reload();',
 				];
 			}
-
-			return [
-				'status' => 1,
-				'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");',
-			];
 		}
+
+		return [
+			'status' => 1,
+			'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");',
+		];
 	}
 }
