@@ -122,7 +122,7 @@ class ProfileXhr extends Control
 		if ($this->session->may('orga') || $this->session->isAdminFor($storeRegion)) {
 			if ($this->pickupGateway->removeFetcher($userId, $storeId, $pickupDate)) {
 				if ($this->session->id() === $userId) {
-					$this->storeGateway->addStoreLog( // the user removed their own pickup
+					$this->storeGateway->addStoreLog( // the user(bot/orga) removed their own pickup
 						$storeId,
 						$userId,
 						null,
@@ -132,7 +132,7 @@ class ProfileXhr extends Control
 						'Removed through user Profile.'
 					);
 				} else {
-					$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied
+					$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied by a bot / orga
 							$storeId,
 							$this->session->id(),
 							$userId,
@@ -141,16 +141,6 @@ class ProfileXhr extends Control
 							null,
 							'Removed through user Profile.'
 						);
-
-					$this->storeGateway->addStoreLog(
-						$storeId,
-						$this->session->id(),
-						$userId,
-						$pickupDate,
-						StoreLogAction::REMOVED_FROM_SLOT,
-						null,
-						'Removed through user Profile'
-					);
 				}
 
 				return [
