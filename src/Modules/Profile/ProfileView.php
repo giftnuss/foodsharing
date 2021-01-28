@@ -578,7 +578,6 @@ class ProfileView extends View
 		return '
 			<li><a href="#mediation_request" onclick="return false;" class="item mediation_request">
 				<i class="far fa-handshake fa-fw"></i> ' . $this->translator->trans('profile.mediationRequest') . '</a></li>
-			</a></li>
 		';
 	}
 
@@ -622,7 +621,6 @@ class ProfileView extends View
 		return '
 			<li><a href="#report_request" onclick="return false;" class="item report_request">
 				<i class="far fa-life-ring fa-fw"></i>' . $this->translator->trans('profile.reportRequest') . '</a></li>
-			</a></li>
 		';
 	}
 
