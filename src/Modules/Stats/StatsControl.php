@@ -110,12 +110,11 @@ class StatsControl extends ConsoleControl
 				foreach ($team as $fs) {
 					$fetchCount = $fs['stat_fetchcount'] + ($userFetchCount[$fs['id']] ?? 0);
 
-					$this->model->updateStoreStats(
+					$this->statsGateway->updateStoreStats(
 						$storeId, // Betrieb id
 						$fs['id'], // foodsaver_id
-						$fs['stat_add_date'], // add date
-						$firstDates[$fs['id']] ?? null, // erste mal abholen
 						$fetchCount, // anzahl abholungen
+						$firstDates[$fs['id']] ?? null, // erste mal abholen
 						$lastDates[$fs['id']] ?? null
 					);
 				}

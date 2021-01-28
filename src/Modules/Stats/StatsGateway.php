@@ -27,7 +27,7 @@ class StatsGateway extends BaseGateway
 	 */
 	public function getStoreUsersFetchCount(int $storeId): array
 	{
-		$data = $this->db->fetch(
+		$data = $this->db->fetchAll(
 			'SELECT a.foodsaver_id, COUNT(*) as count
 			FROM 	fs_abholer a
             LEFT JOIN fs_betrieb_team t
@@ -49,7 +49,7 @@ class StatsGateway extends BaseGateway
 	 */
 	public function getFirstPickupInStore(int $storeId)
 	{
-		$data = $this->db->fetch(
+		$data = $this->db->fetchAll(
 			'SELECT foodsaver_id, MIN(`date`) as date
 			FROM fs_abholer
 			WHERE betrieb_id = :storeId
@@ -67,7 +67,7 @@ class StatsGateway extends BaseGateway
 	 */
 	public function getLastPickupInStore(int $storeId)
 	{
-		$data = $this->db->fetch(
+		$data = $this->db->fetchAll(
 			'SELECT foodsaver_id, MAX(`date`) as date
 			FROM fs_abholer
 			WHERE betrieb_id = :storeId
@@ -78,6 +78,23 @@ class StatsGateway extends BaseGateway
 		);
 
 		return $this->flattenArray($data, 'foodsaver_id', 'date');
+	}
+
+	/**
+	 * Updates the stats for one user in a store.
+	 */
+	public function updateStoreStats(int $storeId, int $foodsaverId, int $fetchCount, ?string $firstFetch,
+									 ?string $lastFetch)
+	{
+		$this->db->update('fs_betrieb_team', [
+			'stat_last_update' => $this->db->now(),
+			'stat_fetchcount' => $fetchCount,
+			'stat_first_fetch' => $firstFetch,
+			'stat_last_fetch' => $lastFetch,
+		], [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $foodsaverId,
+		]);
 	}
 
 	/**
