@@ -44,6 +44,43 @@ class StatsGateway extends BaseGateway
 	}
 
 	/**
+	 * Returns the first pickup date for each user in the store who had at least one pickup in that time.
+	 * This is returned as an associative array `[foodsaver_id => date]`.
+	 */
+	public function getFirstPickupInStore(int $storeId)
+	{
+		$data = $this->db->fetch(
+			'SELECT foodsaver_id, MIN(`date`) as date
+			FROM fs_abholer
+			WHERE betrieb_id = :storeId
+			AND confirmed = 1', [
+				':storeId' => $storeId
+			]
+		);
+
+		return $this->flattenArray($data, 'foodsaver_id', 'date');
+	}
+
+	/**
+	 * Returns the last pickup date for each user in the store who had at least one pickup in that time.
+	 * This is returned as an associative array `[foodsaver_id => date]`.
+	 */
+	public function getLastPickupInStore(int $storeId)
+	{
+		$data = $this->db->fetch(
+			'SELECT foodsaver_id, MAX(`date`) as date
+			FROM fs_abholer
+			WHERE betrieb_id = :storeId
+			AND confirmed = 1
+			AND `date` < NOW()', [
+				':storeId' => $storeId
+			]
+		);
+
+		return $this->flattenArray($data, 'foodsaver_id', 'date');
+	}
+
+	/**
 	 * Converts a 2d array `[[key => x, value => y]]` into an associative 1d array `[x => y]`.
 	 */
 	private function flattenArray(array $data, string $key, string $value)

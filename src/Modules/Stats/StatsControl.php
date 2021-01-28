@@ -104,35 +104,19 @@ class StatsControl extends ConsoleControl
 		if ($storeId > 0) {
 			if ($team = $this->storeGateway->getStoreTeam($storeId)) {
 				$userFetchCount = $this->statsGateway->getStoreUsersFetchCount($storeId);
+				$firstDates = $this->statsGateway->getFirstPickupInStore($storeId);
+				$lastDates = $this->statsGateway->getLastPickupInStore($storeId);
+
 				foreach ($team as $fs) {
-					$newdata = [
-						'stat_first_fetch' => $fs['stat_first_fetch'],
-						'foodsaver_id' => $fs['id'],
-						'betrieb_id' => $storeId,
-						'verantwortlich' => $fs['verantwortlich'],
-						'stat_fetchcount' => $fs['stat_fetchcount'],
-						'stat_last_fetch' => null,
-					];
-
-					/* first_fetch */
-					if ($first_fetch = $this->model->getFirstFetchInStore($storeId, $fs['id'])) {
-						$newdata['stat_first_fetch'] = $first_fetch;
-					}
-
-					/*last_fetch*/
-					if ($last_fetch = $this->model->getLastFetchInStore($storeId, $fs['id'])) {
-						$newdata['stat_last_fetch'] = $last_fetch;
-					}
-
 					$fetchCount = $fs['stat_fetchcount'] + ($userFetchCount[$fs['id']] ?? 0);
 
 					$this->model->updateStoreStats(
 						$storeId, // Betrieb id
 						$fs['id'], // foodsaver_id
 						$fs['stat_add_date'], // add date
-						$newdata['stat_first_fetch'], // erste mal abholen
+						$firstDates[$fs['id']] ?? null, // erste mal abholen
 						$fetchCount, // anzahl abholungen
-						$newdata['stat_last_fetch']
+						$lastDates[$fs['id']] ?? null
 					);
 				}
 			}
