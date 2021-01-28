@@ -102,9 +102,8 @@ class StatsControl extends ConsoleControl
 		$storeId = $store['id'];
 
 		if ($storeId > 0) {
-			$added = $store['added'];
-
 			if ($team = $this->storeGateway->getStoreTeam($storeId)) {
+				$userFetchCount = $this->statsGateway->getStoreUsersFetchCount($storeId);
 				foreach ($team as $fs) {
 					$newdata = [
 						'stat_first_fetch' => $fs['stat_first_fetch'],
@@ -125,20 +124,14 @@ class StatsControl extends ConsoleControl
 						$newdata['stat_last_fetch'] = $last_fetch;
 					}
 
-					/*fetchcount*/
-					$fetchcount = $this->model->getStoreFetchCount(
-						$storeId,
-						$fs['id'],
-						$fs['stat_last_update'],
-						$fs['stat_fetchcount']
-					);
+					$fetchCount = $fs['stat_fetchcount'] + ($userFetchCount[$fs['id']] ?? 0);
 
 					$this->model->updateStoreStats(
 						$storeId, // Betrieb id
 						$fs['id'], // foodsaver_id
 						$fs['stat_add_date'], // add date
 						$newdata['stat_first_fetch'], // erste mal abholen
-						$fetchcount, // anzahl abholungen
+						$fetchCount, // anzahl abholungen
 						$newdata['stat_last_fetch']
 					);
 				}

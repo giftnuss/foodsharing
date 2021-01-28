@@ -107,23 +107,6 @@ class StatsModel extends Db
 		');
 	}
 
-	public function getStoreFetchCount($storeId, $fsId, $last_update, $stat_fetchcount)
-	{
-		$val = $this->qOne('
-			SELECT COUNT(foodsaver_id)
-
-			FROM 	fs_abholer
-
-			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
-			AND 	`betrieb_id` = ' . (int)$storeId . '
-			AND 	`date` > ' . $this->dateval($last_update) . '
-			AND 	`date` < NOW()
-			AND 	`confirmed` = 1
-		');
-
-		return (int)$val + (int)$stat_fetchcount;
-	}
-
 	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
 	{
 		return $this->update('
