@@ -167,10 +167,14 @@ export default {
   },
   methods: {
     async sendQuickreply (txt) {
-      console.log('sending reply', this.quickreplyValue)
-      this.qrLoading = true
-      await sendQuickreply(this.quickreply, this.quickreplyValue).then((x) => { pulseInfo(x.message) })
-      this.qrLoading = false
+      if (this.quickreplyValue !== null && this.quickreplyValue.trim().length !== 0) {
+        console.log('sending reply', this.quickreplyValue)
+        this.qrLoading = true
+        await sendQuickreply(this.quickreply, this.quickreplyValue).then((x) => {
+          pulseInfo(x.message)
+        })
+        this.qrLoading = false
+      }
       return true
     },
   },
