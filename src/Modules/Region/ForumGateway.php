@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Region\ThreadStatus;
 
 class ForumGateway extends BaseGateway
 {
@@ -90,22 +91,23 @@ class ForumGateway extends BaseGateway
 	{
 		return $this->db->fetch('
 			SELECT 		t.id,
-						b.bezirk_id AS regionId, 
-						b.bot_theme AS regionSubId, 
+						b.bezirk_id AS regionId,
+						b.bot_theme AS regionSubId,
 						t.name as title,
 						t.`time`,
 						UNIX_TIMESTAMP(t.`time`) AS time_ts,
 						t.last_post_id,
 						t.`active`,
 						t.`sticky`,
-						t.foodsaver_id as creator_id
+						t.foodsaver_id as creator_id,
+						t.status
 
 			FROM 		fs_theme t
 
 			LEFT JOIN fs_bezirk_has_theme AS b ON b.theme_id = t.id
 
 			WHERE 		t.id = :thread_id
-			
+
 			LIMIT 1
 
 		', ['thread_id' => $threadId]);
@@ -119,6 +121,7 @@ class ForumGateway extends BaseGateway
 			'name' => $title,
 			'time' => date('Y-m-d H:i:s'),
 			'active' => $isActive,
+			'status' => ThreadStatus::OPEN,
 		]);
 
 		$this->forumFollowerGateway->followThreadByBell($foodsaverId, $threadId);
@@ -209,7 +212,7 @@ class ForumGateway extends BaseGateway
 			FROM 		fs_theme_post p
 			INNER JOIN   fs_foodsaver fs
 				ON 		p.foodsaver_id = fs.id
-			LEFT JOIN   fs_bezirk_has_theme ht 
+			LEFT JOIN   fs_bezirk_has_theme ht
 				ON 		ht.theme_id = p.theme_id
 			LEFT JOIN	fs_bezirk b
 				ON		b.id = ht.bezirk_id';
@@ -231,7 +234,7 @@ class ForumGateway extends BaseGateway
 			r.time,
 			r.foodsaver_id,
 			fs.name as foodsaver_name
-			
+
 			FROM
 			fs_post_reaction r
 			LEFT JOIN
@@ -289,7 +292,7 @@ class ForumGateway extends BaseGateway
 	public function listPosts($threadId)
 	{
 		$posts = $this->db->fetchAll(
-			$this->getPostSelect() . ' 
+			$this->getPostSelect() . '
 			WHERE 		p.theme_id = :threadId
 
 			ORDER BY 	p.`time`
@@ -313,7 +316,7 @@ class ForumGateway extends BaseGateway
 	public function getPost($postId)
 	{
 		return $this->db->fetch(
-			$this->getPostSelect() . ' 
+			$this->getPostSelect() . '
 			WHERE 		p.id = :postId
 
 			ORDER BY 	p.`time`
@@ -365,13 +368,12 @@ class ForumGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns whether the status was set successfully.
+	 * Sets the status of a thread and returns whether the status was set successfully, see {@see ThreadStatus}.
 	 */
-	public function setThreadStatus(int $threadId, string $status): bool
+	public function setThreadStatus(int $threadId, int $status): bool
 	{
 		return $this->db->update('fs_theme', ['status' => $status], ['id' => $threadId]) > 0;
 	}
-
 
 	public function getThreadForPost(int $postId): ?int
 	{

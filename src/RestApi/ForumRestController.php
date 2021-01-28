@@ -59,7 +59,8 @@ class ForumRestController extends AbstractFOSRestController
 			],
 			'creator' => [
 				'id' => $thread['creator_id'],
-			]
+			],
+			'status' => intval($thread['status'])
 		];
 		if (isset($thread['post_time'])) {
 			$normalizedThread['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
@@ -257,7 +258,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @Rest\Patch("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="isSticky", nullable=true, default=null, description="should thread be pinned to the top of forum?")
 	 * @Rest\RequestParam(name="isActive", nullable=true, default=null, description="should a thread in a moderated forum be activated?")
-	 * @Rest\RequestParam(name="status", nullable=true, default=open, description="status for a active thread --> open or closed")
+	 * @Rest\RequestParam(name="status", nullable=true, default=null, description="status of a thread")
 	 */
 	public function patchThreadAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
@@ -282,7 +283,7 @@ class ForumRestController extends AbstractFOSRestController
 		}
 		$status = $paramFetcher->get('status');
 		if (!empty($status)) {
-			$this->forumGateway->setThreadStatus($threadId, $status);
+			$this->forumGateway->setThreadStatus($threadId, intval($status));
 		}
 
 		return $this->getThreadAction($threadId);
