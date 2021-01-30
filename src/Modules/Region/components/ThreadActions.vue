@@ -37,41 +37,21 @@
       </b-form-checkbox>
     </div>
     <div>
-      <span class="legend font-italic mr-2">
-        {{ $i18n('forum.close.header') }}
-      </span>
+      <div>{{ status }}, {{ ThreadStatus.THREAD_OPEN }}, {{ ThreadStatus.THREAD_CLOSED }}</div>
       <b-button
-        v-if="status === OPEN"
+        v-if="status === ThreadStatus.THREAD_OPEN"
         data-toggle="tooltip"
         data-placement="bottom"
-        :title="$i18n('forum.close.positiv')"
-        @click="$emit('positiv')"
-      >
-        <i class="fas fa-folder-plus" />
-      </b-button>
-      <b-button
-        v-if="status === OPEN"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        :title="$i18n('forum.close.negativ')"
-        @click="$emit('negativ')"
-      >
-        <i class="fas fa-folder-minus" />
-      </b-button>
-      <b-button
-        v-if="status === OPEN"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        :title="$i18n('forum.close.neutral')"
-        @click="$emit('neutral')"
+        :title="$i18n('forum.thread.close')"
+        @click="$emit('close')"
       >
         <i class="fas fa-folder" />
       </b-button>
       <b-button
-        v-if="status === CLOSED"
+        v-else
         data-toggle="tooltip"
         data-placement="bottom"
-        :title="$i18n('forum.open')"
+        :title="$i18n('forum.thread.open')"
         @click="$emit('open')"
       >
         <i class="fas fa-folder-open" />
@@ -82,6 +62,8 @@
 
 <script>
 
+import ThreadStatus from './ThreadStatus'
+
 export default {
   components: {},
   props: {
@@ -89,7 +71,7 @@ export default {
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
     showSticky: { type: Boolean, default: null },
-    status: { type: String, default: null },
+    status: { type: Number, default: ThreadStatus.THREAD_OPEN },
   },
 }
 </script>

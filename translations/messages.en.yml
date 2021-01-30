@@ -2235,9 +2235,6 @@ date_short:
   Monday: Mo
 
 forum:
-  close:
-    header: "Close Thread:"
-    positiv: "Close positiv"
-    negativ: "Close negativ"
-    neutral: "Close neutral"
-  open: "Open thread again"
+  thread:
+    close: "Close thread"
+    open: "Reopen thread"

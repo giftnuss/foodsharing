@@ -29,10 +29,8 @@
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
-        @positiv="closeThreadPositiv"
-        @negativ="closeThreadNegativ"
-        @neutral="closeThreadNeutral"
-        @open="openThreadAgain"
+        @close="setStatus(ThreadStatus.THREAD_CLOSED)"
+        @open="setStatus(ThreadStatus.THREAD_OPEN)"
       />
       <div
         v-if="!isActive && mayModerate"
@@ -97,10 +95,8 @@
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
-        @positiv="closeThreadPositiv"
-        @negativ="closeThreadNegativ"
-        @neutral="closeThreadNeutral"
-        @open="openThreadAgain"
+        @close="setStatus(ThreadStatus.THREAD_CLOSED)"
+        @open="setStatus(ThreadStatus.THREAD_OPEN)"
       />
     </div>
 
@@ -150,6 +146,8 @@ import { pulseError } from '@/script'
 import i18n from '@/i18n'
 import { user } from '@/server-data'
 import { GET } from '@/browser'
+import { setThreadStatus } from '@/api/forum'
+import ThreadStatus from './ThreadStatus'
 
 export default {
   components: { BModal, ThreadActions, ThreadForm, ThreadPost },
@@ -371,34 +369,10 @@ export default {
         pulseError(i18n('error_unexpected'))
       }
     },
-    async closeThreadPositiv (threadID) {
-      this.isClosed = true
+    async setStatus (status) {
       try {
-
-      } catch (err) {
-        pulseError(i18n('error_unexpected'))
-      }
-    },
-    async closeThreadNegativ (threadID) {
-      this.isClosed = true
-      try {
-
-      } catch (err) {
-        pulseError(i18n('error_unexpected'))
-      }
-    },
-    async closeThreadNeutral (threadID) {
-      this.isClosed = true
-      try {
-
-      } catch (err) {
-        pulseError(i18n('error_unexpected'))
-      }
-    },
-    async openThreadAgain (threadID) {
-      this.isClosed = false
-      try {
-
+        setThreadStatus(this.id, status)
+        this.isClosed = (status === THREAD_CLOSED)
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       }

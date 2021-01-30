@@ -8,7 +8,7 @@ final class AddForumThreadStatus extends AbstractMigration
 {
 	public function change(): void
 	{
-		$this->table('fs_poll')
+		$this->table('fs_theme')
 			->addColumn('status', 'integer', [
 				'null' => false,
 				'default' => '0',
