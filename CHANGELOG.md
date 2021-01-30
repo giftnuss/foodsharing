@@ -16,6 +16,7 @@
 - Remove active baskets if a user is deleted !1867 #983 @alex.simm 
 - Report and Mediation button is not visible against foodsharers !1874 @fs_k
 - Updated english translations !1875 @kingu @alex.simm
+- Redirect to previous page when logging in using the topbar #689 !1887 @alex.simm
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

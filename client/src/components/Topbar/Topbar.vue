@@ -27,7 +27,7 @@
           />
           <menu-item
             id="login"
-            :url="$url('login')"
+            :url="$url('login')+'&ref='+encodeURIComponent(loginReferrer)"
             icon="fa-sign-in-alt"
             :title="$i18n('login.topbar')"
             :show-title-always="true"
@@ -132,6 +132,13 @@ export default {
     return {
       searchOpen: false,
     }
+  },
+  computed: {
+    loginReferrer () {
+      const url = new URL(window.location.href)
+      const path = url.pathname + url.search
+      return (path === '/') ? this.$url('dashboard') : path
+    },
   },
 }
 </script>
