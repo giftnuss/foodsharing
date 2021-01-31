@@ -22,91 +22,31 @@ class StatsGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns the number of pickups since the last update for each user in the store who had at least
-	 * one pickup in that time. This is returned as an associative array `[foodsaver_id => count]`.
+	 * Update the number of pickups, and the first and last pickup for each user in the store.
+	 *
+	 * @param int $storeId the store that will be updated
+	 *
+	 * @throws \Exception
 	 */
-	public function getStoreUsersFetchCount(int $storeId): array
+	public function updateStoreUsersData(int $storeId): void
 	{
-		$data = $this->db->fetchAll(
-			'SELECT a.foodsaver_id, COUNT(*) as count
-			FROM 	fs_abholer a
-            LEFT JOIN fs_betrieb_team t
-            ON a.foodsaver_id = t.foodsaver_id
-			WHERE 	a.betrieb_id = :storeId
-            AND (t.stat_last_update IS NULL OR a.date > t.stat_last_update)
-			AND 	a.date < NOW()
-			AND 	a.confirmed = 1
-			GROUP BY a.foodsaver_id', [
+		$this->db->fetch('UPDATE fs_betrieb_team,
+    			(SELECT foodsaver_id,
+    			        COUNT(*) as fetchcount,
+    			        DATE_FORMAT(max(date),"%Y-%m-%d") as last_fetch,
+    			        DATE_FORMAT(min(date),"%Y-%m-%d") as first_fetch
+    			FROM fs_abholer
+    			WHERE betrieb_id = 1
+    			AND date < NOW()
+    			AND confirmed = 1
+    			GROUP BY foodsaver_id
+    		) AS storestats
+    		SET stat_fetchcount = storestats.fetchcount,
+    		    stat_first_fetch = storestats.first_fetch,
+    		    stat_last_fetch = storestats.last_fetch
+			WHERE storestats.foodsaver_id = fs_betrieb_team.foodsaver_id
+			AND fs_betrieb_team.betrieb_id = :storeId', [
 			':storeId' => $storeId,
 		]);
-
-		return $this->flattenArray($data, 'foodsaver_id', 'count');
-	}
-
-	/**
-	 * Returns the first pickup date for each user in the store who had at least one pickup in that time.
-	 * This is returned as an associative array `[foodsaver_id => date]`.
-	 */
-	public function getFirstPickupInStore(int $storeId)
-	{
-		$data = $this->db->fetchAll(
-			'SELECT foodsaver_id, MIN(`date`) as date
-			FROM fs_abholer
-			WHERE betrieb_id = :storeId
-			AND confirmed = 1', [
-				':storeId' => $storeId
-			]
-		);
-
-		return $this->flattenArray($data, 'foodsaver_id', 'date');
-	}
-
-	/**
-	 * Returns the last pickup date for each user in the store who had at least one pickup in that time.
-	 * This is returned as an associative array `[foodsaver_id => date]`.
-	 */
-	public function getLastPickupInStore(int $storeId)
-	{
-		$data = $this->db->fetchAll(
-			'SELECT foodsaver_id, MAX(`date`) as date
-			FROM fs_abholer
-			WHERE betrieb_id = :storeId
-			AND confirmed = 1
-			AND `date` < NOW()', [
-				':storeId' => $storeId
-			]
-		);
-
-		return $this->flattenArray($data, 'foodsaver_id', 'date');
-	}
-
-	/**
-	 * Updates the stats for one user in a store.
-	 */
-	public function updateStoreStats(int $storeId, int $foodsaverId, int $fetchCount, ?string $firstFetch,
-									 ?string $lastFetch)
-	{
-		$this->db->update('fs_betrieb_team', [
-			'stat_last_update' => $this->db->now(),
-			'stat_fetchcount' => $fetchCount,
-			'stat_first_fetch' => $firstFetch,
-			'stat_last_fetch' => $lastFetch,
-		], [
-			'betrieb_id' => $storeId,
-			'foodsaver_id' => $foodsaverId,
-		]);
-	}
-
-	/**
-	 * Converts a 2d array `[[key => x, value => y]]` into an associative 1d array `[x => y]`.
-	 */
-	private function flattenArray(array $data, string $key, string $value)
-	{
-		$flat = [];
-		foreach ($data as $d) {
-			$flat[$d[$key]] = $d[$value];
-		}
-
-		return $flat;
 	}
 }

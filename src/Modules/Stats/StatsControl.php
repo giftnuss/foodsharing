@@ -91,35 +91,12 @@ class StatsControl extends ConsoleControl
 		$allStores = $this->statsGateway->fetchAllStores();
 
 		foreach ($allStores as $store) {
-			$this->calcStores($store);
+			if ($store['id'] > 0) {
+				$this->statsGateway->updateStoreUsersData($store['id']);
+			}
 		}
 
 		self::success('stores ready :o)');
-	}
-
-	private function calcStores($store)
-	{
-		$storeId = $store['id'];
-
-		if ($storeId > 0) {
-			if ($team = $this->storeGateway->getStoreTeam($storeId)) {
-				$userFetchCount = $this->statsGateway->getStoreUsersFetchCount($storeId);
-				$firstDates = $this->statsGateway->getFirstPickupInStore($storeId);
-				$lastDates = $this->statsGateway->getLastPickupInStore($storeId);
-
-				foreach ($team as $fs) {
-					$fetchCount = $fs['stat_fetchcount'] + ($userFetchCount[$fs['id']] ?? 0);
-
-					$this->statsGateway->updateStoreStats(
-						$storeId, // Betrieb id
-						$fs['id'], // foodsaver_id
-						$fetchCount, // anzahl abholungen
-						$firstDates[$fs['id']] ?? null, // erste mal abholen
-						$lastDates[$fs['id']] ?? null
-					);
-				}
-			}
-		}
 	}
 
 	/**
