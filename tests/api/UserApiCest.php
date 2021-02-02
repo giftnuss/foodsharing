@@ -2,6 +2,7 @@
 
 namespace api;
 
+use Carbon\Carbon;
 use Codeception\Example;
 use Codeception\Util\HttpCode as Http;
 use Faker;
@@ -13,6 +14,7 @@ class UserApiCest
 {
 	private $user;
 	private $userOrga;
+	private $store;
 	private $faker;
 
 	private const EMAIL = 'email';
@@ -23,6 +25,10 @@ class UserApiCest
 	{
 		$this->user = $I->createFoodsaver();
 		$this->userOrga = $I->createOrga();
+
+		$region = $I->createRegion();
+		$this->store = $I->createStore($region['id']);
+		$I->addStoreTeam($this->store['id'], $this->user['id']);
 
 		$this->faker = Faker\Factory::create('de_DE');
 	}
@@ -201,5 +207,28 @@ class UserApiCest
 		}
 
 		return $text;
+	}
+
+	public function canDeleteUser(\ApiTester $I): void
+	{
+		// add user to a pickup slots
+		$I->addPicker($this->store['id'], $this->user['id']);
+		$I->addPicker($this->store['id'], $this->user['id'], ['confirmed' => 0]);
+
+		// delete user
+		$I->login($this->user[self::EMAIL]);
+		$I->sendDELETE(self::API_USER . '/' . $this->user['id']);
+		$I->seeResponseCodeIs(Http::NO_CONTENT);
+
+		// check that the user is not in the team anymore and that no future slots are assigned to the user
+		$I->dontSeeInDatabase('fs_betrieb_team', [
+			'betrieb_id' => $this->store['id'],
+			'foodsaver_id' => $this->user['id']
+		]);
+		$I->dontSeeInDatabase('fs_abholer', [
+			'foodsaver_id' => $this->user['id'],
+			'betrieb_id' => $this->store['id'],
+			'date >' => Carbon::now()->format('Y-m-d H:i:s')
+		]);
 	}
 }

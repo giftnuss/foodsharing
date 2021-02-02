@@ -309,7 +309,7 @@ class StoreTransactions
 
 	public function leaveStoreTeam(int $storeId, int $userId): void
 	{
-		$this->pickupGateway->deleteAllDatesFromAFoodsaver($storeId, $userId);
+		$this->pickupGateway->deleteAllDatesFromAFoodsaver($userId, $storeId);
 		$this->storeGateway->removeUserFromTeam($storeId, $userId);
 
 		if ($teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId)) {

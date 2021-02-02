@@ -40,6 +40,8 @@ class FoodsaverTransactions
 		// set all active baskets of the user to deleted
 		$this->basketGateway->removeActiveUserBaskets($foodsaverId);
 
+		$this->storeTransactions->leaveAllStoreTeams($foodsaverId);
+
 		// delete the user
 		$this->foodsaverGateway->deleteFoodsaver($foodsaverId);
 	}
