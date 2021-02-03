@@ -104,4 +104,9 @@ class ProfilePermissions
 		// users can delete bananas that were given to them by someone else
 		return $this->session->id() == $recipientId;
 	}
+
+	public function mayRemoveFromBounceList(int $userId): bool
+	{
+		return $this->session->may('orga');
+	}
 }

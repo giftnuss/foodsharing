@@ -408,4 +408,26 @@ class UserRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view($user, 200));
 	}
+
+	/**
+	 * Removes the user from the email bounce list. This will have no effect and return 200 if the user was
+	 * not on the bounce list.
+	 *
+	 * @OA\Parameter(name="userId", in="path", @OA\Schema(type="integer"), description="which user to remove from the list")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @OA\Tag(name="user")
+	 *
+	 * @Rest\Delete("user/{userId}/emailbounce", requirements={"userId" = "\d+"})
+	 */
+	public function removeFromBounceListAction(int $userId): Response
+	{
+		if (!$this->session->may() || !$this->profilePermissions->mayRemoveFromBounceList($userId)) {
+			throw new HttpException(403);
+		}
+
+		$this->profileTransactions->removeUserFromBounceList($userId);
+
+		return $this->handleView($this->view([], 200));
+	}
 }

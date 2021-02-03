@@ -5,21 +5,25 @@ namespace Foodsharing\Modules\Profile;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Mails\MailsGateway;
 
 class ProfileTransactions
 {
 	private ProfileGateway $profileGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private BellGateway $bellGateway;
+	private MailsGateway $mailsGateway;
 
 	public function __construct(
 		ProfileGateway $profileGateway,
 		FoodsaverGateway $foodsaverGateway,
-		BellGateway $bellGateway
+		BellGateway $bellGateway,
+		MailsGateway $mailsGateway
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
 		$this->bellGateway = $bellGateway;
+		$this->mailsGateway = $mailsGateway;
 	}
 
 	/**
@@ -44,5 +48,14 @@ class ProfileTransactions
 		$this->bellGateway->addBell($receiverId, $bell);
 
 		return $this->profileGateway->giveBanana($receiverId, $message, $giverId);
+	}
+
+	/**
+	 * Removes the user's personal (login) email address from the bounce list.
+	 */
+	public function removeUserFromBounceList(int $userId): void
+	{
+		$address = $this->foodsaverGateway->getEmailAddress($userId);
+		$this->mailsGateway->removeBounceForMail($address);
 	}
 }

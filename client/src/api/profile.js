@@ -22,3 +22,7 @@ export function sendBanana (id, message) {
 export function deleteBanana (userId, senderId) {
   return remove(`/user/${userId}/banana/${senderId}`)
 }
+
+export function removeUserFromBounceList (userId) {
+  return remove(`/user/${userId}/emailbounce`)
+}
