@@ -4,7 +4,7 @@ import './Profile.css'
 import $ from 'jquery'
 import { expose } from '@/utils'
 import { sendBuddyRequest } from '@/api/buddy'
-import { pulseError, pulseInfo } from '@/script'
+import { hideLoader, pulseError, pulseInfo, reload, showLoader } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
 import MediationRequest from './components/MediationRequest'
@@ -17,8 +17,9 @@ import PickupHistory from '../StoreUser/components/PickupHistory'
 import { URL_PART } from '@/browser'
 import '../WallPost/WallPost.css'
 import { initWall } from '@/wall'
+import { removeUserFromBounceList } from '@/api/profile'
 
-expose({ trySendBuddyRequest })
+expose({ trySendBuddyRequest, removeFromBounceList })
 
 async function trySendBuddyRequest (userId) {
   try {
@@ -49,4 +50,17 @@ vueApply('#report-Request', true) // ReportRequest
 if (URL_PART(0) === 'profile') {
   const wallpostTable = (URL_PART(2) === 'notes') ? 'usernotes' : 'foodsaver'
   initWall(wallpostTable, URL_PART(1))
+}
+
+async function removeFromBounceList (userId) {
+  showLoader()
+
+  try {
+    await removeUserFromBounceList(userId)
+    reload()
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+
+  hideLoader()
 }

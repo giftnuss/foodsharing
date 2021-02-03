@@ -93,17 +93,22 @@ class ProfileView extends View
 		$maySeePickups = $this->profilePermissions->maySeePickups($fsId);
 		$maySeeStores = $this->profilePermissions->maySeeStores($fsId);
 
-		if ($maySeeBounceWarning) {
-			if ($this->foodsaver['emailIsBouncing']) {
-				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning_1', [
+		if ($maySeeBounceWarning && $this->foodsaver['emailIsBouncing']) {
+			$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning_1', [
 					'{email}' => $this->foodsaver['email'],
 				]) . '<a href="/?page=settings"> ' . $this->translator->trans('profile.mailBounceWarning_2') . ' </a>'
 				. $this->translator->trans('profile.mailBounceWarning_3') . '</h1>';
-				$warningContainer = '<div>'
-					. $this->v_utils->v_info($warningMessage, '', '<i class="fas fa-exclamation-triangle"></i>')
-					. '</div>';
-				$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
+			$warningContainer = '<div>'
+				. $this->v_utils->v_info($warningMessage, '', '<i class="fas fa-exclamation-triangle"></i>')
+				. '</div>';
+
+			if ($this->profilePermissions->mayRemoveFromBounceList($this->foodsaver['id'])) {
+				// $warningContainer .= 'Kategorien: ' . implode(', ', $this->foodsaver['emailBounceCategories']);
+				$warningContainer .= '<div style="text-align:center"><a href="#" onclick="removeFromBounceList('
+					. $this->foodsaver['id']
+					. ')" class="button">' . $this->translator->trans('profile.mail_bounce_remove_button') . '</a></div>';
 			}
+			$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
 		}
 
 		$wallTitle = $this->translator->trans('profile.pinboard', ['{name}' => $this->foodsaver['name']]);
