@@ -147,4 +147,14 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
+
+	public function getLocale(int $userId): ?string
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'locale', ['id' => $userId]);
+	}
+
+	public function setLocale(int $userId, string $locale): void
+	{
+		$this->db->update('fs_foodsaver', ['locale' => $locale], ['id' => $userId]);
+	}
 }

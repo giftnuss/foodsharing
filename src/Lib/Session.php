@@ -15,6 +15,7 @@ use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class Session
@@ -27,6 +28,7 @@ class Session
 	private $storeGateway;
 	private $mailsGateway;
 	private $loginGateway;
+	private SettingsGateway $settingsGateway;
 	private $initialized = false;
 
 	// update this whenever adding new fields to the session!!!
@@ -44,6 +46,8 @@ class Session
 		Role::SITE_ADMIN => 'admin',
 	];
 
+	const DEFAULT_LOCALE = 'de';
+
 	public function __construct(
 		Mem $mem,
 		BuddyGateway $buddyGateway,
@@ -52,7 +56,8 @@ class Session
 		RegionGateway $regionGateway,
 		StoreGateway $storeGateway,
 		MailsGateway $mailsGateway,
-		LoginGateway $loginGateway
+		LoginGateway $loginGateway,
+		SettingsGateway $settingsGateway
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -62,6 +67,7 @@ class Session
 		$this->storeGateway = $storeGateway;
 		$this->mailsGateway = $mailsGateway;
 		$this->loginGateway = $loginGateway;
+		$this->settingsGateway = $settingsGateway;
 	}
 
 	public function initIfCookieExists()
@@ -237,10 +243,10 @@ class Session
 	public function getLocale()
 	{
 		if (!$this->initialized) {
-			return 'de';
+			return self::DEFAULT_LOCALE;
 		}
 
-		return fSession::get('locale', 'de');
+		return fSession::get('locale', self::DEFAULT_LOCALE);
 	}
 
 	/**
@@ -449,6 +455,7 @@ class Session
 
 		$this->set('email_is_activated', $this->loginGateway->isActivated($fs['id']));
 		$this->set('email_is_bouncing', $this->mailsGateway->emailIsBouncing($fs['email']));
+		$this->set('locale', $this->settingsGateway->getLocale($fs['id']));
 	}
 
 	private function rolleWrapInt($roleInt)
