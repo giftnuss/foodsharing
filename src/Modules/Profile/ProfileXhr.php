@@ -114,8 +114,8 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
-		$userId = $_GET['fsid'];
-		$storeId = $_GET['storeId'];
+		$userId = intval($_GET['fsid']);
+		$storeId = intval($_GET['storeId']);
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
 		$pickupDate = Carbon::createFromTimestamp($_GET['date']);
 
