@@ -1495,7 +1495,7 @@ profile:
     join: "Mitmachen & Registrieren"
   mediation:
     title: "**Beta-Test** Mediationsanfrage für {name}"
-    info: "Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender Emailadresse : {email}@foodsharing.network"
+    info: "Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender Emailadresse:"
     no_group: "Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird."
   report:
     title: "**Beta-Test** Meldung über {name}"

@@ -7,7 +7,8 @@
 
     <b-alert variant="info" show>
       <div v-if="hasLocalMediationGroup">
-        {{ $i18n('profile.mediation.info', { email: mediationGroupEmail }) }}
+        {{ $i18n('profile.mediation.info') }}
+        <a :href="'mailto:' + emailAddress">{{ emailAddress }}</a>
       </div>
       <div v-else>
         {{ $i18n('profile.mediation.no_group') }}
@@ -22,6 +23,11 @@ export default {
     foodSaverName: { type: String, required: true },
     mediationGroupEmail: { type: String, required: true },
     hasLocalMediationGroup: { type: Boolean, default: false },
+  },
+  computed: {
+    emailAddress () {
+      return this.mediationGroupEmail + '@foodsharing.network'
+    },
   },
 }
 </script>
