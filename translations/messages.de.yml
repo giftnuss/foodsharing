@@ -349,15 +349,15 @@ group:
     moderation: "Moderation"
     invalid: "Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden."
     duplicate_welcome_team: "Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben."
-    duplicate_voting_team: "Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben."
-    duplicate_fsp_team: "Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben."
-    duplicate_stores_team: 'Betriebskoordinationsteam schon angelegt ! Pro Bezirk kann es nur ein Betriebskoordinationsteam geben.'
-    duplicate_report_team: 'Meldungsteam schon angelegt ! Pro Bezirk kann es nur ein Meldungsteam geben.'
-    duplicate_mediation_team: 'Mediatoinsteam schon angelegt ! Pro Bezirk kann es nur ein Mediatoinsteam geben.'
-    duplicate_arbitration_team: 'Schiedstelle schon angelegt ! Pro Bezirk kann es nur ein Schiedstelle geben.'
-    duplicate_fsmanagement_team: 'Verwaltungsteam schon angelegt ! Pro Bezirk kann es nur ein Verwaltungsteam geben.'
-    duplicate_pr_team: 'Öffentlichkeitsarbeitsteam schon angelegt ! Pro Bezirk kann es nur ein Öffentlichkeitsarbeitsteam geben.'
-    duplicate_moderation_team: 'Moderationsteam schon angelegt ! Pro Bezirk kann es nur ein Moderationsteam geben.'
+    duplicate_voting_team: "Abstimmungsteam schon angelegt! Pro Bezirk kann es nur ein Abstimmungsteam geben."
+    duplicate_fsp_team: "Fairteilerteam schon angelegt! Pro Bezirk kann es nur ein Fairteilerteam geben."
+    duplicate_stores_team: 'Betriebskoordinationsteam schon angelegt! Pro Bezirk kann es nur ein Betriebskoordinationsteam geben.'
+    duplicate_report_team: 'Meldungsteam schon angelegt! Pro Bezirk kann es nur ein Meldungsteam geben.'
+    duplicate_mediation_team: 'Mediationsteam schon angelegt! Pro Bezirk kann es nur ein Mediationsteam geben.'
+    duplicate_arbitration_team: 'Schiedstelle schon angelegt! Pro Bezirk kann es nur ein Schiedstelle geben.'
+    duplicate_fsmanagement_team: 'Verwaltungsteam schon angelegt! Pro Bezirk kann es nur ein Verwaltungsteam geben.'
+    duplicate_pr_team: 'Öffentlichkeitsarbeitsteam schon angelegt! Pro Bezirk kann es nur ein Öffentlichkeitsarbeitsteam geben.'
+    duplicate_moderation_team: 'Moderationsteam schon angelegt! Pro Bezirk kann es nur ein Moderationsteam geben.'
   show-all: "Alle anzeigen"
 
 legal:
@@ -1065,8 +1065,8 @@ reports:
   when: "Zeitpunkt"
   info: '
     <br>
-    <BR>
-    !! Bitte gebe das <b>Datum</b> , den <b>Ort</b> und die <b>Uhrzeit</b> des Vorfalles an !! <br>
+    <br>
+    !! Bitte gebe das <b>Datum</b>, den <b>Ort</b> und die <b>Uhrzeit</b> des Vorfalles an !! <br>
     Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit
     bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an
     wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.'

@@ -213,7 +213,6 @@ class ReportXhr extends Control
 
 		return $dialog->xhrout();
 
-		//return ['status' => 0];
 	}
 
 	public function betriebReport(): array

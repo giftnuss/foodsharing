@@ -99,7 +99,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		return [];
 	}
 
-	protected function CreateFunctionWorkgroups(int $region1)
+	protected function createFunctionWorkgroups(int $region1)
 	{
 		$I = $this->helper;
 		$password = 'user';
@@ -430,7 +430,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln(' done');
 
-		$this->CreateFunctionWorkgroups($region1);
+		$this->createFunctionWorkgroups($region1);
 
 		// create more stores and collect their ids in a list
 		$this->output->writeln('Create some stores');
