@@ -9,18 +9,17 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
-use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Utility\DataHelper;
 
 final class FoodsaverGateway extends BaseGateway
 {
-	private $dataHelper;
-	private $forumFollowerGateway;
+	private DataHelper $dataHelper;
+	private ForumFollowerGateway $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
-		DataHelper $dataHelper,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		DataHelper $dataHelper
 	) {
 		parent::__construct($db);
 
@@ -844,10 +843,8 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
+	public function downgradePermanently(int $fsId): int
 	{
-		$this->signOutFromStores($fsId, $storeModel);
-
 		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $fsId]);
 		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
@@ -860,17 +857,6 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->update('fs_foodsaver', $fsUpdateData, [
 			'id' => $fsId
 		]);
-	}
-
-	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
-	{
-		$storeIds = $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'betrieb_id', [
-			'foodsaver_id' => $fsId
-		]);
-
-		foreach ($storeIds as $storeId) {
-			$storeModel->signout($storeId, $fsId);
-		}
 	}
 
 	public function getFoodsaverAddress(int $foodsaverId): array

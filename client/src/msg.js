@@ -287,7 +287,7 @@ const msg = {
         `).slice(0, 25).join('')}
       </div>
       ${plainToHtml(titleText)}
-      <div style="clear:both;"></div>
+      <div class="clear"></div>
     `
 
     $('#msg-conversation-title a').remove()

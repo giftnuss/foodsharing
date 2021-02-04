@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\Control;
 
 class IndexControl extends Control
 {
-	private $contentGateway;
+	private ContentGateway $contentGateway;
 
 	public function __construct(IndexView $view, ContentGateway $contentGateway)
 	{

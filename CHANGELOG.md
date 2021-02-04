@@ -6,10 +6,19 @@
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - New Workgroupfunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
+- Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
+- Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
+- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
+- Remove active baskets if a user is deleted !1867 #983 @alex.simm 
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
 - Fix frontend validation in new poll form !1854 #975 @alex.simm
+- Fix loading of dashboard updates that contain wall posts from deleted users !1858 @alex.simm
+- Set correct placeholder in automated response email for unknown email addresses !1866 @alex.simm
+- logging when user is removed from a pickup slot from the user profile !1870 @fs_k
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
@@ -18,10 +27,19 @@
 - Simplify controller logic for the `sub` query parameter !1845 @\_fridtjof_
 - Unify and move workgroup-function handling to own gateway !1730 @ChrisOelmueller
 - Made most current translation .yaml weblate compliant !1835 @tinuthir
+- Modernize wallpost module initialization !1772 @ChrisOelmueller
+- Replace bell identifiers by enum class #987 !1764 @alex.simm
+- Replaced inline css style 'clear:both' with corresponding css class !1859 @scarya
+- Move map marker requests to a REST endpoint !1863 @alex.simm
+- Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
+- Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
-- Made ForumPostCest more reliable !1853 !1856 @\_fridtjof_
+- Made ForumPostCest more reliable !1853 !1856 !1857 @\_fridtjof_
 - Added Xdebug config for macOS !1804 #932 @muffelrudaijer
+- Several more PHP7 annotations !1760 @ChrisOelmueller
+- More annotations and correctness fixes !1761 @ChrisOelmueller
+- Bumped some container versions !1865 @\_fridtjof_
 
 # Release "Dragonfruit", 2020-12-31
 
@@ -91,7 +109,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Remove some unused global JS !1766 @ChrisOelmueller
 - Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
-- Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
 
 ## Dev/Test/CI stuff

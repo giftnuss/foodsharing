@@ -10,6 +10,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
@@ -137,64 +138,6 @@ class XhrMethods
 				'status' => 0
 			]);
 		}
-	}
-
-	public function xhr_loadMarker($data)
-	{
-		$out = [];
-		$out['status'] = 0;
-		if (isset($data['types']) && is_array($data['types'])) {
-			$out['status'] = 1;
-			foreach ($data['types'] as $t) {
-				if ($t == 'betriebe' && $this->session->may('fs')) {
-					$team_status = [];
-					$hide_some = ' AND betrieb_status_id <> 7'; // CooperationStatus::PERMANENTLY_CLOSED
-					if (isset($data['options']) && is_array($data['options'])) {
-						foreach ($data['options'] as $opt) {
-							if ($opt == 'needhelpinstant') {
-								$team_status[] = 'team_status = 2'; // TeamStatus::OPEN_SEARCHING
-							} elseif ($opt == 'needhelp') {
-								$team_status[] = 'team_status = 1'; // TeamStatus::OPEN
-							} elseif ($opt == 'nkoorp') {
-								// CooperationStatus::COOPERATION_STARTING
-								// CooperationStatus::COOPERATION_ESTABLISHED
-								$hide_some .= ' AND betrieb_status_id NOT IN(3,5)';
-							}
-						}
-					}
-
-					if (!empty($team_status)) {
-						$team_status = ' AND (' . implode(' OR ', $team_status) . ')';
-					} else {
-						$team_status = '';
-					}
-
-					$out['betriebe'] = $this->model->q('
-						SELECT `id`, lat, lon
-						FROM fs_betrieb
-						WHERE lat != ""
-						' . $team_status . $hide_some
-					);
-				} elseif ($t == 'fairteiler') {
-					$out['fairteiler'] = $this->model->q('
-						SELECT `id`, lat, lon, bezirk_id AS bid
-						FROM fs_fairteiler
-						WHERE lat != ""
-						AND status = 1'
-					);
-				} elseif ($t == 'baskets') {
-					if ($baskets = $this->model->q('
-						SELECT id, lat, lon, location_type
-						FROM fs_basket
-						WHERE `status` = 1')
-					) {
-						$out['baskets'] = $baskets;
-					}
-				}
-			}
-		}
-
-		return json_encode($out);
 	}
 
 	public function xhr_uploadPictureRefactorMeSoon($data)
@@ -867,7 +810,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], 'store-time-' . (int)$data['bid']);
+		], BellType::createIdentifier(BellType::STORE_TIME_CHANGED, (int)$data['bid']));
 		$this->bellGateway->addBell($team, $bellData);
 
 		return json_encode(['status' => 1]);
@@ -1077,7 +1020,7 @@ class XhrMethods
 					. '</h1>'
 					. '<p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p>'
 					. '<p>' . $this->sanitizerService->jsSafe($b['plz'] . ' ' . $b['stadt']) . '</p>'
-				. '</div><div style="clear: both;"></div>';
+				. '</div><div class="clear"></div>';
 			}
 		}
 
@@ -1136,7 +1079,7 @@ class XhrMethods
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName,
-		], 'store-request-' . $storeId);
+		], BellType::createIdentifier(BellType::NEW_STORE_REQUEST, $storeId));
 		$this->bellGateway->addBell($bellRecipients, $bellData);
 
 		$this->storeModel->teamRequest($this->session->id(), $storeId);

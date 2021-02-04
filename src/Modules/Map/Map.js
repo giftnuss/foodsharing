@@ -22,6 +22,7 @@ import 'mapbox-gl-leaflet'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
+import { getMapMarkers } from '@/api/map'
 
 let u_map = null
 let markers = null
@@ -34,17 +35,9 @@ expose({
 
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
 
-const fsIcon = L.AwesomeMarkers.icon({
-  icon: 'smile',
-  markerColor: 'orange',
-})
 const bkIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-basket',
   markerColor: 'green',
-})
-const botIcon = L.AwesomeMarkers.icon({
-  icon: 'smile',
-  markerColor: 'red',
 })
 const bIcon = L.AwesomeMarkers.icon({
   icon: 'shopping-cart',
@@ -166,7 +159,7 @@ function init_bDialog () {
   })
 }
 
-function loadMarker (types, loader) {
+async function loadMarker (types, loader) {
   $('#map-options').hide()
   var options = []
   for (let i = 0; i < types.length; i++) {
@@ -186,93 +179,67 @@ function loadMarker (types, loader) {
     showLoader()
   }
 
-  $.ajax({
-    url: '/xhr.php?f=loadMarker',
-    data: { types: types, options: options },
-    dataType: 'json',
-    success: function (data) {
-      if (data.status == 1) {
-        if (markers != null) {
-          u_map.removeLayer(markers)
-        }
+  try {
+    const data = await getMapMarkers(types, options)
 
-        markers = null
+    if (markers != null) {
+      u_map.removeLayer(markers)
+    }
 
-        markers = L.markerClusterGroup({ maxClusterRadius: 50 })
-        markers.on('click', function (el) {
-          const fsid = (el.layer.options.id)
-          const type = el.layer.options.type
+    markers = L.markerClusterGroup({ maxClusterRadius: 50 })
+    markers.on('click', function (el) {
+      const fsid = (el.layer.options.id)
+      const type = el.layer.options.type
 
-          if (type === 'bk') {
-            ajreq('bubble', { app: 'basket', id: fsid })
-          } else if (type === 'b') {
-            ajreq('bubble', { app: 'store', id: fsid })
-          } else if (type === 'f') {
-            const bid = (el.layer.options.bid)
-            goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
-          }
+      if (type === 'bk') {
+        ajreq('bubble', { app: 'basket', id: fsid })
+      } else if (type === 'b') {
+        ajreq('bubble', { app: 'store', id: fsid })
+      } else if (type === 'f') {
+        const bid = (el.layer.options.bid)
+        goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
+      }
+    })
+
+    if (data.baskets != undefined) {
+      $('#map-control li a.baskets').addClass('active')
+      for (let i = 0; i < data.baskets.length; i++) {
+        const a = data.baskets[i]
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bkIcon, type: 'bk' })
+        markers.addLayer(marker)
+      }
+    }
+
+    if (data.betriebe != undefined) {
+      $('#map-control li a.betriebe').addClass('active')
+      for (let i = 0; i < data.betriebe.length; i++) {
+        const a = data.betriebe[i]
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bIcon, type: 'b' })
+
+        markers.addLayer(marker)
+      }
+    }
+
+    if (data.fairteiler != undefined) {
+      $('#map-control li a.fairteiler').addClass('active')
+      for (let i = 0; i < data.fairteiler.length; i++) {
+        const a = data.fairteiler[i]
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), {
+          id: a.id,
+          bid: a.regionId,
+          icon: fIcon,
+          type: 'f',
         })
 
-        if (data.baskets != undefined) {
-          $('#map-control li a.baskets').addClass('active')
-          for (let i = 0; i < data.baskets.length; i++) {
-            const a = data.baskets[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bkIcon, type: 'bk' })
-            markers.addLayer(marker)
-          }
-        }
-
-        if (data.foodsaver != undefined) {
-          $('#map-control li a.foodsaver').addClass('active')
-          for (let i = 0; i < data.foodsaver.length; i++) {
-            const a = data.foodsaver[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: fsIcon, type: 'fs' })
-            markers.addLayer(marker)
-          }
-        }
-
-        if (data.betriebe != undefined) {
-          $('#map-control li a.betriebe').addClass('active')
-          for (let i = 0; i < data.betriebe.length; i++) {
-            const a = data.betriebe[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: bIcon, type: 'b' })
-
-            markers.addLayer(marker)
-          }
-        }
-
-        if (data.fairteiler != undefined) {
-          $('#map-control li a.fairteiler').addClass('active')
-          for (let i = 0; i < data.fairteiler.length; i++) {
-            const a = data.fairteiler[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), {
-              id: a.id,
-              bid: a.bid,
-              icon: fIcon,
-              type: 'f',
-            })
-
-            markers.addLayer(marker)
-          }
-        }
-
-        if (data.botschafter != undefined) {
-          $('#map-control li a.botschafter').addClass('active')
-          for (let i = 0; i < data.botschafter.length; i++) {
-            const a = data.botschafter[i]
-            const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: botIcon, type: 'fs' })
-            markers.addLayer(marker)
-          }
-        }
-        u_map.addLayer(markers)
-      } else if (markers != null) {
-        u_map.removeLayer(markers)
+        markers.addLayer(marker)
       }
-    },
-    complete: function () {
-      hideLoader()
-    },
-  })
+    }
+    u_map.addLayer(markers)
+  } catch (e) {
+    console.error(e)
+    u_map.removeLayer(markers)
+  }
+  hideLoader()
 }
 
 showLoader()

@@ -414,7 +414,7 @@ class MailboxGateway extends BaseGateway
 			$mb_name = strtolower(substr($me['name'], 0, 1) . '.' . $me['nachname']);
 			$mb_name = trim($mb_name);
 			$mb_name = str_replace(['ä', 'ö', 'ü', 'è', 'ß', ' '], ['ae', 'oe', 'ue', 'e', 'ss', '.'], $mb_name);
-			$mb_name = preg_replace('/[^0-9a-z\.]/', '', $mb_name);
+			$mb_name = preg_replace('/[^0-9a-z\.]/', '', $mb_name) ?? '';
 
 			$mb_name = substr($mb_name, 0, 25);
 

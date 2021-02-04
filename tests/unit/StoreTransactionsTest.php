@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Faker\Factory;
 use Faker\Generator;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Store\PickupGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
@@ -145,7 +146,7 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 		$this->tester->updateInDatabase(
 			'fs_bell',
 			['expiration' => '1970-01-01 00:00:00'],
-			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
+			['identifier' => BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $store['id'])]
 		); // outdate bell notification
 
 		$this->gateway->updateExpiredBells();
@@ -178,13 +179,13 @@ class StoreTransactionsTest extends \Codeception\Test\Unit
 
 		$this->tester->seeNumRecords(3, 'fs_abholer');
 
-		$this->tester->seeNumRecords(1, 'fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+		$this->tester->seeNumRecords(1, 'fs_bell', ['identifier' => BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $store['id'])]);
 
-		$bellVars = $this->tester->grabFromDatabase('fs_bell', 'vars', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+		$bellVars = $this->tester->grabFromDatabase('fs_bell', 'vars', ['identifier' => BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $store['id'])]);
 		$vars = unserialize($bellVars);
 		$this->assertEquals(2, $vars['count']);
 
-		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
+		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => BellType::createIdentifier(BellType::STORE_UNCONFIRMED_PICKUP, $store['id'])]);
 		$this->assertEquals($soonDate->format('Y-m-d H:i:s'), $bellDate);
 	}
 

@@ -193,7 +193,7 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function getRequest(int $basket_id, int $foodsaver_id_requester, $foodsaver_id_offerer): array
+	public function getRequest(int $basket_id, ?int $foodsaver_id_requester, $foodsaver_id_offerer): array
 	{
 		$stm = '		
 				SELECT
@@ -356,14 +356,14 @@ class BasketGateway extends BaseGateway
 		?string $pic,
 		float $lat,
 		float $lon,
-		int $fsId
+		?int $fsId
 	): int {
 		return $this->db->update(
 			'fs_basket',
 			[
 				'update' => date('Y-m-d H:i:s'),
 				'description' => strip_tags($desc),
-				'picture' => strip_tags($pic),
+				'picture' => strip_tags($pic ?? ''),
 				'lat' => $lat,
 				'lon' => $lon
 			],
@@ -510,5 +510,18 @@ class BasketGateway extends BaseGateway
 			LIMIT
 				0, 10	
 		', [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
+	}
+
+	/**
+	 * Sets the status of all active baskets of a user to 'deleted'.
+	 */
+	public function removeActiveUserBaskets(int $userId): void
+	{
+		$this->db->update('fs_basket', [
+			'status' => BasketStatus::DELETED_OTHER_REASON
+		], [
+			'foodsaver_id' => $userId,
+			'status' => BasketStatus::REQUESTED_MESSAGE_READ
+		]);
 	}
 }

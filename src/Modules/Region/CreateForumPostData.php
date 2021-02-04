@@ -10,7 +10,7 @@ class CreateForumPostData
 	 * @Assert\Type("string")
 	 * @Assert\NotBlank()
 	 */
-	public $body;
+	public string $body;
 
 	/**
 	 * @Assert\Type("integer")
@@ -19,11 +19,11 @@ class CreateForumPostData
 	 *     max = 1
 	 * )
 	 */
-	public $subscribe;
+	public int $subscribe;
 
 	public $thread;
 
-	public static function create(bool $isFollowing, int $threadId)
+	public static function create(bool $isFollowing, int $threadId): self
 	{
 		$data = new self();
 		$data->subscribe = $isFollowing ? 1 : 0;

@@ -815,7 +815,7 @@ class Utils
 			' . $content . '
 		</div>
 		<input type="hidden" id="' . $id . '-error-msg" value="' . $error_msg . '" />
-		<div style="clear: both;"></div>
+		<div class="clear"></div>
 		</div>';
 	}
 

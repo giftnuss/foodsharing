@@ -7,11 +7,13 @@ use DateTime;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\DTO\CreateStoreData;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -50,6 +52,28 @@ class StoreTransactions
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+	}
+
+	public function createStore(array $legacyGlobalData): int
+	{
+		$store = new CreateStoreData();
+		$store->name = $legacyGlobalData['name'];
+		$store->regionId = $legacyGlobalData['bezirk_id'];
+		$store->lat = $legacyGlobalData['lat'];
+		$store->lon = $legacyGlobalData['lon'];
+		$store->str = $legacyGlobalData['str'];
+		$store->hsnr = $legacyGlobalData['hsnr'];
+		$store->plz = $legacyGlobalData['plz'];
+		$store->stadt = $legacyGlobalData['stadt'];
+		$store->createdAt = Carbon::now();
+
+		$storeId = $this->storeGateway->addStore($store);
+		$managerId = $this->session->id();
+
+		$this->storeGateway->addStoreManager($storeId, $managerId);
+		$this->createTeamConversations($storeId, $managerId);
+
+		return $storeId;
 	}
 
 	/**
@@ -232,7 +256,7 @@ class StoreTransactions
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $storeName
-		], 'store-arequest-' . $userId);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_ACCEPTED, $userId));
 		$this->bellGateway->addBell($userId, $bellData);
 
 		// add the user to the store's region
@@ -262,7 +286,7 @@ class StoreTransactions
 			'href' => '/?page=fsbetrieb&id=' . $storeId
 		], [
 			'name' => $storeName,
-		], 'store-drequest-' . $userId);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_REJECTED, $userId));
 
 		$this->bellGateway->addBell($userId, $bellData);
 	}
@@ -281,5 +305,42 @@ class StoreTransactions
 		$footer = $this->translator->trans('pickup.kick_message_footer');
 
 		return $salutation . ",\n" . $mandatoryMessage . $optionalMessage . "\n\n" . $footer;
+	}
+
+	public function leaveStoreTeam(int $storeId, int $userId): void
+	{
+		$this->pickupGateway->deleteAllDatesFromAFoodsaver($storeId, $userId);
+		$this->storeGateway->removeUserFromTeam($storeId, $userId);
+
+		if ($teamChatConversationId = $this->storeGateway->getBetriebConversation($storeId)) {
+			$this->messageGateway->deleteUserFromConversation($teamChatConversationId, $userId);
+		}
+
+		if ($jumperChatConversationId = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$this->messageGateway->deleteUserFromConversation($jumperChatConversationId, $userId);
+		}
+	}
+
+	public function leaveAllStoreTeams(int $userId): void
+	{
+		$ownStoreIds = $this->storeGateway->listStoreIds($userId);
+
+		foreach ($ownStoreIds as $storeId) {
+			$this->leaveStoreTeam($storeId, $userId);
+		}
+	}
+
+	/**
+	 * creates an empty team conversation for the given store.
+	 * creates an empty standby-team conversation for the given store.
+	 * prefills both conversations with the given userId.
+	 */
+	private function createTeamConversations(int $storeId, int $managerId): void
+	{
+		$storeTeamChatId = $this->messageGateway->createConversation([$managerId], true);
+		$this->storeGateway->updateStoreConversation($storeId, $storeTeamChatId, false);
+
+		$standbyTeamChatId = $this->messageGateway->createConversation([$managerId], true);
+		$this->storeGateway->updateStoreConversation($storeId, $standbyTeamChatId, true);
 	}
 }

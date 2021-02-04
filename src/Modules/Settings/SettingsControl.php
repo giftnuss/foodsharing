@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
@@ -138,7 +139,12 @@ class SettingsControl extends Control
 		$quizRole = Role::STORE_MANAGER;
 		if ($this->session->may() && $this->foodsaver['rolle'] > Role::FOODSHARER) {
 			if (!$this->foodsaver['verified']) {
-				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
+				$content = $this->contentGateway->get(ContentId::QUIZ_MESSAGE_SM_UNVERIFIED_PAGE_45);
+				$this->pageHelper->addContent($this->v_utils->v_field(
+					$content['body'],
+					$content['title'],
+					['class' => 'ui-padding']
+				));
 			} else {
 				if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
 					$fsId = $this->session->id();

@@ -4,6 +4,12 @@ import { acceptApplication, declineApplication } from '@/api/applications'
 import { pulseError, pulseInfo, goTo } from '@/script'
 import i18n from '@/i18n'
 import { expose } from '@/utils'
+// Wallpost
+import { GET } from '@/browser'
+import '../WallPost/WallPost.css'
+import { initWall } from '@/wall'
+
+initWall('application', GET('fid'))
 
 expose({
   tryAcceptApplication,

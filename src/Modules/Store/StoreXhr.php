@@ -213,8 +213,13 @@ class StoreXhr extends Control
 		if ($status === TeamStatus::Coordinator) {
 			$xhr->addMessage($this->translator->trans('storeedit.team.cannot-leave'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
-			$this->storeModel->signout($_GET['id'], $this->session->id());
-			$this->storeGateway->addStoreLog($_GET['id'], $this->session->id(), null, null, StoreLogAction::LEFT_STORE);
+			$storeId = intval($_GET['id']);
+			$userId = $this->session->id();
+			if (is_null($userId)) {
+				return XhrResponses::PERMISSION_DENIED;
+			}
+			$this->storeTransactions->leaveStoreTeam($storeId, $userId);
+			$this->storeGateway->addStoreLog($storeId, $userId, null, null, StoreLogAction::LEFT_STORE);
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->translator->trans('store.not-in-team'), 'error');

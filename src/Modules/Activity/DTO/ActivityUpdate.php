@@ -10,7 +10,7 @@ class ActivityUpdate
 
 	public string $title;
 	public string $desc;
-	public string $source;
+	public ?string $source;
 	public string $source_suffix;
 
 	public string $icon;
@@ -18,7 +18,7 @@ class ActivityUpdate
 	public ?string $quickreply;
 
 	public int $fs_id;
-	public string $fs_name;
+	public ?string $fs_name;
 	public int $entity_id;
 	public ?int $region_id;
 
@@ -32,13 +32,13 @@ class ActivityUpdate
 		int $time_ts,
 		string $title,
 		string $desc,
-		string $source,
+		?string $source,
 		?string $source_suffix,
 		string $icon,
 		?array $gallery,
 		?string $quickreply,
 		int $fs_id,
-		string $fs_name,
+		?string $fs_name,
 		int $entity_id,
 		?int $region_id = null,
 		?int $forum_post = null,

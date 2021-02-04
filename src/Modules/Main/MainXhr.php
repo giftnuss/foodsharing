@@ -66,7 +66,7 @@ class MainXhr extends Control
 				window.parent.$(\'.attach-preview\').html(\''
 					. '<a href="#" onclick="return false;" class="preview-thumb" rel="wallpost-gallery">'
 					. '<img height="60" src="/tmp/thumb-' . $newname . '">&nbsp;'
-					. '</a><div style="clear: both;"></div>\');
+					. '</a><div class="clear"></div>\');
 			}
 		</script>
 		</head><body onload="' . $function . '"></body></html>';

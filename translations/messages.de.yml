@@ -1581,6 +1581,7 @@ dashboard:
     title: "Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen."
     info: "Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren."
     button: "Push-Benachrichtigungen aktivieren"
+  deleted_user: "abgemeldeter Benutzer"
 
 home:
   title: "Startseite"
@@ -2073,8 +2074,12 @@ poll:
   type: "Art der Abstimmung"
   type_description_0: "Auswählen (nur eine Option kann gewählt werden)"
   type_description_1: "Ankreuzen (mehrere Optionen können gewählt werden)"
-  type_description_2: "Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung"
-  type_description_3: "Bewertungswahl mit Werten zwischen -3 und +3"
+  type_description_2: "Wahlmöglichkeiten jeweils Ablehnung / Enthaltung / Zustimmung"
+  type_description_3: "Bewertungswahl mit Werten zwischen -3 (Ablehnung) und +3 (Zustimmung)"
+  type_2:
+    tooltip_negative: "Ablehnung"
+    tooltip_neutral: "Enthaltung"
+    tooltip_positive: "Zustimmung"
   submit_vote_warning: "Achtung: die Abstimmung ist anonym und du kannst deine Auswahl nach dem Abstimmen nicht mehr ändern!"
   submit_vote: "Abstimmen"
   error_cannot_vote: "Du kannst an dieser Abstimmung nicht teilnehmen"

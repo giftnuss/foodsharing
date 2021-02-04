@@ -331,6 +331,7 @@ class ForumPostCest
 		});
 
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
+		$I->waitForActiveAPICalls();
 		$I->canSee($title);
 		$I->click('.forum_threads a');
 		$I->waitForActiveAPICalls();

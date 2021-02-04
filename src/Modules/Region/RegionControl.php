@@ -96,7 +96,7 @@ final class RegionControl extends Control
 		return false;
 	}
 
-	private function regionViewData(array $region, string $activeSubpage): array
+	private function regionViewData(array $region, ?string $activeSubpage): array
 	{
 		$isWorkGroup = $this->isWorkGroup($region);
 		$regionId = (int)$region['id'];
@@ -189,7 +189,10 @@ final class RegionControl extends Control
 			'prAdmins' => array_map($avatarListEntry, array_slice($this->region['prAdmins'], 0, self::DisplayAvatarListEntries)),
 			'moderationAdmins' => array_map($avatarListEntry, array_slice($this->region['moderationAdmins'], 0, self::DisplayAvatarListEntries)),
 		];
-		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
+		$viewdata['nav'] = [
+			'menu' => $menu,
+			'active' => $activeSubpage ? ('=' . $activeSubpage) : null,
+		];
 
 		return $viewdata;
 	}
@@ -295,7 +298,7 @@ final class RegionControl extends Control
 		) {
 			$threadId = $this->forumTransactions->createThread(
 				$this->session->id(), $data->title, $data->body, $region,
-				$ambassadorForum, $postActiveWithoutModeration, $data->sendMail
+				$ambassadorForum, $postActiveWithoutModeration, $postActiveWithoutModeration ? $data->sendMail : null
 			);
 
 			$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);

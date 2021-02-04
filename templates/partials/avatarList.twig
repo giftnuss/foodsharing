@@ -5,10 +5,10 @@
             <a href="/profile/{{ entry.user.id }}" class="ui-corner-all">
             <span style="float:left;margin-right:7px;">{% include 'partials/avatar.twig' with entry only %}</span>
             <span class="title">{{ entry.user.name }}</span>
-            <span style="clear:both;"></span>
+            <span class="clear"></span>
             </a>
         </li>
         {% endfor %}
     </ul>
-    <div style="clear:both"></div>
+    <div class="clear"></div>
 </div>

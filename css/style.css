@@ -205,7 +205,6 @@ body {
   background-color: var(--fs-beige);
 }
 
-.even,
 .odd {
   background-color: #fffffe;
   border-bottom: 1px solid var(--border);
@@ -455,15 +454,6 @@ textarea.comment {
   margin-bottom: 10px;
 }
 
-table.pintable {
-  width: 100%;
-}
-
-table.pintable tr td {
-  vertical-align: top;
-  padding: 12px 0 12px 0;
-}
-
 div.foot {
   display: block;
   text-align: left;
@@ -489,46 +479,6 @@ a.light {
 
 a.light:hover {
   color: var(--fs-brown);
-}
-
-table.pintable tr td span.msg {
-  display: block;
-  padding-right: 8px;
-  padding-left: 8px;
-  word-break: break-word;
-}
-
-table.pintable tr td.img {
-  padding-left: 8px;
-  width: 35px;
-}
-
-table.pintable tr td.img img {
-  border-radius: 3px;
-}
-
-table.pintable tr.milestone {
-  background-color: #f5f5b5;
-  border: 1px solid #d9bb73;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-table.pintable tr.milestone td {
-  vertical-align: middle;
-  text-align: center;
-  color: var(--fs-brown);
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-table.pintable tr.milestone td a {
-  color: #cb672b;
-  text-decoration: none;
-}
-
-table.pintable tr.milestone td a:hover {
-  text-decoration: underline;
 }
 
 select.childChanger {

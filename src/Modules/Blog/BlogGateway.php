@@ -7,15 +7,16 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Utility\Sanitizer;
 
 final class BlogGateway extends BaseGateway
 {
-	private $bellGateway;
-	private $foodsaverGateway;
-	private $sanitizerService;
-	private $session;
+	private BellGateway $bellGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private Sanitizer $sanitizerService;
+	private Session $session;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -213,7 +214,7 @@ final class BlogGateway extends BaseGateway
 				'teaser' => $this->sanitizerService->tt($data['teaser'], 100),
 				'title' => $data['name']
 			],
-			'blog-check-' . $id
+			BellType::createIdentifier(BellType::NEW_BLOG_POST, $id)
 		);
 		$this->bellGateway->addBell($foodsaver, $bellData);
 

@@ -47,7 +47,7 @@ class FoodsaverView extends View
 		);
 	}
 
-	public function foodsaverForm($foodsaver = false)
+	public function foodsaverForm($foodsaver = false): string
 	{
 		if ($foodsaver === false) {
 			return '<div id="fsform"></div>';
@@ -82,7 +82,7 @@ class FoodsaverView extends View
 		return $this->v_utils->v_field($cnt, $foodsaver['name'], ['class' => 'ui-padding']);
 	}
 
-	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
+	public function foodsaverList($foodsaver, $bezirk, $inactive = false): string
 	{
 		$avatars = $this->fsAvatarList($foodsaver, 600, true, false, 'fslist');
 		$name = $inactive ? 'inactive' : '';
@@ -95,7 +95,7 @@ class FoodsaverView extends View
 			$this->v_utils->v_field($avatars, $label) . '</div>';
 	}
 
-	public function foodsaver_form($title, $regionDetails)
+	public function foodsaver_form($title, $regionDetails): string
 	{
 		global $g_data;
 
@@ -194,7 +194,7 @@ class FoodsaverView extends View
 		]);
 	}
 
-	public function u_delete_account()
+	public function u_delete_account(): string
 	{
 		$content = '
 	<div style="text-align: center; margin-bottom: 10px;">

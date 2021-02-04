@@ -81,6 +81,10 @@ class ActivityRestController extends AbstractFOSRestController
 	 */
 	public function getActivityUpdatesAction(ParamFetcher $paramFetcher): Response
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
 		$page = intval($paramFetcher->get('page'));
 
 		$updates = [

@@ -6,7 +6,7 @@ use Foodsharing\Modules\Console\ConsoleControl;
 
 class MigrateControl extends ConsoleControl
 {
-	private $migrateGateway;
+	private MigrateGateway $migrateGateway;
 
 	public function __construct(MigrateGateway $migrateGateway)
 	{

@@ -2,9 +2,12 @@
 <template>
   <li class="activity-item">
     <span class="n mb-2">
-      <a v-if="fs_id" :href="$url('profile', fs_id)">
+      <a v-if="fs_id && fs_name" :href="$url('profile', fs_id)">
         {{ fs_name }}
       </a>
+      <span v-else-if="fs_id">
+        {{ $i18n('dashboard.deleted_user') }}
+      </span>
       <a v-else-if="sender_email" :href="dashboardContentLink">
         {{ sender_email }}
       </a>

@@ -273,7 +273,7 @@ class QuizView extends View
 					<span style="cursor:pointer;user-select:none;float:left">' . ($k + 1) . '. &nbsp;</span>
 					<input id="qacb-' . $a['id'] . '" style="cursor:pointer;float:left;" type="checkbox" class="qanswers" name="qanswers[]" value="' . $a['id'] . '" />
 					<span style="cursor:pointer;user-select:none;display:block;margin-left:43px;">' . $a['text'] . '</span>
-					<span style="clear:both;"></span>
+					<span class="clear"></span>
 				</label>
 			</li>';
 		}
@@ -284,7 +284,7 @@ class QuizView extends View
 				<span style="cursor:pointer;user-select:none;float:left">' . ($i) . '. &nbsp;</span>
 				<input class="nocheck" style="float:left;" type="checkbox" name="none" value="0" />
 				<span style="cursor:pointer;wouser-select:none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
-				<span style="clear:both;"></span>
+				<span class="clear"></span>
 			</label>
 		</li>
 		</ul></div>';
@@ -469,7 +469,7 @@ class QuizView extends View
 			. '</strong>'
 			. $this->sanitizerService->tt($a['text'], 60) .
 			'</span>
-			<span style="clear:both;"></span>
+			<span class="clear"></span>
 		</a>
 	</li>';
 		}

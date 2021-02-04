@@ -12,6 +12,10 @@ import ReportRequest from './components/ReportRequest'
 import BananaList from './components/BananaList'
 import PublicProfile from './components/PublicProfile'
 import PickupHistory from '../StoreUser/components/PickupHistory'
+// Wallpost
+import { URL_PART } from '@/browser'
+import '../WallPost/WallPost.css'
+import { initWall } from '@/wall'
 
 expose({ trySendBuddyRequest })
 
@@ -38,3 +42,8 @@ vueApply('#vue-pickup-history', true) // PickupHistory
 vueApply('#profile-public', true) // PublicProfile
 vueApply('#mediation-Request', true) // MediationRequest
 vueApply('#report-Request', true) // ReportRequest
+
+if (URL_PART(0) === 'profile') {
+  const wallpostTable = (URL_PART(2) === 'notes') ? 'usernotes' : 'foodsaver'
+  initWall(wallpostTable, URL_PART(1))
+}

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Buddy;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Utility\ImageHelper;
 
 class BuddyTransactions
@@ -35,8 +36,8 @@ class BuddyTransactions
 	{
 		$this->buddyGateway->confirmBuddy($userId, $this->session->id());
 
-		$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . $userId);
-		$this->bellGateway->delBellsByIdentifier('buddy-' . $userId . '-' . $this->session->id());
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::BUDDY_REQUEST, $this->session->id(), $userId));
+		$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::BUDDY_REQUEST, $userId, $this->session->id()));
 
 		$buddyIds = $this->session->get('buddy-ids') ?: [];
 
@@ -58,7 +59,7 @@ class BuddyTransactions
 			$this->imageHelper->img($this->session->user('photo')),
 			['href' => '/profile/' . (int)$this->session->id() . ''],
 			['name' => $this->session->user('name')],
-			'buddy-' . $this->session->id() . '-' . $userId
+			BellType::createIdentifier(BellType::BUDDY_REQUEST, $this->session->id(), $userId)
 		));
 	}
 }

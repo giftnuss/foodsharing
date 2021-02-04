@@ -200,7 +200,7 @@ class StoreUserControl extends Control
 				}
 
 				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', [
-					'particularitiesDescription' => $store['besonderheiten'],
+					'particularitiesDescription' => $store['besonderheiten'] ?? '',
 					'lastFetchDate' => $lastFetchDate,
 					'street' => $store['str'],
 					'housenumber' => $store['hsnr'],

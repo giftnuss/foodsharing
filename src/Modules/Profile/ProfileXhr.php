@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
+use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\PickupGateway;
@@ -64,7 +66,7 @@ class ProfileXhr extends Control
 
 				$this->view->setData($this->foodsaver);
 			} else {
-				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$_GET['id']);
+				$this->bellGateway->delBellsByIdentifier(BellType::createIdentifier(BellType::NEW_FOODSAVER_IN_REGION, (int)$_GET['id']));
 			}
 		}
 	}
@@ -112,13 +114,35 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
-		$userId = $_GET['fsid'];
-		$storeId = $_GET['storeId'];
+		$userId = intval($_GET['fsid']);
+		$storeId = intval($_GET['storeId']);
 		$storeRegion = $this->storeGateway->getStoreRegionId($storeId);
 		$pickupDate = Carbon::createFromTimestamp($_GET['date']);
 
 		if ($this->session->may('orga') || $this->session->isAdminFor($storeRegion)) {
 			if ($this->pickupGateway->removeFetcher($userId, $storeId, $pickupDate)) {
+				if ($this->session->id() === $userId) {
+					$this->storeGateway->addStoreLog( // the user(bot/orga) removed their own pickup
+						$storeId,
+						$userId,
+						null,
+						$pickupDate,
+						StoreLogAction::SIGN_OUT_SLOT,
+						null,
+						'Removed through user Profile.'
+					);
+				} else {
+					$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied by a bot / orga
+							$storeId,
+							$this->session->id(),
+							$userId,
+							$pickupDate,
+							StoreLogAction::REMOVED_FROM_SLOT,
+							null,
+							'Removed through user Profile.'
+						);
+				}
+
 				return [
 					'status' => 1,
 					'script' => '

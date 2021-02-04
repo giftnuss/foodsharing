@@ -365,7 +365,7 @@ class BasketXhr extends Control
 				<p>' . $this->translator->trans('Anfragezeitpunkt:', [
 					'{time}' => $this->timeHelper->niceDate($request['time_ts']),
 				]) . '</p>
-				<div style="clear: both;"></div>
+				<div class="clear"></div>
 			</div>'
 			. $this->v_utils->v_form_radio('fetchstate', [
 				'values' => [
@@ -520,7 +520,7 @@ class BasketXhr extends Control
 
 	private function preparePicture(string $filename): string
 	{
-		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename);
+		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename) ?? '';
 		if (!empty($pic) && file_exists('tmp/' . $pic)) {
 			$this->resizePic($pic);
 		}

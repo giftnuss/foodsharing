@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -28,21 +29,6 @@ class StoreModel extends Db
 		$this->messageGateway = $messageGateway;
 
 		parent::__construct();
-	}
-
-	public function signout($storeId, $fsId)
-	{
-		$storeId = (int)$storeId;
-		$fsId = (int)$fsId;
-		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' ');
-		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
-
-		if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
-			$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
-		}
-		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageGateway->deleteUserFromConversation($scid, $fsId);
-		}
 	}
 
 	public function getOne_betrieb($storeId)
@@ -160,95 +146,6 @@ class StoreModel extends Db
 		WHERE 	`id` = ' . (int)$id);
 	}
 
-	public function add_betrieb($data)
-	{
-		$id = $this->insert('
-			INSERT INTO 	`fs_betrieb`
-			(
-			`betrieb_status_id`,
-			`bezirk_id`,
-			`added`,
-			`plz`,
-			`stadt`,
-			`lat`,
-			`lon`,
-			`kette_id`,
-			`betrieb_kategorie_id`,
-			`name`,
-			`str`,
-			`hsnr`,
-			`status_date`,
-			`status`,
-			`ansprechpartner`,
-			`telefon`,
-			`fax`,
-			`email`,
-			`begin`,
-			`besonderheiten`,
-			`public_info`,
-			`public_time`,
-			`ueberzeugungsarbeit`,
-			`presse`,
-			`sticker`,
-			`abholmenge`,
-			`prefetchtime`
-			)
-			VALUES
-			(
-			' . (int)$data['betrieb_status_id'] . ',
-			' . (int)$data['bezirk_id'] . ',
-			NOW(),
-			' . $this->strval($data['plz']) . ',
-			' . $this->strval($data['stadt']) . ',
-			' . $this->strval($data['lat']) . ',
-			' . $this->strval($data['lon']) . ',
-			' . (int)$data['kette_id'] . ',
-			' . (int)$data['betrieb_kategorie_id'] . ',
-			' . $this->strval($data['name']) . ',
-			' . $this->strval($data['str']) . ',
-			' . $this->strval($data['hsnr']) . ',
-			' . $this->dateval($data['status_date']) . ',
-			' . (int)$data['betrieb_status_id'] . ',
-			' . $this->strval($data['ansprechpartner']) . ',
-			' . $this->strval($data['telefon']) . ',
-			' . $this->strval($data['fax']) . ',
-			' . $this->strval($data['email']) . ',
-			' . $this->dateval($data['begin']) . ',
-			' . $this->strval($data['besonderheiten']) . ',
-			' . $this->strval($data['public_info']) . ',
-			' . (int)$data['public_time'] . ',
-			' . (int)$data['ueberzeugungsarbeit'] . ',
-			' . (int)$data['presse'] . ',
-			' . (int)$data['sticker'] . ',
-			' . (int)$data['abholmenge'] . ',
-			' . (int)$data['prefetchtime'] . '
-			)');
-
-		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
-			foreach ($data['lebensmittel'] as $lebensmittel_id) {
-				$this->insert('
-						INSERT INTO `fs_betrieb_has_lebensmittel`
-						(
-							`betrieb_id`,
-							`lebensmittel_id`
-						)
-						VALUES
-						(
-							' . (int)$id . ',
-							' . (int)$lebensmittel_id . '
-						)
-					');
-			}
-		}
-
-		$this->createTeamConversation($id);
-		$this->createSpringerConversation($id);
-
-		$this->addBetriebTeam($id, $data['foodsaver'], $data['foodsaver']);
-
-		return $id;
-	}
-
 	public function warteRequest($fsid, $storeId)
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
@@ -258,7 +155,7 @@ class StoreModel extends Db
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		], 'store-wrequest-' . (int)$fsid);
+		], BellType::createIdentifier(BellType::STORE_REQUEST_WAITING, (int)$fsid));
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
@@ -295,36 +192,6 @@ class StoreModel extends Db
 				0,
 				0
 			)');
-	}
-
-	/* creates an empty team conversation for the given store */
-	private function createTeamConversation(int $storeId): int
-	{
-		$storeTeam = $this->storeGateway->getStoreTeam($storeId);
-		$storeTeamIds = array_column($storeTeam, 'id');
-		$storeTeamChatId = $this->messageGateway->createConversation($storeTeamIds, true);
-		$this->update('
-			UPDATE	`fs_betrieb`
-			SET		team_conversation_id = ' . (int)$storeTeamChatId . '
-			WHERE	id = ' . $storeId . '
-		');
-
-		return $storeTeamChatId;
-	}
-
-	/* creates an empty springer conversation for the given store */
-	private function createSpringerConversation(int $storeId): int
-	{
-		$standbyTeam = $this->storeGateway->getBetriebSpringer($storeId);
-		$standbyTeamIds = array_column($standbyTeam, 'id');
-		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamIds, true);
-		$this->update('
-			UPDATE	`fs_betrieb`
-			SET		springer_conversation_id = ' . (int)$standbyTeamChatId . '
-			WHERE	id = ' . $storeId . '
-		');
-
-		return $standbyTeamChatId;
 	}
 
 	public function addBetriebTeam(int $storeId, array $member, array $selectedManagers)

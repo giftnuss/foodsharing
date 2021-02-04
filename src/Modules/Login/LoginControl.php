@@ -115,7 +115,7 @@ class LoginControl extends Control
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
 						if ($this->loginGateway->newPassword($_POST)) {
-							$this->view->success(
+							$this->flashMessageHelper->success(
 								$this->translator->trans('login.pwreset.success')
 							);
 						} elseif (strlen($_POST['pass1']) < 5) {

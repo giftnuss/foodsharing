@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BlogView extends View
 {
-	private $blogPermissions;
+	private BlogPermissions $blogPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -74,7 +74,7 @@ class BlogView extends View
 			. $this->getImage($news, 'crop_0_528_')
 			. '<p>'
 			. $this->sanitizerService->purifyHtml($news['body'])
-			. '</p><div style="clear:both;"></div></div>'
+			. '</p><div class="clear"></div></div>'
 		);
 	}
 
@@ -86,7 +86,7 @@ class BlogView extends View
 				$news
 			) . '<p>' . $this->routeHelper->autolink(
 				$news['teaser']
-			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
+			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div class="clear"></div></div>';
 	}
 
 	private function getImage(array $news, string $prefix = 'crop_1_528_'): string

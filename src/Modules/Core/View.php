@@ -74,7 +74,7 @@ class View
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>
+			<div class="clear"></div>
 		</div>';
 	}
 
@@ -133,13 +133,13 @@ class View
 					<a href="' . $href . '"' . $click . ' class="ui-corner-all">
 						<span style="float:left;margin-right:7px;">' . $photo . '</span>
 						<span class="title">' . $fs['name'] . '</span>
-						<span style="clear:both;"></span>
+						<span class="clear"></span>
 					</a>
 				</li>';
 		}
 		$out .= '
 			</ul>
-			<div style="clear:both"></div>
+			<div class="clear"></div>
 		</div>';
 
 		if ($useScroller) {
@@ -149,7 +149,7 @@ class View
 		return $out;
 	}
 
-	public function menu($items, $option = [])
+	public function menu(array $items, array $option = []): string
 	{
 		$title = false;
 		if (isset($option['title'])) {
@@ -204,7 +204,7 @@ class View
 		</div>';
 	}
 
-	public function latLonPicker($id, $options = [], $context = '')
+	public function latLonPicker(string $id, array $options = [], string $context = ''): string
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
@@ -248,14 +248,7 @@ class View
 		return $out;
 	}
 
-	public function simpleContent($content)
-	{
-		$out = $this->v_utils->v_field($content['body'], $content['title'], ['class' => 'ui-padding']);
-
-		return $out;
-	}
-
-	public function vueComponent($id, $component, $props = [], $data = [])
+	public function vueComponent(string $id, string $component, array $props = [], array $data = []): string
 	{
 		return $this->twig->render('partials/vue-wrapper.twig', [
 			'id' => $id,
