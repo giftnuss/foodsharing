@@ -212,7 +212,6 @@ class ReportXhr extends Control
 		$dialog->noOverflow();
 
 		return $dialog->xhrout();
-
 	}
 
 	public function betriebReport(): array
