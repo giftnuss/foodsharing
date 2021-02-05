@@ -548,7 +548,7 @@ class ProfileView extends View
 
 	private function renderMediationRequest(int $bezirk_id): string
 	{
-		if (($this->foodsaver['rolle'] < 1) || ($this->foodsaver['id'] === $this->session->id())) {
+		if (($this->foodsaver['rolle'] < Role::FOODSAVER) || ($this->foodsaver['id'] === $this->session->id())) {
 			return '';
 		}
 
@@ -582,7 +582,7 @@ class ProfileView extends View
 
 	private function renderReportRequest(int $bezirk_id, int $fs_id, array $userStores = []): string
 	{
-		if ($this->foodsaver['rolle'] < 1) {
+		if ($this->foodsaver['rolle'] < Role::FOODSAVER) {
 			return '';
 		}
 
