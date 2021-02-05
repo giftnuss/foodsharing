@@ -267,9 +267,8 @@ class ProfileView extends View
 					'{count}' => $this->foodsaver['violation_count'],
 				]) . '</a></li>';
 		}
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($this->foodsaver['bezirk_id'], WorkgroupFunction::REPORT)) {
-			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
-		}
+
+		$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
 
 		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
 
@@ -549,7 +548,7 @@ class ProfileView extends View
 
 	private function renderMediationRequest(int $bezirk_id): string
 	{
-		if (!$this->session->may('fs')) {
+		if ($this->foodsaver['rolle'] < 1) {
 			return '';
 		}
 
@@ -583,7 +582,7 @@ class ProfileView extends View
 
 	private function renderReportRequest(int $bezirk_id, int $fs_id, array $userStores = []): string
 	{
-		if (!$this->session->may('fs')) {
+		if ($this->foodsaver['rolle'] < 1) {
 			return '';
 		}
 

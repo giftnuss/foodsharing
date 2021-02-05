@@ -1482,7 +1482,7 @@ profile:
   signoutPickup: "austragen"
   signoutAll: "Aus allen austragen"
   signoutAllConfirmation: "Wirklich {name} aus allen kommenden Abhol-Terminen austragen?"
-  reportRequest: "Meldung einreichen"
+  reportRequest: "*Beta* Meldung einreichen"
   mediationRequest: "*Beta* Mediation anfragen"
   public:
     who: "{name} aus {from}"
