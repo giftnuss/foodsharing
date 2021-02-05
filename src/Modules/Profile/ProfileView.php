@@ -548,7 +548,7 @@ class ProfileView extends View
 
 	private function renderMediationRequest(int $bezirk_id): string
 	{
-		if ($this->foodsaver['rolle'] < 1) {
+		if (($this->foodsaver['rolle'] < 1) || ($this->foodsaver['id'] === $this->session->id())) {
 			return '';
 		}
 
