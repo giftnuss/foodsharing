@@ -29,6 +29,12 @@ Our developers hang out in the
 [yunity slack](https://slackin.yunity.org) group in the
 **#foodsharing-dev** and **#foodsharing-beta** channels. Come and say hi!
 
+## 🔣 Translations
+
+Translations are done via 
+[weblate](https://hosted.weblate.org/projects/foodsharing/). If you can help translate the app into a
+new language, feel free to help!
+
 ## 👪 Contributors
 
 <!-- FOODSHARING-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
