@@ -172,7 +172,7 @@ export default {
     overflow-wrap: anywhere;
 
     ::v-deep .markdown {
-      div, p, ul, ol, th, td, label {
+      div, ul, ol, th, td, label {
         margin-bottom: 0;
         font-size: inherit;
       }
