@@ -8598,10 +8598,10 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typeahead-address-photon@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/typeahead-address-photon/-/typeahead-address-photon-1.0.0.tgz#9b8437d2eb8aad101848e7c39e0e0e59c3da34df"
-  integrity sha1-m4Q30uuKrRAYSOfDng4OWcPaNN8=
+typeahead-address-photon@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/typeahead-address-photon/-/typeahead-address-photon-1.1.0.tgz#b6db50eded1956431ccb5974706531df3d62d3b4"
+  integrity sha512-VjVI+dcu2/ZKjSB8Gr3uhsy9XT3mI5OdOxKHClY17+n1vr7Rs7o72Tke2YtCCoykSuYys5sjDhTcqHfPwIV0TQ==
 
 typeahead-addresspicker@^1.0.1:
   version "1.0.1"

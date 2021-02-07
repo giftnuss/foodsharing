@@ -44,7 +44,7 @@
     "socket.io-client": "^2.3.1",
     "tinysort": "~3.2.7",
     "twemoji": "^13.0.1",
-    "typeahead-address-photon": "^1.0.0",
+    "typeahead-address-photon": "^1.1.0",
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "^0.0.72",
     "underscore": "^1.11.0",
