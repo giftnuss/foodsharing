@@ -366,7 +366,7 @@ export default {
     possibleScopes () {
       if (this.isWorkGroup) {
         // 'store managers' and 'users with home region' does not make sense in work groups
-        return [1, 2, 4]
+        return [1, 2]
       } else {
         return [1, 2, 3, 4, 5]
       }
