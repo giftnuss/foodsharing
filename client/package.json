@@ -54,7 +54,7 @@
     "vue-slider-component": "~3.2.10",
     "vue-tel-input": "^4.4.2",
     "vuelidate": "^0.7.5",
-    "whatwg-fetch": "^3.4.1"
+    "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
