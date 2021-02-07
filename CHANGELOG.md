@@ -41,6 +41,7 @@
 - Several more PHP7 annotations !1760 @ChrisOelmueller
 - More annotations and correctness fixes !1761 @ChrisOelmueller
 - Bumped some container versions !1865 @\_fridtjof_
+- Updated mdbook to 0.4.6 !1876 @chriswalg
 
 # Release "Dragonfruit", 2020-12-31
 
