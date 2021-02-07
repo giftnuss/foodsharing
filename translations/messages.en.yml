@@ -5,25 +5,28 @@ group:
   applications: Applications
   applications_for: Applications for %name%
   mail_link_title:
-    workgroup: email inbox
-    region: email inbox
+    workgroup: e-mail inbox
+    region: e-mail inbox
   application_requirements:
     requirements: Who can enter this group?
     nobody: Nobody (closed group)
-    requires_properties: Everybody who fulfills certain criteria
+    requires_properties: Anybody fulfilling certain criteria
     everybody: Everybody can apply
-    open: Everybody can directly join
+    open: Anyone can join directly
     fetch_count: How many pickups does an applicant need to have done?
     banana_count: How many trust bananas must an applicant have?
     banana_count_errors:
       min: Nobody can have less than {{ limit }} trust banans!
       max: Please do not expect more than {{ limit }} trust bananas!
-    member_since_weeks: How many weeks does an applicant need to be registered on the platform?
-    not_fulfilled: To apply for this group, you have to be registered for at least %weeks% weeks, have %bananas% trust bananas and helped %fetches% times picking up food.
+    member_since_weeks: How many weeks does an applicant need to be registered on
+      the platform?
+    not_fulfilled: To apply for this group, you have to be registered for at least
+      %weeks% weeks, have %bananas% trust bananas and helped %fetches% times picking
+      up food.
   members: Members
   administrators: Administrators
   title: foodsharing working groups
-  subtitle: find help and or work...
+  subtitle: find help and or work…
   member_count: '{0} No members|{1} One member| [2, Inf[ %count% members'
   admin_count: '{0} No administrators|{1} One administrator| [2, Inf[ %count% administrators'
   image: image for %name%
@@ -41,9 +44,33 @@ group:
   really_quit_name: Do you really want to quit the group %name%?
   delete_group_sure: Do you really want to delete the group {groupName}?
 
+  function:
+    title: Working group function
+    fsp: FoodSharePoints
+    voting: Polls
+  apply:
+    sent: The application was sent!
+    send: Send application
+    time:
+      "5": 5 or more hours
+      "3": 3-4 hours
+      "2": 2-3 hours
+      "1": 1-2 hours
+    declined: Application rejected
+    accepted: Application accepted
+  show-all: Show all
+  really_quit_district: Do you really want to leave the region %name%?
+  really_quit_workgroup: Do you really want to leave the working group %name%?
+  quit_name_district: Leave region %name%
+  quit_name_workgroup: Leave team %name%
 settings:
   header: Your data and settings
 
+  push:
+    not-supported: Your browser does not support push notifications.
+    title: Push notifications
+  title: Settings
+  notifications: Notifications
 menu:
   manage_regions: Manage regions
   blog: Manage blog content
@@ -56,7 +83,7 @@ menu:
     activities: Activities
     infos: Infos
     mark_as_read: Mark all as read
-    all_messages: All Messages
+    all_messages: All messages
     messages: Messages
     your_groups: Your groups
     groups: Group overview
@@ -96,7 +123,7 @@ menu:
     team: Team
     partners: Partner
     background: Background
-    support: Help & Support
+    support: Help and support
     wiki: Wiki
     guide: Guide
     statistics: Statistics
@@ -113,11 +140,403 @@ profile:
   banana:
     by: ' by '
     sent: The banana was sent!
-    messageTooShort: The text message accompanying your banana should be at least 100 characters long.
+    messageTooShort: The text message accompanying your banana should be at least
+      100 characters long.
 
+    give: Give a trust banana to {name}
+    title: '{count} trust bananas'
+  public:
+    join: Join & register
+    who: '{name} from {from}'
+  signoutAll: Sign out of all
+  signoutPickup: sign out
+  regions: '{name} is a foodsaver'
+  stats:
+    baskets: Food baskets
+    weight: saved
+  infos:
+    buddies: Buddies
+    never: Never
+    lastLogin: Last login
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
+mailbox:
+  recipients: Too many recipients
+  mark_as_unread: Mark as unread
+  attach: Attach file (max. 1.2 MB)
+  refresh: Refresh
+  subject: Subject
+  date: Date
+  recipient: Recipient
+  sender: Sender
+  reply: Reply
+  trash: Trash
+  sent: Sent
+  inbox: Inbox
+events:
+  description: Description
+  create:
+    date: Date
+  bread: Events
+forum:
+  threads: Threads
+timepicker:
+  labelNowButton: Now
+  labelCloseButton: Close
+  labelSeconds: Seconds
+  labelMinutes: Minutes
+  labelHours: Hours
+calendar:
+  labelCalendar: Calendar
+  labelSelected: Selected date
+  labelToday: Today
+  labelNextYear: Next year
+  labelNextMonth: Next month
+  labelCurrentMonth: Current month
+  labelPrevMonth: Previous month
+  labelPrevYear: Previous year
+pickup:
+  signout_confirm: Are you sure?
+  copyNumber: Copy phone number
+  open_profile: Open profile
+  confirm: Confirm
+  call: Call
+storeview:
+  cooperation: Cooperation since {startTime}.
+  store: Store
+day: Day
+time: Time
+select: Please select
+validate:
+  required: '{it} can not be empty'
+no: No
+yes: Yes
+are_you_sure: Are you sure?
+terminology:
+  buddies: Buddies
+  polls: Polls
+  message: Message
+  homeRegion: Home region
+  threads: Threads
+  regions: Regions
+  region: Region
+  profile_picture: Profile picture
+  settings: Settings
+  subgroups: Subgroups
+  group: Working group
+  groups: Working groups
+  baskets: Food baskets
+  basket: Food basket
+  statistic: Statistics
+  wall: wall
+  admins: Administrators
+  ambassadors: Ambassadors
+  ambassador:
+    d: Ambassador
+    f: Ambassador
+login:
+  pwreset:
+    bread: Reset password
+  logout: Logout
+  topbar: Log in
+  submit_btn: Login
+salutation:
+  "3": Dear
+  "2": Dear
+  "1": Dear
+  "0": Dear
+nachname: Surname
+button:
+  create: Create
+  send: Send
+  cancel: Cancel
+  apply: Apply
+  yes_i_am_sure: Yes, I am sure
+  permadelete: Delete permanently
+  delete: Delete
+  new: ''
+  edit: Edit
+  upload: Upload
+  rotate_right: rotate clockwise
+  attach_image: Attach picture
+  change_picture: Change picture
+  next: Next
+  save: Save
+  answer: Answer
+bell:
+  ft_update_title: '{name}'
+  blog_new_check: '{title}'
+  forum_reply_title: '{forum}: {title}'
+  forum_answer_title: '{forum}'
+  new_quiz_comment: '{comment}'
+  store_cr_times_title: '{name}'
+  store_wallpost_title: '{name}'
+  poll_new: '{title}'
+  poll_new_title: New poll
+  store_request_deny_title: '{name}'
+  store_request_accept_wait_title: '{name}'
+  store_request_accept_title: '{name}'
+  store_new_title: New store
+  ft_update: '{teaser}'
+reports:
+  time: Time
+  region: Home region
+  reason: Reason
+  city: City
+  all_reports: All reports
+  about: About
+recipients:
+  test: Test the newsletter
+poll:
+  time_period: Time period
+  results:
+    sum: Sum
+    votes: Votes
+  new_poll:
+    submit_question: The poll can be changed within one hour (until {date}). Do you
+      really want to create it now?
+    option_texts_required: Please enter a text for each option.
+    description_required: Please enter a description.
+    description: Description
+    time: Time
+    scope: Who is allowed to vote?
+    name_required: Please enter a name.
+    title: New poll
+  submit_vote: Submit vote
+  type: Poll type
+  scope_description_3: All ambassadors in the region / the group
+  scope_description_1: All verified foodsavers in the region / the group
+  scope_description_0: All verified and not verified foodsavers in the region / the
+    group
+  allowed_voters: Eligible to vote
+  in_future: has not started yet
+  in_past: has ended
+  hint_random_order: The following options are shown in random ordering.
+buddy:
+  request_accepted: Now you are buddies!
+email_template:
+  help_needed:
+    support_mail: it@foodsharing.network
+    or: or
+    link: https://devdocs.foodsharing.network/it-tasks_EN.html
+  warning: Warning
+  reply: Reply
+  confirm_topic: 'Thread needs approval:'
+  login: Log in to answer
+  in: in
+  to: to
+  request_from: Request by
+sidenav:
+  yourgroups: Your groups
+  localgroups: Local groups
+password:
+  reset: Reset password
+tablesorter:
+  page: Page
+page:
+  presence:
+    header: Festivals
+  cooperations:
+    header: Stores
+  basket:
+    header: Food baskets
+  welcomeheader: Welcome to foodsharing!
+conference:
+  join: Join video conference
+  join_title: Join video conference
+blog:
+  status:
+    "1": published
+region:
+  type:
+    workgroup: Working group
+    country: Country
+    state: State
+    district: Region
+    city: City
+  delete: Delete region
+  edit: Edit region
+storelist:
+  others: More stores in {region}
+  region: Region
+  city: City
+  zipcode: Post code
+  address: Street
+releases:
+  "2020-08": "'Pear' release (August 2020)"
+  "2020-10": "'Cranberry' release (October 2020)"
+  "2020-12": "'Dragonfruit' release (December 2020)"
+footer:
+  it_devdocs: by foodsharing IT
+  donate_now: Donate now
+  version: 'Version: {version}'
+  donate: Donate
+  statistics: Statistics
+  blog: Blog
+  wiki: Wiki
+  press: Press
+  contact: Contact
+basket:
+  is:
+    gf: are gluten-free
+    vegan: are vegan
+  has:
+    pet: pet food
+    dairy: dairy products
+    bread: pastries
+  valid:
+    "21": three weeks
+    "14": two weeks
+    "7": one week
+    "3": three days
+    "2": two days
+    "1": one day
+  contact:
+    call: By phone
+    write: By message
+map:
+  title: Map
+content:
+  content: Content
+  name: Unique name
+  edit: Edit page
+  new: Add a new page
+  public: Public pages
+  bread: All pages
+foodsaver:
+  kicked: Foodsaver removed
+  list:
+    summary: '{count} foodsavers in {region}'
+  upgrade:
+    to_sm: Become a store manager
+    needs_sm: You need to become a store manager first
+    needs_fs: You need to become a foodsaver first
+    to_fs: Become a foodsaver
+store:
+  addNewStoresButton: Add new store
+  allStoresOfRegion: All stores in the region
+  all_of_my_stores: All my stores
+  bread: All stores
+  request:
+    to-jumper: Jumper list
+    verified: User is verified
+search:
+  mygroups: My groups
+  mybuddies: My buddies
+  title: Search
+month:
+  short:
+    "12": Dec.
+    "11": Nov.
+    "10": Oct.
+    "9": Sep.
+    "8": Aug.
+    "7": July
+    "6": June
+    "5": May
+    "4": Apr.
+    "2": Feb.
+    "1": Jan.
+  "12": December
+  "11": November
+  "10": October
+  "9": September
+  "8": August
+  "6": June
+  "5": May
+  "4": April
+  "3": March
+  "2": February
+  "1": January
+  "7": July
+date:
+  sunday: Sunday
+  saturday: Saturday
+  friday: Friday
+  thursday: Thursday
+  wednesday: Wednesday
+  tuesday: Tuesday
+  monday: Monday
+  yesterday: yesterday
+  -- Yesterday: Yesterday
+  tomorrow: tomorrow
+  -- Tomorrow: Tomorrow
+  today: today
+  Today: Today
+wall:
+  error-create: Your wall post could not be saved.
+  created: Great! Your wall post was saved.
+pass:
+  nav:
+    title: Let's go!
+  name: Name
+  noPhoto: 'The following persons have not uploaded a photo yet:'
+  button:
+    verify: Verify
+  verify:
+    failed: A problem occured
+ui:
+  switch:
+    on: published
+    off: inactive
+upload:
+  file: Upload file
+  edit_image: Edit image
+  new_image: Upload a new image
+  image: Upload image
+  preview_image: Preview
+photo: Photo
+status: Current status
+title: Title
+last_login: Last login
+bezirk: Region
+lon: Longitude
+lat: Latitude
+parent_id: Parent region
+picture: Picture
+botschafter: Ambassador
+attachement: Attachment
+description: Description
+desc: Description
+edit: edit
+address: Address
+message: Message
+subject: Subject
+add: add
+geb_datum: Date of birth
+polls:
+  future: Future polls
+  ongoing: Ongoing polls
+  new_poll: Create a new poll
+  end_date: end date
+  start_date: start date
+  title: Title
+storeedit:
+  bread: Edit store
+legal:
+  delete_account: I want to delete my account.
+answers: Which answers are correct?
+name: Name
+bcard:
+  for: '{role} for {region}'
+picture_upload_widget:
+  picture_upload: Upload image
+image: Image
+wikilink: Link to wiki site
+fax: Fax
+newsletter: Newsletter
+info: Information
+rolle: User role
+active: Activated
+email: E-mail address
+leader: Group admins
+member: Members
+first_post: First wall post
+betrieb_status_id: Status
+betrieb_kategorie_id: Category
+kette_id: Store chain
+storemanagers: Store managers
 
 language_chooser:
   title: "Choose Language"

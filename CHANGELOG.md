@@ -15,6 +15,7 @@
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
 - Remove active baskets if a user is deleted !1867 #983 @alex.simm 
 - Report and Mediation button is not visible against foodsharers !1874 @fs_k
+- Updated english translations !1875 @kingu @alex.simm
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
