@@ -12,7 +12,16 @@ final class AddUserLocale extends AbstractMigration
 			->addColumn('locale', 'string', [
 				'null' => true,
 				'limit' => 10,
-				'comment' => 'frontend language selected by the user'
+				'comment' => 'frontend language selected by the user',
+				'default' => null
+			])
+			->save();
+		$this->table('fs_foodsaver_archive')
+			->addColumn('locale', 'string', [
+				'null' => true,
+				'limit' => 10,
+				'comment' => 'frontend language selected by the user',
+				'default' => null
 			])
 			->save();
 	}
