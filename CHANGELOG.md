@@ -4,16 +4,6 @@
 - New menu entry for changing the language of the website #1015 !1877 @alex.simm
 
 ## Changes
-# 2021-02-08 Hotfix
-
-- Make the order of values in voting options consistent from left (negative) to right (positive) !1868 #975 @alex.simm
-
-# 2021-01-18 Hotfix
-
-## Changes
-- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1863 #975 @alex.simm
-
-# 2020-10-23 Hotfix
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - New Workgroupfunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
@@ -59,8 +49,13 @@
 - upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 - Update some frontend dependencies !1842 @chriswalg
 
-## Bugfixes
-- Fix transmitted choices in checkbox voting !1847 @alex.simm
+# 2021-02-08 Hotfix
+
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1868 #975 @alex.simm
+
+# 2021-01-18 Hotfix
+
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1863 #975 @alex.simm
 
 # Release "Dragonfruit", 2020-12-31
 
@@ -556,7 +551,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Fix database method which prevents newsletter sending #754 !1198 @jofranz
 - Improved SQL query which caused that the team of large work groups could not be updated anymore #726 !1199 @dthulke
 - Use font awesome icons for store status indicators to avoid that they disappear when the store name is too long #742 !1190 @dthulke
-- Avoid duplicate names in user autocomplete !1223 @dthulke
+- Avoid duplicate names in user autocomplete !1223 @dthulke
 - Fix error when logging out while not logged in !1240 #753 @alex.simm
 - Prevent exception for orga users if a deleted user profile is visited @jofranz
 - Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
