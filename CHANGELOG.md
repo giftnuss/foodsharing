@@ -50,6 +50,7 @@
 - upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 - Update some frontend dependencies !1842 !1881 @chriswalg
 - Update some backend dependencies !1885 @chriswalg
+- Fixed Xdebug !1883 @\_fridtjof_
 
 # 2021-02-08 Hotfix
 
