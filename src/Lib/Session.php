@@ -9,6 +9,7 @@ use Flourish\fSession;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\UserOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -455,7 +456,7 @@ class Session
 
 		$this->set('email_is_activated', $this->loginGateway->isActivated($fs['id']));
 		$this->set('email_is_bouncing', $this->mailsGateway->emailIsBouncing($fs['email']));
-		$this->set('locale', $this->settingsGateway->getLocale($fs['id']));
+		$this->set('locale', $this->settingsGateway->getUserOption($fs['id'], UserOptionType::LOCALE));
 	}
 
 	private function rolleWrapInt($roleInt)

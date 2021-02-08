@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Settings;
 
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\UserOptionType;
 
 class SettingsGateway extends BaseGateway
 {
@@ -148,13 +149,33 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function getLocale(int $userId): ?string
+	/**
+	 * Returns an option for the user, or null if the option is not set for the user.
+	 * See {@see UserOptionType},.
+	 */
+	public function getUserOption(int $userId, int $optionType): ?string
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'locale', ['id' => $userId]);
+		try {
+			return $this->db->fetchValueByCriteria('fs_foodsaver_has_options', 'option_value', [
+				'foodsaver_id' => $userId,
+				'option_type' => $optionType
+			]);
+		} catch (Exception $e) {
+			return null;
+		}
 	}
 
-	public function setLocale(int $userId, string $locale): void
+	/**
+	 * Sets an option for the user. If the option is already existing for this user, it will be
+	 * overwritten. See {@see UserOptionType},.
+	 */
+	public function setUserOption(int $userId, int $optionType, string $value): void
 	{
-		$this->db->update('fs_foodsaver', ['locale' => $locale], ['id' => $userId]);
+		$this->db->insertOrUpdate('fs_foodsaver_has_options', [
+			'foodsaver_id' => $userId,
+			'option_type' => $optionType,
+			'option_value' => $value,
+			'option_date' => $this->db->now(),
+		]);
 	}
 }

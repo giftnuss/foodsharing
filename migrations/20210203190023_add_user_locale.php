@@ -2,27 +2,44 @@
 
 declare(strict_types=1);
 
+use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
 final class AddUserLocale extends AbstractMigration
 {
 	public function change(): void
 	{
-		$this->table('fs_foodsaver')
-			->addColumn('locale', 'string', [
-				'null' => true,
-				'limit' => 10,
-				'comment' => 'frontend language selected by the user',
-				'default' => null
+		$this->table('fs_foodsaver_has_options', [
+			'id' => false,
+			'primary_key' => ['foodsaver_id', 'option_type'],
+		])
+			->addColumn('foodsaver_id', 'integer', [
+				'null' => false,
+				'limit' => '10',
+				'signed' => false,
 			])
-			->save();
-		$this->table('fs_foodsaver_archive')
-			->addColumn('locale', 'string', [
-				'null' => true,
-				'limit' => 10,
-				'comment' => 'frontend language selected by the user',
-				'default' => null
+			->addColumn('option_type', 'integer', [
+				'null' => false,
+				'limit' => '10',
+				'signed' => false,
+				'after' => 'foodsaver_id',
+				'comment' => 'category of the option',
 			])
-			->save();
+			->addColumn('option_value', 'string', [
+				'null' => false,
+				'limit' => MysqlAdapter::TEXT_SMALL,
+				'after' => 'option_type',
+				'comment' => 'value of the option'
+			])
+			->addColumn('option_date', 'datetime', [
+				'null' => false,
+				'after' => 'option_date',
+				'comment' => 'last timestamp at which this option was changed',
+			])
+			->addForeignKey('foodsaver_id', 'fs_foodsaver', 'id', [
+				'delete' => 'CASCADE',
+				'update' => 'CASCADE',
+			])
+			->create();
 	}
 }

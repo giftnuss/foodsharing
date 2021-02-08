@@ -1,7 +1,7 @@
 # Release "Erdbeere", Unreleased
 
 ## Features
-- New menu entry for changing the language of the website #1015 !1877 @alex.simm
+- New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
 
 ## Changes
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller

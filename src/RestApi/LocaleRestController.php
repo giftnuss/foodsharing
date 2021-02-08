@@ -3,6 +3,7 @@
 namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session as Session;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\UserOptionType;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -57,7 +58,7 @@ class LocaleRestController extends AbstractFOSRestController
 		}
 
 		$this->session->set('locale', $locale);
-		$this->settingsGateway->setLocale($this->session->id(), $locale);
+		$this->settingsGateway->setUserOption($this->session->id(), UserOptionType::LOCALE, $locale);
 
 		return $this->getLocaleAction();
 	}
