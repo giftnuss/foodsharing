@@ -1,3 +1,7 @@
+# 2021-02-08 Hotfix
+
+- Make the order of values in voting options consistent from left (negative) to right (positive) !1868 #975 @alex.simm
+
 # 2021-01-18 Hotfix
 
 ## Changes
