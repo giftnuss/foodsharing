@@ -343,6 +343,7 @@ class ForumPostCest
 		$I->waitForElementVisible($confirmButton);
 		$I->click($confirmButton);
 		$I->waitForElementNotVisible($confirmButton);
+		$I->wait(2); // avoiding yet another common race condition here
 		$I->seeCurrentUrlEquals($I->forumUrl($this->{$example[1]}['id']));
 		$I->waitForActiveAPICalls();
 		$I->cantSee($title);
