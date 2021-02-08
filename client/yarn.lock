@@ -8659,10 +8659,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeface-alfa-slab-one@^0.0.72:
-  version "0.0.72"
-  resolved "https://registry.yarnpkg.com/typeface-alfa-slab-one/-/typeface-alfa-slab-one-0.0.72.tgz#90faf7d9a80302923e1e2729e3ffce1e4c208c02"
-  integrity sha512-13kyPOCodpHEPTIlpsndZ9owOxIUkYls4M0pNGZr0BtlaZaqeffYj9hMfGlSPPcu9HDNCemJMSLaQnB1tCPKMA==
+typeface-alfa-slab-one@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/typeface-alfa-slab-one/-/typeface-alfa-slab-one-1.1.13.tgz#106865aae5893d7c870b2779b9e7bc006d9d014a"
+  integrity sha512-rDeNZ+zDoRYGBCqSTYJ9YV4J7f3WWDp48Z9rWNo1TDSDk99YjOROmHlLAgqHCq+HY/UXUrNvTHLcSvJuWbSu0g==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
