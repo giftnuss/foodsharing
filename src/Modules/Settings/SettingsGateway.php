@@ -175,7 +175,6 @@ class SettingsGateway extends BaseGateway
 			'foodsaver_id' => $userId,
 			'option_type' => $optionType,
 			'option_value' => $value,
-			'option_date' => $this->db->now(),
 		]);
 	}
 }

@@ -31,11 +31,6 @@ final class AddUserLocale extends AbstractMigration
 				'after' => 'option_type',
 				'comment' => 'value of the option'
 			])
-			->addColumn('option_date', 'datetime', [
-				'null' => false,
-				'after' => 'option_date',
-				'comment' => 'last timestamp at which this option was changed',
-			])
 			->addForeignKey('foodsaver_id', 'fs_foodsaver', 'id', [
 				'delete' => 'CASCADE',
 				'update' => 'CASCADE',
