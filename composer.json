@@ -55,7 +55,7 @@
     "influxdb/influxdb-php": "1.15.2",
     "intervention/image": "2.5.1",
     "jms/serializer-bundle": "3.7.0",
-    "maximebf/debugbar": "v1.16.4",
+    "maximebf/debugbar": "v1.16.5",
     "minishlink/web-push": "5.2.4",
     "mobiledetect/mobiledetectlib": "2.8.35",
     "nelmio/api-doc-bundle": "v4.1.1",
