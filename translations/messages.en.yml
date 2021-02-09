@@ -541,3 +541,4 @@ storemanagers: Store managers
 language_chooser:
   title: "Choose Language"
   content: "Please choose a language"
+plz: Postcode (automatically from the map above!)
