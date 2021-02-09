@@ -8,8 +8,6 @@ parameters:
   bootstrapFiles:
     - config.inc.php
   ignoreErrors:
-    # LEVEL 0+ see https://github.com/phpstan/phpstan/issues/1557
-    - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
     # Level 4+ see https://github.com/phpstan/phpstan/issues/3264
     - '#Comparison operation ">" between int<1, max> and 0 is always true#'
     # Level 4+ see https://github.com/phpstan/phpstan/issues/2889
@@ -33,7 +31,6 @@ parameters:
       message: '#expects (DateTime|Carbon\\Carbon)(\|null)?, (DateTimeInterface|Carbon\\CarbonInterface)(\|null)? given#'
       paths:
         - src/Modules/Store/StoreTransactions.php
-        - src/Modules/Store/PickupGateway.php
     # LEVEL 5+ Weirdness with InputBag / ParameterBag, see https://github.com/symfony/symfony/issues/37100
     -
       message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Symfony\\Component\\HttpFoundation\\InputBag::get\(\) expects string\|null, int given#'
