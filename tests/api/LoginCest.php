@@ -9,7 +9,7 @@ class LoginCest
 	 * @example ["createAmbassador", "Dein Stammbezirk ist"]
 	 * @example ["createOrga", "Dein Stammbezirk ist"]
 	 */
-	public function checkLogin(\ApiTester $I, \Codeception\Example $example)
+	public function checkLogin(ApiTester $I, Codeception\Example $example)
 	{
 		$pass = sq('pass');
 		$user = $I->{$example[0]}($pass);
@@ -31,7 +31,7 @@ class LoginCest
 	/**
 	 * @example ["createFoodsaver", "Hallo ", "Foodsaver für"]
 	 */
-	public function checkInvalidLogin(\ApiTester $I, \Codeception\Example $example)
+	public function checkInvalidLogin(ApiTester $I, Codeception\Example $example)
 	{
 		$pass = sq('pass');
 		$user = call_user_func([$I, $example[0]], $pass);

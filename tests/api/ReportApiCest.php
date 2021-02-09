@@ -15,7 +15,7 @@ class ReportApiCest
 	private $subRegionFoodsaver;
 	private $foodsharer;
 
-	public function _before(\ApiTester $I)
+	public function _before(ApiTester $I)
 	{
 		//Create regions
 		$this->parentRegion = $I->createRegion();
@@ -43,7 +43,7 @@ class ReportApiCest
 		$this->foodsharer = $I->createFoodsharer();
 	}
 
-	public function seeReportAboutFoodsaverInRegion(\ApiTester $I)
+	public function seeReportAboutFoodsaverInRegion(ApiTester $I)
 	{
 		$I->login($this->reportGroupAdmin['email']);
 		$I->addReport($this->foodsaver['id'], $this->foodsaver['id']);
@@ -53,7 +53,7 @@ class ReportApiCest
 		codecept_debug($I->seeResponseContainsJson(['data' => ['fs_id' => $this->foodsaver['id'], 'rp_id' => $this->foodsaver['id']]]));
 	}
 
-	public function cantSeeReportAboutFoodsaverInSubRegion(\ApiTester $I)
+	public function cantSeeReportAboutFoodsaverInSubRegion(ApiTester $I)
 	{
 		$I->login($this->reportGroupAdmin['email']);
 		$I->addReport($this->foodsharer['id'], $this->subRegionFoodsaver['id']);
@@ -62,7 +62,7 @@ class ReportApiCest
 		$I->cantSeeResponseContainsJson(['data' => ['fs_id' => $this->subRegionFoodsaver['id'], 'rp_id' => $this->foodsharer['id']]]);
 	}
 
-	public function dontSeeReportAboutSelf(\ApiTester $I)
+	public function dontSeeReportAboutSelf(ApiTester $I)
 	{
 		$I->login($this->reportGroupAdmin['email']);
 		$I->addReport($this->foodsharer['id'], $this->reportGroupAdmin['id']);
@@ -72,7 +72,7 @@ class ReportApiCest
 		$I->dontSeeResponseContainsJson(['data' => ['fs_id' => $this->reportGroupAdmin['id']]]);
 	}
 
-	public function dontSeeReportAboutFoodsharerReporterNotInRegion(\ApiTester $I)
+	public function dontSeeReportAboutFoodsharerReporterNotInRegion(ApiTester $I)
 	{
 		$I->login($this->reportGroupAdmin['email']);
 		$I->addReport($this->reportGroupAdmin['id'], $this->foodsharer['id']);
@@ -81,7 +81,7 @@ class ReportApiCest
 		$I->dontSeeResponseContainsJson(['data' => ['fs_id' => $this->foodsharer['id']]]);
 	}
 
-	public function ArbitrationAdminSeesReportAboutReportAdmin(\ApiTester $I)
+	public function ArbitrationAdminSeesReportAboutReportAdmin(ApiTester $I)
 	{
 		$I->login($this->arbitrationGroupAdmin['email']);
 		$I->addReport($this->foodsharer['id'], $this->reportGroupAdmin['id']);
@@ -90,21 +90,21 @@ class ReportApiCest
 		$I->seeResponseContainsJson(['data' => ['fs_id' => $this->reportGroupAdmin['id'], 'rp_id' => $this->foodsharer['id']]]);
 	}
 
-	public function foodsaverCannotAccessReports(\ApiTester $I)
+	public function foodsaverCannotAccessReports(ApiTester $I)
 	{
 		$I->login($this->foodsaver['email']);
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 	}
 
-	public function foodsharerCannotAccessReports(\ApiTester $I)
+	public function foodsharerCannotAccessReports(ApiTester $I)
 	{
 		$I->login($this->foodsharer['email']);
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 	}
 
-	public function reportTeamCanAccessReports(\ApiTester $I)
+	public function reportTeamCanAccessReports(ApiTester $I)
 	{
 		$fs = $I->createFoodsaver();
 		$reportTeamRegion = $I->createRegion('report team region', ['id' => Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM]);

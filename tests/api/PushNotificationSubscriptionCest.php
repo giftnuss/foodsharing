@@ -9,7 +9,7 @@ class PushNotificationSubscriptionCest
 	 */
 	private $testSubscription;
 
-	public function _before(\ApiTester $I)
+	public function _before(ApiTester $I)
 	{
 		$this->tester = $I;
 		$this->user = $I->createFoodsaver();
@@ -24,7 +24,7 @@ class PushNotificationSubscriptionCest
 		}';
 	}
 
-	public function subscriptionSucceedsIfLoggedIn(\ApiTester $I)
+	public function subscriptionSucceedsIfLoggedIn(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/pushnotification/webpush/subscription', $this->testSubscription);
@@ -32,7 +32,7 @@ class PushNotificationSubscriptionCest
 		$I->seeResponseCodeIs(HttpCode::OK);
 	}
 
-	public function subscriptionFailsIfNotLoggedIn(\ApiTester $I)
+	public function subscriptionFailsIfNotLoggedIn(ApiTester $I)
 	{
 		$I->sendPOST('api/pushnotification/webpush/subscription', $this->testSubscription);
 

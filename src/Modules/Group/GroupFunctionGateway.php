@@ -124,7 +124,7 @@ class GroupFunctionGateway extends BaseGateway
 			if (empty($group_id)) {
 				return $this->db->exists('fs_region_function', ['target_id' => $target_id, 'function_id' => $function_id]);
 			} else {
-				return  $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => $function_id, 'target_id' => $target_id]);
+				return $this->db->exists('fs_region_function', ['region_id' => $group_id, 'function_id' => $function_id, 'target_id' => $target_id]);
 			}
 		} catch (\Exception $e) {
 			return false;

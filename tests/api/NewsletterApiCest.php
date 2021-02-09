@@ -6,17 +6,14 @@ class NewsletterApiCest
 	private $user;
 	private $userOrga;
 
-	public function _before(\ApiTester $I)
+	public function _before(ApiTester $I)
 	{
 		$this->tester = $I;
 		$this->user = $I->createFoodsharer();
 		$this->userOrga = $I->createOrga();
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function foodsaverMayNotTestNewsletter(\ApiTester $I): void
+	public function foodsaverMayNotTestNewsletter(ApiTester $I): void
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/newsletter/test', [
@@ -27,10 +24,7 @@ class NewsletterApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function invalidEmailAddressIsRejected(\ApiTester $I): void
+	public function invalidEmailAddressIsRejected(ApiTester $I): void
 	{
 		$I->login($this->userOrga['email']);
 		$I->sendPOST('api/newsletter/test', [
@@ -41,10 +35,7 @@ class NewsletterApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::INTERNAL_SERVER_ERROR);
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function validEmailAddressIsAccepted(\ApiTester $I): void
+	public function validEmailAddressIsAccepted(ApiTester $I): void
 	{
 		$I->login($this->userOrga['email']);
 		$I->sendPOST('api/newsletter/test', [

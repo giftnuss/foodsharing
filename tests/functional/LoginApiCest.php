@@ -2,7 +2,7 @@
 
 class LoginApiCest
 {
-	public function checkLogin(\FunctionalTester $I)
+	public function checkLogin(FunctionalTester $I)
 	{
 		$pass = 'pw';
 		$user = $I->createFoodsaver($pass);
@@ -17,7 +17,7 @@ class LoginApiCest
 		]);
 	}
 
-	public function loginFailsWrongUserPassword(\FunctionalTester $I)
+	public function loginFailsWrongUserPassword(FunctionalTester $I)
 	{
 		$user['email'] = 'thissurelydoesnotexist@example.com';
 		$pass = '123';
@@ -28,7 +28,7 @@ class LoginApiCest
 		$I->seeResponseCodeIs(401);
 	}
 
-	public function loginFailsWrongPasswordForExistingUser(\FunctionalTester $I)
+	public function loginFailsWrongPasswordForExistingUser(FunctionalTester $I)
 	{
 		$pass = 'pw';
 		$user = $I->createFoodsaver($pass);

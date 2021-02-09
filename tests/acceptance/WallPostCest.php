@@ -24,7 +24,7 @@ class WallPostCest
 	 * @example["regionMember", true]
 	 * @example["unconnectedFoodsaver", false]
 	 */
-	public function canAddSeeWallPosts(AcceptanceTester $I, \Codeception\Example $example)
+	public function canAddSeeWallPosts(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->regionWallUrl($this->testGroup['id']));

@@ -24,7 +24,7 @@ class SettingsCest
 	 * @example["infomail_message", false]
 	 * @example["infomail_message", true]
 	 */
-	public function userCanChangeGeneralSubscriptions(AcceptanceTester $I, \Codeception\Example $example)
+	public function userCanChangeGeneralSubscriptions(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$field = $example[0];
 		$selector = $this->createSelector($field);
@@ -79,7 +79,7 @@ class SettingsCest
 	 * @example[1, "EMAIL"]
 	 * @example[2, "BELL"]
 	 */
-	public function userCanChangeFoodsharepointSubscriptions(AcceptanceTester $I, \Codeception\Example $example)
+	public function userCanChangeFoodsharepointSubscriptions(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$targetValue = $example[0];
 		$selector = $this->createSelector('fairteiler_' . $this->foodSharePoint['id']);

@@ -9,11 +9,9 @@
 class ChangePickupTimeCest
 {
 	/**
-	 * @param ApiTester $I
-	 *
 	 * @example ["createStoreCoordinator", true]
 	 */
-	public function createRequestSucceeds(\ApiTester $I, \Codeception\Example $example)
+	public function createRequestSucceeds(ApiTester $I, Codeception\Example $example)
 	{
 		$store = $I->createStore(1);
 		$user = call_user_func([$I, $example[0]]);

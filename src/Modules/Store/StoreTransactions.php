@@ -135,7 +135,7 @@ class StoreTransactions
 	 *
 	 * @return \DateTime the slot's time or null
 	 */
-	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?\DateTime
+	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?DateTime
 	{
 		if ($maxDate < Carbon::now()) {
 			return null;

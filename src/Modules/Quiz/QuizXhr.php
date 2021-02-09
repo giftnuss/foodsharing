@@ -1060,7 +1060,6 @@ class QuizXhr extends Control
 						}
 						break;
 					default:
-
 						// Bei neutralen Fragen einfach Erklärung anfügen
 						$explains[$a['id']] = $rightQuestions[$question['id']]['answers'][$a['id']];
 						break;

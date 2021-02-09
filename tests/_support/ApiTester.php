@@ -20,7 +20,7 @@ class ApiTester extends \Codeception\Actor
 {
 	use _generated\ApiTesterActions;
 
-	public function __construct(\Codeception\Scenario $scenario)
+	public function __construct(Codeception\Scenario $scenario)
 	{
 		parent::__construct($scenario);
 		$this->haveHttpHeader('X-CSRF-Token', CSRF_TEST_TOKEN);

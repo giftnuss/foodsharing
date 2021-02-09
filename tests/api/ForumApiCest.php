@@ -13,7 +13,7 @@ class ForumApiCest
 	private $inactiveThread;
 	private $faker;
 
-	public function _before(\ApiTester $I)
+	public function _before(ApiTester $I)
 	{
 		$this->tester = $I;
 		$this->user = $I->createFoodsaver();
@@ -31,10 +31,7 @@ class ForumApiCest
 		$this->faker = Faker\Factory::create('de_DE');
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function deleteNonExistingForumPostIs404(\ApiTester $I): void
+	public function deleteNonExistingForumPostIs404(ApiTester $I): void
 	{
 		$I->login($this->user['email']);
 		$I->sendDELETE('api/forum/post/9999999');
@@ -42,10 +39,7 @@ class ForumApiCest
 		$I->seeResponseIsJson();
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function deleteOwnPostSucceeds(\ApiTester $I): void
+	public function deleteOwnPostSucceeds(ApiTester $I): void
 	{
 		$I->login($this->user['email']);
 		$I->sendDELETE('api/forum/post/' . $this->thread['post']['id']);
@@ -53,10 +47,7 @@ class ForumApiCest
 		$I->seeResponseIsJson();
 	}
 
-	/**
-	 * @param ApiTester $I
-	 */
-	public function deleteForeignPostFails403(\ApiTester $I): void
+	public function deleteForeignPostFails403(ApiTester $I): void
 	{
 		$foreigner = $I->createFoodsaver();
 		$I->login($foreigner['email']);
@@ -66,11 +57,9 @@ class ForumApiCest
 	}
 
 	/**
-	 * @param ApiTester $I
-	 *
 	 * @throws Exception
 	 */
-	public function canUseEmojis(\ApiTester $I): void
+	public function canUseEmojis(ApiTester $I): void
 	{
 		$I->login($this->user['email']);
 		$body = 'I am so 😂 for you! ' . $this->faker->text(50);
@@ -89,11 +78,9 @@ class ForumApiCest
 	}
 
 	/**
-	 * @param ApiTester $I
-	 *
 	 * @throws Exception
 	 */
-	public function canDeleteInactiveThreadAsAmbassador(\ApiTester $I): void
+	public function canDeleteInactiveThreadAsAmbassador(ApiTester $I): void
 	{
 		$I->login($this->ambassador['email']);
 		$I->sendDELETE('api/forum/thread/' . $this->inactiveThread['id']);
@@ -101,11 +88,9 @@ class ForumApiCest
 	}
 
 	/**
-	 * @param ApiTester $I
-	 *
 	 * @throws Exception
 	 */
-	public function canNotDeleteActiveThread(\ApiTester $I): void
+	public function canNotDeleteActiveThread(ApiTester $I): void
 	{
 		$I->login($this->ambassador['email']);
 		$I->sendPATCH('api/forum/thread/' . $this->thread['id'], [

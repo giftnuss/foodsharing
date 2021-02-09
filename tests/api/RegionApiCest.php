@@ -7,14 +7,14 @@ class RegionApiCest
 	private $user;
 	private $region;
 
-	public function _before(\ApiTester $I)
+	public function _before(ApiTester $I)
 	{
 		$this->tester = $I;
 		$this->user = $I->createFoodsaver();
 		$this->region = $I->createRegion();
 	}
 
-	public function canJoinRegion(\ApiTester $I)
+	public function canJoinRegion(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->dontSeeInDatabase('fs_foodsaver_has_bezirk', [
@@ -30,7 +30,7 @@ class RegionApiCest
 			]);
 	}
 
-	public function joinNotExistingRegionIs404(\ApiTester $I)
+	public function joinNotExistingRegionIs404(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/999999999/join');
@@ -42,7 +42,7 @@ class RegionApiCest
 			]);
 	}
 
-	public function canNotJoinRegionAsFoodsharer(\ApiTester $I)
+	public function canNotJoinRegionAsFoodsharer(ApiTester $I)
 	{
 		$foodsharer = $I->createFoodsharer();
 		$I->login($foodsharer['email']);
@@ -55,7 +55,7 @@ class RegionApiCest
 			]);
 	}
 
-	public function canJoinRegionTwice(\ApiTester $I)
+	public function canJoinRegionTwice(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
@@ -65,7 +65,7 @@ class RegionApiCest
 		// database entry is not interesting, already tested that in other test
 	}
 
-	public function canNotLeaveRegionWithoutLogin(\ApiTester $I)
+	public function canNotLeaveRegionWithoutLogin(ApiTester $I)
 	{
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
@@ -74,7 +74,7 @@ class RegionApiCest
 		// there is no user to look at
 	}
 
-	public function canLeaveRegionWithoutJoiningFirst(\ApiTester $I)
+	public function canLeaveRegionWithoutJoiningFirst(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
@@ -86,7 +86,7 @@ class RegionApiCest
 			]);
 	}
 
-	public function canLeaveRegion(\ApiTester $I)
+	public function canLeaveRegion(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
@@ -105,7 +105,7 @@ class RegionApiCest
 			]);
 	}
 
-	public function canNotLeaveDifferentRegionThanJoined(\ApiTester $I)
+	public function canNotLeaveDifferentRegionThanJoined(ApiTester $I)
 	{
 		$region2 = $I->createRegion();
 
@@ -120,7 +120,7 @@ class RegionApiCest
 		]);
 	}
 
-	public function canNotLeaveNonExistingRegion(\ApiTester $I)
+	public function canNotLeaveNonExistingRegion(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/999999999/leave');
@@ -128,7 +128,7 @@ class RegionApiCest
 		$I->seeResponseIsJson();
 	}
 
-	public function canNotLeaveRootRegion(\ApiTester $I)
+	public function canNotLeaveRootRegion(ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . RegionIDs::ROOT . '/leave');
@@ -136,7 +136,7 @@ class RegionApiCest
 		$I->seeResponseIsJson();
 	}
 
-	public function canNotLeaveRegionIfActiveStoreManager(\ApiTester $I)
+	public function canNotLeaveRegionIfActiveStoreManager(ApiTester $I)
 	{
 		$store = $I->createStore($this->region['id']);
 		$coordinator = $I->createStoreCoordinator();

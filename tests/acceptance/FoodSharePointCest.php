@@ -79,7 +79,7 @@ class FoodSharePointCest
 	 * @example["responsible", true]
 	 * @example["otherBot", true]
 	 */
-	public function mayEditFoodSharePoint(AcceptanceTester $I, \Codeception\Example $example)
+	public function mayEditFoodSharePoint(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$user = $this->{$example[0]};
 		$I->login($user['email']);

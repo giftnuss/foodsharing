@@ -24,7 +24,7 @@ class LookupControl extends ConsoleControl
 		$filename = $argv[3];
 		if (!file_exists($filename)) {
 			self::error('Could not load file ' . $filename);
-			die();
+			exit();
 		}
 
 		$this->info('Loading emails from ' . $filename);

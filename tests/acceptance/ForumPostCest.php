@@ -52,7 +52,7 @@ class ForumPostCest
 	 * @example["ambassador", "thread_user_ambassador", true]
 	 * @example["foodsaver", "thread_user_ambassador", false]
 	 */
-	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
+	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$followMailSwitch = '.above .toggle-status .email'; // per Mail folgen
 		$followBellSwitch = '.below .toggle-status .bell'; // per Glocke folgen
@@ -202,7 +202,7 @@ class ForumPostCest
 	 * @example["foodsaver", "bigTestBezirk"]
 	 * @example["foodsaver", "moderatedTestBezirk"]
 	 */
-	public function newThreadWillBeModerated(AcceptanceTester $I, \Codeception\Example $example)
+	public function newThreadWillBeModerated(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$title = 'TestThreadTitle';
@@ -220,7 +220,7 @@ class ForumPostCest
 	/**
 	 * @example["foodsaver", "testBezirk"]
 	 */
-	public function newThreadWillNotSendEmail(AcceptanceTester $I, \Codeception\Example $example)
+	public function newThreadWillNotSendEmail(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$title = 'TestThreadTitleWithoutEmailToForumMembers';
@@ -237,7 +237,7 @@ class ForumPostCest
 	/**
 	 * @example["foodsaver", "testBezirk"]
 	 */
-	public function newThreadWillSendEmail(AcceptanceTester $I, \Codeception\Example $example)
+	public function newThreadWillSendEmail(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$title = 'TestThreadTitleWithEmailToForumMembers';
@@ -262,7 +262,7 @@ class ForumPostCest
 	/**
 	 * @example["ambassador", "thread_ambassador_user", true]
 	 */
-	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, \Codeception\Example $example)
+	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$title = 'TestAmbassadorThreadTitle';
@@ -307,7 +307,7 @@ class ForumPostCest
 	/**
 	 * @example["foodsaver", "bigTestBezirk"]
 	 */
-	public function DeleteLastPostAndGetRedirectedToForum(AcceptanceTester $I, \Codeception\Example $example)
+	public function DeleteLastPostAndGetRedirectedToForum(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$title = 'TestThreadTitleForDeletion';

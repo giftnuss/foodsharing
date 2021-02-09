@@ -24,7 +24,7 @@ class QuizCest
 	 * @example["foodsharer", "Werde Foodsaver", "Quiz ohne Zeitlimit"]
 	 * @example["foodsaver", "Werde Betriebsverantwortliche", "Quiz jetzt starten"]
 	 */
-	public function canStartQuiz(AcceptanceTester $I, \Codeception\Example $example)
+	public function canStartQuiz(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->settingsUrl());

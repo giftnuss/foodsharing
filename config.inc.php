@@ -5,7 +5,7 @@ $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
 $private_env_filename = __DIR__ . '/.config.inc.' . $FS_ENV . '.php';
 if (defined('FS_ENV')) {
 	if (FS_ENV !== $FS_ENV) {
-		die('different values of FS_ENV const (' . FS_ENV . ') and ENV var (' . $FS_ENV . ')');
+		exit('different values of FS_ENV const (' . FS_ENV . ') and ENV var (' . $FS_ENV . ')');
 	}
 } else {
 	define('FS_ENV', $FS_ENV);
@@ -14,7 +14,7 @@ if (defined('FS_ENV')) {
 if (file_exists($env_filename)) {
 	require_once $env_filename;
 } else {
-	die('no config found for env [' . $FS_ENV . ']');
+	exit('no config found for env [' . $FS_ENV . ']');
 }
 if (file_exists($private_env_filename)) {
 	require_once $private_env_filename;

@@ -49,7 +49,7 @@ class WorkGroupCest
 	 * @example["unconnectedFoodsaver", true]
 	 * @example["foodsharer", true]
 	 */
-	public function canSeeGlobalGroups(AcceptanceTester $I, \Codeception\Example $example)
+	public function canSeeGlobalGroups(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->groupListUrl());
@@ -66,7 +66,7 @@ class WorkGroupCest
 	 *
 	 * @example["unconnectedFoodsaver", "testGroup"]
 	 */
-	public function canJoinGlobalGroup(AcceptanceTester $I, \Codeception\Example $example)
+	public function canJoinGlobalGroup(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$group = $this->{$example[1]};
 		$I->login($this->{$example[0]}['email']);
@@ -102,7 +102,7 @@ class WorkGroupCest
 	 * @example["unconnectedFoodsaver"]
 	 * @example["regionMember"]
 	 */
-	public function canNotEditWorkGroupAs(AcceptanceTester $I, \Codeception\Example $example)
+	public function canNotEditWorkGroupAs(AcceptanceTester $I, Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->groupEditUrl($this->testGroup['id']));
