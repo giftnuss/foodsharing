@@ -124,7 +124,8 @@
 
 <script>
 import { addStoreMember } from '@/api/stores'
-import { reload } from '@/script'
+import { reload, pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   props: {
@@ -147,8 +148,7 @@ export default {
         await addStoreMember(this.storeId, userId)
         this.newUserId = ''
       } catch (e) {
-        console.error(e)
-        // pulseError(i18n('error_unexpected'))
+        pulseError(i18n('error_unexpected'))
       }
       // convince user to trigger page reload for server refresh of teamlist
       this.requireReload = true
