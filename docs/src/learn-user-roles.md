@@ -123,17 +123,17 @@ This has been done with the project GOALS (goals@foodsharing.network).
 It is possible to assign a workgroup function that grants certain administrative optimised
 to the function task. The workgroup function affect the district, that the workgroup is appended to. 
 
-| workgroup-Function  | description                                                                                                              |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------|
-| Welcome             | administrators get a bell about entries of foodsavers into the district                                                  |
-| FSP(foodsharepoint) | managing foodshar points of this region (regardless of who's listed as responsible for the point)                        |  
-| Store Coordination  | managing of all stores from this region. If a store coordination group is set up it is prioritized over ambassadors      |
-| Report              | managing reports for a region. Technical support for making reports                                                      |
-| Mediation           | e-mail address is shown if requesting a mediation                                                                        |
-| Arbitration         | managing reports with reports of report team                                                                             |
-| FSManagement        | managing foodsaver in a region (work in progress)                                                                        |
-| PR                  | no special functionality                                                                                                 |
-| Moderation          | managing moderation of a district (activate threads). If a moderation group is set up it is prioritized over ambassadors |
+| workgroup-Function   | description                                                                                                              |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Welcome              | administrators get a bell about entries of foodsavers into the district                                                  |
+| FSP (foodsharepoint) | managing foodshare points of this region (regardless of who's listed as responsible for the point)                       |
+| Store Coordination   | managing all stores from this region. If a store coordination group is set up it is prioritized over ambassadors         |
+| Report               | managing reports for a region. Technical support for making reports                                                      |
+| Mediation            | e-mail address is shown if requesting a mediation                                                                        |
+| Arbitration          | managing reports with reports of report team                                                                             |
+| FSManagement         | managing foodsaver in a region (work in progress)                                                                        |
+| PR                   | no special functionality                                                                                                 |
+| Moderation           | managing moderation of a district (activate threads). If a moderation group is set up it is prioritized over ambassadors |
 
 Those groups are optional and are set up by writing to the "AG Creation" group.
 They do show up in the forum sidebar, similar to the ambassador list.
