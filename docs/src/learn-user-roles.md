@@ -117,10 +117,23 @@ and only introduce "clean" permission handling in new code.
 
 Recently, we have also started introducing special workgroups which can take over certain predefined duties
 that previously belonged to ambassadors only (or did not exist separately at all).
-Those so-called workgroup functions currently are:
-- greeting foodsavers who join a region and need introductory pickups (*Welcome Group*)
-- managing foodshare points of a region (regardless of who's listed as responsible for the point)
-- managing polls for a region (voting is a very new feature, so this is still under construction)
 
-Those groups are optional and right now need to be set up by Orgateam members for a region.
-Some of them will also show up in the forum sidebar, similar to the ambassador list.
+This has been done with the project GOALS (goals@foodsharing.network).
+
+It is possible to assign a workgroup function that grants certain administrative optimised
+to the function task. The workgroup function affect the district, that the workgroup is appended to. 
+
+| workgroup-Function  | description                                                                                                              |
+|---------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Welcome             | administrators get a bell about entries of foodsavers into the district                                                  |
+| FSP(foodsharepoint) | managing foodshar points of this region (regardless of who's listed as responsible for the point)                        |  
+| Store Coordination  | managing of all stores from this region. If a store coordination group is set up it is prioritized over ambassadors      |
+| Report              | managing reports for a region. Technical support for making reports                                                      |
+| Mediation           | e-mail address is shown if requesting a mediation                                                                        |
+| Arbitration         | managing reports with reports of report team                                                                             |
+| FSManagement        | managing foodsaver in a region (work in progress)                                                                        |
+| PR                  | no special functionality                                                                                                 |
+| Moderation          | managing moderation of a district (activate threads). If a moderation group is set up it is prioritized over ambassadors |
+
+Those groups are optional and are set up by writing to the "AG Creation" group.
+They do show up in the forum sidebar, similar to the ambassador list.
