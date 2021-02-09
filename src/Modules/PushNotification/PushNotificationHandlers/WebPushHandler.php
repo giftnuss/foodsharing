@@ -41,7 +41,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * @var string[] an array with subscription strings in JSON format
+	 * @param string[] $subscriptionData an array with subscription strings in JSON format
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
