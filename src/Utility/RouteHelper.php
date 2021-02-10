@@ -36,7 +36,7 @@ final class RouteHelper
 
 	public function goLogin(): void
 	{
-		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
+		$this->go('/?page=login&ref=' . urlencode($this->getSelf()));
 	}
 
 	public function goPage(string $page = ''): void
