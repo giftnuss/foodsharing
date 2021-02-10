@@ -25,6 +25,7 @@
 - logging when user is removed from a pickup slot from the user profile !1870 @fs_k
 - Remove users from every store team and pickup slot on deletion !1872 @alex.simm
 - Blank lines in Markdown on the form for editing store information are now also displayed as blank lines !1878 @stepin
+- Removed a duplicate and broken submit button from the workgroup application dialog !1889 @\_fridtjof_
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
