@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import 'corejs-typeahead'
-import PhotonAddressEngine from 'typeahead-address-photon'
+import 'typeahead-address-photon'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
 import 'mapbox-gl-leaflet'
@@ -40,7 +40,7 @@ export function attachAddressPicker () {
   const map = initMap('map', center, initialZoom, 18)
   setTimeout(() => (map.invalidateSize()), 400)
 
-  const engine = new PhotonAddressEngine(
+  const engine = new window.PhotonAddressEngine(
     {
       url: 'https://photon.komoot.io',
       formatResult: function (feature) {
