@@ -796,3 +796,6 @@ geschlecht: Gender
 anschrift: Street and number (automatically from map above, if necessary you can change!)
 handy: Mobile number
 telefon: Landline number
+body: message
+mailbox_name: Mailbox name
+betrieb: Cooperation company/ies
