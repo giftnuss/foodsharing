@@ -66,6 +66,7 @@ final class RouteHelper
 
 		$fixedRequestUri = preg_replace('/^\/xhr.php\/xhr.php/', '/xhr.php', $originalRequestUri, 1);
 		$fixedRequestUri = preg_replace('/^\/xhrapp.php\/xhrapp.php/', '/xhrapp.php', $fixedRequestUri, 1);
+
 		return $fixedRequestUri;
 	}
 
