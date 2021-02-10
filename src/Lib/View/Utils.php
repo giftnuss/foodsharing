@@ -409,8 +409,10 @@ class Utils
 
 		if (!isset($option['submit'])) {
 			$submitTitle = $this->translator->trans('button.send');
+		} elseif ($option['submit'] !== false) {
+			$submitTitle = strval($option['submit']);
 		} else {
-			$submitTitle = $option['submit'];
+			$submitTitle = null;
 		}
 
 		if ($submitTitle !== null) {
