@@ -48,7 +48,7 @@
 - Bumped some container versions !1865 @\_fridtjof_
 - Updated mdbook to 0.4.6 !1876 @chriswalg
 - upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
-- Update some frontend dependencies !1842 !1881 @chriswalg
+- Update some frontend dependencies !1842 !1881 !1890 @chriswalg @\_fridtjof_
 - Update some backend dependencies !1885 @chriswalg
 - Fixed Xdebug !1883 @\_fridtjof_
 
