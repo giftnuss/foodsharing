@@ -52,7 +52,21 @@ final class RouteHelper
 
 	public function getSelf()
 	{
-		return $_SERVER['REQUEST_URI'];
+		// TODO revert all this when index.php is the only entry point left
+		// xhr.php and xhrapp.php currently modify REQUEST_URI to make symfony's routing happy.
+		// see those two files for the reason why
+		// because we don't want to use these technically-invalid URIs anywhere (form URLs for example),
+		// fix them if needed
+
+		// Example of an URI affected by the hack:
+		// '/xhrapp.php/xhrapp.php?app=groups&m=apply&id=1'
+		// only one /xhrapp.php should be there
+
+		$originalRequestUri = $_SERVER['REQUEST_URI'];
+
+		$fixedRequestUri = preg_replace('/^\/xhr.php\/xhr.php/', '/xhr.php', $originalRequestUri, 1);
+		$fixedRequestUri = preg_replace('/^\/xhrapp.php\/xhrapp.php/', '/xhrapp.php', $fixedRequestUri, 1);
+		return $fixedRequestUri;
 	}
 
 	public function getPage(): string
