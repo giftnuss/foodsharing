@@ -8,7 +8,7 @@ import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import 'corejs-typeahead'
-import PhotonAddressEngine from 'typeahead-address-photon'
+import 'typeahead-address-photon'
 
 import { initMap } from '@/mapUtils'
 
@@ -62,7 +62,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
       prefix: 'fa',
     })
 
-  const engine = new PhotonAddressEngine(
+  const engine = new window.PhotonAddressEngine(
     {
       url: 'https://photon.komoot.io',
       formatResult: function (feature) {
