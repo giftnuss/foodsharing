@@ -63,6 +63,20 @@ class UploadsGateway extends BaseGateway
 		$this->db->update('uploads', ['lastaccess_at' => $this->db->now()], ['uuid' => $uuid]);
 	}
 
+	/**
+	 * Returns the user who uploaded the file with the specific UUID.
+	 *
+	 * @param string $uuid UUID of a previously uploaded file
+	 *
+	 * @return int the foodsaver ID
+	 *
+	 * @throws Exception if the file does not exist
+	 */
+	public function getUser(string $uuid): int
+	{
+		return $this->db->fetchValueByCriteria('uploads', 'user_id', ['uuid' => $uuid]);
+	}
+
 	// our mysql query builder doesn't offer UUID(), so we use this PHP code
 	// until we moved to a new library
 	private function uuid_v4(): string

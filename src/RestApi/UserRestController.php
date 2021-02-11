@@ -3,6 +3,7 @@
 namespace Foodsharing\RestApi;
 
 use Carbon\Carbon;
+use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -12,6 +13,7 @@ use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Profile\ProfileTransactions;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Modules\Register\RegisterTransactions;
+use Foodsharing\Modules\Uploads\UploadsGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\UserPermissions;
@@ -30,6 +32,7 @@ class UserRestController extends AbstractFOSRestController
 	private LoginGateway $loginGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private ProfileGateway $profileGateway;
+	private UploadsGateway $uploadsGateway;
 	private ReportPermissions $reportPermissions;
 	private UserPermissions $userPermissions;
 	private ProfilePermissions $profilePermissions;
@@ -47,6 +50,7 @@ class UserRestController extends AbstractFOSRestController
 		LoginGateway $loginGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ProfileGateway $profileGateway,
+		UploadsGateway $uploadsGateway,
 		ReportPermissions $reportPermissions,
 		UserPermissions $userPermissions,
 		ProfilePermissions $profilePermissions,
@@ -59,6 +63,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->loginGateway = $loginGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
+		$this->uploadsGateway = $uploadsGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->userPermissions = $userPermissions;
 		$this->profilePermissions = $profilePermissions;
@@ -324,6 +329,41 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		$this->profileTransactions->giveBanana($userId, $message, $this->session->id());
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Sets a previously uploaded picture as the user's profile photo.
+	 *
+	 * @OA\RequestBody(description="UUID of the previously uploaded file")
+	 * @OA\Response(response="200", description="Success.")
+	 * @OA\Response(response="400", description="File does not exist.")
+	 * @OA\Response(response="401", description="Not logged in.")
+	 * @OA\Response(response="403", description="File was not uploaded by this user.")
+	 * @OA\Tag(name="user")
+	 *
+	 * @Rest\Patch("user/photo")
+	 * @Rest\RequestParam(name="uuid", nullable=false)
+	 */
+	public function setProfilePictureAction(ParamFetcher $paramFetcher): Response
+	{
+		$userId = $this->session->id();
+		if (!$userId) {
+			throw new HttpException(401);
+		}
+
+		// check if the photo exists and was uploaded by this user
+		$uuid = trim($paramFetcher->get('uuid'));
+		try {
+			if ($this->uploadsGateway->getUser($uuid) !== $userId) {
+				throw new HttpException(403);
+			}
+		} catch (Exception $e) {
+			throw new HttpException(400);
+		}
+
+		$this->foodsaverGateway->updatePhoto($this->session->id(), '/api/uploads/' . $uuid);
 
 		return $this->handleView($this->view([], 200));
 	}
