@@ -11,6 +11,7 @@
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
 - Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 - New look for event header panels and dashboard invitations including the event's region #992 !1717 @ChrisOelmueller
+- Use new upload API for profile photos !1916 @alex.simm
 
 ## Dev/Test/CI stuff
 

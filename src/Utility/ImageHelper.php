@@ -103,12 +103,22 @@ final class ImageHelper
 		$file = preg_replace('/%/', '', $file) ?? '';
 		$file = preg_replace('/\.+/', '.', $file) ?? '';
 
-		if (!empty($file) && file_exists('images/' . $file)) {
-			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
-				$this->resizeImg('images/' . $file, $size, $format);
-			}
+		if (!empty($file)) {
+			if (strpos($file, '/api/uploads/') === 0) {
+				// path for pictures uploaded with the new API
+				if (is_numeric($size)) {
+					$file .= '?w=' . $size . '&h=' . $size;
+				}
 
-			return '/images/' . $size . '_' . $format . '_' . $file;
+				return $file;
+			} elseif (file_exists('images/' . $file)) {
+				// backward compatible path for old pictures
+				if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
+					$this->resizeImg('images/' . $file, $size, $format);
+				}
+
+				return '/images/' . $size . '_' . $format . '_' . $file;
+			}
 		}
 
 		if ($altimg === false) {

@@ -50,7 +50,13 @@ export default {
         130: '130_q_',
       }[this.size] || ''
       if (this.url) {
-        return '/images/' + prefix + this.url
+        if (this.url.startsWith('/api/uploads/')) {
+          // path for pictures uploaded with the new API
+          return this.url + `?w=${this.size}&h=${this.size}`
+        } else {
+          // backward compatible path for old pictures
+          return '/images/' + prefix + this.url
+        }
       } else {
         return '/img/' + prefix + 'avatar.png'
       }

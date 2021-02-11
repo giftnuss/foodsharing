@@ -6,8 +6,6 @@ import 'jquery-jcrop'
 import 'jquery-dynatree'
 import { attachAddressPicker } from '@/addressPicker'
 import {
-  fotoupload,
-  picFinish,
   pulseSuccess,
   pulseError,
   collapse_wrapper,
@@ -34,8 +32,6 @@ if (GET('sub') === 'calendar') {
 }
 
 expose({
-  fotoupload,
-  picFinish,
   confirmDeleteUser,
   collapse_wrapper,
 })

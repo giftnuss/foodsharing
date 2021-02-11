@@ -1,11 +1,9 @@
 <template>
   <div
     id="input-wrapper"
-    class="input-wrapper"
+    class="input-wrapper bootstrap"
   >
-    <label class="wrapper-label ui-widget">{{ $i18n('image') }}</label>
-
-    <div class="element-wrapper">
+    <div class="element-wrapper mx-4">
       <file-upload
         :filename="value"
         :is-image="true"

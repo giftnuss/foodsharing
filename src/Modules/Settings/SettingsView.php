@@ -615,7 +615,7 @@ class SettingsView extends View
 		if (!empty($photo)) {
 			if (strpos($photo, '/api/uploads/') === 0) {
 				// path for pictures uploaded with the new API
-				$initialValue = $photo . '?w=200?h=257';
+				$initialValue = $photo . '?w=200&h=257';
 			} elseif (file_exists('images/thumb_crop_' . $photo)) {
 				// backward compatible path for old pictures
 				$initialValue = 'images/thumb_crop_' . $photo;
