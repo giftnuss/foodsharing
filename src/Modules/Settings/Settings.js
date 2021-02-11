@@ -19,12 +19,18 @@ import { subscribeForPushNotifications, unsubscribeFromPushNotifications } from 
 import { confirmDeleteUser } from '../Foodsaver/Foodsaver'
 import { vueApply, vueRegister } from '@/vue'
 import Calendar from './components/Calendar'
+import ProfilePicture from './components/ProfilePicture'
 
 if (GET('sub') === 'calendar') {
   vueRegister({
     Calendar,
   })
   vueApply('#calendar')
+} else if (GET('sub') === 'general') {
+  vueRegister({
+    ProfilePicture,
+  })
+  vueApply('#image-upload')
 }
 
 expose({

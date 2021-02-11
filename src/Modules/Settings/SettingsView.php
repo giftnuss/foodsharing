@@ -610,11 +610,24 @@ class SettingsView extends View
 			'{link_fs}' => 'https://wiki.foodsharing.de/Foodsaver',
 		]));
 
-		if (!file_exists('images/thumb_crop_' . $photo)) {
-			$p_cnt .= $this->v_utils->v_photo_edit('img/portrait.png');
-		} else {
-			$p_cnt .= $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
+		// find previous picture
+		$initialValue = 'img/portrait.png';
+		if (!empty($photo)) {
+			if (strpos($photo, '/api/uploads/') === 0) {
+				// path for pictures uploaded with the new API
+				$initialValue = $photo . '?w=200?h=257';
+			} elseif (file_exists('images/thumb_crop_' . $photo)) {
+				// backward compatible path for old pictures
+				$initialValue = 'images/thumb_crop_' . $photo;
+			}
 		}
+
+		// create picture upload component
+		$p_cnt .= $this->vueComponent('image-upload', 'profile-picture', [
+			'initialValue' => $initialValue,
+			'imgHeight' => 400,
+			'imgWidth' => 400,
+		]);
 
 		return $this->v_utils->v_field($p_cnt, $this->translator->trans('settings.photo.title'));
 	}
