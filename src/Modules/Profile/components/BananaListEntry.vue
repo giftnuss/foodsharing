@@ -18,17 +18,18 @@
         </a>
         <i class="fas fa-fw fa-angle-right" />
         {{ $dateFormat(when, 'full-long') }}
+        <a
+          v-if="canRemove"
+          href="#"
+          :title="$i18n('profile.banana.remove.confirm_title')"
+          @click="removeBanana"
+        ><i class="fas fa-trash" />
+        </a>
       </div>
       <!-- For whitespace and layout reasons, the text needs to be enclosed directly: -->
       <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
       <div class="msg ml-1 p-1 pl-2">{{ text }}</div>
     </div>
-    <a
-      v-if="canRemoveBanana"
-      href="#"
-      @click="removeBanana"
-    ><i class="fas fa-trash" />
-    </a>
   </div>
 </template>
 
@@ -37,45 +38,46 @@ import dateFnsParseISO from 'date-fns/parseISO'
 
 import Avatar from '@/components/Avatar'
 import { deleteBanana } from '@/api/profile'
-import { pulseError } from '@/script'
+import { hideLoader, pulseError, showLoader } from '@/script'
 import i18n from '@/i18n'
 
 export default {
   components: { Avatar },
   props: {
-    userId: { type: Number, required: true },
+    recipientId: { type: Number, required: true },
     authorId: { type: Number, required: true },
     authorName: { type: String, default: '' },
     avatar: { type: String, default: '' },
     createdAt: { type: String, required: true },
     text: { type: String, default: '' },
+    canRemove: { type: Boolean, default: false },
   },
   data () {
     return {
       when: dateFnsParseISO(this.createdAt),
     }
   },
-  computed: {
-    canRemoveBanana () {
-      return true
-    },
-  },
   methods: {
     async removeBanana () {
-      const remove = await this.$bvModal.msgBoxConfirm(i18n('conference.description_text') + '\n' + i18n('conference.privacy_notice'), {
+      // the banana dialog has to be closed because the confirm dialog would appear behind it
+      this.$emit('close-dialog')
+      const remove = await this.$bvModal.msgBoxConfirm(i18n('profile.banana.remove.confirm_message'), {
         modalClass: 'bootstrap',
-        title: i18n('conference.join_title'),
-        cancelTitle: i18n('button.cancel'),
-        okTitle: i18n('conference.join'),
+        title: i18n('profile.banana.remove.confirm_title'),
+        cancelTitle: i18n('no'),
+        okTitle: i18n('yes'),
         headerClass: 'd-flex',
         contentClass: 'pr-3 pt-3',
       })
       if (remove) {
+        showLoader()
         try {
-          await deleteBanana(123, this.authorId)
+          await deleteBanana(this.recipientId, this.authorId)
+          location.reload()
         } catch (e) {
           pulseError(i18n('error_unexpected'))
         }
+        hideLoader()
       }
     },
   },

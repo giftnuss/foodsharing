@@ -1455,6 +1455,9 @@ profile:
     sent: "Banane wurde gesendet!"
     messageTooShort: "Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein."
     alreadyGiven: "{name} hat bereits eine Banane von dir erhalten!"
+    remove:
+      confirm_title: "Vertrauensbanana entfernen"
+      confirm_message: "Möchtest du diese Vertrauensbanane wirklich entfernen?"
   nav:
     edit: "Profil bearbeiten"
     buddy: "Ich kenne {name}"

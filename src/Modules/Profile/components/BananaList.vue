@@ -62,6 +62,9 @@
         :avatar="b.photo"
         :created-at="b.createdAt"
         :text="b.msg"
+        :can-remove="canRemoveBanana"
+        :recipient-id="recipientId"
+        @close-dialog="closeDialog"
       />
     </div>
   </div>
@@ -83,6 +86,7 @@ export default {
     recipientId: { type: Number, required: true },
     recipientName: { type: String, required: true },
     canGiveBanana: { type: Boolean, default: false },
+    canRemoveBanana: { type: Boolean, default: false },
     bananas: { type: Array, default: () => { return [] } },
   },
   data () {
@@ -145,6 +149,9 @@ export default {
         photo: profilePic ? profilePic.substr('50_q_/images/'.length) : profilePic,
         msg: this.bananaText.trim(),
       }
+    },
+    closeDialog () {
+      $.fancybox.close()
     },
   },
 }
