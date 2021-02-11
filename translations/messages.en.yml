@@ -48,6 +48,8 @@ group:
     title: Working group function
     fsp: FoodSharePoints
     voting: Polls
+    stores: Stores
+    welcome: Greeting
   apply:
     sent: The application was sent!
     send: Send application
@@ -58,11 +60,16 @@ group:
       "1": 1-2 hours
     declined: Application rejected
     accepted: Application accepted
+    title: Application for {group}
   show-all: Show all
   really_quit_district: Do you really want to leave the region %name%?
   really_quit_workgroup: Do you really want to leave the working group %name%?
   quit_name_district: Leave region %name%
   quit_name_workgroup: Leave team %name%
+  contact:
+    send: Send message
+    title: Contact {group}
+  edit: Edit {group}
 settings:
   header: Your data and settings
 
@@ -72,6 +79,12 @@ settings:
   title: Settings
   notifications: Notifications
   email: Change e-mail address
+  sleep:
+    temp: I am not available for following time period
+    none: I am active and fully on board
+    missing-date: Please type in a start and end date for a time period!
+  account: Account options
+  businesscard: Personal business card
 menu:
   manage_regions: Manage regions
   blog: Manage blog content
@@ -300,7 +313,7 @@ button:
   yes_i_am_sure: Yes, I am sure
   permadelete: Delete permanently
   delete: Delete
-  new: ''
+  new: 'New'
   edit: Edit
   upload: Upload
   rotate_right: rotate clockwise
@@ -309,6 +322,7 @@ button:
   next: Next
   save: Save
   answer: Answer
+  clear_filter: Clear filter
 bell:
   ft_update_title: '{name}'
   blog_new_check: '{title}'
@@ -463,6 +477,7 @@ storelist:
   city: City
   zipcode: Post code
   address: Street
+  map: Map
 releases:
   "2020-08": "'Pear' release (August 2020)"
   "2020-10": "'Cranberry' release (October 2020)"
@@ -589,12 +604,25 @@ wall:
 pass:
   nav:
     title: Let's go!
+    generate: Marked passports generate
+    deselect: Mark nothing
+    select: Mark all
+    options: Options
   name: Name
   noPhoto: 'The following persons have not uploaded a photo yet:'
   button:
     verify: Verify
+    check: Check appointments
   verify:
     failed: A problem occured
+    confirm: Sure?
+    undo: Verification of {name} cancel
+    do: Account of {name} verify
+  claim: Share foods instead of throw it away!
+  hint: Notes
+  verified: Verificated?
+  photo: Picture
+  bread: Pass generator
 ui:
   switch:
     on: published
@@ -605,6 +633,9 @@ upload:
   new_image: Upload a new image
   image: Upload image
   preview_image: Preview
+  crop_dialog_title: Cut picture
+  new_file: Upload new data
+  choose_file: Upload data
 photo: Photo
 status: Current status
 title: Title
@@ -643,8 +674,14 @@ answers: Which answers are correct?
 name: Name
 bcard:
   for: '{role} for {region}'
+  generate: Create business card
+  choose: You have to choose one option
+  actions: Options
+  card: Your foodsharing business card
+  title: Business card generator
 picture_upload_widget:
   picture_upload: Upload image
+  choose_picture: Choose a picture from your computer!
 image: Image
 wikilink: Link to wiki site
 fax: Fax
@@ -719,3 +756,43 @@ register:
   email_invalid: Your e-mail address is invalid.
   email_required: An e-mail address is required.
   login_email: Your e-mail address
+bread:
+  backToOverview: back to overview
+duration: Time to answer
+explanation: Explanation
+fp: Failure points
+text: text
+public_info: Public information of the store
+besonderheiten: Special features
+begin: Start of cooperation
+fetchercount: Number of collectors
+team_status: Team status
+verantwortlicher: Responsible members
+homepage: Your website
+sleep_status: Your actual status
+newmail: Type in your new mail address here
+infomail_message: Notification about chat messages in foodsharing
+compose_body: Message
+pass2: Password repeat
+pass1: Your new requested password
+infotype: Notification
+position: Position in foodsharing (public)
+dateend: End date
+mailbox_id: Sender mail address
+testemail: Test mail address
+opt: Options
+teaser: Teaser
+food_type: Which types of food are included?
+weight: Estimated weight
+about_me_intern: Short description
+about_me_public: Public short description
+regions: Regions
+daterange: Time period
+ort: City/municipality (automatically from the map above)
+stadt: Your city or municipality
+fs_id: foodsharing-ID
+options: Options
+geschlecht: Gender
+anschrift: Street and number (automatically from map above, if necessary you can change!)
+handy: Mobile number
+telefon: Landline number
