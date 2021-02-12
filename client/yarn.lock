@@ -1337,10 +1337,10 @@
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha512-+iTbntw2IZPb/anVDbypzfQa+ay64MW0Zo8aJ8gZPWMMK6/OubMVb6lUPMagqjOPnmtauXnFCACVl3O7ogjeqQ==
 
-"@sum.cumo/vue-datepicker@~2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@sum.cumo/vue-datepicker/-/vue-datepicker-2.1.3.tgz#73d6b9047d16841d2626dab83f2495e87ad5f3dc"
-  integrity sha512-VXZAzAkkFaxOPwDaP5iz3Es6Ih5GB6Qf+pSwLj1KAqpgRASWGZUU4quXqu6P7jFCjI82HNNmLFl7b4dYjRgIKA==
+"@sum.cumo/vue-datepicker@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@sum.cumo/vue-datepicker/-/vue-datepicker-3.1.0.tgz#7315f1f020674b724e46c2d886363bd2df25d6d3"
+  integrity sha512-5yAmj3z+EVPHApN4Fx12H9FZXhSCJEQxaKTF4WPOP/KD7/+IzDHzaBIFpTMAPgUGCc6dAENl46uyPcZa1khHbg==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import DatePicker from '@sum.cumo/vue-datepicker'
-import '@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css'
+import DatePicker from '@sum.cumo/vue-datepicker/dist/Datepicker.js'
+import '@sum.cumo/vue-datepicker/dist/Datepicker.css'
 import { de } from '@sum.cumo/vue-datepicker/dist/locale'
 import { ageCheck, dateValid } from './birthdateValidation'
 import { required } from 'vuelidate/lib/validators'
