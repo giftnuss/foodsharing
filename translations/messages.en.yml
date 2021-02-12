@@ -71,6 +71,7 @@ settings:
     title: Push notifications
   title: Settings
   notifications: Notifications
+  email: Change e-mail address
 menu:
   manage_regions: Manage regions
   blog: Manage blog content
@@ -158,6 +159,19 @@ profile:
     buddies: Buddies
     never: Never
     lastLogin: Last login
+  report:
+    sent: Report was sent
+    send: Send report
+    title: '**Beta-Test** Reports about {name}'
+  history:
+    wasVerified: Verified
+  nav:
+    storelist: Stores ({count})
+    notes: Notes <strong>({count})</strong>
+    verificationHistory: Verification history
+    history: Pass history
+    buddy: I know {name}
+    edit: Edit profile
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -178,15 +192,30 @@ events:
   description: Description
   create:
     date: Date
+    endtime: End time
+    starttime: Start time
   bread: Events
+  menu:
+    edit: Edit event
+    yes: Accept invitation
 forum:
   threads: Threads
+  quickreply:
+    error: Post could not be saved.
+  thread:
+    title: Title
+    delete: Delete thread
+    activate: Activate thread
+  post:
+    delete: Delete post
 timepicker:
   labelNowButton: Now
   labelCloseButton: Close
   labelSeconds: Seconds
   labelMinutes: Minutes
   labelHours: Hours
+  labelNoTimeSelected: No time selected
+  labelSelected: Selected time
 calendar:
   labelCalendar: Calendar
   labelSelected: Selected date
@@ -196,6 +225,8 @@ calendar:
   labelCurrentMonth: Current month
   labelPrevMonth: Previous month
   labelPrevYear: Previous year
+  labelNoDateSelected: Select date
+  locale: de
 pickup:
   signout_confirm: Are you sure?
   copyNumber: Copy phone number
@@ -205,6 +236,12 @@ pickup:
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
+  want_to_fetch: I would like to help in this team.
+  frequency4: at night
+  frequency3: in the evening
+  frequency2: at noon/in the afternoon
+  frequency1: in the morning
+  info: Information
 day: Day
 time: Time
 select: Please select
@@ -235,12 +272,20 @@ terminology:
   ambassador:
     d: Ambassador
     f: Ambassador
+  n_stores: A store|%count% stores
+  n_ambassadors: An ambassador|%count% ambassadors
 login:
   pwreset:
     bread: Reset password
+    mismatch: Sorry, the passwords do not match.
+    tooShort: Sorry, your chosen password is too short.
   logout: Logout
   topbar: Log in
   submit_btn: Login
+  error_no_auth: E-mail address or password are wrong
+  error_no_password: Please enter your password!
+  error_no_email: Please enter your e-mail address!
+  save_password: Save password
 salutation:
   "3": Dear
   "2": Dear
@@ -279,6 +324,24 @@ bell:
   store_request_accept_title: '{name}'
   store_new_title: New store
   ft_update: '{teaser}'
+  report_reason: '{reason}'
+  new_report_title: New report about {name}
+  banana_given: '{name} gave you a trust banana.'
+  banana_given_title: New trust banana
+  workgroup_request_decline: You were not accepted to the working group.
+  workgroup_request_decline_title: '{name}'
+  workgroup_request_accept: You were accepted to the working group.
+  workgroup_request_accept_title: '{name}'
+  sharepoint_activate_title: New food-share-point in {bezirk}
+  buddy_request: '{name} knows you.'
+  buddy_request_title: Do you know {name}?
+  betrieb_fetch_title: '{betrieb}'
+  store_wallpost: New post on the wall.
+  store_request_deny: Your request was denied.
+  store_request_accept: You were accepted to the team.
+  store_new_request_title: New team request
+  blog_new_check_title: New blog article
+  no_bells: You have no notifications
 reports:
   time: Time
   region: Home region
@@ -288,6 +351,14 @@ reports:
   about: About
 recipients:
   test: Test the newsletter
+  done: All e-mails have been sent
+  unknown: unknown
+  abort: Abort sending
+  continue: Continue sending
+  pending: There are {count} e-mails left to sent
+  history: E-mails sent by you
+  sent: The e-mail was successfully sent to {count} addresses
+  send: Send e-mail
 poll:
   time_period: Time period
   results:
@@ -303,6 +374,13 @@ poll:
     scope: Who is allowed to vote?
     name_required: Please enter a name.
     title: New poll
+    end_date_required: Please choose an end date that is after the start date.
+    end_date: End date
+    start_date_required: Please choose a start date. It must be at least one hour
+      in the future.
+    start_date: Start date
+    type: Type of the poll
+    name: Poll name
   submit_vote: Submit vote
   type: Poll type
   scope_description_3: All ambassadors in the region / the group
@@ -313,6 +391,13 @@ poll:
   in_future: has not started yet
   in_past: has ended
   hint_random_order: The following options are shown in random ordering.
+  error_cannot_vote: You cannot vote in this poll
+  type_2:
+    tooltip_positive: Approval
+    tooltip_negative: Disapproval
+  type_description_1: Check (multiple options can be chosen)
+  type_description_0: Select (only one option can be chosen)
+  not_available: This poll does not exist or you cannot access it.
 buddy:
   request_accepted: Now you are buddies!
 email_template:
@@ -327,6 +412,9 @@ email_template:
   in: in
   to: to
   request_from: Request by
+  foodbasket_request: Your food basket was requested by %SENDER
+  foodsharepoint: -- Food-share-point
+  yourFSteam: Your foodsharing team.
 sidenav:
   yourgroups: Your groups
   localgroups: Local groups
@@ -348,6 +436,15 @@ conference:
 blog:
   status:
     "1": published
+    "0": inactive
+  delete: Delete post
+  last-editor: Last edit by
+  author: Written by
+  content: Content
+  all: All blog posts
+  title: Blog posts
+  manage: Manage blog posts
+  bread: Blog
 region:
   type:
     workgroup: Working group
@@ -357,6 +454,9 @@ region:
     city: City
   delete: Delete region
   edit: Edit region
+  save: Yes, save
+  mail:
+    sender: Sender name
 storelist:
   others: More stores in {region}
   region: Region
@@ -413,6 +513,12 @@ foodsaver:
     needs_sm: You need to become a store manager first
     needs_fs: You need to become a foodsaver first
     to_fs: Become a foodsaver
+  delete_account: ⚠️ Delete account
+  profileBack: Back to the profile
+  editName: Edit {name}
+  edit: Edit foodsaver
+  title: Foodsaver
+  bread: All foodsavers
 store:
   addNewStoresButton: Add new store
   allStoresOfRegion: All stores in the region
@@ -421,6 +527,14 @@ store:
   request:
     to-jumper: Jumper list
     verified: User is verified
+  sm:
+    reallyRemove: Do you really want to remove {name} from the store team?
+    removeFromTeam: Remove from the team
+  address: Address
+  may_referred_to_in_public: This store may be referred to in public.
+  isNotVerified: Is not yet verified.
+  isManager: Responsible for this store.
+  unknownDate: unknown
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -467,6 +581,11 @@ date:
 wall:
   error-create: Your wall post could not be saved.
   created: Great! Your wall post was saved.
+  error-delete: You can not remove this post.
+  delete: Delete post
+  see-more: Show more posts
+  message_placeholder: Write a message...
+  name: Wall
 pass:
   nav:
     title: Let's go!
@@ -512,8 +631,12 @@ polls:
   end_date: end date
   start_date: start date
   title: Title
+  ended: Past polls
 storeedit:
   bread: Edit store
+  team:
+    orga: "You are not responsible for this store,\nbut as a member of the Orga-team\
+      \ you have extensive rights.\n"
 legal:
   delete_account: I want to delete my account.
 answers: Which answers are correct?
@@ -542,3 +665,57 @@ language_chooser:
   title: "Choose Language"
   content: "Please choose a language"
 plz: Postcode (automatically from the map above!)
+fsp:
+  twig:
+    n_in_region: '{0} No food-share-points in %name%| {1} One food-share-point in
+      %name%| [2, Inf[ %count% food-share-points in %name%'
+  deleteSuccess: Food-share-point was removed
+  deleteConfirm: Do you really want to remove this food-share-point?
+  delete: Remove food-share-point
+  addedBy: Added by
+  street: Street
+  address: Address
+  editName: Edit food-share-point "{name}"
+  edit: Edit food-share-point
+  new: New food-share-point
+  description: Description
+  followName: Follow food-share-point {name}
+  follow: Follow this food-share-point
+lifetime: How long will be basket be valid?
+contact_type: How would you like to be contacted?
+food_art: What kind of food is it?
+ageBandList:
+  home_district_tab: Home region
+  district_tab: Region
+pickuplist:
+  NumberOfFoodSavers_table_header: Number of foodsavers
+  NumberOfStores_table_header: Number of stores
+  year_tab: Year
+  month_tab: Month
+  week_tab: Week
+  day_tab: Day
+genderlist:
+  gender_female: female
+  gender_male: male
+  gender_not_selected: not selected
+  gender_divers: diverse
+  gender_table_header: Gender
+  home_district_tab: Home region
+  district_tab: Region
+memberlist:
+  some_in_all: ({some} of {all})
+  header_for_workgroup: Foodsavers in the working group {bezirk}
+  header_for_district: Foodsavers in the region {bezirk}
+chat:
+  conversations: Conversations
+  new_message: New message
+  open_chat: Write a message
+delete: Delete
+error_unexpected: An error occured
+register:
+  confirmPassword_required: Please repeat the password.
+  password_required: A password is required.
+  login_passwd2: Repeat password
+  email_invalid: Your e-mail address is invalid.
+  email_required: An e-mail address is required.
+  login_email: Your e-mail address
