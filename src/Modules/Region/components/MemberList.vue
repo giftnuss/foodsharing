@@ -63,7 +63,7 @@
         responsive
         class="foto-table"
       >
-        <template v-slot:cell(imageUrl)="row">
+        <template #cell(imageUrl)="row">
           <div>
             <img
               :src="row.value"
@@ -72,7 +72,7 @@
             >
           </div>
         </template>
-        <template v-slot:cell(userName)="row">
+        <template #cell(userName)="row">
           <a
             :href="$url('profile', row.item.user.id)"
           >

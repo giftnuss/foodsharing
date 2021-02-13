@@ -10,7 +10,7 @@ import conversationStore, { convertMessage } from '@/stores/conversations'
 
 export default {
   connect: function () {
-    var socket = io.connect(window.location.host, { path: '/chat/socket.io' })
+    const socket = io.connect(window.location.host, { path: '/chat/socket.io' })
     socket.on('connect', function () {
       console.log('WebSocket connected.')
       socket.emit('register', session_id())

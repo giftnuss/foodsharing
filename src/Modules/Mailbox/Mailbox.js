@@ -206,13 +206,13 @@ function mb_refresh () {
   })
 }
 
-var substringMatcher = function (strs) {
+const substringMatcher = function (strs) {
   return function findMatches (q, cb) {
     // regex used to determine if a string contains the substring `q`
-    var substringRegex = new RegExp(q, 'i')
+    const substringRegex = new RegExp(q, 'i')
 
     // an array that will be populated with substring matches
-    var matches = []
+    const matches = []
 
     // iterate through the pool of strings and for any string that
     // contains the substring `q`, add it to the `matches` array
@@ -274,7 +274,7 @@ function u_handleNewEmail (email, el) {
     $('#mail-subject').before('<tr><td class="label">&nbsp;</td><td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td></tr>')
 
     u_addTypeHead()
-    var height = $('#edit-body').height() - (availmail_count * 28)
+    const height = $('#edit-body').height() - (availmail_count * 28)
     if (height > 40) {
       $('#edit-body').css('height', `${height}px`)
     }

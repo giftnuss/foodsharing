@@ -103,7 +103,7 @@ if ($('#mapsearch').length > 0) {
 
 $(document).ready(() => {
   // Container only exists if the current user is not the basket offerer
-  var requestFormContainerId = 'vue-BasketRequestForm'
+  const requestFormContainerId = 'vue-BasketRequestForm'
   if (document.getElementById(requestFormContainerId)) {
     vueRegister({
       RequestForm,

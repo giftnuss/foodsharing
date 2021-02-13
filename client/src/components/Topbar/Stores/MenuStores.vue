@@ -5,7 +5,7 @@
     icon="fa-shopping-cart"
     lazy
   >
-    <template v-slot:heading-text>
+    <template #heading-text>
       <span />
     </template>
     <menu-stores-list /> <!-- This is an own component in order to be lazy loaded -->

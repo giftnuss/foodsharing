@@ -71,7 +71,7 @@
           responsive
         >
           <template
-            v-slot:cell(status)="row"
+            #cell(status)="row"
             :v-if="isMobile"
           >
             <div class="text-center">
@@ -79,7 +79,7 @@
             </div>
           </template>
           <template
-            v-slot:cell(name)="row"
+            #cell(name)="row"
           >
             <a
               :href="$url('store', row.item.id)"
@@ -89,7 +89,7 @@
             </a>
           </template>
           <template
-            v-slot:cell(actions)="row"
+            #cell(actions)="row"
           >
             <b-button
               size="sm"
@@ -99,7 +99,7 @@
             </b-button>
           </template>
           <template
-            v-slot:row-details="row"
+            #row-details="row"
           >
             <b-card>
               <div class="details">
@@ -268,11 +268,12 @@ export default {
       }))
     },
     fieldsFiltered: function () {
-      const regions = []
       const fields = []
-      this.stores.map(function (value) {
-        if (!regions.includes(value.region)) regions.push(value.region)
-      })
+
+      const regions = [...new Set(this.stores.map(function (value) {
+        return value.region
+      }))]
+
       const displayableFields = (window.innerWidth > 800 && window.innerHeight > 600)
         ? ['region', 'geo', 'actions']
         : ['region', 'geo', 'address', 'added', 'zipcode']

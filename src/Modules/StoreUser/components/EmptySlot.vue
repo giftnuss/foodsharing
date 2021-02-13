@@ -24,7 +24,7 @@
       toggle-class="btn p-0"
       variant="tertiary"
     >
-      <template v-slot:button-content>
+      <template #button-content>
         <i class="fas fa-question" />
       </template>
       <b-dropdown-item @click="$emit('join')">

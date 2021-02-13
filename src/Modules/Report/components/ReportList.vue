@@ -43,7 +43,7 @@
           </template>
 
           <template
-            v-slot:cell(actions)="row"
+            #cell(actions)="row"
           >
             <b-button
               size="sm"
@@ -53,7 +53,7 @@
             </b-button>
           </template>
           <template
-            v-slot:row-details="row"
+            #row-details="row"
           >
             <div class="report">
               <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>

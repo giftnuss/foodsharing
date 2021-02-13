@@ -12,17 +12,17 @@ import './Team.css'
 
 const $form = $('#contactform-form')
 if ($form.length > 0) {
-  var $email = $('#email')
+  const $email = $('#email')
 
   $email.on('keyup', function () {
-    var $el = $(this)
+    const $el = $(this)
     if (checkEmail($el.val())) {
       $email.removeClass('input-error')
     }
   })
 
   $email.on('blur', function () {
-    var $el = $(this)
+    const $el = $(this)
     if (!checkEmail($el.val())) {
       $email.addClass('input-error')
       pulseError('Mit Deiner E-Mail-Adressse stimmt etwas nicht.')
@@ -46,16 +46,16 @@ if ($form.length > 0) {
 
 const $teamList = $('#team-list')
 $teamList.find('.foot i').on('mouseover', function () {
-  var $this = $(this)
+  const $this = $(this)
 
-  var val = $this.children('span').text()
+  const val = $this.children('span').text()
   if (val !== '') {
     $this.parent().parent().attr('href', val).attr('target', '_blank')
   }
 })
 
 $teamList.find('.foot i').on('click', function (ev) {
-  var $this = $(this)
+  const $this = $(this)
   if ($this.hasClass('fa-lock')) {
     ev.preventDefault()
   }
@@ -67,7 +67,7 @@ $teamList.find('.foot i').on('click', function (ev) {
 })
 
 $teamList.find('.foot i').on('mouseout', function () {
-  var $this = $(this).parent().parent()
+  const $this = $(this).parent().parent()
 
   $this.attr('href', `/team/${$this.attr('id').substring(2)}`).attr('target', '_self')
 })

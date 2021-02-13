@@ -139,7 +139,7 @@ export default {
     async request (message) {
       this.isLoading = true
       try {
-        var response = await requestBasket(this.basketId, message)
+        const response = await requestBasket(this.basketId, message)
         this.requestCount = response.basket.requestCount
         this.hasRequested = true
         pulseSuccess(i18n('basket.sent_request'))
@@ -159,7 +159,7 @@ export default {
     async withdraw () {
       this.isLoading = true
       try {
-        var response = await withdrawBasketRequest(this.basketId)
+        const response = await withdrawBasketRequest(this.basketId)
         this.requestCount = response.basket.requestCount
         this.hasRequested = false
         pulseSuccess(i18n('basket.withdrawn_request'))

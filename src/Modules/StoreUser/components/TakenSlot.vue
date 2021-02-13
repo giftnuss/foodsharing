@@ -4,7 +4,7 @@
     no-caret
     toggle-class="btn p-0 filled"
   >
-    <template v-slot:button-content>
+    <template #button-content>
       <Avatar
         :url="profile.avatar"
         :size="50"

@@ -78,7 +78,7 @@
       hide-header-close
       @ok="$emit('deletePost', post.id)"
     >
-      <template v-slot:modal-header>
+      <template #modal-header>
         <div v-if="!isOwn(post)" class="alert alert-warning" role="alert">
           <div v-if="!mayDeleteEverything">
             <i class="fas fa-fw fa-info-circle" />

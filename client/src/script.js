@@ -200,7 +200,7 @@ function displayXhrMessages (msg) {
 export const ajax = {
   data: {},
   req: function (app, method, option) {
-    var opt = {}
+    let opt = {}
     if (option != undefined) {
       opt = option
     }
@@ -294,7 +294,7 @@ export const pulseSuccess = definePulse('success', 5000)
 export const pulseError = definePulse('error', 6000)
 
 export function checkEmail (email) {
-  var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/
+  const filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/
 
   if (!filter.test(email)) {
     return false
@@ -538,7 +538,7 @@ export function becomeBezirk () {
 }
 
 export function shuffle (o) {
-  for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+  for (let j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
   return o
 }
 
@@ -565,7 +565,7 @@ export function merge (firstArray, secondArray, keyProperty, objectPropertiesToM
     })
   } else {
     _.each(secondArray, function (itemFromSecond) {
-      var itemFromFirst = _.find(firstArray, function (item) {
+      const itemFromFirst = _.find(firstArray, function (item) {
         return item[keyProperty] === itemFromSecond[keyProperty]
       })
 

@@ -73,13 +73,15 @@ module.exports = merge(webpackBase, {
   stats: 'minimal',
   output: {
     path: assetsPath,
-    ...(dev ? {
-      filename: 'js/[name].js',
-      chunkFilename: 'js/[chunkhash].js',
-    } : {
-      filename: 'js/[name].[hash].js',
-      chunkFilename: 'js/[id].[chunkhash].js',
-    }),
+    ...(dev
+      ? {
+          filename: 'js/[name].js',
+          chunkFilename: 'js/[chunkhash].js',
+        }
+      : {
+          filename: 'js/[name].[hash].js',
+          chunkFilename: 'js/[id].[chunkhash].js',
+        }),
     publicPath: '/assets/',
   },
   module: {

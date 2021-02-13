@@ -5,7 +5,7 @@
     icon="fa-shopping-basket"
     class="list-with-actions topbar-baskets"
   >
-    <template v-slot:heading-text>
+    <template #heading-text>
       <span
         v-if="showLabel"
         class="d-none d-md-inline-block"
@@ -33,7 +33,7 @@
         />
       </div>
     </div>
-    <template v-slot:actions>
+    <template #actions>
       <b-btn
         :href="$url('baskets')"
         secondary

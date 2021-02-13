@@ -10,9 +10,9 @@ export async function getFilters () {
 
 export async function setFilters (options) {
   const excluded = []
-  for (var optionId in options) {
+  for (const optionId in options) {
     options[optionId].items = options[optionId].items.filter((a) => { return !a.included })
-    for (var item in options[optionId].items) {
+    for (const item in options[optionId].items) {
       excluded.push({
         index: options[optionId].index,
         id: options[optionId].items[item].id,

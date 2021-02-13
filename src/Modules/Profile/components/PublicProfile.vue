@@ -8,20 +8,20 @@
       bg-variant="light"
       border-variant="primary"
     >
-      <template v-if="canPickUp" v-slot:header>
+      <template v-if="canPickUp" #header>
         <span class="text-secondary">
           <i class="fas fa-fw fa-check-circle" />
           {{ $i18n('profile.public.may') }}
         </span>
       </template>
-      <template v-else v-slot:header>
+      <template v-else #header>
         <span class="text-danger">
           <i class="fas fa-fw fa-times-circle" />
           {{ $i18n('profile.public.mayNot') }}
         </span>
       </template>
 
-      <template v-slot:lead>
+      <template #lead>
         {{ $i18n(canPickUp ? 'profile.public.textMay' : 'profile.public.textMayNot') }}
       </template>
 

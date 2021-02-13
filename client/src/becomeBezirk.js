@@ -56,7 +56,7 @@ export function u_printChildBezirke (element) {
 
   const part = val.split(':')
 
-  var parent = part[0]
+  const parent = part[0]
 
   if (parent == -1) {
     $('#becomebezirkchooser').val('')
@@ -93,8 +93,6 @@ export function u_printChildBezirke (element) {
       if (data.status == 1) {
         $(`#becomebezirkchooser-childs-${parent}`).remove()
         $('#becomebezirkchooser-wrapper').append(data.html)
-      } else {
-
       }
     },
     complete: function () {

@@ -8,7 +8,7 @@
     :show-only-on-mobile="showOnlyOnMobile"
     :hide-only-on-mobile="hideOnlyOnMobile"
   >
-    <template v-slot:heading-text>
+    <template #heading-text>
       <span
         v-if="unread"
         class="badge badge-danger"
@@ -64,7 +64,7 @@ export default {
   computed: {
     bells () {
       return bellStore.bells.map(bell => {
-        var newBell = Object.assign({}, bell)
+        const newBell = Object.assign({}, bell)
         newBell.createdAt = dateFnsParseISO(bell.createdAt)
         return newBell
       })

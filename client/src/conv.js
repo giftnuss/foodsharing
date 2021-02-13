@@ -55,7 +55,7 @@ const conv = {
       const chats = storage.get('msg-chats')
 
       if (chats != undefined) {
-        for (var i = 0; i < chats.length; i++) {
+        for (let i = 0; i < chats.length; i++) {
           if (chats[i].id != undefined) {
             conv.appendChatbox(chats[i].id, chats[i].min)
           }
@@ -77,7 +77,7 @@ const conv = {
   },
 
   getConvByFs: function (fsid) {
-    for (var i = 0; i < conv.user2Conv.length; i++) {
+    for (let i = 0; i < conv.user2Conv.length; i++) {
       if (conv.user2Conv[i].fsid == fsid) {
         return conv.user2Conv[i].cid
       }
@@ -106,10 +106,10 @@ const conv = {
   },
 
   storeOpenedChatWindows: function () {
-    var ids = conv.getCids()
+    const ids = conv.getCids()
 
     if (ids.length > 0) {
-      var infos = conv.getChatInfos()
+      const infos = conv.getChatInfos()
       storage.set('msg-chats', infos)
     } else {
       storage.del('msg-chats')
@@ -157,8 +157,8 @@ const conv = {
   },
 
   checkInputKey: async function (event, chatboxtextarea, cid) {
-    var $ta = $(chatboxtextarea)
-    var val = $ta.val().trim()
+    const $ta = $(chatboxtextarea)
+    let val = $ta.val().trim()
 
     if (event.keyCode == 13 && event.shiftKey == 0 && val != '') {
       conv.showLoader(cid)
@@ -170,7 +170,7 @@ const conv = {
       }, 100)
 
       // replace to many line breaks
-      // eslint-disable-next-line no-control-regex
+      // eslint-disable-next-line no-control-regex,prefer-regex-literals
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
       try {
@@ -196,9 +196,9 @@ const conv = {
    * close the chatbox to thr given cid
    */
   close: function (cid) {
-    var tmp = []
-    var x = 0
-    for (var i = 0; i < conv.chatboxes.length; i++) {
+    const tmp = []
+    let x = 0
+    for (let i = 0; i < conv.chatboxes.length; i++) {
       if (conv.chatboxes[i].id == cid) {
         conv.chatboxes[i].el.remove()
       } else {
@@ -232,7 +232,7 @@ const conv = {
    * get the array key for given conversation_id
    */
   getKey: function (cid) {
-    for (var i = 0; i < conv.chatboxes.length; i++) {
+    for (let i = 0; i < conv.chatboxes.length; i++) {
       if (conv.chatboxes[i].id == cid) {
         return i
       }
@@ -245,9 +245,9 @@ const conv = {
    * get actic chatbox infos
    */
   getChatInfos: function () {
-    var tmp = []
+    const tmp = []
 
-    for (var i = 0; i < conv.chatboxes.length; i++) {
+    for (let i = 0; i < conv.chatboxes.length; i++) {
       tmp.push({
         id: parseInt(conv.chatboxes[i].id),
         min: conv.chatboxes[i].minimized,
@@ -262,9 +262,9 @@ const conv = {
    * get all conversation ids from active windows
    */
   getCids: function () {
-    var tmp = []
+    const tmp = []
 
-    for (var i = 0; i < conv.chatboxes.length; i++) {
+    for (let i = 0; i < conv.chatboxes.length; i++) {
       tmp.push(parseInt(conv.chatboxes[i].id))
     }
 
@@ -354,8 +354,6 @@ const conv = {
     } catch (e) {
       pulseError('Fehler beim Umbenennen der Unterhaltung')
       console.error(e)
-    } finally {
-
     }
   },
 
@@ -381,7 +379,7 @@ const conv = {
       // I did not find out where name is supposed to be assigned, so I just set it to empty thing to avoid an error
       const name = ''
 
-      var $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
+      const $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
       $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${plainToHtml(name)}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
 
       $el.children('.chatboxcontent').slimScroll()

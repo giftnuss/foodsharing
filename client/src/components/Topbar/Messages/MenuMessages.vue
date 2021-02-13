@@ -8,7 +8,7 @@
     :hide-only-on-mobile="hideOnlyOnMobile"
     right
   >
-    <template v-slot:heading-text>
+    <template #heading-text>
       <span
         v-if="unread"
         class="badge badge-danger"

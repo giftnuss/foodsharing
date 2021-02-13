@@ -73,7 +73,7 @@
         <b-overlay
           :show="isLoading"
         >
-          <template v-slot:overlay>
+          <template #overlay>
             <img src="/img/469.gif">
           </template>
           <b-button

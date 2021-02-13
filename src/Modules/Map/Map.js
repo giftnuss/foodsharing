@@ -161,7 +161,7 @@ function init_bDialog () {
 
 async function loadMarker (types, loader) {
   $('#map-options').hide()
-  var options = []
+  const options = []
   for (let i = 0; i < types.length; i++) {
     if (types[i] == 'betriebe') {
       $('#map-options input:checked').each(function () {

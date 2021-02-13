@@ -55,7 +55,7 @@ const msg = {
     this.initComposer()
 
     if (!msg.isMob()) {
-      var height = `${$(window).height() - 200}px`
+      const height = `${$(window).height() - 200}px`
       this.$conversation.css('height', height)
 
       this.$conversation.slimScroll({
@@ -76,7 +76,7 @@ const msg = {
      */
     $(window).on('resize', function () {
       if (!msg.isMob()) {
-        var height = `${$(window).height() - 200}px`
+        const height = `${$(window).height() - 200}px`
         msg.$conversation.css('height', height)
         msg.$conversation.parent('.slimScrollDiv').css('height', height)
         msg.$conversation.slimScroll({
@@ -102,7 +102,7 @@ const msg = {
     $('#msg-control form').on('submit', async function (ev) {
       ev.preventDefault()
 
-      var val = msg.$answer.val()
+      const val = msg.$answer.val()
       if (val != '') {
         msg.$answer.val('')
         msg.$answer.css('height', '40px')
@@ -121,8 +121,8 @@ const msg = {
       }
     })
 
-    var cid = 0
-    var gcid = GET('cid')
+    let cid = 0
+    const gcid = GET('cid')
     if (GET('cid') != undefined && parseInt(gcid) > 0) {
       cid = gcid
       this.loadConversation(cid)
@@ -382,7 +382,7 @@ const msg = {
         size = 'mini'
       }
 
-      for (var y = 0; y < conversation.member.length; y++) {
+      for (let y = 0; y < conversation.member.length; y++) {
         if (msg.fsid != conversation.member[y].id) {
           pics += `<img width="${picwidth}" src="${img(conversation.member[y].photo, size)}" />`
           names += `, ${conversation.member[y].name}`

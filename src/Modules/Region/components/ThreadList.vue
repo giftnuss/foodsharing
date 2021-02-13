@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async infiniteHandler ($state) {
-      var threads = (await listThreads(this.groupId, this.subforumId, this.offset)).data
+      const threads = (await listThreads(this.groupId, this.subforumId, this.offset)).data
       if (threads.length) {
         this.offset += threads.length
         // sorting is awkward due to sticky threads

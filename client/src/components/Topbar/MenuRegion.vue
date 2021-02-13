@@ -6,7 +6,7 @@
     class="regionMenu"
     icon="fa-globe"
   >
-    <template v-slot:heading-text>
+    <template #heading-text>
       <span class="regionName text-truncate d-none d-sm-inline-block">
         {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
       </span>

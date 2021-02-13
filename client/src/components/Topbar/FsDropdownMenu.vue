@@ -7,7 +7,7 @@
     :lazy="lazy"
     class="caret-beneath"
   >
-    <template v-slot:button-content>
+    <template #button-content>
       <i
         v-if="icon"
         :class="`fas ${icon}`"

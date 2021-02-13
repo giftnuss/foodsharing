@@ -9,7 +9,7 @@
       :show-only-on-mobile="showOnlyOnMobile"
       :hide-only-on-mobile="hideOnlyOnMobile"
     >
-      <template v-slot:heading-text>
+      <template #heading-text>
         <img :src="avatar">
       </template>
       <a
