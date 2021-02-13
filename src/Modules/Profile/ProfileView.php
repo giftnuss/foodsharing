@@ -103,7 +103,12 @@ class ProfileView extends View
 				. '</div>';
 
 			if ($this->profilePermissions->mayRemoveFromBounceList($this->foodsaver['id'])) {
-				// $warningContainer .= 'Kategorien: ' . implode(', ', $this->foodsaver['emailBounceCategories']);
+				$warningContainer .= '<dl class="profile-infos profile-main"><dt>Bounces</dt>';
+				foreach ($this->foodsaver['emailBounceCategories'] as $bounce) {
+					$warningContainer .= '<dd>' . $bounce['bounce_category'] . ' (' . $bounce['bounced_at'] . ')</dd>';
+				}
+				$warningContainer .= '</dl>';
+
 				$warningContainer .= '<div style="text-align:center"><a href="#" onclick="removeFromBounceList('
 					. $this->foodsaver['id']
 					. ')" class="button">' . $this->translator->trans('profile.mail_bounce_remove_button') . '</a></div>';
