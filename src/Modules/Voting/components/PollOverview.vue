@@ -12,20 +12,22 @@
         >
           {{ $i18n('polls.hint_2') }}: <a :href="$url('wiki_voting')">{{ $url('wiki_voting') }}</a>
         </b-alert>
-        <b-link
+        <div
           v-if="mayEdit"
-          :href="$url('pollEdit', poll.id)"
-          class="btn btn-sm btn-secondary mb-3"
         >
-          {{ $i18n('poll.edit.title') }}
-        </b-link>
-        <b-link
-          v-if="mayEdit && !isPollInPast"
-          class="btn btn-sm btn-secondary mb-3"
-          @click="showCancelConfirmDialog"
-        >
-          {{ $i18n('poll.cancel.title') }}
-        </b-link>
+          <b-link
+            :href="$url('pollEdit', poll.id)"
+            class="btn btn-sm btn-secondary mb-3"
+          >
+            {{ $i18n('poll.edit.title') }}
+          </b-link>
+          <b-link
+            class="btn btn-sm btn-secondary mb-3"
+            @click="showCancelConfirmDialog"
+          >
+            {{ $i18n('poll.cancel.title') }}
+          </b-link>
+        </div>
         <ul class="poll-properties">
           <li class="poll-date">
             <b>{{ $i18n('poll.time_period') }}:</b>
