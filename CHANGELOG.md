@@ -101,6 +101,8 @@
 - upgrade webpack-cli and webpack-bundle-analyzer to v 4 !1767 @peter.toennies
 - Update some frontend dependencies !1842 !1881 !1890 !1892 @chriswalg @\_fridtjof_
 - Update some backend dependencies !1885 !1897 @chriswalg
+- Update some frontend dependencies !1842 !1881 !1890 !1892 !1894 @chriswalg @\_fridtjof_
+- Update some backend dependencies !1885 @chriswalg
 - Fixed Xdebug !1883 @\_fridtjof_
 
 # 2021-02-08 Hotfix
