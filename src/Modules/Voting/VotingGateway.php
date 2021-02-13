@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Voting;
 
-use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
