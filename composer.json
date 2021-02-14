@@ -57,7 +57,7 @@
     "jms/serializer-bundle": "3.8.0",
     "maximebf/debugbar": "v1.16.5",
     "minishlink/web-push": "5.2.4",
-    "mobiledetect/mobiledetectlib": "2.8.35",
+    "mobiledetect/mobiledetectlib": "2.8.36",
     "nelmio/api-doc-bundle": "v4.1.1",
     "nesbot/carbon": "2.45.1",
     "sensio/framework-extra-bundle": "5.6.1",
