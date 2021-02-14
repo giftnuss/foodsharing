@@ -30,6 +30,7 @@
 - Fix permissions for content IDs @alex.simm
 - Fix link to wiki on the registration page !1992 @alex.simm
 - Fixed the link texts in the newsletter email template !1993 @alex.simm
+- Render HTML markings in subject line of email teplates #714 !1899 @alex.simm
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
