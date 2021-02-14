@@ -50,6 +50,12 @@ group:
     voting: Polls
     stores: Stores
     welcome: Greeting
+    moderation: Moderation
+    pr: Public relations
+    fsmanagement: Management
+    arbitration: Arbitration board
+    mediation: Mediation
+    report: Reports
   apply:
     sent: The application was sent!
     send: Send application
@@ -69,6 +75,7 @@ group:
   contact:
     send: Send message
     title: Contact {group}
+    admins: '{count} contact person:'
   edit: Edit {group}
 settings:
   header: Your data and settings
@@ -302,6 +309,11 @@ login:
   error_no_password: Please enter your password!
   error_no_email: Please enter your e-mail address!
   save_password: Save password
+  forgotten_password_label: Password forgotten?
+  login_button_label: Login
+  password: Password
+  email_address: E-mail address
+  form_title: Login
 salutation:
   "3": Dear
   "2": Dear
@@ -684,6 +696,14 @@ storeedit:
       \ you have extensive rights.\n"
 legal:
   delete_account: I want to delete my account.
+  legal_agreement: Legal agreement
+  privacy_notice_agree:
+    acknowledge: I agree
+    select: Please select
+  privacy_notice: Privacy notice
+  actions:
+    safe: Apply settings
+  pp: Privacy policy
 answers: Which answers are correct?
 name: Name
 bcard:
@@ -767,7 +787,7 @@ error_unexpected: An error occured
 register:
   confirmPassword_required: Please repeat the password.
   password_required: A password is required.
-  login_passwd2: Repeat password
+  login_passwd2: Password repeat
   email_invalid: Your e-mail address is invalid.
   email_required: An e-mail address is required.
   login_email: Your e-mail address
@@ -780,6 +800,23 @@ register:
   login_passwd1: Password (at least 8 symbols)
   register_button_label: Register
   topbar: Join!
+  pass2: Password repeat
+  other: other
+  woman: female
+  man: male
+  select_your_gender: For the salutation...
+  join_error: Your registration was not successful.
+  join_success: Your registration was successfull.
+  finish: Registration send
+  next: next
+  prev: previous
+  have_read_the_legal_stuff1: I have the
+  forgotten_password: Password forgotten?
+  phone_example: Example +4917912345678
+  firstname_required: Please enter your first name.
+  lastname_required: Please enter your last name.
+  requiredFields: Mandatory input
+  title: Registration
 bread:
   backToOverview: back to overview
 duration: Time to answer
@@ -832,3 +869,11 @@ dashboard:
   my:
     groups: Your groups
     regions: Your regions
+pronoun:
+  "3": he*she
+  "2": she
+  "1": he
+  "0": he/she
+right: Score
+ansprechpartner: Store contact person (store manager, etc.)
+location_name: Event location/conference room
