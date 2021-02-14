@@ -296,8 +296,29 @@ terminology:
   ambassador:
     d: Ambassador
     f: Ambassador
+    m: Ambassador
   n_stores: A store|%count% stores
   n_ambassadors: An ambassador|%count% ambassadors
+  ambassador_forum: Ambassador forum
+  orga:
+    d: Orga person
+    f: Orga person
+    m: Orga person
+  storemanager:
+    d: Store manager
+    f: Store manager
+    m: Store manager
+  foodsaver:
+    d: Foodsaver
+    f: Foodsaver
+    m: Foodsaver
+  foodsharer:
+    d: Foodsharer
+    f: Foodsharer
+    m: Foodsharer
+  stores: Stores
+  events: Events
+  forum: Forum
 login:
   pwreset:
     bread: Reset password
@@ -463,6 +484,7 @@ page:
   basket:
     header: Food baskets
   welcomeheader: Welcome to foodsharing!
+  join_button: Join
 conference:
   join: Join video conference
   join_title: Join video conference
@@ -478,6 +500,10 @@ blog:
   title: Blog posts
   manage: Manage blog posts
   bread: Blog
+  new: Write a new article
+  go: Go to the blog
+  edit: Edit blog article
+  newTitle: New article for {region}
 region:
   type:
     workgroup: Working group
@@ -570,6 +596,8 @@ store:
   request:
     to-jumper: Jumper list
     verified: User is verified
+    title: Requests for {storeTitle}
+    withdraw: Withdraw request
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
@@ -578,6 +606,7 @@ store:
   isNotVerified: Is not yet verified.
   isManager: Responsible for this store.
   unknownDate: unknown
+  team_conversation_name: Team {name}
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -698,6 +727,7 @@ storeedit:
   team:
     orga: "You are not responsible for this store,\nbut as a member of the Orga-team\
       \ you have extensive rights.\n"
+  add-new: Add new store
 legal:
   delete_account: I want to delete my account.
   legal_agreement: Legal agreement
@@ -762,6 +792,17 @@ fsp:
   unfollow: Stop following food-share-point
   summaryRegion: There are {count} food-share-points in {region} and all subregions
   summary: There are {count} food-share-points in all regions, in which you are active
+  info:
+    none: none
+    mail: Bell and e-mail notification
+    bell: only internal notification (bell)
+    from: Updates from food-share-point "{name}"
+  pic: Photo
+  location: Postal code / city
+  reject: Reject food-share-point
+  acceptSuccess: Food-share-point is now active
+  acceptName: Accept {name}
+  accept: Accept food-share-point
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -886,3 +927,6 @@ pronoun:
 right: Score
 ansprechpartner: Store contact person (store manager, etc.)
 location_name: Event location/conference room
+stats:
+  leader:
+    users: Most active foodsavers
