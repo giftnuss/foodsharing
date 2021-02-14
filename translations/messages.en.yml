@@ -150,6 +150,7 @@ menu:
     joinregion: Join a region
     language: "Choose language"
 
+    conference: Video conference
 profile:
   banana:
     by: ' by '
@@ -207,6 +208,8 @@ events:
     date: Date
     endtime: End time
     starttime: Start time
+    groups: Your working groups
+    regions: Your regions
   bread: Events
   menu:
     edit: Edit event
@@ -492,6 +495,8 @@ footer:
   wiki: Wiki
   press: Press
   contact: Contact
+  about_us: About us
+  call_to_donate: "You would like to\nsupport foodsharing?\n"
 basket:
   is:
     gf: are gluten-free
@@ -510,6 +515,13 @@ basket:
   contact:
     call: By phone
     write: By message
+  nearby-short: Nearby
+  mapsearch: Search for an address...
+  nearby: Food baskets nearby
+  recent: Newest food baskets
+  all: All food baskets
+  title: Food baskets
+  all_map: All food baskets on the map
 map:
   title: Map
 content:
@@ -554,6 +566,8 @@ search:
   mygroups: My groups
   mybuddies: My buddies
   title: Search
+  forum: Search for a title...
+  placeholder: Search...
 month:
   short:
     "12": Dec.
@@ -718,6 +732,7 @@ fsp:
   description: Description
   followName: Follow food-share-point {name}
   follow: Follow this food-share-point
+  yours: Food-share-points in your regions
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -756,6 +771,15 @@ register:
   email_invalid: Your e-mail address is invalid.
   email_required: An e-mail address is required.
   login_email: Your e-mail address
+  login_surname: Your surname
+  login_name: Your first name
+  login_location: Your address
+  login_mobile_phone: Your mobile phone number
+  geb_datum: Your day of birth
+  password_minLength: The password needs to contain at least 8 symbols.
+  login_passwd1: Password (at least 8 symbols)
+  register_button_label: Register
+  topbar: Join!
 bread:
   backToOverview: back to overview
 duration: Time to answer
@@ -799,3 +823,12 @@ telefon: Landline number
 body: message
 mailbox_name: Mailbox name
 betrieb: Cooperation company/ies
+passcheck: Please confirm the change with your password
+online_type: Will this event be offline or online?
+addresspicker:
+  label: Search for address/location
+dashboard:
+  invitations: You were invited
+  my:
+    groups: Your groups
+    regions: Your regions
