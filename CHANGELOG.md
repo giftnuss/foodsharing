@@ -28,6 +28,7 @@
 - Blank lines in Markdown on the form for editing store information are now also displayed as blank lines !1878 @stepin
 - Removed a duplicate and broken submit button from the workgroup application dialog !1889 @\_fridtjof_
 - Prevent sending empty quickreplies on the dashboard #944 !1891 @alex.simm
+- Fixed a bug where URLs could be broken in some niche cases !1888 @\_fridtjof_
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
