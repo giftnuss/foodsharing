@@ -102,7 +102,7 @@ menu:
   content: Manage content
   entry:
     activities: Activities
-    infos: Infos
+    infos: Information
     mark_as_read: Mark all as read
     all_messages: All messages
     messages: Messages
@@ -142,7 +142,7 @@ menu:
     fundamentals: Fundamentals
     blog: Blog
     team: Team
-    partners: Partner
+    partners: Partners
     background: Background
     support: Help and support
     wiki: Wiki
@@ -158,6 +158,7 @@ menu:
     language: "Choose language"
 
     conference: Video conference
+    release-notes: What's new?
 profile:
   banana:
     by: ' by '
@@ -410,6 +411,7 @@ poll:
     start_date: Start date
     type: Type of the poll
     name: Poll name
+    submit: Submit poll
   submit_vote: Submit vote
   type: Poll type
   scope_description_3: All ambassadors in the region / the group
@@ -427,6 +429,8 @@ poll:
   type_description_1: Check (multiple options can be chosen)
   type_description_0: Select (only one option can be chosen)
   not_available: This poll does not exist or you cannot access it.
+  edit:
+    submit: Submit poll
 buddy:
   request_accepted: Now you are buddies!
 email_template:
@@ -753,6 +757,11 @@ fsp:
   followName: Follow food-share-point {name}
   follow: Follow this food-share-point
   yours: Food-share-points in your regions
+  suggest: Suggest food-share-point
+  followers: Followers
+  unfollow: Stop following food-share-point
+  summaryRegion: There are {count} food-share-points in {region} and all subregions
+  summary: There are {count} food-share-points in all regions, in which you are active
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
