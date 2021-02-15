@@ -17,6 +17,7 @@
 - Report and Mediation button is not visible against foodsharers !1874 @fs_k
 - Updated english translations !1875 @kingu @alex.simm
 - Redirect to previous page when logging in using the topbar #689 !1887 @alex.simm
+- DevDocs enhanced about GOAL-System #1046 !1884 @fs_k
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

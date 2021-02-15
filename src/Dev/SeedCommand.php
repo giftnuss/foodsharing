@@ -144,7 +144,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$storesGroup = $I->createWorkingGroup('Betriebskoordination Göttingen', ['parent_id' => $region1, 'email_name' => 'betriebskoordination.Goettingen', 'teaser' => 'Hier sind die Betriebskoordinationsansprechpartner für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $storesGroup['id'], 'function_id' => WorkgroupFunction::STORES_COORDINATION, 'target_id' => $region1]);
 		foreach (range(1, 3) as $i) {
-			$user = $I->createStoreCoordinator($password, ['email' => 'userstoregroup' . $i . '@example.com', 'bezirk_id' => $region1]);
+			$user = $I->createStoreCoordinator($password, ['email' => 'userstorecoordination' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($storesGroup['id'], $user['id']);
 			$I->addRegionAdmin($storesGroup['id'], $user['id']);
 			$this->storesGroupAdmin[] = $user['id'];
@@ -192,7 +192,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$fsmanagementGroup = $I->createWorkingGroup('Verwaltung Göttingen', ['parent_id' => $region1, 'email_name' => 'verwaltung.Goettingen', 'teaser' => 'Hier ist das Verwaltungsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $fsmanagementGroup['id'], 'function_id' => WorkgroupFunction::FSMANAGEMENT, 'target_id' => $region1]);
 		foreach (range(1, 3) as $i) {
-			$user = $I->createStoreCoordinator($password, ['email' => 'userpr' . $i . '@example.com', 'bezirk_id' => $region1]);
+			$user = $I->createStoreCoordinator($password, ['email' => 'userfsmanagement' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($fsmanagementGroup['id'], $user['id']);
 			$I->addRegionAdmin($fsmanagementGroup['id'], $user['id']);
 			$this->fsManagementAdmins[] = $user['id'];
@@ -204,7 +204,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$prGroup = $I->createWorkingGroup('Öffentlichkeitsarbeit Göttingen', ['parent_id' => $region1, 'email_name' => 'oeffentlichkeitsarbeit.Goettingen', 'teaser' => 'Hier ist das Öffentlichkeitsarbeitsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $prGroup['id'], 'function_id' => WorkgroupFunction::PR, 'target_id' => $region1]);
 		foreach (range(1, 5) as $i) {
-			$user = $I->createStoreCoordinator($password, ['email' => 'userfsmanagement' . $i . '@example.com', 'bezirk_id' => $region1]);
+			$user = $I->createStoreCoordinator($password, ['email' => 'userpr' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($prGroup['id'], $user['id']);
 			$I->addRegionAdmin($prGroup['id'], $user['id']);
 			$this->prGroup[] = $user['id'];
@@ -215,7 +215,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- create moderation group');
 		$moderationGroup = $I->createWorkingGroup('Moderation Göttingen', ['parent_id' => $region1, 'email_name' => 'moderation.Goettingen', 'teaser' => 'Hier ist das Moderationsteam für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $moderationGroup['id'], 'function_id' => WorkgroupFunction::MODERATION, 'target_id' => $region1]);
-		foreach (range(1, 5) as $i) {
+		foreach (range(1, 4) as $i) {
 			$user = $I->createStoreCoordinator($password, ['email' => 'usermoderation' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($moderationGroup['id'], $user['id']);
 			$I->addRegionAdmin($moderationGroup['id'], $user['id']);
