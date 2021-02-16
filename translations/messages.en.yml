@@ -95,6 +95,15 @@ settings:
     missing-date: Please type in a start and end date for a time period!
   account: Account options
   businesscard: Personal business card
+  photo:
+    title: Your photo
+  calendar:
+    event_link_desc: (incl. events)
+    link_title: 'ICS/ICAL/WebCal:'
+    menu: Calendar
+  saved: The changes were saved.
+  changemail:
+    done: Your e-mail address was changed!
 menu:
   manage_regions: Manage regions
   blog: Manage blog content
@@ -225,6 +234,9 @@ events:
   menu:
     edit: Edit event
     yes: Accept invitation
+  notFound: Either this event does not exist or you can not access it.
+  goto: Go to the event
+  edited: Event was changed successfully!
 forum:
   threads: Threads
   quickreply:
@@ -236,6 +248,7 @@ forum:
   post:
     delete: Delete post
   from: From {name}
+  sending_error: An error occured during sending
 timepicker:
   labelNowButton: Now
   labelCloseButton: Close
@@ -261,6 +274,14 @@ pickup:
   open_profile: Open profile
   confirm: Confirm
   call: Call
+  team_message_success: Message was successfully sent to the team
+  leave_team_message_title: Message to the team
+  leave_pickup_message_team: Notify the team
+  leave_pickup_ok: I already have a replacement
+  signout_sure: Do you really want to leave this team?
+  copiedNumber: '"{number}" was copied to the clipboard.'
+  leave: Leave
+  kick: Kick
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -326,6 +347,7 @@ terminology:
   fspAdmins: FoodSharePoint team
   votingAdmins: Voting team
   welcomeAdmins: Welcome team
+  fsp: FoodSharePoint
 login:
   pwreset:
     bread: Reset password
@@ -428,11 +450,14 @@ recipients:
   history: E-mails sent by you
   sent: The e-mail was successfully sent to {count} addresses
   send: Send e-mail
+  status: 'Sending e-mails ... (current address: {current})'
+  permission: You do not have permission to send e-mails
 poll:
   time_period: Time period
   results:
     sum: Sum
     votes: Votes
+    number_of_votes: Submitted votes
   new_poll:
     submit_question: The poll can be changed within one hour (until {date}). Do you
       really want to create it now?
@@ -487,6 +512,9 @@ email_template:
   foodbasket_request: Your food basket was requested by %SENDER
   foodsharepoint: -- Food-share-point
   yourFSteam: Your foodsharing team.
+  dont_respond:
+    noreply: Please do not respond to this e-mail. It was sent from an address, which
+      does not correspond to a mailbox.
 sidenav:
   yourgroups: Your groups
   localgroups: Local groups
@@ -503,6 +531,10 @@ page:
     header: Food baskets
   welcomeheader: Welcome to foodsharing!
   join_button: Join
+  foodsharepoints:
+    header: Food-share-points
+  fsvsfs:
+    header: Foodsharers and Foodsavers
 conference:
   join: Join video conference
   join_title: Join video conference
@@ -647,6 +679,7 @@ month:
     "4": Apr.
     "2": Feb.
     "1": Jan.
+    "3": Mar.
   "12": December
   "11": November
   "10": October
@@ -760,6 +793,10 @@ storeedit:
     orga: "You are not responsible for this store,\nbut as a member of the Orga-team\
       \ you have extensive rights.\n"
   add-new: Add new store
+  milestone:
+    dropped: '{user} is not part of the team anymore'
+    accepted: '{user} is now part of the team'
+  edit_success: The changes were saved
 legal:
   delete_account: I want to delete my account.
   legal_agreement: Legal agreement
@@ -789,7 +826,7 @@ newsletter: Newsletter
 info: Information
 rolle: User role
 active: Activated
-email: E-mail address
+email: Email address
 leader: Group admins
 member: Members
 first_post: First wall post
