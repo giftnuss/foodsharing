@@ -63,6 +63,7 @@
 - New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
 - Show icon and tooltip for working groups with extra functions !1846 @alex.simm
 - Added a button that allows the creator of a poll to delete it within the first hour #975 !1906 !1912 @alex.simm
+- New calendar API including token management #80 !1719 @alex.simm
 
 ## Changes
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
@@ -253,7 +254,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Display public profile for deleted users as well !1703 @ChrisOelmueller
 - fetchrate is not shown as long as reporting system is down !1706 @fs_k
 - Sort forum search results by last update !1704 @ChrisOelmueller
- 
+
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
 - Removed form for new amb's #821 !1619 @chriswalg

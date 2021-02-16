@@ -421,10 +421,10 @@ class SettingsView extends View
 			$this->v_utils->v_form_passwd('passcheck');
 	}
 
-	public function settingsCalendar($token)
+	public function settingsCalendar()
 	{
 		return $this->vueComponent('calendar', 'Calendar', [
-			'url' => WEBCAL_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token
+			'baseUrl' => WEBCAL_URL . '/api/calendar/'
 		]);
 	}
 

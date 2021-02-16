@@ -12,15 +12,27 @@
       </h3>
       <div class="bootstrap">
         <p> {{ $i18n('settings.calendar.teaser') }} </p>
-        <ul class="webcal">
+        <b-button
+          class="my-2"
+          @click="createToken"
+        >
+          {{ $i18n('settings.calendar.create_token.button') }}
+        </b-button>
+        <b-button
+          v-if="token"
+          class="my-2"
+          @click="removeToken"
+        >
+          {{ $i18n('settings.calendar.delete_token.button') }}
+        </b-button>
+
+        <ul
+          v-if="token"
+          class="webcal"
+        >
           <li class="pb-1">
             <a :href="webcalPickups">
               {{ webcalPickups }}
-            </a>
-          </li>
-          <li class="pb-1">
-            <a :href="webcalPickupsAndEvents">
-              {{ webcalPickupsAndEvents }} {{ $i18n('settings.calendar.event_link_desc') }}
             </a>
           </li>
         </ul>
@@ -38,16 +50,78 @@
 </template>
 
 <script>
+import { hideLoader, pulseError, showLoader } from '@/script'
+import { createApiToken, getApiToken, removeApiToken } from '@/api/calendar'
+import i18n from '@/i18n'
+import { BAlert, BButton } from 'bootstrap-vue'
+
 export default {
+  components: { BAlert, BButton },
   props: {
-    url: { type: String, default: '' },
+    baseUrl: { type: String, required: true },
+  },
+  data () {
+    return {
+      token: null,
+    }
   },
   computed: {
     webcalPickups () {
-      return this.url + '&opts=s'
+      return this.baseUrl + this.token
     },
-    webcalPickupsAndEvents () {
-      return this.url + '&opts=se'
+  },
+  async mounted () {
+    showLoader()
+    try {
+      this.token = await getApiToken()
+    } catch (e) {
+      // an error means that the user has no token
+      this.token = null
+    }
+    hideLoader()
+  },
+  methods: {
+    async createToken () {
+      let confirmed = true
+      if (this.token) {
+        confirmed = await this.$bvModal.msgBoxConfirm(i18n('settings.calendar.create_token.message'), {
+          modalClass: 'bootstrap',
+          title: i18n('settings.calendar.create_token.title'),
+          cancelTitle: i18n('no'),
+          okTitle: i18n('yes'),
+          headerClass: 'd-flex',
+          contentClass: 'pr-3 pt-3',
+        })
+      }
+      if (confirmed) {
+        showLoader()
+        try {
+          this.token = await createApiToken()
+        } catch (e) {
+          pulseError(i18n('error_unexpected'))
+        }
+        hideLoader()
+      }
+    },
+    async removeToken () {
+      const confirmed = await this.$bvModal.msgBoxConfirm(i18n('settings.calendar.delete_token.message'), {
+        modalClass: 'bootstrap',
+        title: i18n('settings.calendar.delete_token.title'),
+        cancelTitle: i18n('no'),
+        okTitle: i18n('yes'),
+        headerClass: 'd-flex',
+        contentClass: 'pr-3 pt-3',
+      })
+      if (confirmed) {
+        showLoader()
+        try {
+          await removeApiToken()
+          this.token = null
+        } catch (e) {
+          pulseError(i18n('error_unexpected'))
+        }
+        hideLoader()
+      }
     },
   },
 }

@@ -1414,6 +1414,14 @@ settings:
       Nur dann tauchen neue Abholtermine auf oder abgesagte Termine nicht mehr.
     link_title: "ICS/ICAL/WebCal:"
     event_link_desc: "(inkl. Events)"
+    create_token:
+      button: Neuen Token erstellen
+      title: Neuen Token erstellen
+      message: Du kannst immer nur einen Token anlegen. Durch einen neuen Token wird der bisherige Link überschrieben und ungültig. Möchtest du ihn wirklich neu erstellen?
+    delete_token:
+      button: Token löschen
+      title: Token löschen
+      message: Der bisherige Link wird hierdurch ungültig. Möchtest du den Token wirklich löschen?
   photo:
     title: "Dein Foto"
     info: |

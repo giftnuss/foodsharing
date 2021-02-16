@@ -376,8 +376,7 @@ class SettingsControl extends Control
 	public function calendar()
 	{
 		$this->pageHelper->addBread($this->translator->trans('settings.calendar.menu'));
-		$token = $this->generate_api_token($this->session->id());
-		$this->pageHelper->addContent($this->view->settingsCalendar($token));
+		$this->pageHelper->addContent($this->view->settingsCalendar());
 	}
 
 	public function info()
@@ -505,19 +504,5 @@ class SettingsControl extends Control
 		} else {
 			$this->flashMessageHelper->info($this->translator->trans('foodsaver.mailchange_error'));
 		}
-	}
-
-	/**
-	 * Creates and saves a new API token for given user.
-	 */
-	private function generate_api_token(int $fsId): ?string
-	{
-		if ($token = bin2hex(openssl_random_pseudo_bytes(10))) {
-			$this->settingsGateway->saveApiToken($fsId, $token);
-
-			return $token;
-		}
-
-		return null;
 	}
 }
