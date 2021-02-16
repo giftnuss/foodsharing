@@ -77,6 +77,9 @@ group:
     title: Contact {group}
     admins: '{count} contact person:'
   edit: Edit {group}
+  quitting_home_district_warning: Do you really want to leave your home district %name%?
+    You will lose your verification and have to contact the ambassador team of your
+    new home district later!
 settings:
   header: Your data and settings
 
@@ -232,6 +235,7 @@ forum:
     activate: Activate thread
   post:
     delete: Delete post
+  from: From {name}
 timepicker:
   labelNowButton: Now
   labelCloseButton: Close
@@ -319,6 +323,9 @@ terminology:
   stores: Stores
   events: Events
   forum: Forum
+  fspAdmins: FoodSharePoint team
+  votingAdmins: Voting team
+  welcomeAdmins: Welcome team
 login:
   pwreset:
     bread: Reset password
@@ -393,6 +400,10 @@ bell:
   store_new_request_title: New team request
   blog_new_check_title: New blog article
   no_bells: You have no notifications
+  passgen_failed_title: Your ID could not be created
+  passgen_failed: Please load a photo! Then it will work.
+  sharepoint_activate: '{name} has been listed'
+  store_new: '{name} has been listed'
 reports:
   time: Time
   region: Home region
@@ -400,6 +411,13 @@ reports:
   city: City
   all_reports: All reports
   about: About
+  when: Time
+  about_last_name: About last name
+  about_first_name: About first name
+  message: Description
+  from_last_name: From last name
+  from_first_name: From name
+  from: From
 recipients:
   test: Test the newsletter
   done: All e-mails have been sent
@@ -613,6 +631,9 @@ search:
   title: Search
   forum: Search for a title...
   placeholder: Search...
+  persons: Persons
+  groups: Groups
+  myregions: My regions
 month:
   short:
     "12": Dec.
@@ -652,6 +673,8 @@ date:
   -- Tomorrow: Tomorrow
   today: today
   Today: Today
+  to: to
+  from: from
 wall:
   error-create: Your wall post could not be saved.
   created: Great! Your wall post was saved.
@@ -682,6 +705,10 @@ pass:
   verified: Verificated?
   photo: Picture
   bread: Pass generator
+  hintSelect: "By clicking on the creation date, all food savers with the same date\
+    \ or without a creation date are marked.\n"
+  date: Last created
+  none: '- not yet created -'
 ui:
   switch:
     on: published
@@ -695,6 +722,11 @@ upload:
   crop_dialog_title: Cut picture
   new_file: Upload new data
   choose_file: Upload data
+  image-problem: Your file seems to be out of order, it is best to use a normal jpg
+    image
+  no_image_chosen: No file selected yet
+  no_image_yet: No picture uploaded yet
+  no_image: The uploaded file is not a photo. Please choose another file!
 photo: Photo
 status: Current status
 title: Title
@@ -919,6 +951,29 @@ dashboard:
   my:
     groups: Your groups
     regions: Your regions
+  source_event: Appointment {0}
+  source_forum_bot: BOT forum {0}
+  source_forum: Forum {0}
+  source_friendWall_own: Your pinboard
+  source_friendWall: Pinboard from {0}
+  source_foodsharepoint: Fair share point {0}
+  save_selection: Save settings
+  empty_section: You don't have a {type} yet
+  activity_filter_info: Here you can set which updates should be displayed on your
+    homepage.
+  no_more_updates_store: No more store informations
+  no_more_updates_mailbox: No more mailbox messages
+  no_more_updates_friendWall: No more status messages
+  no_more_updates_forum: No further forum entries
+  no_more_updates_foodsharepoint: No more fair share posts
+  no_more_updates_event: No further dates
+  no_more_updates_all: That's it!
+  no_updates: No updates
+  settings_tooltip: Overview settings
+  display_all: All
+  updates_title_some: Updates overview ({0})
+  updates_title_all: Updates overview
+  title: Dashboard
 pronoun:
   "3": he*she
   "2": she
@@ -930,3 +985,28 @@ location_name: Event location/conference room
 stats:
   leader:
     users: Most active foodsavers
+gender:
+  f: Woman
+quizusercomment: "Give us feedback on this question!\nWas it too easy, too difficult,\
+  \ incomprehensible?\nOr are some answers or explanations not correct?\n"
+questcount: How many questions should be asked during the exam?
+maxfp: Maximum number of failure points to pass
+week_num: How many weeks does an applicant need to be registered on the platform?
+fetch_count: How many pickups does an applicant need to have done?
+banana_count: How many trust bananas must an applicant have?
+apply_type: Who can sign up for this group?
+abholmenge: How many kilograms are taken per pickup approximately?
+prefetchtime: How many weeks in advance can food savers sign up using automatic slots?
+sticker: Is the store/shop/club etc. willing to display a sticker visibly at the entrance
+  or elsewhere?
+presse: Is the store/shop/club willing to be mentioned in the press and foodsharing.de?
+ueberzeugungsarbeit: Was it easy to convince a responsible person to cooperate with
+  foodsharing?
+public_time: Approximate time of day for collection
+fspmanagers: Foodsaver who are contact persons for the Fair share point
+fsp_bezirk_id: In which district is the fair share point?
+orgateam: Nationwide Orga
+bezirk_id: For which region is the article relevant?
+fetchstate: Did everything go all right?
+sleep_msg: Here you can leave a short message why you don't have time at the moment.
+lebensmittel: Which foods are allowed to collect?
