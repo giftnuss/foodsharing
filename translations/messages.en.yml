@@ -80,6 +80,7 @@ group:
   quitting_home_district_warning: Do you really want to leave your home district %name%?
     You will lose your verification and have to contact the ambassador team of your
     new home district later!
+  saved: Changes were saved
 settings:
   header: Your data and settings
 
@@ -249,11 +250,18 @@ forum:
     title: Title
     delete: Delete thread
     activate: Activate thread
+    stick: Make thread sticky
+    inactive: "This thread is not active yet.\nHere, you can activate it and inform\
+      \ all foodsavers about it.\n"
   post:
     delete: Delete post
     body: Message
   from: From {name}
   sending_error: An error occured during sending
+  no_threads: No threads yet
+  no_posts: No posts yet
+  hold_back_for_moderation: The thread was saved and will be published as soon as
+    an ambassador / moderator has approved it.
 timepicker:
   labelNowButton: Now
   labelCloseButton: Close
@@ -473,6 +481,7 @@ poll:
     sum: Sum
     votes: Votes
     number_of_votes: Submitted votes
+    option_text: Option
   new_poll:
     submit_question: The poll can be changed within one hour (until {date}). Do you
       really want to create it now?
@@ -491,6 +500,10 @@ poll:
     type: Type of the poll
     name: Poll name
     submit: Submit poll
+    missing_fields: All fields need to be filled in
+    submit_success: The poll was created
+    option: Option
+    description_placeholder: What is this poll about?
   submit_vote: Submit vote
   type: Poll type
   scope_description_3: All ambassadors in the region / the group
@@ -505,13 +518,31 @@ poll:
   type_2:
     tooltip_positive: Approval
     tooltip_negative: Disapproval
+    tooltip_neutral: Neutral
   type_description_1: Check (multiple options can be chosen)
   type_description_0: Select (only one option can be chosen)
   not_available: This poll does not exist or you cannot access it.
   edit:
     submit: Submit poll
+    submit_question: Do you really want to save the changes in this poll?
+    title: Edit poll
+  may_not_edit: Either you do not have the rights to change this poll or the time
+    period for editing has expired.
+  eligible_votes_count: Number of people eligible to vote
+  submit_vote_question: Submit your vote? Your choices can not be changed later.
+  may_not_yet_vote: Voting in this poll has not started yet.
+  may_not_vote: You may not vote in this poll.
+  already_voted: You have already voted in this poll
+  vote_success: You have successfully voted.
+  submit_vote_warning: 'Caution: voting is anonymous. You can not change your choices
+    after submitting!'
+  type_description_3: Score voting with values between +3 (approval) and -3 (disapproval)
+  type_description_2: Choosing between approval / neutral / disapproval
+  scope_description_2: All store managers in the region, who are currently responsible
+    for a store
 buddy:
   request_accepted: Now you are buddies!
+  request_sent: Request was sent!
 email_template:
   help_needed:
     support_mail: it@foodsharing.network
@@ -530,6 +561,9 @@ email_template:
   dont_respond:
     noreply: Please do not respond to this e-mail. It was sent from an address, which
       does not correspond to a mailbox.
+  information: Information
+  unknown_email2: The e-mail address %ADDRESS% is not known.
+  unknown_email: Unkown e-mail address
 sidenav:
   yourgroups: Your groups
   localgroups: Local groups
@@ -629,6 +663,8 @@ basket:
   all: All food baskets
   title: Food baskets
   all_map: All food baskets on the map
+  by: Food basket by {name}
+  description: Description
 map:
   title: Map
 content:
@@ -771,6 +807,7 @@ pass:
   none: '- not yet created -'
   hintVerify: "Foodsavers can be verified as soon as they were handed their ID card\
     \ and their personal data has been checked.\n"
+  notGenerated: Your passport could not be generated.
 ui:
   switch:
     on: published
@@ -816,6 +853,8 @@ polls:
   start_date: start date
   title: Title
   ended: Past polls
+  hint: The voting module can be tested in the transregional working group "Abstimmungen
+    - Test".
 storeedit:
   bread: Edit store
   team:
@@ -852,6 +891,10 @@ bcard:
   actions: Options
   card: Your foodsharing business card
   title: Business card generator
+  error:
+    verified: You need to be verified in order to generate business cards.
+  desc: Choose the region and role, for which you would like to generate your business
+    card!
 picture_upload_widget:
   picture_upload: Upload image
   choose_picture: Choose a picture from your computer!
@@ -902,6 +945,8 @@ fsp:
     mail: Bell and e-mail notification
     bell: only internal notification (bell)
     from: Updates from food-share-point "{name}"
+    manager: You are responsible for this food-share-point and therefore obligated
+      to accept the updates!
   pic: Photo
   location: Postal code / city
   reject: Reject food-share-point
@@ -1027,7 +1072,7 @@ dashboard:
     groups: Your groups
     regions: Your regions
   source_event: Appointment {0}
-  source_forum_bot: BOT forum {0}
+  source_forum_bot: Amb. forum {0}
   source_forum: Forum {0}
   source_friendWall_own: Your pinboard
   source_friendWall: Pinboard from {0}
@@ -1049,6 +1094,12 @@ dashboard:
   updates_title_some: Updates overview ({0})
   updates_title_all: Updates overview
   title: Dashboard
+  deleted_user: deleted user
+  push:
+    button: Enable push notifications
+    info: If you don't want to receive push notifications anymore, you can deactivate
+      it in the settings anytime.
+    title: You can now receive push notifications from foodsharing.
 pronoun:
   "3": he*she
   "2": she
@@ -1092,3 +1143,14 @@ store_status_impact_explanation: 'Please update the status of the store (<a href
   willing to cooperate are shown in the corresponding tab in the navbar.'
 notice: Note!
 back: Back
+team:
+  not-found: Page not found
+  email: E-mail address
+  name: Name
+  current: Team
+home:
+  home: Home
+message_text_to_group_admin_workgroup: 'The region/group <b>{groupName}</b> does not
+  have an ambassador anymore.<br><br><br>It has the following ID-structure:<br>{idStructureList}<br><br>The
+  ID is: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum"
+  target="_blank">Click here to go to the region/group</a>'
