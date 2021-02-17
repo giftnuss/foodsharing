@@ -234,9 +234,13 @@ events:
   menu:
     edit: Edit event
     yes: Accept invitation
+    options: Event options
   notFound: Either this event does not exist or you can not access it.
   goto: Go to the event
   edited: Event was changed successfully!
+  button:
+    maybe: Maybe
+    yes: Accept
 forum:
   threads: Threads
   quickreply:
@@ -247,6 +251,7 @@ forum:
     activate: Activate thread
   post:
     delete: Delete post
+    body: Message
   from: From {name}
   sending_error: An error occured during sending
 timepicker:
@@ -257,6 +262,8 @@ timepicker:
   labelHours: Hours
   labelNoTimeSelected: No time selected
   labelSelected: Selected time
+  labelDecrement: Decrease
+  labelIncrement: Increase
 calendar:
   labelCalendar: Calendar
   labelSelected: Selected date
@@ -268,6 +275,7 @@ calendar:
   labelPrevYear: Previous year
   labelNoDateSelected: Select date
   locale: de
+  labelNav: Calendar navigation
 pickup:
   signout_confirm: Are you sure?
   copyNumber: Copy phone number
@@ -282,6 +290,10 @@ pickup:
   copiedNumber: '"{number}" was copied to the clipboard.'
   leave: Leave
   kick: Kick
+  history:
+    title: Pick-up history
+  join_title_date: Sure?
+  dates: Pick-up dates
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -291,6 +303,7 @@ storeview:
   frequency2: at noon/in the afternoon
   frequency1: in the morning
   info: Information
+  specials: Special features
 day: Day
 time: Time
 select: Please select
@@ -315,7 +328,7 @@ terminology:
   baskets: Food baskets
   basket: Food basket
   statistic: Statistics
-  wall: wall
+  wall: Wall
   admins: Administrators
   ambassadors: Ambassadors
   ambassador:
@@ -452,6 +465,8 @@ recipients:
   send: Send e-mail
   status: 'Sending e-mails ... (current address: {current})'
   permission: You do not have permission to send e-mails
+  body: Message
+  recipients: Recipient
 poll:
   time_period: Time period
   results:
@@ -648,15 +663,27 @@ store:
     verified: User is verified
     title: Requests for {storeTitle}
     withdraw: Withdraw request
+    to-nowhere: Reject
+    to-team: Record
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
+    filterJumper: Jumper
+    filterUnverified: Unverified
+    pickupReset: Standard sorting
+    managementActions: BV actions
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
   isManager: Responsible for this store.
   unknownDate: unknown
   team_conversation_name: Team {name}
+  days_before: before
+  days: Days
+  attribution: Attribution
+  particularities: Special features
+  teamName: '{storeTitle} team'
+  actions: Options
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -794,11 +821,18 @@ storeedit:
   team:
     orga: "You are not responsible for this store,\nbut as a member of the Orga-team\
       \ you have extensive rights.\n"
+    note: 'Note:'
+    foodsaver: Foodsaver
   add-new: Add new store
   milestone:
     dropped: '{user} is not part of the team anymore'
     accepted: '{user} is now part of the team'
   edit_success: The changes were saved
+  fetch:
+    teamStatus: team status
+  store:
+    status: status
+  actions: Options
 legal:
   delete_account: I want to delete my account.
   legal_agreement: Legal agreement
@@ -874,6 +908,7 @@ fsp:
   acceptSuccess: Food-share-point is now active
   acceptName: Accept {name}
   accept: Accept food-share-point
+  managers: Contact Person
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1055,3 +1090,5 @@ store_status_impact_explanation: 'Please update the status of the store (<a href
   target="_blank">Wiki: Building up cooperations - Checkliste</a>). The status of
   the cooperation should always be transparent for everybody. Only stores which are
   willing to cooperate are shown in the corresponding tab in the navbar.'
+notice: Note!
+back: Back
