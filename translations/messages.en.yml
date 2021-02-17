@@ -742,6 +742,8 @@ pass:
     \ or without a creation date are marked.\n"
   date: Last created
   none: '- not yet created -'
+  hintVerify: "Foodsavers can be verified as soon as they were handed their ID card\
+    \ and their personal data has been checked.\n"
 ui:
   switch:
     on: published
@@ -1048,3 +1050,8 @@ bezirk_id: For which region is the article relevant?
 fetchstate: Did everything go all right?
 sleep_msg: Here you can leave a short message why you don't have time at the moment.
 lebensmittel: Which foods are allowed to collect?
+store_status_impact_explanation: 'Please update the status of the store (<a href="https://wiki.foodsharing.de/Betrieb"
+  target="_blank">Wiki: Store</a>) after every time there has been contact (<a href="https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste"
+  target="_blank">Wiki: Building up cooperations - Checkliste</a>). The status of
+  the cooperation should always be transparent for everybody. Only stores which are
+  willing to cooperate are shown in the corresponding tab in the navbar.'
