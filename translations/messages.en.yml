@@ -184,16 +184,21 @@ profile:
   public:
     join: Join & register
     who: '{name} from {from}'
+    may: active
   signoutAll: Sign out of all
   signoutPickup: sign out
   regions: '{name} is a foodsaver'
   stats:
     baskets: Food baskets
     weight: saved
+    posts: Posts
   infos:
     buddies: Buddies
     never: Never
     lastLogin: Last login
+    fetchrate: Fetch rate
+    registrationDate: Registration date
+    title: Informations
   report:
     sent: Report was sent
     send: Send report
@@ -207,6 +212,10 @@ profile:
     history: Pass history
     buddy: I know {name}
     edit: Edit profile
+  notes:
+    bread: Notes
+  warning: Warning
+  title: Profile
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -223,6 +232,10 @@ mailbox:
   trash: Trash
   sent: Sent
   inbox: Inbox
+  manage: Mailbox manager
+  member: Mailbox user
+  actions: Options
+  title: Mailboxes
 events:
   description: Description
   create:
@@ -369,6 +382,7 @@ terminology:
   votingAdmins: Voting team
   welcomeAdmins: Welcome team
   fsp: FoodSharePoint
+  mailboxes: Mailboxes
 login:
   pwreset:
     bread: Reset password
@@ -646,6 +660,8 @@ basket:
     pet: pet food
     dairy: dairy products
     bread: pastries
+    frozen: Frozen food
+    dry: Dry food
   valid:
     "21": three weeks
     "14": two weeks
@@ -665,6 +681,7 @@ basket:
   all_map: All food baskets on the map
   by: Food basket by {name}
   description: Description
+  where: Where?
 map:
   title: Map
 content:
@@ -689,6 +706,12 @@ foodsaver:
   edit: Edit foodsaver
   title: Foodsaver
   bread: All foodsavers
+  manage:
+    actions: Options
+    role: Role
+    name: Name
+    photo: Photo
+  your_account: your
 store:
   addNewStoresButton: Add new store
   allStoresOfRegion: All stores in the region
@@ -960,6 +983,7 @@ food_art: What kind of food is it?
 ageBandList:
   home_district_tab: Home region
   district_tab: Region
+  NumberOfAgeband: Quantity
 pickuplist:
   NumberOfFoodSavers_table_header: Number of foodsavers
   NumberOfStores_table_header: Number of stores
@@ -967,6 +991,7 @@ pickuplist:
   month_tab: Month
   week_tab: Week
   day_tab: Day
+  time_table_header: Time
 genderlist:
   gender_female: female
   gender_male: male
@@ -975,6 +1000,7 @@ genderlist:
   gender_table_header: Gender
   home_district_tab: Home region
   district_tab: Region
+  number_table_header: Quantity
 memberlist:
   some_in_all: ({some} of {all})
   header_for_workgroup: Foodsavers in the working group {bezirk}
@@ -1100,6 +1126,9 @@ dashboard:
     info: If you don't want to receive push notifications anymore, you can deactivate
       it in the settings anytime.
     title: You can now receive push notifications from foodsharing.
+  mail_activation_error_body:
+    part_3: or
+  source_mailbox: '{o}'
 pronoun:
   "3": he*she
   "2": she
@@ -1113,6 +1142,7 @@ stats:
     users: Most active foodsavers
 gender:
   f: Woman
+  m: Man
 quizusercomment: "Give us feedback on this question!\nWas it too easy, too difficult,\
   \ incomprehensible?\nOr are some answers or explanations not correct?\n"
 questcount: How many questions should be asked during the exam?
@@ -1150,7 +1180,12 @@ team:
   current: Team
 home:
   home: Home
+  title: Landing page
 message_text_to_group_admin_workgroup: 'The region/group <b>{groupName}</b> does not
   have an ambassador anymore.<br><br><br>It has the following ID-structure:<br>{idStructureList}<br><br>The
   ID is: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum"
   target="_blank">Click here to go to the region/group</a>'
+personal_data:
+  label: Contact
+messages:
+  bread: Messages
