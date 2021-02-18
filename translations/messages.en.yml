@@ -56,6 +56,25 @@ group:
     arbitration: Arbitration board
     mediation: Mediation
     report: Reports
+    duplicate_moderation_team: Moderation team already created! There can only be
+      one moderation team per district.
+    duplicate_pr_team: Public relations team already created! There can only be one
+      public relations team per district.
+    duplicate_fsmanagement_team: Administration team already created! There can only
+      be one administration team per district.
+    duplicate_arbitration_team: Arbitration board already created! There can only
+      be one arbitration board per district.
+    duplicate_mediation_team: Mediation team already created! There can only be one
+      mediation team per district.
+    duplicate_report_team: Reporting team already created! There can only be one reporting
+      team per district.
+    duplicate_fsp_team: Fairteiler team already created! There can only be one Fairteiler
+      team per district.
+    duplicate_voting_team: Voting team already created! There can only be one voting
+      team per district.
+    duplicate_welcome_team: Welcome team already created! There can only be one welcome
+      team per district.
+    invalid: A district cannot be assigned a working group function.
   apply:
     sent: The application was sent!
     send: Send application
@@ -67,6 +86,12 @@ group:
     declined: Application rejected
     accepted: Application accepted
     title: Application for {group}
+    zeit: How many hours do you have time and inclination to spend on it per week?
+    erfahrung: "In the group, can you draw on experiences that you have gained elsewhere?\n\
+      If so, where or what?\n"
+    faehigkeit: What are your skills that you have in this area?
+    motivation: What is your motivation to participate in the group {group}?
+    summary: '{name} would like to participate in the {group} working group.'
   show-all: Show all
   really_quit_district: Do you really want to leave the region %name%?
   really_quit_workgroup: Do you really want to leave the working group %name%?
@@ -76,6 +101,11 @@ group:
     send: Send message
     title: Contact {group}
     admins: '{count} contact person:'
+    sent: The message has been sent successfully!
+    empty: Please write something first ;)
+    disclaimer: "By sending a message to this workgroup\nall administrators of the\
+      \ workgroup see your email address,\nwhich you have specified on your foodsharing\
+      \ profile.\nYou will be emailed a copy of this message.\n"
   edit: Edit {group}
   quitting_home_district_warning: Do you really want to leave your home district %name%?
     You will lose your verification and have to contact the ambassador team of your
@@ -383,11 +413,22 @@ terminology:
   welcomeAdmins: Welcome team
   fsp: FoodSharePoint
   mailboxes: Mailboxes
+  moderationAdmins: Moderation team
+  prAdmins: Public relations team
+  fsManagementAdmins: administration
+  arbitrationAdmins: arbitration board
+  mediationAdmins: Mediation team
+  reportAdmins: Report processing team
 login:
   pwreset:
     bread: Reset password
     mismatch: Sorry, the passwords do not match.
     tooShort: Sorry, your chosen password is too short.
+    error: Sorry, there is a problem with your data.
+    expired: Sorry, you waited a little too long. Please request a new password again!
+    success: Great, your password has been changed successfully. You can now log in.
+    mailSent: All right! A link to change your password has been emailed to you.
+    wrongMail: Sorry! Did you make a mistake in your email address?
   logout: Logout
   topbar: Log in
   submit_btn: Login
@@ -400,6 +441,9 @@ login:
   password: Password
   email_address: E-mail address
   form_title: Login
+  success: <b> Have a wonderful day, {user_name}! </b> <br /> You have successfully
+    logged in and will be redirected immediately.
+  steady_login: Stay logged in (uses cookies)
 salutation:
   "3": Dear
   "2": Dear
@@ -819,6 +863,9 @@ pass:
     confirm: Sure?
     undo: Verification of {name} cancel
     do: Account of {name} verify
+    checkPickups: Before de-verifying you have to check the pickup dates entered!
+    hasPickup: Still registered for pickups
+    text: "Checked your personal data? <br/>\nHand over ID?\n"
   claim: Share foods instead of throw it away!
   hint: Notes
   verified: Verificated?
@@ -901,10 +948,27 @@ legal:
   privacy_notice_agree:
     acknowledge: I agree
     select: Please select
+    not_acknowledge: I do not agree and would like to be downgraded to a Foodsaver
   privacy_notice: Privacy notice
   actions:
     safe: Apply settings
   pp: Privacy policy
+  are_you_sure_to_downgrade: 'Warning: You have chosen to be downgraded to Foodsaver.
+    Are you sure?'
+  not_acknowledge_pn_description: If you disagree with the teaching, you will be downgraded
+    to a food saver. This means that you are no longer an ambassador for districts,
+    that you lose your operational responsibilities and that you have to take the
+    quiz about the operational manager / ambassador again.
+  agree_privacy_notice: I was informed about the confidentiality obligation of personal
+    data and the resulting behavior. I will receive a confirmation of this by email
+    for my records to the address I have given.
+  must_accept_pp: In order to participate in foodsharing, you have to agree to the
+    data protection conditions.
+  agree_privacy_policy: I have read the data protection agreement.
+  dont_agree: I do not consent to the processing of my data and
+  not_acknowledge_pp_description: In order to be able to use the foodsharing platform,
+    you must take note of the data protection declaration described.
+  acknowledge: Do you take note of the agreement?
 answers: Which answers are correct?
 name: Name
 bcard:
@@ -916,8 +980,12 @@ bcard:
   title: Business card generator
   error:
     verified: You need to be verified in order to generate business cards.
+    phone: You must have provided a valid phone number to generate your business card.
+    length: Your address is too long! Address, post code and city together may have
+      a maximum of 49 characters.
   desc: Choose the region and role, for which you would like to generate your business
     card!
+  claim: Generate, print and cut easily here ...
 picture_upload_widget:
   picture_upload: Upload image
   choose_picture: Choose a picture from your computer!
@@ -1044,6 +1112,32 @@ register:
   lastname_required: Please enter your last name.
   requiredFields: Mandatory input
   title: Registration
+  signup_newsletter: I would like to receive the foodsharing newsletter about once
+    a month
+  set-password: Set new password
+  pass1: Your new desired password
+  change-password: Now you can change your password.
+  activation_failed: <strong> Activation failed! </strong> Is the entered link correct?
+  activation_success: <strong> Activation successful. </strong> Now log in with your
+    email address and your chosen password.
+  account-exists: You're already registered. Please log out if you want to register
+    again.
+  error_birthdate: Example 03/25/2001 (DD.MM.YYYY). For data protection and liability
+    reasons, you must be at least 18 years old to participate in foodsharing.
+  error_email_exist: Your email address already exists.
+  error: An error has occurred
+  check_mail: Check your e-mail now to complete the registration!
+  join_success_message: You have successfully completed your registration at foodsharing.
+    You can now log in with your email and password.
+  have_read_the_legal_stuff2: noted
+  phone_not_valid: The phone number you entered is not valid.
+  login_phone_info: It can be helpful to share your phone number with other food sharers
+  lastname_minLength: The last name must consist of at least 2 characters.
+  firstname_minLength: The first name must consist of at least 2 characters.
+  confirmPassword_sameAsPassword: The password must match.
+  birthdate_hint: You can find more information in the <a href="?page=legal" target="_blank">
+    privacy policy </a> in point 2d) when registering as a foodsharer or foodsaver.
+  mail_hint: IMPORTANT - Pay attention to the correct spelling!
 bread:
   backToOverview: back to overview
 duration: Time to answer
@@ -1143,6 +1237,7 @@ stats:
 gender:
   f: Woman
   m: Man
+  d: Both or something else
 quizusercomment: "Give us feedback on this question!\nWas it too easy, too difficult,\
   \ incomprehensible?\nOr are some answers or explanations not correct?\n"
 questcount: How many questions should be asked during the exam?
