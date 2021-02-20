@@ -1,1 +1,12 @@
 name: Nom
+photo: Photo
+lat: Latitude
+lon: Longitude
+picture: Image
+geschlecht: Sexe
+description: Description
+desc: Description
+address: adresse
+subject: Objet
+no: Non
+yes: Oui
