@@ -25,9 +25,6 @@ class CalendarApiCest
 
 		$I->sendDelete('api/calendar/token');
 		$I->seeResponseCodeIs(HttpCode::UNAUTHORIZED);
-
-		$I->sendGet('api/calendar/' . self::TEST_TOKEN);
-		$I->seeResponseCodeIs(HttpCode::UNAUTHORIZED);
 	}
 
 	public function canRequestExistingToken(ApiTester $I)

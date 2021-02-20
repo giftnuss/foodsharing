@@ -197,4 +197,16 @@ class SettingsGateway extends BaseGateway
 	{
 		$this->db->delete('fs_apitoken', ['foodsaver_id' => $userId]);
 	}
+
+	/**
+	 * Returns the user to whom the token belongs, or null if the token does not exist.
+	 */
+	public function getUserForToken(string $token): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria('fs_apitoken', 'foodsaver_id', ['token' => $token]);
+		} catch (Exception $e) {
+			return null;
+		}
+	}
 }

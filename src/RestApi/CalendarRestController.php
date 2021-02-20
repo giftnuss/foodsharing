@@ -122,14 +122,9 @@ class CalendarRestController extends AbstractFOSRestController
 	 */
 	public function listPickupDatesAction(string $token): Response
 	{
-		$userId = $this->session->id();
-		if (!$userId) {
-			throw new HttpException(401);
-		}
-
 		// check access token
-		$existingToken = $this->settingsGateway->getApiToken($userId);
-		if (empty($token) || empty($existingToken) || $token !== $existingToken) {
+		$userId = $this->settingsGateway->getUserForToken($token);
+		if (!$userId) {
 			throw new HttpException(403);
 		}
 
