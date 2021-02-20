@@ -75,6 +75,8 @@ group:
     duplicate_welcome_team: Welcome team already created! There can only be one welcome
       team per district.
     invalid: A district cannot be assigned a working group function.
+    duplicate_stores_team: Store coordination team does already exist! There can only
+      be one store coordination team per region.
   apply:
     sent: The application was sent!
     send: Send application
@@ -429,6 +431,8 @@ terminology:
   arbitrationAdmins: arbitration board
   mediationAdmins: Mediation team
   reportAdmins: Report processing team
+  n_foodsaver: one foodsaver|%count% foodsavers
+  storesAdmins: Store coordination team
 login:
   pwreset:
     bread: Reset password
@@ -765,7 +769,11 @@ foodsaver:
     role: Role
     name: Name
     photo: Photo
+    remove: Remove from region
+    last-login: Last login
   your_account: your
+  delete_own_account: You are about to delete your own account. Are you sure?
+  delete_account_now: Delete account now
 store:
   addNewStoresButton: Add new store
   allStoresOfRegion: All stores in the region
@@ -1067,6 +1075,8 @@ fsp:
   acceptName: Accept {name}
   accept: Accept food-share-point
   managers: Contact Person
+  add: Add food-share-point
+  inRegion: All food-share-points in {region}
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1309,3 +1319,6 @@ personal_data:
   label: Contact
 messages:
   bread: Messages
+error_ajax: "That did not work.\nMaybe your internet connection is not working right\
+  \ now.\nPlease reload the page and try again.\n"
+really_delete: Really delete?
