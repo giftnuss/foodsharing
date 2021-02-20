@@ -126,6 +126,8 @@ settings:
     temp: I am not available for following time period
     none: I am active and fully on board
     missing-date: Please type in a start and end date for a time period!
+    header: Sleepyhead function
+    title: Sleepyhead
   account: Account options
   businesscard: Personal business card
   photo:
@@ -224,6 +226,7 @@ profile:
     baskets: Food baskets
     weight: saved
     posts: Posts
+    count: picked up
   infos:
     buddies: Buddies
     never: Never
@@ -231,12 +234,15 @@ profile:
     fetchrate: Fetch rate
     registrationDate: Registration date
     title: Informations
+    foodsharerId: Foodsharer ID
+    foodsaverId: Foodsaver ID
   report:
     sent: Report was sent
     send: Send report
     title: '**Beta-Test** Reports about {name}'
   history:
     wasVerified: Verified
+    lostVerification: De-verified
   nav:
     storelist: Stores ({count})
     notes: Notes <strong>({count})</strong>
@@ -268,6 +274,7 @@ mailbox:
   member: Mailbox user
   actions: Options
   title: Mailboxes
+  mail: Emails
 events:
   description: Description
   create:
@@ -749,6 +756,7 @@ content:
   new: Add a new page
   public: Public pages
   bread: All pages
+  actions: Activities
 foodsaver:
   kicked: Foodsaver removed
   list:
@@ -774,6 +782,7 @@ foodsaver:
   your_account: your
   delete_own_account: You are about to delete your own account. Are you sure?
   delete_account_now: Delete account now
+  actions: Activities
 store:
   addNewStoresButton: Add new store
   allStoresOfRegion: All stores in the region
@@ -1084,6 +1093,7 @@ ageBandList:
   home_district_tab: Home region
   district_tab: Region
   NumberOfAgeband: Quantity
+  ageBand: Age group
 pickuplist:
   NumberOfFoodSavers_table_header: Number of foodsavers
   NumberOfStores_table_header: Number of stores
@@ -1258,6 +1268,8 @@ dashboard:
   mail_activation_error_body:
     part_3: or
   source_mailbox: '{o}'
+  quiz:
+    read: continue reading
 pronoun:
   "3": he*she
   "2": she
@@ -1308,6 +1320,7 @@ team:
   email: E-mail address
   name: Name
   current: Team
+  former: Former
 home:
   home: Home
   title: Landing page
