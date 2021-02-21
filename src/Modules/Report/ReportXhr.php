@@ -132,5 +132,4 @@ class ReportXhr extends Control
 
 		return null;
 	}
-
 }
