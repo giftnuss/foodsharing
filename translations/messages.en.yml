@@ -694,6 +694,8 @@ region:
   save: Yes, save
   mail:
     sender: Sender name
+    name-info: Attention! Do not change arbitrarily! Also make sure that this address
+      does not yet exist under Manage Mailboxes.
 storelist:
   others: More stores in {region}
   region: Region
