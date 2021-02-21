@@ -5,6 +5,7 @@ namespace Foodsharing\RestApi;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
@@ -142,7 +143,7 @@ class ReportRestController extends AbstractFOSRestController
 				'name' => $reportedFs['name'] . ' ' . $reportedFs['nachname'],
 				'reason' => $paramFetcher->get('reason')
 			],
-			'new-report-' . $reportedFs['id'],
+			BellType::createIdentifier(BellType::NEW_REPORT, $reportedFs['id']),
 			true
 		);
 

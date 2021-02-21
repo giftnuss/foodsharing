@@ -83,6 +83,10 @@ class BellType
 	 * The user's request to join a work group was denied.
 	 */
 	public const WORK_GROUP_REQUEST_DENIED = 'workgroup-drequest-%d';
+	/**
+	 * A new report for a user was created.
+	 */
+	public const NEW_REPORT = 'new-report-%d';
 
 	/**
 	 * Creates a bell identifier from a template and an optional list of parameters.
