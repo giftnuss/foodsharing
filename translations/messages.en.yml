@@ -206,6 +206,7 @@ menu:
 
     conference: Video conference
     release-notes: What's new?
+    donations: Donations
 profile:
   banana:
     by: ' by '
@@ -219,6 +220,7 @@ profile:
     join: Join & register
     who: '{name} from {from}'
     may: active
+    mayNot: not active
   signoutAll: Sign out of all
   signoutPickup: sign out
   regions: '{name} is a foodsaver'
@@ -254,6 +256,8 @@ profile:
     bread: Notes
   warning: Warning
   title: Profile
+  pinboard: Status updates from {name}
+  about_me_intern: About me
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -294,6 +298,8 @@ events:
   button:
     maybe: Maybe
     yes: Accept
+  add_event: New event
+  add_new_event: Add a new event
 forum:
   threads: Threads
   quickreply:
@@ -689,6 +695,7 @@ region:
     state: State
     district: Region
     city: City
+    region: Region
   delete: Delete region
   edit: Edit region
   save: Yes, save
@@ -696,6 +703,9 @@ region:
     sender: Sender name
     name-info: Attention! Do not change arbitrarily! Also make sure that this address
       does not yet exist under Manage Mailboxes.
+  hull:
+    parent: Master region
+  noParent: Without parent region
 storelist:
   others: More stores in {region}
   region: Region
@@ -719,6 +729,14 @@ footer:
   contact: Contact
   about_us: About us
   call_to_donate: "You would like to\nsupport foodsharing?\n"
+  our_partner: Our partners
+  partner: Partners
+  infosPrivatePersons: For private persons
+  infosCompany: For companies
+  guide: Hygiene guide
+  dataprivacy: Privacy
+  imprint: Impressum
+  team: Team
 basket:
   is:
     gf: are gluten-free
@@ -759,6 +777,9 @@ content:
   public: Public pages
   bread: All pages
   actions: Activities
+  delete_success: The page was deleted
+  edit_success: The page was saved!
+  new_success: The page was created
 foodsaver:
   kicked: Foodsaver removed
   list:
@@ -831,6 +852,8 @@ search:
   persons: Persons
   groups: Groups
   myregions: My regions
+  mystores: My stores
+  noresults: No results could be found
 month:
   short:
     "12": Dec.
@@ -1088,6 +1111,9 @@ fsp:
   managers: Contact Person
   add: Add food-share-point
   inRegion: All food-share-points in {region}
+  none: No food-share-points were added yet
+  addSuccess: Food-share-point was successfully added
+  editSuccess: Food-share-point was successfully changed
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1124,6 +1150,8 @@ chat:
   notification_unnamed_conversation: '{foodsaver} has sent you a message.'
   placeholder: Write something!
   empty: No conversations yet
+  empty_recipients: You need to select recipients.
+  empty_message: You need to enter a message first.
 delete: Delete
 error_unexpected: An error occured
 register:
