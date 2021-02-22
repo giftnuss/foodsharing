@@ -147,16 +147,18 @@ class ReportRestController extends AbstractFOSRestController
 			true
 		);
 
+		$reportBellRecipients = 0;
 		$regionReportGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::REPORT);
 		if ($regionReportGroupId) {
-			$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionReportGroupId);
-			if (in_array($reportedFs['id'], $reportBellRecipients)) {
+			$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionReportGroupId);
+			if (in_array($reportedFs['id'], $reportBellRecipients)
+			 || in_array($paramFetcher->get('reporterId'),$reportBellRecipients)) {
 				$regionArbitrationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::ARBITRATION);
-				$reportBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionArbitrationGroupId);
+				$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionArbitrationGroupId);
 			}
 			$this->bellGateway->addBell($reportBellRecipients, $bellData);
 		}
 
-		return $this->handleView($this->view([], 200));
+		return $this->handleView($this->view([$reportBellRecipients], 200));
 	}
 }
