@@ -152,7 +152,7 @@ class ReportRestController extends AbstractFOSRestController
 		if ($regionReportGroupId) {
 			$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionReportGroupId);
 			if (in_array($reportedFs['id'], $reportBellRecipients)
-			 || in_array($paramFetcher->get('reporterId'),$reportBellRecipients)) {
+			 || in_array($paramFetcher->get('reporterId'), $reportBellRecipients)) {
 				$regionArbitrationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::ARBITRATION);
 				$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionArbitrationGroupId);
 			}
