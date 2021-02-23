@@ -3,7 +3,11 @@
 namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Report\ReportGateway;
@@ -16,6 +20,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ReportRestController extends AbstractFOSRestController
 {
+	private BellGateway $bellGateway;
+	private FoodsaverGateway $foodsaverGateway;
 	private Session $session;
 	private RegionGateway $regionGateway;
 	private ReportGateway $reportGateway;
@@ -27,16 +33,20 @@ class ReportRestController extends AbstractFOSRestController
 
 	public function __construct(
 		Session $session,
+		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
+		FoodsaverGateway $foodsaverGateway,
 		ReportGateway $reportGateway,
 		ReportPermissions $reportPermissions,
 		GroupFunctionGateway $groupFunctionGateway
 	) {
 		$this->session = $session;
+		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->groupFunctionGateway = $groupFunctionGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
 	/**
@@ -123,6 +133,32 @@ class ReportRestController extends AbstractFOSRestController
 			$paramFetcher->get('storeId')
 		);
 
-		return $this->handleView($this->view([], 200));
+		$reportedFs = $this->foodsaverGateway->getFoodsaverBasics($paramFetcher->get('reportedId'));
+		$bellData = Bell::create(
+			'new_report_title',
+			'report_reason',
+			'far fa-life-ring fa-fw',
+			['href' => '/?page=report&bid=' . $reportedFs['bezirk_id']],
+			[
+				'name' => $reportedFs['name'] . ' ' . $reportedFs['nachname'],
+				'reason' => $paramFetcher->get('reason')
+			],
+			BellType::createIdentifier(BellType::NEW_REPORT, $reportedFs['id']),
+			true
+		);
+
+		$reportBellRecipients = 0;
+		$regionReportGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::REPORT);
+		if ($regionReportGroupId) {
+			$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionReportGroupId);
+			if (in_array($reportedFs['id'], $reportBellRecipients)
+			 || in_array($paramFetcher->get('reporterId'), $reportBellRecipients)) {
+				$regionArbitrationGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($reportedFs['bezirk_id'], WorkgroupFunction::ARBITRATION);
+				$reportBellRecipients = $this->groupFunctionGateway->getFsAdminIdsFromGroup($regionArbitrationGroupId);
+			}
+			$this->bellGateway->addBell($reportBellRecipients, $bellData);
+		}
+
+		return $this->handleView($this->view([$reportBellRecipients], 200));
 	}
 }
