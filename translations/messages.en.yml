@@ -853,7 +853,7 @@ store:
   actions: Options
   chat:
     team: Message to the team
-  error: Store could not be loaded
+  error: Store could not be loaded.
   noStores: There are no stores yet
   may_not_referred_to_in_public: Please do not refer to this store in public (e.g.
     in food baskets, on Facebook, or in the press)
