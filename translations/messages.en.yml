@@ -1260,7 +1260,7 @@ about_me_public: Public short description
 regions: Regions
 daterange: Time period
 ort: City/municipality (automatically from the map above)
-stadt: Your city or municipality
+stadt: Your city or town
 fs_id: foodsharing-ID
 options: Options
 geschlecht: gender
