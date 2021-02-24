@@ -74,7 +74,7 @@ group:
       team per district.
     duplicate_welcome_team: Welcome team already created! There can only be one welcome
       team per district.
-    invalid: A district cannot be assigned a working group function.
+    invalid: A group function cannot be assigned to a region.
     duplicate_stores_team: Store coordination team does already exist! There can only
       be one store coordination team per region.
   apply:
@@ -380,6 +380,7 @@ storeview:
   frequency1: in the morning
   info: Information
   specials: Special features
+  managers: Responsible foodsavers
 day: Day
 time: Time
 select: Please select
@@ -843,6 +844,8 @@ store:
   actions: Options
   chat:
     team: Message to the team
+  error: Store could not be loaded
+  noStores: There are no stores yet
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -920,7 +923,7 @@ pass:
     failed: A problem occured
     confirm: Sure?
     undo: Verification of {name} cancel
-    do: Account of {name} verify
+    do: Verify {name}'s account
     checkPickups: Before de-verifying you have to check the pickup dates entered!
     hasPickup: Still registered for pickups
     text: "Checked your personal data? <br/>\nHand over ID?\n"
@@ -1072,7 +1075,7 @@ storemanagers: Store managers
 language_chooser:
   title: "Choose Language"
   content: "Please choose a language"
-plz: Postcode (automatically from the map above!)
+plz: Post code (automatically filled by the map above)
 fsp:
   twig:
     n_in_region: '{0} No food-share-points in %name%| {1} One food-share-point in
@@ -1114,6 +1117,7 @@ fsp:
   none: No food-share-points were added yet
   addSuccess: Food-share-point was successfully added
   editSuccess: Food-share-point was successfully changed
+  publicwall: Please remember that posts on a food-share-point's wall are public.
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1185,7 +1189,7 @@ register:
   phone_example: Example +4917912345678
   firstname_required: Please enter your first name.
   lastname_required: Please enter your last name.
-  requiredFields: Mandatory input
+  requiredFields: Required field
   title: Registration
   signup_newsletter: I would like to receive the foodsharing newsletter about once
     a month
