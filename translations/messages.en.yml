@@ -381,6 +381,8 @@ storeview:
   info: Information
   specials: Special features
   managers: Responsible foodsavers
+  status: Current status
+  frequency: ''
 day: Day
 time: Time
 select: Please select
@@ -853,11 +855,16 @@ store:
   actions: Options
   chat:
     team: Message to the team
+    jumper: Message to Jumper
   error: Store could not be loaded.
   noStores: There are no stores yet
   may_not_referred_to_in_public: Please do not refer to this store in public (e.g.
     in food baskets, on Facebook, or in the press)
   memberSince: 'In team since: {date}'
+  lastPickupShort: last {date}
+  lastPickup: ''
+  jumperSince: 'Jumper since: {date}'
+  tooltip_managing: You are responsible for this store
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -1140,6 +1147,8 @@ fsp:
   rejectConfirm: Attention! If you delete this food-share-point, you won't be able
     to undo this. Proceed?
   addError: The food-share-point wasn't added. Did you fill out everything correctly?
+  descLabel: Write some basic information about the food-share-point here! Especially
+    when it is accessible/open.
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
