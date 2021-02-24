@@ -447,6 +447,8 @@ terminology:
   reportAdmins: Report processing team
   n_foodsaver: one foodsaver|%count% foodsavers
   storesAdmins: Store coordination team
+  n_sleeping: A nightcap|%count% Nightcaps
+  n_cooperating_stores: A running cooperation|%count% running cooperations
 login:
   pwreset:
     bread: Reset password
@@ -1105,6 +1107,9 @@ fsp:
     from: Updates from food-share-point "{name}"
     manager: You are responsible for this food-share-point and therefore obligated
       to accept the updates!
+    descSettings: You follow all information from the food-sharing-point "{name}".
+      How would you like to receive these notifications?
+    descModal: How would you like to be informed about updates (e.g. food deliveries)?
   pic: Photo
   location: Postal code / city
   reject: Reject food-share-point
@@ -1118,6 +1123,11 @@ fsp:
   addSuccess: Food-share-point was successfully added
   editSuccess: Food-share-point was successfully changed
   publicwall: Please remember that posts on a food-share-point's wall are public.
+  noManager: There must be at least one person responsible for this food-share-point!
+  addedOn: Added on
+  rejectConfirm: Attention! If you delete this food-share-point, you won't be able
+    to undo this. Proceed?
+  addError: The food-share-point wasn't added. Did you fill out everything correctly?
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1369,3 +1379,8 @@ messages:
 error_ajax: "That did not work.\nMaybe your internet connection is not working right\
   \ now.\nPlease reload the page and try again.\n"
 really_delete: Really delete?
+error_permissions: Unfortunately, you do not have the necessary permissions for this
+  process.
+success: Completed successfully
+statistics:
+  kg_food_saved: '%count% kg food saved'
