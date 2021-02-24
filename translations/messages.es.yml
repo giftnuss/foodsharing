@@ -1,1 +1,37 @@
-{}
+about_me_intern: Descripción breve
+regions: Distritos
+ort: Ciudad/Municipio (automáticamente desde el mapa de arriba)
+photo: Foto
+info: Información
+status: Situación actual
+body: Mensaje
+title: Título
+last_login: Último acceso
+rolle: Función del usuario
+mailbox_name: Nombre del buzón de correo
+active: Activado
+betrieb: Empresa/s de cooperación
+bezirk: Distrito
+stadt: Tu ciudad o municipio
+lon: Latitud
+lat: Longitud
+picture: Foto
+options: Opciones
+botschafter: Embajador
+geschlecht: Sexo
+anschrift: Dirección (automáticamente del mapa anterior, corregir después si es necesario)
+handy: Teléfono mobil
+telefon: Teléfono fijo
+attachement: Documento adjunto
+email: Correo electrónico
+plz: Código postal (¡automáticamente desde el mapa anterior!)
+desc: Descripción
+description: Descripción
+edit: editar
+address: Dirección
+message: Mensaje
+subject: Asunto
+nachname: Apellido
+add: añadir
+name: Nombre
+geb_datum: Fecha de nacimiento
