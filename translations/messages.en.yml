@@ -699,6 +699,7 @@ region:
     district: Region
     city: City
     region: Region
+    title: Type of region
   delete: Delete region
   edit: Edit region
   save: Yes, save
@@ -720,6 +721,7 @@ releases:
   "2020-08": "'Pear' release (August 2020)"
   "2020-10": "'Cranberry' release (October 2020)"
   "2020-12": "'Dragonfruit' release (December 2020)"
+  "2020-05": Release 'Orange' (May 2020)
 footer:
   it_devdocs: by foodsharing IT
   donate_now: Donate now
@@ -744,6 +746,8 @@ basket:
   is:
     gf: are gluten-free
     vegan: are vegan
+    veggie: are vegetarian
+    organic: are organic
   has:
     pet: pet food
     dairy: dairy products
@@ -783,6 +787,7 @@ content:
   delete_success: The page was deleted
   edit_success: The page was saved!
   new_success: The page was created
+  changelog: Latest changelog
 foodsaver:
   kicked: Foodsaver removed
   list:
@@ -792,6 +797,7 @@ foodsaver:
     needs_sm: You need to become a store manager first
     needs_fs: You need to become a foodsaver first
     to_fs: Become a foodsaver
+    to_amb: Become an ambassador
   delete_account: ⚠️ Delete account
   profileBack: Back to the profile
   editName: Edit {name}
@@ -824,6 +830,7 @@ store:
     withdrawn: The request was successfully withdrawn.
     orga-instead: The Orga-team is being informed.
     amb-instead: The ambassadors are being informed.
+    request: I would like to help this team.
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
@@ -848,6 +855,9 @@ store:
     team: Message to the team
   error: Store could not be loaded
   noStores: There are no stores yet
+  may_not_referred_to_in_public: Please do not refer to this store in public (e.g.
+    in food baskets, on Facebook, or in the press)
+  memberSince: 'In team since: {date}'
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -988,6 +998,7 @@ polls:
   ended: Past polls
   hint: The voting module can be tested in the transregional working group "Abstimmungen
     - Test".
+  hint_2: You can find notes on using polls in the Wiki
 storeedit:
   bread: Edit store
   team:
@@ -1003,6 +1014,7 @@ storeedit:
     dropped: '{user} is not part of the team anymore'
     accepted: '{user} is now part of the team'
     created: '{user} added the store on {date}'
+    statuschanged: Status changed on {date}
   edit_success: The changes were saved
   fetch:
     teamStatus: team status
@@ -1384,3 +1396,5 @@ error_permissions: Unfortunately, you do not have the necessary permissions for 
 success: Completed successfully
 statistics:
   kg_food_saved: '%count% kg food saved'
+storestatus:
+  "0": Status unclear
