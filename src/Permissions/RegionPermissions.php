@@ -36,7 +36,7 @@ final class RegionPermissions
 		if (WorkgroupFunction::isRestrictedWorkgroupFunction($wgfunction)) {
 			return $this->session->may('orga') && $this->session->isAdminFor(RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP);
 		}
-		
+
 		return false;
 	}
 
