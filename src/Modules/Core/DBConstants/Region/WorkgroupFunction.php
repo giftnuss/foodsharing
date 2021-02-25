@@ -20,6 +20,15 @@ class WorkgroupFunction
 		return in_array($value, range(self::WELCOME, self::STORES_COORDINATION));
 	}
 
+	/**
+	 * This function determines if a workgroupfunction is a restricted function
+	 * meaning it should only be edited by the workgroup creation group to ensure
+	 * votes have been taking place.
+	 *
+	 * @param int $value Workgroup function value
+	 *
+	 * @return bool true if it is restricted, false if it is not
+	 */
 	public static function isRestrictedWorkgroupFunction(int $value): bool
 	{
 		return in_array($value, [
