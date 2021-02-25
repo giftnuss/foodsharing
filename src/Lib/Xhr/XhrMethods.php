@@ -1101,7 +1101,7 @@ class XhrMethods
 		if ($this->regionPermissions->mayAdministrateRestrictedWorkgroupFunctions($data['workgroup_function'])) {
 			return json_encode([
 				'status' => 1,
-				'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_moderation_team') . '");',
+				'script' => 'pulseError("' . $this->translator->trans('group.function.restricted_workgroup_function') . '");',
 			]);
 		}
 
@@ -1193,7 +1193,6 @@ class XhrMethods
 				]);
 			}
 		}
-
 
 		$oldRegionData = $this->groupGateway->getGroupLegacy($regionId);
 

@@ -19,6 +19,9 @@
 - Redirect to previous page when logging in using the topbar #689 !1887 @alex.simm
 - DevDocs enhanced about GOAL-System #1046 !1884 @fs_k
 - Bell for reports #1046 !1900 @fs_k
+- special workgroup functions can only be edited by global workgroup creation team.
+  report admins and arbitration admins can't report each other
+  only new reports shown in report list. #1046 !1902
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm
