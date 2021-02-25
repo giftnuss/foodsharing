@@ -21,11 +21,19 @@
       </div>
     </b-alert>
     <b-alert
-      v-else-if="(isReporterIdReportAdmin || isReporterIdArbitrationAdmin) && (isReportedIdReportAdmin || isReportedIdArbitrationAdmin)"
+      v-else-if="isReporterIdReportAdmin === true && isReportedIdArbitrationAdmin === true"
       variant="info" show
     >
       <div>
         <div>{{ $i18n('profile.report.repAdminAgainstArbAdmin') }}</div>
+      </div>
+    </b-alert>
+    <b-alert
+      v-else-if="isReporterIdArbitrationAdmin === true && isReportedIdReportAdmin === true"
+      variant="info" show
+    >
+      <div>
+        <div>{{ $i18n('profile.report.arbAdminAgainstRepAdmin') }}</div>
       </div>
     </b-alert>
     <b-alert

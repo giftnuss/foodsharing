@@ -1506,8 +1506,8 @@ profile:
     noReportGroup: "**Beta-test** Du kannst die technische Unterstützung des Meldesystems nicht nutzen, da für den Bezirk des foodsaver diese nicht aktiviert ist."
     reportedAdminNoArbitration: "Du kannst keine Meldung gegen {name} absetzen, da er/sie Admin der lokalen Meldegruppe seines Bezirkes ist und dort keine Schiedstelle existiert."
     reporterAdminNoArbitration: "Du bist Admin der lokalen Meldegruppe und da es keine lokale Schiedsstelle gibt, kannst du keine Meldung absetzen."
-    repAdminagAinstArbAdmin: " Admin gegen Admin"
-
+    repAdminAgainstArbAdmin: "Du bist Admin des Meldebearbeitungsteams und willst einen Admin der Schiedsstelle Melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
+    arbAdminAgainstRepAdmin: "Du bist Admin der Schiedstelle und willst einen Admin der Meldebearbeitung Melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
 search:
   title: "Suche"
   placeholder: "Suche..."
