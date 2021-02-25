@@ -19,4 +19,15 @@ class WorkgroupFunction
 	{
 		return in_array($value, range(self::WELCOME, self::STORES_COORDINATION));
 	}
+
+	public static function isRestrictedWorkgroupFunction(int $value): bool
+	{
+		return in_array($value, [
+			self::VOTING,
+			self::REPORT,
+			self::ARBITRATION,
+			self::FSMANAGEMENT,
+		]);
+	}
+
 }

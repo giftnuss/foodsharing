@@ -21,6 +21,14 @@
       </div>
     </b-alert>
     <b-alert
+      v-else-if="(isReporterIdReportAdmin || isReporterIdArbitrationAdmin) && (isReportedIdReportAdmin || isReportedIdArbitrationAdmin)"
+      variant="info" show
+    >
+      <div>
+        <div>{{ $i18n('profile.report.repAdminAgainstArbAdmin') }}</div>
+      </div>
+    </b-alert>
+    <b-alert
       v-else-if="!hasReportGroup"
       variant="info" show
     >
@@ -82,6 +90,8 @@ export default {
     hasReportGroup: { type: Boolean, required: true },
     hasArbitrationGroup: { type: Boolean, required: true },
     isReporterIdReportAdmin: { type: Boolean, required: true },
+    isReportedIdArbitrationAdmin: { type: Boolean, required: true },
+    isReporterIdArbitrationAdmin: { type: Boolean, required: true },
   },
   data () {
     return {
