@@ -3,7 +3,9 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Region\RegionGateway;
 
 final class RegionPermissions
@@ -27,6 +29,15 @@ final class RegionPermissions
 	public function mayAdministrateRegions(): bool
 	{
 		return $this->session->may('orga');
+	}
+
+	public function mayAdministrateRestrictedWorkgroupFunctions(int $wgfunction): bool
+	{
+		if (WorkgroupFunction::isRestrictedWorkgroupFunction($wgfunction)) {
+			return $this->session->may('orga') && $this->session->isAdminFor(RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP);
+		}
+
+		return false;
 	}
 
 	public function mayAccessStatisticCountry(): bool

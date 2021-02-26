@@ -17,7 +17,23 @@
       variant="info" show
     >
       <div>
-        <div>{{ $i18n('profile.report.reporterAdminNoArbitration') }}</div>
+        {{ $i18n('profile.report.reporterAdminNoArbitration') }}
+      </div>
+    </b-alert>
+    <b-alert
+      v-else-if="isReporterIdReportAdmin && isReportedIdArbitrationAdmin"
+      variant="info" show
+    >
+      <div>
+        {{ $i18n('profile.report.repAdminAgainstArbAdmin') }}
+      </div>
+    </b-alert>
+    <b-alert
+      v-else-if="isReporterIdArbitrationAdmin && isReportedIdReportAdmin"
+      variant="info" show
+    >
+      <div>
+        {{ $i18n('profile.report.arbAdminAgainstRepAdmin') }}
       </div>
     </b-alert>
     <b-alert
@@ -25,7 +41,7 @@
       variant="info" show
     >
       <div>
-        <div>{{ $i18n('profile.report.noReportGroup') }}</div>
+        {{ $i18n('profile.report.noReportGroup') }}
       </div>
     </b-alert>
     <template
@@ -82,6 +98,8 @@ export default {
     hasReportGroup: { type: Boolean, required: true },
     hasArbitrationGroup: { type: Boolean, required: true },
     isReporterIdReportAdmin: { type: Boolean, required: true },
+    isReportedIdArbitrationAdmin: { type: Boolean, required: true },
+    isReporterIdArbitrationAdmin: { type: Boolean, required: true },
   },
   data () {
     return {

@@ -593,6 +593,9 @@ class ProfileView extends View
 
 		$isReportedIdReportAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::REPORT, $this->foodsaver['id']);
 		$isReporterIdReportAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::REPORT, $this->session->id());
+		$isReportedIdArbitrationAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::ARBITRATION, $this->foodsaver['id']);
+		$isReporterIdArbitrationAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::ARBITRATION, $this->session->id());
+
 		$hasReportGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::REPORT);
 
 		$hasArbitrationGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::ARBITRATION);
@@ -614,6 +617,8 @@ class ProfileView extends View
 				'hasReportGroup' => $hasReportGroup,
 				'hasArbitrationGroup' => $hasArbitrationGroup,
 				'isReporterIdReportAdmin' => $isReporterIdReportAdmin,
+				'isReportedIdArbitrationAdmin' => $isReportedIdArbitrationAdmin,
+				'isReporterIdArbitrationAdmin' => $isReporterIdArbitrationAdmin
 			])
 		);
 

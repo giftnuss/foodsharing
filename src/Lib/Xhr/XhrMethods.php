@@ -1098,6 +1098,13 @@ class XhrMethods
 		$regionId = intval($data['bezirk_id']);
 		$parentId = intval($data['parent_id']);
 
+		if ($this->regionPermissions->mayAdministrateRestrictedWorkgroupFunctions($data['workgroup_function'])) {
+			return json_encode([
+				'status' => 1,
+				'script' => 'pulseError("' . $this->translator->trans('group.function.restricted_workgroup_function') . '");',
+			]);
+		}
+
 		// Check for: Only a workgroup can have a function.
 		// If the workgroup is set to welcome Team - make sure there can be only one Welcome Team in a region.
 		if ($data['type'] != Type::WORKING_GROUP && $data['workgroup_function']) {

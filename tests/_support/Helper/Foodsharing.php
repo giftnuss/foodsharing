@@ -879,7 +879,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'foodsaver_id' => $reporteeId,
 			'betrieb_id' => $storeId,
 			'reporttype' => 1,
-			'time' => $this->toDateTime($this->faker->dateTime($max = 'now')),
+			'time' => $this->toDateTime($this->faker->dateTimeBetween('first day of january this year', $max = 'now')),
 			'msg' => $msg ?? $this->faker->text(500),
 			'tvalue' => $reason ?? $this->faker->text(50),
 			'committed' => $confirmed

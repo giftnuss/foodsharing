@@ -265,7 +265,9 @@ class ReportGateway extends BaseGateway
 			$query = $query->where('r.foodsaver_id in (' . $in . ')', $onlyReportsWithUsers, 'OR');
 		}
 
-		//return ($query->getQuery());
+		// restrict access only to new reports to avoid social conflicts from old entries
+		$query = $query->where('time >= \'2021-01-01\'');
+
 		return $query->fetchAll();
 	}
 
