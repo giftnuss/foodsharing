@@ -2,11 +2,9 @@
 
 namespace Foodsharing\Modules\Core\DBConstants\Region;
 
-use Foodsharing\Modules\Settings\SettingsGateway;
-
 /**
  * Types of region-specific settings. Corresponds to column 'option_type' in 'fs_region_options'.
- * See {@see RegionGateway::getRegionOption()} and {@see SettingsGateway::setRegionOption()}.
+ * See {@see RegionGateway::getRegionOption()} and {@see RegionGateway::setRegionOption()}.
  */
 class RegionOptionType
 {

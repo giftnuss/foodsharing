@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -619,7 +620,7 @@ class RegionGateway extends BaseGateway
 
 	/**
 	 * Returns an option for the region, or null if the option is not set for the region.
-	 * See {@see RegionOptionType},.
+	 * See {@see RegionOptionType}.
 	 *
 	 * @param int $regionId ID of region
 	 * @param int $optionType type of option
@@ -631,27 +632,19 @@ class RegionGateway extends BaseGateway
 	public function getRegionOption(int $regionId, int $optionType): ?string
 	{
 		try {
-			if ($this->db->exists('fs_region_options', [
+			return $this->db->fetchValueByCriteria('fs_region_options', 'option_value', [
 				'region_id' => $regionId,
 				'option_type' => $optionType
-			])) {
-				$result = $this->db->fetchValueByCriteria('fs_region_options', 'option_value', [
-					'region_id' => $regionId,
-					'option_type' => $optionType
-				]);
-			} else {
-				return null;
-			}
+			]);
 		} catch (Exception $e) {
-			return null;
 		}
 
-		return $result;
+		return null;
 	}
 
 	/**
 	 * Sets an option for the region. If the option is already existing for this region, it will be
-	 * overwritten. See {@see RegionOptionType},.
+	 * overwritten. See {@see RegionOptionType}.
 	 */
 	public function setRegionOption(int $regionId, int $optionType, string $value): void
 	{

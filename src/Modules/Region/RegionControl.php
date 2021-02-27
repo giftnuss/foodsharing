@@ -420,8 +420,8 @@ final class RegionControl extends Control
 		$this->pageHelper->addBread($this->translator->trans('terminology.options'), '/?page=bezirk&bid=' . $region['id'] . '&sub=options');
 		$this->pageHelper->addTitle($this->translator->trans('terminology.options'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
-		$isReportButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_REPORT_BUTTON);
-		$isMediationButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_MEDIATION_BUTTON);
+		$isReportButtonEnabled = intval($this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_REPORT_BUTTON)) === 1;
+		$isMediationButtonEnabled = intval($this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_MEDIATION_BUTTON)) === 1;
 		$viewdata['isReportButtonEnabled'] = empty($isReportButtonEnabled) ? false : true;
 		$viewdata['isMediationButtonEnabled'] = empty($isMediationButtonEnabled) ? false : true;
 		$response->setContent($this->render('pages/Region/options.twig', $viewdata));

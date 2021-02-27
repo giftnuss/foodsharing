@@ -12,6 +12,9 @@ export function masterUpdate (regionId) {
   return patch(`/region/${regionId}/masterupdate`)
 }
 
-export function setRegionOptions (regionId) {
-  return post(`/region/${regionId}/options`)
+export function setRegionOptions (regionId, enableReportButton, enableMediationButton) {
+  return post(`/region/${regionId}/options`, {
+    enableReportButton: enableReportButton,
+    enableMediationButton: enableMediationButton,
+  })
 }
