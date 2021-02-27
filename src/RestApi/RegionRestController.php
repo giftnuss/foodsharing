@@ -170,7 +170,7 @@ class RegionRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="enableMediationButton")
 	 * @OA\Response(response="200", description="Success")
 	 * @OA\Response(response="403", description="Insufficient permissions")
- * @Rest\Post("region/{regionId}/options", requirements={"regionId" = "\d+"})
+	 * @Rest\Post("region/{regionId}/options", requirements={"regionId" = "\d+"})
 	 */
 	public function setRegionOptions(ParamFetcher $paramFetcher): Response
 	{

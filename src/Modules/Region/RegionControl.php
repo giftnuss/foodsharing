@@ -422,8 +422,8 @@ final class RegionControl extends Control
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$isReportButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_REPORT_BUTTON);
 		$isMediationButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_MEDIATION_BUTTON);
-		$viewdata['isReportButtonEnabled']= empty($isReportButtonEnabled) ? false : true;
-		$viewdata['isMediationButtonEnabled']= empty($isMediationButtonEnabled) ? false : true;
+		$viewdata['isReportButtonEnabled'] = empty($isReportButtonEnabled) ? false : true;
+		$viewdata['isMediationButtonEnabled'] = empty($isMediationButtonEnabled) ? false : true;
 		$response->setContent($this->render('pages/Region/options.twig', $viewdata));
 	}
 }

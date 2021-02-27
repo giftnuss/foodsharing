@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use ContainerBiluhMK\getConsole_ErrorListenerService;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -621,9 +620,12 @@ class RegionGateway extends BaseGateway
 	/**
 	 * Returns an option for the region, or null if the option is not set for the region.
 	 * See {@see RegionOptionType},.
+	 *
 	 * @param int $regionId ID of region
 	 * @param int $optionType type of option
- 	 * @return string|null value of option or null if not found
+	 *
+	 * @return string|null value of option or null if not found
+	 *
 	 * @throws \Exception
 	 */
 	public function getRegionOption(int $regionId, int $optionType): ?string
@@ -643,6 +645,7 @@ class RegionGateway extends BaseGateway
 		} catch (Exception $e) {
 			return null;
 		}
+
 		return $result;
 	}
 
