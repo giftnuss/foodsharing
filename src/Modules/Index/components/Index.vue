@@ -22,7 +22,7 @@
             cols="12"
             class="text-center ml-xl-5 mt-md-5"
           >
-            <b-card-title class="mt-0">
+            <b-card-title class="mt-4 mt-md-0">
               <h2>{{ $i18n('startpage.welcome_text') }}</h2>
             </b-card-title>
             <b-card-text class="mt-4">
@@ -167,7 +167,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h3>{{ $i18n('startpage.member.title') }}</h3>
+                  <h4>{{ $i18n('startpage.member.title') }}</h4>
                 </b-card-text>
                 <b-card-text>
                   {{ $i18n('startpage.member.text') }}
@@ -189,7 +189,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h3>{{ $i18n('startpage.private.title') }}</h3>
+                  <h4>{{ $i18n('startpage.private.title') }}</h4>
                 </b-card-text>
                 <b-card-text>
                   {{ $i18n('startpage.private.text') }}
@@ -210,7 +210,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h3>{{ $i18n('startpage.store.title') }}</h3>
+                  <h4>{{ $i18n('startpage.store.title') }}</h4>
                 </b-card-text>
                 <b-card-text>
                   {{ $i18n('startpage.store.text') }}
@@ -259,7 +259,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h3>{{ $i18n('startpage.near_you.title') }}</h3>
+                  <h4>{{ $i18n('startpage.near_you.title') }}</h4>
                 </b-card-text>
                 <b-row>
                   <b-col
@@ -356,7 +356,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h3>{{ $i18n('startpage.donate.title') }}</h3>
+                  <h4>{{ $i18n('startpage.donate.title') }}</h4>
                 </b-card-text>
                 <b-card-text>
                   {{ $i18n('startpage.donate.text') }}
@@ -431,17 +431,60 @@ svg {
   max-height: 451px;
 }
 
-h3 {
+h4 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-weight: bold;
   font-size: 1.375rem
 }
 
+h3 {
+  color: #333333;
+  font-weight: bold;
+}
+
 h2 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-weight: normal;
-  font-size: 2.25rem;
+}
+
+/*
+Extra small devices (portrait phones, less than 544px)
+No media query since this is the default in Bootstrap because it is "mobile first"
+*/
+h2 {font-size:1.6rem;} /*1rem = 16px*/
+h3 {font-size:1rem;} /*1rem = 16px*/
+/*
+####################################################
+M E D I A  Q U E R I E S
+####################################################
+*/
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Bootstrap 4 breakpoints
+*/
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {
+  h2 {font-size:1.5rem;} /*1rem = 16px*/
+  h3 {font-size:1.25rem;} /*1rem = 16px*/
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  h2 {font-size:2rem;} /*1rem = 16px*/
+  h3 {font-size:1.5rem;} /*1rem = 16px*/
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  h2 {font-size:2.5rem;} /*1rem = 16px*/
+  h3 {font-size:1.75rem;} /*1rem = 16px*/
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  h2 {font-size:3rem;} /*1rem = 16px*/
 }
 </style>
