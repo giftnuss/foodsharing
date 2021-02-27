@@ -539,6 +539,7 @@ terminology:
   message: "Nachricht"
   polls: "Abstimmungen"
   buddies: "Bekannte"
+  options: "Optionen"
 
 statistics:
   kg_food_saved: "%count% kg Lebensmittel gerettet"
@@ -1191,6 +1192,11 @@ ageBandList:
   home_district_tab: "Stammbezirk"
   ageBand: "Altersgruppe"
   NumberOfAgeband: "Anzahl"
+
+regionOptions:
+  header_page: "Optionen für {bezirk}"
+  send: "Optionen erfolgreich gespeichert"
+  save: "Optionen speichern"
 
 foodsaver:
   bread: "Alle Foodsaver"

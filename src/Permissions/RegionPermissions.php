@@ -58,6 +58,15 @@ final class RegionPermissions
 		return $this->session->isAmbassadorForRegion([$regionId], false, false);
 	}
 
+	public function maySetRegionOptions(int $regionId): bool
+	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return $this->session->isAmbassadorForRegion([$regionId], false, false);
+	}
+
 	public function hasConference(int $regionType): bool
 	{
 		return in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE, Type::CITY, TYPE::WORKING_GROUP, Type::PART_OF_TOWN, Type::DISTRICT, Type::REGION, Type::BIG_CITY]);

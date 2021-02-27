@@ -1,0 +1,14 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-options',
+        component: 'options',
+        props: {
+            regionId : region.id,
+            regionName : region.name,
+            isReportButtonEnabled : isReportButtonEnabled,
+            isMediationButtonEnabled : isMediationButtonEnabled
+        }
+    } %}
+{% endblock %}

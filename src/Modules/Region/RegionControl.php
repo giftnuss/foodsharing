@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -111,6 +112,10 @@ final class RegionControl extends Control
 
 		if (!$isWorkGroup && $this->forumPermissions->mayAccessAmbassadorBoard($regionId)) {
 			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
+		}
+
+		if (!$isWorkGroup && $this->regionPermissions->maySetRegionOptions($regionId)) {
+			$menu[] = ['name' => 'terminology.options', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=options'];
 		}
 
 		if ($isWorkGroup) {
@@ -260,6 +265,9 @@ final class RegionControl extends Control
 			case 'polls':
 				$this->polls($request, $response, $region);
 				break;
+			case 'options':
+				$this->options($request, $response, $region);
+				break;
 			default:
 				if ($this->isWorkGroup($region)) {
 					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
@@ -405,5 +413,17 @@ final class RegionControl extends Control
 		$viewdata['regionId'] = $region['id'];
 		$viewdata['mayCreatePoll'] = $this->votingPermissions->mayCreatePoll($region['id']);
 		$response->setContent($this->render('pages/Region/polls.twig', $viewdata));
+	}
+
+	private function options(Request $request, Response $response, array $region): void
+	{
+		$this->pageHelper->addBread($this->translator->trans('terminology.options'), '/?page=bezirk&bid=' . $region['id'] . '&sub=options');
+		$this->pageHelper->addTitle($this->translator->trans('terminology.options'));
+		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
+		$isReportButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_REPORT_BUTTON);
+		$isMediationButtonEnabled = $this->gateway->getRegionOption($region['id'], RegionOptionType::ENABLE_MEDIATION_BUTTON);
+		$viewdata['isReportButtonEnabled']= empty($isReportButtonEnabled) ? false : true;
+		$viewdata['isMediationButtonEnabled']= empty($isMediationButtonEnabled) ? false : true;
+		$response->setContent($this->render('pages/Region/options.twig', $viewdata));
 	}
 }

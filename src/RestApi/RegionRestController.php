@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
@@ -156,6 +157,38 @@ class RegionRestController extends AbstractFOSRestController
 		if ($regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId)) {
 			$this->regionGateway->updateMasterRegions($regions, $regionId);
 		}
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Sets the options for region.
+	 *
+	 * @Rest\Post("region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="which region or group to leave")
+	 * @Rest\RequestParam(name="enableReportButton")
+	 * @Rest\RequestParam(name="enableMediationButton")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+ * @Rest\Post("region/{regionId}/options", requirements={"regionId" = "\d+"})
+	 */
+	public function setRegionOptions(ParamFetcher $paramFetcher): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$regionId = $paramFetcher->get('regionId');
+		if (empty($regionId)) {
+			throw new HttpException(401);
+		}
+
+		if (!$this->regionPermissions->maySetRegionOptions($regionId)) {
+			throw new HttpException(403);
+		}
+
+		$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_REPORT_BUTTON, $paramFetcher->get('showReportButton'));
+		$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_MEDIATION_BUTTON, $paramFetcher->get('showMediationButton'));
 
 		return $this->handleView($this->view([], 200));
 	}
