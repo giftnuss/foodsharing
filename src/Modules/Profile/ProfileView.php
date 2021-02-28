@@ -269,11 +269,11 @@ class ProfileView extends View
 				]) . '</a></li>';
 		}
 
-		if($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'],RegionOptionType::ENABLE_REPORT_BUTTON)) {
+		if ($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'], RegionOptionType::ENABLE_REPORT_BUTTON)) {
 			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
 		}
 
-		if($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'],RegionOptionType::ENABLE_MEDIATION_BUTTON)) {
+		if ($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'], RegionOptionType::ENABLE_MEDIATION_BUTTON)) {
 			$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
 		}
 		$writeMessage = '';

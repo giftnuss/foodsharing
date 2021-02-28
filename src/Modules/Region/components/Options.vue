@@ -20,7 +20,6 @@
           v-model="isMediationButtonEnabled"
         >
           {{ $i18n('regionOptions.enableMediationButton') }}
-
         </b-form-checkbox>
         <b-button
           class="text-right"
