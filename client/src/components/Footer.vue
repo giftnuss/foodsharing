@@ -296,7 +296,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <div class="text-right">
+          <div class="text-right text-truncate">
             <span
               v-if="srcRevision && isBeta"
               class="rev-link"
