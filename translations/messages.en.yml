@@ -383,6 +383,8 @@ storeview:
   managers: Responsible foodsavers
   status: Current status
   frequency: ''
+  pickupWeight: '{pickupWeight} were saved.'
+  counter: <strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>
 day: Day
 time: Time
 select: Please select
@@ -565,6 +567,16 @@ recipients:
   permission: You do not have permission to send e-mails
   body: Message
   recipients: Recipient
+  test_email_invalid: Something is wrong with the e-mail address!
+  test_email_sent: E-mail was sent!
+  testmail: Send test e-mail
+  confirm: Send e-mail?
+  storemanagers_and_ambs: All store managers + ambassadors
+  storemanagers: All store managers worldwide
+  all_no_botschafter: All foodsavers without ambassadors
+  active_ambassadors: All ambassadors country-wide
+  all: All foodsavers worldwide
+  prepare: Prepare for sending
 poll:
   time_period: Time period
   results:
@@ -865,6 +877,7 @@ store:
   lastPickup: ''
   jumperSince: 'Jumper since: {date}'
   tooltip_managing: You are responsible for this store
+  not-in-team: You are not a member of this store's team yet.
 search:
   mygroups: My groups
   mybuddies: My buddies
