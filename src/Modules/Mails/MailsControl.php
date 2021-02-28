@@ -329,7 +329,9 @@ class MailsControl extends ConsoleControl
 
 		if (!empty($data['attachments'])) {
 			foreach ($data['attachments'] as $a) {
-				$file = $email->attach(\Swift_Attachment::fromPath($a[0]));
+				$attachment = \Swift_Attachment::fromPath($a[0]);
+				$attachment->setFilename($a[1]);
+				$email->attach($attachment);
 			}
 		}
 		$mailCount = 0;
