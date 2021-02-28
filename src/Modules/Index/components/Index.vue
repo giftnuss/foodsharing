@@ -151,12 +151,12 @@
         alt="Card image"
         fluid
       >
-      <div class="card-img-overlay">
-        <b-row class="m-xl-5">
+      <div class="card-img-overlay p-xl-5">
+        <b-row class="p-xl-5">
           <b-col
             cols="12"
             xl="4"
-            class="pb-2"
+            class="mb-md-4"
           >
             <b-card-group
               deck
@@ -178,7 +178,7 @@
           <b-col
             cols="12"
             xl="4"
-            class="pb-2"
+            class="mb-md-4"
           >
             <b-card-group
               deck
@@ -244,8 +244,11 @@
         alt="Card image"
         fluid
       >
-      <div class="card-img-overlay">
-        <b-row align-h="end">
+      <div class="card-img-overlay p-xl-5">
+        <b-row
+          align-h="end"
+          class="p-xl-5"
+        >
           <b-col
             xl="6"
             cols="12"
@@ -336,13 +339,13 @@
     </b-row>
     <div class="card text-white pb-5 mt-5">
       <img
-        class="card-img teaser-map"
+        class="card-img teaser-donate"
         src="/img/donate-background.png"
         alt="Card image"
         fluid
       >
-      <div class="card-img-overlay">
-        <b-row align-h="start">
+      <div class="card-img-overlay p-xl-5">
+        <b-row class="p-xl-5">
           <b-col
             xl="6"
             cols="12"
@@ -415,16 +418,6 @@ svg {
   min-height: 23rem;
 }
 
-.call-to-action-image {
-  border-radius: 0px !important;
-  min-height: 30rem;
-}
-
-.teaser-map {
-  border-radius: 0px !important;
-  min-height: 30rem;
-}
-
 .teaser-background {
   background-color: var(--fs-beige);
   max-width: 805px;
@@ -455,6 +448,21 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 */
 h2 {font-size:1.6rem;} /*1rem = 16px*/
 h3 {font-size:1rem;} /*1rem = 16px*/
+
+.call-to-action-image {
+  border-radius: 0px !important;
+  height: 45rem;
+}
+
+.teaser-map {
+  border-radius: 0px !important;
+  min-height: 33rem;
+}
+
+.teaser-donate {
+  border-radius: 0px !important;
+  min-height: 22rem;
+}
 /*
 ####################################################
 M E D I A  Q U E R I E S
@@ -469,22 +477,57 @@ Bootstrap 4 breakpoints
 @media (min-width: 544px) {
   h2 {font-size:1.5rem;} /*1rem = 16px*/
   h3 {font-size:1.25rem;} /*1rem = 16px*/
+
+  .call-to-action-image {
+    border-radius: 0px !important;
+    height: 36rem;
+  }
 }
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
   h2 {font-size:2rem;} /*1rem = 16px*/
   h3 {font-size:1.5rem;} /*1rem = 16px*/
+
+  .call-to-action-image {
+    border-radius: 0px !important;
+    height: 33.5rem;
+  }
+
+  .teaser-map {
+    border-radius: 0px !important;
+    min-height: 20rem;
+  }
+
+  .teaser-donate {
+    border-radius: 0px !important;
+    max-height: 14rem;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   h2 {font-size:2.5rem;} /*1rem = 16px*/
   h3 {font-size:1.75rem;} /*1rem = 16px*/
+
+  .call-to-action-image {
+    border-radius: 0px !important;
+    height: 30rem;
+  }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   h2 {font-size:3rem;} /*1rem = 16px*/
+
+  .call-to-action-image {
+    border-radius: 0px !important;
+    height: 25rem;
+  }
+
+  .teaser-donate {
+    border-radius: 0px !important;
+    max-height: 23rem;
+  }
 }
 </style>
