@@ -637,9 +637,8 @@ class RegionGateway extends BaseGateway
 				'option_type' => $optionType
 			]);
 		} catch (Exception $e) {
+			return null;
 		}
-
-		return null;
 	}
 
 	/**

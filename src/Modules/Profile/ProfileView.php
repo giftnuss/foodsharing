@@ -8,6 +8,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
@@ -268,10 +269,13 @@ class ProfileView extends View
 				]) . '</a></li>';
 		}
 
-		$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
+		if($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'],RegionOptionType::ENABLE_REPORT_BUTTON)) {
+			$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
+		}
 
-		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
-
+		if($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'],RegionOptionType::ENABLE_MEDIATION_BUTTON)) {
+			$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
+		}
 		$writeMessage = '';
 		if ($fsId != $this->session->id()) {
 			$writeMessage = '<li><a href="#" onclick="chat(' . $fsId . ');return false;">'

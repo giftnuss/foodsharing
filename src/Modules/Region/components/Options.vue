@@ -13,13 +13,14 @@
           id="enableReportButton"
           v-model="isReportButtonEnabled"
         >
-          Meldungsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren.
+          {{ $i18n('regionOptions.enableReportButton') }}
         </b-form-checkbox>
         <b-form-checkbox
           id="enableMediationButton"
           v-model="isMediationButtonEnabled"
         >
-          Mediationsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren.
+          {{ $i18n('regionOptions.enableMediationButton') }}
+
         </b-form-checkbox>
         <b-button
           class="text-right"
@@ -52,7 +53,7 @@ export default {
     async trySendOptions () {
       try {
         await setRegionOptions(this.regionId, this.isReportButtonEnabled, this.isMediationButtonEnabled)
-        pulseInfo(i18n('regionOptions.sent'))
+        pulseInfo(i18n('regionOptions.success'))
       } catch (err) {
         console.error(err)
         pulseError(i18n('error_unexpected'))

@@ -1195,8 +1195,10 @@ ageBandList:
 
 regionOptions:
   header_page: "Optionen für {bezirk}"
-  send: "Optionen erfolgreich gespeichert"
+  success: "Optionen erfolgreich gespeichert"
   save: "Optionen speichern"
+  enableReportButton: "Technische Unterstützung für Meldungen durch einen Meldungsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren."
+  enableMediationButton: "Technische Unterstützung für Mediationen durch einen Medationsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren."
 
 foodsaver:
   bread: "Alle Foodsaver"
@@ -1489,8 +1491,8 @@ profile:
   signoutPickup: "austragen"
   signoutAll: "Aus allen austragen"
   signoutAllConfirmation: "Wirklich {name} aus allen kommenden Abhol-Terminen austragen?"
-  reportRequest: "*Beta* Meldung einreichen"
-  mediationRequest: "*Beta* Mediation anfragen"
+  reportRequest: "Meldung einreichen"
+  mediationRequest: "Mediation anfragen"
   public:
     who: "{name} aus {from}"
     may: "aktiv"
