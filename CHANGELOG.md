@@ -35,6 +35,7 @@
 - Prevent sending empty quickreplies on the dashboard #944 !1891 @alex.simm
 - Fixed a bug where URLs could be broken in some niche cases !1888 @\_fridtjof_
 - Use the correct filename for attachments when sending an email !1904 #755 @alex.simm
+- Truncate the commit hash for beta version. The commit hash was to long in small resolutions !1905 @chriswalg
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
