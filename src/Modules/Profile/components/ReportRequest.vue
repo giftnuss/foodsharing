@@ -1,11 +1,32 @@
 <template>
   <!-- eslint-disable vue/max-attributes-per-line -->
   <div id="report_request" class="popbox bootstrap m-2">
-    <h3>
-      {{ $i18n('profile.report.title', { name: foodSaverName }) }}
-    </h3>
+    <div
+      v-if="!isReportButtonEnabled"
+    >
+      <div>
+        <h3>{{ $i18n('profile.report.oldReportButton') }}</h3>
+        <hr>
+        <p>
+          {{ $i18n('profile.report.oldReportButtonTextPart1') }} <br>
+          {{ $i18n('profile.report.oldReportButtonTextPart2') }} <br>
+        </p>
+        <p>
+          {{ $i18n('profile.report.oldReportButtonTextPart3') }}
+          <a href="https://foodsharing.de/?page=blog&amp;sub=read&amp;id=255">in diesem Blogeintrag</a>
+        </p>
+      </div>
+    </div>
     <b-alert
-      v-if="isReportedIdReportAdmin && !hasArbitrationGroup && !isReporterIdReportAdmin"
+      v-else-if="!reporterHasReportGroup"
+      variant="info" show
+    >
+      <div>
+        {{ $i18n('profile.report.reporterHasNoReportGroup') }}
+      </div>
+    </b-alert>
+    <b-alert
+      v-else-if="isReportedIdReportAdmin && !hasArbitrationGroup && !isReporterIdReportAdmin"
       variant="info" show
     >
       <div>
@@ -37,7 +58,7 @@
       </div>
     </b-alert>
     <b-alert
-      v-else-if="!hasReportGroup"
+      v-else-if="!hasReportGroup && !isReportButtonEnabled"
       variant="info" show
     >
       <div>
@@ -69,6 +90,10 @@
         max-rows="8"
         size="sm"
       />
+      <b-alert variant="info" show>
+        <div>{{ $i18n('profile.report.mail') }}</div>
+        <a :href="'mailto:' + emailAddress">{{ emailAddress }}</a>
+      </b-alert>
       <b-button
         class="text-right"
         variant="secondary"
@@ -100,6 +125,9 @@ export default {
     isReporterIdReportAdmin: { type: Boolean, required: true },
     isReportedIdArbitrationAdmin: { type: Boolean, required: true },
     isReporterIdArbitrationAdmin: { type: Boolean, required: true },
+    isReportButtonEnabled: { type: Boolean, required: true },
+    reporterHasReportGroup: { type: Boolean, required: true },
+    mbName: { type: String, required: true },
   },
   data () {
     return {
@@ -115,7 +143,11 @@ export default {
       ],
     }
   },
-
+  computed: {
+    emailAddress () {
+      return this.mbName + '@foodsharing.network'
+    },
+  },
   methods: {
     async trySendReport () {
       const reportReasonText = this.reportReasonOptions.find(reportReasonOptions => reportReasonOptions.value === this.reportReason)

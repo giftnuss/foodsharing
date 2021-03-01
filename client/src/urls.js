@@ -56,6 +56,7 @@ const urls = {
   map: () => '/karte',
   members: (regionId) => `/?page=bezirk&bid=${regionId}&sub=members`,
   mission: () => '/ueber-uns',
+  options: (regionId) => `/?page=bezirk&bid=${regionId}&sub=options`,
   partner: () => '/partner',
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
   passwordReset: () => '/?page=login&sub=passwordReset',
