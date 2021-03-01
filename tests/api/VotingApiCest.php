@@ -3,6 +3,7 @@
 namespace api;
 
 use ApiTester;
+use Carbon\Carbon;
 use Codeception\Util\HttpCode as Http;
 use DateTime;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
@@ -252,24 +253,19 @@ class VotingApiCest
 		$I->seeResponseCodeIs(Http::OK);
 	}
 
-	public function orgaCanCancelPoll(ApiTester $I)
+	public function canCancelPoll(ApiTester $I)
 	{
-		$poll = $this->createPoll($I, [-1, 0, 1], [], ['type' => VotingType::THUMB_VOTING]);
+		$poll = $this->createPoll($I, [-1, 0, 1], [], [
+			'type' => VotingType::THUMB_VOTING,
+			'start' => Carbon::now()->add('2 hours')->format('Y-m-d H:i:s'),
+			'end' => Carbon::now()->add('1 day')->format('Y-m-d H:i:s'),
+			'creation_timestamp' => Carbon::now()->sub('10 minutes')->format('Y-m-d H:i:s')
+		]);
 		$I->login($this->userFoodsaver['email']);
 		$I->sendDELETE(self::POLLS_API . '/' . $poll['id']);
-		$I->seeResponseCodeIs(Http::FORBIDDEN);
-		$I->seeInDatabase('fs_poll', [
-			'id' => $poll['id'],
-			'cancelled_by' => null
-		]);
-
-		$userOrga = $I->createOrga();
-		$I->login($userOrga['email']);
-		$I->sendDELETE(self::POLLS_API . '/' . $poll['id']);
 		$I->seeResponseCodeIs(Http::OK);
-		$I->seeInDatabase('fs_poll', [
-			'id' => $poll['id'],
-			'cancelled_by' => $userOrga['id']
+		$I->dontSeeInDatabase('fs_poll', [
+			'id' => $poll['id']
 		]);
 	}
 
