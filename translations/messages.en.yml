@@ -77,6 +77,8 @@ group:
     invalid: A group function cannot be assigned to a region.
     duplicate_stores_team: Store coordination team does already exist! There can only
       be one store coordination team per region.
+    restricted_workgroup_function: This working group function can only be edited
+      by the transregional group "AG Anlegen"
   apply:
     sent: The application was sent!
     send: Send application
@@ -128,6 +130,7 @@ settings:
     missing-date: Please type in a start and end date for a time period!
     header: Sleepyhead function
     title: Sleepyhead
+    saved: The settings were saved
   account: Account options
   businesscard: Personal business card
   photo:
@@ -139,6 +142,11 @@ settings:
   saved: The changes were saved.
   changemail:
     done: Your e-mail address was changed!
+    occupied: The e-mail address could not be changed because it is already in use!
+    domain: Please choose a different e-mail address, so that you will always be able
+      to restore your password.
+    invalid: Something is wrong with your e-mail address.
+    passcheck: Please confirm the change with your password
 menu:
   manage_regions: Manage regions
   blog: Manage blog content
@@ -705,6 +713,10 @@ blog:
   go: Go to the blog
   edit: Edit blog article
   newTitle: New article for {region}
+  permissions:
+    delete: You can not delete this article
+    edit: You can not edit this article
+    new: You do not have permission to create articles!
 region:
   type:
     workgroup: Working group
@@ -724,6 +736,10 @@ region:
   hull:
     parent: Master region
   noParent: Without parent region
+  created: '{region} was created'
+  still_contains_elements: The region can not be removed because it still contains
+    subregions, stores, or food-share-points.
+  edit_success: Region was saved!
 storelist:
   others: More stores in {region}
   region: Region
