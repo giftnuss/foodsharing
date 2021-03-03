@@ -233,6 +233,7 @@ final class PageHelper
 				$group['isAdmin'] = $this->session->isAdminFor($groupId);
 				$group['mayAccessReportGroupReports'] = $this->reportPermissions->mayAccessReportGroupReports($groupId);
 				$group['mayAccessArbitrationGroupReports'] = $this->reportPermissions->mayAccessArbitrationReports($groupId);
+				$group['maySetRegionOptions'] = $this->regionPermissions->maySetRegionOptions($groupId);
 				$regions[] = $group;
 			} else {
 				$group['isAdmin'] = $this->workGroupPermissions->mayEdit($group);

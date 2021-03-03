@@ -8,6 +8,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
@@ -270,8 +271,9 @@ class ProfileView extends View
 
 		$opt .= $this->renderReportRequest($this->foodsaver['bezirk_id'], $this->foodsaver['id'], $userStores);
 
-		$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
-
+		if ($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'], RegionOptionType::ENABLE_MEDIATION_BUTTON)) {
+			$opt .= $this->renderMediationRequest($this->foodsaver['bezirk_id']);
+		}
 		$writeMessage = '';
 		if ($fsId != $this->session->id()) {
 			$writeMessage = '<li><a href="#" onclick="chat(' . $fsId . ');return false;">'
@@ -597,6 +599,18 @@ class ProfileView extends View
 		$isReporterIdArbitrationAdmin = $this->groupFunctionGateway->isRegionFunctionGroupAdmin($bezirk_id, WorkgroupFunction::ARBITRATION, $this->session->id());
 
 		$hasReportGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::REPORT);
+		$reporterHasReportGroup = $hasReportGroup;
+
+		if ($bezirk_id != $this->session->getCurrentRegionId()) {
+			$reporterHasReportGroup = $this->groupFunctionGateway->existRegionFunctionGroup($this->session->getCurrentRegionId(), WorkgroupFunction::REPORT);
+		}
+
+		$mbName = '';
+		if ($hasReportGroup) {
+			$reportGroupId = $this->groupFunctionGateway->getRegionFunctionGroupId($bezirk_id, WorkgroupFunction::REPORT);
+			$reportGroupDetails = $this->groupGateway->getGroupLegacy($reportGroupId);
+			$mbName = $this->mailboxGateway->getMailboxname($reportGroupDetails['mailbox_id']);
+		}
 
 		$hasArbitrationGroup = $this->groupFunctionGateway->existRegionFunctionGroup($bezirk_id, WorkgroupFunction::ARBITRATION);
 
@@ -606,6 +620,8 @@ class ProfileView extends View
 				closeBtn: true,
 			});
 		');
+
+		$isReportButtonEnabled = intval($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'], RegionOptionType::ENABLE_REPORT_BUTTON));
 
 		$this->pageHelper->addHidden(
 			$this->vueComponent('report-Request', 'ReportRequest', [
@@ -618,14 +634,21 @@ class ProfileView extends View
 				'hasArbitrationGroup' => $hasArbitrationGroup,
 				'isReporterIdReportAdmin' => $isReporterIdReportAdmin,
 				'isReportedIdArbitrationAdmin' => $isReportedIdArbitrationAdmin,
-				'isReporterIdArbitrationAdmin' => $isReporterIdArbitrationAdmin
+				'isReporterIdArbitrationAdmin' => $isReporterIdArbitrationAdmin,
+				'isReportButtonEnabled' => $isReportButtonEnabled,
+				'reporterHasReportGroup' => $reporterHasReportGroup,
+				'mbName' => $mbName,
 			])
 		);
 
+		$buttonName = $this->translator->trans('profile.report.oldReportButton');
+		if ($this->regionGateway->getRegionOption($this->foodsaver['bezirk_id'], RegionOptionType::ENABLE_REPORT_BUTTON)) {
+			$buttonName = $this->translator->trans('profile.reportRequest');
+		}
+
 		return '
 			<li><a href="#report_request" onclick="return false;" class="item report_request">
-				<i class="far fa-life-ring fa-fw"></i>' . $this->translator->trans('profile.reportRequest') . '</a></li>
-		';
+			<i class="far fa-life-ring fa-fw"></i>' . $buttonName . '</a></li>';
 	}
 
 	private function renderInformation(): string

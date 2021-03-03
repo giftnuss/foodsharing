@@ -17,6 +17,7 @@ import PickupList from './components/PickupList'
 import AgeBandList from './components/AgeBandList'
 import ThreadList from './components/ThreadList'
 import PollList from './components/PollList'
+import Options from './components/Options'
 import { leaveRegion } from '@/api/regions'
 // Wallpost
 import '../WallPost/WallPost.css'
@@ -87,5 +88,10 @@ $(document).ready(() => {
       PollList,
     })
     vueApply('#vue-polllist')
+  } else if (GET('sub') === 'options') {
+    vueRegister({
+      Options,
+    })
+    vueApply('#vue-options')
   }
 })

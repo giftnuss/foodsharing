@@ -22,6 +22,7 @@
 - special workgroup functions can only be edited by global workgroup creation team.
   report admins and arbitration admins can't report each other
   only new reports shown in report list. #1046 !1902
+- Regionoptions for profile mediation / report Buttons #1046 !1903 
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

@@ -121,6 +121,14 @@
           <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
         </a>
         <a
+          v-if="region.maySetRegionOptions"
+          :href="$url('options', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-tools" />{{ $i18n('menu.entry.options') }}
+        </a>
+        <a
           v-if="region.mayAccessReportGroupReports"
           :href="$url('reports', region.id)"
           role="menuitem"

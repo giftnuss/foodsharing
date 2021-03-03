@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
@@ -16,6 +17,7 @@ use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -155,6 +157,38 @@ class RegionRestController extends AbstractFOSRestController
 
 		if ($regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId)) {
 			$this->regionGateway->updateMasterRegions($regions, $regionId);
+		}
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Sets the options for region.
+	 *
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="which region to set options for")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @Rest\Post("region/{regionId}/options", requirements={"regionId" = "\d+"})
+	 * @Rest\RequestParam(name="enableReportButton")
+	 * @Rest\RequestParam(name="enableMediationButton")
+	 */
+	public function setRegionOptions(ParamFetcher $paramFetcher, int $regionId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+		if (!$this->regionPermissions->maySetRegionOptions($regionId)) {
+			throw new HttpException(403);
+		}
+
+		$params = $paramFetcher->all();
+		if (isset($params['enableReportButton'])) {
+			$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_REPORT_BUTTON, strval(intval($params['enableReportButton'])));
+		}
+		if (isset($params['enableMediationButton'])) {
+			$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_MEDIATION_BUTTON, strval(intval($params['enableMediationButton'])));
 		}
 
 		return $this->handleView($this->view([], 200));
