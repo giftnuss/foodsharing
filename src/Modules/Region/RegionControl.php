@@ -266,6 +266,10 @@ final class RegionControl extends Control
 				$this->polls($request, $response, $region);
 				break;
 			case 'options':
+				if (!$this->regionPermissions->maySetRegionOptions($region_id)) {
+					$this->flashMessageHelper->info($this->translator->trans('region.restricted'));
+					$this->routeHelper->go($this->forumTransactions->url($region_id, false));
+				}
 				$this->options($request, $response, $region);
 				break;
 			default:
