@@ -12,7 +12,6 @@ class IndexView extends View
 			'first_content' => $first_content,
 		];
 
-		//return $this->twig->render('pages/Index/page.twig', $params);
 		return $this->vueComponent('index', 'Index', ['firstContent' => $first_content]);
 	}
 }
