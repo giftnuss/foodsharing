@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Index;
 
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 
 class IndexControl extends Control
 {
@@ -28,11 +29,15 @@ class IndexControl extends Control
 		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
 			$page_content = $this->contentGateway->get(48);
 		} else {
-			$page_content = $this->contentGateway->get(38);
+			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_DE);
+			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_DE);
+			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_DE);
 		}
 
 		$this->pageHelper->addContent($this->view->index(
-			$page_content['body']
-		), CNT_OVERTOP);
+			$page_content_block1['body'],
+			$page_content_block2['body'],
+			$page_content_block3['body']), CNT_OVERTOP
+		);
 	}
 }

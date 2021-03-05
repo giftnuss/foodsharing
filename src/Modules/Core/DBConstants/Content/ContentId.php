@@ -37,12 +37,16 @@ class ContentId
 	public const QUIZ_POPUP_AMB_LAST_PAGE_36 = 36;
 
 	public const PRIVACY_POLICY_CONTENT = 28;
-	public const START_MAIN_AU_PAGE_37 = 37;
-	public const START_MAIN_DE_PAGE_38 = 38;
 	public const TEAM_HEADER_PAGE_39 = 39;
-	public const START_BETA_PAGE_48 = 48;
 	public const TEAM_ACTIVE_PAGE_53 = 53;
 	public const TEAM_FORMER_ACTIVE_PAGE_54 = 54;
 	public const PRIVACY_NOTICE_CONTENT = 64;
 	public const BROADCAST_MESSAGE = 51;
+
+	//public const START_MAIN_AU_PAGE_37 = 37;
+	//public const START_MAIN_DE_PAGE_38 = 38;
+	//public const START_BETA_PAGE_48 = 48;
+	public const STARTPAGE_BLOCK1_DE = 76;
+	public const STARTPAGE_BLOCK2_DE = 77;
+	public const STARTPAGE_BLOCK3_DE = 78;
 }

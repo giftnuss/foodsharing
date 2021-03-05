@@ -48,7 +48,7 @@
         xl="3"
         class="ml-3 ml-xl-5 text-md-left"
       >
-        <h2>Neuigkeiten</h2>
+        <span v-html="contentBlock1" />
       </b-col>
       <b-col
         cols="12"
@@ -58,22 +58,7 @@
       >
         <b-row class="mt-2 mt-md-0">
           <b-col>
-            <h3>Online Hackweekend</h3>
-          </b-col>
-        </b-row>
-        <b-row class="mt-2">
-          <b-col>
-            Sei dabei wenn wir foodsharing gemeinsam besser machen. Dieses Wochenende ist für alle - nicht nur für Softwareentwickler*innen,
-            Tester*innen, Designer*innen, sondern auch für Leute vom Support, der Öffentlichkeitsarbeit, der Bildungsarbeit etc.
-          </b-col>
-        </b-row>
-        <b-row class="mt-2">
-          <b-col>
-            <b-link
-              href="http://test"
-            >
-              Erfahre mehr
-            </b-link>
+            <span v-html="contentBlock2" />
           </b-col>
         </b-row>
       </b-col>
@@ -83,10 +68,7 @@
         xl="4"
         class="mt-3 align-self-end"
       >
-        <b-img
-          fluid
-          src="/img/MG_87011.png"
-        />
+        <span v-html="contentBlock3" />
       </b-col>
     </b-row>
     <div class="line pt-3 pt-xl-5" />
@@ -380,6 +362,7 @@ export default {
   components: {
     Fork,
   },
+  props: { contentBlock1: { type: String, default: '' }, contentBlock2: { type: String, default: '' }, contentBlock3: { type: String, default: '' } },
 }
 
 </script>

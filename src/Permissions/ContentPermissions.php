@@ -47,9 +47,9 @@ final class ContentPermissions
 
 	private array $START_CONTENT_IDS = [
 		'id' => [
-			ContentId::START_MAIN_AU_PAGE_37,
-			ContentId::START_MAIN_DE_PAGE_38,
-			ContentId::START_BETA_PAGE_48,
+			ContentId::STARTPAGE_BLOCK1_DE,
+			ContentId::STARTPAGE_BLOCK2_DE,
+			ContentId::STARTPAGE_BLOCK3_DE,
 		]
 	];
 
