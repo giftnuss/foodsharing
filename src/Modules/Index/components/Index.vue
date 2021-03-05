@@ -414,12 +414,12 @@ h4 {
   font-size: 1.375rem
 }
 
-h3 {
+::v-deep h3 {
   color: #333333;
   font-weight: bold;
 }
 
-h2 {
+::v-deep h2 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-weight: normal;
@@ -429,8 +429,8 @@ h2 {
 Extra small devices (portrait phones, less than 544px)
 No media query since this is the default in Bootstrap because it is "mobile first"
 */
-h2 {font-size:1.6rem;} /*1rem = 16px*/
-h3 {font-size:1rem;} /*1rem = 16px*/
+::v-deep h2 {font-size:1.6rem;} /*1rem = 16px*/
+::v-deep h3 {font-size:1rem;} /*1rem = 16px*/
 
 .call-to-action-image {
   border-radius: 0px !important;
@@ -458,8 +458,8 @@ Bootstrap 4 breakpoints
 */
 /* Small devices (landscape phones, 544px and up) */
 @media (min-width: 544px) {
-  h2 {font-size:1.5rem;} /*1rem = 16px*/
-  h3 {font-size:1.25rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:1.5rem;} /*1rem = 16px*/
+  ::v-deep h3 {font-size:1.25rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;
@@ -469,8 +469,8 @@ Bootstrap 4 breakpoints
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
-  h2 {font-size:2rem;} /*1rem = 16px*/
-  h3 {font-size:1.5rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:2rem;} /*1rem = 16px*/
+  ::v-deep h3 {font-size:1.5rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;
@@ -490,8 +490,8 @@ Bootstrap 4 breakpoints
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  h2 {font-size:2.5rem;} /*1rem = 16px*/
-  h3 {font-size:1.75rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:2.5rem;} /*1rem = 16px*/
+  ::v-deep h3 {font-size:1.75rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;
@@ -501,7 +501,7 @@ Bootstrap 4 breakpoints
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  h2 {font-size:3rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:3rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;
