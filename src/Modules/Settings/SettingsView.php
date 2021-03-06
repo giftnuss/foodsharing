@@ -605,7 +605,7 @@ class SettingsView extends View
 	public function picture_box($photo): string
 	{
 		$p_cnt = $this->v_utils->v_info($this->translator->trans('settings.photo.info', [
-			'{link_photo}' => 'https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto',
+			'{link_photo}' => 'https://wiki.foodsharing.de/Foto_-_Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto',
 			'{link_id}' => 'https://wiki.foodsharing.de/Ausweis',
 			'{link_fs}' => 'https://wiki.foodsharing.de/Foodsaver',
 		]));
