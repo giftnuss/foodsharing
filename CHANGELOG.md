@@ -20,6 +20,7 @@
   report admins and arbitration admins can't report each other
   only new reports shown in report list. #1046 !1902
 - Regionoptions for profile mediation / report Buttons #1046 !1903 
+- Allow users to see their own registration date !1907 @alex.simm
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

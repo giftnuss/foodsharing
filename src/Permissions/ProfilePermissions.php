@@ -76,7 +76,7 @@ class ProfilePermissions
 
 	public function maySeeRegistrationDate(int $userId): bool
 	{
-		return $this->session->may('orga');
+		return $this->session->id() === $userId || $this->session->may('orga');
 	}
 
 	public function maySeeFetchRate(int $fsId): bool
