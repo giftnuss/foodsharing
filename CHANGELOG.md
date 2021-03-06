@@ -7,10 +7,7 @@
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
 - New icons for login and join buttons on topbar, public profile and loggedInFixedNav !1849 @TheSoulT
 - New Workgroupfunctions for Store coordinator, report, mediation, arbitration, FSMANAGEMENT (without functionality), PR (without functionality), moderation !1841 @fs_k
-- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 #975 @alex.simm
 - Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
-- Make the order of values in voting options consistent from left (negative) to right (positive) !1860 !1868 #975 @alex.simm
-- Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg 
 - Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
 - Remove active baskets if a user is deleted !1867 #983 @alex.simm 
@@ -105,7 +102,6 @@
 - Update voting tool functions and usability !1813 !1792 !1726 !1780 !1793 !1829 #975 #1021 @alex.simm @fs_k @ChrisOelmueller
 - Fully display hour and minute values when editing pickup times #1001 !1754 @ChrisOelmueller
 - Add login checks to all forum endpoints to prevent errors !1739 #993 @alex.simm
-- Fix the CSP to make the map work again !1776 @\_fridtjof_
 - Resolved newsletter flag: Disable the default value to false !1779 @chriswalg
 - Resolved the user registration: Removed adding the accepted_date to getPnVersion !1779 @chriswalg
 - Disabled session cookie checkbox in login form and, until there is a solution in issue 956
@@ -121,9 +117,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
 - Remove some long-unused grabInfo code !1695 @ChrisOelmueller
 - New endpoints for requesting and setting dashboard activity options !1669 @alex.simm
-- Deprecate `v_form_picture` !1701 @ChrisOelmueller
-- Rename `theme` variables to `thread` !1645 #840 @Caluera @ChrisOelmueller
-- Deprecate `v_scroller` !1698 @ChrisOelmueller
 - Deprecate and remove most of v_activeSwitcher !1697 @ChrisOelmueller
 - Deprecate `v_form_submit` !1700 @ChrisOelmueller
 - Remove obsolete `v_dialog_button` helper !1693 @ChrisOelmueller
