@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use function PHPUnit\Framework\isNull;
 
 final class WorkGroupPermissions
 {
