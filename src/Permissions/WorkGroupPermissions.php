@@ -31,7 +31,9 @@ final class WorkGroupPermissions
 			return true;
 		}
 
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])
+		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::ARBITRATION, $group['id'])
+		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::FSMANAGEMENT, $group['id'])) {
 			return false;
 		}
 		// Workgroup admins
@@ -58,7 +60,9 @@ final class WorkGroupPermissions
 		if ($this->session->mayBezirk($regionId)) {
 			return true;
 		}
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])) {
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])
+		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::ARBITRATION, $group['id'])
+		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::FSMANAGEMENT, $group['id'])) {
 			return false;
 		}
 
