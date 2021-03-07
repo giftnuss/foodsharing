@@ -7,6 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use function PHPUnit\Framework\isNull;
 
 final class WorkGroupPermissions
 {
@@ -32,7 +33,7 @@ final class WorkGroupPermissions
 		}
 
 		$groupFunction = $this->groupFunctionGateway->getRegionGroupFunctionId($group['id'], $group['parent_id']);
-		if (WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
+		if (!is_null($groupFunction) && WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
 			return false;
 		}
 
@@ -61,7 +62,7 @@ final class WorkGroupPermissions
 			return true;
 		}
 		$groupFunction = $this->groupFunctionGateway->getRegionGroupFunctionId($group['id'], $group['parent_id']);
-		if (WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
+		if (!is_null($groupFunction) && WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
 			return false;
 		}
 
