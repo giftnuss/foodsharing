@@ -31,11 +31,11 @@ final class WorkGroupPermissions
 			return true;
 		}
 
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])
-		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::ARBITRATION, $group['id'])
-		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::FSMANAGEMENT, $group['id'])) {
+		$groupFunction = $this->groupFunctionGateway->getRegionGroupFunctionId($group['id'], $group['parent_id']);
+		if (WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
 			return false;
 		}
+
 		// Workgroup admins
 		$regionId = $group['id'];
 		if ($this->session->isAdminFor($regionId)) {
@@ -60,9 +60,8 @@ final class WorkGroupPermissions
 		if ($this->session->mayBezirk($regionId)) {
 			return true;
 		}
-		if ($this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::REPORT, $group['id'])
-		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::ARBITRATION, $group['id'])
-		|| $this->groupFunctionGateway->existRegionFunctionGroup($group['parent_id'], WorkgroupFunction::FSMANAGEMENT, $group['id'])) {
+		$groupFunction = $this->groupFunctionGateway->getRegionGroupFunctionId($group['id'], $group['parent_id']);
+		if (WorkgroupFunction::isRestrictedWorkgroupFunction($groupFunction)) {
 			return false;
 		}
 

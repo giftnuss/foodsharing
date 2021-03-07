@@ -32,7 +32,6 @@ class WorkgroupFunction
 	public static function isRestrictedWorkgroupFunction(int $value): bool
 	{
 		return in_array($value, [
-			self::VOTING,
 			self::REPORT,
 			self::ARBITRATION,
 			self::FSMANAGEMENT,
