@@ -39,6 +39,7 @@
 - Fixed a bug where URLs could be broken in some niche cases !1888 @\_fridtjof_
 - Use the correct filename for attachments when sending an email !1904 #755 @alex.simm
 - Truncate the commit hash for beta version. The commit hash was to long in small resolutions !1905 @chriswalg
+- Fix creation of polls to which only ambassadors are invited !1901 @alex.simm
 
 ## Refactoring
 - Remove unused code from the Flourish library !1789 @\_fridtjof_
