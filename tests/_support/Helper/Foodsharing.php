@@ -46,43 +46,34 @@ class Foodsharing extends \Codeception\Module\Db
 			RegionIDs::PR_START_PAGE,
 			RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP,
 		]);
+
+		$tablesToSkip = implode(',', [
+			"'fs_bezirk'",
+			"'phinxlog'"
+		]);
+
+		$tablesToTruncate = $this->_getDriver()->executeQuery("
+				SELECT `table_name`
+				FROM `information_schema`.`tables`
+				WHERE `table_type` = 'BASE TABLE'
+					AND `table_schema` = DATABASE()
+					AND `table_name` NOT IN (" . $tablesToSkip . ');
+		', []);
+
+		// itereate over all tables returned from information_schema
+		foreach ($tablesToTruncate->fetchAll(\PDO::FETCH_COLUMN) as $table) {
+			// and truncate them
+			$this->_getDriver()->executeQuery('DELETE FROM ' . $table, []);
+		}
+
+		// delete from fs_bezirk but keep certain regions
 		$this->_getDriver()->executeQuery('
-			DELETE FROM fs_buddy;
-			DELETE FROM fs_question_has_quiz;
-			DELETE FROM fs_question;
-			DELETE FROM fs_quiz;
-			DELETE FROM fs_foodsaver_has_bezirk;
-			DELETE FROM fs_foodsaver_has_conversation;
-			DELETE FROM fs_msg;
-			DELETE FROM fs_betrieb_team;
-			DELETE FROM fs_betrieb_has_lebensmittel;
-			DELETE FROM fs_kette;
-			DELETE FROM fs_betrieb;
-			DELETE FROM fs_abholer;
-			DELETE FROM fs_abholzeiten;
-			DELETE FROM fs_botschafter;
-			DELETE FROM fs_theme_post;
-			DELETE FROM fs_bezirk_has_theme;
-			DELETE FROM fs_theme;
-			DELETE FROM fs_betrieb_notiz;
-			DELETE FROM fs_fairteiler;
-			DELETE FROM fs_fairteiler_follower;
-			DELETE FROM fs_fairteiler_has_wallpost;
-			DELETE FROM fs_report;
-			DELETE FROM fs_basket;
-			DELETE FROM fs_foodsaver;
-			DELETE FROM fs_conversation;
-			DELETE FROM fs_wallpost;
-			DELETE FROM fs_mailbox;
-			DELETE FROM fs_mailbox_message;
-			DELETE FROM fs_region_function;
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ') and type = 7;
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ') and id in (SELECT bez.id as id FROM `fs_bezirk` bez
 						left outer join fs_bezirk par on  bez.id = par.parent_id
 						where par.parent_id is null
 						order by bez.id);
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ');
-			DELETE FROM fs_lebensmittel;
 		', []);
 	}
 
