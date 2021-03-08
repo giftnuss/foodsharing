@@ -21,6 +21,7 @@
   only new reports shown in report list. #1046 !1902
 - Regionoptions for profile mediation / report Buttons #1046 !1903 
 - Allow users to see their own registration date !1907 @alex.simm
+- activate all workgroup functions. Restrict certain functions in self-management (report, arbitration, fs-management) #1046 !1909 @fs_k
 
 ## Bugfixes
 - Fix transmitted choices in checkbox voting !1847 @alex.simm

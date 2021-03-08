@@ -915,12 +915,12 @@ class XhrMethods
 					['id' => WorkgroupFunction::VOTING, 'name' => $this->translator->trans('group.function.voting')],
 					['id' => WorkgroupFunction::FSP, 'name' => $this->translator->trans('group.function.fsp')],
 					['id' => WorkgroupFunction::STORES_COORDINATION, 'name' => $this->translator->trans('group.function.stores')],
-/*					['id' => WorkgroupFunction::REPORT, 'name' => $this->translator->trans('group.function.report')],
+					['id' => WorkgroupFunction::REPORT, 'name' => $this->translator->trans('group.function.report')],
 					['id' => WorkgroupFunction::MEDIATION, 'name' => $this->translator->trans('group.function.mediation')],
 					['id' => WorkgroupFunction::ARBITRATION, 'name' => $this->translator->trans('group.function.arbitration')],
 					['id' => WorkgroupFunction::FSMANAGEMENT, 'name' => $this->translator->trans('group.function.fsmanagement')],
 					['id' => WorkgroupFunction::PR, 'name' => $this->translator->trans('group.function.pr')],
-					['id' => WorkgroupFunction::MODERATION, 'name' => $this->translator->trans('group.function.moderation')],*/
+					['id' => WorkgroupFunction::MODERATION, 'name' => $this->translator->trans('group.function.moderation')],
 				],
 			]),
 			$this->v_utils->v_input_wrapper(
