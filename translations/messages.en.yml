@@ -249,7 +249,7 @@ profile:
   report:
     sent: Report was sent
     send: Send report
-    title: '**Beta-Test** Reports about {name}'
+    title: 'Reports about {name}'
   history:
     wasVerified: Verified
     lostVerification: De-verified
@@ -295,6 +295,9 @@ events:
     starttime: Start time
     groups: Your working groups
     regions: Your regions
+    isPublic: Yes, it is public
+    public: Is the event public?
+    title: Create a new event
   bread: Events
   menu:
     edit: Edit event
@@ -378,6 +381,7 @@ pickup:
     title: Pick-up history
   join_title_date: Sure?
   dates: Pick-up dates
+  team_message_send_and_leave: Send and leave
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -547,6 +551,8 @@ bell:
   passgen_failed: Please load a photo! Then it will work.
   sharepoint_activate: '{name} has been listed'
   store_new: '{name} has been listed'
+  new_foodsaver_verified_title: '{name} is new in {bezirk}'
+  new_foodsaver_title: '{name} is new in {bezirk}'
 reports:
   time: Time
   region: Home region
@@ -886,7 +892,7 @@ store:
     jumper: Message to Jumper
   error: Store could not be loaded.
   noStores: There are no stores yet
-  may_not_referred_to_in_public: Please do not refer to this store in public (e.g.
+  may_not_referred_to_in_public: Please do not refer to this store in public! (e.g.
     in food baskets, on Facebook, or in the press)
   memberSince: 'In team since: {date}'
   lastPickupShort: last {date}
@@ -955,6 +961,8 @@ wall:
   see-more: Show more posts
   message_placeholder: Write a message...
   name: Wall
+  info-somebody-else: This entry is older than a month. As a store manager you can
+    remove it.
 pass:
   nav:
     title: Let's go!
