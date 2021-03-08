@@ -394,7 +394,8 @@ storeview:
   specials: Special features
   managers: Responsible foodsavers
   status: Current status
-  frequency: ''
+  frequency: 'It will be picked up roughly {freq}. Please never go to the store without
+    prior consultation!'
   pickupWeight: '{pickupWeight} were saved.'
   counter: <strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>
 day: Day
