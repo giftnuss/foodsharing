@@ -157,25 +157,6 @@ class MailboxXhr extends Control
 		}
 	}
 
-	public function move()
-	{
-		if (!$this->mailboxPermissions->mayMessage($_GET['mid'])) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-		$folder = $this->mailboxGateway->getMailFolderId($_GET['mid']);
-
-		if ($folder == MailboxFolder::FOLDER_TRASH) {
-			$this->mailboxGateway->deleteMessage($_GET['mid']);
-		} else {
-			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
-		}
-
-		return [
-			'status' => 1,
-			'script' => '$("tr#message-' . (int)$_GET['mid'] . '").remove();$("#message-body").dialog("close");'
-		];
-	}
-
 	public function quickreply()
 	{
 		if (!isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {

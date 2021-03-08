@@ -18,13 +18,13 @@ import { vueRegister, vueApply } from '@/vue'
 import './Mailbox.css'
 import Mailbox from './components/Mailbox.vue'
 import i18n from '@/i18n'
-import { setEmailStatus } from '@/api/mailbox'
+import { deleteEmail, setEmailStatus } from '@/api/mailbox'
 
 expose({
   mb_finishFile,
   mb_removeLast,
   mb_mailto,
-  mb_moveto,
+  mb_deleteEmail,
   mb_reset,
   mb_answer,
   mb_forward,
@@ -82,13 +82,14 @@ function mb_mailto (email) {
   }
 }
 
-function mb_moveto (folder) {
-  folder = parseInt(folder)
-  if (folder > 0) {
-    ajreq('move', {
-      mid: $('#mb-hidden-id').val(),
-      f: folder,
-    })
+async function mb_deleteEmail () {
+  const emailId = $('#mb-hidden-id').val()
+  try {
+    await deleteEmail(emailId)
+    $(`tr#message-${emailId}`).remove()
+    $('#message-body').dialog('close')
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
   }
 }
 

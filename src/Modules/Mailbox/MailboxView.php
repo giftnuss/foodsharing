@@ -194,7 +194,7 @@ class MailboxView extends View
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_moveto(' . MailboxFolder::FOLDER_TRASH . ');return false;" class="button">'
+						<a href="#" onclick="mb_deleteEmail();return false;" class="button">'
 						. $this->translator->trans('mailbox.delete')
 						. '</a> '
 						. '<a href="#" onclick="mb_answer();return false;" class="button">'

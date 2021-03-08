@@ -3,6 +3,7 @@
 namespace Foodsharing\RestApi;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Permissions\MailboxPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -48,6 +49,34 @@ class MailboxRestController extends AbstractFOSRestController
 		}
 
 		$this->mailboxGateway->setRead($emailId, $status);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Moves an email to the trash folder or deletes it, if it is already in the trash.
+	 *
+	 * @OA\Parameter(name="emailId", in="path", @OA\Schema(type="integer"), description="which email to delete")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="403", description="Insufficient permissions to delete the email")
+	 * @OA\Tag(name="emails")
+	 *
+	 * @Rest\Delete("emails/{emailId}", requirements={"emailId" = "\d+"})
+	 */
+	public function deleteEmailAction(int $emailId): Response
+	{
+		// check permission
+		if (!$this->session->id() || !$this->mailboxPermissions->mayMessage($emailId)) {
+			throw new HttpException(403);
+		}
+
+		// move or delete the email
+		$folder = $this->mailboxGateway->getMailFolderId($emailId);
+		if ($folder == MailboxFolder::FOLDER_TRASH) {
+			$this->mailboxGateway->deleteMessage($emailId);
+		} else {
+			$this->mailboxGateway->move($emailId, MailboxFolder::FOLDER_TRASH);
+		}
 
 		return $this->handleView($this->view([], 200));
 	}

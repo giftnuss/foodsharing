@@ -36,6 +36,7 @@
 - Use new upload API for profile photos !1916 !1929 !1932 !1933 @alex.simm
 - Request region children for the region picker from a new endpoint !1934 !1949 #823 @alex.simm
 - Remove StoreModel remains, introduce DTO for editing stores !1814 @ChrisOelmueller
+- Use a new REST endpoint for deleting emails !1979 #798 @alex.simm
 
 ## Dev/Test/CI stuff
 - Update some frontend dependencies !1892 @chriswalg
