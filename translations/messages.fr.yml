@@ -10,3 +10,232 @@ address: adresse
 subject: Objet
 no: Non
 yes: Oui
+group:
+  title: Groupes de travail de foodsharing
+  administrators: Administrateurs du groupe
+  members: Membres
+  application_requirements:
+    member_since_weeks: Depuis combien de semaines un candidat doit-il être inscrit
+      sur la plateforme ?
+    fetch_count: Combien de collectes les demandeurs doivent avoir effectuées ?
+    open: Tout le monde peut rejoindre directement
+    everybody: Tout le monde peut s'inscrire
+    requires_properties: Toute personne répondant à certains critères
+    nobody: Personne (groupe fermé)
+    requirements: Qui peut entrer dans ce groupe ?
+  apply:
+    declined: Demande refusée
+    accepted: Demande acceptée
+    sent: La demande a bien été envoyée !
+    send: Envoyer la demande
+    time:
+      "5": 5 heures ou plus
+      "3": 3-4 heures
+      "2": 2-3 heures
+      "1": 1-2 heures
+    zeit: Combien d'heures avez-vous le temps et l'envie d'y consacrer par semaine
+      ?
+    erfahrung: "Dans le groupe, pourrez-vous vous appuyer sur les expériences que\
+      \ vous avez acquises ailleurs ?\nSi oui, où et quoi ?\n"
+    faehigkeit: Quelles sont vos compétences dans ce domaine ?
+    motivation: Quelle est votre motivation pour participer au groupe {group} ?
+    summary: '{name} souhaite participer au groupe de travail {group].'
+    title: Demandes pour {group}
+  contact:
+    sent: Le message a bien été envoyé !
+    send: Envoyer le message
+    empty: Veuillez d'abord écrire quelque chose ;)
+    disclaimer: "En envoyant un message dans ce groupe de travail\ntous les administrateurs\
+      \ du groupe pourront voir l'adresse e-mail\nque vous avez définie sur votre\
+      \ profil foodsharing.\nVous recevrez par e-mail une copie de ce message.\n"
+    admins: '{count} personne·s de contact :'
+    title: Contacter {group}
+  saved: Les modifications ont été enregistrées
+  edit: Modifier {group}
+  applications_for: Demandes pour %name%
+  applications: Demandes
+  photo: Photo
+  description: Description
+  name: Nom
+bcard:
+  generate: Créer une carte de visite
+  error:
+    verified: Vous devez être vérifié pour générer des cartes de visite.
+    phone: Vous devez fournir un numéro de téléphone valide pour générer votre carte
+      de visite.
+    length: Votre adresse est trop longue ! L'adresse, le code postal et la ville
+      doivent avoir une longueur maximum de 49 caractères.
+  choose: Vous devez sélectionner une option
+  desc: Sélectionnez la région et le rôle pour lesquels vous souhaitez générer votre
+    carte de visite !
+  actions: Options
+  for: '{role} pour {region}'
+  claim: Générez, imprimez et découpez facilement ici…
+  card: Votre carte de visite foodsharing
+  title: Générateur de carte de visite
+pass:
+  notGenerated: Votre badge n'a pas pu être généré.
+  noPhoto: "Les personnes suivantes n'ont pas encore importé de photo :"
+  button:
+    verify: Vérifier
+  verify:
+    failed: Une erreur s'est produite
+    confirm: Sûr·e ?
+    undo: Vérification du compte de {name} annulée
+    do: Vérifier le compte de {name}
+  claim: Partagez la nourriture au lieur de la jeter !
+  hintVerify: "Les épargnants alimentaires peuvent être vérifiés dès qu'ils ont reçu\
+    \ leur badge et que leurs données personnelles ont été vérifiées.\n"
+  hintSelect: "En cliquant sur la date de création, tous les épargnants alimentaires\
+    \ avec cette même date ou sans aucune date de création seront sélectionnés.\n"
+  hint: Notes
+  nav:
+    title: C'est parti !
+    deselect: Tout désélectionner
+    select: Tout sélectionner
+    options: Options
+  verified: Vérifié ?
+  name: Nom
+  bread: Générateur de badge
+  photo: Photo
+  none: '- pas encore créé -'
+ui:
+  switch:
+    off: inactif
+    on: publié
+bread:
+  backToOverview: Revenir à la vue d'ensemble
+button:
+  clear_filter: Effacer les filtres
+  create: Créer
+  answer: Répondre
+  send: Envoyer
+  cancel: Annuler
+  apply: Appliquer
+  yes_i_am_sure: Oui, je suis sûr·e
+  permadelete: Supprimer définitivement
+  delete: Supprimer
+  edit: Modifier
+  new: Nouveau
+  upload: Importer
+  rotate_right: Pivoter dans le sens horaire
+  attach_image: Joindre une image
+  change_picture: Modifier l'image
+  next: Suivant
+  save: Enregistrer
+upload:
+  image-problem: Votre fichier semble être corrompu ou non valide, il est préférable
+    d'utiliser une image jpg classique
+  crop_dialog_title: Rogner l'image
+  new_file: Importer de nouvelles données
+  choose_file: Importer des données
+  file: Importer un fichier
+  edit_image: Modifier l'image
+  new_image: Importer une nouvelle image
+  image: Importer une image
+  preview_image: Aperçu
+  no_image_chosen: Aucun fichier n'a encore été sélectionné
+  no_image_yet: Aucune image n'a encore été importée
+  no_image: Le fichier importé n'est pas une photo. Veuillez sélectionner un autre
+    fichier !
+picture_upload_widget:
+  choose_picture: Sélectionnez une image depuis votre ordinateur !
+  picture_upload: Importer une image
+image: Image
+quizusercomment: "Donnez-nous votre avis sur cette question !\nÉtait-ce trop facile,\
+  \ trop difficile, incompréhensible ?\nOu certaines réponses ou explications sont-elles\
+  \ incorrectes ?\n"
+wikilink: Lien vers le wiki
+questcount: Combien de questions doivent être posées pendant l'examen ?
+maxfp: Nombre maximum de points faibles à passer
+answers: Quelles réponses sont correctes ?
+duration: Il est temps de répondre
+explanation: Explication
+fp: Points faibles
+text: Texte
+right: Score
+week_num: Combien de semaines un membre doit-il être enregistré sur la plateforme
+  ?
+fetch_count: Combien de collectes un membre doit-il effectuer ?
+apply_type: Qui peut s'inscrire à ce groupe ?
+leader: Administrateurs du groupe
+member: Membres
+abholmenge: Combien de kilos environ sont retirés par collecte ?
+prefetchtime: Combien de semaines à l'avance les épargnants alimentaires peuvent-ils
+  s'inscrire en utilisant les plages horaires automatiques ?
+sticker: Le magasin est-il intéressé pour apposer un autocollant de façon visible
+  à l'entrée ou ailleurs ?
+presse: Le magasin est-il d'accord pour être mentionné dans la presse et sur foodsharing.de
+  ?
+ueberzeugungsarbeit: A-t-il été facile de convaincre le ou la responsable de coopérer
+  avec foodsharing ?
+first_post: Première publication
+public_time: Heure approximative de la collecte
+public_info: Informations publiques sur le magasin
+besonderheiten: Fonctionnalités spéciales
+begin: Début de la coopération
+lebensmittel: Quels sont les aliments qui peuvent être collectés ?
+fax: Fax
+ansprechpartner: Personne de contact du magasin (gérant du magasin, etc.)
+betrieb_status_id: Statut
+betrieb_kategorie_id: Catégorie
+team_status: Statut de l'équipe
+verantwortlicher: Membres responsables
+homepage: Votre site Web
+sleep_msg: Ici, vous pouvez laisser un court message expliquant pourquoi vous n'avez
+  pas le temps pour le moment.
+sleep_status: Votre statut actuel
+passcheck: Veuillez confirmer les modifications avec votre mot de passe
+newmail: Entrez ici votre nouvelle adresse e-mail
+infomail_message: Notification des messages de tchat sur foodsharing
+newsletter: Lettre d'information
+compose_body: Message
+pass2: Répétition du mot de passe
+pass1: Votre nouveau mot de passe
+orgateam: Organisation nationale
+dateend: Date de fin
+online_type: L'événement aura-t-il lieu sur site ou en ligne ?
+location_name: Lieu de réunion/Salle de conférence
+mailbox_id: Adresse e-mail de l’expéditeur
+testemail: Tester l'adresse e-mail
+bezirk_id: Pour quelle région l'article est-il pertinent ?
+lifetime: Combien de temps votre panier alimentaire doit-il être valide ?
+fetchstate: Tout s'est bien passé ?
+food_art: De quel type de nourriture s'agit-il ?
+food_type: Quels types d'aliments sont inclus ?
+weight: Poids estimé
+about_me_intern: Brève description
+about_me_public: Brève description publique
+daterange: Période
+ort: Ville/Village (automatiquement complété par la carte ci-dessus !)
+status: Statut courant
+last_login: Dernière connexion
+rolle: Rôle de l'utilisateur
+mailbox_name: Nom sur la boîte aux lettres
+betrieb: Coopérative·s
+stadt: Votre ville ou village
+fs_id: foodsharing-ID
+parent_id: District parent
+infotype: Notification
+opt: Options
+contact_type: Comment souhaitez-vous être contacté ?
+regions: Districts
+info: Informations
+body: Message
+title: Titre
+active: Activé
+bezirk: District
+options: Options
+botschafter: Ambassadeur
+anschrift: Rue et numéro de rue (automatiquement complété par la carte ci-dessus,
+  corrigez par la suite si nécessaire !)
+handy: Numéro de téléphone portable
+telefon: Numéro de téléphone fixe
+attachement: Pièce jointe
+email: Adresse e-mail
+plz: Code postal (automatiquement complété par la carte ci-dessus !)
+edit: modifier
+message: Message
+nachname: Nom
+add: ajouter
+geb_datum: Date de naissance
