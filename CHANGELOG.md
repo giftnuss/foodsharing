@@ -5,6 +5,7 @@
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
+- Added a partners page for foodsharing.at !1921 @alex.simm
 
 ## Bugfixes
 

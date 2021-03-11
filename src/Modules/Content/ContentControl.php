@@ -145,7 +145,14 @@ class ContentControl extends Control
 
 	public function partner(): void
 	{
-		if ($cnt = $this->contentGateway->get(ContentId::PARTNER_PAGE_10)) {
+		// select the partners page for the country and use german as fallback
+		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
+		$contentId = ContentId::PARTNER_PAGE_10;
+		if (strpos($host, 'foodsharing.at') !== false) {
+			$contentId = ContentId::PARTNER_PAGE_AU_79;
+		}
+
+		if ($cnt = $this->contentGateway->get($contentId)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
