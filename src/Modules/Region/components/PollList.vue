@@ -70,10 +70,7 @@
       </div>
     </div>
 
-    <div
-      v-if="endedPolls.length > 0"
-      class="card mb-3 rounded"
-    >
+    <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
         {{ $i18n('polls.ended') }}
       </div>
