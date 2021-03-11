@@ -1,6 +1,6 @@
 <template>
   <span
-    v-b-tooltip.hover
+    v-b-tooltip.hover="description"
     :data-status="status"
     class="status"
   >
