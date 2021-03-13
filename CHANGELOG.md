@@ -3,11 +3,13 @@
 ## Features
 
 ## Changes
+- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
 
 ## Bugfixes
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
+- Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 
@@ -128,8 +130,6 @@
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
 - Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
 - Rewrite blogpost management list in Vue !1791 @ChrisOelmueller
-- Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
-- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
@@ -169,7 +169,6 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Rewrite trust banana dialog in REST and Vue !1770 @ChrisOelmueller
 - Introduced a session versioning mechanism to avoid having to log out all users in order to refresh them !1820 !1831 @\_fridtjof_
 - Migrate dashboard updates to REST and DTO !1767 @ChrisOelmueller
-- Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Update many frontend dependencies !1723 @chriswalg
