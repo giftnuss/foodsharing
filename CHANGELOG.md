@@ -83,6 +83,7 @@
 - Split pickup-related gateway functionality off of StoreGateway !1800 @ChrisOelmueller
 - Use DTO for creating new stores, remove parts of StoreModel !1809 @ChrisOelmueller
 - Use more general queries in the nightly stats calculation for stores !1871 #622 #9 @alex.simm
+- New look for event header panels and dashboard invitations including the event's region #992 !1717 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Made ForumPostCest more reliable !1853 !1856 !1857 !1882 @\_fridtjof_
@@ -116,7 +117,6 @@
 - Topbar search query for numeric ID now returns profile link for that ID !1783 @ChrisOelmueller
 
 ## Changes
-- Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
 - Don't set "follow by email" as default when opening a new thread !1676 @Caluera
 - New favicon created with support for all platforms and browsers !1720 !1741 !1822 @chriswalg
 - Notify a user who is accepted to or declined from a workgroup with a bell #808 !1708 !1721 @alex.simm
@@ -130,11 +130,6 @@
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
 - Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
 - Rewrite blogpost management list in Vue !1791 @ChrisOelmueller
-- Display event region on dashboard invitations #992 !1717 @ChrisOelmueller
-
-## Changes
-- Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
-- New look for event header panels and dashboard invitations !1717 @ChrisOelmueller
 
 ## Bugfixes
 - Resolved the CooperationStatus tooltip "no longer exists" and "No contact yet" in StoreList !1714 @chriswalg
