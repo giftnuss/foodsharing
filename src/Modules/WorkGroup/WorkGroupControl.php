@@ -107,12 +107,35 @@ class WorkGroupControl extends Control
 		$myStats = $this->workGroupGateway->getStats($sessionId);
 		$groups = $this->getGroups($parent, $myApplications, $myStats);
 
+		foreach ($groups as &$group) {
+			$group['function_tooltip_key'] = $this->getTooltipKey($group);
+		}
+
 		$list = $this->render('pages/WorkGroup/list.twig', [
 			'nav' => $this->getSideMenuData('=' . $parent),
 			'groups' => $groups,
 		]);
 
 		$response->setContent($list);
+	}
+
+	/**
+	 * Returns the translation key of the tooltip text that is shown for working groups with special
+	 * functions. Returns null if the group does not have any function.
+	 */
+	private function getTooltipKey(array $group): ?string
+	{
+		// working group function that can be present in any region
+		if (!empty($group['function'])) {
+			return 'group.function.tooltip_function_' . $group['function'];
+		}
+
+		// special permissions for unique super-regional groups
+		if (RegionIDs::hasSpecialPermission($group['id'])) {
+			return 'group.unique_function.tooltip_function_region' . $group['id'];
+		}
+
+		return null;
 	}
 
 	private function getGroups(int $parent, array $applications, array $stats): array

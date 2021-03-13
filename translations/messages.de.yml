@@ -364,11 +364,18 @@ group:
     tooltip_function_3: "Admins dieser AG können Fairteiler des Bezirks freischalten und bearbeiten sowie Fairteilerbeiträge entfernen"
     tooltip_function_4: "Admins dieser AG können Betriebe im Bezirk einsehen und bearbeiten"
     tooltip_function_5: "Admins dieser AG können Meldungen über foodsaver im Bezirk sehen. Es werden keine Meldungen angezeigt, an denen die Admins beteiligt sind! Diese erhält die Schiedstelle."
-    tooltip_function_6: "Die E-Mail addresse dieser AG wird beim Mediation anfragen Knopf angezeigt. Die Admins haben keine besonderen Berechigungen."
-    tooltip_function_7: "Admins dieser AG bekommen Meldungen mit beteiligung des Meldeteams angezeigt. Es werden keine Meldungen angezeigtn, an denen die Admins beteiligt sind! Diese erhält das Meldeteam"
-    tooltip_function_8: "Admins dieser AG Verwalten die Stammdaten der Foodsaver."
+    tooltip_function_6: "Die E-Mail Addresse dieser AG wird beim \"Mediation anfragen\"-Knopf angezeigt. Die Admins haben keine besonderen Berechtigungen."
+    tooltip_function_7: "Admins dieser AG bekommen Meldungen mit Beteiligung des Meldeteams angezeigt. Es werden keine Meldungen angezeigt, an denen die Admins beteiligt sind! Diese erhält das Meldeteam"
+    tooltip_function_8: "Admins dieser AG verwalten die Stammdaten der Foodsaver."
     tooltip_function_9: "Admins dieser AG haben keine besonderen Berechtigungen."
     tooltip_function_10: "Admins dieser AG können in moderierten Foren Beiträge freischalten."
+  unique_function:
+    tooltip_function_region331: "Admins dieser AG können Newsletter versenden"
+    tooltip_function_region341: "Admins dieser AG können die Quizfragen verwalten"
+    tooltip_function_region1811: "Admins dieser AG können die Seiten \"Partner\", \"Kontakt\" und \"Team\" bearbeiten"
+    tooltip_function_region2287: "Admins dieser AG können die Inhalte der Startseite bearbeiten"
+    tooltip_function_region432: "Admins dieser AG können Meldungen einsehen"
+    tooltip_function_region1701: "Admins dieser AG können Regionen und Arbeitsgruppen anlegen"
   show-all: "Alle anzeigen"
 
 legal:
