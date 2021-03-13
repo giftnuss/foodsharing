@@ -46,8 +46,8 @@ group:
     send: Envoyer le message
     empty: Veuillez d'abord écrire quelque chose ;)
     disclaimer: "En envoyant un message dans ce groupe de travail\ntous les administrateurs\
-      \ du groupe pourront voir l'adresse e-mail\nque vous avez définie sur votre\
-      \ profil foodsharing.\nVous recevrez par e-mail une copie de ce message.\n"
+      \ du groupe pourront voir l'adresse courriel\nque vous avez définie sur votre\
+      \ profil foodsharing.\nVous recevrez par courriel une copie de ce message.\n"
     admins: '{count} personne·s de contact :'
     title: Contacter {group}
   saved: Les modifications ont été enregistrées
@@ -181,12 +181,12 @@ betrieb_status_id: Statut
 betrieb_kategorie_id: Catégorie
 team_status: Statut de l'équipe
 verantwortlicher: Membres responsables
-homepage: Votre site Web
+homepage: Ton site Web
 sleep_msg: Ici, vous pouvez laisser un court message expliquant pourquoi vous n'avez
   pas le temps pour le moment.
 sleep_status: Votre statut actuel
 passcheck: Veuillez confirmer les modifications avec votre mot de passe
-newmail: Entrez ici votre nouvelle adresse e-mail
+newmail: Entrez ici votre nouvelle adresse courriel
 infomail_message: Notification des messages de tchat sur foodsharing
 newsletter: Lettre d'information
 compose_body: Message
@@ -196,8 +196,8 @@ orgateam: Organisation nationale
 dateend: Date de fin
 online_type: L'événement aura-t-il lieu sur site ou en ligne ?
 location_name: Lieu de réunion/Salle de conférence
-mailbox_id: Adresse e-mail de l’expéditeur
-testemail: Tester l'adresse e-mail
+mailbox_id: Adresse courriel de l’expéditeur
+testemail: Adresse courriel de test
 bezirk_id: Pour quelle région l'article est-il pertinent ?
 lifetime: Combien de temps votre panier alimentaire doit-il être valide ?
 fetchstate: Tout s'est bien passé ?
@@ -211,7 +211,7 @@ ort: Ville/Village (automatiquement complété par la carte ci-dessus !)
 status: Statut courant
 last_login: Dernière connexion
 rolle: Rôle de l'utilisateur
-mailbox_name: Nom sur la boîte aux lettres
+mailbox_name: Nom de la messagerie
 betrieb: Coopérative·s
 stadt: Votre ville ou village
 fs_id: foodsharing-ID
@@ -232,10 +232,126 @@ anschrift: Rue et numéro de rue (automatiquement complété par la carte ci-des
 handy: Numéro de téléphone portable
 telefon: Numéro de téléphone fixe
 attachement: Pièce jointe
-email: Adresse e-mail
+email: Adresse courriel
 plz: Code postal (automatiquement complété par la carte ci-dessus !)
 edit: modifier
 message: Message
 nachname: Nom
 add: ajouter
 geb_datum: Date de naissance
+position: Position chez foodsharing (public)
+page:
+  welcome_main_1: Nous sommes une initiative qui agit contre le gaspillage alimentaire.
+    Nous « sauvons » les aliments non désirés et surproduits dans les ménages privés
+    ainsi que dans les petites et grandes entreprises.
+settings:
+  follow:
+    none: Ne plus m'informer sur les nouvelles publications par courriel.
+    mail: Oui, je souhaite être informé·e des nouvelles publications par courriel.
+email_template:
+  newsletter:
+    unsubscribe: Tu ne veux plus recevoir de lettres d'information ?
+  unknown_email2: L'adresse courriel %ADDRESS% n'est pas connue.
+  unknown_email: Adresse courriel inconnue
+  yourFSteam: Ton équipe foodsharing.
+  confirm_topic: 'Le sujet doit être confirmé :'
+  login: Se connecter pour répondre
+  warning: Avertissement
+  reply: Répondre
+  information: Infos
+  help_needed:
+    or: ou
+mailbox:
+  mark_as_unread: Marquer comme non lu
+  filesize: Désolé. Le fichier est trop gros.
+  filetype: Ce type de fichier n'est pas autorisé
+  ratelimit: Tu ne peux envoyer qu'un seul courriel toutes les 15 secondes, patiente
+    un moment…
+  recipients: Trop de destinataire
+  failed: Le courriel n'a pas pu être envoyé.
+  okay: Le courriel a bien été envoyé.
+  not-allowed: Tu n’as pas le droit de faire ceci.
+  sm-quiz: Quiz pour les responsables des opérations
+  not-available: "Tu dois être {rôle} pour accéder aux boîtes de réception.\nRésolvez\
+    \ le {quiz} ici quand tu seras prêt·e.\n"
+  name: Nom affiché
+  already_exists: Une boîte de réception avec ce nom existe déjà
+  saved: Les modifications ont été enregistrées
+  add_success: La messagerie a été créée avec succès.
+  hostinfo: Entrez simplement le nom de la boîte de réception ! Donc sans @{host}
+  new: Nouvelle messagerie
+  create: Créer une nouvelle boîte de réception
+  manage: Gestionnaire de messagerie
+  signature: Message du {date}
+  claim: foodsharing.de – utiliser au lieu de gaspiller
+  attach: Joindre un fichier (1,2 Mo max.)
+  write: Nouveau courriel
+  refresh: Actualiser
+  member: Utilisateurs de la messagerie
+  actions: Options
+  subject: Objet
+  date: Date
+  recipient: Destinataire
+  sender: Expéditeur
+  reply: Répondre
+  empty: Aucun message dans cette boîte de réception
+  trash: Corbeille
+  sent: Envoyés
+  inbox: Boîte de réception
+  title: Messageries
+  mail: Courriels
+foodsaver:
+  mailchange_error: L'activation de votre nouvelle adresse électronique a échoué.
+    Veuillez réessayer !
+recipients:
+  done: Tous les courriels ont été envoyés
+  status: 'Envoyer des courriels… (adresse électronique actuelle : {courant})'
+  permission: Tu n’as pas le droit d’envoyer des courriels
+  pending: Il reste encore {count} courriels à envoyer
+  history: Courriels envoyés par toi
+  sent: Le courriel a bien été envoyé à {count} adresses électroniques
+  test_email_invalid: Il y a un problème avec l'adresse courriel !
+  test_email_sent: Le courriel a été envoyé !
+  testmail: Envoyer un courriel de test
+  confirm: Envoyer le courriel ?
+  send: envoyer le courriel
+forum:
+  inform_per_email: Informer tous les membres du forum actifs au cours des six derniers
+    mois de la création de ce nouveau sujet par courriel, uniquement possible dans
+    les forums non modérés
+  thread:
+    too_big_to_mail: Aucun courriel n'a été envoyé pour le sujet car il s'agit d'un
+      pays ou d'un État fédéré.
+    no_mail: Le sujet a été ouvert sans envoyer de courriels
+    with_mail: Sujet ouvert et tous informés par courriel
+  follow:
+    email: comme courriel
+fsp:
+  info:
+    mail: Cloche et notification par courriel
+terminology:
+  mailboxes: Messageries
+register:
+  activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
+    avec ton adresse courriel et le mot de passe que tu as choisi.
+  error_email_exist: Ton adresse électronique existe déjà.
+  join_success_message: Tu as terminé avec succès ton inscription à foodsharing. Tu
+    peux maintenant te connecter avec ton adresse courriel et ton mot de passe.
+  check_mail: Vérifie tes courriels maintenant pour terminer l'inscription !
+  email_invalid: L'adresse courriel est invalide.
+  email_required: Une adresse courriel est nécessaire.
+  login_email: Ton adresse courriel
+  mail_hint: IMPORTANT – Faites attention à l'orthographe !
+login:
+  pwreset:
+    mailSent: Très bien ! Un lien vous a été envoyé par courriel pour modifier votre
+      mot de passe.
+    wrongMail: Désolé. Vous avez peut-être fait une erreur de frappe dans votre adresse
+      courriel ?
+  error_no_auth: L'adresse courriel ou le mot de passe est incorrect
+  error_no_email: Veuillez saisir votre adresse courriel !
+  email_address: Adresse courriel
+legal:
+  agree_privacy_notice: J'ai été informé de l'obligation de confidentialité des données
+    personnelles et du comportement qui en résulte. Je recevrai une confirmation de
+    ceci par courriel pour mes dossiers à l'adresse que j'ai donnée.
