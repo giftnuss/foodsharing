@@ -1,4 +1,4 @@
-# Release "Erdbeere", Unreleased
+# Release "Erdbeere", 2021-03-14
 
 ## Features
 - New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
