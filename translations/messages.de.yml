@@ -2092,6 +2092,7 @@ polls:
   ongoing: "Laufende Abstimmungen"
   ended: "Vergangene Abstimmungen"
   future: "Zukünftige Abstimmungen"
+  filter_by: "Filtern nach"
 
 poll:
   not_available: "Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen."

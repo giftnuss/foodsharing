@@ -307,7 +307,7 @@ class VotingGateway extends BaseGateway
 	 */
 	public function getAmbassadorsIDsOfSubregions(int $groupId): array
 	{
-		return $this->db->fetchAll('
+		return $this->db->fetchAllValues('
 			SELECT DISTINCT amb.foodsaver_id
 			FROM `fs_botschafter` amb
 
