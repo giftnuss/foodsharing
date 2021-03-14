@@ -285,7 +285,7 @@
         >
           <p>
             <a :href="$url('releaseNotes')">
-              {{ $i18n('releases.2020-12') }}
+              {{ $i18n('releases.2021-03') }}
               <i class="fas fa-magic social_icons" />
             </a>
             <a :href="$url('devdocs')">
