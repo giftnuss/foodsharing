@@ -90,11 +90,6 @@ final class VotingPermissions
 		}
 	}
 
-	public function mayDeletePoll(int $pollId): bool
-	{
-		return $this->session->may('orga');
-	}
-
 	public function mayEditPoll(Poll $poll): bool
 	{
 		// polls can be edited by the author during the first hour after creating the poll

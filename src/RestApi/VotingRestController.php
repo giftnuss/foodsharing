@@ -267,7 +267,7 @@ class VotingRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Cancels a poll.
+	 * Deletes a poll.
 	 *
 	 * @OA\Response(response="200", description="Success")
 	 * @OA\Response(response="403", description="Insufficient permissions to delete that poll.")
@@ -276,18 +276,18 @@ class VotingRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("polls/{pollId}", requirements={"pollId" = "\d+"})
 	 */
-	public function cancelPollAction(int $pollId): Response
+	public function deletePollAction(int $pollId): Response
 	{
 		$poll = $this->votingGateway->getPoll($pollId, false);
 		if (is_null($poll)) {
 			throw new HttpException(404);
 		}
 
-		if (!$this->votingPermissions->mayDeletePoll($pollId)) {
+		if (!$this->votingPermissions->mayEditPoll($poll)) {
 			throw new HttpException(403);
 		}
 
-		$this->votingTransactions->cancelPoll($pollId);
+		$this->votingTransactions->deletePoll($pollId);
 
 		return $this->handleView($this->view([], 200));
 	}

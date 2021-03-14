@@ -2157,6 +2157,9 @@ poll:
     submit_question: "Möchtest du die Änderungen an der Abstimmung wirklich speichern?"
   may_not_edit: "Du hast nicht die Rechte, um diese Abstimmung zu bearbeiten, oder der Bearbeitungszeitraum ist abgelaufen."
   hint_random_order: "Die Reihenfolge der folgenden zur Auswahl stehenden Optionen ist zufällig gewählt."
+  cancel:
+    title: "Abstimmung abbrechen"
+    question: "Möchtest du diese Abstimmung wirklich abbrechen? Dies kann nicht rückgängig gemacht werden."
 
 language_chooser:
   title: "Sprache wählen"

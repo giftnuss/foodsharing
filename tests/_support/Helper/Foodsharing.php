@@ -927,7 +927,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
 			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s'),
 			'votes' => $this->faker->numberBetween(0, 1000),
-			'eligible_votes_count' => 0
+			'eligible_votes_count' => 0,
+			'creation_timestamp' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
 		], $extraParams);
 		$params['author'] = $authorId;
 		$params['region_id'] = $regionId;

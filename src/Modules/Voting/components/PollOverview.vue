@@ -12,13 +12,22 @@
         >
           {{ $i18n('polls.hint_2') }}: <a :href="$url('wiki_voting')">{{ $url('wiki_voting') }}</a>
         </b-alert>
-        <b-link
+        <div
           v-if="mayEdit"
-          :href="$url('pollEdit', poll.id)"
-          class="btn btn-sm btn-secondary mb-3"
         >
-          {{ $i18n('poll.edit.title') }}
-        </b-link>
+          <b-link
+            :href="$url('pollEdit', poll.id)"
+            class="btn btn-sm btn-secondary mb-3"
+          >
+            {{ $i18n('poll.edit.title') }}
+          </b-link>
+          <b-link
+            class="btn btn-sm btn-secondary mb-3"
+            @click="showCancelConfirmDialog"
+          >
+            {{ $i18n('poll.cancel.title') }}
+          </b-link>
+        </div>
         <ul class="poll-properties">
           <li class="poll-date">
             <b>{{ $i18n('poll.time_period') }}:</b>
@@ -114,6 +123,9 @@ import VoteForm from './VoteForm'
 import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
 import { BAlert, BLink, BBadge } from 'bootstrap-vue'
+import { deletePoll } from '@/api/voting'
+import { pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   components: { ResultsTable, VoteForm, Markdown, BAlert, BLink, BBadge },
@@ -168,6 +180,31 @@ export default {
     userJustVoted () {
       this.userAlreadyVoted = true
       this.userMayVote = false
+    },
+    async showCancelConfirmDialog (e) {
+      e.preventDefault()
+      // show confirmation dialog
+      const cancel = await this.$bvModal.msgBoxConfirm(i18n('poll.cancel.question'), {
+        modalClass: 'bootstrap',
+        title: i18n('poll.cancel.title'),
+        cancelTitle: i18n('no'),
+        okTitle: i18n('yes'),
+        headerClass: 'd-flex',
+        contentClass: 'pr-3 pt-3',
+      })
+      if (cancel) {
+        this.isLoading = true
+
+        try {
+          // cancel poll and redirect to poll list
+          await deletePoll(this.poll.id)
+          window.location.href = this.$url('polls', this.poll.regionId)
+        } catch (e) {
+          pulseError(i18n('error_unexpected'))
+        }
+
+        this.isLoading = false
+      }
     },
   },
 }
