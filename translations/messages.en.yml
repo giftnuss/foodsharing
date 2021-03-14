@@ -1449,3 +1449,6 @@ statistics:
   kg_food_saved: '%count% kg food saved'
 storestatus:
   "0": Status unclear
+formatting:
+  md: You can use <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+    for formatting.
