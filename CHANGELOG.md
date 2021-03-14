@@ -2,6 +2,7 @@
 
 ## Features
 - New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
+- Show icon and tooltip for working groups with extra functions !1846 @alex.simm
 
 ## Changes
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -252,6 +253,13 @@ class WorkGroupGateway extends BaseGateway
 				', [':bezirk_id' => $g['id']]);
 				$groups[$i]['members'] = $members ? $members : [];
 				$groups[$i]['leaders'] = $leaders ? $leaders : [];
+				try {
+					$groups[$i]['function'] = $this->db->fetchValueByCriteria('fs_region_function', 'function_id',
+						['region_id' => $g['id']]
+					);
+				} catch (Exception $e) {
+					$groups[$i]['function'] = null;
+				}
 			}
 
 			return $groups;

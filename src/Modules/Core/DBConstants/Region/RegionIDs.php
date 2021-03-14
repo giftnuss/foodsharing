@@ -30,4 +30,13 @@ class RegionIDs
 	public const TEAM_ALUMNI_MEMBER = 1564;
 	public const TEAM_ADMINISTRATION_MEMBER = 1565;
 	public const WORKGROUP_ADMIN_CREATION_GROUP = 1701;
+
+	public static function hasSpecialPermission(int $regionId): bool
+	{
+		return in_array($regionId, [
+			self::NEWSLETTER_WORK_GROUP, self::QUIZ_AND_REGISTRATION_WORK_GROUP,
+			self::PR_PARTNER_AND_TEAM_WORK_GROUP, self::PR_START_PAGE,
+			self::EUROPE_REPORT_TEAM
+		]);
+	}
 }

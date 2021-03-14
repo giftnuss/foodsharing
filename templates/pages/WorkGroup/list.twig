@@ -15,7 +15,9 @@
 {% block main %}
     <div class="groups">
         {% for group in groups %}
-            {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding']} %}
+            {% embed 'components/field.twig' with {'title': group.name, 'classes': ['ui-padding'],
+                'icon': group.function_tooltip_key is empty ? null : 'fa-info-circle',
+                'icon_tooltip': group.function_tooltip_key is empty ? null : group.function_tooltip_key|trans } %}
                 {% block content %}
                     <div class="members">
                         {% for leader in group.leaders %}
