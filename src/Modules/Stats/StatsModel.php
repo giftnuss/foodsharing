@@ -17,26 +17,6 @@ class StatsModel extends Db
 		parent::__construct();
 	}
 
-	public function getFirstFetchInStore($storeId, $fsId)
-	{
-		return $this->qOne(
-			'
-				SELECT
-					MIN(`date`)
-
-				FROM
-					fs_abholer
-
-				WHERE
-					betrieb_id = ' . $storeId . '
-
-				AND
-					foodsaver_id = ' . $fsId . '
-				AND
-					`confirmed` = 1'
-		);
-	}
-
 	public function getTotalKilosFetchedByFoodsaver(int $fs_id)
 	{
 		$savedWeight = 0;
@@ -63,28 +43,6 @@ class StatsModel extends Db
 		return $this->qCol('SELECT id FROM fs_foodsaver');
 	}
 
-	public function getLastFetchInStore($storeId, $fsId)
-	{
-		return $this->qOne(
-			'
-				SELECT
-					MAX(`date`)
-
-				FROM
-					fs_abholer
-
-				WHERE
-					betrieb_id = ' . $storeId . '
-
-				AND
-					foodsaver_id = ' . $fsId . '
-				AND
-					`confirmed` = 1
-				AND
-					`date` < NOW()'
-		);
-	}
-
 	public function updateStoreStats(
 		$betrieb_id,
 		$foodsaver_id,
@@ -105,23 +63,6 @@ class StatsModel extends Db
 			WHERE 	`foodsaver_id` = ' . (int)$foodsaver_id . '
 			AND 	`betrieb_id` = ' . (int)$betrieb_id . '
 		');
-	}
-
-	public function getStoreFetchCount($storeId, $fsId, $last_update, $stat_fetchcount)
-	{
-		$val = $this->qOne('
-			SELECT COUNT(foodsaver_id)
-
-			FROM 	fs_abholer
-
-			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
-			AND 	`betrieb_id` = ' . (int)$storeId . '
-			AND 	`date` > ' . $this->dateval($last_update) . '
-			AND 	`date` < NOW()
-			AND 	`confirmed` = 1
-		');
-
-		return (int)$val + (int)$stat_fetchcount;
 	}
 
 	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
