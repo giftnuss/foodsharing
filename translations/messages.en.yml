@@ -901,6 +901,7 @@ store:
   jumperSince: 'Jumper since: {date}'
   tooltip_managing: You are responsible for this store
   not-in-team: You are not a member of this store's team yet.
+  tooltip_yellow: Open collections in the next five days.
 search:
   mygroups: My groups
   mybuddies: My buddies
