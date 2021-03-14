@@ -122,6 +122,7 @@
 - Update some frontend dependencies !1842 !1881 !1890 !1892 @chriswalg @\_fridtjof_
 - Update some backend dependencies !1885 !1897 @chriswalg
 - Fixed Xdebug !1883 @\_fridtjof_
+- Improved table cleanup during seed command !1859 @scarya
 
 # 2021-02-08 Hotfix
 
