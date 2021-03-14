@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\WorkGroup;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Permissions\WorkGroupPermissions;
 use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -126,7 +127,8 @@ class WorkGroupControl extends Control
 	private function getTooltipKey(array $group): ?string
 	{
 		// working group function that can be present in any region
-		if (!empty($group['function'])) {
+		// TODO: remove the exception when the FS-management group is implemented
+		if (!empty($group['function']) && $group['function'] !== WorkgroupFunction::FSMANAGEMENT) {
 			return 'group.function.tooltip_function_' . $group['function'];
 		}
 

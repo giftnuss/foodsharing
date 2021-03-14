@@ -36,7 +36,7 @@ class RegionIDs
 		return in_array($regionId, [
 			self::NEWSLETTER_WORK_GROUP, self::QUIZ_AND_REGISTRATION_WORK_GROUP,
 			self::PR_PARTNER_AND_TEAM_WORK_GROUP, self::PR_START_PAGE,
-			self::EUROPE_REPORT_TEAM, self::CREATING_WORK_GROUPS_WORK_GROUP
+			self::EUROPE_REPORT_TEAM
 		]);
 	}
 }
