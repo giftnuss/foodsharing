@@ -124,7 +124,7 @@ import ResultsTable from './ResultsTable'
 import Markdown from '@/components/Markdown/Markdown'
 import { BAlert, BLink, BBadge } from 'bootstrap-vue'
 import { deletePoll } from '@/api/voting'
-import { pulseError } from '@/script'
+import { hideLoader, pulseError, showLoader } from '@/script'
 import i18n from '@/i18n'
 
 export default {
@@ -193,7 +193,7 @@ export default {
         contentClass: 'pr-3 pt-3',
       })
       if (cancel) {
-        this.isLoading = true
+        showLoader()
 
         try {
           // cancel poll and redirect to poll list
@@ -203,7 +203,7 @@ export default {
           pulseError(i18n('error_unexpected'))
         }
 
-        this.isLoading = false
+        hideLoader()
       }
     },
   },
