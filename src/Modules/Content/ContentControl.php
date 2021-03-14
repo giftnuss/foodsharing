@@ -350,7 +350,7 @@ class ContentControl extends Control
 		$releaseList = [
 			[
 				'id' => '2021-03',
-				'title' => 'Release "Erdbeere" (Dezember 2020)',
+				'title' => $this->translator->trans('releases.2021-03'),
 				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2021-03.md') ?: ''),
 				'visible' => true,
 			], [
