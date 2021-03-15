@@ -6,6 +6,7 @@
 
 ## Bugfixes
 - Fixed a small logic error that lead to unnecessary and invalid requests being made !1918
+- Fix permission problem in region admin module when saving working groups without functions !1917 @alex.simm
 
 ## Refactoring
 
