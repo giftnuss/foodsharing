@@ -342,7 +342,10 @@ class Foodsharing extends \Codeception\Module\Db
 				'active' => $is_confirmed ? ($is_waiting ? 2 : 1) : 0,
 				'verantwortlich' => $is_coordinator ? 1 : 0,
 			];
-			$this->haveInDatabase('fs_betrieb_team', $v);
+			$res = $this->countInDatabase('fs_betrieb_team', $v);
+			if ($res < 1) {
+				$this->haveInDatabase('fs_betrieb_team', $v);
+			}
 		}
 	}
 
