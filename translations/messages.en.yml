@@ -79,6 +79,21 @@ group:
       be one store coordination team per region.
     restricted_workgroup_function: This working group function can only be edited
       by the transregional group "AG Anlegen"
+    tooltip_function_10: Admins of this work group can approve posts in moderated
+      forums.
+    tooltip_function_9: Admins of this work group have no special permissions.
+    tooltip_function_6: The email address of this work group is shown at the "Request
+      mediation" button. The admins have no special permissions.
+    tooltip_function_5: Admins of this work group can see messages about foodsaver
+      in the region. No messages are shown in which the admins are involved! These
+      are received by the arbitration body.
+    tooltip_function_4: Admins of this work group can view and edit stores in the
+      district
+    tooltip_function_3: Admins of this work group can activate and edit fairteiler
+      of the district as well as remove fairteiler contributions
+    tooltip_function_1: Admins of this work group will be notified when new members
+      join the district
+    tooltip_function_2: Admins of this work group can create votes for the district
   apply:
     sent: The application was sent!
     send: Send application
@@ -115,6 +130,14 @@ group:
     You will lose your verification and have to contact the ambassador team of your
     new home district later!
   saved: Changes were saved
+  unique_function:
+    tooltip_function_region432: Admins of this work group can view messages
+    tooltip_function_region2287: Admins of this work group can edit the contents of
+      the start page
+    tooltip_function_region1811: Admins of this work group can edit the pages "Partner",
+      "Contact" and "Team".
+    tooltip_function_region341: Admins of this work group can manage the quiz questions
+    tooltip_function_region331: Admins of this work group can send newsletters.
 settings:
   header: Your data and settings
 
@@ -400,6 +423,7 @@ storeview:
   counter: <strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>
   teamInfo: There are <strong> {active} </strong> actives and <strong> {jumper} </strong>
     jumpers in the team.
+  pickupCount: At this store was picked up {pickupCount}.
 day: Day
 time: Time
 select: Please select
@@ -469,6 +493,8 @@ terminology:
   n_sleeping: A nightcap|%count% Nightcaps
   n_cooperating_stores: A running cooperation|%count% running cooperations
   options: Options
+  reports: Message overview (LMG)
+  arbitration: Message overview (LS)
 login:
   pwreset:
     bread: Reset password
@@ -1191,6 +1217,8 @@ fsp:
   addError: The food-share-point wasn't added. Did you fill out everything correctly?
   descLabel: Write some basic information about the food-share-point here! Especially
     when it is accessible/open.
+  suggestSuccess: Fairteiler has been proposed and now needs to be confirmed by an
+    ambassador or fairteiler responsible person.
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1448,6 +1476,7 @@ error_permissions: Unfortunately, you do not have the necessary permissions for 
 success: Completed successfully
 statistics:
   kg_food_saved: '%count% kg food saved'
+  num_fetches: At 1 rescue operation | At %count% rescue operations
 storestatus:
   "0": Status unclear
 formatting:
