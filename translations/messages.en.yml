@@ -957,6 +957,10 @@ store:
     filterQuizSM: BV-quiz successfully passed
     pickupAsc: Newest last
     pickupDesc: Newest first
+    byLastPickup: Sort by last pick-up
+    managementEffect: 'Sort by last pick-up date:'
+    managementToggleOff: Back to standard view
+    managementToggleOn: Enable BV view
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
@@ -984,6 +988,18 @@ store:
   not-in-team: You are not a member of this store's team yet.
   tooltip_yellow: Open collections in the next five days
   springer_conversation_name: Jumper {name}
+  my_last_pickup: My last pick-up
+  average_collection_quantity: Pick-up quantity on average
+  mayManage: Passed the BOT quiz.
+  mayAmb: Passed the BOT quiz.
+  fetchCount: Picked up {count}× here.
+  isJumper: Is on the jumper list.
+  noPickup: Has never picked up here.
+  go: To the store page
+  tooltip_red: Vacant pick-ups today or tomorrow
+  tooltip_orange: Vacant pick-ups in the next three days
+  pickup_slot_unavailable: This pickup slot is further in the future than provided
+    by your BVs. So please try again at a later time.
 search:
   mygroups: My groups
   mybuddies: My buddies
