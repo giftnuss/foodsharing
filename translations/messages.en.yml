@@ -1369,7 +1369,7 @@ infotype: Notification
 position: Position in foodsharing (public)
 dateend: End date
 mailbox_id: Sender mail address
-testemail: Test mail address
+testemail: Email address for testing
 opt: Options
 teaser: Teaser
 food_type: Which types of food are included?
