@@ -1,3 +1,7 @@
+# 2021-03-15 Hotfix
+
+- Fix nightly calculation of store statistics !1914
+
 # Release "Erdbeere", 2021-03-14
 
 ## Features
