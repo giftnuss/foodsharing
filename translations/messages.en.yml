@@ -364,6 +364,7 @@ forum:
     header: 'Notification about new answers:'
     email: by e-mail
     bell: by bell notification
+  new_thread: Compose new thread
 timepicker:
   labelNowButton: Now
   labelCloseButton: Close
@@ -402,9 +403,28 @@ pickup:
   kick: Kick
   history:
     title: Pick-up history
+    search: Show pickups
   join_title_date: Sure?
   dates: Pick-up dates
   team_message_send_and_leave: Send and leave
+  edit:
+    slotscount: '{count} collectors'
+    slotcount: 1 collector
+    more: Add date
+    add: Add pickup dates
+    bread: Edit pickup dates
+  slot_remove: Delete slot
+  slot_add: Add slot
+  add_onetime_pickup: Add additional date
+  edit_recurring_pickups: Edit regular pickup dates
+  really_delete_date: Do you really want to delete the pickup on {date}?
+  leave_team_message_template: Dear all, {date} ...
+  really_leave_date: You are responsible for this pickup. Please arrange a replacement
+    independently.
+  kick_message_footer: Best wishes, your store managers
+  kick_message_placeholder: Optionally add information here...
+  really_leave_date_title: Sign out for {date}?
+  signout_info: All your pickup dates will be deleted.
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -897,6 +917,7 @@ store:
     orga-instead: The Orga-team is being informed.
     amb-instead: The ambassadors are being informed.
     request: I would like to help this team.
+    no-sm: There are no store managers for this store yet.
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
@@ -926,11 +947,12 @@ store:
     in food baskets, on Facebook, or in the press)
   memberSince: 'In team since: {date}'
   lastPickupShort: last {date}
-  lastPickup: ''
+  lastPickup: 'Last pickup: {date}'
   jumperSince: 'Jumper since: {date}'
   tooltip_managing: You are responsible for this store
   not-in-team: You are not a member of this store's team yet.
   tooltip_yellow: Open collections in the next five days.
+  springer_conversation_name: Jumper {name}
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -994,6 +1016,7 @@ wall:
   name: Wall
   info-somebody-else: This entry is older than a month. As a store manager you can
     remove it.
+  confirm-deletion: Do you really want to delete the following wall post from {name}?
 pass:
   nav:
     title: Let's go!
@@ -1084,6 +1107,8 @@ storeedit:
     empty: The team must not be empty
     leave: Leave store
     bread: Edit team
+    max-sm: Please choose three store managers maximum
+    cannot-leave: You are responsible for this store,  so you can't leave it!
   add-new: Add new store
   milestone:
     dropped: '{user} is not part of the team anymore'
@@ -1093,6 +1118,9 @@ storeedit:
   edit_success: The changes were saved
   fetch:
     teamStatus: team status
+    teamStatus2: Helpers are strongly needed
+    teamStatus1: Helpers are needed
+    teamStatus0: This team is full and presently does not search for more helpers
   store:
     status: status
   actions: Options
