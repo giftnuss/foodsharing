@@ -443,7 +443,7 @@ storeview:
   counter: <strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>
   teamInfo: There are <strong> {active} </strong> actives and <strong> {jumper} </strong>
     jumpers in the team.
-  pickupCount: At this store was picked up {pickupCount}.
+  pickupCount: At this store there have been {pickupCount} pickups.
 day: Day
 time: Time
 select: Please select
@@ -513,8 +513,8 @@ terminology:
   n_sleeping: A nightcap|%count% Nightcaps
   n_cooperating_stores: A running cooperation|%count% running cooperations
   options: Options
-  reports: Message overview (LMG)
-  arbitration: Message overview (LS)
+  reports: Reporting View (local reporting group)
+  arbitration: Reporting View (LS)
 login:
   pwreset:
     bread: Reset password
@@ -1504,7 +1504,7 @@ error_permissions: Unfortunately, you do not have the necessary permissions for 
 success: Completed successfully
 statistics:
   kg_food_saved: '%count% kg food saved'
-  num_fetches: At 1 rescue operation | At %count% rescue operations
+  num_fetches: In a pickup|In %count% pickups
 storestatus:
   "0": Status unclear
 formatting:
