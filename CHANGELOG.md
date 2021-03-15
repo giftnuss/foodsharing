@@ -1,4 +1,16 @@
-# Release "Erdbeere", Unreleased
+# Release "Feige", Unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# Release "Erdbeere", 2021-03-14
 
 ## Features
 - New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
