@@ -135,9 +135,9 @@ group:
     tooltip_function_region2287: Admins of this work group can edit the contents of
       the start page
     tooltip_function_region1811: Admins of this work group can edit the pages "Partner",
-      "Contact" and "Team".
+      "Contact" and "Team"
     tooltip_function_region341: Admins of this work group can manage the quiz questions
-    tooltip_function_region331: Admins of this work group can send newsletters.
+    tooltip_function_region331: Admins of this work group can send newsletters
 settings:
   header: Your data and settings
 
@@ -321,6 +321,12 @@ events:
     isPublic: Yes, it is public
     public: Is the event public?
     title: Create a new event
+    mumble: Multi-local on mumble.foodsharing.de
+    offline: A normal real life event
+    online: Via video or telephone conference
+    multiday: The event lasts for several days
+    delinvites: Delete existing invitations?
+    cascading: Include all subgroups / districts?
   bread: Events
   menu:
     edit: Edit event
@@ -334,6 +340,19 @@ events:
     yes: Accept
   add_event: New event
   add_new_event: Add a new event
+  rsvp:
+    maybe: Nice that you might be there!
+    yes: Thank you very much! You accepted the invitation.
+  morePeople: … and {count} more
+  invitedCount: '{count} invitations'
+  maybeCount: '{count} may come'
+  acceptedCount: '{count} take part'
+  created: Event was created successfully!
+  mumble:
+    guide: 'Instructions: <strong><a href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></strong>'
+    location: 'Our mumble server: <br><strong>mumble.foodsharing.de</strong>'
+    text: We hold voice conferences with <em>Mumble</em>.
+  duration: '{from} to {until}'
 forum:
   threads: Threads
   quickreply:
@@ -387,6 +406,7 @@ calendar:
   labelNoDateSelected: Select date
   locale: de
   labelNav: Calendar navigation
+  labelHelp: Navigation is also possible with arrow keys
 pickup:
   signout_confirm: Are you sure?
   copyNumber: Copy phone number
@@ -425,6 +445,7 @@ pickup:
   kick_message_placeholder: Optionally add information here...
   really_leave_date_title: Sign out for {date}?
   signout_info: All your pickup dates will be deleted.
+  take_empty_slot: sign up here
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -617,6 +638,8 @@ reports:
   from_last_name: From last name
   from_first_name: From name
   from: From
+  no_reports_fallback: There are no reports yet
+  report_id: Report ID
 recipients:
   test: Test the newsletter
   done: All e-mails have been sent
@@ -641,6 +664,8 @@ recipients:
   active_ambassadors: All ambassadors country-wide
   all: All foodsavers worldwide
   prepare: Prepare for sending
+  empty-region: There are no foodsavers in the selected districts
+  choose: Select districts manually
 poll:
   time_period: Time period
   results:
@@ -918,6 +943,8 @@ store:
     amb-instead: The ambassadors are being informed.
     request: I would like to help this team.
     no-sm: There are no store managers for this store yet.
+    got-it: The responsibles have been informed of your request and will get in touch
+      with you.
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
@@ -951,7 +978,7 @@ store:
   jumperSince: 'Jumper since: {date}'
   tooltip_managing: You are responsible for this store
   not-in-team: You are not a member of this store's team yet.
-  tooltip_yellow: Open collections in the next five days.
+  tooltip_yellow: Open collections in the next five days
   springer_conversation_name: Jumper {name}
 search:
   mygroups: My groups
@@ -1006,6 +1033,7 @@ date:
   Today: Today
   to: to
   from: from
+  time: "{time} o'clock"
 wall:
   error-create: Your wall post could not be saved.
   created: Great! Your wall post was saved.
@@ -1017,6 +1045,8 @@ wall:
   info-somebody-else: This entry is older than a month. As a store manager you can
     remove it.
   confirm-deletion: Do you really want to delete the following wall post from {name}?
+  info-logging: Please note that to avoid conflicts, the content and the person who
+    carried it out are logged.
 pass:
   nav:
     title: Let's go!
@@ -1109,6 +1139,7 @@ storeedit:
     bread: Edit team
     max-sm: Please choose three store managers maximum
     cannot-leave: You are responsible for this store,  so you can't leave it!
+    need-sm: There must be at least one responsible person per team!
   add-new: Add new store
   milestone:
     dropped: '{user} is not part of the team anymore'
@@ -1263,6 +1294,7 @@ pickuplist:
   week_tab: Week
   day_tab: Day
   time_table_header: Time
+  error_whileSending: Error while sending the message
 genderlist:
   gender_female: female
   gender_male: male
@@ -1285,6 +1317,9 @@ chat:
   empty: No conversations yet
   empty_recipients: You need to select recipients.
   empty_message: You need to enter a message first.
+  error_sending_message: Sending the message failed.
+  error_loading_messages: Reloading of messages failed.
+  notification_named_conversation: '{foodsaver} wrote in {conversation}.'
 delete: Delete
 error_unexpected: An error occured
 register:
@@ -1394,6 +1429,7 @@ passcheck: Please confirm the change with your password
 online_type: Will this event be offline or online?
 addresspicker:
   label: Search for address/location
+  placeholder: Please look for the address here! If necessary, correct below afterwards.
 dashboard:
   invitations: You were invited
   my:
@@ -1485,6 +1521,7 @@ team:
   name: Name
   current: Team
   former: Former
+  ratelimit: Please wait {minutes} minutes before you can send the next message.
 home:
   home: Home
   title: Landing page
@@ -1510,3 +1547,5 @@ storestatus:
 formatting:
   md: You can use <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
     for formatting.
+base:
+  jsrequired: This page does not work properly without JavaScript.
