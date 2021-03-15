@@ -1098,7 +1098,7 @@ class XhrMethods
 		$regionId = intval($data['bezirk_id']);
 		$parentId = intval($data['parent_id']);
 
-		if ($this->regionPermissions->mayAdministrateRestrictedWorkgroupFunctions($data['workgroup_function'])) {
+		if ($data['workgroup_function'] && !$this->regionPermissions->mayAdministrateWorkgroupFunction(intval($data['workgroup_function']))) {
 			return json_encode([
 				'status' => 1,
 				'script' => 'pulseError("' . $this->translator->trans('group.function.restricted_workgroup_function') . '");',
