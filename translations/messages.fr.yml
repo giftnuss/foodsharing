@@ -23,6 +23,13 @@ group:
     requires_properties: Toute personne répondant à certains critères
     nobody: Personne (groupe fermé)
     requirements: Qui peut entrer dans ce groupe ?
+    not_fulfilled: Pour candidater à ce groupe de travail, tu dois être inscrit.e
+      depuis %weeks% semaines sur foodsharing, avoir %bananas% de bananes-confiance
+      et avoir réalisé %fetches% de collectes.
+    banana_count_errors:
+      max: Ne vous attendez pas à recevoir plus de {{ limit }} bananes-confiance !
+      min: Personne ne peut avoir moins de {{ limit }} bananes-confiance !
+    banana_count: De combien de banane-confiance un membre a-t-il besoin ?
   apply:
     declined: Demande refusée
     accepted: Demande acceptée
@@ -57,6 +64,99 @@ group:
   photo: Photo
   description: Description
   name: Nom
+  subtitle: Ici tu trouveras de l'aide et bien d'autres choses ...
+  show-all: Tout montrer
+  unique_function:
+    tooltip_function_region432: les admins de ce groupe peuvent voir les signalements
+    tooltip_function_region2287: Les admins de ce groupe peuvent modifier le contenu
+      de la page d'accueil
+    tooltip_function_region1811: Les admins de ce groupe peuvent modifier les pages
+      "partenaires", "contact" et "équipe"
+    tooltip_function_region341: Les admins de ce groupe peuvent modifier les questions
+      liées aux Quiz
+    tooltip_function_region331: Les admins de ce groupe peuvent envoyer des Newsletter
+  function:
+    tooltip_function_10: Les admins de ce groupe peuvent accepter des contributions
+      dans les forums déjà modérés.
+    tooltip_function_9: Les admins de ce groupe n'ont pas d'autorisations spéciales.
+    tooltip_function_7: Les admins de ce groupe de travail reçoivent les signalements
+      dont le groupe de signalements fait l'objet. Les signalements concernant les
+      admins restent invisibles et seront directement envoyés au groupe en charge
+      des signalement.
+    tooltip_function_6: L'adresse mail de ce groupe de travail est lié à la fonction
+      "demander une médiation". Les admins n'ont pas d'autorisations spéciales.
+    tooltip_function_5: Les admins de ce groupe peuvent voir les signalements dans
+      le district. Les signalements concernant les admins restent invisibles et seront
+      directement envoyés à la commission d'arbitrage.
+    tooltip_function_4: Les admins de ce groupe de travail peuvent voir et modifier
+      les entreprises du district
+    fsp: "Frigo solidaire // idée : \"comm'un frigo\""
+    tooltip_function_3: Les admins de ce groupe de travail peuvent activer les frigos
+      solidaires de ce district ainsi que modifier et retirer les contributions des
+      membres sur la page du frigo solidaire
+    tooltip_function_2: Les admins de ce groupe de travail peuvent instaurer des votes
+      pour le district
+    tooltip_function_1: Les admins de ce groupe de travail seront notifiés aux membres
+      du district
+    restricted_workgroup_function: Cette fonction de groupe ne peut être modifiée
+      que par les membres du groupe de travail interrégional
+    duplicate_moderation_team: L'équipe de modération existe déjà ! Il ne peut y avoir
+      qu'une telle équipe par district.
+    duplicate_pr_team: L'équipe en charge des relations publiques existe déjà ! Il
+      ne peut y avoir qu'une telle équipe par district.
+    duplicate_fsmanagement_team: L'équipe de gestion existe déjà ! Il ne peut y avoir
+      qu'une telle équipe par district.
+    duplicate_arbitration_team: L'équipe en charge de l'arbitrage existe déjà ! Il
+      ne peut y avoir qu'une telle équipe par district.
+    duplicate_mediation_team: L'équipe de médiation existe déjà ! Il ne peut y avoir
+      qu'une telle équipe par district.
+    duplicate_report_team: L'équipe en charge des signalements existe déjà ! Il ne
+      peut y avoir qu'une telle équipe par district.
+    duplicate_stores_team: L'équipe de coordination des entreprises existe déjà !
+      Il ne peut y avoir qu'une telle équipe par district.
+    duplicate_fsp_team: L'équipe de frigo solidaires existe déjà ! Il ne peut y avoir
+      qu'une telle équipe par district.
+    duplicate_voting_team: L'équipe de vote existe déjà ! Il ne peut y avoir qu'une
+      telle équipe par district.
+    duplicate_welcome_team: L'équipe de bienvenue existe déjà ! Il ne peut y avoir
+      qu'une telle équipe par district.
+    invalid: Un district ne peut pas être pourvu des fonctions des groupes de travail.
+    moderation: Modération
+    pr: Relations publiques
+    fsmanagement: Gestion
+    arbitration: commission d'arbitrage
+    mediation: Médiation
+    report: Signalement
+    stores: Entreprises
+    voting: Vote
+    welcome: Souhaits de bienvenue
+    title: Fonctions des groupes de travail
+  delete_group_sure: Le groupe de travail/le district {groupName} doit-il réellement
+    être supprimé ?
+  quitting_home_district_warning: Souhaites-tu vraiment quitter ton district principal
+    ? Tu perdras ta vérification et devras donner ton nouveau district principal à
+    l'équipe des ambassadeurs !
+  really_quit_district: Veux-tu vraiment quitter le district %name% ?
+  really_quit_workgroup: Veux-tu vraiment quitter le groupe de travail %name% ?
+  quit: Quitter
+  quit_name_district: Quitter le district %name%
+  quit_name_workgroup: Quitter l'équipe %name%
+  no_groups: Il n'y a pas encore de groupes de travail ici
+  actions:
+    safe: enregistrer les modifications
+    join: Adhérer à ce groupe de travail
+    apply: Candidater pour ce groupe de travail
+    go: Aller sur le groupe
+    edit: Modifier le groupe
+    contact: Contacter le groupe
+  already_applied: Tu as déjà candidaté pour ce groupe
+  image: Image principale pour %name%
+  admin_count: "{0} pas d'admin|{1} un.e admin| [2, Inf[ %count% admins"
+  member_count: '{0} Pas de participant.e.s|{1} un.e participant.e| [2, Inf[ %count%
+    participant.e.s'
+  mail_link_title:
+    region: Boîte mail du district
+    workgroup: Boîte mail du groupe de travail
 bcard:
   generate: Créer une carte de visite
   error:
@@ -78,11 +178,17 @@ pass:
   noPhoto: "Les personnes suivantes n'ont pas encore importé de photo :"
   button:
     verify: Vérifier
+    check: Vérifier les rendez-vous
   verify:
     failed: Une erreur s'est produite
     confirm: Sûr·e ?
     undo: Vérification du compte de {name} annulée
     do: Vérifier le compte de {name}
+    text: "Données personnelles ok <br/> ?\nCarte de membre remise à l'intéressé(e)\
+      \ ?\n"
+    checkPickups: Avant de retirer la vérification, vérifie les collectes de ce membre
+      !
+    hasPickup: Encore inscrit pour des collectes
   claim: Partagez la nourriture au lieur de la jeter !
   hintVerify: "Les épargnants alimentaires peuvent être vérifiés dès qu'ils ont reçu\
     \ leur badge et que leurs données personnelles ont été vérifiées.\n"
@@ -94,11 +200,13 @@ pass:
     deselect: Tout désélectionner
     select: Tout sélectionner
     options: Options
+    generate: Générer les cartes cochées
   verified: Vérifié ?
   name: Nom
   bread: Générateur de badge
   photo: Photo
   none: '- pas encore créé -'
+  date: créé le
 ui:
   switch:
     off: inactif
@@ -172,7 +280,7 @@ ueberzeugungsarbeit: A-t-il été facile de convaincre le ou la responsable de c
 first_post: Première publication
 public_time: Heure approximative de la collecte
 public_info: Informations publiques sur le magasin
-besonderheiten: Fonctionnalités spéciales
+besonderheiten: Spécificités
 begin: Début de la coopération
 lebensmittel: Quels sont les aliments qui peuvent être collectés ?
 fax: Fax
@@ -331,6 +439,52 @@ fsp:
     mail: Cloche et notification par courriel
 terminology:
   mailboxes: Messageries
+  settings: Paramètres
+  subgroups: Sous-groupes
+  group: Groupe de travail
+  groups: Groupes de travail
+  basket: Corbeille
+  baskets: Corbeilles
+  arbitration: Vue des signalements
+  reports: Vue des signalements
+  statistic: Statistique
+  wall: Tableau
+  moderationAdmins: Équipe de modérateur.rices
+  prAdmins: Équipe de relations publiques
+  fsManagementAdmins: Gestion
+  arbitrationAdmins: Équipe d'arbitrage
+  mediationAdmins: Équipe médiation
+  reportAdmins: Équipe en charge des signalements
+  storesAdmins: Équipe de coordination des coopérations
+  fspAdmins: Équipe en charge des frigos solidaires / des comm'un frigos / comm'uns
+  votingAdmins: Équipe en charge des votes
+  welcomeAdmins: Équipe de bienvenue
+  admins: Administateur.rices
+  ambassador_forum: Forum des ambassadeur.rices
+  ambassadors: Ambassadeur
+  orga:
+    d: membre du groupe organisation
+    f: Membre du groupe organisation
+    m: Membre du groupe organisation
+  ambassador:
+    d: Ambassadeur.rice
+    f: Ambassadrice
+    m: Ambassadeur
+  storemanager:
+    d: responsable magasin
+    f: responsable magasin
+    m: Responsable magasin
+  foodsaver:
+    d: foodsaver.euse
+    f: foodsaveuse
+    m: foodsaver
+  foodsharer:
+    d: foodsharer.euse
+    f: foodshareuse
+    m: foodsharer
+  stores: Magasin / entreprise
+  events: Rendez-vous
+  forum: Forum
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
@@ -342,16 +496,141 @@ register:
   email_required: Une adresse courriel est nécessaire.
   login_email: Ton adresse courriel
   mail_hint: IMPORTANT – Faites attention à l'orthographe !
+  signup_newsletter: Je voudrais recevoir la Newsletter de foodsharing (env. 1 fois
+    par mois)
+  set-password: établir un nouveau mot de passe
+  pass2: Renseigne à nouveau le mot de passe
+  pass1: Nouveau mot de passe de ton choix
+  change-password: Tu peux désormais changer ton mot de passe.
+  activation_failed: <strong>L'activation a échouée !</strong> Le lien renseigné est-il
+    correct ?
+  account-exists: Tu es déjà inscrit. Pense à te déconnecter si tu veux t'inscrire
+    à nouveau.
+  error_birthdate: Exemple 25.03.2001 (JJ.MM.AAAA). Pour des raisons de protection
+    des données et de responsabilité juridique, tu dois être majeur.e (avoir + de
+    18 ans) pour participer à foodsharing.
+  error: Oups, il y a eu une erreur
+  other: autre
+  man: homme
+  woman: femme
+  select_your_gender: Comment s'adresser à toi ...
+  join_error: Ton inscription n'a pas pu être prise en compte.
+  join_success: Ton inscription a été réalisée avec succès.
+  finish: Envoyer l'inscription
+  next: suivant
+  prev: retour
+  have_read_the_legal_stuff2: acceptée
+  have_read_the_legal_stuff1: Je l'ai
+  forgotten_password: Mot de passe oublié ?
+  phone_not_valid: Le numéro de téléphone renseigné est invalide.
+  phone_example: Exemple +331122334455
+  login_phone_info: Partager ton numéro de téléphone avec les autres foodsharer peut
+    être plus pratique
+  lastname_minLength: Ton nom doit se composer d'au moins 2 caractères.
+  lastname_required: Saisis ton nom.
+  firstname_minLength: Ton prénom doit se composer d'au minimum 2 caractères.
+  firstname_required: Saisis ton/tes prénom(s).
+  login_surname: Nom
+  login_name: Prénom
+  login_location: Adresse postale
+  login_mobile_phone: Numéro de téléphone
+  geb_datum: Date de naissance
+  confirmPassword_sameAsPassword: Les deux mot de passe doivent être identiques.
+  confirmPassword_required: Renseigne à nouveau le mot de passe.
+  password_minLength: Le mot de passe doit contenir au minimum 8 caractères.
+  password_required: Il faut renseigner un mot de passe.
+  login_passwd2: nouvelle saisie du mot de passe
+  login_passwd1: Mot de passe (min. 8 caractères)
+  birthdate_hint: Tu trouveras plus d'informations dans la rubrique <a href="?page=legal"
+    target="_blank">Datenschutzerklärung</a> au point 2d) Bei der Anmeldung als Foodsharer
+    bzw. Foodsaver.
+  requiredFields: saisie obligatoire
+  register_button_label: s'enregistrer
+  title: S'enregistrer
+  topbar: Rejoins nous !
 login:
   pwreset:
     mailSent: Très bien ! Un lien vous a été envoyé par courriel pour modifier votre
       mot de passe.
     wrongMail: Désolé. Vous avez peut-être fait une erreur de frappe dans votre adresse
       courriel ?
+    mismatch: Désolé, tes mots de passe sont différents.
+    error: Désolé, il y a un problème avec tes informations personnelles.
+    expired: Désolé, tu as attendu un peu trop longtemps. Nous te prions de bien vouloir
+      redemander un nouveau mot de passe.
+    tooShort: Désolé, le mot de passe choisi est trop court.
+    success: Super ! Ton mot de passe a été changé avec succès. Tu peux maintenant
+      te reconnecter.
+    bread: Changer le mot de passe
   error_no_auth: L'adresse courriel ou le mot de passe est incorrect
   error_no_email: Veuillez saisir votre adresse courriel !
   email_address: Adresse courriel
+  logout: Se déconnecter
+  success: <b>Bienvenue, {user_name}!</b><br />Tu es désormais isncrit.e et vas maintenant
+    être redirigé.e.
+  error_no_password: Renseigne ton mot de passe !
+  steady_login: rester connecté.e (utilisation de cookies)
+  save_password: Enregistrer le mot de passe
+  login_button_label: inscription
+  forgotten_password_label: Mot de passe oublié ?
+  password: Mot de passe
+  form_title: s'inscrire
+  topbar: s'identifier
+  submit_btn: Identifiant
 legal:
   agree_privacy_notice: J'ai été informé de l'obligation de confidentialité des données
     personnelles et du comportement qui en résulte. Je recevrai une confirmation de
     ceci par courriel pour mes dossiers à l'adresse que j'ai donnée.
+  are_you_sure_to_downgrade: "Attention : tu as choisis d'être rétrogradé au rang\
+    \ de foodsaver. Es-tu sûr.e de ton choix ?"
+  legal_agreement: Accord juridique
+  not_acknowledge_pn_description: En cas de désaccord avec l'avertissement, tu seras
+    rétrogradé.e au rang de foodsaver. Tu perdras ton statut d'ambassadeur.rice ainsi
+    que ta/tes responsabilités envers les magasins et que tu devras à nouveau réussir
+    le quiz de responsable magasin/ambassadeur.rice afin de posséder à nouveau ces
+    statuts.
+  privacy_notice_agree:
+    not_acknowledge: Je n'accepte pas et voudrais être rétrogradé au rang de foodsaver
+    acknowledge: J'accepte
+    select: Veuillez choisir
+  privacy_notice: Avertissement quant à l'utilisation des données personnelles
+  must_accept_pp: Afin de faire partie de foodsharing, tu dois accepter les conditions
+    d'utilisation de tes données.
+  actions:
+    safe: Accepter les paramètres
+  delete_account: Je souhaite supprimer mon compte.
+  agree_privacy_policy: J'ai lu et accepte les conditions d'utilisation.
+  dont_agree: Je ne suis pas d'accord avec le traitement de mes données et
+  not_acknowledge_pp_description: Afin d'utiliser la plateforme foodsharing, tu dois
+    lire et accepter les conditions d'utilisations de celle-ci.
+  acknowledge: Acceptes-tu les conditions ?
+  pp: Déclaration de protection des données
+message_text_to_group_admin_workgroup: "La région/le groupe de travail<b>{groupName}</b>\
+  \ n'a<b>plus</b> d'ambassadeur.rice/d'admin.<br><br><br>Elle possède la structure\
+  \ ID ci-contre :<br>{idStructureList}<br><br>l'ID est : {groupId}<br><br>URL : \"\
+  <a href=\"https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum\" target=\"\
+  _blank\">Clique ici pour rejoindre la région/le groupe de travail</a>"
+gender:
+  d: les deux ou autre
+  f: Femme
+  m: Homme
+salutation:
+  "3": Chèr.e
+  "2": Chère
+  "1": Cher
+  "0": Cher/chère
+pronoun:
+  "3": iel
+  "2": elle/iel
+  "1": il/iel
+  "0": il/elle/iel
+banana_count: De combien de bananes-confiance un membre a-t-il besoin ?
+store_status_impact_explanation: Veuillez actualiser le statut de la coopération après
+  chaque contact avec l'entreprise afin qu'il soit visible pour tous. Seules les entreprises
+  coopérantes seront visibles dans la barre de navigation.
+kette_id: chaîne (entreprise)
+fetchercount: Nombre de quêteurs
+storemanagers: Responsable coopération
+fspmanagers: Foodsaver en charge des frigos solidaires
+fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
+teaser: Extrait
