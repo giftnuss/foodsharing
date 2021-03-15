@@ -1377,6 +1377,7 @@ dashboard:
   source_mailbox: '{o}'
   quiz:
     read: continue reading
+  greeting: Hello {name}! Nice to have you there.
 pronoun:
   "3": he*she
   "2": she
