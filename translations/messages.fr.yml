@@ -557,7 +557,7 @@ login:
     mismatch: Désolé, tes mots de passe sont différents.
     error: Désolé, il y a un problème avec tes informations personnelles.
     expired: Désolé, tu as attendu un peu trop longtemps. Nous te prions de bien vouloir
-      redemander un nouveau mot de passe.
+      redemander un nouveau mot de passe !
     tooShort: Désolé, le mot de passe choisi est trop court.
     success: Super ! Ton mot de passe a été changé avec succès. Tu peux maintenant
       te reconnecter.
