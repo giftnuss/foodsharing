@@ -953,6 +953,10 @@ store:
     pickupReset: Standard sorting
     managementActions: BV actions
     filter: 'Show only:'
+    makeRegularTeamMember: Add to team
+    filterQuizSM: BV-quiz successfully passed
+    pickupAsc: Newest last
+    pickupDesc: Newest first
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
@@ -1138,7 +1142,7 @@ storeedit:
     leave: Leave store
     bread: Edit team
     max-sm: Please choose three store managers maximum
-    cannot-leave: You are responsible for this store,  so you can't leave it!
+    cannot-leave: You are responsible for this store, so you can't leave it!
     need-sm: There must be at least one responsible person per team!
   add-new: Add new store
   milestone:
