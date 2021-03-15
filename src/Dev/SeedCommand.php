@@ -233,6 +233,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 				for ($k = 0; $k <= 2; ++$k) {
 					$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
 					$this->helper->addCollector($foodSaver_id, $store_id, ['date' => $pickupDate->toDateTimeString()]);
+					$this->helper->addStoreTeam($store_id, $foodSaver_id);
 				}
 			}
 			$this->output->write('.');
