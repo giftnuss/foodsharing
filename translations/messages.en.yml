@@ -1435,8 +1435,8 @@ store:
   go: To the store page
   tooltip_red: Vacant pick-ups today or tomorrow
   tooltip_orange: Vacant pick-ups in the next three days
-  pickup_slot_unavailable: This pickup slot is further in the future than provided
-    by your BVs. So please try again at a later time.
+  pickup_slot_unavailable: This pick-up slot is further in the future than intended
+    by your BIEBs. So please try again at a later date.
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -1741,8 +1741,8 @@ fsp:
   addError: The food-share-point wasn't added. Did you fill out everything correctly?
   descLabel: Write some basic information about the food-share-point here! Especially
     when it is accessible/open.
-  suggestSuccess: Fairteiler has been proposed and now needs to be confirmed by an
-    ambassador or fairteiler responsible person.
+  suggestSuccess: Food share point has been proposed and now needs to be confirmed
+    by an ambassador / food share responsible.
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
