@@ -178,6 +178,7 @@ settings:
       \ icon is placed over your profile picture.\n"
     range: 'Indicate how long you will not be available for:'
     tooltip: '{name} is currently taking a break and is in the night cap mode'
+    full: I'm going to be away indefinetely
   account: Account options
   businesscard: Personal business card
   photo:
@@ -334,6 +335,8 @@ profile:
     foodsaverId: Foodsaver ID
     fsMail: Internal mailbox
     privateMail: Private email address
+    buddycount1: '{name} is buddy with {count} foodsavers'
+    buddycount: '{count} foodsavers are buddies with {name}'
   report:
     sent: Report was sent
     send: Send report
@@ -1102,6 +1105,7 @@ region:
     region: Region
     title: Type of region
     bigcity: Big city (without registration option)
+    townpart: Part of a town
   delete: Delete region
   edit: Edit region
   save: Yes, save
@@ -1597,6 +1601,10 @@ storeedit:
     need-sm: There must be at least one responsible person per team!
     unmanaged: "This store doesn't have any responsible person at the moment!\nPlease\
       \ add up to three store managers that will manage the store in the future.\n"
+    amb: "You are not responsible for this store.\nHowever, as an ambassador you have\
+      \ extensive rights.\n"
+    coordinator: "You are not responsible for this store.\nHowever, as part of the\
+      \ store management team you have extensive rights.\n"
   add-new: Add new store
   milestone:
     dropped: '{user} is not part of the team anymore'
