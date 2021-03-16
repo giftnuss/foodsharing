@@ -48,16 +48,3 @@ $I->fillField('#homepage', 'https://www.matthias-larisch.de');
 $I->click('Speichern');
 $I->see('Änderungen wurden gespeichert');
 $I->seeInField('#homepage', 'https://www.matthias-larisch.de');
-
-/* I have no picture - that is the default */
-$I->seeElement('//img[@src="img/portrait.png"]');
-
-$I->click('Neues Bild hochladen');
-$I->attachFile('//input[@type="file"][@name="uploadpic"]', 'avatar-300px.png');
-$I->wait(2);
-$I->waitForElement('#fotoupload-save', 10);
-$I->clickWithLeftButton('#fotoupload-save');
-$I->waitForElementNotVisible('#fotoupload-save', 10);
-
-/* Now I have a picture and should not see the default */
-$I->dontSeeElement('//img[@src="img/portrait.png"]');
