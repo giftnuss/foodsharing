@@ -179,6 +179,10 @@ settings:
     range: 'Indicate how long you will not be available for:'
     tooltip: '{name} is currently taking a break and is in the night cap mode'
     full: I'm going to be away indefinetely
+    info: "With the sleepyhead feature, you tell the community that you are currently\
+      \ out of town or don't have time to save food right now for other reasons.\n\
+      It is helpful to know if you are able to respond to messages\nor even sometimes\
+      \ make pickups.\n"
   account: Account options
   businesscard: Personal business card
   photo:
@@ -360,6 +364,10 @@ profile:
       you have tried the communication channels available to you in order to address
       the incident directly to the person and to clarify the matter. Please indicate
       how you can be reached best in case we have further questions.
+    repAdminAgainstArbAdmin: You are an admin of the reporting team and want to report
+      an admin of the arbitration board. This is not technically supported at the
+      moment. You can always submit a report by mail to the local responsible for
+      this case.
   history:
     wasVerified: Verified
     lostVerification: De-verified
@@ -808,6 +816,7 @@ bell:
   store_cr_times: Pick-up times have changed
   store_new_request: Request for {name}
   forum_answer: '{user} responded to your comment'
+  store_request_accept_wait: You are now on the jumper/waiting list.
 reports:
   time: Time
   region: Home region
@@ -827,6 +836,10 @@ reports:
   in-store: Does the message concern a specific store where {user} picks up?
   store: Assigned store
   reportmessage: Please indicate how you can be reached if we have further questions!
+  info: ' !! Please specify the <b>date</b>, the <b>place</b> and the <b>time</b>
+    of the incident !!! <br> Please check if you have tried the available communication
+    channels to address the incident directly with the person and to clarify the facts.
+    Please indicate how you can best be reached for queries during processing.'
 recipients:
   test: Test the newsletter
   done: All e-mails have been sent
@@ -1022,6 +1035,15 @@ page:
   join_button: Join
   foodsharepoints:
     header: Food-share-points
+    main: "The Fairteiler is like a \"transshipment point\" for food, to which you\
+      \ can bring food and take it from there for free. A shelf and/or a refrigerator\
+      \ serves as a Fairteiler. You can find our Fairteiler in easily accessible places\
+      \ such as in private or communal rooms, on university campuses, in club rooms,\
+      \ and much more. The Fairteiler can be registered on our platform and thus be\
+      \ displayed on a map for all users.\n\nThere are Fairteiler with regulated opening\
+      \ hours and those that are accessible around the clock.\nOur Fairteiler rules\
+      \ and requirements, such as the hygiene plan and the responsibility of a responsible\
+      \ foodsaver, must be observed in all cases."
   fsvsfs:
     header: Foodsharers and Foodsavers
   whatiswhat: What's this?
@@ -1398,6 +1420,7 @@ store:
     managementEffect: 'Sort by last pick-up date:'
     managementToggleOff: Back to standard view
     managementToggleOn: Enable BV view
+    makeJumper: To the jumper list
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
@@ -1772,6 +1795,7 @@ pickuplist:
   tryagain: Try again after reloading.
   tooslow: Unfortunately, the registration did not work. This is probably because
     someone else was faster.
+  header_for_district: 'Allocation of collections in {district} '
 genderlist:
   gender_female: female
   gender_male: male
@@ -1782,6 +1806,10 @@ genderlist:
   district_tab: Region
   number_table_header: Quantity
   header_for_district: Gender distribution of the foodsavers in {bezirk}
+  gender_home_district_table_caption: Allocation of the characteristic 'gender' to
+    the root district foodsaver
+  gender_district_table_caption: Breakdown of the characteristic 'gender' among all
+    foodsaver who joined the district.
 memberlist:
   some_in_all: ({some} of {all})
   header_for_workgroup: Foodsavers in the working group {bezirk}
@@ -1926,6 +1954,7 @@ dashboard:
     managing: You are responsible for
     pending: Requests have been made to
     stores: You pick up groceries from
+    waiting: You are on the jumper list at
   source_event: Appointment {0}
   source_forum_bot: Amb. forum {0}
   source_forum: Forum {0}
