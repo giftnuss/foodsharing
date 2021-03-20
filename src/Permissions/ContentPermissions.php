@@ -50,6 +50,15 @@ final class ContentPermissions
 			ContentId::STARTPAGE_BLOCK1_DE,
 			ContentId::STARTPAGE_BLOCK2_DE,
 			ContentId::STARTPAGE_BLOCK3_DE,
+			ContentId::STARTPAGE_BLOCK1_BETA,
+			ContentId::STARTPAGE_BLOCK2_BETA,
+			ContentId::STARTPAGE_BLOCK3_BETA,
+			ContentId::STARTPAGE_BLOCK1_AT,
+			ContentId::STARTPAGE_BLOCK2_AT,
+			ContentId::STARTPAGE_BLOCK3_AT,
+			ContentId::STARTPAGE_BLOCK1_CH,
+			ContentId::STARTPAGE_BLOCK2_CH,
+			ContentId::STARTPAGE_BLOCK3_CH,
 		]
 	];
 

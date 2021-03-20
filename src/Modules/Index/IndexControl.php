@@ -23,11 +23,17 @@ class IndexControl extends Control
 
 		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
 		if (strpos($host, 'foodsharing.at') !== false) {
-			$page_content = $this->contentGateway->get(37);
+			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_AT);
+			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_AT);
+			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_AT);
 		} elseif (strpos($host, 'foodsharingschweiz.ch') !== false) {
-			$page_content = $this->contentGateway->get(47);
+			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_CH);
+			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_CH);
+			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_CH);
 		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
-			$page_content = $this->contentGateway->get(48);
+			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_BETA);
+			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_BETA);
+			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_BETA);
 		} else {
 			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_DE);
 			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_DE);
