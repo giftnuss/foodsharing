@@ -253,7 +253,10 @@
                     class="pb-4"
                   >
                     <b-card-text>
-                      {{ $i18n('startpage.near_you.text1') }}
+                      {{ $i18n('startpage.near_you.text1.part1') }} <b-link :href="karte">
+                        {{ $i18n('startpage.near_you.text1.part2') }}
+                      </b-link>
+                      {{ $i18n('startpage.near_you.text1.part3') }}
                     </b-card-text>
                   </b-col>
                   <b-col
@@ -266,7 +269,9 @@
                   </b-col>
                 </b-row>
                 <b-card-text class="pt-4">
-                  {{ $i18n('startpage.near_you.text3') }}
+                  {{ $i18n('startpage.near_you.text3.part1') }} <b-link :href="currentCountry">
+                    {{ $i18n('startpage.near_you.text3.part2') }}
+                  </b-link>
                 </b-card-text>
               </b-card>
             </b-card-group>
@@ -362,7 +367,23 @@ export default {
   components: {
     Fork,
   },
-  props: { contentBlock1: { type: String, default: '' }, contentBlock2: { type: String, default: '' }, contentBlock3: { type: String, default: '' } },
+  props: {
+    contentBlock1: { type: String, default: '' },
+    contentBlock2: { type: String, default: '' },
+    contentBlock3: { type: String, default: '' },
+    country: { type: String, default: 'DE' },
+  },
+  computed: {
+    currentCountry () {
+      if (this.country === 'AT') {
+        return '?page=content&sub=communitiesAustria'
+      } else if (this.country === 'CH') {
+        return '?page=content&sub=communitiesSwitzerland'
+      } else {
+        return '?page=content&sub=communitiesGermany'
+      }
+    },
+  },
 }
 
 </script>
@@ -410,7 +431,6 @@ svg {
 h4 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
-  font-weight: bold;
   font-size: 1.375rem
 }
 
@@ -501,7 +521,7 @@ Bootstrap 4 breakpoints
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  ::v-deep h2 {font-size:3rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:2.25rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;

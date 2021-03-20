@@ -6,12 +6,13 @@ use Foodsharing\Modules\Core\View;
 
 class IndexView extends View
 {
-	public function index($content_block1, $content_block2, $content_block3)
+	public function index($content_block1, $content_block2, $content_block3, $country)
 	{
 		$params = [
 				'contentBlock1' => $content_block1,
 				'contentBlock2' => $content_block2,
-				'contentBlock3' => $content_block3
+				'contentBlock3' => $content_block3,
+				'country' => $country,
 			];
 
 		return $this->vueComponent('index', 'Index', $params);

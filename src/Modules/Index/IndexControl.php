@@ -26,24 +26,29 @@ class IndexControl extends Control
 			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_AT);
 			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_AT);
 			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_AT);
+			$country = 'AT';
 		} elseif (strpos($host, 'foodsharingschweiz.ch') !== false) {
 			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_CH);
 			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_CH);
 			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_CH);
+			$country = 'CH';
 		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
 			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_BETA);
 			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_BETA);
 			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_BETA);
+			$country = 'BETA';
 		} else {
 			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_DE);
 			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_DE);
 			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_DE);
+			$country = 'DE';
 		}
 
 		$this->pageHelper->addContent($this->view->index(
 			$page_content_block1['body'],
 			$page_content_block2['body'],
-			$page_content_block3['body']), CNT_OVERTOP
+			$page_content_block3['body'],
+			$country), CNT_OVERTOP
 		);
 	}
 }

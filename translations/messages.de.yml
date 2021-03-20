@@ -1439,9 +1439,6 @@ settings:
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"
 
-index:
-  confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
-
 profile:
   title: "Profil"
   go: "Profil aufrufen"
@@ -2179,13 +2176,16 @@ startpage:
       open source und basiert auf Engagement und Herzblut vieler. Wie du bei der IT mitmachen kannst? Erfahre mehr
   near_you:
     title: "In deiner Nähe"
-    text1: |
-      Auf der Karte findest du Fairteiler, das sind Regale oder Kühlschränke an denen du Lebensmittel kostenfrei abholen
-      oder vorbeibringen kannst.
+    text1:
+      part1: 'Auf der'
+      part2: 'Karte'
+      part3: 'findest du Fairteiler, das sind Regale oder Kühlschränke an denen du Lebensmittel kostenfrei abholen oder vorbeibringen kannst.'
     text2: |
       Außerdem gibt es Essenskörbe - hiermit kannst du deine eigenen überschüssigen Lebensmittel anbieten und Lebensmittel
       bei anderen abholen.
-    text3: "Die community ist in Bezirke organisiert. Finde Bezirke in deiner Umgebung"
+    text3:
+      part1: 'Die community ist in Bezirke organisiert.'
+      part2: 'Finde Bezirke in deiner Umgebung'
   demands:
     title: Forderungen
     text: |
