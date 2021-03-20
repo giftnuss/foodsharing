@@ -514,3 +514,10 @@ Bootstrap 4 breakpoints
   }
 }
 </style>
+
+<style>
+div#main {
+  min-height: unset !important;
+  padding-bottom: unset !important;
+}
+</style>
