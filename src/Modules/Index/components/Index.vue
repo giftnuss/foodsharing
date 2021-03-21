@@ -324,6 +324,30 @@
         />
       </b-col>
     </b-row>
+    <b-row class="ml-md-5 mt-5">
+      <b-col
+        cols="12"
+        xl="6"
+        class="mb-3"
+      >
+        <b-img
+          class="card-img teaser-towns"
+          src="/img/startpage/foodsharing-staedte.png"
+          alt="Card image"
+          fluid
+        />
+      </b-col>
+      <b-col
+        cols="12"
+        xl="4"
+      >
+        <h2>{{ $i18n('startpage.towns.title') }}</h2>
+        <br>
+        <p>
+          {{ $i18n('startpage.towns.text') }}
+        </p>
+      </b-col>
+    </b-row>
     <div class="card text-white pb-5 mt-5">
       <img
         class="card-img teaser-donate"
@@ -395,12 +419,6 @@ export default {
   margin-right: 0px;
 }
 
-.background-image {
-  background-image: url("/img/teaser.png");
-  background-repeat: no-repeat;
-  background-position-x: center;
-}
-
 .line {
   border-bottom: 1px solid var(--fs-dark-grey);
   width: 90%;
@@ -420,6 +438,10 @@ svg {
 .teaser-image {
   border-radius: 0px !important;
   min-height: 23rem;
+}
+
+.teaser-towns {
+  border-radius: 0px !important;
 }
 
 .teaser-background {

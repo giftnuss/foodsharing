@@ -2193,9 +2193,15 @@ startpage:
       veröffentlicht zum 6. foodsharing-Geburtstag am 12.12.2018. Um Deutschland vor einem erneuten Wortbruch
       – wie bei den Klimaschutzzielen für 2020 – zu bewahren, zeigen foodsharing und Deutsche Umwelthilfe mit einem
       Aktionsplan die Maßnahmen auf, ohne die das Halbierungsziel nicht erreicht werden kann.
-      Erfahre mehr
+  towns:
+    title: foodsharing Städte
+    text: |
+      Teilnehmende Städte unterscheiden sich dahingehend, ob sich diese noch auf dem Weg befinden oder bereits
+      als foodsharing-Stadt ausgezeichnet wurden. Letzteres ist der Fall, wenn es neben einem foodsharing-Team vor Ort
+      auch eine von der Stadtverwaltung unterschriebene Motivationserklärung als Symbol der Partnerschaft zwischen
+      foodsharing und der öffentlichen Hand gibt.
   donate:
-    title: "Spenden"
+    title: Spenden
     text: |
       Wir bemühen uns für jegliche Ausgaben um Sponsering. In manchen Fällen gelingt dies jedoch nicht oder nicht
       vollständig, z.B. bei Ausgaben für: Finanzierung von Veranstaltungen, Rechtsberatung, Versicherungen. Wir freuen uns
