@@ -33,6 +33,6 @@ const sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
   vueApply('#image-upload')
-} else {
+} else if (sub === 'ft') {
   initWall('fairteiler', GET('id'))
 }
