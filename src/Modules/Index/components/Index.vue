@@ -41,7 +41,7 @@
         </b-row>
       </div>
     </div>
-    <b-row>
+    <b-row v-if="contentBlockVisible">
       <b-col
         cols="12"
         md="12"
@@ -71,7 +71,10 @@
         <span v-html="contentBlock3" />
       </b-col>
     </b-row>
-    <div class="line pt-3 pt-xl-5" />
+    <div
+      v-if="contentBlockVisible"
+      class="line pt-3 pt-xl-5"
+    />
     <b-row class="mt-3 ml-5 mt-5">
       <b-col
         cols="12"
@@ -477,6 +480,9 @@ export default {
       } else {
         return '?page=content&sub=communitiesGermany'
       }
+    },
+    contentBlockVisible () {
+      return this.contentBlock1 && this.contentBlock2 && this.contentBlock1
     },
   },
 }
