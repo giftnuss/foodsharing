@@ -124,7 +124,7 @@
             >
               <p>{{ $i18n('footer.our_partner') }}</p>
               <a
-                href="$url('hoster')"
+                :href="$url('hoster')"
                 target="_blank"
                 :rel="externalLink"
                 data-toggle="tooltip"
@@ -133,7 +133,7 @@
               >
                 <img src="/img/footer/manitu_logo_at.png"></a>
               <a
-                href="$url('denns')"
+                :href="$url('denns')"
                 target="_blank"
                 :rel="externalLink"
               >
@@ -145,7 +145,7 @@
               </a>
               <br>
               <a
-                href="$url('bmlfuw')"
+                :href="$url('bmlfuw')"
                 target="_blank"
                 :rel="externalLink"
               >
@@ -156,7 +156,7 @@
                 >
               </a>
               <a
-                href="$url('wiener_tafel')"
+                :href="$url('wiener_tafel')"
                 target="_blank"
                 :rel="externalLink"
               >
