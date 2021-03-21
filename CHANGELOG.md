@@ -1,3 +1,15 @@
+# Release "Feige", Unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+- Fixed a small logic error that lead to unnecessary and invalid requests being made !1918
+
+## Refactoring
+
+## Dev/Test/CI stuff
 # 2021-03-15 Hotfix
 
 - Fix nightly calculation of store statistics !1914
