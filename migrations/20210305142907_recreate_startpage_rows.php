@@ -37,7 +37,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'id' => 78,
 				'name' => 'startpage-block3-de',
 				'title' => '-- ignored --',
-				'body' => '<img src="/img/MG_87011.png">'
+				'body' => '<img src="/img/startpage/hackweekend-img.png">'
 			],
 			[
 			'id' => 79,
@@ -56,7 +56,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'id' => 81,
 				'name' => 'startpage-block3-beta',
 				'title' => '-- ignored --',
-				'body' => '<img src="/img/MG_87011.png">'
+				'body' => '<img src="/img/startpage/hackweekend-img.png">'
 			],
 			[
 				'id' => 82,
@@ -77,7 +77,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'id' => 84,
 				'name' => 'startpage-block3-at',
 				'title' => '-- ignored --',
-				'body' => '<img src="/img/MG_87011.png">'
+				'body' => '<img src="/img/startpage/hackweekend-img.png">'
 			],
 			[
 				'id' => 85,
@@ -98,7 +98,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'id' => 87,
 				'name' => 'startpage-block3-ch',
 				'title' => '-- ignored --',
-				'body' => '<img src="/img/MG_87011.png">'
+				'body' => '<img src="/img/startpage/hackweekend-img.png">'
 			]
 		];
 

@@ -6,7 +6,7 @@
     <div class="card text-white pb-5">
       <img
         class="card-img teaser-image"
-        src="/img/teaser.png"
+        src="/img/startpage/foto-header.png"
         alt="Card image"
       >
       <div class="card-img-overlay">
@@ -97,14 +97,14 @@
           aspect="16by9"
           controls
           allowfullscreen
-          poster="/img/intro.png"
+          poster="/img/startpage/intro.png"
         >
           <source
-            src="/img/intro.webm"
+            src="/img/startpage/intro.webm"
             type="video/webm"
           >
           <source
-            src="/img/intro.mp4"
+            src="/img/startpage/intro.mp4"
             type="video/mp4"
           >
         </b-embed>
@@ -129,7 +129,7 @@
     <div class="card text-white pb-5 mt-5">
       <img
         class="card-img call-to-action-image"
-        src="/img/Rectangle.png"
+        src="/img/startpage/call-to-action-bg.png"
         alt="Card image"
         fluid
       >
@@ -222,7 +222,7 @@
     <div class="card text-white pb-5 mt-5">
       <img
         class="card-img teaser-map"
-        src="/img/map.png"
+        src="/img/startpage/map-bg.png"
         alt="Card image"
         fluid
       >
@@ -320,14 +320,14 @@
       >
         <b-img
           fluid
-          src="/img/forderungen.png"
+          src="/img/startpage/picture-forderungen.png"
         />
       </b-col>
     </b-row>
     <div class="card text-white pb-5 mt-5">
       <img
         class="card-img teaser-donate"
-        src="/img/donate-background.png"
+        src="/img/startpage/donate-bg.png"
         alt="Card image"
         fluid
       >

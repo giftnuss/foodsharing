@@ -131,14 +131,14 @@
                 data-placement="top"
                 :title="$i18n('footer.hosting_tooltip')"
               >
-                <img src="/img/manitu_logo_at.png"></a>
+                <img src="/img/footer/manitu_logo_at.png"></a>
               <a
                 href="$url('denns')"
                 target="_blank"
                 :rel="externalLink"
               >
                 <img
-                  src="/img/denns_logo_at.png"
+                  src="/img/footer/denns_logo_at.png"
                   class="pl-4"
                   :alt="$i18n('footer.denns_at_alt_text')"
                 >
@@ -150,7 +150,7 @@
                 :rel="externalLink"
               >
                 <img
-                  src="/img/lebensministerium_Logo_2014_at.png"
+                  src="/img/footer/lebensministerium_Logo_2014_at.png"
                   :alt="$i18n('footer.lebensministerium_alt_text')"
                   class="pt-4"
                 >
@@ -161,7 +161,7 @@
                 :rel="externalLink"
               >
                 <img
-                  src="/img/wiener_tafel_logo_at.png"
+                  src="/img/footer/wiener_tafel_logo_at.png"
                   class="pl-4 pt-4"
                   :alt="$i18n('footer.wiener_tafel_alt_text')"
                 >
@@ -178,7 +178,7 @@
                 target="_blank"
                 :rel="externalLink"
               >
-                <img src="/img/manitu_logo.png">
+                <img src="/img/footer/manitu_logo.png">
               </a>
             </b-col>
             <b-col
