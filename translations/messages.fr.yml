@@ -83,8 +83,8 @@ group:
       dont le groupe de signalements fait l'objet. Les signalements concernant les
       admins restent invisibles et seront directement envoyés au groupe en charge
       des signalement.
-    tooltip_function_6: L'adresse mail de ce groupe de travail est lié à la fonction
-      "demander une médiation". Les admins n'ont pas d'autorisations spéciales.
+    tooltip_function_6: L'adresse courriel de ce groupe de travail est liée à la fonction
+      « demander une médiation ». Les admins n'ont pas d'autorisations spéciales.
     tooltip_function_5: Les admins de ce groupe peuvent voir les signalements dans
       le district. Les signalements concernant les admins restent invisibles et seront
       directement envoyés à la commission d'arbitrage.
@@ -155,8 +155,8 @@ group:
   member_count: '{0} Pas de participant.e.s|{1} un.e participant.e| [2, Inf[ %count%
     participant.e.s'
   mail_link_title:
-    region: Boîte mail du district
-    workgroup: Boîte mail du groupe de travail
+    region: Messagerie du district
+    workgroup: Messagerie du groupe de travail
 bcard:
   generate: Créer une carte de visite
   error:
@@ -423,6 +423,11 @@ recipients:
   testmail: Envoyer un courriel de test
   confirm: Envoyer le courriel ?
   send: envoyer le courriel
+  doublecheck: Tout est vérifié ? Le courriel doit-il être envoyé au groupe cible
+    sélectionné ?
+  variable-info: "Pour rendre le courriel plus personnel, tu peux insérer <strong>{NAME}</strong>\
+    \ au lieu du nom\net utilisez <strong>{ANREDE}</strong> pour la salutation.\n\
+    <p>{ANREDE} {NAME} donne par exemple : « Cher Peter »\n"
 forum:
   inform_per_email: Informer tous les membres du forum actifs au cours des six derniers
     mois de la création de ce nouveau sujet par courriel, uniquement possible dans
@@ -632,5 +637,5 @@ kette_id: chaîne (entreprise)
 fetchercount: Nombre de quêteurs
 storemanagers: Responsable coopération
 fspmanagers: Foodsaver en charge des frigos solidaires
-fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
+fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
 teaser: Extrait
