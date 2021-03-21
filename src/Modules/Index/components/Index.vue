@@ -148,9 +148,21 @@
                 text-variant="dark"
                 class="p-4"
               >
-                <b-card-text>
-                  <h4>{{ $i18n('startpage.member.title') }}</h4>
-                </b-card-text>
+                <b-row class="mb-3">
+                  <b-col
+                    cols="10"
+                    md="11"
+                    xl="10"
+                  >
+                    <h4>{{ $i18n('startpage.member.title') }}</h4>
+                  </b-col>
+                  <b-col
+                    cols="1"
+                    align-self="center"
+                  >
+                    <i class="fas fa-arrow-right" />
+                  </b-col>
+                </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.member.text') }}
                 </b-card-text>
@@ -191,9 +203,21 @@
                 text-variant="dark"
                 class="p-4"
               >
-                <b-card-text>
-                  <h4>{{ $i18n('startpage.store.title') }}</h4>
-                </b-card-text>
+                <b-row class="mb-3">
+                  <b-col
+                    cols="10"
+                    md="11"
+                    xl="10"
+                  >
+                    <h4>{{ $i18n('startpage.store.title') }}</h4>
+                  </b-col>
+                  <b-col
+                    cols="1"
+                    align-self="center"
+                  >
+                    <i class="fas fa-arrow-right" />
+                  </b-col>
+                </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.store.text') }}
                 </b-card-text>
@@ -369,9 +393,20 @@
                 text-variant="dark"
                 class="p-4"
               >
-                <b-card-text>
-                  <h4>{{ $i18n('startpage.donate.title') }}</h4>
-                </b-card-text>
+                <b-row class="mb-3">
+                  <b-col
+                    cols="10"
+                    md="11"
+                  >
+                    <h4>{{ $i18n('startpage.donate.title') }}</h4>
+                  </b-col>
+                  <b-col
+                    cols="1"
+                    align-self="center"
+                  >
+                    <i class="fas fa-arrow-right" />
+                  </b-col>
+                </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.donate.text') }}
                 </b-card-text>
