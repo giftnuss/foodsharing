@@ -31,7 +31,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'body' => '<h3>Online Hackweekend</h3><p>Sei dabei wenn wir foodsharing gemeinsam besser machen.
 				Dieses Wochenende ist für alle - nicht nur für Softwareentwickler*innen,Tester*innen, Designer*innen,
 				sondern auch für Leute vom Support, der Öffentlichkeitsarbeit, der Bildungsarbeit etc.</p>
- 				<p><a href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
+ 				<p><a class="link" href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
 			],
 			[
 				'id' => 78,
@@ -71,7 +71,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'body' => '<h3>Online Hackweekend</h3><p>Sei dabei wenn wir foodsharing gemeinsam besser machen.
 				Dieses Wochenende ist für alle - nicht nur für Softwareentwickler*innen,Tester*innen, Designer*innen,
 				sondern auch für Leute vom Support, der Öffentlichkeitsarbeit, der Bildungsarbeit etc.</p>
- 				<p><a href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
+ 				<p><a class="link" href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
 			],
 			[
 				'id' => 84,
@@ -92,7 +92,7 @@ final class RecreateStartpageRows extends AbstractMigration
 				'body' => '<h3>Online Hackweekend</h3><p>Sei dabei wenn wir foodsharing gemeinsam besser machen.
 				Dieses Wochenende ist für alle - nicht nur für Softwareentwickler*innen,Tester*innen, Designer*innen,
 				sondern auch für Leute vom Support, der Öffentlichkeitsarbeit, der Bildungsarbeit etc.</p>
- 				<p><a href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
+ 				<p><a class="link" href="https://devblog.foodsharing.de">Erfahre mehr</a></p>'
 			],
 			[
 				'id' => 87,

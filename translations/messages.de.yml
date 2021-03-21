@@ -2150,30 +2150,32 @@ startpage:
   welcome_text: "Willkommen bei foodsharing"
   slogan: "Gemeinsam für mehr Lebensmittelwertschätzung"
   call_to_action_button: "Mitmachen"
+  more_infos: Erfahre mehr
+  this_is_how_it_works: So funktioniert's
   mission:
     title: "Mission"
     text: "Unser langfristiges Ziel ist es die Wegwerfkultur von Lebensmitteln und anderen Ressourcen zu vermindern.
       Wir retten Lebensmittel in privaten Haushalten sowie von Betrieben - gemeinschaftlich, nachhaltig & wertschätzend.
-      Wir verstehen und als Bildungspolitische Bewegung. Erfahre mehr"
+      Wir verstehen und als Bildungspolitische Bewegung."
   call_to_action:
     title: "Mach mit"
     text: "Wir entstanden 2012, mittlerweile sind wir eine internationale Bewegung  mit über 200.000 Nutzer*innen
       in Deutschland, Österreich, Schweiz und weiteren europäischen Ländern."
   member:
     title: "als Mitglied"
-    text: "Teile deine überschüssigen Lebensmittel mit der foodsharing Community oder rette Lebensmittel von Betrieben. Erfahre mehr"
+    text: "Teile deine überschüssigen Lebensmittel mit der foodsharing Community oder rette Lebensmittel von Betrieben."
   private:
     title: "im Privaten"
     text: "Sag Lebensmittelverschwendung im deinem Haushalt den Kampf an. Wir informieren auf Messen und bei Veranstaltungen wie."
   store:
     title: "als Betrieb"
-    text: "Du arbeitest in einem Supermarkt, Restaurant, Kantine...? Registriere deinen Betrieb und rette Lebensmittel. Erfahre mehr"
+    text: "Du arbeitest in einem Supermarkt, Restaurant, Kantine...? Registriere deinen Betrieb und rette Lebensmittel."
   how_we_work:
     title: "So läufts"
     text: |
       Das alles entsteht ehrenamtlich und unentgeltlich, unabhängig und werbefrei. Die Platform bildet das Herz
       unserer Gemeinschaft. Hier vernetzen und koordinieren wir uns lokal und europaweit. Die Website und beta App ist
-      open source und basiert auf Engagement und Herzblut vieler. Wie du bei der IT mitmachen kannst? Erfahre mehr
+      open source und basiert auf Engagement und Herzblut vieler. Wie du bei der IT mitmachen kannst?
   near_you:
     title: "In deiner Nähe"
     text1:

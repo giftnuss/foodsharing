@@ -85,10 +85,19 @@
       >
         <p>
           {{ $i18n('startpage.mission.text') }}
+          <b-link
+            class="link"
+            href="ueber-uns"
+          >
+            {{ $i18n('startpage.more_infos') }}
+          </b-link>
         </p>
       </b-col>
     </b-row>
     <b-row class="ml-5 mr-5 mt-5">
+      <b-cols cols="12">
+        <h2>{{ $i18n('startpage.this_is_how_it_works') }}</h2>
+      </b-cols>
       <b-col
         cols="12"
       >
@@ -165,6 +174,12 @@
                 </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.member.text') }}
+                  <b-link
+                    class="link"
+                    href="?page=content&sub=joininfo"
+                  >
+                    {{ $i18n('startpage.more_infos') }}
+                  </b-link>
                 </b-card-text>
               </b-card>
             </b-card-group>
@@ -220,6 +235,12 @@
                 </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.store.text') }}
+                  <b-link
+                    class="link"
+                    href="fuer-unternehmen"
+                  >
+                    {{ $i18n('startpage.more_infos') }}
+                  </b-link>
                 </b-card-text>
               </b-card>
             </b-card-group>
@@ -240,6 +261,12 @@
       >
         <p>
           {{ $i18n('startpage.how_we_work.text') }}
+          <b-link
+            class="link"
+            href="https://devdocs.foodsharing.network"
+          >
+            {{ $i18n('startpage.more_infos') }}
+          </b-link>
         </p>
       </b-col>
     </b-row>
@@ -277,7 +304,10 @@
                     class="pb-4"
                   >
                     <b-card-text>
-                      {{ $i18n('startpage.near_you.text1.part1') }} <b-link :href="karte">
+                      {{ $i18n('startpage.near_you.text1.part1') }} <b-link
+                        class="link"
+                        :href="karte"
+                      >
                         {{ $i18n('startpage.near_you.text1.part2') }}
                       </b-link>
                       {{ $i18n('startpage.near_you.text1.part3') }}
@@ -293,7 +323,10 @@
                   </b-col>
                 </b-row>
                 <b-card-text class="pt-4">
-                  {{ $i18n('startpage.near_you.text3.part1') }} <b-link :href="currentCountry">
+                  {{ $i18n('startpage.near_you.text3.part1') }} <b-link
+                    class="link"
+                    :href="currentCountry"
+                  >
                     {{ $i18n('startpage.near_you.text3.part2') }}
                   </b-link>
                 </b-card-text>
@@ -324,14 +357,11 @@
         <b-row class="mt-2">
           <b-col>
             {{ $i18n('startpage.demands.text') }}
-          </b-col>
-        </b-row>
-        <b-row class="mt-2">
-          <b-col>
             <b-link
-              href="http://test"
+              class="link"
+              href="?page=content&sub=forderungen"
             >
-              Erfahre mehr
+              {{ $i18n('startpage.more_infos') }}
             </b-link>
           </b-col>
         </b-row>
@@ -369,6 +399,12 @@
         <br>
         <p>
           {{ $i18n('startpage.towns.text') }}
+          <b-link
+            class="link"
+            href="https://foodsharing-staedte.org"
+          >
+            {{ $i18n('startpage.more_infos') }}
+          </b-link>
         </p>
       </b-col>
     </b-row>
@@ -454,6 +490,11 @@ export default {
   margin-right: 0px;
 }
 
+::v-deep .link {
+  color: var(--fs-green);
+  font-weight: bold;
+}
+
 .line {
   border-bottom: 1px solid var(--fs-dark-grey);
   width: 90%;
@@ -511,7 +552,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 
 .call-to-action-image {
   border-radius: 0px !important;
-  height: 45rem;
+  height: 48rem;
 }
 
 .teaser-map {
