@@ -5,6 +5,7 @@
 ## Changes
 
 ## Bugfixes
+- Fixed a small logic error that lead to unnecessary and invalid requests being made !1918
 
 ## Refactoring
 
