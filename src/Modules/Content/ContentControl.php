@@ -357,7 +357,6 @@ class ContentControl extends Control
 				'id' => '2020-12',
 				'title' => 'Release "Dragonfruit" (Dezember 2020)',
 				'markdown' => $this->parseGitlabLinks(file_get_contents('release-notes/2020-12.md') ?: ''),
-				'visible' => true,
 			], [
 				'id' => '2020-10',
 				'title' => 'Release "Cranberry" (Oktober 2020)',
