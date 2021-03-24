@@ -816,7 +816,7 @@ bell:
   store_cr_times: Pick-up times have changed
   store_new_request: Request for {name}
   forum_answer: '{user} responded to your comment'
-  store_request_accept_wait: You are now on the jumper/waiting list.
+  store_request_accept_wait: You were added to the jumper/waiting list.
 reports:
   time: Time
   region: Home region
@@ -1420,7 +1420,7 @@ store:
     managementEffect: 'Sort by last pick-up date:'
     managementToggleOff: Back to standard view
     managementToggleOn: Enable BV view
-    makeJumper: To the jumper list
+    makeJumper: add to jumper list
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
