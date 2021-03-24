@@ -263,6 +263,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_partnerandteam = RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP;
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
+		$CreateWorkgroupWG = $I->createWorkingGroup('AG Anlegen', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
 
 		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 
@@ -308,6 +309,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $region1]);
 		$this->writeUser($userorga, $password, 'orga');
+
+		$userorgaWG = $I->createOrga($password, false, ['email' => 'userorgaWG@example.com', 'name' => 'OrgaWG', 'bezirk_id' => $region1, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
+		$this->writeUser($userorgaWG, $password, 'orga');
+		$I->addRegionAdmin(RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP, $userorgaWG['id']);
+		$I->addRegionMember(RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP, $userorgaWG['id']);
+
 		$this->output->writeln('- done');
 
 		$this->output->writeln('Create some user interaction:');

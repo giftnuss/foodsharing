@@ -42,7 +42,6 @@ class Foodsharing extends \Codeception\Module\Db
 			RegionIDs::TEAM_BOARD_MEMBER,
 			RegionIDs::TEAM_ALUMNI_MEMBER,
 			RegionIDs::TEAM_ADMINISTRATION_MEMBER,
-			RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP,
 			RegionIDs::PR_START_PAGE,
 			RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP,
 		]);

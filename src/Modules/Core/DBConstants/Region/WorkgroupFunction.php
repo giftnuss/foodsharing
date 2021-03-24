@@ -17,7 +17,7 @@ class WorkgroupFunction
 
 	public static function isValidFunction(int $value): bool
 	{
-		return in_array($value, range(self::WELCOME, self::STORES_COORDINATION));
+		return in_array($value, range(self::WELCOME, self::MODERATION));
 	}
 
 	/**
