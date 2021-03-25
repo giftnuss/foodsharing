@@ -225,7 +225,7 @@ button:
   delete: Supprimer
   edit: Modifier
   new: Nouveau
-  upload: Importer
+  upload: Téléverser
   rotate_right: Pivoter dans le sens horaire
   attach_image: Joindre une image
   change_picture: Modifier l'image
@@ -235,12 +235,12 @@ upload:
   image-problem: Votre fichier semble être corrompu ou non valide, il est préférable
     d'utiliser une image jpg classique
   crop_dialog_title: Rogner l'image
-  new_file: Importer de nouvelles données
-  choose_file: Importer des données
-  file: Importer un fichier
+  new_file: Téléverser un nouveau fichier
+  choose_file: Téléverser un fichier
+  file: Téléverser un fichier
   edit_image: Modifier l'image
-  new_image: Importer une nouvelle image
-  image: Importer une image
+  new_image: Téléverser une nouvelle image
+  image: Téléverser une image
   preview_image: Aperçu
   no_image_chosen: Aucun fichier n'a encore été sélectionné
   no_image_yet: Aucune image n'a encore été importée
@@ -254,7 +254,7 @@ quizusercomment: "Donnez-nous votre avis sur cette question !\nÉtait-ce trop fa
   \ trop difficile, incompréhensible ?\nOu certaines réponses ou explications sont-elles\
   \ incorrectes ?\n"
 wikilink: Lien vers le wiki
-questcount: Combien de questions doivent être posées pendant l'examen ?
+questcount: Combien de questions doivent être posées pendant l'examen ?
 maxfp: Nombre maximum de points faibles à passer
 answers: Quelles réponses sont correctes ?
 duration: Il est temps de répondre
@@ -359,6 +359,7 @@ settings:
 email_template:
   newsletter:
     unsubscribe: Tu ne veux plus recevoir de lettres d'information ?
+    linktext: Cliquez ici pour vous désabonner !
   unknown_email2: L'adresse courriel %ADDRESS% n'est pas connue.
   unknown_email: Adresse courriel inconnue
   yourFSteam: Ton équipe foodsharing.
@@ -369,6 +370,21 @@ email_template:
   information: Infos
   help_needed:
     or: ou
+  dont_respond:
+    you_can: Tu peux ci-dessous choisir
+    no_notification_link: Voulez-vous arrêter de recevoir ces types de notifications ?
+    noreply: Veuillez ne pas répondre à ce courriel. Ce message a été envoyé depuis
+      une adresse sans boîte de réception.
+    nomail: quels courriels tu recevras.
+  to: à
+  from: -- De
+  impress:
+    title: Mentions légales
+    address: "foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Représenté\
+      \ par :\n\n Frank Bowinkelmann \n Contact :\n Courriel : info@foodsharing.de\n\
+      \ Inscription au registre :\n\n Inscription au registre des associations\n Tribunal d’enregistrement :\
+      \ tribunal de Cologne\n Numéro d’enregistrement : VR 17439\n Responsable du\
+      \ contenu d’après § 55 Abs. 2 RStV :\n  Frank Bowinkelmann"
 mailbox:
   mark_as_unread: Marquer comme non lu
   filesize: Désolé. Le fichier est trop gros.
@@ -490,6 +506,8 @@ terminology:
   stores: Magasin / entreprise
   events: Rendez-vous
   forum: Forum
+  message: message
+  profile_picture: photo de profil
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
@@ -635,7 +653,7 @@ store_status_impact_explanation: Veuillez actualiser le statut de la coopératio
   coopérantes seront visibles dans la barre de navigation.
 kette_id: chaîne (entreprise)
 fetchercount: Nombre de quêteurs
-storemanagers: Responsable coopération
-fspmanagers: Foodsaver en charge des frigos solidaires
+storemanagers: Gérants du magasin
+fspmanagers: Épargnants alimentaires responsables des frigos solidaires
 fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
 teaser: Extrait
