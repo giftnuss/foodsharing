@@ -23,31 +23,24 @@ class IndexControl extends Control
 
 		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
 		if (strpos($host, 'foodsharing.at') !== false) {
-			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_AT);
-			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_AT);
-			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_AT);
+			$contentIds = [ContentId::STARTPAGE_BLOCK1_AT, ContentId::STARTPAGE_BLOCK2_AT, ContentId::STARTPAGE_BLOCK3_AT];
 			$country = 'AT';
 		} elseif (strpos($host, 'foodsharingschweiz.ch') !== false) {
-			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_CH);
-			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_CH);
-			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_CH);
+			$contentIds = [ContentId::STARTPAGE_BLOCK1_CH, ContentId::STARTPAGE_BLOCK2_CH, ContentId::STARTPAGE_BLOCK3_CH];
 			$country = 'CH';
 		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
-			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_BETA);
-			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_BETA);
-			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_BETA);
+			$contentIds = [ContentId::STARTPAGE_BLOCK1_BETA, ContentId::STARTPAGE_BLOCK2_BETA, ContentId::STARTPAGE_BLOCK3_BETA];
 			$country = 'BETA';
 		} else {
-			$page_content_block1 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK1_DE);
-			$page_content_block2 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK2_DE);
-			$page_content_block3 = $this->contentGateway->get(ContentId::STARTPAGE_BLOCK3_DE);
+			$contentIds = [ContentId::STARTPAGE_BLOCK1_DE, ContentId::STARTPAGE_BLOCK2_DE, ContentId::STARTPAGE_BLOCK3_DE];
 			$country = 'DE';
 		}
 
+		$page_content_blocks = $this->contentGateway->getMultiple($contentIds);
 		$this->pageHelper->addContent($this->view->index(
-			$page_content_block1['body'],
-			$page_content_block2['body'],
-			$page_content_block3['body'],
+			$page_content_blocks[0]['body'],
+			$page_content_blocks[1]['body'],
+			$page_content_blocks[2]['body'],
 			$country), CNT_OVERTOP
 		);
 	}

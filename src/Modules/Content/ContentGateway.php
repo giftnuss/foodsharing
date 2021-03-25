@@ -16,6 +16,11 @@ class ContentGateway extends BaseGateway
 		);
 	}
 
+	public function getMultiple(array $ids): array
+	{
+		return $this->db->fetchAllByCriteria('fs_content', ['id', 'title', 'body'], ['id' => $ids]);
+	}
+
 	public function list($filter): array
 	{
 		return $this->db->fetchAllByCriteria('fs_content', ['id', 'name'], $filter);
