@@ -5,13 +5,15 @@
 ## Changes
 
 ## Bugfixes
-- Fixed a small logic error that lead to unnecessary and invalid requests being made !1918
-- Fix permission problem in region admin module when saving working groups without functions !1917 @alex.simm
-- Fix for assigning workgroup functions !1922 @fs_k
 
 ## Refactoring
 
 ## Dev/Test/CI stuff
+
+# 2021-03-26 Hotfix
+
+- Fix for assigning workgroup functions !1922 @fs_k
+
 # 2021-03-22 Hotfix
 
 - Fixed a small logic error that lead to unnecessary and invalid requests being made !1918 @\_fridtjof_
