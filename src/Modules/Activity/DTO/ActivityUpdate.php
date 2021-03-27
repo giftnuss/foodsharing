@@ -2,11 +2,12 @@
 
 namespace Foodsharing\Modules\Activity\DTO;
 
+use DateTime;
+
 class ActivityUpdate
 {
 	public string $type;
-	public string $time;
-	public int $time_ts; // Legacy timestamp (still used for comparison)
+	public DateTime $time;
 
 	public string $title;
 	public string $desc;
@@ -28,8 +29,7 @@ class ActivityUpdate
 
 	public static function create(
 		string $type,
-		string $time,
-		int $time_ts,
+		DateTime $time,
 		string $title,
 		string $desc,
 		?string $source,
@@ -48,7 +48,6 @@ class ActivityUpdate
 
 		$u->type = $type;
 		$u->time = $time;
-		$u->time_ts = $time_ts;
 
 		$u->title = $title;
 		$u->desc = $desc;
