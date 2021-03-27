@@ -1,3 +1,16 @@
+# Release "Feige", Unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+- Change DTOs for dashboard updates to use date objects !1926 @alex.simm
+
+## Dev/Test/CI stuff
+
 # 2021-03-26 Hotfix
 
 - Fix for assigning workgroup functions !1922 @fs_k

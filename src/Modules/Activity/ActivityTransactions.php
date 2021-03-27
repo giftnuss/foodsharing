@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Activity;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Activity\DTO\ActivityFilter;
 use Foodsharing\Modules\Activity\DTO\ActivityFilterCategory;
@@ -163,8 +164,7 @@ class ActivityTransactions
 
 			$out[] = ActivityUpdate::create(
 				'event',
-				$u['time'],
-				$u['time_ts'],
+				Carbon::createFromTimestamp($u['time_ts']),
 				$u['name'],
 				$u['body'] ?? '',
 				$u['event_region'],
@@ -189,8 +189,7 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$out[] = ActivityUpdate::create(
 				'foodsharepoint',
-				$u['time'],
-				$u['time_ts'],
+				Carbon::createFromTimestamp($u['time_ts']),
 				$u['name'],
 				$u['body'] ?? '',
 				$u['fsp_location'],
@@ -236,8 +235,7 @@ class ActivityTransactions
 
 			$out[] = ActivityUpdate::create(
 				'friendWall',
-				$u['time'],
-				$u['time_ts'],
+				Carbon::createFromTimestamp($u['time_ts']),
 				'',
 				$u['body'] ?? '',
 				$u['fs_name'],
@@ -289,8 +287,7 @@ class ActivityTransactions
 			$replyUrl = '/xhrapp.php?app=mailbox&m=quickreply&mid=' . (int)$u['id'];
 
 			$out[] = MailboxUpdate::create(
-				$u['time'], // TODO DateTime
-				$u['time_ts'],
+				Carbon::createFromTimestamp($u['time_ts']),
 				$u['body'] ?? '',
 				$replyUrl,
 				$u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
@@ -344,8 +341,7 @@ class ActivityTransactions
 
 			$out[] = ActivityUpdate::create(
 				'forum',
-				$u['update_time'],
-				$u['update_time_ts'],
+				Carbon::createFromTimestamp($u['update_time_ts']),
 				$u['name'],
 				$u['post_body'] ?? '',
 				$u['bezirk_name'],
@@ -376,8 +372,7 @@ class ActivityTransactions
 		foreach ($updates as $u) {
 			$out[] = ActivityUpdate::create(
 				'store',
-				$u['update_time'],
-				$u['update_time_ts'],
+				Carbon::createFromTimestamp($u['update_time_ts']),
 				$u['betrieb_name'],
 				$u['text'] ?? '',
 				$u['region_name'],

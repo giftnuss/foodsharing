@@ -37,6 +37,7 @@ import { getUpdates } from '@/api/dashboard'
 import ActivityPost from './ActivityPost'
 import { allFilterTypes } from './ActivityFilter'
 import InfiniteLoading from 'vue-infinite-loading'
+import { parseISO, compareDesc } from 'date-fns'
 
 export default {
   components: { ActivityPost, InfiniteLoading },
@@ -73,11 +74,14 @@ export default {
     },
     async infiniteHandler ($state) {
       var updates = await getUpdates(this.page)
+      updates.forEach(function (u, index, array) {
+        array[index].time = parseISO(array[index].time)
+      })
       var filtered = this.hideUnwanted(updates)
       if (filtered.length) {
         this.page += 1
         updates.sort((a, b) => {
-          return b.time_ts - a.time_ts
+          return compareDesc(a.time, b.time)
         })
         this.updates.push(...updates)
         $state.loaded()
