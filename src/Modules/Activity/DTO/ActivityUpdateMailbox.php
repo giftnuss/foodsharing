@@ -2,10 +2,11 @@
 
 namespace Foodsharing\Modules\Activity\DTO;
 
+use DateTime;
+
 class ActivityUpdateMailbox
 {
-	public string $time;
-	public int $time_ts; // Legacy timestamp (still used for comparison)
+	public DateTime $time;
 
 	public string $type = 'mailbox';
 	public string $desc;
@@ -21,8 +22,7 @@ class ActivityUpdateMailbox
 	public string $sender_email;
 
 	public static function create(
-		string $time, // DateTime $time,
-		int $time_ts,
+		DateTime $time,
 		string $desc,
 		?string $quickreply,
 		string $mailbox_name,
@@ -33,7 +33,6 @@ class ActivityUpdateMailbox
 		$u = new self();
 
 		$u->time = $time;
-		$u->time_ts = $time_ts;
 
 		$u->desc = $desc;
 		$u->title = $subject;

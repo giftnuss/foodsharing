@@ -74,9 +74,9 @@
 
     <div class="time mt-2">
       <i class="far fa-fw fa-clock" />
-      <span> {{ $dateDistanceInWords(when) }} </span>
+      <span> {{ $dateDistanceInWords(time) }} </span>
       <i class="fas fa-fw fa-angle-right" />
-      <span> {{ $dateFormat(when, 'full-short') }} </span>
+      <span> {{ $dateFormat(time, 'full-short') }} </span>
     </div>
   </li>
 </template>
@@ -86,7 +86,6 @@ import serverData from '@/server-data'
 import { sendQuickreply } from '@/api/dashboard'
 import { pulseInfo } from '@/script'
 import { url } from '@/urls'
-import dateFnsParseISO from 'date-fns/parseISO'
 import Markdown from '@/components/Markdown/Markdown'
 
 export default {
@@ -94,8 +93,7 @@ export default {
   /* eslint-disable vue/prop-name-casing */
   props: {
     // Shared properties
-    time: { type: String, required: true },
-    time_ts: { type: Number, required: true },
+    time: { type: Date, required: true },
 
     type: { type: String, required: true },
     desc: { type: String, default: '' },
@@ -160,9 +158,6 @@ export default {
     },
     translationKey () {
       return 'dashboard.source_' + this.type + this.source_suffix
-    },
-    when () {
-      return dateFnsParseISO(this.time)
     },
   },
   methods: {
