@@ -3,11 +3,13 @@
 ## Features
 
 ## Changes
+- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
 
 ## Bugfixes
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
+- Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 

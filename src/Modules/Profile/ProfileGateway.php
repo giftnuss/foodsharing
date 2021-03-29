@@ -371,19 +371,22 @@ final class ProfileGateway extends BaseGateway
 
 	public function listStoresOfFoodsaver(int $fsId): array
 	{
-		$stm = '
-			SELECT 	b.id,
-					b.name,
-					bt.verantwortlich,
-					bt.active
-			FROM 	fs_betrieb_team bt,
-					fs_betrieb b
-			WHERE 	bt.betrieb_id = b.id
-			AND		bt.foodsaver_id = :fs_id
-			ORDER BY b.name
-		';
+		return $this->db->fetchAll('
+			SELECT 	s.id,
+					s.name,
+					st.verantwortlich as isManager,
+					st.active,
+					s.betrieb_status_id as cooperationStatus
 
-		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
+			FROM             fs_betrieb_team st
+			LEFT OUTER JOIN  fs_betrieb s  ON  s.id = st.betrieb_id
+
+			WHERE  st.foodsaver_id = :fs_id
+
+			ORDER BY  st.verantwortlich DESC, st.active ASC, s.name ASC
+		', [
+			':fs_id' => $fsId,
+		]);
 	}
 
 	public function buddyStatus(int $fsId, int $sessionId): int
