@@ -8,13 +8,13 @@
       <div
         v-if="emailIsBouncing"
       >
-        {{ $i18n('profile.mailBounceWarning_1', { email: email }) }}
+        {{ $i18n('profile.mail_bounce.warning_1', { email: email }) }}
         <a
           :href="$url('settings')"
         >
-          {{ $i18n('profile.mailBounceWarning_2') }}
+          {{ $i18n('profile.mail_bounce.warning_2') }}
         </a>
-        {{ $i18n('profile.mailBounceWarning_3') }}
+        {{ $i18n('profile.mail_bounce.warning_3') }}
       </div>
       <div
         v-else-if="isNotActivated"

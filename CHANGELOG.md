@@ -2,6 +2,7 @@
 
 ## Features
 - Allow users to remove trust bananas on their own profile #592 !1920 @alex.simm
+- Added a button that allows removing users from the email bounce list !1927 @alex.simm
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
