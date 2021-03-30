@@ -1,15 +1,6 @@
-# Release "Feige", Unreleased
+# 2021-03-30 Hotfix
 
-## Features
-
-## Changes
-
-## Bugfixes
-
-## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
-
-## Dev/Test/CI stuff
 
 # 2021-03-26 Hotfix
 
