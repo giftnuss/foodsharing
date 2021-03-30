@@ -4,7 +4,7 @@ import './Profile.css'
 import $ from 'jquery'
 import { expose } from '@/utils'
 import { sendBuddyRequest } from '@/api/buddy'
-import { hideLoader, pulseError, pulseInfo, reload, showLoader } from '@/script'
+import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
 import MediationRequest from './components/MediationRequest'
@@ -13,13 +13,13 @@ import BananaList from './components/BananaList'
 import PublicProfile from './components/PublicProfile'
 import ProfileStoreList from './components/ProfileStoreList'
 import PickupHistory from '../StoreUser/components/PickupHistory'
+import EmailBounceList from './components/EmailBounceList'
 // Wallpost
 import { URL_PART } from '@/browser'
 import '../WallPost/WallPost.css'
 import { initWall } from '@/wall'
-import { removeUserFromBounceList } from '@/api/profile'
 
-expose({ trySendBuddyRequest, removeFromBounceList })
+expose({ trySendBuddyRequest })
 
 async function trySendBuddyRequest (userId) {
   try {
@@ -38,6 +38,7 @@ vueRegister({
   PublicProfile,
   MediationRequest,
   ReportRequest,
+  EmailBounceList,
 })
 
 vueApply('#vue-profile-bananalist', true) // BananaList
@@ -46,21 +47,9 @@ vueApply('#vue-profile-storelist', true) // ProfileStoreList
 vueApply('#profile-public', true) // PublicProfile
 vueApply('#mediation-Request', true) // MediationRequest
 vueApply('#report-Request', true) // ReportRequest
+vueApply('#email-bounce-list', true)
 
 if (URL_PART(0) === 'profile') {
   const wallpostTable = (URL_PART(2) === 'notes') ? 'usernotes' : 'foodsaver'
   initWall(wallpostTable, URL_PART(1))
-}
-
-async function removeFromBounceList (userId) {
-  showLoader()
-
-  try {
-    await removeUserFromBounceList(userId)
-    reload()
-  } catch (e) {
-    pulseError(i18n('error_unexpected'))
-  }
-
-  hideLoader()
 }

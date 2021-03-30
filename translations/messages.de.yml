@@ -1449,10 +1449,11 @@ profile:
   go: "Profil aufrufen"
   notFound: "Dieses Nutzerprofil gibt es nicht oder nicht mehr"
   warning: "Warnung"
-  mailBounceWarning_1: "Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
-  mailBounceWarning_2: "Ändern der Mail-Adresse"
-  mailBounceWarning_3: "wird diese Sperre wieder entfernt."
-  mail_bounce_remove_button: "Von der Bounce-Liste entfernen"
+  mail_bounce:
+    warning_1: "Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
+    warning_2: "Ändern der Mail-Adresse"
+    warning_3: "wird diese Sperre wieder entfernt."
+    remove_button: "Von der Bounce-Liste entfernen"
   banana:
     title: "{count} Vertrauensbananen"
     none: "{name} hat bislang noch keine Vertrauensbanane erhalten."

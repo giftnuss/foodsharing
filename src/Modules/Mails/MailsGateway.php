@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mails;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class MailsGateway extends BaseGateway
@@ -84,9 +85,16 @@ class MailsGateway extends BaseGateway
 
 	public function getBounces(string $email): array
 	{
-		return $this->db->fetchAllByCriteria('fs_email_bounces', [
+		$data = $this->db->fetchAllByCriteria('fs_email_bounces', [
 			'bounce_category',
 			'bounced_at'
 		], ['email' => $email]);
+
+		return array_map(function ($x) {
+			return [
+				'category' => $x['bounce_category'],
+				'date' => Carbon::createFromFormat(Carbon::DEFAULT_TO_STRING_FORMAT, $x['bounced_at'])
+			];
+		}, $data);
 	}
 }

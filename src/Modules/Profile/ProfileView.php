@@ -94,26 +94,13 @@ class ProfileView extends View
 		$maySeeStores = $this->profilePermissions->maySeeStores($fsId);
 
 		if ($maySeeBounceWarning && $this->foodsaver['emailIsBouncing']) {
-			$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning_1', [
-					'{email}' => $this->foodsaver['email'],
-				]) . '<a href="/?page=settings"> ' . $this->translator->trans('profile.mailBounceWarning_2') . ' </a>'
-				. $this->translator->trans('profile.mailBounceWarning_3') . '</h1>';
-			$warningContainer = '<div>'
-				. $this->v_utils->v_info($warningMessage, '', '<i class="fas fa-exclamation-triangle"></i>')
-				. '</div>';
-
-			if ($this->profilePermissions->mayRemoveFromBounceList($this->foodsaver['id'])) {
-				$warningContainer .= '<dl class="profile-infos profile-main"><dt>Bounces</dt>';
-				foreach ($this->foodsaver['emailBounceCategories'] as $bounce) {
-					$warningContainer .= '<dd>' . $bounce['bounce_category'] . ' (' . $bounce['bounced_at'] . ')</dd>';
-				}
-				$warningContainer .= '</dl>';
-
-				$warningContainer .= '<div style="text-align:center"><a href="#" onclick="removeFromBounceList('
-					. $this->foodsaver['id']
-					. ')" class="button">' . $this->translator->trans('profile.mail_bounce_remove_button') . '</a></div>';
-			}
-			$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
+			$mayRemove = $this->profilePermissions->mayRemoveFromBounceList($this->foodsaver['id']);
+			$page->addSection($this->vueComponent('email-bounce-list', 'EmailBounceList', [
+				'userId' => $this->foodsaver['id'],
+				'emailAddress' => $this->foodsaver['email'],
+				'mayRemove' => $mayRemove,
+				'bounceEvents' => $mayRemove ? $this->foodsaver['emailBounceCategories'] : []
+			]));
 		}
 
 		$wallTitle = $this->translator->trans('profile.pinboard', ['{name}' => $this->foodsaver['name']]);
@@ -127,7 +114,7 @@ class ProfileView extends View
 			$page->addSection($this->fetchDates($fetchDates), $this->translator->trans('dashboard.pickupdates'));
 		}
 
-		if ($this->profilePermissions->maySeePickups($fsId)) {
+		if ($maySeePickups) {
 			$page->addSection($this->pastPickups(), $this->translator->trans('pickup.history.title'));
 		}
 		$page->addSectionLeft(
