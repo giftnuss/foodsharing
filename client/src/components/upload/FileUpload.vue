@@ -67,6 +67,8 @@
       :static="true"
       size="lg"
       :title="$i18n('upload.crop_dialog_title')"
+      :cancel-title="$i18n('button.cancel')"
+      :ok-title="$i18n('button.send')"
       modal-class="bootstrap"
       dialog-class="full-resize"
       hide-header-close
