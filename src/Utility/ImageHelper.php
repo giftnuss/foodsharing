@@ -108,6 +108,8 @@ final class ImageHelper
 				// path for pictures uploaded with the new API
 				if (is_numeric($size)) {
 					$file .= '?w=' . $size . '&h=' . $size;
+				} elseif ($size === 'mini') {
+					$file .= '?w=35&h=35';
 				}
 
 				return $file;

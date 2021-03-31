@@ -303,14 +303,26 @@ export function checkEmail (email) {
   }
 }
 export function img (photo, size) {
-  if (size == undefined) {
-    size = 'med'
+  if (photo) {
+    if (photo.startsWith('/api/uploads/')) {
+      // path for pictures uploaded with the new API
+      if (size == undefined) {
+        size = 75
+      } else if (size === 'mini') {
+        size = 35
+      }
+
+      return photo + `?w=${size}&h=${size}`
+    } else if (photo.length > 3) {
+      // backward compatible path for old pictures
+      if (size == undefined) {
+        size = 'med'
+      }
+
+      return `/images/${size}_q_${photo}`
+    }
   }
-  if (photo && photo.length > 3) {
-    return `/images/${size}_q_${photo}`
-  } else {
-    return `/img/${size}_q_avatar.png`
-  }
+  return `/img/${size}_q_avatar.png`
 }
 
 export function reload () {

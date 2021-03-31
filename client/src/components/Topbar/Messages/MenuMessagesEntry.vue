@@ -35,6 +35,7 @@ import serverData from '@/server-data'
 import conv from '@/conv'
 import { AVATAR_DEFAULT, GROUP_PICTURE_DEFAULT } from '@/consts'
 import profileStore from '@/stores/profiles'
+import { img } from '@/script'
 
 export default {
   props: {
@@ -82,7 +83,7 @@ export default {
       members = members.slice(0, 4)
 
       if (members.length) {
-        return members.map(m => '/images/mini_q_' + profileStore.profiles[m].avatar)
+        return members.map(m => img(profileStore.profiles[m].avatar, 'mini'))
       } else {
         if (this.conversation.members.length !== 2) {
           // default group picture
