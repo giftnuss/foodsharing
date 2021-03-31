@@ -13,7 +13,7 @@ class AddPushSubscriptionId extends AbstractMigration
 				'signed' => false,
 				'limit' => 10,
 			])
-			->changePrimaryKey('subscriptions_id')
+			->changePrimaryKey('subscription_id')
 			->save();
 	}
 }

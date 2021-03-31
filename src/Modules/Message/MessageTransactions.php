@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Message;
 use Carbon\Carbon;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\WebSocketConnection;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Foodsaver\Profile;
 use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
@@ -138,7 +139,7 @@ class MessageTransactions
 							$author['id'],
 							$author['name'] ?? '?',
 							$author['photo'],
-							0
+							SleepStatus::NONE
 						),
 						$conversationId,
 						count($members) > 2 ? $conversationName : null
