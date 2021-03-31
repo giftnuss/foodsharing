@@ -42,25 +42,23 @@
 
           <b-button-group size="sm">
             <b-button
-              :variant="statusVariant('yes')"
-              @click="acceptInvitation(eventId); status = 1"
+              :variant="statusVariant(1)"
+              @click="acceptInvitation(eventId); currentStatus = 1"
             >
-              <!-- TODO don't overwrite prop after clicking -->
               <i class="fas fa-fw fa-calendar-check" />
               {{ $i18n('events.button.yes') }}
             </b-button>
             <b-button
-              :variant="statusVariant('maybe')"
-              @click="maybeInvitation(eventId); status = 2"
+              :variant="statusVariant(2)"
+              @click="maybeInvitation(eventId); currentStatus = 2"
             >
-              <!-- TODO don't overwrite prop after clicking -->
               <i class="fas fa-fw fa-question-circle" />
               <span class="d-none d-sm-inline">
                 {{ $i18n('events.button.maybe') }}
               </span>
             </b-button>
             <b-button
-              :variant="statusVariant('no')"
+              :variant="statusVariant(3)"
               @click="declineInvitation(eventId)"
             >
               <!-- TODO faded UI after clicking (don't remove, to allow correcting mis-clicks) -->
@@ -102,6 +100,7 @@ export default {
     return {
       startDate: parseISO(this.start),
       endDate: parseISO(this.end),
+      currentStatus: this.status,
     }
   },
   computed: {
@@ -133,13 +132,8 @@ export default {
     acceptInvitation,
     maybeInvitation,
     declineInvitation,
-    statusVariant: function (status) {
-      const statusToCompare = {
-        yes: 1, // ACCEPTED
-        maybe: 2, // MAYBE
-        no: 3, // WONT_JOIN
-      }[status]
-      if (statusToCompare === this.status) {
+    statusVariant: function (s) {
+      if (s === this.currentStatus) {
         return 'secondary'
       } else {
         return 'outline-primary'
