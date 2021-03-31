@@ -20,7 +20,7 @@
                   v-b-tooltip="$i18n('events.edit')"
                   :href="$url('eventEdit', eventId)"
                   size="sm"
-                  variant="outline-secondary"
+                  variant="outline-secondary ml-2"
                 >
                   <i class="fas fa-fw fa-pencil-alt" />
                 </b-button>
@@ -92,8 +92,6 @@ export default {
     end: { type: String, required: true },
     title: { type: String, default: '' },
     mayEdit: { type: Boolean, default: false },
-    description: { type: String, default: '' },
-    location: { type: String, default: '' },
     status: { type: Number, default: 0 },
   },
   data () {

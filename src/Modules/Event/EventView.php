@@ -290,7 +290,6 @@ class EventView extends View
 			'start' => $event['start'],
 			'end' => $event['end'],
 			'title' => $event['name'],
-			'location' => ($event['location'] ?? '') ?: '',
 			'mayEdit' => $mayEdit,
 			'status' => $event['status'] ?? '',
 			'e' => $event,
