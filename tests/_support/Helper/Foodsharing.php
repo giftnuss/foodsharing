@@ -977,6 +977,20 @@ class Foodsharing extends \Codeception\Module\Db
 		]);
 	}
 
+	public function giveBanana(int $senderId, int $recipientId, string $message = null)
+	{
+		if (empty($message)) {
+			$message = $this->createRandomText(100, 300);
+		}
+
+		$this->haveInDatabase('fs_rating', [
+			'foodsaver_id' => $recipientId,
+			'rater_id' => $senderId,
+			'msg' => $message,
+			'time' => $this->faker->dateTime($max = 'now')->format('Y-m-d H:i:s')
+		]);
+	}
+
 	// =================================================================================================================
 	// private methods
 	// =================================================================================================================
@@ -1011,5 +1025,15 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 
 		return $dt->format('Y-m-d H:i:s');
+	}
+
+	private function createRandomText(int $minLength, int $maxLength): string
+	{
+		$text = $this->faker->realText($maxLength);
+		while (strlen($text) < $minLength) {
+			$text .= ' ' . $this->faker->realText(($maxLength + $minLength) / 2 - strlen($text));
+		}
+
+		return $text;
 	}
 }

@@ -94,9 +94,9 @@ class ProfilePermissions
 		return $this->session->id() == $userId || $this->session->may('orga');
 	}
 
-	public function mayDeleteBanana(int $userId, int $senderId): bool
+	public function mayDeleteBanana(int $recipientId): bool
 	{
 		// users can delete bananas that were given to them by someone else
-		return $this->session->id() == $userId;
+		return $this->session->id() == $recipientId;
 	}
 }

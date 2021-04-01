@@ -498,7 +498,7 @@ class ProfileView extends View
 				'recipientId' => intval($this->foodsaver['id']),
 				'recipientName' => $this->foodsaver['name'],
 				'canGiveBanana' => $canGiveBanana,
-				'canRemoveBanana' => $this->session->id() === $this->foodsaver['id'],
+				'canRemoveBanana' => $this->profilePermissions->mayDeleteBanana($this->foodsaver['id']),
 				'bananas' => $this->foodsaver['bananen'],
 			])
 		);

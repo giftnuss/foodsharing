@@ -403,6 +403,16 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln(' done');
 
+		// give some trust bananas
+		$this->output->writeln('Give some trust bananas');
+		foreach ($this->foodsavers as $recipient) {
+			foreach ($this->getRandomIDOfArray($this->foodsavers, 2) as $sender) {
+				$I->giveBanana($sender, $recipient);
+			}
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
+
 		// create conversations between users
 		$this->output->writeln('Create conversations between users');
 		foreach ($this->foodsavers as $user) {

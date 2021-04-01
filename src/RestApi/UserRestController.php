@@ -352,7 +352,7 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(401);
 		}
 
-		if (!$this->profilePermissions->mayDeleteBanana($userId, $senderId)) {
+		if (!$this->profilePermissions->mayDeleteBanana($userId)) {
 			throw new HttpException(403);
 		}
 
