@@ -40,14 +40,14 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * @param string[] $subscriptionData an array with subscription strings in JSON format
+	 * @param string[] $subscriptionData an map of ID to subscription data in JSON format
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
 		$payload = $this->makePayload($notification);
 		$deadSubscriptions = [];
 
-		foreach ($subscriptionData as $subscriptionAsJson) {
+		foreach ($subscriptionData as $subscriptionId => $subscriptionAsJson) {
 			$subscriptionArray = json_decode($subscriptionAsJson, true);
 
 			// Fix inconsistent definition of encoding by some clients
@@ -60,7 +60,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 			$endpoint = $messageSentReport->getEndpoint();
 
 			if ($messageSentReport->isSubscriptionExpired()) {
-				$deadSubscriptions[] = $subscriptionAsJson;
+				$deadSubscriptions[] = $subscriptionId;
 			}
 
 			// logging

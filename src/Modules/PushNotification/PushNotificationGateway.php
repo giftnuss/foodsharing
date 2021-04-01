@@ -35,7 +35,7 @@ class PushNotificationGateway extends BaseGateway
 		]);
 	}
 
-	public function deleteSubscriptionByDataForFoodsaver(int $foodsaverId, string $subscriptionData, string $type)
+	public function deleteSubscription(int $foodsaverId, int $subscriptionId, string $type)
 	{
 		if (!$this->hasHandlerFor($type)) {
 			throw new \InvalidArgumentException("There is no handler registered to handle {$type}.");
@@ -43,17 +43,16 @@ class PushNotificationGateway extends BaseGateway
 
 		return $this->db->delete('fs_push_notification_subscription', [
 			'foodsaver_id' => $foodsaverId,
-			'data' => $subscriptionData,
-			'type' => $type
+			'id' => $subscriptionId
 		]);
 	}
 
 	/**
-	 * @param string[] $subscriptionData - array of subscription data to be removed
+	 * @param int[] $subscriptionIds - array of subscription IDs to be removed
 	 */
-	private function deleteSubscriptionsByData(array $subscriptionData)
+	private function deleteSubscriptions(array $subscriptionIds)
 	{
-		return $this->db->delete('fs_push_notification_subscription', ['data' => $subscriptionData]);
+		return $this->db->delete('fs_push_notification_subscription', ['id' => $subscriptionIds]);
 	}
 
 	public function addHandler(PushNotificationHandlerInterface $handler)
@@ -65,7 +64,7 @@ class PushNotificationGateway extends BaseGateway
 	{
 		$subscriptions = $this->db->fetchAllByCriteria(
 			'fs_push_notification_subscription',
-			['data', 'type'],
+			['id', 'data', 'type'],
 			['foodsaver_id' => $foodsaverId]
 		);
 
@@ -74,13 +73,16 @@ class PushNotificationGateway extends BaseGateway
 
 			foreach ($subscriptions as $subscription) {
 				if ($subscription['type'] === $handler::getTypeIdentifier()) {
-					$subscriptionDataForThisHandler[] = $subscription['data'];
+					$subscriptionDataForThisHandler[$subscription['id']] = $subscription['data'];
 				}
 			}
 
 			if (!empty($subscriptionDataForThisHandler)) {
 				$deadSubscriptions = $handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $notification);
-				$this->deleteSubscriptionsByData($deadSubscriptions);
+
+				// safety check: only remove dead subscriptions that were in the array for this handler
+				$subscriptionsToRemove = array_intersect($deadSubscriptions, array_keys($subscriptionDataForThisHandler));
+				$this->deleteSubscriptions($subscriptionsToRemove);
 			}
 		}
 	}

@@ -8,12 +8,12 @@ class AddPushSubscriptionId extends AbstractMigration
 	{
 		// poll table
 		$this->table('fs_push_notification_subscription')
-			->addColumn('subscription_id', 'integer', [
+			->addColumn('id', 'integer', [
 				'null' => false,
 				'signed' => false,
 				'limit' => 10,
 			])
-			->changePrimaryKey('subscription_id')
+			->changePrimaryKey('id')
 			->save();
 	}
 }

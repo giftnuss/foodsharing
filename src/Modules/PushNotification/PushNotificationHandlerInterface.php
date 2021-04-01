@@ -16,12 +16,11 @@ interface PushNotificationHandlerInterface
 	/**
 	 * Sends a PushNotification to all of the clients belonging to $subscriptionData.
 	 *
-	 * @param string[] $subscriptionData - an array with subscription data of all subscriptions the notification should
-	 * be sent to
+	 * @param string[] $subscriptionData - an map from subscription ID to subscription data for all subscriptions
+	 * the notification should be sent to
 	 *
-	 * @return string[] - Dead subscriptions: The returned array contains strings that identify endpoints to which the
-	 *		delivery failed. Subscriptions with data equaling one of the dead subscriptions will be removed form the
-	 *		database.
+	 * @return int[] - Dead subscriptions: The returned array contains the IDs of subscriptions to whose endpoints the
+	 *		delivery failed. These dead subscriptions will be removed form the database.
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array;
 

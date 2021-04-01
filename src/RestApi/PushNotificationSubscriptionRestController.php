@@ -57,19 +57,20 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 		$pushSubscription = $request->getContent();
 		$foodsaverId = $this->session->id();
 
-		$this->gateway->addSubscription($foodsaverId, $pushSubscription, $type);
+		$subscriptionId = $this->gateway->addSubscription($foodsaverId, $pushSubscription, $type);
 
 		$this->gateway->sendPushNotificationsToFoodsaver($foodsaverId, new TestPushNotification());
 
-		$view = $this->view($pushSubscription, 200);
+		$result = json_decode($pushSubscription, true);
+		$result['subscriptionId'] = $subscriptionId;
 
-		return $this->handleView($view);
+		return $this->handleView($this->view($result, 200));
 	}
 
 	/**
-	 * @Rest\Post("pushnotification/{type}/unsubscribe")
+	 * @Rest\Delete("pushnotification/{type}/subscription/{subscriptionId}", requirements={"subscriptionId" = "\d+"})
 	 */
-	public function unsubscribeAction(Request $request, string $type)
+	public function unsubscribeAction(string $type, int $subscriptionId)
 	{
 		if (!$this->gateway->hasHandlerFor($type)) {
 			return $this->handleHttpStatus(404);
@@ -79,10 +80,9 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 			return $this->handleHttpStatus(403);
 		}
 
-		$pushSubscription = $request->getContent();
 		$foodsaverId = $this->session->id();
 
-		$this->gateway->deleteSubscriptionByDataForFoodsaver($foodsaverId, $pushSubscription, $type);
+		$this->gateway->deleteSubscription($foodsaverId, $subscriptionId, $type);
 
 		return $this->handleHttpStatus(200);
 	}

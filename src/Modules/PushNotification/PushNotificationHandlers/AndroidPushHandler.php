@@ -35,7 +35,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * @param string[] $subscriptionData an array with subscription strings in JSON format
+	 * @param string[] $subscriptionData a map of ID to subscription data in JSON format
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
@@ -48,7 +48,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 
 		$payloadJson = $this->makePayload($notification);
 
-		foreach ($subscriptionData as $subscriptionAsJson) {
+		foreach ($subscriptionData as $subscriptionId => $subscriptionAsJson) {
 			$subscriptionArray = json_decode($subscriptionAsJson, true);
 
 			try {
@@ -61,7 +61,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 				$serialNumber = $subscriptionArray['public_key']['serial_number'] ?? 0;
 			} catch (Exception $e) {
 				// Failed to read required elements from the subscription data
-				$deadSubscriptions[] = $subscriptionAsJson;
+				$deadSubscriptions[] = $subscriptionId;
 				continue;
 			}
 
@@ -100,7 +100,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 			if ($resultJson['failure'] === 1 && in_array($resultJson['results'][0]['error'], [
 						'NotRegistered', 'InvalidRegistration', 'MismatchSenderId', 'InvalidApnsCredential']
 				)) {
-				$deadSubscriptions[] = $subscriptionAsJson;
+				$deadSubscriptions[] = $subscriptionId;
 			}
 		}
 
