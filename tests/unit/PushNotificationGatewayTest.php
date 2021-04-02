@@ -38,11 +38,11 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		$testHandler = $this->makeTestPushNotificationHandler('test type');
 		$this->gateway->addHandler($testHandler);
 
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, 'test type');
+		$id = $this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, 'test type');
 
 		$this->tester->seeInDatabase(
 			'fs_push_notification_subscription',
-			['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription, 'type' => 'test type']
+			['id' => $id, 'foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription, 'type' => 'test type']
 		);
 	}
 
