@@ -2550,7 +2550,7 @@ class InitialMigration extends Phinx\Migration\AbstractMigration
 			])
 			->create();
 		$this->table('fs_push_notification_subscription', [
-			'id' => false,
+			'id' => true,
 			'engine' => 'InnoDB',
 			'encoding' => 'utf8mb4',
 			'collation' => 'utf8mb4_unicode_ci',
