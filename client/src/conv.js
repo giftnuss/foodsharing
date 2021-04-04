@@ -171,7 +171,7 @@ const conv = {
 
       // replace to many line breaks
       // eslint-disable-next-line no-control-regex
-      val = val.replace(/(\n){3,}/gim)
+      val = val.replace(/(\n){3,}/gim, '\n\n')
 
       try {
         await api.sendMessage(cid, val)

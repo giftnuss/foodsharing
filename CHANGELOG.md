@@ -16,10 +16,10 @@
 - Use new upload API for profile photos !1916 !1929 !1932 !1933 @alex.simm
 
 ## Dev/Test/CI stuff
-# 2021-03-30 Hotfix
-
-- Change DTOs for dashboard updates to use date objects !1926 @alex.simm
 - Update some frontend dependencies !1892 @chriswalg
+
+# 2021-03-30 Hotfix
+- Change DTOs for dashboard updates to use date objects !1926 @alex.simm
 
 # 2021-03-26 Hotfix
 
