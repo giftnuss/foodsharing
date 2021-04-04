@@ -201,7 +201,9 @@ class MaintenanceControl extends ConsoleControl
 		$check = [];
 		if ($foodsaver = $this->maintenanceGateway->listUsersWithPhoto()) {
 			foreach ($foodsaver as $fs) {
-				$check[$fs['photo']] = $fs['id'];
+				if (!str_starts_with('/api/uploads', $fs['photo'])) {
+					$check[$fs['photo']] = $fs['id'];
+				}
 			}
 			$dir = opendir('./images');
 			$count = 0;
