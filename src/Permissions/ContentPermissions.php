@@ -13,6 +13,7 @@ final class ContentPermissions
 	private array $PR_PARTNER_AND_TEAM_CONTENT_IDS = [
 		'id' => [
 			ContentId::PARTNER_PAGE_10,
+			ContentId::PARTNER_PAGE_AU_79,
 			ContentId::TEAM_HEADER_PAGE_39,
 			ContentId::TEAM_ACTIVE_PAGE_53,
 			ContentId::TEAM_FORMER_ACTIVE_PAGE_54,
