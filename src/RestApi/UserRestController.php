@@ -392,6 +392,7 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		$this->foodsaverGateway->updatePhoto($this->session->id(), '/api/uploads/' . $uuid);
+		$this->session->refreshFromDatabase();
 
 		return $this->handleView($this->view([], 200));
 	}
