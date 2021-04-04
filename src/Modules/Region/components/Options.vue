@@ -9,13 +9,13 @@
       <div class="rounded p-3">
         <b-form-checkbox
           id="enableReportButton"
-          v-model="isReportButtonEnabled"
+          v-model="reportButtonEnabled"
         >
           {{ $i18n('regionOptions.enableReportButton') }}
         </b-form-checkbox>
         <b-form-checkbox
           id="enableMediationButton"
-          v-model="isMediationButtonEnabled"
+          v-model="mediationButtonEnabled"
           class="mt-1"
         >
           {{ $i18n('regionOptions.enableMediationButton') }}
@@ -47,11 +47,17 @@ export default {
       default: '',
     },
   },
+  data () {
+    return {
+      reportButtonEnabled: this.isReportButtonEnabled,
+      mediationButtonEnabled: this.isMediationButtonEnabled,
+    }
+  },
   methods: {
     async trySendOptions () {
       showLoader()
       try {
-        await setRegionOptions(this.regionId, this.isReportButtonEnabled, this.isMediationButtonEnabled)
+        await setRegionOptions(this.regionId, this.reportButtonEnabled, this.mediationButtonEnabled)
         pulseInfo(i18n('regionOptions.success'))
       } catch (err) {
         console.error(err)

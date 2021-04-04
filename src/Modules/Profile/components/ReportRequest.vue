@@ -58,7 +58,7 @@
       </div>
     </b-alert>
     <b-alert
-      v-else-if="!hasReportGroup && !isReportButtonEnabled"
+      v-else-if="!hasReportGroup"
       variant="info" show
     >
       <div>
