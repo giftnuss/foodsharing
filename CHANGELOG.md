@@ -18,6 +18,7 @@
 ## Dev/Test/CI stuff
 - Update some frontend dependencies !1892 @chriswalg
 - Update mdbook to 0.4.7 !1938 @chriwalg
+- Update some frontend dependencies !1892 !1939 @chriswalg
 
 # 2021-03-30 Hotfix
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
