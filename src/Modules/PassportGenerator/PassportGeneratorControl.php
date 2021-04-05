@@ -11,6 +11,7 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Uploads\UploadsTransactions;
 use Foodsharing\Utility\IdentificationHelper;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
@@ -23,6 +24,7 @@ final class PassportGeneratorControl extends Control
 	private PassportGeneratorGateway $passportGeneratorGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private IdentificationHelper $identificationHelper;
+	private UploadsTransactions $uploadsTransactions;
 
 	public function __construct(
 		PassportGeneratorView $view,
@@ -30,7 +32,8 @@ final class PassportGeneratorControl extends Control
 		RegionGateway $regionGateway,
 		PassportGeneratorGateway $passportGateway,
 		FoodsaverGateway $foodsaverGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		UploadsTransactions $uploadsTransactions
 	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
@@ -38,6 +41,7 @@ final class PassportGeneratorControl extends Control
 		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->uploadsTransactions = $uploadsTransactions;
 
 		parent::__construct();
 
@@ -209,10 +213,21 @@ final class PassportGeneratorControl extends Control
 				$pdf->write2DBarcode('https://foodsharing.de/profile/' . $fs_id, 'QRCODE,L', 70.5 + $x, 43 + $y, 20, 20, $style, 'N');
 
 				if ($photo = $this->foodsaverGateway->getPhotoFileName($fs_id)) {
-					if (file_exists('images/crop_' . $photo)) {
-						$pdf->Image('images/crop_' . $photo, 14 + $x, 29.7 + $y, 24);
-					} elseif (file_exists('images/' . $photo)) {
-						$pdf->Image('images/' . $photo, 14 + $x, 29.7 + $y, 22);
+					if (str_starts_with($photo, '/api/uploads')) {
+						// get the UUID and create a resized file
+						$uuid = substr($photo, strlen('/api/uploads/'));
+						$filename = $this->uploadsTransactions->getFileLocation($uuid, 200, 257, 0);
+						if (!file_exists($filename)) {
+							$originalFilename = $this->uploadsTransactions->getFileLocation($uuid);
+							$this->uploadsTransactions->resizeImage($originalFilename, $filename, 200, 257, 0);
+						}
+						$pdf->Image($filename, 14 + $x, 29.7 + $y, 24);
+					} else {
+						if (file_exists('images/crop_' . $photo)) {
+							$pdf->Image('images/crop_' . $photo, 14 + $x, 29.7 + $y, 24);
+						} elseif (file_exists('images/' . $photo)) {
+							$pdf->Image('images/' . $photo, 14 + $x, 29.7 + $y, 22);
+						}
 					}
 				}
 

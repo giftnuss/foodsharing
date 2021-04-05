@@ -35,11 +35,7 @@ final class PassportGeneratorView extends View
 				. /* weird icon magic: */ '<span></span>'
 				. '</a>';
 
-			if (empty($fs['photo'])) {
-				$img = $this->imageService->img($fs['photo']);
-			} else {
-				$img = 'images/thumb_crop_' . $fs['photo'];
-			}
+			$img = $this->imageService->img($fs['photo']);
 
 			$checkbox = '<input class="checkbox'
 					. ' bezirk' . $region['id']
