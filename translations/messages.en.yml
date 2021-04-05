@@ -1599,7 +1599,6 @@ ui:
     off: inactive
 upload:
   file: Upload file
-  edit_image: Edit image
   new_image: Upload a new image
   image: Upload image
   preview_image: Preview

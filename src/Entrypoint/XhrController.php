@@ -24,7 +24,6 @@ class XhrController extends AbstractController
 		// 'bBubble',
 		// 'uploadPictureRefactorMeSoon',
 		'uploadPicture',
-		// 'cropagain',
 		'pictureCrop',
 		// 'out',
 		// 'getRecip',

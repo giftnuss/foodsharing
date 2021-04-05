@@ -193,18 +193,4 @@ class FoodsaverControl extends Control
 
 		return $downgradedRows > 0 || $updatedRows > 0;
 	}
-
-	private function picture_box(): string
-	{
-		$photo = $this->foodsaverGateway->getPhotoFileName($_GET['id']);
-
-		if (!(file_exists('images/thumb_crop_' . $photo))) {
-			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);
-		} else {
-			$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo, (int)$_GET['id']);
-			//$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
-		}
-
-		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
-	}
 }

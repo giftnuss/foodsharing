@@ -176,7 +176,6 @@ upload:
   preview_image: "Vorschau"
   image: "Bild hochladen"
   new_image: "Neues Bild hochladen"
-  edit_image: "Bild bearbeiten"
   file: "Datei hochladen"
   choose_file: "Datei hochladen"
   new_file: "Neue Datei hochladen"
