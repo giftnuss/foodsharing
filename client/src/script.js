@@ -332,53 +332,6 @@ export function ifconfirm (url, question, title) {
   $('#dialog-confirm').dialog('open')
 }
 
-export function picFinish (img, id) {
-  $(`#${id}-action`).val('upload')
-  $.fancybox.close()
-  const d = new Date()
-  const imgp = `${img}?${d.getTime()}`
-  $(`#${id}-open`).html(`<img src="images/${imgp}" /><input type="hidden" name="photo" value="${img}" />`)
-  hideLoader()
-  reload()
-}
-export function pic_error (msg, id) {
-  msg = `<div class="ui-widget"><div style="padding: 15px;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-alert"></span><strong>Fehler:</strong> ${msg}</p></div></div>`
-  $(`#${id}-placeholder`).html(msg)
-  hideLoader()
-}
-export function fotoupload (file, id) {
-  $(`#${id}-file`).val(file)
-  const d = new Date()
-  const img = `${file}?${d.getTime()}`
-
-  $(`#${id}-placeholder`).html(`<img src="./tmp/${img}" />`)
-  $(`#${id}-placeholder img`).Jcrop({
-    setSelect: [100, 0, 400, 400],
-    aspectRatio: 35 / 45,
-    onSelect: function (c) {
-      $(`#${id}-x`).val(c.x)
-      $(`#${id}-y`).val(c.y)
-      $(`#${id}-w`).val(c.w)
-      $(`#${id}-h`).val(c.h)
-    },
-  })
-  $(`#${id}-save`).show()
-  $(`#${id}-save`).button().on('click', function () {
-    showLoader()
-    $(`#${id}-action`).val('crop')
-    $(`#${id}-form`)[0].submit()
-    return false
-  })
-
-  $(`#${id}-placeholder`).css('height', 'auto')
-  hideLoader()
-  setTimeout(function () {
-    $.fancybox.update()
-    $.fancybox.reposition()
-    $.fancybox.toggle()
-  }, 200)
-}
-
 export function closeBox () {
   $.fancybox.close()
 }

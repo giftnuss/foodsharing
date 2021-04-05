@@ -38,6 +38,7 @@
 - Update some backend dependencies !1942 @chriswalg
 - Update minishlink WebPush to version 6 !1745 @peter.toennies
 - Update chat dependencies !1962 @chriswalg
+- Remove obsolete code for picture uploads !1969 @alex.simm
 
 # 2021-04-09 Hotfix
 

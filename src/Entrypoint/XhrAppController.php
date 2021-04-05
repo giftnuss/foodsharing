@@ -61,7 +61,6 @@ class XhrAppController extends AbstractController
 		// 'Foodsaver::foodsaverrefresh',
 		// 'Foodsaver::delFromRegion',
 		// 'Login::loginsubmit',
-		'Login::photoupload',
 		'Login::joinsubmit',
 		'Login::join',
 		'Mailbox::attach',
