@@ -677,6 +677,7 @@ store:
   isManager: "Verantwortlich für diesen Betrieb."
   noPickup: "Hat noch nie hier abgeholt."
   isJumper: "Ist auf der Springerliste."
+  appliedFor: "Anfrage gestellt"
   isNotVerified: "Ist noch nicht verifiziert."
   fetchCount: "Hat {count}× hier abgeholt."
   mayAmb: "Hat das BOT-Quiz bestanden."

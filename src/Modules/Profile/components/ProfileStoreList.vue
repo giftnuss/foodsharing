@@ -29,8 +29,7 @@
           />
           <i
             v-else
-            v-b-tooltip.hover
-            title="appliedFor"
+            v-b-tooltip.hover="$i18n('store.appliedFor')"
             class="fas fa-fw fa-question-circle"
           />
 

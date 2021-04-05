@@ -4,7 +4,7 @@
 - Allow users to remove trust bananas on their own profile #592 !1920 @alex.simm
 
 ## Changes
-- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
+- Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
 - Added a partners page for foodsharing.at !1931 @alex.simm
 
 ## Bugfixes
