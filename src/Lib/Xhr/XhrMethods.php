@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Exception;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
@@ -341,70 +340,6 @@ class XhrMethods
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
-	public function xhr_addPhoto($data)
-	{
-		if (!$this->session->may()) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		$data = $this->dataHelper->getPostData();
-
-		if (isset($data['fs_id'])) {
-			$user_id = (int)$data['fs_id'];
-
-			if (isset($_FILES['photo']) && (int)$_FILES['photo']['size'] > 0) {
-				$ext = explode('.', $_FILES['photo']['name']);
-				$ext = strtolower(end($ext));
-
-				@unlink('./images/' . $user_id . '.' . $ext);
-
-				$file = $this->makeUnique() . '.' . $ext;
-				if (move_uploaded_file($_FILES['photo']['tmp_name'], './images/' . $file)) {
-					$image = new fImage('./images/' . $file);
-					$image->resize(800, 800);
-					$image->saveChanges();
-
-					copy('./images/' . $file, './images/thumb_crop_' . $file);
-					copy('./images/' . $file, './images/crop_' . $file);
-
-					$image = new fImage('./images/thumb_crop_' . $file);
-					$image->cropToRatio(35, 45);
-					$image->resize(200, 200);
-					$image->saveChanges();
-
-					$image = new fImage('./images/crop_' . $file);
-					$image->cropToRatio(35, 45);
-					$image->resize(600, 600);
-					$image->saveChanges();
-
-					copy('./images/thumb_crop_' . $file, './images/mini_q_' . $file);
-					$image = new fImage('./images/mini_q_' . $file);
-					$image->cropToRatio(1, 1);
-					$image->resize(35, 35);
-					$image->saveChanges();
-
-					copy('./images/thumb_crop_' . $file, './images/130_q_' . $file);
-					$image = new fImage('./images/130_q_' . $file);
-					$image->cropToRatio(1, 1);
-					$image->resize(130, 130);
-					$image->saveChanges();
-
-					@unlink('./tmp/tmp_' . $file);
-
-					$this->foodsaverGateway->updatePhoto($user_id, str_replace('/', '', $file));
-					$this->session->setPhoto($file);
-
-					return '<html><head></head><body onload="parent.uploadPhotoReady(' . $user_id . ',\'./images/mini_q_' . $file . '\');"></body></html>';
-				}
-			}
-		}
-	}
-
-	private function makeUnique()
-	{
-		return md5(date('Y-m-d H:i:s') . ':' . uniqid());
-	}
-
 	public function xhr_continueMail($data)
 	{
 		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
@@ -470,72 +405,6 @@ class XhrMethods
 		return 0;
 	}
 
-	public function xhr_uploadPhoto($data)
-	{
-		$func = '';
-
-		if (isset($_POST['action']) && $_POST['action'] == 'upload') {
-			$id = strip_tags($_POST['pic_id']);
-			if (isset($_FILES['uploadpic'])) {
-				$error = 0;
-				$uploaded = $_FILES['uploadpic']['tmp_name'];
-				// prevent path traversal
-				$uploaded = preg_replace('/%/', '', $uploaded);
-				$uploaded = preg_replace('/\.+/', '.', $uploaded);
-
-				$filename = $_FILES['uploadpic']['name'];
-				$filename = strtolower($filename);
-				$filename = str_replace('.jpeg', '.jpg', $filename);
-				$extension = strtolower(substr($filename, strlen($filename) - 4, 4));
-				if ($this->is_allowed($_FILES['uploadpic'])) {
-					try {
-						$file = $this->makeUnique() . $extension;
-						move_uploaded_file($uploaded, './tmp/' . $file);
-						$image = new fImage('./tmp/' . $file);
-						$image->resize(550, 0);
-						$image->saveChanges();
-						$func = 'parent.fotoupload(\'' . $file . '\',\'' . $id . '\');';
-					} catch (Exception $e) {
-						$func = 'parent.pic_error(\'' . $this->translator->trans('upload.image-problem') . '\',\'' . $id . '\');';
-					}
-				} else {
-					$func = 'parent.pic_error(\'' . $this->translator->trans('error_unexpected') . '\',\'' . $id . '\');';
-				}
-			}
-		} elseif (isset($_POST['action']) && $_POST['action'] == 'crop') {
-			$file = str_replace('/', '', $_POST['file']);
-
-			if ($img = $this->cropImage($file, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h'])) {
-				$id = strip_tags($_POST['pic_id']);
-
-				@unlink('images/' . $file);
-				@unlink('images/crop_' . $file);
-				@unlink('images/thumb_crop_' . $file);
-
-				copy('tmp/' . $file, 'images/' . $file);
-				copy('tmp/crop_' . $file, 'images/crop_' . $file);
-				copy('tmp/thumb_crop_' . $file, 'images/thumb_crop_' . $file);
-
-				@unlink('tmp/' . $file);
-				@unlink('tmp/crop_' . $file);
-				@unlink('tmp/thumb_crop_' . $file);
-
-				$this->makeThumbs($file);
-
-				$this->foodsaverGateway->updatePhoto($this->session->id(), $file);
-
-				$func = 'parent.picFinish(\'' . $img . '\',\'' . $id . '\');';
-			} else {
-				$func = 'alert(\'' . $this->translator->trans('error_unexpected') . '\');';
-			}
-		}
-
-		echo '<html>
-		<head><title>' . $this->translator->trans('picture_upload_widget.picture_upload') . '</title></head>
-		<body onload="' . $func . '"></body>
-		</html>';
-	}
-
 	private function is_allowed($img)
 	{
 		$img['name'] = strtolower($img['name']);
@@ -552,96 +421,6 @@ class XhrMethods
 		}
 
 		return false;
-	}
-
-	private function cropImage($image, $x, $y, $w, $h)
-	{
-		if ($w > 2000 || $h > 2000) {
-			return false;
-		}
-
-		$targ_w = 467;
-		$targ_h = 600;
-		$jpeg_quality = 100;
-
-		$ext = explode('.', $image);
-		$ext = end($ext);
-		$ext = strtolower($ext);
-
-		$img_r = null;
-
-		switch ($ext) {
-			case 'gif':
-				$img_r = imagecreatefromgif('./tmp/' . $image);
-				break;
-			case 'jpg':
-				$img_r = imagecreatefromjpeg('./tmp/' . $image);
-				break;
-			case 'png':
-				$img_r = imagecreatefrompng('./tmp/' . $image);
-				break;
-		}
-
-		if ($img_r === null) {
-			return false;
-		}
-
-		$dst_r = imagecreatetruecolor($targ_w, $targ_h);
-
-		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
-
-		@unlink('../tmp/crop_' . $image);
-
-		switch ($ext) {
-			case 'gif':
-				imagegif($dst_r, './tmp/crop_' . $image);
-				break;
-			case 'jpg':
-				imagejpeg($dst_r, './tmp/crop_' . $image, $jpeg_quality);
-				break;
-			case 'png':
-				imagepng($dst_r, './tmp/crop_' . $image, 0);
-				break;
-		}
-
-		if (file_exists('./tmp/crop_' . $image)) {
-			try {
-				copy('./tmp/crop_' . $image, './tmp/thumb_crop_' . $image);
-				$img = new fImage('./tmp/thumb_crop_' . $image);
-				$img->resize(200, 0);
-				$img->saveChanges();
-
-				return 'thumb_crop_' . $image;
-			} catch (Exception $e) {
-				return false;
-			}
-		}
-
-		return false;
-	}
-
-	private function makeThumbs($pic)
-	{
-		if (!file_exists(ROOT_DIR . 'images/mini_q_' . $pic) && file_exists(ROOT_DIR . 'images/' . $pic)) {
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/mini_q_' . $pic);
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/med_q_' . $pic);
-			copy(ROOT_DIR . 'images/' . $pic, ROOT_DIR . 'images/q_' . $pic);
-
-			$image = new fImage(ROOT_DIR . 'images/mini_q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(35, 35);
-			$image->saveChanges();
-
-			$image = new fImage(ROOT_DIR . 'images/med_q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(75, 75);
-			$image->saveChanges();
-
-			$image = new fImage(ROOT_DIR . 'images/q_' . $pic);
-			$image->cropToRatio(1, 1);
-			$image->resize(150, 150);
-			$image->saveChanges();
-		}
 	}
 
 	public function xhr_newregion($data)

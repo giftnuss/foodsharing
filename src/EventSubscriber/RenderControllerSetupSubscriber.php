@@ -140,7 +140,6 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 		$pageHelper->addHidden('<ul id="hidden-info"></ul>');
 		$pageHelper->addHidden('<ul id="hidden-error"></ul>');
 		$pageHelper->addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
-		$pageHelper->addHidden('<div id="uploadPhoto"><form method="post" enctype="multipart/form-data" target="upload" action="/xhr.php?f=addPhoto"><input type="file" name="photo" onchange="uploadPhoto();" /></form><div id="uploadPhoto-preview"></div><iframe name="upload" width="1" height="1" src=""></iframe></div>');
 
 		$contentGateway = $this->get(ContentGateway::class);
 		global $g_broadcast_message;

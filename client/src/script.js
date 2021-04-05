@@ -163,16 +163,6 @@ export function initialize () {
         el.removeClass('input-error')
       }
     })
-
-    $('#uploadPhoto').dialog({
-      autoOpen: false,
-      modal: true,
-      buttons: {
-        [i18n('upload.image')]: function () {
-          uploadPhoto()
-        },
-      },
-    })
   })
 }
 
@@ -328,16 +318,6 @@ export function img (photo, size) {
 
 export function reload () {
   window.location.reload()
-}
-
-export function uploadPhoto () {
-  $('#uploadPhoto form').trigger('submit')
-}
-
-export function uploadPhotoReady (id, file) {
-  $(`#miniq-${id}`).attr('src', file)
-  $('#uploadPhoto').dialog('close')
-  pulseInfo('Foto erfolgreich hochgeladen!')
 }
 
 export function ifconfirm (url, question, title) {
