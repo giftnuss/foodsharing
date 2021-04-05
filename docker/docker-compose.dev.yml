@@ -181,7 +181,7 @@ services:
 
   mdbook:
     container_name: foodsharing_dev_devdocs
-    image: peaceiris/mdbook:v0.4.6
+    image: peaceiris/mdbook:v0.4.7
     command: serve --hostname '0.0.0.0'
     stdin_open: true
     tty: true
