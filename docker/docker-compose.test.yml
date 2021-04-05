@@ -66,7 +66,7 @@ services:
     image: registry.gitlab.com/foodsharing-dev/images/php:7.4.11
     command: php run.php Mails queueWorker
     working_dir: /app
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - db
       - redis
@@ -149,7 +149,7 @@ services:
       PMA_HOST: db
       PMA_USER: root
       PMA_PASSWORD: root
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - "127.0.0.1:28081:80"
     volumes:
