@@ -1035,6 +1035,15 @@ date:
   saturday: "Samstag"
   sunday: "Sonntag"
 
+date_short:
+  Monday: "Mon"
+  Tuesday: "Di"
+  Wednesday: "Mi"
+  Thursday: "Do"
+  Friday: "Fr"
+  Saturday: "Sa"
+  Sunday: "So"
+
 month:
   "1": "Januar"
   "2": "Februar"
