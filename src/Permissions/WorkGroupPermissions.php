@@ -77,7 +77,7 @@ final class WorkGroupPermissions
 	public function mayApply(array $group, array $applications, array $stats): bool
 	{
 		$regionId = $group['id'];
-		if ($this->session->mayBezirk($regionId)) {
+		if (in_array($regionId, $this->session->getRegions())) {
 			return false; // may not apply if already a member
 		}
 		if (in_array($regionId, $applications)) {
@@ -96,7 +96,7 @@ final class WorkGroupPermissions
 	public function mayJoin(array $group): bool
 	{
 		$regionId = $group['id'];
-		if ($this->session->mayBezirk($regionId)) {
+		if (in_array($regionId, $this->session->getRegions())) {
 			return false; // may not join if already a member
 		}
 

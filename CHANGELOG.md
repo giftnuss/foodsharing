@@ -14,6 +14,7 @@
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm
 - Prevent a timeout when creating polls for many users !1893 @alex.simm
+- Allow orga to apply for working groups !1953 #1050 @alex.simm
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
