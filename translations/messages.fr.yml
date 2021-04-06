@@ -458,6 +458,60 @@ forum:
 fsp:
   info:
     mail: Cloche et notification par courriel
+    manager: En étant responsable de ce frigo solidaire, tu t'engages à recevoir les
+      mises à jour de celui-ci !
+    descSettings: Tu suis toutes les informations du frigo solidaire "{name}". Comment
+      souhaites-tu recevoir les notifications qui lui sont liées ?
+    descModal: 'Comment souhaites-tu être informé·e des mises à jour (par ex. : livraisons)
+      ?'
+    none: plus du tout
+    bell: Seulement informations internes à l'équipe (cloche)
+    from: Mises à jour du frigo solidaire "{name}"
+  twig:
+    n_in_region: '{0} Aucun frigo solidaire à %name%| {1} Un frigo solidaire à %name%|
+      [2, Inf[ %count% frigos solidaires à %name%'
+  none: Il n'y a encore aucun frigo solidaire d'enregistré
+  deleteSuccess: Le frigo solidaire a été supprimé
+  deleteConfirm: Souhaites-tu réellement supprimer ce frigo solidaire ?
+  delete: Supprimer le frigo solidaire
+  publicwall: Fais attention à ce que tes contributions soient visibles sur l'aide-mémoire
+    du frigo solidaire.
+  noManager: Il doit y avoir au minimum un·e responsable pour ce frigo solidaire !
+  descLabel: Écrit ici quelques informations de base sur le frigo solidaire (surtout
+    ses horaires et particularités).
+  addedBy: Ajouté par
+  addedOn: Ajouté le
+  pic: Photo
+  location: Code postal / Lieu
+  street: adresse
+  address: adresse
+  editSuccess: Le frigo solidaire a été modifié avec succès
+  editName: Modifier le frigo solidaire "{name}"
+  edit: Modifier le frigo solidaire
+  rejectConfirm: Attention ! Si tu supprimes ce frigo solidaire, tu ne pourras plus
+    revenir en arrière. Poursuivre ?
+  reject: Refuser le frigo solidaire
+  acceptSuccess: Le frigo solidaire est maintenant actif
+  acceptName: mettre {name} en ligne
+  accept: Mettre le frigo solidaire en ligne
+  suggestSuccess: Le frigo solidaire a été proposé et doit maintenant être accepté
+    par un·e ambassadeur·ice ou un responsable des frigos solidaires.
+  suggest: Proposer un frigo solidaire
+  add: Enregistrer le frigo solidaire
+  addSuccess: Le frigo solidaire a été enregistré avec succès
+  addError: Le frigo solidaire n'a pas pu être enregistré. As-tu rempli tous les champs
+    ?
+  new: Nouveau frigo solidaire
+  description: Description
+  followers: Follower
+  managers: Interlocuteur·ice
+  unfollow: Ne plus suivre ce frigo solidaire
+  followName: Suivre le frigo {name}
+  follow: Suivre ce frigo solidaire
+  summary: Il y a {count} frigo(s) solidaire(s) dans tous les secteurs dans lesquels
+    tu es actif·ve
+  inRegion: Tous les frigos solidaires dans {region}
+  yours: Frigos solidaires dans ton secteur
 terminology:
   mailboxes: Messageries
   settings: Paramètres
@@ -508,6 +562,18 @@ terminology:
   forum: Forum
   message: message
   profile_picture: photo de profil
+  options: Options
+  buddies: Connaissances
+  polls: Votes
+  threads: Thèmes
+  regions: Secteurs
+  region: Secteur
+  n_cooperating_stores: Une coopération en cours|%count% Coopérations en cours
+  n_stores: Une entreprise|%count% Entreprise
+  n_ambassadors: Un ambassadeur·ice
+  n_sleeping: Un bonnet de nuit|%count% Bonnet de nuit
+  n_foodsaver: Un Foodsaver|%count% Foodsaver
+  fsp: Frigo solidaire
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
@@ -657,3 +723,47 @@ storemanagers: Gérants du magasin
 fspmanagers: Épargnants alimentaires responsables des frigos solidaires
 fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
 teaser: Extrait
+store:
+  not-in-team: Tu n'es pas encore dans l'équipe de ce magasin.
+  chat:
+    team: Message à l'équipe
+    jumper: Message aux remplaçant·e·s
+  actions: Options
+  bread: Tous les magasins
+storeview:
+  want_to_fetch: J'aimerais m'engager dans cette équipe.
+  specials: Particularités
+  managers: Foodsaver responsable
+  status: Statut actuel
+  frequency4: la nuit
+  frequency3: le soir
+  frequency2: le midi/l'après-midi
+  frequency1: le matin
+  frequency: Les interventions ont lieu tous les {freq}. N'interviens JAMAIS dans
+    le magasin sans accord !
+  cooperation: Coopère depuis le {startTime}.
+  pickupWeight: Il y a eu {pickupWeight} de repêchés.
+  store: Magasin
+  pickupCount: Il y a déjà eu {pickupCount} interventions dans ce magasin.
+  counter: <strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>
+  teamInfo: Il y a <strong>{active}</strong> actif·ve·s et <strong>{jumper}</strong>
+    remplaçant·e·s dans l'équipe.
+  info: Informations
+day: Balise
+time: Heure
+select: Veuillez choisir
+validate:
+  required: '{it} ne peut pas être vide'
+notice: Conseil !
+delete: Supprimer
+error_ajax: "Ça n'a malheureusement pas fonctionné.\nPeut-être que ta connexion internet\
+  \ ne fonctionne pas actuellement.\nCharge à nouveau la page et réessaye.\n"
+error_unexpected: Une erreur est survenue
+error_permissions: Tu n'as malheureusement pas les droits nécessaires pour cette action.
+success: Réalisé avec succès
+back: Retour
+really_delete: supprimer définitivement ?
+are_you_sure: Es-tu sûr·e ?
+statistics:
+  num_fetches: Après une intervention|Après %count% interventions
+  kg_food_saved: '%count% kg de denrées alimentaires repêchées'
