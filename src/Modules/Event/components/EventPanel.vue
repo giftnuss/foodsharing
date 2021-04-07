@@ -4,7 +4,7 @@
     <b-card>
       <b-media no-body class="d-flex w-100">
         <b-media-aside
-          v-b-tooltip.hover="dayTooltip"
+          v-b-tooltip.hover="dateTooltip"
           class="mr-2 flex-column"
         >
           <CalendarDate :date-object="startDate" />
@@ -108,8 +108,8 @@ export default {
     displayedMonth () {
       return this.$i18n('month.' + formatDate(this.startDate, 'M'))
     },
-    dayTooltip () {
-      return formatDate(this.startDate, 'EEEEEE dd.M. HH:mm') + ' (' + this.$dateDistanceInWords(this.startDate) + ')'
+    dateTooltip () {
+      return formatDate(this.startDate, 'dd.MM.yyyy HH:mm') + ' (' + this.$dateDistanceInWords(this.startDate) + ')'
     },
     displayedStart () {
       return formatDate(this.startDate, 'HH:mm')

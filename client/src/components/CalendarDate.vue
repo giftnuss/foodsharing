@@ -5,7 +5,7 @@
       {{ displayedMonth }}
     </div>
     <div class="px-1 day">
-      {{ displayedDay }}
+      {{ displayedWeekday }} {{ displayedDay }}
     </div>
   </div>
 </template>
@@ -22,6 +22,9 @@ export default {
     displayedDay () {
       return formatDate(this.dateObject, 'dd')
     },
+    displayedWeekday () {
+      return this.$i18n('date_short.' + formatDate(this.dateObject, 'EEEE'))
+    },
     displayedMonth () {
       return this.$i18n('month.' + formatDate(this.dateObject, 'M'))
     },
@@ -34,7 +37,7 @@ export default {
   --calendar-highlight-bg: #ff8746; // new orange
   --calendar-highlight-text: #45a045; // modified kale
   --calendar-font-size: 1rem;
-  --calendar-line-height: 1.5;
+  --calendar-line-height: 1.2;
   --calendar-border-radius: 6px;
 
   text-align: center;
@@ -60,7 +63,7 @@ export default {
     border-top-right-radius: 0;
     color: var(--calendar-highlight-text);
     font-family: 'Alfa Slab One', serif;
-    font-size: calc(2 * var(--calendar-font-size));
+    font-size: calc(1.57 * var(--calendar-font-size));
     line-height: var(--calendar-line-height);
 
     // letter-spacing has alignment problems
