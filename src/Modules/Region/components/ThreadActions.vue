@@ -25,7 +25,7 @@
         </a>
       </b-form-checkbox>
       <b-form-checkbox
-        v-if="showSticky"
+        v-if="mayModerate"
         :checked="isSticky"
         class="sticky"
         switch
@@ -35,26 +35,25 @@
           {{ $i18n('forum.thread.stick') }}
         </a>
       </b-form-checkbox>
-    </div>
-    <div>
-      <div>{{ status }}, {{ ThreadStatus.THREAD_OPEN }}, {{ ThreadStatus.THREAD_CLOSED }}</div>
       <b-button
-        v-if="status === ThreadStatus.THREAD_OPEN"
+        v-if="mayModerate && isOpen"
+        small
+        class="ml-2 btn-sm"
         data-toggle="tooltip"
         data-placement="bottom"
-        :title="$i18n('forum.thread.close')"
         @click="$emit('close')"
       >
-        <i class="fas fa-folder" />
+        {{ $i18n('forum.thread.close') }}
       </b-button>
       <b-button
-        v-else
+        v-if="mayModerate && !isOpen"
+        small
+        class="ml-2 btn-sm"
         data-toggle="tooltip"
         data-placement="bottom"
-        :title="$i18n('forum.thread.open')"
         @click="$emit('open')"
       >
-        <i class="fas fa-folder-open" />
+        {{ $i18n('forum.thread.open') }}
       </b-button>
     </div>
   </div>
@@ -70,8 +69,13 @@ export default {
     isFollowingBell: { type: Boolean, default: null },
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
-    showSticky: { type: Boolean, default: null },
+    mayModerate: { type: Boolean, default: false },
     status: { type: Number, default: ThreadStatus.THREAD_OPEN },
+  },
+  computed: {
+    isOpen () {
+      return this.currentStatus === ThreadStatus.THREAD_OPEN
+    },
   },
 }
 </script>

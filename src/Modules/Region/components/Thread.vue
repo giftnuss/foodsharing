@@ -25,12 +25,12 @@
         :is-following-bell.sync="isFollowingBell"
         :is-following-email.sync="isFollowingEmail"
         :is-sticky.sync="isSticky"
-        :show-sticky="mayModerate"
+        :may-moderate="mayModerate"
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
-        @close="setStatus(ThreadStatus.THREAD_CLOSED)"
-        @open="setStatus(ThreadStatus.THREAD_OPEN)"
+        @close="close"
+        @open="open"
       />
       <div
         v-if="!isActive && mayModerate"
@@ -92,11 +92,12 @@
         :is-following-bell="isFollowingBell"
         :is-following-email="isFollowingEmail"
         :is-sticky="isSticky"
+        :may-moderate="mayModerate"
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
-        @close="setStatus(ThreadStatus.THREAD_CLOSED)"
-        @open="setStatus(ThreadStatus.THREAD_OPEN)"
+        @close="close"
+        @open="open"
       />
     </div>
 
@@ -369,10 +370,16 @@ export default {
         pulseError(i18n('error_unexpected'))
       }
     },
+    async close () {
+      await this.setStatus(ThreadStatus.THREAD_CLOSED)
+    },
+    async open () {
+      await this.setStatus(ThreadStatus.THREAD_OPEN)
+    },
     async setStatus (status) {
       try {
         setThreadStatus(this.id, status)
-        this.isClosed = (status === THREAD_CLOSED)
+        this.isClosed = (status === ThreadStatus.THREAD_CLOSED)
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       }

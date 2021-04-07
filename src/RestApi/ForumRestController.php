@@ -258,7 +258,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @Rest\Patch("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="isSticky", nullable=true, default=null, description="should thread be pinned to the top of forum?")
 	 * @Rest\RequestParam(name="isActive", nullable=true, default=null, description="should a thread in a moderated forum be activated?")
-	 * @Rest\RequestParam(name="status", nullable=true, default=null, description="status of a thread")
+	 * @Rest\RequestParam(name="status", nullable=true, default=null, description="if the thread is open or closed")
 	 */
 	public function patchThreadAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{

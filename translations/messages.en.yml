@@ -547,6 +547,8 @@ forum:
     no_mail: The thread was started without sending e-mails
     with_mail: The topic was opened and all participants were informed about it by
       mail
+    close: "Close thread"
+    open: "Reopen thread"
   post:
     delete: Delete post
     body: Message
@@ -2233,8 +2235,3 @@ date_short:
   Wednesday: Thu
   Tuesday: Tu
   Monday: Mo
-
-forum:
-  thread:
-    close: "Close thread"
-    open: "Reopen thread"
