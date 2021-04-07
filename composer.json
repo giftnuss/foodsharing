@@ -63,7 +63,7 @@
     "sensio/framework-extra-bundle": "6.0.0",
     "sentry/sentry-symfony": "^3.5",
     "setasign/fpdi": "v2.3.6",
-    "swiftmailer/swiftmailer": "6.2.5",
+    "swiftmailer/swiftmailer": "6.2.7",
     "symfony/asset": "v5.2.4",
     "symfony/config": "v5.2.4",
     "symfony/console": "v5.2.6",
