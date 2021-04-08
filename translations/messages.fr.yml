@@ -92,14 +92,14 @@ group:
       les entreprises du district
     fsp: "Frigo solidaire // idée : \"comm'un frigo\""
     tooltip_function_3: Les admins de ce groupe de travail peuvent activer les frigos
-      solidaires de ce district ainsi que modifier et retirer les contributions des
-      membres sur la page du frigo solidaire
+      solidaires de ce secteur ainsi que modifier et retirer les contributions des
+      membres sur la page du frigo solidaire.
     tooltip_function_2: Les admins de ce groupe de travail peuvent instaurer des votes
       pour le district
     tooltip_function_1: Les admins de ce groupe de travail seront notifiés aux membres
       du district
     restricted_workgroup_function: Cette fonction de groupe ne peut être modifiée
-      que par les membres du groupe de travail interrégional
+      que par les membres du groupe de travail interrégional.
     duplicate_moderation_team: L'équipe de modération existe déjà ! Il ne peut y avoir
       qu'une telle équipe par district.
     duplicate_pr_team: L'équipe en charge des relations publiques existe déjà ! Il
@@ -107,15 +107,15 @@ group:
     duplicate_fsmanagement_team: L'équipe de gestion existe déjà ! Il ne peut y avoir
       qu'une telle équipe par district.
     duplicate_arbitration_team: L'équipe en charge de l'arbitrage existe déjà ! Il
-      ne peut y avoir qu'une telle équipe par district.
+      ne peut y avoir qu'une telle équipe par secteur.
     duplicate_mediation_team: L'équipe de médiation existe déjà ! Il ne peut y avoir
       qu'une telle équipe par district.
     duplicate_report_team: L'équipe en charge des signalements existe déjà ! Il ne
-      peut y avoir qu'une telle équipe par district.
+      peut y avoir qu'une telle équipe par secteur.
     duplicate_stores_team: L'équipe de coordination des entreprises existe déjà !
       Il ne peut y avoir qu'une telle équipe par district.
     duplicate_fsp_team: L'équipe de frigo solidaires existe déjà ! Il ne peut y avoir
-      qu'une telle équipe par district.
+      qu'une telle équipe par secteur.
     duplicate_voting_team: L'équipe de vote existe déjà ! Il ne peut y avoir qu'une
       telle équipe par district.
     duplicate_welcome_team: L'équipe de bienvenue existe déjà ! Il ne peut y avoir
@@ -178,7 +178,7 @@ pass:
   noPhoto: "Les personnes suivantes n'ont pas encore importé de photo :"
   button:
     verify: Vérifier
-    check: Vérifier les rendez-vous
+    check: Vérifier les occurences
   verify:
     failed: Une erreur s'est produite
     confirm: Sûr·e ?
@@ -307,7 +307,7 @@ location_name: Lieu de réunion/Salle de conférence
 mailbox_id: Adresse courriel de l’expéditeur
 testemail: Adresse courriel de test
 bezirk_id: Pour quelle région l'article est-il pertinent ?
-lifetime: Combien de temps votre panier alimentaire doit-il être valide ?
+lifetime: Combien de temps votre panier solidaire doit-il être valide ?
 fetchstate: Tout s'est bien passé ?
 food_art: De quel type de nourriture s'agit-il ?
 food_type: Quels types d'aliments sont inclus ?
@@ -356,6 +356,9 @@ settings:
   follow:
     none: Ne plus m'informer sur les nouvelles publications par courriel.
     mail: Oui, je souhaite être informé·e des nouvelles publications par courriel.
+  calendar:
+    sync: "Ton programme calendrier doit régulièrement être synchronisé avec ce calendrier\
+      \ afin d'actualiser tes évènements.\n"
 email_template:
   newsletter:
     unsubscribe: Tu ne veux plus recevoir de lettres d'information ?
@@ -385,6 +388,11 @@ email_template:
       \ Inscription au registre :\n\n Inscription au registre des associations\n Tribunal d’enregistrement :\
       \ tribunal de Cologne\n Numéro d’enregistrement : VR 17439\n Responsable du\
       \ contenu d’après § 55 Abs. 2 RStV :\n  Frank Bowinkelmann"
+  manual_slots_get_ignored: Cette notification est envoyée que pour les collectes
+    régulières. Les collectes particulières ajoutées manuellement, modifiées ou supprimées
+    ne sont pas prises en compte.
+  foodbasket_request: Ton panier solidaire vient de faire l'objet d'une requête de
+    la part de %SENDER%.
 mailbox:
   mark_as_unread: Marquer comme non lu
   filesize: Désolé. Le fichier est trop gros.
@@ -453,8 +461,35 @@ forum:
       pays ou d'un État fédéré.
     no_mail: Le sujet a été ouvert sans envoyer de courriels
     with_mail: Sujet ouvert et tous informés par courriel
+    title: Titre
+    stick: Rendre la discussion prioritaire
+    inactive: "Cette discussion est inactive.\nTu peux l'activer en cliquant ici et\
+      \ en informer tous les Foodsaver.\n"
+    delete: Supprimer la discussion
+    activate: Activer la discussion
   follow:
     email: comme courriel
+    bell: par la cloche
+    header: 'Notification des nouvelles réponses :'
+  quickreply:
+    error: Ta contribution n'a pas pu être sauvegardée.
+    success: Super ! Ta réponse a été sauvegardée.
+  markdown_description: "Pour formater le texte en *<i>cursif</i>* ou **<b>gras</b>**,\
+    \ utilise  <a href=\"https://de.wikipedia.org/wiki/Markdown\" target=\"_blank\"\
+    >Markdown</a>. \n<br />Attention : Si tu souhaites mettre une étoile * au sein\
+    \ de ton texte, il faudra ajouter un \\ avant l'étoile (\\*) pour que celle-ci\
+    \ soit visible."
+  sending_error: Une erreur est survenue lors de l'envoi
+  no_threads: Aucune discussion
+  no_posts: Aucune contribution à afficher
+  hold_back_for_moderation: La discussion a été enregistrée et sera publiée dès qu'un.e
+    ambassadeur.ice / un.e modérateur.ice l'aura acceptée.
+  post:
+    body: Message
+    delete: Supprimer la contribution
+  threads: Discussions
+  new_thread: Ouvrir une nouvelle discussion
+  from: de {name}
 fsp:
   info:
     mail: Cloche et notification par courriel
@@ -512,13 +547,15 @@ fsp:
     tu es actif·ve
   inRegion: Tous les frigos solidaires dans {region}
   yours: Frigos solidaires dans ton secteur
+  summaryRegion: Il y a {count} frigo(s) solaidaire(s) à {region} et dans les secteurs
+    associés
 terminology:
   mailboxes: Messageries
   settings: Paramètres
   subgroups: Sous-groupes
   group: Groupe de travail
   groups: Groupes de travail
-  basket: Corbeille
+  basket: Panier solidaire
   baskets: Corbeilles
   arbitration: Vue des signalements
   reports: Vue des signalements
@@ -558,7 +595,7 @@ terminology:
     f: foodshareuse
     m: foodsharer
   stores: Magasin / entreprise
-  events: Rendez-vous
+  events: Évènements
   forum: Forum
   message: message
   profile_picture: photo de profil
@@ -574,6 +611,7 @@ terminology:
   n_sleeping: Un bonnet de nuit|%count% Bonnet de nuit
   n_foodsaver: Un Foodsaver|%count% Foodsaver
   fsp: Frigo solidaire
+  homeRegion: Secteur favori
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
@@ -719,7 +757,7 @@ store_status_impact_explanation: Veuillez actualiser le statut de la coopératio
   coopérantes seront visibles dans la barre de navigation.
 kette_id: chaîne (entreprise)
 fetchercount: Nombre de quêteurs
-storemanagers: Gérants du magasin
+storemanagers: Responsable coopération
 fspmanagers: Épargnants alimentaires responsables des frigos solidaires
 fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
 teaser: Extrait
@@ -730,6 +768,74 @@ store:
     jumper: Message aux remplaçant·e·s
   actions: Options
   bread: Tous les magasins
+  request:
+    to-nowhere: Refuser
+    to-jumper: Liste des remplaçant(e)s
+    to-team: Accepter
+    verified: L'utilisateur.ice est vérifié(e)
+    title: Demandes pour {storeTitle}
+    withdrawn: Ta demande a été retirée avec succès.
+    withdraw: Retirer ma demande
+    orga-instead: L'équipe organisation a été informée.
+    amb-instead: Les ambassadeur.ice.s ont été informés.
+    no-sm: Il n'y a encore aucun(e) responsable pour ce magasin partenaire.
+    got-it: Les responsables ont été notifiés de ta demande et se manifesteront sous
+      peu.
+    request: Je souhaite aider dans cette équipe.
+  sm:
+    makeRegularTeamMember: Intégrer dans l'équipe
+    makeJumper: Nommer remplaçant(e)
+    reallyRemove: Souhaites-tu vraiment retirer {name} de cette équipe ?
+    removeFromTeam: Retirer de l'équipe
+    filterQuizSM: Test-RC réussi
+    filterJumper: Remplaçants
+    filterUnverified: Non-vérifé(e)s
+    filter: 'Ne montrer que :'
+    pickupReset: Tri standard
+    pickupDesc: Récent en premier
+    pickupAsc: Récent en dernier
+    byLastPickup: Trier suivant la dernière collecte
+    managementActions: Actions-RC
+    managementEffect: 'Trier suivant la dernière collecte :'
+    managementToggleOff: Revenir à la version standard
+    managementToggleOn: Voir en tant que RC
+  springer_conversation_name: Replaçant(e) {name}
+  team_conversation_name: Équipe {name}
+  days_before: avant
+  days: Jours
+  my_last_pickup: Ma dernière collecte
+  address: Adresse
+  may_not_referred_to_in_public: Ne pas mentionner ce magasin publiquement (que ce
+    soit dans les paniers solidaires, sur Facebook ou dans la presse) !
+  may_referred_to_in_public: Ce magasin peut être mentionné publiquement.
+  attribution: Mention de nom auprès du public
+  average_collection_quantity: Poids collecté en moyenne
+  particularities: Particularités
+  mayManage: A réussi le test Responsable coopération.
+  mayAmb: A réussi le test Ambassadeur.ice.
+  fetchCount: a collecté {count}× ici.
+  isNotVerified: N'est pas encore vérifié(e).
+  isJumper: Remplaçant(e)
+  noPickup: Aucune collecte à ce jour.
+  isManager: Responsable coopération pour ce magasin.
+  unknownDate: inconnue
+  lastPickupShort: dernière collecte le {date}
+  lastPickup: Dernière collecte le {date}
+  jumperSince: Remplaçant(e) depuis le {date}
+  memberSince: Dans l'équipe depuis le {date}
+  teamName: Équipe {storeTitle}
+  error: La page magasin n'a pas pu être chargée.
+  go: Page de l'équipe
+  noStores: Il n'y a encore aucun magasin partenaire
+  addNewStoresButton: Inscrire un nouveau magasin partenaire
+  allStoresOfRegion: Tous les magasins dans ce secteur
+  tooltip_managing: Tu es responsable coopération de ce magasin
+  tooltip_red: Collectes disponibles aujourd'hui ou demain
+  tooltip_orange: Collectes disponibles dans les 3 prochains jours
+  tooltip_yellow: Collectes disponibles dans les 5 prochains jours
+  all_of_my_stores: Mes magasins
+  pickup_slot_unavailable: Cette collecte n'est pas disponible car les responsables
+    coopération ne l'ont pas encore prévue. Réessaye plus tard.
 storeview:
   want_to_fetch: J'aimerais m'engager dans cette équipe.
   specials: Particularités
@@ -767,3 +873,197 @@ are_you_sure: Es-tu sûr·e ?
 statistics:
   num_fetches: Après une intervention|Après %count% interventions
   kg_food_saved: '%count% kg de denrées alimentaires repêchées'
+menu:
+  entry:
+    events: Évènements
+dashboard:
+  pickupdates: Prochains évènements
+  no_more_updates_event: Plus de nouveaux évènements
+profile:
+  signoutAllConfirmation: Retirer {name} de toutes les collectes à venir ?
+pickuplist:
+  NumberOfAppointments_table_header: Nombre d'évènements
+pickup:
+  dates: Échéances des collectes
+  edit:
+    added: La collecte a été ajoutée !
+    many-people: "Tu as inscrit plus de deux personnes pour la collecte.\n<br />\n\
+      N'envoie <strong>que le nombre de collecteurs nécessaire</strong> pour la collecte.\n\
+      Plus il y a de collecteurs, plus il y a de chances de faire péricliter la coopération.\n\
+      <br />\nClarifie la situation avec le magasin partenaire, si besoin ajoutez\
+      \ des collectes.\nDes Foodsaver peuvent aussi vous attendre à quelques mètres\
+      \ du magasin pour vous aider à porter.\n"
+    slotscount: '{count} collecteur.ice.s'
+    slotcount: 1 collecteur.ice
+    more: Ajouter un rendez-vous
+    add: Ajouter les horaires des collectes
+    bread: Modifier les horaires des collectes
+  history:
+    search: Voir les collectes
+    title: Historique des collectes
+  slot_remove: Retirer un créneau
+  slot_add: Ajouter un créneau
+  add_onetime_pickup: Ajouter une collecte exceptionnelle
+  edit_recurring_pickups: Modifier les collectes régulières
+  delete_not_empty: Des Foodsavers sont encore inscrits. Tu pourras supprimer ces
+    collectes seulement après que chacun se soit retirés.
+  really_delete_date: Souhaites-tu vraiment supprimer la collecte du {date} ?
+  delete_title: Supprimer la collecte
+  take_empty_slot: Sélectionner cette collecte
+  join_agree: Oui, je m'engage
+  join_cancel: Finalement non
+  really_join_date: T'engages-tu vraiment à réaliser cette collecte le {date} ?
+  join_title_date: Confirmer ?
+  team_message_success: Le message a été envoyé à l'équipe avec succès
+  team_message_send_and_leave: Envoyer et se retirer de la collecte
+  leave_team_message_template: Chers tou.te.s, le {date} ...
+  leave_team_message_title: Envoyer un message à l'équipe
+  leave_pickup_message_team: Notifier l'équipe
+  leave_pickup_ok: J'ai déjà trouvé un(e) replaçant(e).
+  really_leave_date: Tu es responsable de cette collecte, c'est ton rôle de trouver
+    un(e) remplaçant(e).
+  kick_message_footer: Amicalement, l'équipe des responsables coopération
+  kick_message_placeholder: 'Information complémentaires (optionnel) :'
+  kick_message: Nous t'avons retiré de la collecte du {date} dans le magasin {storeName}.
+  really_kick_user_info: "Souhaites-tu vraiment retirer {name} de la collecte du {date}\
+    \ ?\n{name} recevra le message suivant :\n"
+  really_leave_date_title: Se retirer de la collecte du {date} ?
+  signout_confirm: Continuer ?
+  signout_info: Toutes tes collectes futures dans cette équipe vont être retirées.
+  signout_sure: Souhaites-tu quitter cette équipe ?
+  copiedNumber: '"{number}" a été copié dans le presse-papier.'
+  copyNumber: Copier le numéro dans le presse-papier
+  open_profile: Voir le profil
+  leave: Se retirer
+  kick: Retirer
+  confirm: Confirmer
+  call: Appeler
+events:
+  bread: Évènements
+wall:
+  error-create: Ta contribution sur ce mur n'a pas pu être sauvegardée.
+  created: Parfait ! Ta contribution sur ce mur a été enregistrée.
+  error-delete: Tu ne peux pas supprimer cette contribution.
+  info-logging: Afin d'éviter tout conflit, fais en sorte que le contenu ainsi que
+    la personne responsable de ce contenu fasse l'objet d'un protocole écrit.
+  info-somebody-else: Cette contribution date de plus d'un mois, en tant que responsable,
+    tu peux la supprimer si besoin est.
+  confirm-deletion: La contribution de {name} doit-elle être supprimée ?
+  delete: Supprimer la contribution
+  see-more: Voir plus de contributions
+  message_placeholder: Écrire un message
+  name: Mur
+chat:
+  confirm_draft_discard: "En changeant de conversation, le texte écrit jusqu'ici sera\
+    \ automatiquement supprimé.\nEn interrompant cet échange, ton brouillon sera automatiquement\
+    \ utilisé dans la nouvelle conversation.\n"
+  empty_recipients: Tu dois d'abord choisir un.e destinataire.
+  empty_message: Tu dois d'abord écrire un message.
+  error_sending_message: L'envoi du message a échoué.
+  error_loading_messages: Le chargement des messages a échoué.
+  notification_named_conversation: '{foodsaver} a écrit dans {conversation}.'
+  notification_unnamed_conversation: Tu as un message de {foodsaver}.
+  placeholder: Écris ton texte ici.
+  empty: Aucune discussion
+  conversations: Discussions
+  new_message: Nouveau message
+  open_chat: Écrire un message
+timepicker:
+  labelNowButton: maintenant
+  labelCloseButton: fermer
+  labelNoTimeSelected: Aucune heure choisir
+  labelSelected: Heure choisie
+  labelDecrement: Limiter
+  labelIncrement: Augmenter
+  labelSeconds: Secondes
+  labelMinutes: Minutes
+  labelHours: Heures
+calendar:
+  labelHelp: La navigation est aussi possible grâce aux flèches
+  labelNav: Naviguer dans le calendrier
+  labelCalendar: Calendrier
+  labelNoDateSelected: Choisir la date
+  labelSelected: Date choisie
+  labelToday: Aujourd'hui
+  labelNextYear: Année prochaine
+  labelNextMonth: Mois prochain
+  labelCurrentMonth: Mois actuel
+  labelPrevMonth: Mois précédent
+  labelPrevYear: Année précédente
+  locale: de
+storeedit:
+  milestone:
+    dropped: "{user} ne fait désormais plus partie de l'équipe"
+    accepted: "{user} fait désormais partie de l'équipe"
+    created: '{user} a ajouté le magasin partenaire le {date}'
+    statuschanged: Changement de statut le {date}
+  edit_success: Les modifications ont été enregistrées avec succès
+  add_success: Nouveau magasin partenaire ajouté
+  fetch:
+    teamStatus2: Besoin de renforts urgent !
+    teamStatus1: Ton aide est la bienvenue !
+    teamStatus0: Cette équipe est complète et n'a pas besoin d'aide supplémentaire.
+    teamStatus: Statut de l'équipe
+  store:
+    status: Statut
+  team:
+    orga: "Tu n'es pas responsable de ce magasin.\nTu possèdes néanmoins des droits\
+      \ étendus en tant que membre de l'équipe organisationnelle générale.\n"
+    coordinator: "Tu n'es pas responsable de ce magasin.\nTu possèdes néanmoins des\
+      \ droits étendus en tant que membre de l'équipe de coordination-magasins.\n"
+    amb: "Tu n'es pas responsable de ce magasin.\nTu possèdes néanmoins des droits\
+      \ étendus en tant qu'ambassadeur.ice.\n"
+    note: 'Conseils :'
+    unmanaged: "Il n'y a actuellement aucun(e) responsable coopération dans cette\
+      \ équipe.\nAjoute jusqu'à 3 RC pour gérer cette équipe.\n"
+    max-sm: Choisis au maximum 3 Responsables coopération (RC)
+    need-sm: Il doit y avoir au minimum un(e) responsable pour ce magasin !
+    empty: L'équipe ne peut pas être vide.
+    cannot-leave: Tu es encore responsable coopération pour ce magasin et ne peut
+      donc pas le quitter !
+    leave: Retirer de l'équipe
+    bread: Modifier l'équipe
+  actions: Options
+  not-in-region: Tu peux ajouter des magasins partenaires uniquement dans la région
+    dont tu fais partie.
+  add-new: Ajouter un nouveau magasin
+  bread: Modifier la fiche magasin
+basket:
+  published: Merci ! Ton panier solidaire vient d'être mis en ligne !
+  publish_error: Erreur. Le panier solidaire n'a pas pu être publié.
+  not-allowed: Tu n'as pas les droits requis pour modifier ce panier solidaire.
+  no-address: "Renseigne ton adresse dans les {settings} afin de pouvoir proposer\
+    \ ton panier solidaire.\n<br><br>\nTon adresse est demandée afin de pouvoir la\
+    \ matérialiser sur la carte.\n<br><br>\nL'adresse complète et précise n'est pas\
+    \ visible pour tous les utilisateurs de la fonction paniers solidaires.\n"
+  not_active: Ce panier solidaire est inactif.
+  request_denied: Ta requête a été rejetée par le créateur de ce panier solidaire.
+  not_found: Ce panier solidaire n'existe plus.
+  error: Le panier solidaire n'a pas pu être chargé.
+  image: Ajoute une photo à ton panier solidaire.
+  state:
+    okay: Oui, {pronoun} a récupéré son panier solidaire.
+  change-state: Envoyer la demande de {name} pour ce panier solidaire
+  request-fs: Obtenir ce panier solidaire sur la page d'accueil de foodsharing
+  request: Obtenir ce panier solidaire
+  request_close: Envoyer ma demande pour ce panier solidaire
+  taken: "<b>Ce panier solidaire n'est malheureusement plus disponible.</b>\n<br><br>\n\
+    Tu n'es pas encore membre de foodsharing ?\nAlors clique en haut sur le bouton\
+    \ <b>Participer</b> pour t'inscrire ou dépose ton propre panier solidaire sur\
+    \ la plateforme !\n<br><br>\nTrouve d'autres paniers solidaires dans ton secteur\
+    \ grâce à notre carte !\n"
+  howto: "<b>Information sur l'utilisation des paniers solidaires</b>\n<br>\nUtilise\
+    \ le bouton vert <b>\"Obtenir ce panier solidaire\"</b>, pour montrer ton intérêt\
+    \ envers ce panier,\nou <b>\"modifier le panier solidaire\"</b> afin de modifier\
+    \ ton panier ultérieurement.\n"
+  new: Nouveau panier solidaire
+  delete: Supprimer le panier solidaire
+  edit: Modifier le panier solidaire
+  publish: Publier le panier solidaire
+  add: Poster un panier solidaire
+  on: Panier solidaire de {platform}
+  by: Panier solidaire de {name}
+  go: Aller au panier solidaire
+formatting:
+  md: Tu peux utiliser Markdown pour formater  <a href="https://www.markdownguide.org/">Markdown</a>
+    à utiliser.
