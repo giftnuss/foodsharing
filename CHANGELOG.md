@@ -8,6 +8,7 @@
 - Added a partners page for foodsharing.at !1931 @alex.simm
 
 ## Bugfixes
+- Add permission checks to REST endpoints !1944 @alex.simm
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm

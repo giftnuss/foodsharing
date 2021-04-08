@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -16,6 +17,7 @@ final class FoodsaverRestController extends AbstractFOSRestController
 {
 	private FoodsaverGateway $foodsaverGateway;
 	private ProfileGateway $profileGateway;
+	private ProfilePermissions $profilePermissions;
 	private Session $session;
 
 	public function __construct(
@@ -33,6 +35,10 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	 */
 	public function listPastPickupsAction(int $fsId, string $fromDate, string $toDate): Response
 	{
+		if (!$this->session->id() || !$this->profilePermissions->maySeePickups($fsId)) {
+			throw new HttpException(403);
+		}
+
 		// convert date strings into datetime objects
 		$from = TimeHelper::parsePickupDate($fromDate);
 		$to = TimeHelper::parsePickupDate($toDate);
