@@ -45,6 +45,10 @@ class ApplicationRestController extends AbstractFOSRestController
 	 */
 	public function acceptApplicationAction(int $groupId, int $userId): Response
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(401);
+		}
+
 		try {
 			$group = $this->regionGateway->getRegion($groupId);
 		} catch (Exception $e) {
@@ -73,6 +77,10 @@ class ApplicationRestController extends AbstractFOSRestController
 	 */
 	public function declineApplicationAction(int $groupId, int $userId): Response
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(401);
+		}
+
 		try {
 			$group = $this->regionGateway->getRegion($groupId);
 		} catch (Exception $e) {

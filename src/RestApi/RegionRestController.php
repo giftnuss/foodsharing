@@ -62,17 +62,17 @@ class RegionRestController extends AbstractFOSRestController
 	 */
 	public function joinRegionAction(int $regionId): Response
 	{
+		$sessionId = $this->session->id();
+		if ($sessionId === null) {
+			throw new AccessDeniedHttpException();
+		}
+
 		$region = $this->regionGateway->getRegion($regionId);
 		if (!$region) {
 			throw new HttpException(404);
 		}
 		if (!$this->regionPermissions->mayJoinRegion($regionId)) {
 			throw new HttpException(403);
-		}
-
-		$sessionId = $this->session->id();
-		if ($sessionId === null) {
-			throw new AccessDeniedHttpException();
 		}
 
 		$this->regionGateway->linkBezirk($sessionId, $regionId);
