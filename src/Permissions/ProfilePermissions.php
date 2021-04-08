@@ -3,6 +3,7 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfilePermissions
@@ -107,6 +108,6 @@ class ProfilePermissions
 
 	public function mayRemoveFromBounceList(int $userId): bool
 	{
-		return $this->session->may('orga');
+		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::IT_SUPPORT_GROUP);
 	}
 }

@@ -374,6 +374,7 @@ group:
     tooltip_function_region1811: "Admins dieser AG können die Seiten \"Partner\", \"Kontakt\" und \"Team\" bearbeiten"
     tooltip_function_region2287: "Admins dieser AG können die Inhalte der Startseite bearbeiten"
     tooltip_function_region432: "Admins dieser AG können Meldungen einsehen"
+    tooltip_function_region387: "Admins dieser AG können Einträge von der E-Mail-Bounceliste entfernen"
   show-all: "Alle anzeigen"
 
 legal:

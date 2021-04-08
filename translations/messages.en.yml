@@ -141,6 +141,7 @@ group:
       "Contact" and "Team"
     tooltip_function_region341: Admins of this work group can manage the quiz questions
     tooltip_function_region331: Admins of this work group can send newsletters
+    tooltip_function_region387: "Admins of this group can remove entries from the e-mail bounce list"
 settings:
   header: Your data and settings
 
