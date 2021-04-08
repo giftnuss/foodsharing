@@ -13,9 +13,8 @@ import EventPanel from './components/EventPanel'
 const sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
-} else if (sub === 'event') {
-  initWall('event', GET('id'))
 } else {
+  initWall('event', GET('id'))
   vueRegister({
     EventPanel,
   })
