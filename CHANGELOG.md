@@ -1,26 +1,6 @@
-# Release "Feige", Unreleased
+# 2021-04-09 Hotfix
 
-## Features
-- Allow users to remove trust bananas on their own profile #592 !1920 @alex.simm
-
-## Changes
-- Profile storelist now shows store cooperation status !1828 @ChrisOelmueller
-- Added a partners page for foodsharing.at !1931 @alex.simm
-
-## Bugfixes
 - Add permission checks to REST endpoints !1944 @alex.simm
-
-## Refactoring
-- Change DTOs for dashboard updates to use date objects !1926 @alex.simm
-- Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
-- New look for event header panels and dashboard invitations including the event's region #992 !1717 #1079 !1940 #1075 !1943 @chriswalg @ChrisOelmueller @fs_k
-- Use new upload API for profile photos !1916 !1929 !1932 !1933 @alex.simm
-
-## Dev/Test/CI stuff
-- Update some frontend dependencies !1892 @chriswalg
-- Update mdbook to 0.4.7 !1938 @chriwalg
-- Update some frontend dependencies !1892 !1939 @chriswalg
-- Fixed restart behavior for some docker containers !1937 @\_fridtjof_
 
 # 2021-03-30 Hotfix
 
