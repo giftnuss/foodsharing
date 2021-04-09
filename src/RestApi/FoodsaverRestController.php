@@ -23,10 +23,12 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
 		ProfileGateway $profileGateway,
+		ProfilePermissions $profilePermissions,
 		Session $session
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
+		$this->profilePermissions = $profilePermissions;
 		$this->session = $session;
 	}
 
@@ -45,7 +47,7 @@ final class FoodsaverRestController extends AbstractFOSRestController
 		if (is_null($from) || is_null($to)) {
 			throw new HttpException(400, 'Invalid date format');
 		}
-		$from = $from->min(Carbon::now());
+		$from = $from->min(Carbon::now())->max(Carbon::now()->subMonth());
 		$to = $to->min(Carbon::now());
 
 		$pickups = [
@@ -68,7 +70,7 @@ final class FoodsaverRestController extends AbstractFOSRestController
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				$details = $this->foodsaverGateway->getFoodsaver($slot['foodsaverId']);
-				$slot['profile'] = RestNormalization::normalizeStoreUser($details);
+				$slot['profile'] = RestNormalization::normalizeUser($details);
 				unset($slot['foodsaverId']);
 			}
 		}
