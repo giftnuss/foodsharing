@@ -153,6 +153,10 @@ class UploadsRestController extends AbstractFOSRestController
 	 */
 	public function uploadFileAction(ParamFetcher $paramFetcher): Response
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(401);
+		}
+
 		$filename = $paramFetcher->get('filename');
 		$bodyEncoded = $paramFetcher->get('body');
 

@@ -144,6 +144,10 @@ class VotingRestController extends AbstractFOSRestController
 	 */
 	public function createPollAction(ParamFetcher $paramFetcher): Response
 	{
+		if (!$this->session->id()) {
+			throw new HttpException(401);
+		}
+
 		// parse and check parameters
 		$poll = new Poll();
 		$poll->name = trim($paramFetcher->get('name'));

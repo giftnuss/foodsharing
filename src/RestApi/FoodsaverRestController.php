@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Utility\TimeHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -16,15 +17,18 @@ final class FoodsaverRestController extends AbstractFOSRestController
 {
 	private FoodsaverGateway $foodsaverGateway;
 	private ProfileGateway $profileGateway;
+	private ProfilePermissions $profilePermissions;
 	private Session $session;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
 		ProfileGateway $profileGateway,
+		ProfilePermissions $profilePermissions,
 		Session $session
 	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->profileGateway = $profileGateway;
+		$this->profilePermissions = $profilePermissions;
 		$this->session = $session;
 	}
 
@@ -33,13 +37,17 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	 */
 	public function listPastPickupsAction(int $fsId, string $fromDate, string $toDate): Response
 	{
+		if (!$this->session->id() || !$this->profilePermissions->maySeePickups($fsId)) {
+			throw new HttpException(403);
+		}
+
 		// convert date strings into datetime objects
 		$from = TimeHelper::parsePickupDate($fromDate);
 		$to = TimeHelper::parsePickupDate($toDate);
 		if (is_null($from) || is_null($to)) {
 			throw new HttpException(400, 'Invalid date format');
 		}
-		$from = $from->min(Carbon::now());
+		$from = $from->min(Carbon::now())->max(Carbon::now()->subMonth());
 		$to = $to->min(Carbon::now());
 
 		$pickups = [
@@ -62,7 +70,7 @@ final class FoodsaverRestController extends AbstractFOSRestController
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				$details = $this->foodsaverGateway->getFoodsaver($slot['foodsaverId']);
-				$slot['profile'] = RestNormalization::normalizeStoreUser($details);
+				$slot['profile'] = RestNormalization::normalizeUser($details);
 				unset($slot['foodsaverId']);
 			}
 		}
