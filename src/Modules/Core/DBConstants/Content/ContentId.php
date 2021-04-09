@@ -43,19 +43,19 @@ class ContentId
 	public const PRIVACY_NOTICE_CONTENT = 64;
 	public const BROADCAST_MESSAGE = 51;
 
-	public const STARTPAGE_BLOCK1_DE = 76;
-	public const STARTPAGE_BLOCK2_DE = 77;
-	public const STARTPAGE_BLOCK3_DE = 78;
+	public const STARTPAGE_BLOCK1_DE = 80;
+	public const STARTPAGE_BLOCK2_DE = 81;
+	public const STARTPAGE_BLOCK3_DE = 82;
 
-	public const STARTPAGE_BLOCK1_BETA = 79;
-	public const STARTPAGE_BLOCK2_BETA = 80;
-	public const STARTPAGE_BLOCK3_BETA = 81;
+	public const STARTPAGE_BLOCK1_BETA = 83;
+	public const STARTPAGE_BLOCK2_BETA = 84;
+	public const STARTPAGE_BLOCK3_BETA = 85;
 
-	public const STARTPAGE_BLOCK1_AT = 82;
-	public const STARTPAGE_BLOCK2_AT = 83;
-	public const STARTPAGE_BLOCK3_AT = 84;
+	public const STARTPAGE_BLOCK1_AT = 86;
+	public const STARTPAGE_BLOCK2_AT = 87;
+	public const STARTPAGE_BLOCK3_AT = 88;
 
-	public const STARTPAGE_BLOCK1_CH = 85;
-	public const STARTPAGE_BLOCK2_CH = 86;
-	public const STARTPAGE_BLOCK3_CH = 87;
+	public const STARTPAGE_BLOCK1_CH = 89;
+	public const STARTPAGE_BLOCK2_CH = 90;
+	public const STARTPAGE_BLOCK3_CH = 91;
 }
