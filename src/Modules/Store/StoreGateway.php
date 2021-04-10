@@ -44,7 +44,7 @@ class StoreGateway extends BaseGateway
 		return $this->db->exists('fs_betrieb', ['id' => $storeId]);
 	}
 
-	public function getBetrieb($storeId): array
+	public function getBetrieb($storeId, bool $includeWallposts = true): array
 	{
 		$result = $this->db->fetch('
             SELECT  `id`,
@@ -83,7 +83,9 @@ class StoreGateway extends BaseGateway
 			$result['kette'] = $kette;
 		}
 
-		$result['notizen'] = $this->getStorePosts($storeId);
+		if ($includeWallposts) {
+			$result['notizen'] = $this->getStorePosts($storeId);
+		}
 
 		return $result;
 	}

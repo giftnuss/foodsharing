@@ -113,29 +113,22 @@ class RestNormalization
 	 *
 	 * @param array $data the store data from the database
 	 */
-	public static function normalizeStore(array $data): array
+	public static function normalizeStore(array $data, bool $includeDetails): array
 	{
 		$store = [
 			'id' => (int)$data['id'],
 			'name' => $data['name'],
-			'address' => self::normalizeAddress($data),
 			'group' => [
 				'id' => $data['bezirk_id'],
 				'name' => $data['bezirk'],
 			],
 			'lat' => (float)$data['lat'],
 			'lon' => (float)$data['lon'],
-			'phone' => $data['telefon'],
-			'fax' => $data['fax'],
-			'email' => $data['email'],
-			'contactPerson' => $data['ansprechpartner'],
 			'storeCategoryId' => (int)$data['betrieb_kategorie_id'],
 			'cooperationStatus' => (int)$data['betrieb_status_id'],
-			'updatedAt' => self::normalizeDate(strtotime($data['status_date'])),
 			'teamStatus' => (int)$data['team_status'],
 			'chain' => [],
 			'responsibleUserIds' => [],
-			'notes' => [],
 		];
 
 		if (isset($data['kette'])) {
@@ -146,10 +139,23 @@ class RestNormalization
 				return (int)$u;
 			}, $data['verantwortlicher']);
 		}
-		if (isset($data['notizen']) && is_array($data['notizen'])) {
-			$store['notes'] = array_map(function ($n) {
-				return self::normalizeStoreNote($n);
-			}, $data['notizen']);
+
+		if ($includeDetails) {
+			$store = array_merge($store, [
+				'address' => self::normalizeAddress($data),
+				'phone' => $data['telefon'],
+				'fax' => $data['fax'],
+				'email' => $data['email'],
+				'contactPerson' => $data['ansprechpartner'],
+				'updatedAt' => self::normalizeDate(strtotime($data['status_date'])),
+				'notes' => [],
+			]);
+
+			if (isset($data['notizen']) && is_array($data['notizen'])) {
+				$store['notes'] = array_map(function ($n) {
+					return self::normalizeStoreNote($n);
+				}, $data['notizen']);
+			}
 		}
 
 		return $store;

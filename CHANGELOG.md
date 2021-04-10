@@ -11,7 +11,7 @@
 - Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
 
 ## Bugfixes
-- Add permission checks to REST endpoints !1944 @alex.simm
+- Add permission checks to REST endpoints !1944 !1946 @alex.simm
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm

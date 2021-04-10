@@ -60,17 +60,18 @@ class StoreRestController extends AbstractFOSRestController
 	 */
 	public function getStoreAction(int $storeId): Response
 	{
-		if (!$this->session->may()) {
+		if (!$this->session->may('fs')) {
 			throw new UnauthorizedHttpException(self::NOT_LOGGED_IN);
 		}
+		$maySeeDetails = $this->storePermissions->mayAccessStore($storeId);
 
-		$store = $this->storeGateway->getBetrieb($storeId);
+		$store = $this->storeGateway->getBetrieb($storeId, $maySeeDetails);
 
 		if (!$store || !isset($store[self::ID])) {
 			throw new NotFoundHttpException('Store does not exist.');
 		}
 
-		$store = RestNormalization::normalizeStore($store);
+		$store = RestNormalization::normalizeStore($store, $maySeeDetails);
 
 		return $this->handleView($this->view(['store' => $store], 200));
 	}
