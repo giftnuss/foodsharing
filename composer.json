@@ -59,7 +59,7 @@
     "minishlink/web-push": "5.2.4",
     "mobiledetect/mobiledetectlib": "2.8.36",
     "nelmio/api-doc-bundle": "v4.1.1",
-    "nesbot/carbon": "2.45.1",
+    "nesbot/carbon": "2.46.0",
     "sensio/framework-extra-bundle": "v6.1.1",
     "sentry/sentry-symfony": "^3.5",
     "setasign/fpdi": "v2.3.6",
