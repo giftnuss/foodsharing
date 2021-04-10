@@ -15,7 +15,7 @@
     "codeception/module-db": "1.1.0",
     "codeception/module-filesystem": "1.0.3",
     "codeception/module-phpbrowser": "1.0.2",
-    "codeception/module-rest": "1.2.8",
+    "codeception/module-rest": "1.3.0",
     "codeception/module-sequence": "1.0.1",
     "codeception/module-symfony": "2.0.1",
     "codeception/module-webdriver": "1.2.0",
