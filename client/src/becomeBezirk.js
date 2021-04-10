@@ -15,6 +15,7 @@ import {
 import 'jquery-ui'
 
 import * as api from '@/api/regions'
+import { listRegionChildren } from '@/api/regions'
 
 $('#becomebezirkchooser-button').button().on('click', async function () {
   if (parseInt($('#becomebezirkchooser').val()) > 0) {
@@ -51,7 +52,7 @@ $('#becomebezirkchooser-button').button().on('click', async function () {
   }
 })
 
-export function u_printChildBezirke (element) {
+export async function u_printChildBezirke (element) {
   const val = `${element.value}`
 
   const part = val.split(':')
@@ -86,19 +87,20 @@ export function u_printChildBezirke (element) {
   $(`#xv-childbezirk-${parent}`).remove()
 
   showLoader()
-  $.ajax({
-    dataType: 'json',
-    url: `/xhr.php?f=childBezirke&parent=${parent}`,
-    success: function (data) {
-      if (data.status == 1) {
-        $(`#becomebezirkchooser-childs-${parent}`).remove()
-        $('#becomebezirkchooser-wrapper').append(data.html)
-      }
-    },
-    complete: function () {
-      hideLoader()
-    },
-  })
+  const children = await listRegionChildren(parent)
+  if (children !== undefined && children.length > 0) {
+    $(`#becomebezirkchooser-childs-${parent}`).remove()
+
+    let html = '<select class="select childChanger" id="xv-childbezirk-' + parent + '" onchange="u_printChildBezirke(this);">'
+    html += '<option value="-1:0" class="xv-childs-0">Bitte auswählen...</option>'
+    children.forEach(child => {
+      html += '<option value="' + child.id + ':' + child.type + '" class="xv-childs-' + child.id + '">' + child.name + '</option>'
+    })
+    html += '</select>'
+    $('#becomebezirkchooser-wrapper').append(html)
+  }
+
+  hideLoader()
 }
 
 $(() => {

@@ -1,4 +1,4 @@
-import { patch, post } from './base'
+import { get, patch, post } from './base'
 
 export function joinRegion (regionId) {
   return post(`/region/${regionId}/join`)
@@ -17,4 +17,8 @@ export function setRegionOptions (regionId, enableReportButton, enableMediationB
     enableReportButton: enableReportButton,
     enableMediationButton: enableMediationButton,
   })
+}
+
+export function listRegionChildren (regionId) {
+  return get(`/region/${regionId}/children`)
 }

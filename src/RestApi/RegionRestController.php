@@ -193,4 +193,33 @@ class RegionRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * Returns a list of all subregions including working groups of a region. The result is empty if the
+	 * region does not exist.
+	 *
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="ID of the region or 0 for the root region")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @Rest\Get("region/{regionId}/children", requirements={"regionId" = "\d+"})
+	 */
+	public function listRegionChildrenAction(int $regionId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$children = $this->regionGateway->getBezirkByParent($regionId, false);
+		$response = array_map(function ($child) {
+			return [
+				'id' => $child['id'],
+				'name' => $child['name'],
+				'hasChildren' => $child['has_children'],
+				'type' => $child['type']
+			];
+		}, $children);
+
+		return $this->handleView($this->view($response, 200));
+	}
 }
