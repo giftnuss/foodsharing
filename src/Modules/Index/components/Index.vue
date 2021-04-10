@@ -474,11 +474,11 @@ export default {
   computed: {
     currentCountry () {
       if (this.country === 'AT') {
-        return '?page=content&sub=communitiesAustria'
+        return this.$url('communitiesAustria')
       } else if (this.country === 'CH') {
-        return '?page=content&sub=communitiesSwitzerland'
+        return this.$url('communitiesSwitzerland')
       } else {
-        return '?page=content&sub=communitiesGermany'
+        return this.$url('communitiesGermany')
       }
     },
     contentBlockVisible () {
