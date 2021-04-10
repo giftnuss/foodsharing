@@ -1,9 +1,20 @@
 <template>
   <b-dropdown
-    v-b-tooltip="profile.name"
+    :id="`slot-${uniqueId}`"
     no-caret
     toggle-class="btn p-0 filled"
   >
+    <b-tooltip
+      :target="`slot-${uniqueId}`"
+      triggers="hover blur"
+    >
+      <div>
+        {{ profile.name }}
+      </div>
+      <div v-if="!confirmed">
+        ({{ $i18n('pickup.to_be_confirmed') }})
+      </div>
+    </b-tooltip>
     <template #button-content>
       <Avatar
         :url="profile.avatar"
@@ -67,6 +78,7 @@ import { callableNumber } from '@/utils'
 import conv from '@/conv'
 import i18n from '@/i18n'
 import serverData from '@/server-data'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: { Avatar, BDropdown, BDropdownItem },
@@ -96,6 +108,11 @@ export default {
       default: false,
     },
   },
+  data () {
+    return {
+      uniqueId: null,
+    }
+  },
   computed: {
     callLink () {
       const number = callableNumber(this.profile.mobile) || callableNumber(this.profile.landline)
@@ -111,6 +128,9 @@ export default {
     isMe () {
       return serverData.user.id === this.profile.id
     },
+  },
+  mounted () {
+    this.uniqueId = uuidv4()
   },
   methods: {
     copyIntoClipboard (text) {
