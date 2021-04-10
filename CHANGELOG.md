@@ -21,6 +21,7 @@
 - Update mdbook to 0.4.7 !1938 @chriwalg
 - Update some frontend dependencies !1892 !1939 @chriswalg
 - Fixed restart behavior for some docker containers !1937 @\_fridtjof_
+- Update some backend dependencies !1942 @chriswalg
 
 # 2021-03-30 Hotfix
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm

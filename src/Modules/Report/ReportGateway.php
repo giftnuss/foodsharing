@@ -145,10 +145,6 @@ class ReportGateway extends BaseGateway
 			';
 			$fs['reports'] = $this->db->fetchAll($stm, [':id' => (int)$id]);
 
-			if ($fs['reports'] === false) {
-				$fs['reports'] = [];
-			}
-
 			return $fs;
 		}
 
