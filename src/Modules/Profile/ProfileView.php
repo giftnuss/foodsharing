@@ -91,6 +91,7 @@ class ProfileView extends View
 		$mayAdmin = $this->profilePermissions->mayAdministrateUserProfile($fsId, $regionId);
 		$maySeeBounceWarning = $this->profilePermissions->maySeeBounceWarning($fsId);
 		$maySeePickups = $this->profilePermissions->maySeePickups($fsId);
+		$maySeeStores = $this->profilePermissions->maySeeStores($fsId);
 
 		if ($maySeeBounceWarning) {
 			if ($this->foodsaver['emailIsBouncing']) {
@@ -125,7 +126,7 @@ class ProfileView extends View
 
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
 
-		if ($mayAdmin && $userStores) {
+		if ($maySeeStores) {
 			$page->addSectionLeft(
 				$this->vueComponent('vue-profile-storelist', 'ProfileStoreList', [
 					'stores' => $userStores,
@@ -388,11 +389,12 @@ class ProfileView extends View
 
 		$mayAdmin = $this->profilePermissions->mayAdministrateUserProfile($fsId, $regionId);
 		$maySeeHistory = $this->profilePermissions->maySeeHistory($fsId);
+		$maySeeStores = $this->profilePermissions->maySeeStores($fsId);
 
 		$page->addSectionLeft($this->photo($mayAdmin, $maySeeHistory));
 		$page->addSectionLeft($this->sideInfos(), $this->translator->trans('profile.infos.title'));
 
-		if ($mayAdmin && $userStores) {
+		if ($maySeeStores) {
 			$page->addSectionLeft(
 				$this->vueComponent('vue-profile-storelist', 'ProfileStoreList', [
 					'stores' => $userStores,

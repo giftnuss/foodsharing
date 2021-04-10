@@ -55,6 +55,11 @@ class ProfilePermissions
 		return $this->session->id() == $fsId || $this->mayAdministrateUserProfile($fsId);
 	}
 
+	public function maySeeStores(int $fsId): bool
+	{
+		return $this->session->id() == $fsId || $this->mayAdministrateUserProfile($fsId);
+	}
+
 	public function maySeeEmailAddress(int $fsId): bool
 	{
 		if ($this->session->may('orga')) {
