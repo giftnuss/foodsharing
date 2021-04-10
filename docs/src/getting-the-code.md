@@ -21,4 +21,4 @@ Für Git empfehlen wir die Verwendung von SSH (das Secure Shell Netzwerkprotokol
 
 Für die erste Benutzung von Git such online nach einem Tutorial. Es gibt eine Menge gute Anleitungen.
 
-Um das Projekt zu erkunden, mach anschließend weiter bei [Running the code](running-the-code.md) und [Setting things set-up](seting-things-up.md). Für Beiträge wie das Schreiben von issues und das Erstellen von Merge-Requests schau in den Abschnitt [Einführung in Git und unser Arbeiten](contributing_DE.md) an, und komm in unseren Slack-Kanal (slackin.yunity.org , Kanal #foodsharing-dev).
+Um das Projekt zu erkunden, mach anschließend weiter bei [Running the code](running-the-code.md) und [Setting things up](setting-things-up.md). Für Beiträge wie das Schreiben von issues und das Erstellen von Merge-Requests schau in den Abschnitt [Einführung in Git und unser Arbeiten](contributing_DE.md) an, und komm in unseren Slack-Kanal (slackin.yunity.org , Kanal #foodsharing-dev).
