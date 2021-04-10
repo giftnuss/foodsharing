@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa334316bad968a2da57f53738bee0f8",
+    "content-hash": "c97808b63b438fa369fa0cd1ca089574",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -925,17 +925,21 @@
         },
         {
             "name": "fpdo/fluentpdo",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/envms/fluentpdo.git",
-                "reference": "8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260"
+                "reference": "90048d9ae637278ccde922f197b11483df3a48ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/envms/fluentpdo/zipball/8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260",
-                "reference": "8684e2d22ebbcdf4cdcdf7bbe7558459ceb31260",
+                "url": "https://api.github.com/repos/envms/fluentpdo/zipball/90048d9ae637278ccde922f197b11483df3a48ea",
+                "reference": "90048d9ae637278ccde922f197b11483df3a48ea",
                 "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": "^7.1"
             },
             "require-dev": {
                 "envms/fluent-test": "^1.0",
@@ -973,9 +977,9 @@
             ],
             "support": {
                 "issues": "https://github.com/envms/fluentpdo/issues",
-                "source": "https://github.com/envms/fluentpdo/tree/v2.2.0"
+                "source": "https://github.com/envms/fluentpdo/tree/v2.2.1"
             },
-            "time": "2020-09-30T14:24:57+00:00"
+            "time": "2021-02-22T23:26:57+00:00"
         },
         {
             "name": "friendsofsymfony/rest-bundle",

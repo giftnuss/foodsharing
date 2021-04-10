@@ -49,7 +49,7 @@
     "erusev/parsedown": "1.7.4",
     "exercise/htmlpurifier-bundle": "3.1.0",
     "filp/whoops": "2.9.2",
-    "fpdo/fluentpdo": "2.2.0",
+    "fpdo/fluentpdo": "2.2.1",
     "friendsofsymfony/rest-bundle": "3.0.5",
     "html2text/html2text": "4.3.1",
     "influxdb/influxdb-php": "1.15.2",
