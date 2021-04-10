@@ -14,7 +14,9 @@ use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 class StoreApiCest
 {
 	private $store;
+	private $foodsharer;
 	private $user;
+	private $teamMember;
 	private $manager;
 	private $region;
 	private $faker;
@@ -27,7 +29,10 @@ class StoreApiCest
 	{
 		$this->region = $I->createRegion();
 		$this->store = $I->createStore($this->region['id']);
+		$this->foodsharer = $I->createFoodsharer();
 		$this->user = $I->createFoodsaver();
+		$this->teamMember = $I->createFoodsaver();
+		$I->addStoreTeam($this->store[self::ID], $this->teamMember[self::ID], false);
 		$this->manager = $I->createStoreCoordinator(null, ['bezirk_id' => $this->region['id']]);
 		$I->addStoreTeam($this->store[self::ID], $this->manager[self::ID], true);
 		$this->faker = Faker\Factory::create('de_DE');
@@ -35,23 +40,43 @@ class StoreApiCest
 
 	public function getStore(ApiTester $I)
 	{
-		$I->login($this->user[self::EMAIL]);
+		$I->login($this->teamMember[self::EMAIL]);
 		$I->sendGET(self::API_STORES . '/' . $this->store[self::ID]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
+		$I->seeResponseContainsJson(['id' => $this->store[self::ID]]);
+		$I->seeResponseContainsJson(['phone' => $this->store['telefon']]);
+	}
+
+	public function canOnlyAccessStoreAsFoodsaver(ApiTester $I)
+	{
+		$I->sendGET(self::API_STORES . '/' . $this->store[self::ID]);
+		$I->seeResponseCodeIs(Http::UNAUTHORIZED);
+
+		$I->login($this->foodsharer[self::EMAIL]);
+		$I->sendGET(self::API_STORES . '/' . $this->store[self::ID]);
+		$I->seeResponseCodeIs(Http::UNAUTHORIZED);
+	}
+
+	public function canOnlySeeStoreDetailsAsMember(ApiTester $I)
+	{
+		$I->login($this->user[self::EMAIL]);
+		$I->sendGET(self::API_STORES . '/' . $this->store[self::ID]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseContainsJson(['id' => $this->store[self::ID]]);
+		$I->dontSeeResponseContainsJson(['phone' => $this->store['telefon']]);
 	}
 
 	public function canWriteStoreWallpostAndGetAllPosts(ApiTester $I): void
 	{
-		$I->addStoreTeam($this->store[self::ID], $this->user[self::ID], false);
-		$I->login($this->user[self::EMAIL]);
+		$I->login($this->teamMember[self::EMAIL]);
 		$newWallPost = $this->faker->realText(200);
 		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => $newWallPost]);
 
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 		$I->seeInDatabase('fs_betrieb_notiz', [
-			'foodsaver_id' => $this->user[self::ID],
+			'foodsaver_id' => $this->teamMember[self::ID],
 			'betrieb_id' => $this->store[self::ID],
 			'text' => $newWallPost,
 		]);
@@ -94,15 +119,14 @@ class StoreApiCest
 	{
 		$wallPost = [
 			'betrieb_id' => $this->store[self::ID],
-			'foodsaver_id' => $this->user[self::ID],
+			'foodsaver_id' => $this->teamMember[self::ID],
 			'text' => $this->faker->realText(100),
 			'zeit' => $this->faker->dateTimeBetween('-14 days', '-30m')->format('Y-m-d H:i:s'),
 			'milestone' => Milestone::NONE,
 		];
 		$postId = $I->haveInDatabase('fs_betrieb_notiz', $wallPost);
 
-		$I->addStoreTeam($this->store[self::ID], $this->user[self::ID], false);
-		$I->login($this->user[self::EMAIL]);
+		$I->login($this->teamMember[self::EMAIL]);
 
 		$I->sendDELETE(self::API_STORES . '/' . $this->store[self::ID] . '/posts/' . $postId);
 
@@ -112,8 +136,8 @@ class StoreApiCest
 
 		$I->seeInDatabase('fs_store_log', [
 			'store_id' => $this->store[self::ID],
-			'fs_id_a' => $this->user[self::ID],
-			'fs_id_p' => $this->user[self::ID],
+			'fs_id_a' => $this->teamMember[self::ID],
+			'fs_id_p' => $this->teamMember[self::ID],
 			'content' => $wallPost['text'],
 			'date_reference' => $wallPost['zeit'],
 			'action' => StoreLogAction::DELETED_FROM_WALL,
@@ -127,7 +151,7 @@ class StoreApiCest
 	{
 		$wallPost = [
 			'betrieb_id' => $this->store[self::ID],
-			'foodsaver_id' => $this->user[self::ID],
+			'foodsaver_id' => $this->teamMember[self::ID],
 			'text' => $this->faker->realText(100),
 			'zeit' => $this->faker->dateTimeBetween('-66 days', '-33 days')->format('Y-m-d H:i:s'),
 			'milestone' => Milestone::NONE,
@@ -144,7 +168,7 @@ class StoreApiCest
 		$I->seeInDatabase('fs_store_log', [
 			'store_id' => $this->store[self::ID],
 			'fs_id_a' => $this->manager[self::ID],
-			'fs_id_p' => $this->user[self::ID],
+			'fs_id_p' => $this->teamMember[self::ID],
 			'content' => $wallPost['text'],
 			'date_reference' => $wallPost['zeit'],
 			'action' => StoreLogAction::DELETED_FROM_WALL,
@@ -155,7 +179,7 @@ class StoreApiCest
 	{
 		$wallPost = [
 			'betrieb_id' => $this->store[self::ID],
-			'foodsaver_id' => $this->user[self::ID],
+			'foodsaver_id' => $this->teamMember[self::ID],
 			'text' => $this->faker->realText(100),
 			'zeit' => $this->faker->dateTimeBetween('-14 days', '-30m')->format('Y-m-d H:i:s'),
 			'milestone' => Milestone::NONE,
