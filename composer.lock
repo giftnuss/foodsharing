@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d8876dc25690f4a90f4750050c7a5d8",
+    "content-hash": "66992129163ce06df37943c505ed462b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1574,16 +1574,16 @@
         },
         {
             "name": "jms/metadata",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/metadata.git",
-                "reference": "491917b66b44deff7d1c320d35c1b92237083f67"
+                "reference": "b5c52549807b2d855b3d7e36ec164c00eb547338"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/metadata/zipball/491917b66b44deff7d1c320d35c1b92237083f67",
-                "reference": "491917b66b44deff7d1c320d35c1b92237083f67",
+                "url": "https://api.github.com/repos/schmittjoh/metadata/zipball/b5c52549807b2d855b3d7e36ec164c00eb547338",
+                "reference": "b5c52549807b2d855b3d7e36ec164c00eb547338",
                 "shasum": ""
             },
             "require": {
@@ -1592,6 +1592,7 @@
             "require-dev": {
                 "doctrine/cache": "^1.0",
                 "doctrine/coding-standard": "^8.0",
+                "mikey179/vfsstream": "^1.6.7",
                 "phpunit/phpunit": "^8.5|^9.0",
                 "psr/container": "^1.0",
                 "symfony/cache": "^3.1|^4.0|^5.0",
@@ -1631,22 +1632,22 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/metadata/issues",
-                "source": "https://github.com/schmittjoh/metadata/tree/2.4.0"
+                "source": "https://github.com/schmittjoh/metadata/tree/2.5.0"
             },
-            "time": "2020-11-30T11:08:28+00:00"
+            "time": "2021-03-07T19:20:09+00:00"
         },
         {
             "name": "jms/serializer",
-            "version": "3.11.0",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/serializer.git",
-                "reference": "5158b454ecf209a9fea91c837e827355204581ea"
+                "reference": "ea54838a0acd960839b7401bfd83fcd6ebe34aed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/5158b454ecf209a9fea91c837e827355204581ea",
-                "reference": "5158b454ecf209a9fea91c837e827355204581ea",
+                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/ea54838a0acd960839b7401bfd83fcd6ebe34aed",
+                "reference": "ea54838a0acd960839b7401bfd83fcd6ebe34aed",
                 "shasum": ""
             },
             "require": {
@@ -1665,6 +1666,7 @@
                 "ext-pdo_sqlite": "*",
                 "jackalope/jackalope-doctrine-dbal": "^1.1.5",
                 "ocramius/proxy-manager": "^1.0|^2.0",
+                "phpstan/phpstan": "^0.12.65",
                 "phpunit/phpunit": "^8.0||^9.0",
                 "psr/container": "^1.0",
                 "symfony/dependency-injection": "^3.0|^4.0|^5.0",
@@ -1684,7 +1686,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.11-dev"
+                    "dev-master": "3.12-dev"
                 }
             },
             "autoload": {
@@ -1717,7 +1719,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/serializer/issues",
-                "source": "https://github.com/schmittjoh/serializer/tree/3.11.0"
+                "source": "https://github.com/schmittjoh/serializer/tree/3.12.2"
             },
             "funding": [
                 {
@@ -1725,30 +1727,31 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-29T12:26:56+00:00"
+            "time": "2021-03-23T12:37:04+00:00"
         },
         {
             "name": "jms/serializer-bundle",
-            "version": "3.8.0",
+            "version": "3.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-                "reference": "5ba2675b9174659013fd93c3cbc8edf12189c9af"
+                "reference": "2fbf2385668dd715d030567fd41e181bbf41fb42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/5ba2675b9174659013fd93c3cbc8edf12189c9af",
-                "reference": "5ba2675b9174659013fd93c3cbc8edf12189c9af",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/2fbf2385668dd715d030567fd41e181bbf41fb42",
+                "reference": "2fbf2385668dd715d030567fd41e181bbf41fb42",
                 "shasum": ""
             },
             "require": {
-                "jms/metadata": "^2.3",
+                "jms/metadata": "^2.5",
                 "jms/serializer": "^3.0",
                 "php": "^7.2 || ^8.0",
                 "symfony/dependency-injection": "^3.3 || ^4.0 || ^5.0",
                 "symfony/framework-bundle": "^3.0 || ^4.0 || ^5.0"
             },
             "require-dev": {
+                "doctrine/coding-standard": "^8.1",
                 "doctrine/orm": "^2.4",
                 "phpunit/phpunit": "^8.0 || ^9.0",
                 "symfony/expression-language": "^3.0 || ^4.0 || ^5.0",
@@ -1767,7 +1770,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.8-dev"
+                    "dev-master": "3.9-dev"
                 }
             },
             "autoload": {
@@ -1802,7 +1805,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/JMSSerializerBundle/issues",
-                "source": "https://github.com/schmittjoh/JMSSerializerBundle/tree/3.8.0"
+                "source": "https://github.com/schmittjoh/JMSSerializerBundle/tree/3.9.1"
             },
             "funding": [
                 {
@@ -1810,7 +1813,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-23T20:13:28+00:00"
+            "time": "2021-03-23T12:21:23+00:00"
         },
         {
             "name": "maximebf/debugbar",
@@ -2874,16 +2877,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "0.4.10",
+            "version": "0.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "5c1eb9aac80cb236f1b7fbe52e691afe4cc9f430"
+                "reference": "cf4fc7d2aeca6910fba061901ffd7d107ccfdbcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/5c1eb9aac80cb236f1b7fbe52e691afe4cc9f430",
-                "reference": "5c1eb9aac80cb236f1b7fbe52e691afe4cc9f430",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/cf4fc7d2aeca6910fba061901ffd7d107ccfdbcc",
+                "reference": "cf4fc7d2aeca6910fba061901ffd7d107ccfdbcc",
                 "shasum": ""
             },
             "require": {
@@ -2896,7 +2899,7 @@
                 "phpstan/phpstan": "^0.12.60",
                 "phpstan/phpstan-strict-rules": "^0.12.5",
                 "phpunit/phpunit": "^7.5.20",
-                "symfony/process": "^4.0"
+                "symfony/process": "^5.2"
             },
             "type": "library",
             "extra": {
@@ -2918,9 +2921,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/0.4.10"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/0.4.14"
             },
-            "time": "2020-12-12T15:45:28+00:00"
+            "time": "2021-03-19T10:54:14+00:00"
         },
         {
             "name": "psr/cache",
