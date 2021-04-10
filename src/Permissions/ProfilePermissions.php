@@ -97,7 +97,7 @@ class ProfilePermissions
 
 	public function maySeeBounceWarning(int $userId): bool
 	{
-		return $this->session->id() == $userId || $this->session->may('orga');
+		return $this->session->id() == $userId || $this->mayRemoveFromBounceList($userId);
 	}
 
 	public function mayDeleteBanana(int $recipientId): bool

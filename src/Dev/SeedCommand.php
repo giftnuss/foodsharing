@@ -264,6 +264,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 		$CreateWorkgroupWG = $I->createWorkingGroup('AG Anlegen', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
+		$I->createWorkingGroup('Support', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::IT_SUPPORT_GROUP]);
 
 		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 
@@ -288,6 +289,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			'about_me_intern' => 'hello!'
 		]);
 		$this->writeUser($userbot, $password, 'ambassador');
+		$I->addRegionAdmin(RegionIDs::IT_SUPPORT_GROUP, $userbot['id']);
 
 		$userbot2 = $I->createAmbassador($password, [
 			'email' => 'userbot2@example.com',
