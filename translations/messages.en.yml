@@ -141,7 +141,8 @@ group:
       "Contact" and "Team"
     tooltip_function_region341: Admins of this work group can manage the quiz questions
     tooltip_function_region331: Admins of this work group can send newsletters
-    tooltip_function_region387: "Admins of this group can remove entries from the e-mail bounce list"
+    tooltip_function_region387: "Admins of this group can remove entries from the\
+      \ e-mail bounce list"
 settings:
   header: Your data and settings
 
@@ -1457,7 +1458,7 @@ store:
   fetchCount: Picked up {count}× here.
   isJumper: Is on the jumper list.
   noPickup: Has never picked up here.
-  go: To the store page
+  go: To the team page
   tooltip_red: Vacant pick-ups today or tomorrow
   tooltip_orange: Vacant pick-ups in the next three days
   pickup_slot_unavailable: This pick-up slot is further in the future than intended
