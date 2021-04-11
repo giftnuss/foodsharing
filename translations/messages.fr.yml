@@ -1637,6 +1637,7 @@ footer:
   team: Équipe
   about_us: À propos
   call_to_action: Rejoindre
+  denns_at_alt_text: Denn's Biomarkt
 search:
   persons: Personnes
   groups: Groupes
@@ -1857,3 +1858,31 @@ addresspicker:
     sur la carte.
   placeholder: Cherche l'adresse ici et si besoin, corrige-la plus bas.
   label: Recherche de l'adresse
+storelist:
+  inprogress: Négociations en cours
+  nocontact: Aucun contact pour le moment
+  geo: géo
+  region: Secteur
+  added: inscrit
+  city: Lieu
+  zipcode: Code postal
+  addressdata: Domicile
+  address: Rue
+  name: Nom
+  status: Statut
+  entered: 'inscrit :'
+storestatus:
+  "7": Le magasin n'existe plus
+  "6": Fait don de ses denrées alimentaires à la croix rouge, banques alimentaires...
+  "5": Le magasin coopère déjà avec foodsharing
+  "4": Ne souhaite pas coopérer
+  "3": Le magasin est prêt à coopérer
+  "2": Négociations en cours
+  "1": Aucun contact pour le moment
+  "0": Statut ambigu
+releases:
+  "2020-05": Version "orange" (Mai 2020)
+  "2020-08": Version "poire" (Août 2020)
+  "2020-10": Version "Canneberge" (Octobre 2020)
+  "2020-12": Version "fruit du dragon" (Décembre 2020)
+  "2021-03": Version "fraise" 🍓 (Mars 2021)
