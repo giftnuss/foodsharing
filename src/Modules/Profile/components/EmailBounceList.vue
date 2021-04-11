@@ -10,6 +10,7 @@
         {{ $i18n('profile.mail_bounce.warning_1', { email: emailAddress }) }}
         <a href="/?page=settings"> {{ $i18n('profile.mail_bounce.warning_2') }} </a>
         {{ $i18n('profile.mail_bounce.warning_3') }}
+        <a href="https://foodsharing.freshdesk.com/support/solutions/articles/77000299947-e-mail-sperre-im-profil"> {{ $i18n('profile.mail_bounce.warning_4') }}</a>
       </div>
     </b-alert>
 

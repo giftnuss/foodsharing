@@ -15,6 +15,7 @@
           {{ $i18n('profile.mail_bounce.warning_2') }}
         </a>
         {{ $i18n('profile.mail_bounce.warning_3') }}
+        <a href="https://foodsharing.freshdesk.com/support/solutions/articles/77000299947-e-mail-sperre-im-profil"> {{ $i18n('profile.mail_bounce.warning_4') }}</a>
       </div>
       <div
         v-else-if="isNotActivated"
