@@ -8724,10 +8724,10 @@ uc.micro@^1.0.1, uc.micro@^1.0.5:
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
   integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
-underscore@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.12.0.tgz#4814940551fc80587cef7840d1ebb0f16453be97"
-  integrity sha512-21rQzss/XPMjolTiIezSu3JAjgagXKROtNrYFEOWK109qY1Uv2tVjPTZ1ci2HgvQDA16gHYSthQIJfB+XId/rQ==
+underscore@^1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.0.tgz#3ccdcbb824230fc6bf234ad0ddcd83dff4eafe5f"
+  integrity sha512-sCs4H3pCytsb5K7i072FAEC9YlSYFIbosvM0tAKAlpSSUgD7yC1iXSEGdl5XrDKQ1YUB+p/HDzYrSG2H2Vl36g==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

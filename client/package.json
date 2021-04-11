@@ -46,7 +46,7 @@
     "typeahead-address-photon": "^1.1.0",
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "^1.1.13",
-    "underscore": "^1.12.0",
+    "underscore": "^1.13.0",
     "vue": "~2.6.12",
     "vue-croppie": "^2.0.1",
     "vue-infinite-loading": "^2.4.5",
