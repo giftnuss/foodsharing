@@ -11,6 +11,7 @@ import { GET, goTo, isMob } from '@/browser'
 import conv from '@/conv'
 import { removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
+import { u_printChildBezirke } from '@/becomeBezirk'
 
 export { goTo, isMob, GET }
 
@@ -529,12 +530,17 @@ export function checkAllCb (sel) {
   $("input[type='checkbox']").prop('checked', sel)
 }
 
+/**
+ * Opens the region picker popup.
+ */
 export function becomeBezirk () {
   $('#becomeBezirk-link').fancybox({
     minWidth: 390,
     maxWidth: 400,
   })
   $('#becomeBezirk-link').trigger('click')
+
+  u_printChildBezirke({ value: '0:0' })
 }
 
 export function shuffle (o) {

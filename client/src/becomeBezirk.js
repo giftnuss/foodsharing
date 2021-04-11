@@ -102,8 +102,3 @@ export async function u_printChildBezirke (element) {
 
   hideLoader()
 }
-
-$(() => {
-  // run later, otherwise CSRF-Header for $.ajax are not set yet
-  u_printChildBezirke({ value: '0:0' })
-})

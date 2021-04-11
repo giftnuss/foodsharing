@@ -16,7 +16,7 @@
 - Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 - New look for event header panels and dashboard invitations including the event's region #992 !1717 #1079 !1940 #1075 !1943 @chriswalg @ChrisOelmueller @fs_k
 - Use new upload API for profile photos !1916 !1929 !1932 !1933 @alex.simm
-- Request region children for the region picker from a new endpoint !1934 #874 #823 @alex.simm
+- Request region children for the region picker from a new endpoint !1934 !1949 #823 @alex.simm
 
 ## Dev/Test/CI stuff
 - Update some frontend dependencies !1892 @chriswalg
