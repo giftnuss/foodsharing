@@ -1454,6 +1454,7 @@ profile:
     warning_1: "Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
     warning_2: "Ändern der Mail-Adresse"
     warning_3: "wird diese Sperre wieder entfernt."
+    warning_others: "Die E-Mail-Adresse {email} diese*r Benutzer*in ist für foodsharing-Mails und -Kommunikation gesperrt. Über den Button kannst du diese Sperre entfernen."
     remove_button: "Von der Bounce-Liste entfernen"
   banana:
     title: "{count} Vertrauensbananen"

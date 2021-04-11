@@ -3,9 +3,14 @@
   <div class="bootstrap">
     <b-alert variant="danger" show>
       <h3>{{ $i18n('profile.warning') }}</h3>
-      {{ $i18n('profile.mail_bounce.warning_1', { email: emailAddress }) }}
-      <a href="/?page=settings"> {{ $i18n('profile.mail_bounce.warning_2') }} </a>
-      {{ $i18n('profile.mail_bounce.warning_3') }}
+      <div v-if="mayRemove">
+        {{ $i18n('profile.mail_bounce.warning_others', { email: emailAddress }) }}
+      </div>
+      <div v-else>
+        {{ $i18n('profile.mail_bounce.warning_1', { email: emailAddress }) }}
+        <a href="/?page=settings"> {{ $i18n('profile.mail_bounce.warning_2') }} </a>
+        {{ $i18n('profile.mail_bounce.warning_3') }}
+      </div>
     </b-alert>
 
     <div v-if="mayRemove">
