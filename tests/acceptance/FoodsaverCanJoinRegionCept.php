@@ -28,6 +28,7 @@ $I->click('Bezirk beitreten');
 $I->see('Bitte auswählen');
 $I->selectOption('#xv-childbezirk-0', $region['name']);
 $I->moveMouseOver('#becomebezirkchooser-button');
+$I->waitForActiveAPICalls();
 $I->click('#becomebezirkchooser-button');
 $I->waitForElementVisible('//a[contains(text(), "Neues Thema")]');
 
