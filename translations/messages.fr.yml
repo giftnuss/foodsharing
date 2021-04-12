@@ -74,7 +74,8 @@ group:
       "partenaires", "contact" et "équipe"
     tooltip_function_region341: Les admins de ce groupe peuvent modifier les questions
       liées aux Quiz
-    tooltip_function_region331: Les admins de ce groupe peuvent envoyer des Newsletter
+    tooltip_function_region331: Les admins de ce groupe peuvent envoyer des lettres
+      d'information
     tooltip_function_region387: Les admins de ce groupe de travail peuvent retirer
       des entrées dans la liste de diffusion.
   function:
@@ -303,14 +304,14 @@ pass2: Répétition du mot de passe
 pass1: Votre nouveau mot de passe
 orgateam: Organisation nationale
 dateend: Date de fin
-online_type: L'événement aura-t-il lieu sur site ou en ligne ?
+online_type: L'évènement aura-t-il lieu sur site ou en ligne ?
 location_name: Lieu de réunion/Salle de conférence
 mailbox_id: Adresse courriel de l’expéditeur
 testemail: Adresse courriel de test
 bezirk_id: Pour quelle région l'article est-il pertinent ?
-lifetime: Combien de temps votre panier solidaire doit-il être valide ?
-fetchstate: Tout s'est bien passé ?
-food_art: De quel type de nourriture s'agit-il ?
+lifetime: Combien de temps votre panier solidaire doit-il être valide ?
+fetchstate: Tout s'est bien passé ?
+food_art: De quel type de nourriture s'agit-il ?
 food_type: Quels types d'aliments sont inclus ?
 weight: Poids estimé
 about_me_intern: Brève description
@@ -327,7 +328,7 @@ fs_id: foodsharing-ID
 parent_id: District parent
 infotype: Notification
 opt: Options
-contact_type: Comment souhaitez-vous être contacté ?
+contact_type: Comment souhaitez-vous être contacté·e ?
 regions: Districts
 info: Informations
 body: Message
@@ -361,7 +362,7 @@ settings:
   calendar:
     sync: "Ton programme calendrier doit régulièrement être synchronisé avec ce calendrier\
       \ afin d'actualiser tes évènements.\n"
-    event_link_desc: (événements inclus)
+    event_link_desc: (évènements inclus)
     link_title: 'ICS/ICAL/WebCal :'
     token-warning: "Important : le lien doit rester secret !\nIl contient une clé\
       \ pour accéder à ton compte sans mot de passe.\n"
@@ -429,8 +430,8 @@ settings:
   chatmail: "Lorsque tu reçois un message ou une notification interne à foodsharing\
     \ sans être connecté.e,\ntu peux faire suivre et être informé·e de cette notification/ce\
     \ message par courriel.\nSouhaites-tu faire suivre par courriel ?\n"
-  newsletter: "Notre newsletter sur les actions et événements de foodsharing\nest\
-    \ envoyée environ 1x par mois.\nSouhaites-tu t'abonner à la newsletter ?\n"
+  newsletter: "Notre lettre d'information sur les actions et évènements de foodsharing\n\
+    est envoyée environ 1× par mois.\nSouhaites-tu t'abonner à la lettre d'information ?\n"
   notifications: Notifications
   header: Tes données / paramètres
   title: Paramètres
@@ -612,7 +613,7 @@ recipients:
   abort: annuler l'envoi
   continue: envoyer
   variables: Titre
-  test: Tester la newsletter
+  test: Tester la lettre d'information
   body: Message
   empty-region: Il n'y a encore aucun(e) collecteur.ice dans les secteurs géographiques
     choisis
@@ -624,7 +625,7 @@ recipients:
   storemanagers_and_ambs: Tous les Responsables Magasin + Ambassadeurs
   storemanagers: Tous les Responsables Magasin (international)
   all_no_botschafter: Tous les Foodsaver sans les Ambassadeurs
-  newsletter_only_foodsharer: SEULEMENT les Foodsharer abonnés à la newsletter
+  newsletter_only_foodsharer: SEULEMENT les Foodsharer abonnés à la lettre d'information
   newsletter_all: Tous les abonnés à la lettre d'information (Foodsharer, Foodsaver,
     tous)
   newsletter: Tous les abonnés à la lettre d'information (au min. Foodsaver)
@@ -677,7 +678,7 @@ fsp:
     mail: Cloche et notification par courriel
     manager: En étant responsable de ce frigo solidaire, tu t'engages à recevoir les
       mises à jour de celui-ci !
-    descSettings: Tu suis toutes les informations du frigo solidaire "{name}". Comment
+    descSettings: Tu suis toutes les informations du frigo solidaire « {name} ». Comment
       souhaites-tu recevoir les notifications qui lui sont liées ?
     descModal: 'Comment souhaites-tu être informé·e des mises à jour (par ex. : livraisons)
       ?'
@@ -703,7 +704,7 @@ fsp:
   street: adresse
   address: adresse
   editSuccess: Le frigo solidaire a été modifié avec succès
-  editName: Modifier le frigo solidaire "{name}"
+  editName: Modifier le frigo solidaire « {name} »
   edit: Modifier le frigo solidaire
   rejectConfirm: Attention ! Si tu supprimes ce frigo solidaire, tu ne pourras plus
     revenir en arrière. Poursuivre ?
@@ -805,8 +806,8 @@ register:
   email_required: Une adresse courriel est nécessaire.
   login_email: Ton adresse courriel
   mail_hint: IMPORTANT – Faites attention à l'orthographe !
-  signup_newsletter: Je voudrais recevoir la Newsletter de foodsharing (env. 1 fois
-    par mois)
+  signup_newsletter: Je voudrais recevoir la lettre d'information de foodsharing (env.
+    1 fois par mois)
   set-password: établir un nouveau mot de passe
   pass2: Renseigne à nouveau le mot de passe
   pass1: Nouveau mot de passe de ton choix
@@ -940,7 +941,7 @@ store_status_impact_explanation: Veuillez actualiser le statut de la coopératio
 kette_id: chaîne (entreprise)
 fetchercount: Nombre de quêteurs
 storemanagers: Responsable coopération
-fspmanagers: Collecteur.ice.s responsables des frigos solidaires
+fspmanagers: Collecteur·ice·s responsables des frigos solidaires
 fsp_bezirk_id: Dans quel quartier se trouve le frigo solidaire ?
 teaser: Extrait
 store:
@@ -1126,8 +1127,8 @@ menu:
     infos: infos
     activities: actions
   content: modifier les contenus
-  manage_mailboxes: gérer les boîtes mail
-  email: envoyer la newsletter
+  manage_mailboxes: gérer les boîtes de réception
+  email: envoyer la lettre d'information
   reports: Signalements
   quiz: Gérer le quiz
   blog: Modifier un article de blog
@@ -1145,8 +1146,8 @@ dashboard:
     go: Continuer vers le Quiz
     read: continuer à lire
     ack: Conseil lu, ne plus afficher
-  events: Prochains événements ({count})
-  event: Prochain événement
+  events: Prochains évènements ({count})
+  event: Prochain évènement
   invitations: Tu as été invité
   my:
     no-stores: Tu n'es dans aucune équipe pour le moment.
@@ -1165,18 +1166,18 @@ dashboard:
   chooseHomeRegion: Choisis ton secteur favori.
   homeRegion: Ton secteur favori est {region}.
   checkAddress: Vérifie ton adresse. Les coordonnées n'ont pas pu être transmises.
-  mail_activation_error_title: Adresse mail non-confirmée
+  mail_activation_error_title: Adresse courriel non confirmée
   mail_activation_error_body:
-    part_4: modifier ton adresse mail
+    part_4: modifier ton adresse courriel
     part_3: ou
-    part_2: demander un nouveau mail d'activation
-    part_1: Confirme ton adresse mail en cliquant sur le lien d'activation inclus
-      dans le mail. Sinon tu peux
+    part_2: demander un nouveau courriel d'activation
+    part_1: Confirme ton adresse courriel en cliquant sur le lien d'activation inclus
+      dans le courriel. Sinon tu peux
   activation_mail_failure: Aucun nouveau lien d'activation n'a pu être envoyé
-  activation_mail_sent: Lien d'activation envoyé, regarde tes mails
+  activation_mail_sent: Lien d'activation envoyé, regarde tes courriels
   source_store: Magasins {0}
   source_mailbox: '{0}'
-  source_event: Événement {0}
+  source_event: Évènement {0}
   source_forum_bot: Forum des Ambassadeur.ice.s {0}
   source_forum: Forum {0}
   source_friendWall_own: Ton mur
@@ -1204,11 +1205,11 @@ profile:
     arbAdminAgainstRepAdmin: Tu es admin dans un groupe d'arbitrage et tu essayes
       de signaler un membre admin groupe de traitement des signalements. Cette action
       est pour l'instant techniquement impossible. Néanmoins, tu peux envoyer un signalement
-      par mail aux responsables locaux pour leur faire part du problème.
+      par courriel aux responsables locaux pour leur faire part du problème.
     repAdminAgainstArbAdmin: Tu es admin dans un groupe de traitement des signalements
       et tu essayes de signaler un membre admin du groupe d'arbitrage. Cette action
       est pour l'instant techniquement impossible. Néanmoins, tu peux envoyer un signalement
-      par mail aux responsables locaux pour leur faire part du problème.
+      par courriel aux responsables locaux pour leur faire part du problème.
     reporterAdminNoArbitration: Tu es admin dans un groupe local de signalement et
       comme il n'existe pas de groupe d'arbitrage, tu ne peux pas porter de signalement.
     reportedAdminNoArbitration: Tu ne peux pas signaler {name} car iel est administrateur.ice
@@ -1225,8 +1226,7 @@ profile:
     oldReportButtonTextPart1: Les signalement ne sont actuellement pas pris en compte
       ici.
     oldReportButton: Signaler un manquement aux règles
-    mail: 'Tu peux joindre le groupe de signalement local grâce à cette adresse mail
-      :'
+    mail: 'Tu peux joindre le groupe de signalement local grâce à cette adresse courriel :'
     sent: Le signalement a été envoyé
     send: Envoyer le signalement
     info: Renseigne la date, le lieu et l'horaire de l'incident. Vérifie de bien avoir
@@ -1237,12 +1237,12 @@ profile:
   mediation:
     no_group: Il n'existe malheureusement pas encore de groupe local de médiation
       pour le secteur géographique choisi. Tu peux aborder ce thème lors d'un prochain
-      événement de groupe ou en parler dans le forum afin de choisir une équipe de
+      évènement de groupe ou en parler dans le forum afin de choisir une équipe de
       médiation locale.
     info: "Merci d'avoir demandé de l'aide pour aborder un thème important avec un.e\
-      \ autre collecteur.ice. L'équipe médiation peut vous aider à traiter ce différend\
+      \ autre collecteur·ice L'équipe médiation peut vous aider à traiter ce différend\
       \ avec respect et sur un pied d'égalité. Tu peux contacter l'équipe de médiation\
-      \ locale grâce à l'adresse mail suivante :"
+      \ locale grâce à l'adresse courriel suivante :"
     title: Demande de médiation pour {name}
   public:
     join: S'inscrire pour participer
@@ -1276,8 +1276,8 @@ profile:
     buddycount: '{name} est connu.e par {count} collecteur.ice.s'
     buddycount1: '{name} est connu.e par {count} collecteur.ice'
     buddies: Connaissance
-    fsMail: Boîte mail interne
-    privateMail: Adresse mail privée
+    fsMail: Boîte de réception interne
+    privateMail: Adresse courriel privée
     never: Jamais
     registrationDate: Date d'inscription
     lastLogin: Dernière connexion
@@ -1432,40 +1432,40 @@ events:
   invitedCount: '{count} invités'
   maybeCount: '{count} viennent peut-être'
   acceptedCount: '{count} participent'
-  notFound: Cet événement n'existe pas ou n'est pas disponible.
-  goto: afficher l'événement
+  notFound: Cet évènement n'existe pas ou n'est pas disponible.
+  goto: afficher l'évènement
   mumble:
     guide: 'Aide : <strong><a href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></strong>'
     location: 'Notre serveur : <br><strong>mumble.foodsharing.de</strong>'
     text: La conférence vidéo se déroule sur <em>Mumble</em>.
-    title: Événement en ligne (BBB)
+    title: Évènement en ligne (BBB)
   duration: 'Durée : {duration}'
   span: de {from} à {until}
   description: Description
   create:
-    info: "<b>Attention :</b>\n<br>\nL'événement sera accessible à tous les membres\
-      \ des <b>différents groupes</b>\npar un lien partagé ou dans le menu de l'événement.\n\
+    info: "<b>Attention :</b>\n<br>\nL'évènement sera accessible à tous les membres\
+      \ des <b>différents groupes</b>\npar un lien partagé ou dans le menu de l'évènement.\n\
       <br>\n"
     mumble: Sur la plateforme de chat liée à foodsharing (BigBlueButton)
     online: Par conférence vidéo/téléphonique
     offline: Dans la vraie vie (IRL)
-    desc: Description de l'événement
+    desc: Description de l'évènement
     endtime: Heure de fin
     starttime: Heure de début
-    multiday: L'événement dure plusieurs jours
+    multiday: L'évènement dure plusieurs jours
     delinvites: Supprimer l'invitation ?
     cascading: Inclure les sous-groupes et sous-secteurs ?
     inviteAll: Inviter tous les groupes de travail / secteurs géographiques à participer
       ?
     regions: Tes secteurs géographiques
     groups: Tes groupes de travail
-    who: À quel secteur géographique / quel groupe de travail s'adresse l'événement
+    who: À quel secteur géographique / quel groupe de travail s'adresse l'évènement
       ?
-    isPublic: Oui, l'événement est public
-    public: L'événement est-il public ?
+    isPublic: Oui, l'évènement est public
+    public: L'évènement est-il public ?
     title: Ajouter un nouvel évènement
     date: Date
-  edited: l'événement a été modifié avec succès !
+  edited: l'évènement a été modifié avec succès !
   edit: modifier l'évènement
   created: L'évènement a été enregistré avec succès !
   add_event: Nouvel évènement
@@ -1814,7 +1814,7 @@ team:
   ratelimit: Attends {minutes} minutes avant de pouvoir envoyer le prochain message.
   contacted: Ton message a bien été envoyé !
   contact: '{name} par le formulaire de contact de foodsharing.fr'
-  email: Adresse mail
+  email: Adresse courriel
   name: Nom
   former: Ancien.ne
   current: Équipe
@@ -2108,15 +2108,15 @@ becomeregion:
       de secteurs géographiques.
     text1: "Bien joué ! Si tu souhaites créer un nouveau secteur géographique et que\
       \ tu as des questions auxquelles tu n'as pas trouvé de réponse dans le wiki,\
-      \ écris-nous un mail à :"
+      \ écris-nous un courriel à :"
     region_link_text: Créer ou réactiver un secteur géographique
     main: "Pour entrer dans ton premier secteur géographique, clique dans le menu\
-      \ déroulant sur \"Europe\". Si tu ne trouves pas de secteur qui correspondent\
+      \ déroulant sur « Europe ». Si tu ne trouves pas de secteur qui correspondent\
       \ à ton secteur géographique, choisis un niveau supérieur ou choisis un secteur\
       \ un peu plus éloigné. S'il n'y a pas de possibilité de rejoindre un secteur\
-      \ déjà créé et de te faire former par un.e collecteur.ice dans ta région, alors\
+      \ déjà créé et de te faire former par un·e collecteur·ice dans ta région, alors\
       \ tu peux choisir de créer toi-même un nouveau secteur. Si c'est le cas, tu\
-      \ dois d'abord absolument lire l'article suivant dans le Wiki :"
+      \ dois d'abord absolument lire l'article suivant dans le wiki :"
   chooseregion: Choisis le secteur géographique dans lequel tu souhaites devenir actif.ve
     !
   save: enregistrer
@@ -2179,7 +2179,7 @@ region:
   mail:
     sender: Envoyeur
     name-info: Attention ! Ne pas modifier n'importe comment ! Vérifier que cette
-      adresse ne se trouve pas déjà dans la liste des adresses mail.
+      adresse ne se trouve pas déjà dans la liste des adresses courriel.
   created: '{region} a été ajouté.e'
   forum-redirect: Il n'y a pas de mur pour les régions. Tu as été redirigé.e vers
     le forum.
@@ -2216,7 +2216,7 @@ sidenav:
   localgroups: Groupes locaux
   superregional: Groupes internationaux
 password:
-  insertmail: Entre l'adresse mail avec laquelle tu t'es enregistré.e sur le site
+  insertmail: Entre l'adresse courriel avec laquelle tu t'es enregistré·e sur le site
     de foodsharing.
   reset: réinitialiser le mot de passe
 tablesorter:
