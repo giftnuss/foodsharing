@@ -12,6 +12,11 @@
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1944 !1946 @alex.simm
+# 2021-04-09 Hotfix
+
+- Add permission checks to REST endpoints !1944 @alex.simm
+
+# 2021-03-30 Hotfix
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
