@@ -395,9 +395,9 @@ settings:
       \ demandé lors de tes collectes.\n"
   saved: Les changements ont été pris en compte.
   changemail:
-    done: Ton adresse mail a été modifiée !
+    done: Ton adresse courriel a été modifiée !
     sent: Rends-toi sur ta <strong>nouvelle</strong> boîte de réception afin de confirmer
-      ton adresse mail !
+      ton adresse courriel !
     occupied: L'adresse courriel n'a pas pu être modifiée car elle est déjà utilisée !
     domain: Utilise une adresse courriel de secours afin de pouvoir envoyer le mot
       de passe en cas d'oubli.
@@ -1331,13 +1331,13 @@ profile:
   sleeping: '{name} est indisponible pour une période indéterminée'
   mail_bounce:
     remove_button: Retirer de la liste de diffusion
-    warning_others: L'adresse mail personnelle {email} de ce membre est suspendue
+    warning_others: L'adresse courriel personnelle {email} de ce membre est suspendue
       pour les communications avec foodsharing. Tu peux lever cette suspension en
       cliquant sur ce bouton.
     warning_4: cet article d'aide.
     warning_3: "cette suspension sera levée. Pour plus d'infos, tourne-toi vers "
-    warning_2: changeant d'adresse mail
-    warning_1: Ton adresse mail personnelle {email} est suspendue pour les communications
+    warning_2: changeant d'adresse courriel
+    warning_1: Ton adresse courriel personnelle {email} est suspendue pour les communications
       avec foodsharing, en
 pickuplist:
   NumberOfAppointments_table_header: Nombre d'évènements
@@ -1700,8 +1700,8 @@ index:
   confirm_open_video: Souhaites-tu regarder la vidéo sur YouTube ? La vidéo se lancera
     dans un nouvel onglet.
 mail:
-  noreply_addresses_not_allowed: "Les e-mails adressés à des adresses comportant \"\
-    noreply@\" ne peuvent pas être distribués.\nModifie le destinataire."
+  noreply_addresses_not_allowed: "Les courriels adressés à des adresses comportant\
+    \ « noreply@ » ne peuvent pas être distribués.<br>Modifie le destinataire."
 messages:
   bread: Messages
 map:
