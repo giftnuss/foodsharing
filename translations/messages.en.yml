@@ -78,12 +78,12 @@ group:
     duplicate_stores_team: Store coordination team does already exist! There can only
       be one store coordination team per region.
     restricted_workgroup_function: This working group function can only be edited
-      by the transregional group "AG Anlegen"
+      by the transregional group ‘AG Anlegen’
     tooltip_function_10: Admins of this work group can approve posts in moderated
       forums.
     tooltip_function_9: Admins of this work group have no special permissions.
-    tooltip_function_6: The email address of this work group is shown at the "Request
-      mediation" button. The admins have no special permissions.
+    tooltip_function_6: The email address of this work group is shown at the ‘Request
+      mediation’ button. The admins have no special permissions.
     tooltip_function_5: Admins of this work group can see messages about foodsaver
       in the region. No messages are shown in which the admins are involved! These
       are received by the arbitration body.
@@ -137,8 +137,8 @@ group:
     tooltip_function_region432: Admins of this work group can view messages
     tooltip_function_region2287: Admins of this work group can edit the contents of
       the start page
-    tooltip_function_region1811: Admins of this work group can edit the pages "Partner",
-      "Contact" and "Team"
+    tooltip_function_region1811: Admins of this work group can edit the pages ‘Partner’,
+      ‘Contact’ and ‘Team’
     tooltip_function_region341: Admins of this work group can manage the quiz questions
     tooltip_function_region331: Admins of this work group can send newsletters
     tooltip_function_region387: "Admins of this group can remove entries from the\
@@ -197,8 +197,8 @@ settings:
     event_link_desc: (incl. events)
     link_title: 'ICS/ICAL/WebCal:'
     menu: Calendar
-    sync: "Your calendar program has to synchronize this calendar regularly.\nOnly\
-      \ then new pickup dates appear and canceled dates disappear.\n"
+    sync: "Your calendar programme has to synchronise this calendar regularly.\nOnly\
+      \ then new pick-up dates appear and cancelled dates disappear.\n"
     token-warning: "Important: Keep the link secret!\nIt contains a key to access\
       \ your account without a password.\n"
     title: Your pickup calendar
@@ -1009,7 +1009,7 @@ email_template:
     for automatic collection dates. Manually created, overwritten or deleted slots
     are therefore not taken into account at the moment.
   find_someone: Please look for someone from the team as soon as possible so that
-    the pick-up can take place. If you can't mobilize anyone, it would be nice if
+    the pick-up can take place. If you can't mobilise anyone, it would be nice if
     you could perform the pick-up. If this is not possible for you, please cancel
     the appointment with the store in time.
   you_responsible:
@@ -1174,7 +1174,7 @@ region:
   bread: Manage districts
   forum-redirect: For regions, there is no pinboard. You have been redirected to the
     forum.
-  restricted: Unfortunately, you are not authorized to view this data.
+  restricted: Unfortunately, you are not authorised to view this data.
   not-member: You are not a member of this region or working group.
   store_managers_cannot_leave: You cannot leave the district as you are still responsible
     for one or more stores there.
@@ -1280,7 +1280,7 @@ basket:
     or <b>\"Edit food basket\"</b> to edit your own basket afterwards!\n"
   published: Thank you! The food basket was published!
   publish_error: An error has occurred. The food basket could not be published.
-  not-allowed: You are not authorized to edit this food basket.
+  not-allowed: You are not authorised to edit this food basket.
   no-desc: Please enter a description!
   public-info: Description, picture, transfer location and validity period are publicly
     visible.
@@ -1398,7 +1398,7 @@ foodsaver:
     >team page</a>\nor on the <a href=\"https://foodsharing.de/team/ehemalige\">former\
     \ team page</a>, if you belong to one of these groups.\nPeople listed there can\
     \ be viewed by everyone in the internet.\n"
-  restricted: Unfortunately, you are not authorized to view this data.
+  restricted: Unfortunately, you are not authorised to view this data.
   mailchange_error: Activation of your new email address has failed. Please try again!
   url_error: Something is wrong with your homepage URL
   delete_account_sure: Are you sure you want to delete {name}'s account?
@@ -1484,6 +1484,7 @@ store:
   tooltip_orange: Vacant pick-ups in the next three days
   pickup_slot_unavailable: This pick-up slot is further in the future than intended
     by your BIEBs. So please try again at a later date.
+  appliedFor: Request made
 search:
   mygroups: My groups
   mybuddies: My buddies
@@ -1687,7 +1688,7 @@ legal:
     that you lose your operational responsibilities and that you have to take the
     quiz about the operational manager / ambassador again.
   agree_privacy_notice: I was informed about the confidentiality obligation of personal
-    data and the resulting behavior. I will receive a confirmation of this by email
+    data and the resulting behaviour. I will receive a confirmation of this by email
     for my records to the address I have given.
   must_accept_pp: In order to participate in foodsharing, you have to agree to the
     data protection conditions.
@@ -1746,7 +1747,7 @@ fsp:
   addedBy: Added by
   street: Street
   address: Address
-  editName: Edit food-share-point "{name}"
+  editName: Edit food-share-point ‘{name}’
   edit: Edit food-share-point
   new: New food-share-point
   description: Description
@@ -1762,10 +1763,10 @@ fsp:
     none: none
     mail: Bell and e-mail notification
     bell: only internal notification (bell)
-    from: Updates from food-share-point "{name}"
+    from: Updates from food-share-point ‘{name}’
     manager: You are responsible for this food-share-point and therefore obligated
       to accept the updates!
-    descSettings: You follow all information from the food-sharing-point "{name}".
+    descSettings: You follow all information from the food-sharing-point ‘{name}’.
       How would you like to receive these notifications?
     descModal: How would you like to be informed about updates (e.g. food deliveries)?
   pic: Photo
@@ -1913,7 +1914,7 @@ register:
   confirmPassword_sameAsPassword: The password must match.
   birthdate_hint: You can find more information in the <a href="?page=legal" target="_blank">
     privacy policy </a> in point 2d) when registering as a foodsharer or foodsaver.
-  mail_hint: IMPORTANT - Pay attention to the correct spelling!
+  mail_hint: IMPORTANT – Pay attention to the correct spelling!
 bread:
   backToOverview: back to overview
 duration: Time to answer
@@ -1928,7 +1929,7 @@ team_status: Team status
 verantwortlicher: Responsible members
 homepage: Your website
 sleep_status: Your actual status
-newmail: Type in your new mail address here
+newmail: Type in your new email address here
 infomail_message: Notification about chat messages in foodsharing
 compose_body: Message
 pass2: Password repeat
@@ -1936,7 +1937,7 @@ pass1: Your new requested password
 infotype: Notification
 position: Position in foodsharing (public)
 dateend: End date
-mailbox_id: Sender mail address
+mailbox_id: Sender email address
 testemail: Email address for testing
 opt: Options
 teaser: Teaser
