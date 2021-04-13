@@ -622,6 +622,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'name' => $this->faker->sentence(),
 			'time' => $this->faker->dateTime(),
 			'active' => '1',
+			'status' => 0
 		], $extra_params);
 		$params['time'] = $this->toDateTime($params['time']);
 

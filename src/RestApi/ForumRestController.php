@@ -282,7 +282,7 @@ class ForumRestController extends AbstractFOSRestController
 			$this->forumTransactions->activateThread($threadId);
 		}
 		$status = $paramFetcher->get('status');
-		if (!empty($status)) {
+		if (!is_null($status)) {
 			$this->forumGateway->setThreadStatus($threadId, intval($status));
 		}
 

@@ -3,6 +3,7 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\ThreadStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\ForumGateway;
@@ -78,17 +79,11 @@ class ForumPermissions
 
 	public function mayPostToThread(int $threadId): bool
 	{
-		if ($this->session->may('orga')) {
-			return true;
-		}
-		$forums = $this->forumGateway->getForumsForThread($threadId);
-		foreach ($forums as $forum) {
-			if ($this->mayAccessForum($forum['forumId'], $forum['forumSubId'])) {
-				return true;
-			}
+		if (!$this->mayAccessThread($threadId)) {
+			return false;
 		}
 
-		return false;
+		return $this->forumGateway->getThreadStatus($threadId) === ThreadStatus::OPEN;
 	}
 
 	public function mayModerate(int $threadId): bool
@@ -114,7 +109,18 @@ class ForumPermissions
 
 	public function mayAccessThread(int $threadId): bool
 	{
-		return $this->mayPostToThread($threadId);
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		$forums = $this->forumGateway->getForumsForThread($threadId);
+		foreach ($forums as $forum) {
+			if ($this->mayAccessForum($forum['forumId'], $forum['forumSubId'])) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function mayAccessAmbassadorBoard(int $regionId): bool

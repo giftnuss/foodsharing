@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     isOpen () {
-      return this.currentStatus === ThreadStatus.THREAD_OPEN
+      return this.status === ThreadStatus.THREAD_OPEN
     },
   },
 }

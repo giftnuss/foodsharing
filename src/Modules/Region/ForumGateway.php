@@ -179,6 +179,14 @@ class ForumGateway extends BaseGateway
 	}
 
 	/**
+	 * Returns the {@see ThreadStatus} of a thread. Throws an exception if the thread does not exist.
+	 */
+	public function getThreadStatus(int $threadId): int
+	{
+		return $this->db->fetchValueByCriteria('fs_theme', 'status', ['id' => $threadId]);
+	}
+
+	/**
 	 * Sets the status of a thread and returns whether the status was set successfully, see {@see ThreadStatus}.
 	 */
 	public function setThreadStatus(int $threadId, int $status): bool

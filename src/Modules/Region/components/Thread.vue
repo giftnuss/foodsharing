@@ -26,6 +26,7 @@
         :is-following-email.sync="isFollowingEmail"
         :is-sticky.sync="isSticky"
         :may-moderate="mayModerate"
+        :status="status"
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
@@ -93,6 +94,7 @@
         :is-following-email="isFollowingEmail"
         :is-sticky="isSticky"
         :may-moderate="mayModerate"
+        :status="status"
         @toggle:follow-bell="updateFollowBell"
         @toggle:follow-email="updateFollowEmail"
         @toggle:sticky="updateStickyness"
@@ -116,6 +118,7 @@
       <strong>{{ $i18n('error_unexpected') }}:</strong> {{ errorMessage }}
     </div>
     <ThreadForm
+      v-if="isOpen"
       ref="form"
       :error-message="errorMessage"
       @submit="createPost"
@@ -176,12 +179,15 @@ export default {
       loadingPosts: [],
       errorMessage: null,
 
-      isClosed: false,
+      status: ThreadStatus.THREAD_OPEN,
     }
   },
   computed: {
     userId () {
       return user.id
+    },
+    isOpen () {
+      return this.status === ThreadStatus.THREAD_OPEN
     },
   },
   async created () {
@@ -220,6 +226,7 @@ export default {
           mayDelete: res.mayDelete,
           isFollowingEmail: res.isFollowingEmail,
           isFollowingBell: res.isFollowingBell,
+          status: res.status,
         })
         this.isLoading = false
       } catch (err) {
@@ -377,12 +384,14 @@ export default {
       await this.setStatus(ThreadStatus.THREAD_OPEN)
     },
     async setStatus (status) {
+      this.isLoading = true
       try {
-        setThreadStatus(this.id, status)
-        this.isClosed = (status === ThreadStatus.THREAD_CLOSED)
+        await setThreadStatus(this.id, status)
+        this.status = status
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       }
+      this.isLoading = false
     },
   },
 }
