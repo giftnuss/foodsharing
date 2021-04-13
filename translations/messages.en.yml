@@ -313,6 +313,9 @@ profile:
     details: "Here you can describe in at least 100 characters why you would like\
       \ to give {name} a trust banana.\n"
     none: '{name} has not yet received a trust banana.'
+    remove:
+      confirm_message: Do you really want to remove this trust banana?
+      confirm_title: Remove trust banana
   public:
     join: Join & register
     who: '{name} from {from}'
@@ -418,6 +421,15 @@ profile:
   mailBounceWarning_1: Your personal e-mail address {email} is blocked for foodsharing
     e-mails and communication.
   notFound: This user profile does not exist or no longer exists
+  mail_bounce:
+    remove_button: Remove from bounce list
+    warning_others: This user's e-mail address {email} is blocked for foodsharing
+      e-mails and communication. You can remove the blocked status with the button.
+    warning_4: this support article.
+    warning_3: 'it will be unblocked. You can find more information in '
+    warning_2: changing the e-mail address
+    warning_1: Your personal e-mail address {email} is blocked for foodsharing e-mail
+      and communication. By
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -497,7 +509,7 @@ events:
   edited: Event was changed successfully!
   button:
     maybe: Maybe
-    yes: Accept
+    yes: I will join
     no: I can not
   add_event: New event
   add_new_event: Add a new event
@@ -515,7 +527,9 @@ events:
     location: 'Our mumble server: <br><strong>mumble.foodsharing.de</strong>'
     text: We hold voice conferences with <em>Mumble</em>.
     title: Online appointment (Mumble)
-  duration: '{from} to {until}'
+  duration: 'Duration: {duration}'
+  span: '{from} until {until}'
+  edit: Edit event
 forum:
   threads: Threads
   quickreply:
@@ -820,6 +834,8 @@ bell:
   store_new_request: Request for {name}
   forum_answer: '{user} responded to your comment'
   store_request_accept_wait: You were added to the jumper/waiting list.
+  store_request_imposed: You were added to the store team.
+  store_request_imposed_title: '{name}'
 reports:
   time: Time
   region: Home region
@@ -1424,6 +1440,11 @@ store:
     managementToggleOff: Back to standard view
     managementToggleOn: Enable BV view
     makeJumper: add to jumper list
+    reloadRequired: 'For updating the team information:'
+    reloadPage: Reload page
+    reallyDemote: Do you really want to remove {name} as a manager for this store?
+    demoteAsManager: Remove as store manager
+    promoteToManager: Make store manager
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
@@ -2109,7 +2130,7 @@ storestatus:
   "0": Status unclear
   "7": Store no longer exists
   "6": Donate to food bank etc. or doesn't throw anything away
-  "5": Store is already cooperating
+  "5": Store is cooperating
   "4": Don't want to cooperate
   "3": Store is ready to cooperate
   "2": Negotiations are ongoing
@@ -2157,3 +2178,35 @@ regionOptions:
   header_page: Settings for {bezirk}
 list:
   filter_for: filter for …
+startpage:
+  donate:
+    title: Donate
+  demands:
+    title: Demands
+  near_you:
+    text3:
+      part2: Find regions close to you
+      part1: The community is organised in regions.
+    text1:
+      part3: you can find foodsharepoints. Those are shelves or fridges where you
+        can leave or pick up food for free.
+      part2: map
+    title: Close to you
+  store:
+    title: as a company
+  member:
+    title: as a member
+  call_to_action:
+    title: Join
+  mission:
+    title: Mission
+  call_to_action_button: Join
+  welcome_text: Welcome to foodsharing
+date_short:
+  Sunday: Sun
+  Saturday: Sat
+  Friday: Fr
+  Thursday: Wed
+  Wednesday: Thu
+  Tuesday: Tu
+  Monday: Mo
