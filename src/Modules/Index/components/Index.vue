@@ -12,18 +12,19 @@
       <div class="card-img-overlay">
         <b-row class="ml-xl-5 mt-xl-5">
           <b-col
-            xl="2"
+            lg="2"
             class="d-none d-lg-block"
           >
             <Fork />
           </b-col>
           <b-col
+            lg="10"
             xl="8"
             cols="12"
             class="text-center ml-xl-5 mt-md-5"
           >
             <b-card-title class="mt-4 mt-md-0">
-              <h2>{{ $i18n('startpage.welcome_text') }}</h2>
+              <h1>{{ $i18n('startpage.welcome_text') }}</h1>
             </b-card-title>
             <b-card-text class="mt-4">
               <h3>{{ $i18n('startpage.slogan') }}</h3>
@@ -549,11 +550,18 @@ h4 {
   font-weight: normal;
 }
 
+::v-deep h1 {
+  font-family: "Alfa Slab One", serif;
+  color: #333333;
+  font-weight: normal;
+}
+
 /*
 Extra small devices (portrait phones, less than 544px)
 No media query since this is the default in Bootstrap because it is "mobile first"
 */
-::v-deep h2 {font-size:1.6rem;} /*1rem = 16px*/
+::v-deep h1 {font-size:1.6rem;} /*1rem = 16px*/
+::v-deep h2 {font-size:1.4rem;} /*1rem = 16px*/
 ::v-deep h3 {font-size:1rem;} /*1rem = 16px*/
 
 .call-to-action-image {
@@ -582,7 +590,8 @@ Bootstrap 4 breakpoints
 */
 /* Small devices (landscape phones, 544px and up) */
 @media (min-width: 544px) {
-  ::v-deep h2 {font-size:1.5rem;} /*1rem = 16px*/
+  ::v-deep h1 {font-size:1.5rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:1.35rem;} /*1rem = 16px*/
   ::v-deep h3 {font-size:1.25rem;} /*1rem = 16px*/
 
   .call-to-action-image {
@@ -593,7 +602,8 @@ Bootstrap 4 breakpoints
 
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {
-  ::v-deep h2 {font-size:2rem;} /*1rem = 16px*/
+  ::v-deep h1 {font-size:2rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:1.75rem;} /*1rem = 16px*/
   ::v-deep h3 {font-size:1.5rem;} /*1rem = 16px*/
 
   .call-to-action-image {
@@ -614,7 +624,8 @@ Bootstrap 4 breakpoints
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  ::v-deep h2 {font-size:2.5rem;} /*1rem = 16px*/
+  ::v-deep h1 {font-size:2.5rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:2rem;} /*1rem = 16px*/
   ::v-deep h3 {font-size:1.75rem;} /*1rem = 16px*/
 
   .call-to-action-image {
@@ -625,7 +636,8 @@ Bootstrap 4 breakpoints
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  ::v-deep h2 {font-size:2.25rem;} /*1rem = 16px*/
+  ::v-deep h1 {font-size:2.25rem;} /*1rem = 16px*/
+  ::v-deep h2 {font-size:2rem;} /*1rem = 16px*/
 
   .call-to-action-image {
     border-radius: 0px !important;
