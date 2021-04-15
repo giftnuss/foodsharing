@@ -10,27 +10,31 @@
   -->
   <div :class="['bootstrap store-team w-100', `team-${storeId}`]">
     <div class="card rounded mb-2">
-      <div class="card-header text-white bg-primary d-flex justify-content-between">
-        <span>{{ $i18n('store.teamName', { storeTitle }) }}</span>
+      <div class="card-header text-white bg-primary">
+        <div class="row align-items-center">
+          <div class="col font-weight-bold">
+            {{ $i18n('store.teamName', { storeTitle }) }}
+          </div>
 
-        <div class="align-self-center">
-          <a
-            v-if="mayEditStore"
-            v-b-tooltip.hover.top
-            :title="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
-            :class="['px-1', managementModeEnabled ? 'text-warning' : 'text-light']"
-            href="#"
-            @click.prevent="toggleManageControls"
-          >
-            <i class="fas fa-fw fa-cog" />
-          </a>
-          <a
-            class="px-1 d-md-none text-light"
-            href="#"
-            @click.prevent="toggleTeamDisplay"
-          >
-            <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
-          </a>
+          <div class="col col-4 text-right">
+            <button
+              v-if="mayEditStore"
+              v-b-tooltip.hover.top
+              :title="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
+              :class="[managementModeEnabled ? ['text-warning', 'active'] : 'text-light', 'btn', 'btn-secondary', 'btn-sm']"
+              href="#"
+              @click.prevent="toggleManageControls"
+            >
+              <i class="fas fa-fw fa-cog" />
+            </button>
+            <button
+              class="px-1 d-md-none text-light btn btn-sm"
+              href="#"
+              @click.prevent="toggleTeamDisplay"
+            >
+              <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
+            </button>
+          </div>
         </div>
       </div>
 
