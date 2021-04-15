@@ -1414,6 +1414,7 @@ pickup:
   kick: Retirer
   confirm: Confirmer
   call: Appeler
+  to_be_confirmed: Cette collecte doit encore être validée par un·e Responsable Magasin.
 events:
   bread: Évènements
   rsvp:
