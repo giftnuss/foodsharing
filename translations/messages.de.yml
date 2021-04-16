@@ -422,16 +422,16 @@ login:
   error_no_email: "Bitte gib deine E-Mail-Adresse an!"
   error_no_password: "Bitte gib dein Passwort an!"
   error_no_auth: "E-Mail-Adresse oder Passwort sind falsch"
-  success: "<b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet."
+  success: "<b>Wunderschönen Tag dir, {user_name}!</b><br />Du hast dich erfolgreich eingeloggt und wirst gleich weitergeleitet."
   logout: "Logout"
   pwreset:
     bread: "Password zurücksetzen"
     wrongMail: "Sorry! Hast du dich vielleicht bei deiner E-Mail-Adresse vertippt?"
     mailSent: "Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt."
-    success: "Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt einloggen."
+    success: "Prima, Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt einloggen."
     tooShort: "Sorry, Dein gewähltes Passwort ist zu kurz."
     expired: "Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage erneut ein neues Passwort!"
-    error: "Sorry, es gibt ein Problem mit Deinen Daten."
+    error: "Sorry, es gibt ein Problem mit deinen Daten."
     mismatch: "Sorry, die Passwörter stimmen nicht überein."
 
 register:
@@ -1122,7 +1122,7 @@ bell:
   no_bells: "Du hast derzeit keine Benachrichtigungen"
   forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
   forum_reply_title: "{forum}: {title}"
-  forum_answer: "{user} hat Dir geantwortet"
+  forum_answer: "{user} hat dir geantwortet"
   blog_new_check_title: "Neuer Blogartikel"
   blog_new_check: "{title}"
   ft_update_title: "{name}"
@@ -1160,8 +1160,8 @@ bell:
   betrieb_fetch_title: "{betrieb}"
   betrieb_fetch: "{count} unbestätigte Abholzeiten"
 
-  buddy_request_title: "Kennst Du {name}?"
-  buddy_request: "{name} kennt Dich."
+  buddy_request_title: "Kennst du {name}?"
+  buddy_request: "{name} kennt dich."
   sharepoint_activate_title: "Neuer Fairteiler in {bezirk}"
   sharepoint_activate: "{name} wurde eingetragen"
 
@@ -1717,7 +1717,7 @@ basket:
     nope: "Nein, {pronoun} ist leider nicht wie verabredet erschienen."
     gone: "Die Lebensmittel wurden von jemand anderem abgeholt."
     deny: "Ich möchte diese Anfrage ablehnen."
-    finished: "Danke Dir! Der Vorgang ist abgeschlossen."
+    finished: "Danke dir! Der Vorgang ist abgeschlossen."
   request_empty: "Dein Anfragetext darf nicht leer sein."
   image: "Füge dem Essenskorb ein Foto hinzu!"
   contact:
@@ -2024,12 +2024,12 @@ sidenav:
   yourgroups: "Deine Gruppen"
 
 becomeregion:
-  chooseregion: "Wähle den Bezirk aus, in dem Du aktiv werden möchtest!"
+  chooseregion: "Wähle den Bezirk aus, in dem du aktiv werden möchtest!"
   enterregion:
-    main: "Deinem ersten Bezirk kannst Du beitreten, indem Du Dich über die Auswahl 'Europa' bis zu Deinem Bezirk durchklickst.<br> Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest Du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten. Lies Dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu"
+    main: "Deinem ersten Bezirk kannst du beitreten, indem du dich über die Auswahl 'Europa' bis zu deinem Bezirk durchklickst.<br> Solltest du keinen Bezirk für dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst du dir überlegen einen eigenen Bezirk zu starten. Lies dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu"
     region_link_text: "Bezirke gründen oder reaktivieren"
-    text1: "gut durch! Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an"
-    text2: "Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können Dir aber bei Fragen zu Bezirken weiterhelfen."
+    text1: "gut durch! Wenn du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an"
+    text2: "Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können dir aber bei Fragen zu Bezirken weiterhelfen."
   save: "Speichern"
 
 base:
@@ -2044,12 +2044,12 @@ email_template:
   to: "an"
   dont_respond:
     noreply: "Bitte antworte nicht auf diese E-Mail. Diese Nachricht wurde von einer Adresse gesendet, hinter welcher kein Postfach existiert."
-    no_notification_link: "Willst Du diese Art von Benachrichtigungen nicht mehr bekommen?"
+    no_notification_link: "Willst du diese Art von Benachrichtigungen nicht mehr bekommen?"
     you_can: "Du kannst unter"
     notification: "Benachrichtigungen"
-    nomail: "einstellen, welche Mails Du erhältst."
+    nomail: "einstellen, welche Mails du erhältst."
   newsletter:
-    unsubscribe: "Möchtest Du keinen Newsletter mehr erhalten?"
+    unsubscribe: "Möchtest du keinen Newsletter mehr erhalten?"
     linktext: "Klicke hier zum Abbestellen!"
   impress:
     title: "Impressum"
@@ -2063,7 +2063,7 @@ email_template:
   login: "Einloggen zum Antworten"
   confirm_topic: "Thema muss bestätigt werden:"
   confirm_link: "möchte das Thema"
-  confirm_BOT: "absenden. Da Du Botschafter*in / Moderator*in für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird."
+  confirm_BOT: "absenden. Da du Botschafter*in / Moderator*in für %BEZIRK% bist, musst du es bestätigen, bevor es veröffentlicht wird."
   foodsharepoint: "-- Fair-Teiler"
   reply: "Antworten"
   warning: "Warnung"
@@ -2071,11 +2071,11 @@ email_template:
   you_responsible:
     part1: "Du bist verantwortlich für"
     part2: "Leider hat sich für den nächsten Termin noch niemand zum Abholen eingetragen."
-  find_someone: "Bitte kümmere Dich schnellstmöglich um jemanden aus Deinem Betriebsteam, damit die Abholung stattfinden kann. Solltest du niemanden mobilisieren können, wäre es schön, wenn du die Abholung übernehmen könntest. Sollte dir das nicht möglich sein, dann sage den Termin bitte rechtzeitig beim Betrieb ab."
+  find_someone: "Bitte kümmere dich schnellstmöglich um jemanden aus deinem Betriebsteam, damit die Abholung stattfinden kann. Solltest du niemanden mobilisieren können, wäre es schön, wenn du die Abholung übernehmen könntest. Sollte dir das nicht möglich sein, dann sage den Termin bitte rechtzeitig beim Betrieb ab."
   information: "Info"
   manual_slots_get_ignored: "Diese Benachrichtigung wird aktuell leider nur bei automatischen Abholterminen versendet. Manuell angelegte, überschriebene oder gelöschte Slots werden daher nicht berücksichtigt."
   help_needed:
-    main: "Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus Deinem Bezirk"
+    main: "Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus deinem Bezirk"
     link: "https://devdocs.foodsharing.network/it-tasks.html"
     or: "oder"
     support_mail: "it@foodsharing.network"
