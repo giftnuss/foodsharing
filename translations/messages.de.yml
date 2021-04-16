@@ -1428,7 +1428,7 @@ settings:
     title: "Dein Foto"
     info: |
       Dein Gesicht sollte auf dem Profilfoto <a href="{link_photo}">erkennbar</a> sein,
-      da es für den Foodsharing-<a href="{link_id}">Ausweis</a> verwendet wird, wenn du
+      da es für den foodsharing-<a href="{link_id}">Ausweis</a> verwendet wird, wenn du
       später <a href="{link_fs}">Foodsaver</a> wirst und Lebensmittel in Betrieben rettest.
   push:
     title: "Push-Benachrichtigungen"
