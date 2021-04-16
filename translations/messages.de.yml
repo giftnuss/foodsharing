@@ -19,7 +19,7 @@ telefon: "Festnetznummer"
 handy: "Handynummer"
 anschrift: "Straße und Hausnummer (automatisch aus Karte oben, gegebenenfalls anschließend korrigieren)"
 geschlecht: "Geschlecht"
-botschafter: "Botschafter"
+botschafter: "Botschafter*in"
 options: "Optionen" # FoodSharePointControl FoodSharePointView foodSharePoint.twig
 picture: "Bild" # BlogView and maybe more
 parent_id: "Elternbezirk" # at least XhrMethods and RegionAdminControl
@@ -31,7 +31,7 @@ bezirk: "Bezirk"
 betrieb: "Kooperationsbetrieb/e"
 active: "Aktiviert" # TODO check this
 mailbox_name: "Mailbox-Name" # XhrMethods
-rolle: "Benutzerrolle" # FoodsaverView
+rolle: "Benutzer*innenrolle" # FoodsaverView
 last_login: "Letzter Login"
 title: "Überschrift"
 body: "Nachricht"
@@ -41,7 +41,7 @@ photo: "Foto"
 ort: "Stadt/Gemeinde (automatisch aus Karte oben)"
 daterange: "Zeitraum"
 regions: "Bezirke" # TODO check if used anywhere else
-message_text_to_group_admin_workgroup: "Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: \"<a href=\"https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum\" target=\"_blank\">Klicke hier um zur zur Region/AG zu gehen</a>"
+message_text_to_group_admin_workgroup: "Die Region/AG <b>{groupName}</b> hat <b>keine*n</b> Botschafter*in/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: \"<a href=\"https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum\" target=\"_blank\">Klicke hier um zur zur Region/AG zu gehen</a>"
 #
 # FORM DATA KEYS: SettingsView
 # --
@@ -86,7 +86,7 @@ position: "Position bei foodsharing (öffentlich)"
 # --
 infotype: "Benachrichtigung"
 fsp_bezirk_id: "In welchem Bezirk ist der Fairteiler?"
-fspmanagers: "Foodsaver, die Ansprechpartner für den Fairteiler sind"
+fspmanagers: "Foodsaver, die Ansprechpartner*innen für den Fairteiler sind"
 #
 # FORM DATA KEYS: LoginView
 # --
@@ -122,7 +122,7 @@ kette_id: "Betriebskette"
 betrieb_kategorie_id: "Kategorie"
 betrieb_status_id: "Status"
 store_status_impact_explanation: "Bitte aktualisiere nach jedem Betriebskontakt (<a href=\"https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste\" target=\"_blank\">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href=\"https://wiki.foodsharing.de/Betrieb\" target=\"_blank\">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt."
-ansprechpartner: "Betriebsansprechpartner (Filialleiter etc.)"
+ansprechpartner: "Betriebsansprechpartner*innen (Filialleiter*innen etc.)"
 fax: "Fax"
 lebensmittel: "Welche Lebensmittel dürfen abgeholt werden?"
 begin: "Beginn der Kooperation"
@@ -142,8 +142,8 @@ member: "Mitglieder"
 leader: "Gruppen-Admins"
 apply_type: "Wer kann sich für diese Gruppe eintragen?"
 banana_count: "Wie viele Vertrauensbananen braucht ein Mitglied?"
-fetch_count: "Wie viele Abholungen sollte ein Bewerber gemacht haben?"
-week_num: "Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?"
+fetch_count: "Wie viele Abholungen sollte ein*e Bewerber*in gemacht haben?"
+week_num: "Seit wie vielen Wochen sollte ein*e Bewerber*in schon dabei sein?"
 #
 # FORM DATA KEYS: QuizView QuizXhr
 # --
@@ -273,10 +273,10 @@ group:
     region: "Bezirks-Postfach"
   contact:
     title: "{group} kontaktieren"
-    admins: "{count} Ansprechpartner:"
+    admins: "{count} Ansprechpartner*innen:"
     disclaimer: |
       Durch Senden einer Nachricht an diese Arbeitsgruppe
-      sehen alle Administratoren der Arbeitsgruppe deine E-Mail-Adresse,
+      sehen alle Administrator*innen der Arbeitsgruppe deine E-Mail-Adresse,
       welche du auf deinem foodsharing-Profil angegeben hast.
       Dir wird eine Kopie dieser Nachricht als E-Mail zugeschickt.
     empty: "Schreib doch erst einmal etwas ;)"
@@ -303,22 +303,22 @@ group:
   application_requirements:
     requirements: "Wer kann sich für diese Gruppe eintragen?"
     nobody: "Niemand (geschlossene Gruppe)"
-    requires_properties: "Jeder, der bestimmte Vertrauenspunkte erfüllt"
-    everybody: "Jeder darf sich bewerben"
-    open: "Jeder kann sich ohne Bewerbung einklinken"
-    fetch_count: "Wie viele Abholungen sollte ein Bewerber gemacht haben?"
+    requires_properties: "Jede*r, der bestimmte Vertrauenspunkte erfüllt"
+    everybody: "Jede*r darf sich bewerben"
+    open: "Jede*r kann sich ohne Bewerbung einklinken"
+    fetch_count: "Wie viele Abholungen sollte ein*e Bewerber*in gemacht haben?"
     banana_count: "Wie viele Vertrauensbananen braucht ein Mitglied?"
     banana_count_errors:
       min: "Niemand kann weniger als {{ limit }} Vertrauensbananen haben."
       max: "Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen."
-    member_since_weeks: "Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?"
+    member_since_weeks: "Seit wie vielen Wochen sollte ein*e Bewerber*in schon dabei sein?"
     not_fulfilled: "Um dich für diese Arbeitsgruppe zu bewerben, musst du seit %weeks% Wochen bei foodsharing dabei sein, schon %bananas% Vertrauensbananen gesammelt und schon %fetches% Abholungen mitgemacht haben."
   members: "Mitglieder"
   administrators: "Gruppen-Admins"
   title: "foodsharing-Arbeitsgruppen"
   subtitle: "hier findest du Hilfe und viel zu tun..."
   member_count: "{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende"
-  admin_count: "{0} Keine Administratoren|{1} Ein*e Administrator*in| [2, Inf[ %count% Administratoren"
+  admin_count: "{0} Keine Administrator*innen|{1} Ein*e Administrator*in| [2, Inf[ %count% Administrator*innen"
   image: "Titelbild für %name%"
   already_applied: "Für diese Gruppe hast du dich bereits beworben"
   actions:
@@ -334,7 +334,7 @@ group:
   quit: "Verlassen"
   really_quit_workgroup: "Möchtest du wirklich die Arbeitsgruppe %name% verlassen?"
   really_quit_district: "Möchtest du wirklich den Bezirk %name% verlassen?"
-  quitting_home_district_warning: "Möchtest du wirklich deinen Stammbezirk %name% verlassen? Du verlierst deine Verifizierung und musst dich später beim Botschafter-Team deines neuen Stammbezirks melden!"
+  quitting_home_district_warning: "Möchtest du wirklich deinen Stammbezirk %name% verlassen? Du verlierst deine Verifizierung und musst dich später beim Botschafter*innen-Team deines neuen Stammbezirks melden!"
   delete_group_sure: "Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?"
   function:
     title: "Arbeitsgruppenfunktion"
@@ -518,9 +518,9 @@ terminology:
     m: "Orgamensch"
     f: "Orgamensch"
     d: "Orgamensch"
-  ambassadors: "Botschafter"
+  ambassadors: "Botschafter*innen"
   ambassador_forum: "BotschafterInnenforum"
-  admins: "Administratoren"
+  admins: "Administrator*innen"
   welcomeAdmins: "Begrüßungsteam"
   votingAdmins: "Abstimmungsteam"
   fspAdmins: "Fairteilerteam"
@@ -545,7 +545,7 @@ terminology:
   mailboxes: "Mailboxen"
   n_foodsaver: "Ein Foodsaver|%count% Foodsaver"
   n_sleeping: "Eine Schlafmütze|%count% Schlafmützen"
-  n_ambassadors: "Ein(e) BotschafterIn|%count% BotschafterInnen"
+  n_ambassadors: "Ein(e) Botschafter*in|%count% Botschafter*innen"
   n_stores: "Ein Betrieb|%count% Betriebe"
   n_cooperating_stores: "Eine laufende Kooperation|%count% laufende Kooperationen"
   profile_picture: "Profilbild"
@@ -593,7 +593,7 @@ fsp:
   follow: "Diesem Fairteiler folgen"
   followName: "Fairteiler {name} folgen"
   unfollow: "Fairteiler nicht mehr folgen"
-  managers: "Ansprechpartner"
+  managers: "Ansprechpartner*innen"
   followers: "Follower"
   description: "Beschreibung"
   new: "Neuer Fairteiler"
@@ -601,7 +601,7 @@ fsp:
   addError: "Fairteiler konnte nicht eingetragen werden. Hast du alles richtig ausgefüllt?"
   addSuccess: "Fairteiler wurde erfolgreich eingetragen"
   suggest: "Fairteiler vorschlagen"
-  suggestSuccess: "Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter / Fairteilerverantwortlichen bestätigt werden."
+  suggestSuccess: "Fairteiler wurde vorgeschlagen und muss nun noch durch eine*n Botschafter*in / Fairteilerverantwortliche*n bestätigt werden."
   accept: "Fairteiler freischalten"
   acceptName: "{name} freischalten"
   acceptSuccess: "Fairteiler ist jetzt aktiv"
@@ -821,10 +821,10 @@ pickup:
     many-people: |
       Du hast mehr als zwei Personen zum Abholen angegeben.
       <br />
-      Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb.
-      Zu viele Abholer führten schon oft zum Ende einer Kooperation.
+      Bitte schick <strong>nur so viele Abholer*innen wie nötig</strong> in den Betrieb.
+      Zu viele Abholer*innen führten schon oft zum Ende einer Kooperation.
       <br />
-      Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab.
+      Kläre die maximale Zahl möglicher Abholer*innen mit dem Betrieb ab.
       Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger oder ähnlichem
       außer Sichtweite des Betriebes warten.
     added: "Abholtermin wurde eingetragen."
@@ -879,7 +879,7 @@ forum:
     close: "Thema schließen"
     open: "Thema wieder öffnen"
     closed: "geschlossenes Thema"
-  hold_back_for_moderation: "Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt."
+  hold_back_for_moderation: "Das Thema wurde gespeichert und wird veröffentlicht sobald ein*e Botschafter*in/Moderator*in es bestätigt."
   no_posts: "Bisher keine Beiträge vorhanden"
   no_threads: "Noch keine Themen gepostet"
   sending_error: "Beim Senden ist ein Fehler aufgetreten"
@@ -983,14 +983,14 @@ recipients:
   prepare: "Vorbereiten zum Versand"
   recipients: "Empfänger"
   all: "Alle Foodsaver weltweit"
-  active_ambassadors: "Alle Botschafter bundesweit"
+  active_ambassadors: "Alle Botschafter*innen bundesweit"
   orga_team: "Orgateam bundesweit"
   newsletter: "Alle Newsletter-Abonnenten (mindestens Foodsaver)"
   newsletter_all: "Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)"
   newsletter_only_foodsharer: "NUR die Foodsharer unter allen Newsletter-Abonnenten"
-  all_no_botschafter: "Alle Foodsaver ohne Botschafter"
+  all_no_botschafter: "Alle Foodsaver ohne Botschafter*innen"
   storemanagers: "Alle Betriebsverantwortlichen weltweit"
-  storemanagers_and_ambs: "Alle Betriebsverantwortlichen + Botschafter"
+  storemanagers_and_ambs: "Alle Betriebsverantwortlichen + Botschafter*innen"
   choose: "Bezirke einzeln auswählen"
   manual: "Manuelle Eingabe"
   region-hint: |
@@ -1120,7 +1120,7 @@ reports:
   reportmessage: "Gib kurz an wie du bei Rückfragen erreicht werden kannst."
 
 bell:
-  no_bells: "Du hast derzeit keine Benachrichtigungen"
+  no_bells: "Du hast derzeit keine Benachrichtigungen."
   forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
   forum_reply_title: "{forum}: {title}"
   forum_answer: "{user} hat dir geantwortet"
@@ -1271,18 +1271,18 @@ foodsaver:
     ad_fs: "Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver*in werden!"
     to_fs: "Werde Foodsaver*in"
     needs_fs: "Du musst erst Foodsaver werden"
-    needs_sm: "Du musst erst BetriebsverantwortlicheR werden"
+    needs_sm: "Du musst erst Betriebsverantwortliche*r werden"
     needs_fs_quiz: "Du darfst zunächst das Foodsaver Quiz machen"
     to_sm: "Werde Betriebsverantwortliche*r"
     to_amb: "Werde Botschafter*in"
-    amb_region: "In welcher Region möchtest du Botschafter werden?"
+    amb_region: "In welcher Region möchtest du Botschafter*in werden?"
     needs_publicinfo: "Deine Kurzbeschreibung ist leer"
     needs_region: "Wähle bitte aus, in welchem Bezirk du Botschafter*in werden möchtest"
     rv: "Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie."
     needs_rv: "Du musst die Rechtsvereinbarung akzeptieren."
     quiz_error: "Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:"
     fs_success: "Danke, du bist jetzt Foodsaver!"
-    sm_success: "Danke, du bist jetzt Betriebsverantwortlicher!"
+    sm_success: "Danke, du bist jetzt Betriebsverantwortliche*r!"
     amb_requested: "Anfrage erfolgreich versendet."
     amb_success: "Danke dir für deine Motivation, mehr Verantwortung zu übernehmen. Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet."
   restricted: "Du hast leider keine Berechtigung, diese Daten einzusehen."
@@ -1329,7 +1329,7 @@ mailbox:
   date: "Datum"
   subject: "Betreff"
   actions: "Optionen"
-  member: "Mailbox-Benutzer"
+  member: "Mailbox-Benutzer*in"
   refresh: "Aktualisieren"
   write: "Neue E-Mail"
   attach: "Datei anhängen (maximal 1,2 MB)"
@@ -1645,7 +1645,7 @@ dashboard:
     title: "Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen."
     info: "Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren."
     button: "Push-Benachrichtigungen aktivieren"
-  deleted_user: "abgemeldeter Benutzer"
+  deleted_user: "abgemeldete*r Benutzer*in"
 
 home:
   title: "Startseite"
