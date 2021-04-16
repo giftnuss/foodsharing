@@ -2064,7 +2064,7 @@ email_template:
   confirm_topic: "Thema muss bestätigt werden:"
   confirm_link: "möchte das Thema"
   confirm_BOT: "absenden. Da du Botschafter*in / Moderator*in für %BEZIRK% bist, musst du es bestätigen, bevor es veröffentlicht wird."
-  foodsharepoint: "-- Fair-Teiler"
+  foodsharepoint: "-- Fairteiler"
   reply: "Antworten"
   warning: "Warnung"
   slot_empty: "Für die nächste Abholung bei %BETRIEB% hat sich noch niemand zum Abholen eingetragen"
