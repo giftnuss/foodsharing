@@ -53,11 +53,9 @@ class BellGateway extends BaseGateway
 			}, $part);
 
 			$this->db->insertMultiple('fs_foodsaver_has_bell', $data);
-
-			foreach ($part as $fs) {
-				$this->updateFoodsaverClient((int)$fs);
-			}
 		}
+
+		$this->updateMultipleFoodsaverClients(array_column($foodsavers, 'id'));
 	}
 
 	/**
