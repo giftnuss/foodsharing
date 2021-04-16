@@ -17,7 +17,7 @@ email: "E-Mail-Adresse"
 attachement: "Anhang" # EmailControl
 telefon: "Festnetznummer"
 handy: "Handynummer"
-anschrift: "Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren)"
+anschrift: "Straße und Hausnummer (automatisch aus Karte oben, gegebenenfalls anschließend korrigieren)"
 geschlecht: "Geschlecht"
 botschafter: "Botschafter"
 options: "Optionen" # FoodSharePointControl FoodSharePointView foodSharePoint.twig
@@ -364,7 +364,7 @@ group:
     tooltip_function_2: "Admins dieser AG können Abstimmungen für den Bezirk anlegen"
     tooltip_function_3: "Admins dieser AG können Fairteiler des Bezirks freischalten und bearbeiten sowie Fairteilerbeiträge entfernen"
     tooltip_function_4: "Admins dieser AG können Betriebe im Bezirk einsehen und bearbeiten"
-    tooltip_function_5: "Admins dieser AG können Meldungen über foodsaver im Bezirk sehen. Es werden keine Meldungen angezeigt, an denen die Admins beteiligt sind! Diese erhält die Schiedstelle."
+    tooltip_function_5: "Admins dieser AG können Meldungen über Foodsaver im Bezirk sehen. Es werden keine Meldungen angezeigt, an denen die Admins beteiligt sind! Diese erhält die Schiedstelle."
     tooltip_function_6: "Die E-Mail Addresse dieser AG wird beim \"Mediation anfragen\"-Knopf angezeigt. Die Admins haben keine besonderen Berechtigungen."
     tooltip_function_7: "Admins dieser AG bekommen Meldungen mit Beteiligung des Meldeteams angezeigt. Es werden keine Meldungen angezeigt, an denen die Admins beteiligt sind! Diese erhält das Meldeteam"
     tooltip_function_9: "Admins dieser AG haben keine besonderen Berechtigungen."
@@ -825,7 +825,7 @@ pickup:
       Zu viele Abholer führten schon oft zum Ende einer Kooperation.
       <br />
       Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab.
-      Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
+      Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger oder ähnlichem
       außer Sichtweite des Betriebes warten.
     added: "Abholtermin wurde eingetragen."
 
@@ -866,8 +866,8 @@ forum:
     delete: "Beitrag löschen"
     body: "Nachricht"
   thread:
-    with_mail: "Thema eröffnet und alle per Mail darüber informiert"
-    no_mail: "Das Thema wurde eröffnet, ohne Mails zu versenden"
+    with_mail: "Thema eröffnet und alle per E-Mail darüber informiert"
+    no_mail: "Das Thema wurde eröffnet, ohne E-Mails zu versenden"
     too_big_to_mail: "Für das Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt."
     activate: "Thema aktivieren"
     delete: "Thema löschen"
@@ -996,7 +996,7 @@ recipients:
   region-hint: |
     <strong>Hinweis:</strong>
     Um untergeordnete Bezirke zu markieren, musst du den Ordner erst öffnen.
-    In alle nicht sichtbaren Bezirke werden keine Mails versendet.
+    In alle nicht sichtbaren Bezirke werden keine E-Mails versendet.
   empty-region: "In den ausgewählten Bezirken gibt es noch keine Foodsaver"
   body: "Nachricht"
   send: "E-Mail senden"
@@ -1007,12 +1007,12 @@ recipients:
   test_email_invalid: "Mit der E-Mail-Adresse stimmt etwas nicht."
   variables: "Persönliche Anrede"
   variable-info: |
-    Um die Mail persönlicher zu gestalten, kannst du <strong>{NAME}</strong> anstelle des Namens einfügen
+    Um die E-Mail persönlicher zu gestalten, kannst du <strong>{NAME}</strong> anstelle des Namens einfügen
     und <strong>{ANREDE}</strong> für die Anrede verwenden.
     <p>{ANREDE} {NAME} ergibt beispielsweise: "Lieber Peter"
   doublecheck: "Alles gechecked? Soll die E-Mail an die gewählte Zielgruppe gesendet werden?"
   sent: "Die E-Mail wurde erfolgreich an {count} E-Mail-Adressen gesendet"
-  history: "Von dir gesendete Mails"
+  history: "Von dir gesendete E-Mails"
   pending: "Es sind noch {count} E-Mails zu versenden"
   continue: "Mit dem Senden weitermachen"
   abort: "Versand abbrechen"
@@ -1332,7 +1332,7 @@ mailbox:
   member: "Mailbox-Benutzer"
   refresh: "Aktualisieren"
   write: "Neue E-Mail"
-  attach: "Datei anhängen (max. 1,2 MB)"
+  attach: "Datei anhängen (maximal 1,2 MB)"
   claim: "foodsharing.de - verwenden statt verschwenden"
   signature: "Nachricht vom {date}"
   manage: "Mailbox-Manager"
@@ -1464,8 +1464,8 @@ profile:
   notFound: "Dieses Nutzerprofil gibt es nicht oder nicht mehr"
   warning: "Warnung"
   mail_bounce:
-    warning_1: "Deine persönliche Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
-    warning_2: "Ändern der Mail-Adresse"
+    warning_1: "Deine persönliche E-Mail-Adresse {email} ist für foodsharing-Mails und -Kommunikation gesperrt. Durch das"
+    warning_2: "Ändern der E-Mail-Adresse"
     warning_3: "wird diese Sperre wieder entfernt. Weitere Infos findest du in "
     warning_4: "diesem Support-Artikel."
     warning_others: "Die E-Mail-Adresse {email} diese*r Benutzer*in ist für foodsharing-Mails und -Kommunikation gesperrt. Über den Button kannst du diese Sperre entfernen."
@@ -1481,7 +1481,7 @@ profile:
       Bitte vergib die Vertrauensbanane daher nur an dir persönlich bekannte Menschen,
       welche die Verhaltensregeln und die Rechtsvereinbarung einhalten
       und für deren Zuverlässigkeit und Engagement du einstehen kannst.
-    placeholder: "min. 100 Zeichen..."
+    placeholder: "mindestens 100 Zeichen..."
     sent: "Banane wurde gesendet!"
     messageTooShort: "Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein."
     alreadyGiven: "{name} hat bereits eine Banane von dir erhalten."
@@ -1553,7 +1553,7 @@ profile:
   mediation:
     title: "Mediationsanfrage für {name}"
     info: "Wir finden es toll, dass du dir Unterstützung suchst, um ein Thema mit dem Foodsaver anzusprechen. Das Mediationsteam kann hierbei als Vermittler auftreten und helfen das eure Gespräche auf Augenhöhe und mit gegenseitigem Respekt geführt werden. Du erreichst die lokale Mediations-AG unter folgender E-Mail-Adresse:"
-    no_group: "Leider gibt es für den Stammbezirk des foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird."
+    no_group: "Leider gibt es für den Stammbezirk des Foodsavers noch keine lokale Mediationsgruppe. Du kannst das Thema bei einem Gruppentreffen oder im Forum ansprechen, so dass ein lokales Mediationsteam gewählt wird."
   report:
     title: "Meldung über {name}"
     info: "Bitte gib Datum, Ort und Uhrzeit des Vorfalles an. Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist."
@@ -1565,14 +1565,14 @@ profile:
     oldReportButtonTextPart2: "Wendet euch bei Bedarf an die lokale Meldegruppe in eurem Bezirk."
     oldReportButtonTextPart3: "Mehr Infos zum Meldesystem findet ihr"
     reporterHasNoReportGroup: "Du kannst die technische Unterstützung des Meldesystemes nicht nutzen, da es in deinem Bezirk keine lokale Meldegruppe gibt."
-    noReportGroup: "Du kannst die technische Unterstützung des Meldesystems nicht nutzen, da für den Bezirk des foodsaver diese nicht aktiviert ist."
+    noReportGroup: "Du kannst die technische Unterstützung des Meldesystems nicht nutzen, da für den Bezirk des Foodsaver diese nicht aktiviert ist."
     reportedAdminNoArbitration: "Du kannst keine Meldung gegen {name} absetzen, da er/sie Admin der lokalen Meldegruppe seines Bezirkes ist und dort keine Schiedstelle existiert."
     reporterAdminNoArbitration: "Du bist Admin der lokalen Meldegruppe und da es keine lokale Schiedsstelle gibt, kannst du keine Meldung absetzen."
-    repAdminAgainstArbAdmin: "Du bist Admin des Meldebearbeitungsteams und willst einen Admin der Schiedsstelle melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
-    arbAdminAgainstRepAdmin: "Du bist Admin der Schiedstelle und willst einen Admin der Meldebearbeitung Melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
+    repAdminAgainstArbAdmin: "Du bist Admin des Meldebearbeitungsteams und willst einen Admin der Schiedsstelle melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
+    arbAdminAgainstRepAdmin: "Du bist Admin der Schiedstelle und willst einen Admin der Meldebearbeitung melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
 search:
   title: "Suche"
-  placeholder: "Suche Bekannte, Gruppen, Betriebe, Bezirke"
+  placeholder: "Suche Personen, Gruppen, Betriebe, ..."
   forum: "Nach Titel suchen..."
   thread-title-only: "Es werden nur Titel durchsucht, nicht der Text von Beiträgen."
   noresults: "Es konnten keine Ergebnisse gefunden werden"
@@ -2029,7 +2029,7 @@ becomeregion:
   enterregion:
     main: "Deinem ersten Bezirk kannst du beitreten, indem du dich über die Auswahl 'Europa' bis zu deinem Bezirk durchklickst.<br> Solltest du keinen Bezirk für dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst du dir überlegen einen eigenen Bezirk zu starten. Lies dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu"
     region_link_text: "Bezirke gründen oder reaktivieren"
-    text1: "gut durch. Wenn du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an"
+    text1: "gut durch. Wenn du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine E-Mail an"
     text2: "Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können dir aber bei Fragen zu Bezirken weiterhelfen."
   save: "Speichern"
 
@@ -2048,7 +2048,7 @@ email_template:
     no_notification_link: "Willst du diese Art von Benachrichtigungen nicht mehr bekommen?"
     you_can: "Du kannst unter"
     notification: "Benachrichtigungen"
-    nomail: "einstellen, welche Mails du erhältst."
+    nomail: "einstellen, welche E-Mails du erhältst."
   newsletter:
     unsubscribe: "Möchtest du keinen Newsletter mehr erhalten?"
     linktext: "Klicke hier zum Abbestellen."
@@ -2107,8 +2107,8 @@ poll:
   scope_description_0: "Alle verifizierten und nicht verifizierten Foodsaver aus dem Bezirk / der Gruppe"
   scope_description_1: "Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe"
   scope_description_2: "Alle Betriebsverantwortlichen aus dem Bezirk, die momentan für einen Betrieb verantwortlich sind"
-  scope_description_3: "Alle Botschafter aus dem Bezirk / der Gruppe"
-  scope_description_4: "Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung"
+  scope_description_3: "Alle Botschafter*innen aus dem Bezirk / der Gruppe"
+  scope_description_4: "Alle verifizierten Foodsaver mit dem Stammbezirk der Abstimmung"
   type: "Art der Abstimmung"
   type_description_0: "Auswählen (nur eine Option kann gewählt werden)"
   type_description_1: "Ankreuzen (mehrere Optionen können gewählt werden)"
