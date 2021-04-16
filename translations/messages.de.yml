@@ -411,23 +411,23 @@ salutation:
   "3": "Liebe*r"
 
 login:
-  submit_btn: "Login"
-  topbar: "Login"
-  form_title: "Anmelden"
+  submit_btn: "Einloggen"
+  topbar: "Einloggen"
+  form_title: "Willkommen zurück"
   email_address: "E-Mail-Adresse"
   password: "Passwort"
   forgotten_password_label: "Passwort vergessen?"
-  login_button_label: "Anmelden"
+  login_button_label: "Einloggen"
   save_password: "Passwort speichern"
   steady_login: "Eingeloggt bleiben (verwendet Cookies)"
-  error_no_email: "Bitte gib deine E-Mail-Adresse an!"
-  error_no_password: "Bitte gib dein Passwort an!"
-  error_no_auth: "E-Mail-Adresse oder Passwort sind falsch"
-  success: "<b>Wunderschönen Tag dir, {user_name}!</b><br />Du hast dich erfolgreich eingeloggt und wirst gleich weitergeleitet."
+  error_no_email: "Bitte gib deine E-Mail-Adresse an."
+  error_no_password: "Bitte gib dein Passwort an."
+  error_no_auth: "Leider finden wir diese E-Mail-Adresse oder Passwort nicht, bitte versuche es noch einmal."
+  success: "<b>Wunderschönen Tag dir, {user_name}!</b>"
   logout: "Logout"
   pwreset:
     bread: "Password zurücksetzen"
-    wrongMail: "Sorry, hast du dich vielleicht bei deiner E-Mail-Adresse vertippt?"
+    wrongMail: "Leider finden wir diese E-Mail-Adresse nicht, bitte versuche es noch einmal."
     mailSent: "Alles klar, dir wurde ein Link zum Passwortändern per E-Mail zugeschickt."
     success: "Prima, Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt einloggen."
     tooShort: "Sorry, Dein gewähltes Passwort ist zu kurz."
@@ -436,13 +436,13 @@ login:
     mismatch: "Sorry, die Passwörter stimmen nicht überein."
 
 register:
-  topbar: "Mach mit!"
+  topbar: "Mitmachen"
   title: "Registrierung"
   register_button_label: "Registrieren"
   mail_hint: "Wichtig: Achte auf korrekte Schreibweise!"
   requiredFields: "Pflichteingabe"
   birthdate_hint: "Nähere Information findest du in der <a href=\"?page=legal\" target=\"_blank\">Datenschutzerklärung</a> in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver."
-  login_email: "Deine E-Mail-Adresse"
+  login_email: "E-Mail-Adresse"
   email_required: "Eine E-Mail-Adresse wird benötigt."
   email_invalid: "Die E-Mail-Adresse ist ungültig."
   login_passwd1: "Passwort (mindestens 8 Zeichen)"
@@ -1531,7 +1531,7 @@ profile:
   regions: "{name} ist Foodsaver in"
   ambRegions: "{name} ist {role} für"
   homeRegion: "Stammbezirk von {name}"
-  workgroups: "{name} ist Ansprechperson für folgende Arbeitsgruppen"
+  workgroups: "{name} engagiert sich als Ansprechperson für die Gruppen"
   sleeping: "{name} hat eine Schlafmütze auf unbestimmte Zeit"
   sleepinfo: "{name} hat eine Schlafmütze auf vom {from} bis {until}"
   about_me_intern: "Über sich selbst"
@@ -1572,7 +1572,7 @@ profile:
     arbAdminAgainstRepAdmin: "Du bist Admin der Schiedstelle und willst einen Admin der Meldebearbeitung Melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
 search:
   title: "Suche"
-  placeholder: "Suche..."
+  placeholder: "Suche Bekannte, Gruppen, Betriebe, Bezirke"
   forum: "Nach Titel suchen..."
   thread-title-only: "Es werden nur Titel durchsucht, nicht der Text von Beiträgen."
   noresults: "Es konnten keine Ergebnisse gefunden werden"
@@ -2015,8 +2015,8 @@ tablesorter:
   entriespp: "Einträge pro Seite"
 
 password:
-  reset: "Passwort zurücksetzen"
-  insertmail: "Bitte trage hier deine E-Mail-Adresse ein, mit welcher du auf foodsharing.de angemeldet bist."
+  reset: "Passwort vergessen?"
+  insertmail: "Gib deine E-Mail-Adresse ein, um dein Passwort zurückzusetzen."
 
 sidenav:
   superregional: "Überregionale Gruppen"
@@ -2182,7 +2182,7 @@ startpage:
       Wir retten Lebensmittel in privaten Haushalten sowie von Betrieben - gemeinschaftlich, nachhaltig & wertschätzend.
       Wir verstehen und als Bildungspolitische Bewegung."
   call_to_action:
-    title: "Mach mit"
+    title: "Mitmachen"
     text: "Wir entstanden 2012, mittlerweile sind wir eine internationale Bewegung  mit über 200.000 Nutzer*innen
       in Deutschland, Österreich, Schweiz und weiteren europäischen Ländern."
   member:
