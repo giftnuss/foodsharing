@@ -49,9 +49,9 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$tablesToSkip = implode(',', [
 			"'fs_bezirk'",
-		    "'fs_content'",
-		    "'fs_fetchweight'",
-		    "'fs_bezirk_closure'",
+			"'fs_content'",
+			"'fs_fetchweight'",
+			"'fs_bezirk_closure'",
 			"'phinxlog'"
 		]);
 
