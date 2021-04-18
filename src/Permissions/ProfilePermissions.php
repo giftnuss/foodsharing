@@ -72,7 +72,7 @@ class ProfilePermissions
 
 	public function maySeePrivateEmail(int $userId): bool
 	{
-		return $this->session->may('orga');
+		return $this->session->id() === $userId || $this->session->may('orga');
 	}
 
 	public function maySeeLastLogin(int $userId): bool
