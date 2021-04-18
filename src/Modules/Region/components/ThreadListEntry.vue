@@ -14,7 +14,8 @@
           class="thread-main px-1 mr-1 align-self-center flex-grow-1 flex-shrink-1 flex-sm-noshrink"
           :class="{'font-weight-bold': thread.isSticky}"
         >
-          <span class="thread-title d-inline">
+          <span class="thread-title d-inline" :class="titleClass">
+            <i v-if="isClosed" class="fas fa-lock" :title="$i18n('forum.thread.closed')" />
             {{ thread.title }}
           </span>
         </div>
@@ -39,6 +40,7 @@ import Avatar from '@/components/Avatar'
 
 import dateFnsParseISO from 'date-fns/parseISO'
 import { url } from '@/urls'
+import ThreadStatus from './ThreadStatus'
 
 export default {
   components: { Avatar },
@@ -51,6 +53,12 @@ export default {
     },
     lastPostDate () {
       return dateFnsParseISO(this.thread.lastPost.createdAt)
+    },
+    isClosed () {
+      return this.thread.status === ThreadStatus.THREAD_CLOSED
+    },
+    titleClass () {
+      return this.isClosed ? 'thread-title-closed' : ''
     },
   },
 }
@@ -68,6 +76,9 @@ export default {
 
   .thread-title {
     font-size: 1.1em;
+  }
+  .thread-title-closed {
+    color: gray;
   }
 
   .last-post {

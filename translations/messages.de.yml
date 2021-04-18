@@ -878,6 +878,7 @@ forum:
     title: "Titel"
     close: "Thread schließen"
     open: "Thread wieder öffnen"
+    closed: "geschlossener Thread"
   hold_back_for_moderation: "Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt."
   no_posts: "Bisher keine Beiträge vorhanden"
   no_threads: "Noch keine Themen gepostet"
