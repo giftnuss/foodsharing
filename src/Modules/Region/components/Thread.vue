@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div
     :class="{disabledLoading: isLoading}"
@@ -17,6 +18,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row m-1">
           <h4 class="text-truncate">
+            <i v-if="!isOpen" class="fas fa-lock mr-1" :title="$i18n('forum.thread.closed')" />
             {{ title }}
           </h4>
         </div>
