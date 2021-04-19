@@ -99,14 +99,17 @@ final class ContentPermissions
 		if ($this->session->may('orga')) {
 			return true;
 		}
-		if ($this->session->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
-			return in_array($id, $this->QUIZ_CONTENT_IDS['id']);
+		if ($this->session->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)
+			&& in_array($id, $this->QUIZ_CONTENT_IDS['id'])) {
+			return true;
 		}
-		if ($this->session->isAdminFor(RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP)) {
-			return in_array($id, $this->PR_PARTNER_AND_TEAM_CONTENT_IDS['id']);
+		if ($this->session->isAdminFor(RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP)
+			&& in_array($id, $this->PR_PARTNER_AND_TEAM_CONTENT_IDS['id'])) {
+			return true;
 		}
-		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)) {
-			return in_array($id, $this->START_CONTENT_IDS['id']);
+		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)
+			&& in_array($id, $this->START_CONTENT_IDS['id'])) {
+			return true;
 		}
 
 		return false;
