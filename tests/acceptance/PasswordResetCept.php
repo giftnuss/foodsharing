@@ -10,11 +10,11 @@ $user = $I->createFoodsaver();
 $I->amOnPage('/?page=login');
 $I->click('Passwort vergessen?');
 
-$I->see('Bitte trage hier deine E-Mail-Adresse ein');
+$I->see('Gib deine E-Mail-Adresse ein');
 $I->fillField('#email', $user['email']);
 $I->click('Senden');
 
-$I->see('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt');
+$I->see('Alles klar, dir wurde ein Link zum Passwortändern per E-Mail zugeschickt');
 
 // recieve a mail
 $I->expectNumMails(1, 5);

@@ -124,7 +124,7 @@ class WorkGroupCest
 		$I->fillField('#erfahrung', 'My Experience');
 		$I->selectOption('#zeit', '1-2 Stunden');
 		$I->click('Bewerbung absenden');
-		$I->waitForText('Bewerbung wurde abgeschickt!');
+		$I->waitForText('Bewerbung wurde abgeschickt');
 		$I->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionMember['id'], 'bezirk_id' => $this->testGroupApply['id']]);
 		$admin = $I->haveFriend('admin');
 		$admin->does(function (AcceptanceTester $I) {

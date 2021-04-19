@@ -23,7 +23,7 @@ $min_time = new DateTime('-1 second', new DateTimeZone('Europe/Berlin')); /* mic
 $I->click('Essenskorb veröffentlichen');
 
 $I->waitForElementVisible('#pulse-info', 4);
-$I->see('Danke Dir! Der Essenskorb wurde veröffentlicht!');
+$I->see('Danke Dir, der Essenskorb wurde veröffentlicht');
 $max_time = new DateTime('+1 second', new DateTimeZone('Europe/Berlin'));
 
 $id = $I->grabFromDatabase('fs_basket', 'id', ['foodsaver_id' => $foodsaver['id'], 'description' => $description]);

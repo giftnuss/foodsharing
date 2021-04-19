@@ -71,7 +71,7 @@ $I->see($newStoreName . '-Team');
 $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
-$I->click('BV-Ansicht aktivieren');
+$I->click('Ansicht für Betriebsverantwortliche aktivieren');
 $I->waitForElement('#new-foodsaver-id', 5);
 
 $I->fillField('#new-foodsaver-id', $bibC['id']);
@@ -103,7 +103,7 @@ $I->waitForElement('button.reload-page', 5);
 $I->click('button.reload-page');
 
 /* Promote another store manager */
-$I->click('BV-Ansicht aktivieren');
+$I->click('Ansicht für Betriebsverantwortliche aktivieren');
 $I->click($bibC['name'] . ' ' . $bibC['nachname'], '.store-team');
 $I->click('Verantwortlich machen', '.member-actions');
 $I->waitForActiveAPICalls();
@@ -131,9 +131,9 @@ $I->see($foodsaverE['name'] . ' ' . $foodsaverE['nachname'], '.store-team');
 $I->see($foodsaverF['name'] . ' ' . $foodsaverF['nachname'], '.store-team');
 
 /* Demote store manager to regular team member */
-$I->click('BV-Ansicht aktivieren');
+$I->click('Ansicht für Betriebsverantwortliche aktivieren');
 $I->click($bibC['name'] . ' ' . $bibC['nachname'], '.store-team');
-$I->click('Als BV entfernen', '.member-actions');
+$I->click('Als Betriebsverantwortliche*n entfernen', '.member-actions');
 $I->seeInPopup('die Verantwortung für diesen Betrieb entziehen?');
 $I->cancelPopup();
 $I->seeInDatabase('fs_betrieb_team', [
@@ -142,7 +142,7 @@ $I->seeInDatabase('fs_betrieb_team', [
 	'verantwortlich' => 1,
 ]);
 $I->waitForElement('.store-team tr.table-warning[data-pk="' . $bibC['id'] . '"]', 2);
-$I->click('Als BV entfernen', '.member-actions');
+$I->click('Als Betriebsverantwortliche*n entfernen', '.member-actions');
 $I->seeInPopup('die Verantwortung für diesen Betrieb entziehen?');
 $I->acceptPopup();
 $I->waitForActiveAPICalls();

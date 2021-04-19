@@ -33,6 +33,6 @@ $I->waitForElementVisible('#passcheck', 5);
 $I->fillField('#passcheck', $pass);
 $I->executeJS("$('button:contains(Bestätigen)').trigger('click')");
 $I->waitForElementVisible('#pulse-info', 5);
-$I->see('Deine E-Mail-Adresse wurde geändert!');
+$I->see('Deine E-Mail-Adresse wurde geändert');
 
 $I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'email' => $newmail]);

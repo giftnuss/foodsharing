@@ -38,7 +38,7 @@ class RegisterCest
 
 		// click signup, then press next on the first dialog
 
-		$I->click('Mach mit!');
+		$I->click('Mitmachen');
 		$I->click('Jetzt registrieren!');
 		$I->waitForElementVisible('#step1', 4);
 		$I->fillField('#email', $this->email);
@@ -106,7 +106,7 @@ class RegisterCest
 
 		// click signup, then press next on the first dialog
 
-		$I->click('Mach mit!');
+		$I->click('Mitmachen');
 		$I->click('Jetzt registrieren!');
 		$I->waitForElementVisible('#step1', 4);
 		$I->fillField('#email', $this->email);

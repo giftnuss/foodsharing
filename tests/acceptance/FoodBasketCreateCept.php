@@ -39,7 +39,7 @@ $I->fillField('description', $description);
 $I->click('Essenskorb veröffentlichen');
 
 $I->waitForElementVisible('#pulse-info', 4);
-$I->see('Danke Dir! Der Essenskorb wurde veröffentlicht!');
+$I->see('Danke dir, der Essenskorb wurde veröffentlicht');
 
 $I->seeInDatabase('fs_basket', [
 	'description' => $description,

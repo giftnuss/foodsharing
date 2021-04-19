@@ -65,8 +65,8 @@ class FoodSharePointCest
 		$user = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->login($this->responsible['email']);
 		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']));
-		$I->waitForText('Schreibe hier ein paar grundsätzliche Infos über den Fairteiler!');
-		$I->waitForText('Insbesondere wann er zugänglich/geöffnet ist');
+		$I->waitForText('Schreibe hier ein paar grundsätzliche Infos über den Fairteiler');
+		$I->waitForText('insbesondere wann er zugänglich/geöffnet ist');
 		$I->fillField('#name', 'The BEST fairshare point!');
 		$I->addInTagSelect($user['name'], '#fspmanagers');
 		$I->click('Speichern');
