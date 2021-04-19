@@ -1383,7 +1383,7 @@ pickup:
   edit_recurring_pickups: Modifier les collectes régulières
   delete_not_empty: Des Foodsavers sont encore inscrits. Tu pourras supprimer ces
     collectes seulement après que chacun se soit retirés.
-  really_delete_date: Souhaites-tu vraiment supprimer la collecte du {date} ?
+  really_delete_date: Souhaites-tu vraiment supprimer la collecte du {date} ?
   delete_title: Supprimer la collecte
   take_empty_slot: Sélectionner cette collecte
   join_agree: Oui, je m'engage
@@ -1414,7 +1414,7 @@ pickup:
   kick: Retirer
   confirm: Confirmer
   call: Appeler
-  to_be_confirmed: Cette collecte doit encore être validée par un·e Responsable Magasin.
+  to_be_confirmed: Cette collecte doit encore être validée par un·e Responsable magasin.
 events:
   bread: Évènements
   rsvp:
