@@ -876,9 +876,9 @@ forum:
       Hier kannst du es freischalten und alle Foodsaver darüber informieren.
     stick: "Thema fixieren"
     title: "Titel"
-    close: "Thread schließen"
-    open: "Thread wieder öffnen"
-    closed: "geschlossener Thread"
+    close: "Thema schließen"
+    open: "Thema wieder öffnen"
+    closed: "geschlossenes Thema"
   hold_back_for_moderation: "Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter / Moderator es bestätigt."
   no_posts: "Bisher keine Beiträge vorhanden"
   no_threads: "Noch keine Themen gepostet"

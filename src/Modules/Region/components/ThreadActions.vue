@@ -35,26 +35,26 @@
           {{ $i18n('forum.thread.stick') }}
         </a>
       </b-form-checkbox>
-      <b-button
+      <b-link
         v-if="mayModerate && isOpen"
         small
-        class="ml-2 btn-sm"
+        class="ml-2 fas fa-lock"
         data-toggle="tooltip"
         data-placement="bottom"
         @click="$emit('close')"
       >
         {{ $i18n('forum.thread.close') }}
-      </b-button>
-      <b-button
+      </b-link>
+      <b-link
         v-if="mayModerate && !isOpen"
         small
-        class="ml-2 btn-sm"
+        class="ml-2 fas fa-lock-open"
         data-toggle="tooltip"
         data-placement="bottom"
         @click="$emit('open')"
       >
         {{ $i18n('forum.thread.open') }}
-      </b-button>
+      </b-link>
     </div>
   </div>
 </template>

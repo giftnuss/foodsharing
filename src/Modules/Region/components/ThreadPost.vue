@@ -50,6 +50,7 @@
           />
           <div class="col text-right">
             <ThreadPostActions
+              v-if="mayReply"
               :reactions="reactions"
               :may-delete="mayDelete"
               :may-edit="mayEdit"
@@ -86,6 +87,7 @@ export default {
     mayEdit: { type: Boolean, default: false },
     mayDelete: { type: Boolean, default: false },
     isLoading: { type: Boolean, default: true },
+    mayReply: { type: Boolean, default: true },
   },
   computed: {
     isMe () {

@@ -79,6 +79,7 @@
         :may-edit="false"
         :is-loading="loadingPosts.indexOf(post.id) != -1"
         :created-at="new Date(post.createdAt)"
+        :may-reply="isOpen"
         @delete="deletePost(post)"
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
