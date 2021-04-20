@@ -1023,6 +1023,11 @@ email_template:
   impress:
     general_information_requirements: According to § 5 TMG
     title: Imprint
+    address: "foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n represented\
+      \ by:\n\n Frank Bowinkelmann \n Contact:\n e-mail: info@foodsharing.de\n Register\
+      \ entry:\n\n Entry in the register of associations\n Register court: Amtsgericht\
+      \ Köln\n Register number: VR 17439\n Responsible for the content according to\
+      \ § 55 section 2 RStV:\n  Frank Bowinkelmann"
   newsletter:
     linktext: Click here to unsubscribe!
     unsubscribe: Do you want to unsubscribe from our newsletter?
@@ -1423,6 +1428,7 @@ store:
     no-sm: There are no store managers for this store yet.
     got-it: The responsibles have been informed of your request and will get in touch
       with you.
+    no-duplicate: There is already a request.
   sm:
     reallyRemove: Do you really want to remove {name} from the store team?
     removeFromTeam: Remove from the team
@@ -2184,6 +2190,11 @@ startpage:
     title: Donate
   demands:
     title: Demands
+    text: "Action plan with Deutsche Umwelthilfe\npublished on the 6th foodsharing\
+      \ anniversary on December 12th, 2018. In order to save Germany from breaking\
+      \ \nits word again — as with the climate protection targets for 2020 — foodsharing\
+      \ and Deutsche Umwelthilfe are using \na concrete action plan to show the measures\
+      \ without which the goal of halving food waste cannot be achieved.\n"
   near_you:
     text3:
       part2: Find regions close to you
@@ -2193,16 +2204,27 @@ startpage:
         can leave or pick up food for free.
       part2: map
     title: Close to you
+    text2: "There are also food baskets — you can use them to offer your own surplus\
+      \ groceries and to collect groceries from others.\n"
   store:
     title: as a company
+    text: Do you work in a supermarket, restaurant, canteen ...? Register your business
+      and save food.
   member:
     title: as a member
+    text: Share your surplus groceries with the foodsharing community or save groceries
+      from companies.
   call_to_action:
     title: Join
   mission:
     title: Mission
   call_to_action_button: Join
   welcome_text: Welcome to foodsharing
+  towns:
+    title: foodsharing cities
+  this_is_how_it_works: This is how it works
+  more_infos: Learn more
+  slogan: Together for more food appreciation
 date_short:
   Sunday: Sun
   Saturday: Sat
