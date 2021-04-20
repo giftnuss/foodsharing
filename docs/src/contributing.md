@@ -8,32 +8,45 @@ If you have any questions please reach out to us via slack: [yunity slack](https
 
 If you found an issue on the foodsharing website, then please submit it to our GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
 
-If you feel comfortable submitting a fix (or if you like to try ;) ) too, then follow the next section.
+If you feel comfortable submitting a fix or if you would like to try and learn by doing and other team members in the process, follow the next section.
 
 ## Submitting a change
 
 ### Becoming a member
 
-As an “member” on Gitlab you can
- * create and push to branches within the repository (except master)
- * see confidential issues
- * set labels to issues
- * assign yourself to issues (to tell others that they do not need to start on them)
-After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* Button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
+As a “member” on our versioning system Gitlab you can
+ * create and push to branches within the repository (except master).
+ * see confidential issues.
+ * set labels to issues.
+ * assign yourself to issues (to tell others that they do not need to start on them).
+After creating a GitLab account and applying for membership, write a few introducing lines about yourself on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
 
 ### Working on an issue
 
 You can either submit your own issue and work on it or work on existing issues. Issues that are suitable for newcomers are labeled as [starter tasks](https://gitlab.com/foodsharing-dev/foodsharing/issues?label_name%5B%5D=starter+task).
 
-To work on an issue:
+One-Time-Setup:
+1. [Create a GitLab account](https://gitlab.com/users/sign_up) or use an existing account.
+2. Create an SSH key, e.g. via terminal command `ssh-keygen -t rsa -b 4096`. Then, as a name, enter `foodsharing_ssh_key`, for example. A passphrase is optional. 
+3. Upload the generated key to your GitLab [user profile keys](https://gitlab.com/-/profile/keys) as a new entry to authenticate your computer to the foodsharing GitLab via SSH.
+4. [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+5. Clone the git repository by executing: `git clone git@gitlab.com:foodsharing-dev/foodsharing.git`
 
-1. Check if there is an issue for the change in the GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
-  * This is a seperate project as it is public and the repo is not.
-  * If you are just submitting a very small change or a doc fix, then don't worry about creating an issue.
-2. Create a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier.
-  * For example, the issue number `56` would have a branch named `56-some-descriptive-words`.
-  * Optionally, add your name to the branch name; for example, `56-nicksellen-some-descriptive-words`.
-3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci.skip` which disables running the build and test on the Gitlab server.
+To make a desired change, please work on your own branch named after the issue number (skip the following paragraph, if you already know how to use Git & collaborate in GitLab):
+
+1. Check if an existing issue has already been created for the change in the public GitLab [issue backlog](https://gitlab.com/foodsharing-dev/foodsharing/issues).
+  * Hint: If you are just submitting a very small change or a doc fix, then don't worry about creating an issue.
+  * If you find an issue, only work on it if there is no assignee yet in the issue details bar at the right. If there is an assignee, someone else is already working on the ticket. For a bigger change, discuss if you can help out or split the work into sub-tasks.
+  * Click the "assign yourself" button in the right bar of the issue to indicate that you started working on the issue.
+2. Update to the newest changes on master branch by executing `git checkout master` and `git pull`.
+3. Create a new local git branch for your local changes, prefixed with the issue number, by executing the command `git checkout -b <issue-id><your-name (optional)><some-descriptive-words>`.
+  * For example, the issue number `56` could have a branch named `56-nick-sellen-some-descriptive-words`.
+  * Hint: Best practice is to work in your own branch and never in the master branch. You can create more than one branch at once to work on different issues simultaneously.
+4. Make your changes and push them via the following commands.
+  1. `git status` to see which files changed.
+  2. `git add <desired files>` (`git add .` will add all changed files to version control.), 
+  3. `git commit -m "<description of change>"` and `git push -u origin HEAD` initially to set the upstream name equal to the branch name you created locally. 
+  4. If your changes are very small or only about documentation, you can consider using the push option `git push -o ci.skip` which disables running the build and test on the Gitlab server.
 
 To submit your change:
 
@@ -50,18 +63,23 @@ The next steps will be:
 
 * An approver will get back to you with feedback or change requests. Please have some patience if this does not happen right away.
 * Once the approver considers your changeset ready to be made, they will merge it into the master branch.
-* The master branch will be deployed automatically to [beta.foodsharing.de](https://beta.foodsharing.de), where you can try it out (uses production database).
+* The newest version of the master branch will be deployed automatically to [beta.foodsharing.de](https://beta.foodsharing.de) after some time, where you can try it out (uses production database).
   * See [environments on GitLab](https://gitlab.com/foodsharing-dev/foodsharing/environments) for an overview of the different environments.
 * Hang around and see if people in #foodsharing-beta on [Slack](https://yunity.slack.com/) find any issues, etc.
 * At some point in the future, once a few changes have been collected, they will all be deployed to production.
 
 ## Testing
 
-You can run the tests with `./scripts/test`,
-for your second and following runs, you can use `./scripts/test-rerun` which runs much quicker
+It is recommended to only run individual tests locally. To do so, pass the path to that test as an argument to the test script,
+e.g.: `./scripts/test tests/acceptance/LoginCept.php`.
+
+If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
+
+You can run all the tests at once with `./scripts/test` locally (a lot of time and good hardware required).
+For your second and following runs, you can use `./scripts/test-rerun` which runs much quicker.
 (as long as we keep writing the tests to run idempotently, please do!).
 
-So far, end to end tests (called _acceptance tests_ in codeception) work nicely.
+So far, end-to-end tests (called _acceptance tests_ in codeception) work nicely.
 They run with a headless Firefox and Selenium inside the Docker setup and they are run on CI build too.
 
 We are restructuring the code to enable unit testing.  
@@ -70,8 +88,3 @@ Related issue: [Incremental refactor](https://gitlab.com/foodsharing-dev/foodsha
 The state created during testing is not thrown away, and you can visit the test app
 [in your browser](http://localhost:28080/), and it has
 [its own phpmyadmin](http://localhost:28081/).
-
-If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
-
-If you just want to run one test, pass the path to that test as an argument,
-e.g.: `./scripts/test tests/acceptance/LoginCept.php`.

@@ -1,7 +1,7 @@
 
 ## API
 
-Application interface
+Application Programming Interface
 
 ## DOM
 
@@ -62,4 +62,3 @@ Version Control System
 ## WIP
 
 Work In Progress (prefix for e.g. merge requests)
-

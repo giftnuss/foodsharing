@@ -1,4 +1,4 @@
 # Contributing
 
 Head over to
-[devdocs.foodsharing.network/contributing.html](https://devdocs.foodsharing.network).
+[devdocs.foodsharing.network](https://devdocs.foodsharing.network/contributing.html).

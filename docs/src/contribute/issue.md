@@ -25,15 +25,15 @@ previous issues and found [issue
 changes, e.g. doc fixes and typos.
 
  - check the comments (if there are any). Perhaps someone is already working on this issue or added some useful info
- - (only once:) at this point you *have* to [join our slack channel](./resources/links.md): <https://yunity.slack.com/> so that we can grant you access to the foodsharing source code
+ - (only once:) At this point, you *have* to [join our slack channel](./resources/links.md): <https://yunity.slack.com/> so that we can grant you access to the foodsharing source code.
  - (only once:) the git repository and follow the [instructions for a local installation]()
- - if your change consists of several smaller commits, create a new designated branch and reference the issue
-    - in our case the branch would be named ``89-create-emails-for-invitations``
-    - optionally add your gitlab handle or real name: ``89-inktrap-create-emails-for-invitations``
- - make the edits *only* in your new branch. Preferably commit in smaller intervals so that we can keep track of the progress and see whats happening
- - ensure the tests pass locally by calling ``./scripts/test``
+ - Best practice is to create a new designated branch and reference the issue for your changes.
+    - In our case, you create the branch for the ticket number 89 with the Git command ``git checkout -b 89-create-emails-for-invitations``.
+    - Optionally, add your GitLab handle or real name: ``89-inktrap-create-emails-for-invitations``
+ - make the edits *only* in your new branch. Preferably commit in smaller intervals so that we can keep track of the progress and see what's happening.
+ - Ensure the tests pass locally by calling ``./scripts/test``.
  - [create a MR](https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html). If your change requires multiple commits or is bigger, add the ``WIP:`` prefix to the name of the MR
- - wait! somebody will ask you some questions, and if everything goes well, will approve your MR
+ - Wait. Somebody will ask you some questions, and if everything goes well, will approve your merge request.
 
 Congratulations! You just contributed to foodsharing and made a good community better!
 
