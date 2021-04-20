@@ -2,3 +2,8 @@ email: 电子邮件地址
 plz: 邮编(从地图上自动生成)
 address: 地址
 name: 名称
+description: 描述
+desc: 描述
+edit: 更改
+nachname: 姓氏
+geb_datum: 出生日期
