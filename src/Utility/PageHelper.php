@@ -281,6 +281,7 @@ final class PageHelper
 			'isFsDotAt' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
 			'srcRevision' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'isBeta' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'beta.foodsharing') !== false,
+			'isDev' => strpos($_SERVER['SERVER_NAME'] ?? BASE_URL, 'localhost') !== false,
 		];
 
 		return $this->twig->render(

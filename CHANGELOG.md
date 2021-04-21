@@ -10,6 +10,7 @@
 - Added a partners page for foodsharing.at !1931 @alex.simm
 - Redesign startpage !1778 @chriswalg
 - Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
+- Added a link in Footer.vue to our beta testing issues on beta and dev !1961 @chriswalg
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm

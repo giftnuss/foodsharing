@@ -284,10 +284,20 @@
           class="d-flex justify-content-end"
         >
           <p>
-            <a :href="$url('releaseNotes')">
+            <a
+              v-if="isBeta || isDev"
+              :href="betaTestingIssues"
+            >
+              {{ $i18n('footer.beta_testing_issues') }}
+            </a>
+            <a
+              v-else
+              :href="$url('releaseNotes')"
+            >
               {{ $i18n('releases.2021-03') }}
               <i class="fas fa-magic social_icons" />
             </a>
+            <br>
             <a :href="$url('devdocs')">
               {{ $i18n('footer.it_devdocs') }}
             </a>
@@ -327,6 +337,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isDev: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     revisionLink () {
@@ -346,6 +360,9 @@ export default {
     },
     youtubeUrl () {
       return 'https://www.youtube.com/user/foodsharingtv'
+    },
+    betaTestingIssues () {
+      return 'https://gitlab.com/foodsharing-dev/foodsharing-beta-testing/-/issues'
     },
     externalLink () {
       return 'nofollow noreferrer noopener'
