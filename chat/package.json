@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/randomstring": "^1.1.6",
-    "@types/socket.io-client": "^1.4.33",
+    "@types/socket.io-client": "^1.4.36",
     "@types/superagent": "^4.1.8",
     "@types/tape": "^4.13.0",
     "@typescript-eslint/eslint-plugin": "^3.5.0",
