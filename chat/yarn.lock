@@ -126,10 +126,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/restify@^8.4.2":
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/@types/restify/-/restify-8.4.2.tgz#f071d971d10ad79f6073dfbbeed7729d68760e7f"
-  integrity sha512-jdXB0IrsigqMccBMs3a2kBUUAlYTbjLCbfC63sI00rwTXc+B4UQniGkAJCGS27CAxwkJFAFXzpk0msOQtQ1RXA==
+"@types/restify@^8.5.1":
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/@types/restify/-/restify-8.5.1.tgz#79096d69486956be83a40fb066323255f20a424f"
+  integrity sha512-Attj9MJ4A3zQayIt03R7T+rUNGfTjwgCX38XINWZMKwmTvqSQgc0sQp014KMG2fl57SI/isO32VWxhNT9wu0UA==
   dependencies:
     "@types/bunyan" "*"
     "@types/formidable" "*"
