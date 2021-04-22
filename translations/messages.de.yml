@@ -307,7 +307,7 @@ group:
     everybody: "Jede*r darf sich bewerben."
     open: "Jede*r kann sich ohne Bewerbung einklinken."
     fetch_count: "Wie viele Abholungen sollte ein*e Bewerber*in gemacht haben?"
-    banana_count: "Wie viele Vertrauensbananen braucht ein Mitglied?"
+    banana_count: "Wie viele Vertrauensbananen braucht ein*e Bewerber*in?"
     banana_count_errors:
       min: "Niemand kann weniger als {{ limit }} Vertrauensbananen haben."
       max: "Bitte erwarte nicht mehr als {{ limit }} Vertrauensbananen."
