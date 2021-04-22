@@ -77,7 +77,7 @@
                 v-model="startDate"
                 today-button
                 class="mb-2"
-                v-bind="labelsCalendar[locale] || {}"
+                v-bind="labelsCalendar || {}"
                 :locale="locale"
                 :min="new Date()"
                 :state="$v.startDateTime.$error ? false : null"
@@ -89,7 +89,7 @@
                 id="input-startdatetime"
                 v-model="startTime"
                 :locale="locale"
-                v-bind="labelsTimepicker[locale] || {}"
+                v-bind="labelsTimepicker || {}"
                 :state="$v.startDateTime.$error ? false : null"
                 @input="updateDateStartTimes"
               />
@@ -112,7 +112,7 @@
                 id="input-enddate"
                 v-model="endDate"
                 class="mb-2"
-                v-bind="labelsCalendar[locale] || {}"
+                v-bind="labelsCalendar || {}"
                 :locale="locale"
                 :min="startDate"
                 :state="$v.endDateTime.$error ? false : null"
@@ -124,7 +124,7 @@
                 id="input-enddatetime"
                 v-model="endTime"
                 :locale="locale"
-                v-bind="labelsTimepicker[locale] || {}"
+                v-bind="labelsTimepicker || {}"
                 :state="$v.endDateTime.$error ? false : null"
                 @input="updateDateEndTimes"
               />
@@ -259,7 +259,7 @@ import {
 } from 'bootstrap-vue'
 import { createPoll } from '@/api/voting'
 import { pulseError } from '@/script'
-import i18n from '@/i18n'
+import i18n, { locale } from '@/i18n'
 import { required, minLength } from 'vuelidate/lib/validators'
 
 const EDIT_TIME_HOURS = 1
@@ -312,34 +312,30 @@ export default {
       description: '',
       numOptions: 3,
       options: Array(3).fill(''),
-      locale: 'de',
+      locale: locale,
       labelsTimepicker: {
-        de: {
-          labelHours: i18n('timepicker.labelHours'),
-          labelMinutes: i18n('timepicker.labelMinutes'),
-          labelSeconds: i18n('timepicker.labelSeconds'),
-          labelIncrement: i18n('timepicker.labelIncrement'),
-          labelDecrement: i18n('timepicker.labelDecrement'),
-          labelSelected: i18n('timepicker.labelSelected'),
-          labelNoTimeSelected: i18n('timepicker.labelNoTimeSelected'),
-          labelCloseButton: i18n('timepicker.labelCloseButton'),
-        },
+        labelHours: i18n('timepicker.labelHours'),
+        labelMinutes: i18n('timepicker.labelMinutes'),
+        labelSeconds: i18n('timepicker.labelSeconds'),
+        labelIncrement: i18n('timepicker.labelIncrement'),
+        labelDecrement: i18n('timepicker.labelDecrement'),
+        labelSelected: i18n('timepicker.labelSelected'),
+        labelNoTimeSelected: i18n('timepicker.labelNoTimeSelected'),
+        labelCloseButton: i18n('timepicker.labelCloseButton'),
       },
       labelsCalendar: {
-        de: {
-          labelPrevYear: i18n('calendar.labelPrevYear'),
-          labelPrevMonth: i18n('calendar.labelPrevMonth'),
-          labelCurrentMonth: i18n('calendar.labelCurrentMonth'),
-          labelNextMonth: i18n('calendar.labelNextMonth'),
-          labelNextYear: i18n('calendar.labelNextYear'),
-          labelToday: i18n('calendar.labelToday'),
-          labelSelected: i18n('calendar.labelSelected'),
-          labelNoDateSelected: i18n('calendar.labelNoDateSelected'),
-          labelCalendar: i18n('calendar.labelCalendar'),
-          labelNav: i18n('calendar.labelNav'),
-          labelHelp: i18n('calendar.labelHelp'),
-          labelTodayButton: i18n('calendar.labelToday'),
-        },
+        labelPrevYear: i18n('calendar.labelPrevYear'),
+        labelPrevMonth: i18n('calendar.labelPrevMonth'),
+        labelCurrentMonth: i18n('calendar.labelCurrentMonth'),
+        labelNextMonth: i18n('calendar.labelNextMonth'),
+        labelNextYear: i18n('calendar.labelNextYear'),
+        labelToday: i18n('calendar.labelToday'),
+        labelSelected: i18n('calendar.labelSelected'),
+        labelNoDateSelected: i18n('calendar.labelNoDateSelected'),
+        labelCalendar: i18n('calendar.labelCalendar'),
+        labelNav: i18n('calendar.labelNav'),
+        labelHelp: i18n('calendar.labelHelp'),
+        labelTodayButton: i18n('calendar.labelToday'),
       },
     }
   },

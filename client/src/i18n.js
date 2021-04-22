@@ -4,7 +4,7 @@ import en from '@translations/messages.en.yml'
 import fr from '@translations/messages.fr.yml'
 import objectPath from 'object-path'
 
-const { locale } = serverData
+export const { locale } = serverData
 
 export default function (key, variables = {}) {
   let src = de
