@@ -42,7 +42,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^4.0.1",
-    "node-dev": "^4.3.0",
+    "node-dev": "^6.7.0",
     "request": "^2.88.2",
     "socket.io-client": "^2.3.0",
     "superagent": "^6.1.0",
