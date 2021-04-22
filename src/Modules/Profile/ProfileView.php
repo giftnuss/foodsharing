@@ -230,6 +230,12 @@ class ProfileView extends View
 		$fsId = intval($this->foodsaver['id']);
 		$opt = '';
 
+		if ($this->session->id() == $fsId) {
+			$opt .= '<li><a href="/?page=settings">'
+				. '<i class="fas fa-pencil-alt fa-fw"></i>' . $this->translator->trans('settings.header')
+				. '</a></li>';
+		}
+
 		if ($profileVisitorMayAdminThisFoodsharer) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $fsId . '">'
 				. '<i class="fas fa-pencil-alt fa-fw"></i>' . $this->translator->trans('profile.nav.edit')
