@@ -31,6 +31,7 @@
 - Fixed restart behavior for some docker containers !1937 @\_fridtjof_
 - Update some backend dependencies !1942 @chriswalg
 - Update minishlink WebPush to version 6 !1745 @peter.toennies
+- Update chat dependencies !1962 @chriswalg
 
 # 2021-04-09 Hotfix
 
