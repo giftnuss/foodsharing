@@ -451,7 +451,7 @@ email_template:
     or: ou
     main: Pour modifier cette fonction, nous aurions besoin de plus de programmateur.ice.s,
       de testeur.euse.s et d'aide de ton secteur géographique
-    support_mail: it@foodsharing.network (en anglais)
+    support_mail: it@foodsharing.network (en allemand/anglais)
     link: https://devdocs.foodsharing.network/it-tasks.html (en allemand)
   dont_respond:
     you_can: Tu peux ci-dessous choisir
@@ -550,7 +550,7 @@ foodsaver:
     sm_success: Tu es désormais Responsable Magasin (RM) !
     fs_success: Tu es désormais collecteur.ice !
     quiz_error: "Erreur ! Les données du Quiz n'ont pas pu être chargées. Contacte\
-      \ le support informatique (en anglais) :"
+      \ l'assistance informatique (en allemand ou en anglais) :"
     needs_rv: Tu dois accepter les conditions de participation !
     rv: J'ai lu et accepte les conditions de participation.
     needs_region: Choisis le secteur géographique dans lequel tu souhaiterais devenir
@@ -1685,6 +1685,7 @@ footer:
   about_us: À propos
   call_to_action: Rejoindre
   denns_at_alt_text: Denn's Biomarkt
+  beta_testing_issues: Tâches de test de la version bêta
 search:
   persons: Personnes
   groups: Groupes
