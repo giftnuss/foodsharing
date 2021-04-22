@@ -6,6 +6,7 @@ import 'leaflet.awesome-markers'
 import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { initMap } from '@/mapUtils'
+import { locale } from '@/i18n'
 
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
@@ -47,7 +48,7 @@ export function attachAddressPicker () {
         const prop = feature.properties
         return [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
       },
-      lang: 'de',
+      lang: locale,
     },
   )
 

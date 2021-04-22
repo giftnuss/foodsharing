@@ -5,6 +5,7 @@
 - Added a button that allows removing users from the email bounce list !1927 @alex.simm
 - For unconfirmed pickup slots, explain in the popup text that a store manager still has to confirm it. !1949 @blinry
 - Forum threads can now be closed !1851 #724 @alex.simm
+- Add french translation to language chooser !1964 @alex.simm
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
