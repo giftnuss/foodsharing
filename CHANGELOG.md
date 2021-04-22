@@ -7,6 +7,7 @@
 - Forum threads can now be closed !1851 #724 @alex.simm
 - Add french translation to language chooser !1964 @alex.simm
 - Introduces Push Notifications for the Android App !1647 !1976 @dthulke
+- Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
