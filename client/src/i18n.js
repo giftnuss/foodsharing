@@ -1,12 +1,19 @@
 import serverData from '@/server-data'
 import de from '@translations/messages.de.yml'
 import en from '@translations/messages.en.yml'
+import fr from '@translations/messages.fr.yml'
 import objectPath from 'object-path'
 
 const { locale } = serverData
 
 export default function (key, variables = {}) {
-  const src = 'en'.localeCompare(locale || 'en') === 0 ? en : de
+  let src = de
+  if ('en'.localeCompare(locale || 'en') === 0) {
+    src = en
+  } else if ('fr'.localeCompare(locale || 'fr') === 0) {
+    src = fr
+  }
+
   let message = objectPath.get(src, key)
   if (!message) {
     message = objectPath.get(de, key)

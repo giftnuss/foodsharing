@@ -44,6 +44,7 @@ export default {
       languages: [
         { value: 'de', text: 'Deutsch' },
         { value: 'en', text: 'English' },
+        { value: 'fr', text: 'Français' },
       ],
       loading: true,
     }
