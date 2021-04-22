@@ -461,7 +461,7 @@ class ProfileView extends View
 		if (($basketCount = $this->foodsaver['basketCount']) > 0) {
 			$label = $this->translator->trans('profile.stats.baskets');
 			$stats[] = '<a href="/essenskoerbe">'
-				. $this->renderStat($basketCount, 'x', $label, 'stat_basketcount')
+				. $this->renderStat($basketCount, '', $label, 'stat_basketcount')
 			. '</a>';
 		}
 
