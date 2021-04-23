@@ -519,7 +519,7 @@ terminology:
     f: "Orgamensch"
     d: "Orgamensch"
   ambassadors: "Botschafter*innen"
-  ambassador_forum: "BotschafterInnenforum"
+  ambassador_forum: "Botschafter*innenforum"
   admins: "Administrator*innen"
   welcomeAdmins: "Begrüßungsteam"
   votingAdmins: "Abstimmungsteam"
@@ -900,7 +900,7 @@ chat:
   error_loading_messages: "Das Nachladen von Nachrichten ist fehlgeschlagen."
   error_sending_message: "Das Senden der Nachricht ist fehlgeschlagen."
   empty_message: "Du musst erst eine Nachricht eingeben."
-  empty_recipients: "Du musst erst noch Empfänger*Innen auswählen."
+  empty_recipients: "Du musst erst noch Empfänger*innen auswählen."
   confirm_draft_discard: |
     Du wechselst zu einer neuen Unterhaltung. Der Text im Antwortfeld wird dabei verworfen.
 
@@ -1272,7 +1272,7 @@ foodsaver:
     to_fs: "Werde Foodsaver*in"
     needs_fs: "Du musst erst Foodsaver werden"
     needs_sm: "Du musst erst Betriebsverantwortliche*r werden"
-    needs_fs_quiz: "Du darfst zunächst das Foodsaver Quiz machen"
+    needs_fs_quiz: "Du darfst zunächst das Foodsaver-Quiz machen"
     to_sm: "Werde Betriebsverantwortliche*r"
     to_amb: "Werde Botschafter*in"
     amb_region: "In welcher Region möchtest du Botschafter*in werden?"
@@ -1756,7 +1756,7 @@ basket:
     <br><br>
     Diese wird benötigt, um einen Essenskorb mittels Pinnadel auf der Karte darzustellen.
     <br><br>
-    Die Postanschrift deiner Adresse ist dabei für EssenskorbnutzerInnen nicht sichtbar.
+    Die Postanschrift deiner Adresse ist dabei für Essenskorbnutzer*innen nicht sichtbar.
   go-to-settings: "Zu den Einstellungen"
   public-info: "Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar."
   no-desc: "Bitte gib eine Beschreibung ein."
@@ -2076,7 +2076,7 @@ email_template:
   information: "Info"
   manual_slots_get_ignored: "Diese Benachrichtigung wird aktuell leider nur bei automatischen Abholterminen versendet. Manuell angelegte, überschriebene oder gelöschte Slots werden daher nicht berücksichtigt."
   help_needed:
-    main: "Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus deinem Bezirk."
+    main: "Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer Programmierer*innen, Tester und Helfer aus deinem Bezirk."
     link: "https://devdocs.foodsharing.network/it-tasks.html"
     or: "oder"
     support_mail: "it@foodsharing.network"
