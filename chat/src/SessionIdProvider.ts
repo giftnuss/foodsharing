@@ -1,6 +1,7 @@
 import * as util from 'util';
 import * as fs from 'fs';
 import { Tedis } from 'tedis';
+import path = require('path');
 
 export class SessionIdProvider {
     private readonly redisClient = new Tedis({
@@ -11,7 +12,7 @@ export class SessionIdProvider {
     /**
      * This script can be uploaded to Redis to retrieve all current session ids of a user.
      */
-    private readonly sessionIdsScriptFilename = `${__dirname}/../session-ids.lua`;
+    private readonly sessionIdsScriptFilename = path.join(__dirname, '../', 'session-ids.lua');
     /**
      * Once uploaded to Redis, the script is identified by an SHA hash. This can be used to tell Redis to execute the
      * script.
