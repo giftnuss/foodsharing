@@ -133,9 +133,10 @@ class StoreRestController extends AbstractFOSRestController
 			throw new AccessDeniedHttpException();
 		}
 
+		$author = $this->session->id();
 		$text = $paramFetcher->get('text');
 		$note = [
-			'foodsaver_id' => $this->session->id(),
+			'foodsaver_id' => $author,
 			'betrieb_id' => $storeId,
 			'text' => $text,
 			'zeit' => date('Y-m-d H:i:s'),
@@ -149,6 +150,10 @@ class StoreRestController extends AbstractFOSRestController
 		$userPhoto = $this->session->user('photo');
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
+		$teamWithoutPostAuthor = array_filter($team, function ($x) use ($author) {
+			return $x['id'] !== $author;
+		});
+
 		$bellData = Bell::create(
 			'store_wallpost_title',
 			'store_wallpost',
@@ -161,7 +166,7 @@ class StoreRestController extends AbstractFOSRestController
 			BellType::createIdentifier(BellType::STORE_WALL_POST, $storeId)
 		);
 
-		$this->bellGateway->addBell($team, $bellData);
+		$this->bellGateway->addBell($teamWithoutPostAuthor, $bellData);
 
 		$note = $this->storeGateway->getStoreWallpost($storeId, $postId);
 		$note['name'] = $userName;

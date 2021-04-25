@@ -71,7 +71,9 @@ The next steps will be:
 ## Testing
 
 It is recommended to only run individual tests locally. To do so, pass the path to that test as an argument to the test script,
-e.g.: `./scripts/test tests/acceptance/LoginCept.php`.
+e.g.: `./scripts/test tests/acceptance/LoginCept.php` to run only the tests within this test bundle.
+
+You can run a single test by `./scripts/test <path>:<method_name> <parameters>`, e.g. `./scripts/test tests/api/StoreApiCest.php:canWriteStoreWallpostAndGetAllPosts --debug`.
 
 If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
 
