@@ -35,3 +35,35 @@ nachname: Apellido
 add: añadir
 name: Nombre
 geb_datum: Fecha de nacimiento
+newsletter: Boletín
+compose_body: Mensaje
+pass1: Tu nueva contraseña deseada
+infotype: Notificación
+dateend: Fecha de fin
+online_type: Este evento tendrá lugar fuera de línea o en línea?
+opt: Opciones
+dashboard:
+  checkAddress: Por favor, comprueba tu dirección! Las coordenadas no se han podido
+    determinar.
+  mail_activation_error_title: Correo electrónico no confirmado
+  mail_activation_error_body:
+    part_4: Cambiar tu correo electrónico
+  save_selection: Guardar los ajustes
+  title: el cuadro de mando
+search:
+  persons: personas
+  myregions: Mis distritos
+  mygroups: Mis grupos
+  groups: grupos
+reports:
+  reason: razón
+  message: descripción
+month:
+  short:
+    "12": diciembre
+    "11": noviembre
+    "10": octubre
+    "9": septiembre
+    "8": agosto
+    "7": julio
+    "6": junio
