@@ -265,6 +265,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 		$CreateWorkgroupWG = $I->createWorkingGroup('AG Anlegen', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
 		$I->createWorkingGroup('Support', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::IT_SUPPORT_GROUP]);
+		$I->createWorkingGroup('Öffentlichkeitsarbeit - Partner + Teamseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP]);
+		$I->createWorkingGroup('Öffentlichkeitsarbeit - Startseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_START_PAGE]);
 
 		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 
@@ -331,8 +333,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
 		$I->addRegionMember($ag_startpage, $userStoreManager['id']);
 		$I->addRegionAdmin($ag_startpage, $userStoreManager['id']);
+		$I->addRegionMember($ag_startpage, $userbot['id']);
+		$I->addRegionAdmin($ag_startpage, $userbot['id']);
 		$I->addRegionMember($ag_partnerandteam, $userStoreManager2['id']);
 		$I->addRegionAdmin($ag_partnerandteam, $userStoreManager2['id']);
+		$I->addRegionMember($ag_partnerandteam, $userbot['id']);
+		$I->addRegionAdmin($ag_partnerandteam, $userbot['id']);
 		$I->addRegionMember($region_vorstand, $userbot['id']);
 		$I->addRegionMember($ag_aktive, $userbot['id']);
 
