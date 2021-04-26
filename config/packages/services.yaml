@@ -104,3 +104,6 @@ services:
             $url: !php/const BBB_DOMAIN
             $secret: !php/const BBB_SECRET
             $dialin: !php/const BBB_DIALIN
+
+    Welp\IcalBundle\Factory\Factory:
+        alias: welp_ical.factory

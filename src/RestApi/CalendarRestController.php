@@ -30,13 +30,13 @@ class CalendarRestController extends AbstractFOSRestController
 	public function __construct(
 		Session $session,
 		SettingsGateway $settingsGateway,
-		ProfileGateway $profileGateway
+		ProfileGateway $profileGateway,
+		Factory $icalFactory
 	) {
 		$this->session = $session;
 		$this->settingsGateway = $settingsGateway;
 		$this->profileGateway = $profileGateway;
-
-		$this->icalFactory = new Factory();
+		$this->icalFactory = $icalFactory;
 	}
 
 	/**

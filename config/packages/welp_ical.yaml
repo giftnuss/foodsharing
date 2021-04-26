@@ -1,0 +1,3 @@
+welp_ical:
+  default_timezone: "Europe/Berlin"
+  default_prodid: "-//Foodsharing//Calendar//DE"

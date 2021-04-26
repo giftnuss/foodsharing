@@ -424,7 +424,8 @@ class SettingsView extends View
 	public function settingsCalendar()
 	{
 		return $this->vueComponent('calendar', 'Calendar', [
-			'baseUrl' => WEBCAL_URL . '/api/calendar/'
+			'baseUrlWebcal' => WEBCAL_URL . '/api/calendar/',
+			'baseUrlHttp' => BASE_URL . '/api/calendar/'
 		]);
 	}
 

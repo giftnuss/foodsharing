@@ -35,6 +35,11 @@
               {{ webcalPickups }}
             </a>
           </li>
+          <li class="pb-1">
+            <a :href="httpPickups">
+              {{ httpPickups }}
+            </a>
+          </li>
         </ul>
 
         <b-alert variant="warning" show>
@@ -58,7 +63,8 @@ import { BAlert, BButton } from 'bootstrap-vue'
 export default {
   components: { BAlert, BButton },
   props: {
-    baseUrl: { type: String, required: true },
+    baseUrlWebcal: { type: String, required: true },
+    baseUrlHttp: { type: String, required: true },
   },
   data () {
     return {
@@ -67,7 +73,10 @@ export default {
   },
   computed: {
     webcalPickups () {
-      return this.baseUrl + this.token
+      return this.baseUrlWebcal + this.token
+    },
+    httpPickups () {
+      return this.baseUrlHttp + this.token
     },
   },
   async mounted () {
