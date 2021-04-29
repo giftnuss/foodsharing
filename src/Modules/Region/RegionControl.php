@@ -104,37 +104,45 @@ final class RegionControl extends Control
 		$isHomeDistrict = $this->isHomeDistrict($region);
 
 		$menu = [
-			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=forum'],
-			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=events'],
-			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
-			['name' => 'terminology.polls', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=polls'],
+			'forum' => ['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=forum'],
+			'events' => ['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=events'],
+			'polls' => ['name' => 'terminology.polls', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=polls'],
+			'members' => ['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
 		];
 
 		if (!$isWorkGroup && $this->forumPermissions->mayAccessAmbassadorBoard($regionId)) {
-			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
+			$menu['ambassador_forum'] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
 		}
 
 		if (!$isWorkGroup && $this->regionPermissions->maySetRegionOptions($regionId)) {
-			$menu[] = ['name' => 'terminology.options', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=options'];
+			$menu['options'] = ['name' => 'terminology.options', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=options'];
 		}
 
 		if ($isWorkGroup) {
-			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=wall'];
+			$menu['wall'] = ['name' => 'menu.entry.wall', 'href' => '?page=bezirk&bid=' . $regionId . '&sub=wall'];
 			if ($region['has_children'] === 1) {
-				$menu[] = ['name' => 'terminology.subgroups', 'href' => '/?page=groups&p=' . $regionId];
+				$menu['subgroups'] = ['name' => 'terminology.subgroups', 'href' => '/?page=groups&p=' . $regionId];
 			}
 			if ($this->session->isAdminFor($regionId) || $this->session->may('orga')) {
-				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . $regionId];
+				$menu['workingGroupEdit'] = ['name' => 'menu.entry.workingGroupEdit', 'href' => '/?page=groups&sub=edit&id=' . $regionId];
 			}
 		} else {
-			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=fairteiler'];
-			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . $regionId];
-			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=statistic'];
+			$menu['fsp'] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=fairteiler'];
+			$menu['groups'] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . $regionId];
+			$menu['statistic'] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=statistic'];
+
+			$menu['stores'] = ['name' => 'menu.entry.stores', 'href' => '?page=betrieb&bid=' . $regionId];
+
+			if ($this->session->isAdminFor($regionId)) {
+				$menu['fsList'] = ['name' => 'menu.entry.fs', 'href' => '?page=foodsaver&bid=' . $regionId];
+				$menu['passports'] = ['name' => 'menu.entry.ids', 'href' => '?page=passgen&bid=' . $regionId];
+			}
+
 			if ($this->reportPermissions->mayAccessReportGroupReports($regionId)) {
-				$menu[] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
+				$menu['reports'] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
 			}
 			if ($this->reportPermissions->mayAccessArbitrationReports($regionId)) {
-				$menu[] = ['name' => 'terminology.arbitration', 'href' => '/?page=report&bid=' . $regionId];
+				$menu['arbitration'] = ['name' => 'terminology.arbitration', 'href' => '/?page=report&bid=' . $regionId];
 			}
 		}
 
@@ -144,12 +152,12 @@ final class RegionControl extends Control
 				$regionOrGroupString .= ' (' . $regionMailInfo[0]['count'] . ')';
 			}
 
-			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
+			$menu['mailbox'] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
 		}
 
 		if ($this->mayAccessApplications($regionId)) {
 			if ($requests = $this->gateway->listRequests($regionId)) {
-				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=applications'];
+				$menu['applications'] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=applications'];
 			}
 		}
 
@@ -164,6 +172,8 @@ final class RegionControl extends Control
 				'imageUrl' => $this->imageService->img($fs['photo'], 50, 'q')
 			];
 		};
+
+		$menu = $this->sortMenuItems($menu);
 
 		$viewdata['isRegion'] = !$isWorkGroup;
 		$stat = [
@@ -200,6 +210,43 @@ final class RegionControl extends Control
 		];
 
 		return $viewdata;
+	}
+
+	private function sortMenuItems(array $menu): array
+	{
+		$menuOrderMaster = [
+			['key' => 'wall', 'position' => 0],
+			['key' => 'forum', 'position' => 1],
+			['key' => 'ambassador_forum', 'position' => 2],
+			['key' => 'stores', 'position' => 3],
+			['key' => 'groups', 'position' => 4],
+			['key' => 'events', 'position' => 5],
+			['key' => 'fsp', 'position' => 6],
+			['key' => 'conferences', 'position' => 7],
+			['key' => 'polls', 'position' => 8],
+			['key' => 'members', 'position' => 9],
+			['key' => 'statistic', 'position' => 10],
+			['key' => 'fsList', 'position' => 11],
+			['key' => 'passports', 'position' => 12],
+			['key' => 'mailbox', 'position' => 13],
+			['key' => 'workingGroupEdit', 'position' => 14],
+			['key' => 'reports', 'position' => 15],
+			['key' => 'applications', 'position' => 16],
+			['key' => 'arbitration', 'position' => 17],
+			['key' => 'reports', 'position' => 18],
+			['key' => 'subgroups', 'position' => 19],
+			['key' => 'options', 'position' => 20],
+		];
+
+		$orderedMenu = [];
+
+		foreach ($menuOrderMaster as $value) {
+			if (array_key_exists($value['key'], $menu)) {
+				$orderedMenu[] = $menu[$value['key']];
+			}
+		}
+
+		return $orderedMenu;
 	}
 
 	private function isWorkGroup(array $region): bool

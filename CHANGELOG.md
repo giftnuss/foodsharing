@@ -12,6 +12,7 @@
 - Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
 - Added a link in Footer.vue to our beta testing issues on beta and dev !1961 @chriswalg
 - Make the own personal address visible for the logged in user, as it is already for ORGA #994 !1957 @leonja
+- Harmonise the order of links to subpages in the header line and on the page of the work group (AG) and region (Bezirk) #1080 !1954 @andreasklumpp1
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm

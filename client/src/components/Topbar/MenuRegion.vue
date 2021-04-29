@@ -47,27 +47,6 @@
           <i class="far fa-comment-dots" />{{ $i18n('menu.entry.BOTforum') }}
         </a>
         <a
-          :href="$url('foodsharepoints', region.id)"
-          role="menuitem"
-          class="dropdown-item sub"
-        >
-          <i class="fas fa-recycle" />{{ $i18n('terminology.fsp') }}
-        </a>
-        <a
-          :href="$url('members', region.id)"
-          role="menuitem"
-          class="dropdown-item sub"
-        >
-          <i class="fas fa-user" />{{ $i18n('menu.entry.members') }}
-        </a>
-        <a
-          :href="$url('events', region.id)"
-          role="menuitem"
-          class="dropdown-item sub"
-        >
-          <i class="far fa-calendar-alt" />{{ $i18n('menu.entry.events') }}
-        </a>
-        <a
           :href="$url('stores', region.id)"
           role="menuitem"
           class="dropdown-item sub"
@@ -82,11 +61,18 @@
           <i class="fas fa-users" />{{ $i18n('terminology.groups') }}
         </a>
         <a
-          :href="$url('statistic', region.id)"
+          :href="$url('events', region.id)"
           role="menuitem"
           class="dropdown-item sub"
         >
-          <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
+          <i class="far fa-calendar-alt" />{{ $i18n('menu.entry.events') }}
+        </a>
+        <a
+          :href="$url('foodsharepoints', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-recycle" />{{ $i18n('terminology.fsp') }}
         </a>
         <a
           v-if="region.hasConference"
@@ -103,6 +89,20 @@
           class="dropdown-item sub"
         >
           <i class="fas fa-poll-h" />{{ $i18n('terminology.polls') }}
+        </a>
+        <a
+          :href="$url('members', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-user" />{{ $i18n('menu.entry.members') }}
+        </a>
+        <a
+          :href="$url('statistic', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
         </a>
         <a
           v-if="region.mayHandleFoodsaverRegionMenu"

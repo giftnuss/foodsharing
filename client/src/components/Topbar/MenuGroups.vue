@@ -35,13 +35,6 @@
           :accordion="alwaysOpen ? null : 'groups'"
         >
           <a
-            :href="$url('forum', group.id)"
-            role="menuitem"
-            class="dropdown-item sub"
-          >
-            <i class="far fa-comment-alt" /> {{ $i18n('menu.entry.forum') }}
-          </a>
-          <a
             :href="$url('wall', group.id)"
             role="menuitem"
             class="dropdown-item sub"
@@ -49,18 +42,18 @@
             <i class="fas fa-bullhorn" /> {{ $i18n('menu.entry.wall') }}
           </a>
           <a
+            :href="$url('forum', group.id)"
+            role="menuitem"
+            class="dropdown-item sub"
+          >
+            <i class="far fa-comment-alt" /> {{ $i18n('menu.entry.forum') }}
+          </a>
+          <a
             :href="$url('events', group.id)"
             role="menuitem"
             class="dropdown-item sub"
           >
             <i class="far fa-calendar-alt" /> {{ $i18n('menu.entry.events') }}
-          </a>
-          <a
-            :href="$url('members', group.id)"
-            role="menuitem"
-            class="dropdown-item sub"
-          >
-            <i class="fas fa-user" /> {{ $i18n('menu.entry.members') }}
           </a>
           <a
             href="#"
@@ -76,6 +69,13 @@
             class="dropdown-item sub"
           >
             <i class="fas fa-poll-h" /> {{ $i18n('terminology.polls') }}
+          </a>
+          <a
+            :href="$url('members', group.id)"
+            role="menuitem"
+            class="dropdown-item sub"
+          >
+            <i class="fas fa-user" /> {{ $i18n('menu.entry.members') }}
           </a>
           <a
             v-if="group.isAdmin"
