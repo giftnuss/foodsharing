@@ -8,6 +8,7 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 class BusinessCardControl extends Control
 {
 	private BusinessCardGateway $gateway;
+	private const MAX_CHAR_PER_LINE = 45;
 
 	public function __construct(BusinessCardView $view, BusinessCardGateway $gateway)
 	{
@@ -24,9 +25,8 @@ class BusinessCardControl extends Control
 		$this->pageHelper->addContent($this->view->top(), CNT_TOP);
 
 		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
-			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				$this->flashMessageHelper->error($this->translator->trans('bcard.error.length'));
-				$this->routeHelper->go('/?page=settings');
+			if (mb_strlen($data['anschrift']) >= self::MAX_CHAR_PER_LINE || mb_strlen($data['plz'] . ' ' . $data['stadt']) >= self::MAX_CHAR_PER_LINE) {
+				$this->flashMessageHelper->info($this->translator->trans('bcard.info.address_shortened'));
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
 				$this->flashMessageHelper->error($this->translator->trans('bcard.error.phone'));
@@ -108,6 +108,17 @@ class BusinessCardControl extends Control
 		}
 		$data['subtitle'] = $this->displayedRole($role, $data['geschlecht'], $mailbox['name']);
 
+		if (mb_strlen($data['anschrift']) > self::MAX_CHAR_PER_LINE) {
+			$street_number_pos = $this->index_of_first_number($data['anschrift']);
+			$length_street_number = mb_strlen($data['anschrift']) - $street_number_pos;
+			$data['anschrift'] = mb_substr($data['anschrift'], 0, (self::MAX_CHAR_PER_LINE - $length_street_number - 4)) . '... ' .
+				mb_substr($data['anschrift'], $street_number_pos, $length_street_number);
+		}
+
+		if (mb_strlen($data['plz'] . ' ' . $data['stadt']) >= self::MAX_CHAR_PER_LINE) {
+			$data['stadt'] = mb_substr($data['stadt'], 0, (self::MAX_CHAR_PER_LINE - strlen($data['plz']) - 4)) . '...';
+		}
+
 		$this->generatePdf($data, $role);
 	}
 
@@ -185,5 +196,16 @@ class BusinessCardControl extends Control
 		}
 
 		$pdf->Output('bcard-' . $role . '.pdf', 'D');
+	}
+
+	private function index_of_first_number($text)
+	{
+		preg_match('/\d/u', $text, $m, PREG_OFFSET_CAPTURE);
+		if (sizeof($m)) {
+			return mb_strlen(substr($text, 0, $m[0][1]));
+		}
+
+		// return position of the first number in the string
+		return strlen($text);
 	}
 }

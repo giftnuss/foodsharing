@@ -254,10 +254,11 @@ bcard:
   desc: "Wähle hier, für welchen Bezirk bzw. für welche Rolle du deine Visitenkarte erstellen möchtest!"
   choose: "Du musst eine Option wählen"
   error:
-    length: "Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben."
     phone: "Du musst eine gültige Telefonnummer angegeben haben, um deine Visitenkarte zu generieren."
     verified: "Du musst verifiziert sein, um deine Visitenkarte generieren zu können."
   generate: "Visitenkarten erstellen"
+  info:
+    address_shortened: "Deine Anschrift und/oder PLZ + Ort werden auf der Visitenkarte gekürzt ausgegeben."
 
 group:
   name: "Name"
