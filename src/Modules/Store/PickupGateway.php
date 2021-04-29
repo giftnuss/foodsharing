@@ -276,9 +276,9 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$date = $this->db->fetchValue('
 			SELECT  MIN(`date`)
-		
+
 			FROM    `fs_abholer`
-		
+
 			WHERE   `betrieb_id` = :storeId
 			AND     `confirmed` = 0
 			AND     `date` > :date
@@ -304,7 +304,7 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
 		$from = $from ?? Carbon::now();
-		$extendedToDate = Carbon::tomorrow()->add($intervalFuturePickupSignup);
+		$extendedToDate = Carbon::now()->add($intervalFuturePickupSignup);
 		$to = $to ?? $extendedToDate;
 		$regularSlots = $this->getRegularPickups($storeId);
 		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $oneTimeSlotTo);
