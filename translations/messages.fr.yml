@@ -176,6 +176,9 @@ bcard:
   claim: Générez, imprimez et découpez facilement ici…
   card: Votre carte de visite foodsharing
   title: Générateur de carte de visite
+  info:
+    address_shortened: Ton adresse ou ton code postal + ville seront raccourcis sur
+      la carte de visite.
 pass:
   notGenerated: Votre badge n'a pas pu être généré.
   noPhoto: "Les personnes suivantes n'ont pas encore importé de photo :"
@@ -369,6 +372,16 @@ settings:
       \ abonne-toi à un des deux liens ci-dessous.\n"
     title: Ton calendrier de collectes
     menu: Calendrier
+    delete_token:
+      message: Ceci invalidera le lien précédent. Voulez-vous vraiment supprimer le
+        jeton ?
+      title: Supprimer le jeton
+      button: Supprimer le jeton
+    create_token:
+      message: Vous ne pouvez créer qu'un seul jeton à la fois. Un nouveau jeton écrase
+        le lien précédent et le rend invalide. Voulez-vous vraiment en créer un nouveau ?
+      title: Créer un nouveau jeton
+      button: Créer un nouveau jeton
   push:
     disabled: Les notifications push on été désactivées
     disable: Désactiver les notifications push
@@ -649,6 +662,9 @@ forum:
       \ en informer tous les Foodsaver.\n"
     delete: Supprimer la discussion
     activate: Activer la discussion
+    closed: sujet fermé
+    open: Rouvrir le sujet
+    close: Fermer le sujet
   follow:
     email: comme courriel
     bell: par la cloche
