@@ -61,8 +61,8 @@ class StoreTransactions
 		$store = new CreateStoreData();
 		$store->name = $legacyGlobalData['name'];
 		$store->regionId = $legacyGlobalData['bezirk_id'];
-		$store->lat = $legacyGlobalData['lat'];
-		$store->lon = $legacyGlobalData['lon'];
+		$store->lat = floatval($legacyGlobalData['lat']);
+		$store->lon = floatval($legacyGlobalData['lon']);
 		$store->str = $legacyGlobalData['str'];
 		$store->zip = $legacyGlobalData['plz'];
 		$store->city = $legacyGlobalData['stadt'];
@@ -92,8 +92,8 @@ class StoreTransactions
 		if ($legacyGlobalData['hsnr'] ?? '') {
 			$address .= ' ' . $legacyGlobalData['hsnr'];
 		}
-		$store->lat = $legacyGlobalData['lat'];
-		$store->lon = $legacyGlobalData['lon'];
+		$store->lat = floatval($legacyGlobalData['lat']);
+		$store->lon = floatval($legacyGlobalData['lon']);
 		$store->str = $address;
 		$store->zip = $legacyGlobalData['plz'];
 		$store->city = $legacyGlobalData['stadt'];

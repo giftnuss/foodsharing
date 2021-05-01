@@ -136,7 +136,8 @@ class StoreXhr extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betriebe = $this->storeGateway->setbezirkids($ids)) {
+				$betriebe = $this->storeGateway->listStoresWithoutRegion($ids);
+				if (!empty($betriebe)) {
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');

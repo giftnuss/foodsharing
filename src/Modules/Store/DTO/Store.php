@@ -2,14 +2,16 @@
 
 namespace Foodsharing\Modules\Store\DTO;
 
+use DateTime;
+
 class Store
 {
 	public int $id;
 	public string $name;
 	public int $regionId;
 
-	public string $lat;
-	public string $lon;
+	public float $lat;
+	public float $lon;
 	public string $str;
 	public string $hsnr = '';
 	public string $zip;
@@ -29,7 +31,7 @@ class Store
 	public string $contactPhone;
 	public string $contactFax;
 	public string $contactEmail;
-	public ?\DateTime $cooperationStart;
+	public ?DateTime $cooperationStart;
 
 	public int $calendarInterval;
 	public int $weight;
@@ -37,5 +39,5 @@ class Store
 	public int $publicity;
 	public int $sticker;
 
-	public \DateTime $updatedAt;
+	public DateTime $updatedAt;
 }

@@ -1037,4 +1037,14 @@ class StoreGateway extends BaseGateway
 				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $regionIds) . ')
 		');
 	}
+
+	public function listStoresWithoutRegion(array $storeIds): array
+	{
+		return $this->db->fetchAll(
+			'SELECT id,name,bezirk_id,str,hsnr
+			FROM fs_betrieb
+			WHERE id IN(' . implode(',', $storeIds) . ')
+			AND ( bezirk_id = 0 OR bezirk_id IS NULL)'
+		);
+	}
 }
