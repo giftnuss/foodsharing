@@ -34,6 +34,8 @@ services:
       - db
       - redis
       - mailqueuerunner
+      - chat
+      - influxdb
     environment:
       FS_ENV: test
     volumes:
@@ -52,6 +54,7 @@ services:
     depends_on:
       - db
       - redis
+      - maildev
     environment:
       FS_ENV: test
 
@@ -65,6 +68,8 @@ services:
       - db
       - redis
       - mailqueuerunner
+      - chat
+      - influxdb
     environment:
       FS_ENV: test
     volumes:
@@ -124,6 +129,8 @@ services:
     container_name: foodsharing_ci_selenium
     image: registry.gitlab.com/foodsharing-dev/images/selenium:1.4
     shm_size: 512M
+    depends_on:
+      - web
     expose:
       - 4444
     volumes:

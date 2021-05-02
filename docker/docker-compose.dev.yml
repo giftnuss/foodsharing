@@ -31,6 +31,7 @@ services:
       - redis
       - mailqueuerunner
       - influxdb
+      - chat
     volumes:
       - ../:/app:delegated
       - ./conf/app/php.dev.${FS_PLATFORM}.ini:/usr/local/etc/php/conf.d/dev-config.ini:cached
@@ -67,6 +68,7 @@ services:
     depends_on:
       - db
       - redis
+      - maildev
     working_dir: /app
     volumes:
       - ../:/app:delegated
