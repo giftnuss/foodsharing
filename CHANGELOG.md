@@ -24,7 +24,7 @@
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm
 - Prevent a timeout when creating polls for many users !1893 @alex.simm
-- Allow orga to apply for working groups !1953 #1050 @alex.simm
+- Allow orga to apply for working groups !1953 !1973 #1050 @alex.simm
 - Excluded wall post author from store team members notified about new post !1960 @fabian.rudolf
 - Business Card generation: show info and cut of the rest if street or plz + city is longer than 49 characters #834 !1489 @treee111
 - Fix permissions for content IDs @alex.simm
