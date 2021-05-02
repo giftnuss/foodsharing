@@ -28,11 +28,6 @@ services:
     working_dir: /app
     expose:
       - 9000
-    links:
-      - redis:redis
-      - db:db
-      - chat:chat
-      - influxdb
     depends_on:
       - db
       - redis
@@ -70,10 +65,6 @@ services:
     depends_on:
       - db
       - redis
-    links:
-      - maildev
-      - redis:redis
-      - db:db
     volumes:
       - ../:/app:delegated
     environment:
@@ -132,8 +123,6 @@ services:
     container_name: foodsharing_test_selenium
     image: registry.gitlab.com/foodsharing-dev/images/selenium:1.4
     shm_size: 512M
-    links:
-      - web:web
     expose:
       - 4444
     volumes:

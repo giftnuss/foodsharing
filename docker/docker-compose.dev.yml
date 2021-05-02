@@ -26,10 +26,6 @@ services:
     working_dir: /app
     expose:
       - 9000
-    links:
-      - redis:redis
-      - db:db
-      - chat:chat
     depends_on:
       - db
       - redis
@@ -72,10 +68,6 @@ services:
       - db
       - redis
     working_dir: /app
-    links:
-      - maildev
-      - redis:redis
-      - db:db
     volumes:
       - ../:/app:delegated
     environment:
