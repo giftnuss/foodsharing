@@ -15,6 +15,7 @@ use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\SettingsPermissions;
 use Foodsharing\Utility\DataHelper;
 
 class SettingsControl extends Control
@@ -29,6 +30,7 @@ class SettingsControl extends Control
 	private DataHelper $dataHelper;
 	private ForumFollowerGateway $forumFollowerGateway;
 	private RegionGateway $regionGateway;
+	private SettingsPermissions $settingsPermissions;
 
 	public function __construct(
 		SettingsView $view,
@@ -40,7 +42,8 @@ class SettingsControl extends Control
 		FoodSharePointGateway $foodSharePointGateway,
 		DataHelper $dataHelper,
 		ForumFollowerGateway $forumFollowerGateway,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		SettingsPermissions $settingsPermissions
 	) {
 		$this->view = $view;
 		$this->settingsGateway = $settingsGateway;
@@ -52,6 +55,7 @@ class SettingsControl extends Control
 		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->regionGateway = $regionGateway;
+		$this->settingsPermissions = $settingsPermissions;
 
 		parent::__construct();
 
@@ -80,8 +84,11 @@ class SettingsControl extends Control
 			['name' => $this->translator->trans('settings.header'), 'href' => '/?page=settings&sub=general'],
 			['name' => $this->translator->trans('settings.notifications'), 'href' => '/?page=settings&sub=info'],
 			['name' => $this->translator->trans('settings.businesscard'), 'href' => '/?page=bcard'],
-			['name' => $this->translator->trans('settings.calendar.menu'), 'href' => '/?page=settings&sub=calendar'],
 		];
+
+		if ($this->settingsPermissions->mayUseCalendarExport()) {
+			$menu[] = ['name' => $this->translator->trans('settings.calendar.menu'), 'href' => '/?page=settings&sub=calendar'];
+		}
 
 		$this->pageHelper->addContent($this->view->menu($menu, [
 			'title' => $this->translator->trans('settings.title'),
@@ -375,8 +382,12 @@ class SettingsControl extends Control
 
 	public function calendar()
 	{
-		$this->pageHelper->addBread($this->translator->trans('settings.calendar.menu'));
-		$this->pageHelper->addContent($this->view->settingsCalendar());
+		if ($this->settingsPermissions->mayUseCalendarExport()) {
+			$this->pageHelper->addBread($this->translator->trans('settings.calendar.menu'));
+			$this->pageHelper->addContent($this->view->settingsCalendar());
+		} else {
+			$this->routeHelper->go('/?page=settings');
+		}
 	}
 
 	public function info()

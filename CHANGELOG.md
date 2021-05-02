@@ -11,7 +11,8 @@
 - Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
 - Show membership in profile for workgroups !1988 !1996 @chriswalg
 - IT-Support Admins can delete bananas upon request over it@foodsharing.network. !2002 @fs_k
-- Added a user search field to the store management panel !2007 @alex.simm 
+- Added a user search field to the store management panel !2007 @alex.simm
+- New calendar API including token management #80 !1719 !2029 @alex.simm 
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
@@ -96,7 +97,6 @@
 - New menu entry for changing the language of the website #1015 !1877 !1880 @alex.simm
 - Show icon and tooltip for working groups with extra functions !1846 @alex.simm
 - Added a button that allows the creator of a poll to delete it within the first hour #975 !1906 !1912 @alex.simm
-- New calendar API including token management #80 !1719 @alex.simm
 
 ## Changes
 - New look for mailbox folder list (rewrite in Vue) !1788 @ChrisOelmueller
