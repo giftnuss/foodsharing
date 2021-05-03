@@ -17,6 +17,7 @@
 - Make the own personal address visible for the logged in user, as it is already for ORGA #994 !1957 @leonja
 - Harmonise the order of links to subpages in the header line and on the page of the work group (AG) and region (Bezirk) #1080 !1954 @andreasklumpp1
 - New pickupslots availability moved from midnight to actual pickuptime. #1024 @fs_k
+- Convert regular slots to manual slots as soon as someone joins an empty slot !1825 @ChrisOelmueller
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm
