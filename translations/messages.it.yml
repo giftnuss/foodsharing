@@ -1,7 +1,20 @@
 group:
   mail_link_title:
     region: Casella postale del distretto
+    workgroup: Casella postale di gruppo
   saved: I cambiamenti sono stati salvati
+  apply:
+    title: Domanda per {group}
+  contact:
+    send: Inviare messaggio
+    admins: '{count} referente:'
+    title: '{group} contattare'
+  edit: '{group} modificare'
+  applications_for: Domande per %name%
+  applications: Domande
+  photo: foto
+  description: descrizione
+  name: Nome
 bcard:
   info:
     address_shortened: Il tuo indirizzo e / o codice postale + luogo verranno visualizzati
@@ -14,6 +27,11 @@ bcard:
   desc: Scegli qui per quale distretto o per quale ruolo vorresti creare il tuo biglietto
     da visita!
   claim: Genera, stampa e ritaglia facilmente ....
+  generate: Creare biglietto da visita
+  actions: opzione
+  for: '{role} per {region}'
+  card: Il tuo biglietto da visita
+  title: Generatore biglietto da visita
 pass:
   button:
     check: Controlla gli appuntamenti
@@ -193,3 +211,10 @@ plz: Codice postale
 description: descrizione
 desc: descrizione
 edit: modificare
+address: Indirizzo
+message: Messaggio
+subject: Oggetto
+nachname: Cognome
+add: aggiungere
+name: Nome
+geb_datum: Data di nascita
