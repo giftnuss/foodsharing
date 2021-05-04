@@ -1,1 +1,195 @@
-{}
+group:
+  mail_link_title:
+    region: Casella postale del distretto
+  saved: I cambiamenti sono stati salvati
+bcard:
+  info:
+    address_shortened: Il tuo indirizzo e / o codice postale + luogo verranno visualizzati
+      in forma abbreviata sul biglietto da visita.
+  error:
+    verified: Devi essere verificato per poter generare il tuo biglietto da visita.
+    phone: Devi aver fornito un numero di telefono valido per generare il tuo biglietto
+      da visita.
+  choose: Devi scegliere un'opzione
+  desc: Scegli qui per quale distretto o per quale ruolo vorresti creare il tuo biglietto
+    da visita!
+  claim: Genera, stampa e ritaglia facilmente ....
+pass:
+  button:
+    check: Controlla gli appuntamenti
+    verify: Verificare
+  verify:
+    checkPickups: Prima di annullare la verifica devi controllare le date di ritiro
+      registrate!
+    hasPickup: Ancora registrato per le collezioni
+    failed: Si è verificato un problema
+    text: "Dati personali controllati?<br/>\nConsegnato l'ID carta?\n"
+    confirm: sicuro?
+    undo: Annulla verifica {name}
+    do: Verifica l'account di {name}
+  notGenerated: Non è stato possibile creare il tuo ID.
+  noPhoto: 'Le seguenti persone non hanno ancora caricato una foto:'
+  claim: Condividi il cibo invece di buttarlo via!
+  hintVerify: "I Foodshaver che hanno ricevuto un documento d'identità e hanno confermato\
+    \ la correttezza dei propri dati personali possono essere verificati.\n"
+  hintSelect: "Con un clic sulla data di creazione, tutti i Foodsavers vengono contrassegnati\
+    \ con la stessa data o senza una data di creazione.\n"
+  hint: Suggerimenti
+  nav:
+    title: e ora inizia!
+    deselect: non segniare
+    select: Segna tutto
+    options: opzioni
+  verified: verificato?
+  date: ultima creazione
+  name: nome
+  photo: foto
+  none: '- non ancora creato -'
+  bread: generatore di passaggi
+ui:
+  switch:
+    off: inattivo
+    on: pubblicato
+bread:
+  backToOverview: Torna alla panoramica
+button:
+  clear_filter: filtro pulito
+  create: creare
+  answer: rispondere
+  send: spedire
+  cancel: abortire
+  apply: acettare
+  yes_i_am_sure: sì, sono sicuro
+  permadelete: eliminare irrevocabilmente
+  delete: cancellare
+  edit: modificare
+  new: nuovo
+  upload: caricare
+  rotate_right: ruotare in senso orario
+  attach_image: Allega foto
+  change_picture: cambia immagine
+  next: avanti
+  save: salvare
+upload:
+  image-problem: Il tuo file non sembra essere a posto, è meglio usare una normale
+    immagine jpg
+  crop_dialog_title: ritaglia l'immagine
+  new_file: carica un nuovo file
+  choose_file: Caricare un file
+  file: Caricare un file
+  new_image: Carica una nuova immagine
+  image: Carica immagine
+  preview_image: anteprima
+  no_image_chosen: Nessun file ancora selezionato
+  no_image_yet: Nessuna immagine ancora caricata
+  no_image: Il file caricato non è una foto. Scegli un altro file!
+picture_upload_widget:
+  choose_picture: Scegli un'immagine dal tuo computer!
+  picture_upload: Caricamento di foto
+image: Foto
+quizusercomment: "Dacci un feedback su questa domanda!\nEra troppo facile, troppo\
+  \ difficile, incomprensibile?\nOppure le risposte o le spiegazioni individuali sono\
+  \ errate?\n"
+wikilink: Collegamento alla pagina wiki
+questcount: Quante domande dovrebbero essere poste durante l'esame?
+maxfp: Numero massimo di punti di errore da superare
+answers: Quali risposte sono corrette?
+duration: tempo per rispondere
+explanation: Spiegazione
+fp: punti di guasto
+text: testo
+right: Valutazione
+week_num: Quante settimane avrebbe dovuto essere un candidato con noi?
+fetch_count: Quanti ritiri avrebbe dovuto effettuare un richiedente?
+banana_count: Di quante banane fiducia ha bisogno un membro?
+apply_type: Chi può registrarsi per questo gruppo?
+leader: amministratori dei gruppi
+member: Membri
+abholmenge: Quanti chili circa sono da portare per ogni raccolta?
+prefetchtime: Con quante settimane di anticipo Foodsaver può registrarsi utilizzando
+  gli slot automatici?
+sticker: L'azienda / negozio / club ecc. È disposta ad attaccare un adesivo in modo
+  visibile all'ingresso o da qualche altra parte?
+presse: L'azienda / negozio / club è pronto per essere menzionato sulla stampa e su
+  Foodsharing.de?
+ueberzeugungsarbeit: È stato facile convincere qualcuno incaricato a collaborare con
+  il foodharing?
+public_time: Orario approssimativa per la raccolta
+public_info: Informazioni pubbliche sull'azienda
+besonderheiten: particolarità
+begin: Inizio della collaborazione
+lebensmittel: Quale cibo può essere ritirato?
+fax: Fax
+ansprechpartner: responsabile della filiale di contatto dell'azienda
+betrieb_status_id: stato
+betrieb_kategorie_id: categoria
+kette_id: catena operativa
+fetchercount: Numero di raccoglitori
+team_status: stato della squadra
+storemanagers: Responsabili delle operazioni
+verantwortlicher: Membri responsabili
+homepage: il tuo sito web
+sleep_msg: Qui puoi lasciare un breve messaggio sul perché non hai tempo in questo
+  momento.
+sleep_status: il tuo stato attuale
+passcheck: Conferma la modifica con la tua password
+newmail: Inserisci qui il tuo nuovo indirizzo e-mail
+infomail_message: Notifica di messaggi su chat Foodsharing
+newsletter: Newsletter
+compose_body: Messagio
+pass2: Ripetizione dell password
+pass1: il tuo nuovo password desiderato
+fspmanagers: Foodsaver, le persone di contatto per il divisore
+fsp_bezirk_id: In quale quartiere si trova il divisore ?
+infotype: notifica
+position: Posizione in Foodsharing (pubblico)
+orgateam: Organizzazione nazionale
+dateend: data di fine
+online_type: L'evento si svolge offline o online?
+location_name: Luogo / sala conferenza
+mailbox_id: Indirizzo e-mail del mittente
+testemail: l'indirizzo email come prova
+opt: Opzioni
+bezirk_id: Per quale regione è rilevante l'articolo?
+teaser: teaser
+lifetime: Per quanto tempo dovrebbe essere valido il tuo paniere alimentare?
+contact_type: Come vorresti essere contattato?
+fetchstate: tutto andó bene?
+food_art: Cosa si applica al cibo?
+food_type: Quali tipi di cibo sono inclusi?
+weight: Peso stimato
+about_me_intern: Breve descrizione
+about_me_public: Breve descrizione pubblica
+regions: Quartieri
+daterange: Periodo
+ort: Città / comune (automaticamente dalla mappa sopra!)
+photo: foto
+info: informazione
+status: stato attuale
+body: notizia
+title: intestazione
+rolle: Ruolo utente
+mailbox_name: Nome della casella postale
+betrieb: Società di cooperazione
+active: attivato
+bezirk: distretto
+stadt: La tua città o comune
+lon: latitudine
+lat: longitudine
+fs_id: foodsharing-ID
+parent_id: Distretto genitore
+picture: fotografia
+options: Opzioni
+botschafter: ambasciatore
+geschlecht: genere
+anschrift: Via e numero civico (automaticamente dalla mappa sopra, correggere successivamente
+  se necessario!)
+last_login: ultimo accesso
+handy: numero di cellulare
+telefon: numero di rete fissa
+attachement: attaccamento
+email: Indirizzo e-mail
+plz: Codice postale
+description: descrizione
+desc: descrizione
+edit: modificare
