@@ -121,9 +121,9 @@ class LoginGateway extends BaseGateway
 		);
 	}
 
-	public function checkResetKey(string $key)
+	public function checkResetKey(string $key): bool
 	{
-		return $this->db->fetchValueByCriteria('fs_pass_request', 'foodsaver_id', ['name' => strip_tags($key)]);
+		return $this->db->exists('fs_pass_request', ['name' => strip_tags($key)]);
 	}
 
 	public function newPassword(array $data)

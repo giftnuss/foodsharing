@@ -109,7 +109,7 @@ class LoginControl extends Control
 			}
 		}
 
-		if ($k !== false && $this->loginGateway->checkResetKey($k)) {
+		if ($k !== false) {
 			if ($this->loginGateway->checkResetKey($k)) {
 				if (isset($_POST['pass1'], $_POST['pass2'])) {
 					if ($_POST['pass1'] == $_POST['pass2']) {
