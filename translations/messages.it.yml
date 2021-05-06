@@ -41,6 +41,10 @@ group:
       il contenuto della pagina iniziale
     tooltip_function_region1811: Gli amministratori di questo gruppo di lavoro possono
       modificare le pagine "Partner", "Contatti" e "Team"
+    tooltip_function_region432: Gli amministratori di questo gruppo di lavoro possono
+      visualizzare i messaggi
+    tooltip_function_region341: Gli amministratori di questo gruppo possono gestire
+      le domande del quiz
   function:
     tooltip_function_7: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante "Richiedi mediazione". Gli amministratori non hanno diritti
@@ -551,8 +555,110 @@ fsp:
   summary: Ci sono {count} divisori in tutti i distretti in cui sei attivo
   inRegion: tutti divisori in {regione}
   yours: Divisori nei tuoi distretti
+  twig:
+    n_in_region: '{0} Nessun divisore in % name%| {1} Un divisore in %name%| [2, Inf[%
+      count% divisore in %name%'
+  info:
+    manager: Sei responsabile di questo divisore e quindi obbligato a ricevere gli
+      aggiornamenti!
+    none: non di più
+    from: Aggiornamenti dal divisore "{name}"
+  deleteSuccess: Il divisore è stato eliminato
+  deleteConfirm: Vuoi davvero eliminare questo divisore?
+  delete: Eliminare il divisore
+  noManager: Deve esserci almeno una persona responsabile di questo divisore!
+  descLabel: Scrivi qui alcune informazioni di base sul divisore! Soprattutto quando
+    è accessibile /aperto.
+  addedBy: Aggiunto da
+  addedOn: Aggiunto il
+  pic: Foto
+  location: CAP / località
+  street: Indirizzo
+  address: Indirizzo
+  acceptSuccess: Divisore è ora attivo
+  acceptName: Attivare {name}
+  suggest: Proponi divisori
+  addSuccess: Il divisore è stato inserito con successo
+  addError: Impossibile inserire il divisore. Hai compilato tutto correttamente?
+  add: Inserisci divisori
+  new: Nuovo divisore
+  description: descrizione
+  followers: Follower
+  managers: Referente
+  unfollow: divisore equi non seguiere più
 formatting:
   md: Puoi utilizzare <a href="http://markdown.de/"> Markdown </a> per la formattazione.
 day: Giorno
 time: Orario
 select: Selezionare pregho
+pickup:
+  confirm: confermare
+  call: chiamare
+  dates: Date di ritiro
+storeedit:
+  milestone:
+    statuschanged: Cambio di stato il {date}
+  edit_success: Le modifiche sono state salvate
+  fetch:
+    teamStatus2: Gli aiutanti sono urgentemente necessari
+    teamStatus1: Gli aiutanti sono ancora desiderati
+    teamStatus: stato del team
+  store:
+    status: stato
+  team:
+    need-sm: Deve essere presente almeno una persona responsabile dell'agenzia!
+    empty: Il team non può essere vuota
+    cannot-leave: Sei ancora responsabile di questa azienda e quindi non puoi lasciarla!
+    foodsaver: Foodsaver
+  actions: Opzioni
+  bread: modificare l´agenzia
+store:
+  request:
+    to-nowhere: Rifiutare
+    to-team: includere
+    title: Richieste per {storeTitle}
+    no-duplicate: Esiste già una richiesta.
+    withdrawn: La richiesta è stata ritirata con successo.
+    withdraw: Ritirare la richiesta
+    request: Vorrei aiutare in questo team.
+  sm:
+    removeFromTeam: Rimuovare dal team
+    filterUnverified: Non verificate
+    pickupDesc: Prima il più nuovo
+  days_before: prima
+  days: Giorni
+  my_last_pickup: Il mio ultimo ritiro
+  address: Indirizzo
+  average_collection_quantity: Quantità di ritiro in media
+  particularities: Particolarità
+  isNotVerified: Non è stato ancora verificato.
+  unknownDate: sconosciuto
+  tooltip_managing: Sei responsabile di questa agenzia
+  tooltip_red: Raccolte aperte oggi o domani
+  tooltip_orange: Raccolte aperte nei prossimi tre giorni
+  tooltip_yellow: Raccolte aperte nei prossimi cinque giorni
+  all_of_my_stores: Tutte le mie agenzie
+  not-in-team: Non sei ancora nel team di questa azienda.
+  chat:
+    team: Messaggio al team
+  actions: Opzioni
+storeview:
+  want_to_fetch: Vorrei aiutare in questo team.
+  specials: particolarità
+  managers: Foodsaver responsabile
+  status: Stato attuale
+  frequency4: di notte
+  frequency3: a sera
+  frequency2: mezzogiorno/pomeriggio
+  frequency1: mattina
+  cooperation: Cooperazione da {startTime}.
+  teamInfo: Ci sono <strong>{active}</strong> attivi e <strong>{jumper}</strong> sostituti
+    del team.
+  info: Informationi
+  store: Azienda
+message_text_to_group_admin_workgroup: ''
+startpage:
+  towns:
+    title: città di foodharing
+  donate:
+    title: Donazioni
