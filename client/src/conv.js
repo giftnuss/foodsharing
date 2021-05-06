@@ -320,7 +320,7 @@ const conv = {
       if (title == null) {
         title = []
         for (const m of conversation.members) {
-          if (m == serverData.user.id) {
+          if (m == serverData.user.id || profileStore.profiles[m].name === null) {
             continue
           }
           title.push(`<a href="/profile/${m}">${plainToHtml(profileStore.profiles[m].name)}</a>`)

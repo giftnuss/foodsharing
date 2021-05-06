@@ -74,16 +74,17 @@ class MessagePushNotification extends PushNotification
 	 */
 	public function getTitle(TranslatorInterface $translator): string
 	{
+		$userName = $this->author->name ?? $translator->trans('dashboard.deleted_user');
 		if ($this->getConversationName() !== null) {
 			return $translator->trans(
 				'chat.notification_named_conversation',
-				['{foodsaver}' => $this->author->name, '{conversation}' => $this->getConversationName()]
+				['{foodsaver}' => $userName, '{conversation}' => $this->getConversationName()]
 			);
 		}
 
 		return $translator->trans(
 			'chat.notification_unnamed_conversation',
-			['{foodsaver}' => $this->author->name]
+			['{foodsaver}' => $userName]
 		);
 	}
 }

@@ -92,15 +92,16 @@ class WebPushHandler implements PushNotificationHandlerInterface
 			// set action
 			$payloadArray['options']['data']['action'] = ['page' => 'conversations', 'params' => [$notification->getConversationId()]]; // this thing will be resolved to a url by urls.js on client side
 			// Set title
+			$userName = $notification->getAuthor()->name ?? $this->translator->trans('dashboard.deleted_user');
 			if ($notification->getConversationName() !== null) {
 				$payloadArray['title'] = $this->translator->trans(
 					'chat.notification_named_conversation',
-					['{foodsaver}' => $notification->getAuthor()->name, '{conversation}' => $notification->getConversationName()]
+					['{foodsaver}' => $userName, '{conversation}' => $notification->getConversationName()]
 				);
 			} else {
 				$payloadArray['title'] = $this->translator->trans(
 					'chat.notification_unnamed_conversation',
-					['{foodsaver}' => $notification->getAuthor()->name]
+					['{foodsaver}' => $userName]
 				);
 			}
 		} else {

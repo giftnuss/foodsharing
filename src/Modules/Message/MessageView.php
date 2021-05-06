@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Foodsaver\Profile;
 
 final class MessageView extends View
 {
@@ -95,6 +96,7 @@ final class MessageView extends View
 
 	/**
 	 * @param Conversation[] $conversations
+	 * @param Profile[] $profiles
 	 */
 	public function conversationList(array $conversations, array $profiles): string
 	{
@@ -131,7 +133,9 @@ final class MessageView extends View
 					continue;
 				}
 				$pics .= '<img src="' . $this->imageService->img($profiles[$m]->avatar, $size) . '" width="' . $pictureWidth . '" />';
-				$title .= ', ' . $profiles[$m]->name;
+				if ($profiles[$m]->name) {
+					$title .= ', ' . $profiles[$m]->name;
+				}
 			}
 
 			$title = $c->title ?? substr($title, 2);
