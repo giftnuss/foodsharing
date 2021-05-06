@@ -47,10 +47,10 @@ class MessagesApiCest
 			'geb_datum' => null,
 			'deleted_at' => $this->faker->dateTime($max = '-1 week')->format('Y-m-d\TH:i:s'),
 		]);
-		$I->createConversation([$this->user['id'], $deletedUser['id']]);
+		$conv = $I->createConversation([$this->user['id'], $deletedUser['id']]);
 
 		$I->login($this->user['email']);
-		$I->sendGET('api/conversations/1');
+		$I->sendGET('api/conversations/' . $conv['id']);
 		$I->seeResponseCodeIs(HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
