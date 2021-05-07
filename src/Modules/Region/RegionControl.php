@@ -233,9 +233,8 @@ final class RegionControl extends Control
 			['key' => 'reports', 'position' => 15],
 			['key' => 'applications', 'position' => 16],
 			['key' => 'arbitration', 'position' => 17],
-			['key' => 'reports', 'position' => 18],
-			['key' => 'subgroups', 'position' => 19],
-			['key' => 'options', 'position' => 20],
+			['key' => 'subgroups', 'position' => 18],
+			['key' => 'options', 'position' => 19],
 		];
 
 		$orderedMenu = [];
