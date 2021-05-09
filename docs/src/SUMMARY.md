@@ -45,7 +45,8 @@
   - [Release](release.md)
     - [Hotfix](hotfix.md)
   - [Update Dependencies](update-dependencies.md)
-  - [Glossary](GLOSSARY.md)
+  - [IT Glossary](IT-GLOSSARY.md)
+ - [foodsharing Glossary](FS-GLOSSARY.md)
 
 - [About the devdocs](about-devdocs.md)
 - [Contributors](contributors.md)

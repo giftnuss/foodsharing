@@ -45,9 +45,9 @@
 - Update chat dependencies !1962 @chriswalg
 - Remove obsolete code for picture uploads !1969 @alex.simm
 - Update chat dependencies !1962 !1751 @chriswalg
+- Added a foodsharing glossary to our dev docs !1936 @chriswalg
 
 # 2021-04-09 Hotfix
-
 - Add permission checks to REST endpoints !1944 @alex.simm
 
 # 2021-03-30 Hotfix
