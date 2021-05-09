@@ -8,6 +8,7 @@
 - Add french translation to language chooser !1964 @alex.simm
 - Introduces Push Notifications for the Android App !1647 !1976 @dthulke
 - Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
+- Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
@@ -159,7 +160,6 @@
 - Allow displaying recent pickup history in profiles !1715 !1763 #989 @ChrisOelmueller
 - Given trust bananas will now notify the receiver via Bell !1795 #548 @muffelrudaijer
 - Topbar search query for numeric ID now returns profile link for that ID !1783 @ChrisOelmueller
-- Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
 
 ## Changes
 - Notify a user who is accepted to a workgroup with a bell #808 !1708 @alex.simm
