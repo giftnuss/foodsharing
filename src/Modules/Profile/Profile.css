@@ -34,6 +34,7 @@
 
 .profile.statdisplay {
   margin: -20px auto 10px auto;
+  padding-bottom: 5px;
 }
 
 @media screen and (min-width: 500px) {
@@ -44,6 +45,7 @@
     display: block;
     width: 100%;
     margin: 0 0 -60px 0;
+    padding-bottom: 5px;
   }
 }
 

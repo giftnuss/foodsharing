@@ -887,6 +887,10 @@ body .ui-tooltip {
     color: #1e1b1d
 }
 
+.page.ui-padding.ui-widget-content.corner-all {
+  overflow: overlay;
+}
+
 .ui-widget-content a {
     color: #1e1b1d
 }
