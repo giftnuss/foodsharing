@@ -310,7 +310,7 @@
                     <b-card-text>
                       {{ $i18n('startpage.near_you.text1.part1') }} <b-link
                         class="link"
-                        :href="karte"
+                        :href="$url('map')"
                       >
                         {{ $i18n('startpage.near_you.text1.part2') }}
                       </b-link>
