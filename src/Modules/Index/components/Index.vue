@@ -340,23 +340,16 @@
         </b-row>
       </div>
     </div>
-    <b-row>
+    <b-row
+      class="ml-md-5"
+      align-v="center"
+    >
       <b-col
         cols="12"
-        md="12"
-        xl="3"
-        class="ml-3 ml-xl-5 text-md-left"
-      >
-        <h2>{{ $i18n('startpage.demands.title') }}</h2>
-      </b-col>
-      <b-col
-        cols="12"
-        xl="4"
-        md="6"
-        class="mt-md-5"
+        md="4"
       >
         <b-row class="mt-2 mt-md-0">
-          <b-col />
+          <b-col><h2>{{ $i18n('startpage.demands.title') }}</h2></b-col>
         </b-row>
         <b-row class="mt-2">
           <b-col>
@@ -372,8 +365,7 @@
       </b-col>
       <b-col
         cols="12"
-        md="6"
-        xl="4"
+        md="8"
         class="mt-3 align-self-end"
       >
         <b-img
