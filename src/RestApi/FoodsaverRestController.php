@@ -37,10 +37,17 @@ final class FoodsaverRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Lists all pickups into which a user is signed in on a specific day, including unconfirmed ones.
+	 * This only works for future pickups.
+	 *
 	 * @Rest\Get("foodsaver/{fsId}/pickups/{onDate}", requirements={"fsId" = "\d+", "onDate" = "[^/]+"})
 	 */
 	public function listSameDayPickupsAction(int $fsId, string $onDate): Response
 	{
+		if (!$this->session->id() || !$this->profilePermissions->maySeePickups($fsId)) {
+			throw new HttpException(403);
+		}
+
 		// convert date string into datetime object
 		$day = TimeHelper::parsePickupDate($onDate);
 		if (is_null($day)) {

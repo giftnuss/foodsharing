@@ -83,7 +83,7 @@ class PickupGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		return $this->db->fetchAll('
 			SELECT 	p.`date`,
-					p.confirmed AS confirmed,
+					p.confirmed AS isConfirmed,
 					s.name AS storeName,
 					s.id AS storeId
 

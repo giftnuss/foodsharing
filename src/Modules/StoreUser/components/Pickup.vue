@@ -97,7 +97,7 @@
             :href="$url('store', pickup.storeId)"
             class="font-weight-bolder"
           >
-            <i class="fas fa-fw" :class="[pickup.confirmed ? 'fa-check-circle text-secondary' : 'fa-clock text-danger']" />
+            <i class="fas fa-fw" :class="[pickup.isConfirmed ? 'fa-check-circle text-secondary' : 'fa-clock text-danger']" />
             {{
               $i18n('pickup.same_day_entry', {
                 when: $dateFormat(pickup.date, 'time'),
