@@ -501,7 +501,7 @@ export default {
 }
 
 .line {
-  border-bottom: 1px solid var(--fs-dark-grey);
+  border-bottom: 1px solid var(--fs-light-grey);
   width: 90%;
   margin: 0 auto;
 }
