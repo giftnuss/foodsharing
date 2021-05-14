@@ -42,26 +42,24 @@
         </b-row>
       </div>
     </div>
-    <b-row v-if="contentBlockVisible">
+    <b-row
+      v-if="contentBlockVisible"
+      class="ml-3 ml-md-5"
+    >
       <b-col
         cols="12"
         md="12"
         xl="3"
-        class="ml-3 ml-xl-5 text-md-left"
+        class="text-lg-right"
       >
         <span v-html="contentBlock1" />
       </b-col>
       <b-col
         cols="12"
-        xl="4"
+        xl="5"
         md="6"
-        class="mt-md-5"
       >
-        <b-row class="mt-2 mt-md-0">
-          <b-col>
-            <span v-html="contentBlock2" />
-          </b-col>
-        </b-row>
+        <span v-html="contentBlock2" />
       </b-col>
       <b-col
         cols="12"
@@ -76,10 +74,11 @@
       v-if="contentBlockVisible"
       class="line pt-3 pt-xl-5"
     />
-    <b-row class="mt-3 ml-5 mt-5">
+    <b-row class="mt-3 ml-3 ml-md-5">
       <b-col
         cols="12"
         xl="3"
+        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.mission.title') }}</h2>
       </b-col>
@@ -89,6 +88,8 @@
       >
         <p>
           {{ $i18n('startpage.mission.text') }}
+        </p>
+        <p>
           <b-link
             class="link"
             href="ueber-uns"
@@ -98,8 +99,11 @@
         </p>
       </b-col>
     </b-row>
-    <b-row class="ml-5 mr-5 mt-5">
-      <b-col cols="12">
+    <b-row class="ml-3 ml-md-5 mr-5 mt-5">
+      <b-col
+        xl="4"
+        class="text-lg-right"
+      >
         <h2>{{ $i18n('startpage.this_is_how_it_works') }}</h2>
       </b-col>
       <b-col
@@ -123,10 +127,11 @@
         </b-embed>
       </b-col>
     </b-row>
-    <b-row class="mt-3 ml-5 mt-5">
+    <b-row class="mt-3 ml-3 ml-md-5 mt-5">
       <b-col
         cols="12"
         xl="3"
+        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.call_to_action.title') }}</h2>
       </b-col>
@@ -252,10 +257,11 @@
         </b-row>
       </div>
     </div>
-    <b-row class="mt-3 ml-5 mt-5">
+    <b-row class="mt-3 ml-3 ml-md-5 mt-5">
       <b-col
         cols="12"
         xl="3"
+        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.how_we_work.title') }}</h2>
       </b-col>
@@ -265,6 +271,8 @@
       >
         <p>
           {{ $i18n('startpage.how_we_work.text') }}
+        </p>
+        <p>
           <b-link
             class="link"
             href="https://devdocs.foodsharing.network"
