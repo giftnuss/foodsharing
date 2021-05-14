@@ -305,7 +305,6 @@
                   <b-col
                     cols="12"
                     xl="6"
-                    class="pb-4"
                   >
                     <b-card-text>
                       {{ $i18n('startpage.near_you.text1.part1') }} <b-link
