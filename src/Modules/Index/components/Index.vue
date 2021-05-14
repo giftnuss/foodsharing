@@ -99,9 +99,9 @@
       </b-col>
     </b-row>
     <b-row class="ml-5 mr-5 mt-5">
-      <b-cols cols="12">
+      <b-col cols="12">
         <h2>{{ $i18n('startpage.this_is_how_it_works') }}</h2>
-      </b-cols>
+      </b-col>
       <b-col
         cols="12"
       >
