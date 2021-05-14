@@ -2207,10 +2207,13 @@ startpage:
     text1:
       part1: 'Auf der'
       part2: 'Karte'
-      part3: 'findest du Fairteiler, das sind Regale oder Kühlschränke an denen du Lebensmittel kostenfrei abholen oder vorbeibringen kannst.'
-    text2: |
-      Außerdem gibt es Essenskörbe - hiermit kannst du deine eigenen überschüssigen Lebensmittel anbieten und Lebensmittel
-      bei anderen abholen.
+      part3: 'findest du'
+      part4: 'Fairteiler'
+      part5: ', das sind Regale oder Kühlschränke an denen du Lebensmittel kostenfrei abholen oder vorbeibringen kannst.'
+    text2:
+      part1: 'Außerdem gibt es'
+      part2: 'Essenskörbe'
+      part3: '- hiermit kannst du deine eigenen überschüssigen Lebensmittel anbieten und Lebensmittel bei anderen abholen.'
     text3:
       part1: 'Die community ist in Bezirke organisiert.'
       part2: 'Finde Bezirke in deiner Umgebung'

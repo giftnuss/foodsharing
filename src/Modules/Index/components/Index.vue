@@ -315,6 +315,7 @@
                         {{ $i18n('startpage.near_you.text1.part2') }}
                       </b-link>
                       {{ $i18n('startpage.near_you.text1.part3') }}
+                      <b>{{ $i18n('startpage.near_you.text1.part4') }}</b>{{ $i18n('startpage.near_you.text1.part5') }}
                     </b-card-text>
                   </b-col>
                   <b-col
@@ -322,7 +323,8 @@
                     xl="6"
                   >
                     <b-card-text>
-                      {{ $i18n('startpage.near_you.text2') }}
+                      {{ $i18n('startpage.near_you.text2.part1') }} <b>{{ $i18n('startpage.near_you.text2.part2') }}</b>
+                      {{ $i18n('startpage.near_you.text2.part3') }}
                     </b-card-text>
                   </b-col>
                 </b-row>
