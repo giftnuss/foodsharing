@@ -7,7 +7,7 @@ group:
     title: Domanda per {group}
     declined: Domanda rifiutata
     accepted: domanda accettata
-    sent: Candidatura è stata inviata!
+    sent: La candidatura è stata inviata.
     send: inviare la candidatura
     time:
       "5": 5 o più ore
@@ -21,15 +21,15 @@ group:
     motivation: Qual è la tua motivazione a partecipare al gruppo {group}?
     summary: '{name} partecipare al gruppo di lavoro {group}.'
   contact:
-    send: Inviare messaggio
+    send: Invia il messaggio
     admins: '{count} referente:'
     title: '{group} contattare'
-    sent: Il messaggio è stato inviato con successo!
+    sent: Il messaggio è stato inviato con successo.
     empty: Prima scrivi qualcosa;)
     disclaimer: "Inviando un messaggio a questo gruppo di lavoro\ntutti gli amministratori\
-      \ del gruppo di lavoro vedranno il tuo indirizzo email,\nche hai specificato\
-      \ nel tuo profilo di.\nUna copia di questo messaggio ti verrà inviata via email.\n"
-  edit: '{group} modificare'
+      \ del gruppo di lavoro vedranno il tuo indirizzo e-mail,\nche hai specificato\
+      \ nel tuo profilo di.\nUna copia di questo messaggio ti verrà inviata via e-mail.\n"
+  edit: 'Modifica {group}'
   applications_for: Domande per %name%
   applications: Domande
   photo: foto
@@ -40,18 +40,18 @@ group:
     tooltip_function_region2287: Gli amministratori di questo AG possono modificare
       il contenuto della pagina iniziale
     tooltip_function_region1811: Gli amministratori di questo gruppo di lavoro possono
-      modificare le pagine "Partner", "Contatti" e "Team"
+      modificare le pagine «Partner», «Contatti» e «Team»
     tooltip_function_region432: Gli amministratori di questo gruppo di lavoro possono
       visualizzare i messaggi
     tooltip_function_region341: Gli amministratori di questo gruppo possono gestire
       le domande del quiz
   function:
     tooltip_function_7: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
-      sotto il pulsante "Richiedi mediazione". Gli amministratori non hanno diritti
-      speciali!Il team di segnalazione riceve questo
+      sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
+      speciali! Il team di segnalazione riceve questo
     tooltip_function_9: Gli amministratori di questa AG non hanno altre autorizzazioni.
     tooltip_function_6: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
-      sotto il pulsante "Richiedi mediazione". Gli amministratori non hanno diritti
+      sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
       speciali.
     tooltip_function_2: Gli amministratori di questo AG possono creare votazioni per
       il distretto
@@ -95,7 +95,7 @@ group:
     {groupName}?
   quitting_home_district_warning: Sei sicuro di voler lasciare il tuo distretto di
     origine% name%? Perdi la verifica e devi contattare il team degli ambasciatori
-    del tuo nuovo distretto di origine !
+    del tuo nuovo distretto di origine.
   really_quit_district: Sei sicuro di voler lasciare il distretto% name%?
   really_quit_workgroup: Sei sicuro di voler lasciare il gruppo di lavoro% name%?
   quit: lasciare
@@ -107,9 +107,9 @@ group:
     join: Unisciti a questo gruppo di lavoro
     apply: Candidare per questo gruppo di lavoro
     go: al gruppo
-    edit: modificare il gruppo
+    edit: Modifica il gruppo
     contact: contattare il gruppo
-  already_applied: Hai già fatto domanda per questo gruppo
+  already_applied: Hai già fatto domanda per questo gruppo.
   image: Foto per% name%
   admin_count: '{0} Nessun amministratore | {1} Un amministratore | [2, Inf [% count%
     amministratori'
@@ -125,14 +125,14 @@ group:
       preso parte alle raccolte% fetches%.
     member_since_weeks: Quante settimane avrebbe dovuto essere un candidato con noi?
     banana_count_errors:
-      max: Per favore, non aspettarti più di {{limit}} fidati delle banane!
-      min: Nessuno può avere meno di {{limit}} banane di fiducia!
+      max: Per favore, non aspettarti più di {{limit}} fidati delle banane.
+      min: Nessuno può avere meno di {{limit}} banane di fiducia.
     banana_count: Di quante banane fiducia ha bisogno un membro?
     fetch_count: Quanti prelievi avrebbe dovuto effettuare un richiedente?
-    open: Chiunque può partecipare senza un'applicazione
-    everybody: Tutti possono candidarsi
-    requires_properties: Chiunque soddisfi determinati punti di fiducia
-    nobody: Nessuno (gruppo chiuso)
+    open: Chiunque può partecipare senza candidare.
+    everybody: Tutti possono candidarsi.
+    requires_properties: Chiunque soddisfi determinati punti di fiducia.
+    nobody: Nessuno (gruppo chiuso).
     requirements: Chi può registrarsi per questo gruppo?
 bcard:
   info:
@@ -144,7 +144,7 @@ bcard:
       da visita.
   choose: Devi scegliere un'opzione
   desc: Scegli qui per quale distretto o per quale ruolo vorresti creare il tuo biglietto
-    da visita!
+    da visita.
   claim: Genera, stampa e ritaglia facilmente ....
   generate: Creare biglietto da visita
   actions: opzione
@@ -157,7 +157,7 @@ pass:
     verify: Verificare
   verify:
     checkPickups: Prima di annullare la verifica devi controllare le date di ritiro
-      registrate!
+      registrate.
     hasPickup: Ancora registrato per le collezioni
     failed: Si è verificato un problema
     text: "Dati personali controllati?<br/>\nConsegnato l'ID carta?\n"
@@ -199,7 +199,7 @@ button:
   yes_i_am_sure: sì, sono sicuro
   permadelete: eliminare irrevocabilmente
   delete: cancellare
-  edit: modificare
+  edit: Modifica
   new: nuovo
   upload: caricare
   rotate_right: ruotare in senso orario
@@ -219,28 +219,27 @@ upload:
   preview_image: anteprima
   no_image_chosen: Nessun file ancora selezionato
   no_image_yet: Nessuna immagine ancora caricata
-  no_image: Il file caricato non è una foto. Scegli un altro file!
+  no_image: Il file caricato non è una foto. Scegli un altro file.
 picture_upload_widget:
-  choose_picture: Scegli un'immagine dal tuo computer!
+  choose_picture: Scegli un'immagine dal tuo computer.
   picture_upload: Caricamento di foto
 image: Foto
-quizusercomment: "Dacci un feedback su questa domanda!\nEra troppo facile, troppo\
-  \ difficile, incomprensibile?\nOppure le risposte o le spiegazioni individuali sono\
-  \ errate?\n"
+quizusercomment: "Rispondi a questa domanda.\nEra troppo facile, troppo difficile,\
+  \ incomprensibile?\nOppure le risposte o le spiegazioni individuali sono errate?\n"
 wikilink: Collegamento alla pagina wiki
 questcount: Quante domande dovrebbero essere poste durante l'esame?
 maxfp: Numero massimo di punti di errore da superare
 answers: Quali risposte sono corrette?
-duration: tempo per rispondere
+duration: Tempo per rispondere
 explanation: Spiegazione
-fp: punti di guasto
-text: testo
+fp: Punti di guasto
+text: Testo
 right: Valutazione
 week_num: Quante settimane avrebbe dovuto essere un candidato con noi?
 fetch_count: Quanti ritiri avrebbe dovuto effettuare un richiedente?
 banana_count: Di quante banane fiducia ha bisogno un membro?
 apply_type: Chi può registrarsi per questo gruppo?
-leader: amministratori dei gruppi
+leader: Amministratori dei gruppi
 member: Membri
 abholmenge: Quanti chili circa sono da portare per ogni raccolta?
 prefetchtime: Con quante settimane di anticipo Foodsaver può registrarsi utilizzando
@@ -253,7 +252,7 @@ ueberzeugungsarbeit: È stato facile convincere qualcuno incaricato a collaborar
   il foodharing?
 public_time: Orario approssimativa per la raccolta
 public_info: Informazioni pubbliche sull'azienda
-besonderheiten: particolarità
+besonderheiten: Particolarità
 begin: Inizio della collaborazione
 lebensmittel: Quale cibo può essere ritirato?
 fax: Fax
@@ -265,33 +264,33 @@ fetchercount: Numero di raccoglitori
 team_status: stato della squadra
 storemanagers: Responsabili delle operazioni
 verantwortlicher: Membri responsabili
-homepage: il tuo sito web
+homepage: Il tuo sito web
 sleep_msg: Qui puoi lasciare un breve messaggio sul perché non hai tempo in questo
   momento.
 sleep_status: il tuo stato attuale
 passcheck: Conferma la modifica con la tua password
 newmail: Inserisci qui il tuo nuovo indirizzo e-mail
 infomail_message: Notifica di messaggi su chat Foodsharing
-newsletter: Newsletter
+newsletter: Bollettino
 compose_body: Messagio
 pass2: Ripetizione dell password
-pass1: il tuo nuovo password desiderato
+pass1: La tua nuova password desiderata
 fspmanagers: Foodsaver, le persone di contatto per il divisore
 fsp_bezirk_id: In quale quartiere si trova il divisore ?
-infotype: notifica
+infotype: Notifica
 position: Posizione in Foodsharing (pubblico)
 orgateam: Organizzazione nazionale
-dateend: data di fine
+dateend: Data di fine
 online_type: L'evento si svolge offline o online?
 location_name: Luogo / sala conferenza
 mailbox_id: Indirizzo e-mail del mittente
-testemail: l'indirizzo email come prova
+testemail: Indirizzo e-mail come prova
 opt: Opzioni
 bezirk_id: Per quale regione è rilevante l'articolo?
-teaser: teaser
+teaser: Estratto
 lifetime: Per quanto tempo dovrebbe essere valido il tuo paniere alimentare?
-contact_type: Come vorresti essere contattato?
-fetchstate: tutto andó bene?
+contact_type: Come vorresti essere contattato/a?
+fetchstate: È andato tutto bene?
 food_art: Cosa si applica al cibo?
 food_type: Quali tipi di cibo sono inclusi?
 weight: Peso stimato
@@ -299,42 +298,42 @@ about_me_intern: Breve descrizione
 about_me_public: Breve descrizione pubblica
 regions: Quartieri
 daterange: Periodo
-ort: Città / comune (automaticamente dalla mappa sopra!)
-photo: foto
-info: informazione
-status: stato attuale
-body: notizia
-title: intestazione
+ort: Città / comune (automaticamente dalla mappa sopra)
+photo: Foto
+info: Informazioni
+status: Stato attuale
+body: Messaggio
+title: Intestazione
 rolle: Ruolo utente
 mailbox_name: Nome della casella postale
 betrieb: Società di cooperazione
-active: attivato
-bezirk: distretto
+active: Attivato
+bezirk: Distretto
 stadt: La tua città o comune
 lon: latitudine
 lat: longitudine
 fs_id: foodsharing-ID
 parent_id: Distretto genitore
-picture: fotografia
+picture: Immagine
 options: Opzioni
-botschafter: ambasciatore
-geschlecht: genere
+botschafter: Ambasciatore
+geschlecht: Genere
 anschrift: Via e numero civico (automaticamente dalla mappa sopra, correggere successivamente
-  se necessario!)
-last_login: ultimo accesso
-handy: numero di cellulare
-telefon: numero di rete fissa
-attachement: attaccamento
+  se necessario)
+last_login: Ultimo accesso
+handy: Numero di cellulare
+telefon: Numero di rete fissa
+attachement: Allegato
 email: Indirizzo e-mail
-plz: Codice postale
-description: descrizione
-desc: descrizione
-edit: modificare
+plz: Codice postale (automaticamente dalla mappa sopra)
+description: Descrizione
+desc: Descrizione
+edit: modifica
 address: Indirizzo
 message: Messaggio
 subject: Oggetto
 nachname: Cognome
-add: aggiungere
+add: aggiungi
 name: Nome
 geb_datum: Data di nascita
 validate:
@@ -370,7 +369,7 @@ terminology:
   n_ambassadors: Un ambasciatore |% count% ambasciatori
   n_sleeping: Un dormiglione|%count%dormiglione
   n_foodsaver: Un Foodsaver|%count% Foodsaver
-  mailboxes: box email
+  mailboxes: Cassette e-mail
   settings: impostazioni
   subgroups: Sottogruppi
   group: Gruppo di lavoro
@@ -425,12 +424,12 @@ register:
   activation_failed: <strong> Attivazione non riuscita! </strong> Il link inserito
     è corretto?
   activation_success: <strong> Attivazione riuscita. </strong> Ora accedi con il tuo
-    indirizzo email e il password scelto.
-  account-exists: Sei già registrato. Esci se desideri registrarti di nuovo.
+    indirizzo e-mail e la password scelti.
+  account-exists: Sei già registrato/a. Esci se desideri registrarti di nuovo.
   error_birthdate: Esempio 25/03/2001 (GG.MM.AAAA). Per motivi di protezione dei dati
     e responsabilità, devi avere almeno 18 anni per partecipare alla condivisione
     degli alimenti.
-  error_email_exist: Il tuo indirizzo email esiste già.
+  error_email_exist: Il tuo indirizzo e-mail esiste già.
   error: C'è stato un errore
   other: diversi
   man: mascile
@@ -439,21 +438,21 @@ register:
     registrazione!
   join_error: La tua registrazione non era possibile.
   join_success_message: Hai completato con successo la tua registrazione a Foodsharing.
-    Ora puoi accedere con la tua email e password.
+    Ora puoi accedere con la tua e-mail e password.
   join_success: La tua registrazione è andata a buon fine.
   finish: Invia la registrazione
   next: avanti
   prev: ritorno
   have_read_the_legal_stuff2: notato
   have_read_the_legal_stuff1: io ho la
-  forgotten_password: Dimenticato il password?
+  forgotten_password: Password dimenticata?
   phone_not_valid: Il numero di telefono inserito non è valido.
   phone_example: Esempio +3917912345678
   login_phone_info: Può essere utile condividere il tuo numero di telefono con altre
     persone di foodsharing
   lastname_minLength: Il cognome deve essere composto da almeno 2 lettere.
   login_passwd1: Password (al massimo 8 lettere)
-  password_minLength: Il password deve essere composto da almeno 8 lettere.
+  password_minLength: La password deve essere composta da almeno 8 lettere.
   firstname_required: Per favore inserisci il tuo nome.
   lastname_required: Per favore inserisci il tuo cognome.
   firstname_minLength: Il nome deve essere composto da almeno 2 lettere.
@@ -462,21 +461,21 @@ register:
   login_location: Il tuo indirizzo
   login_mobile_phone: Il tuo numero cellulare
   geb_datum: La tua data di nascita
-  confirmPassword_sameAsPassword: Il password deve corrispondere.
-  confirmPassword_required: Ripeti il password.
+  confirmPassword_sameAsPassword: La password deve corrispondere.
+  confirmPassword_required: Ripeti la password.
   password_required: È richiesto un password.
   login_passwd2: Ripetizione del password
-  email_invalid: L'indirizzo email non è valido.
-  login_email: Il tuo indirizzo e-mail
+  email_invalid: L'indirizzo e-mail non è valido.
+  login_email: Indirizzo e-mail
   email_required: È richiesto un indirizzo e-mail.
   birthdate_hint: Puoi trovare ulteriori informazioni nella <a href="?page=legal"
     target="_blank"> Protezione dati </a> al punto 2d) quando ti registri come food
     sharer o food saver.
   requiredFields: Informazione obbligatoria
-  mail_hint: 'IMPORTANTE: attenzione alla corretta ortografia!'
-  register_button_label: Registrare
+  mail_hint: 'Importante: attenzione alla corretta ortografia!'
+  register_button_label: Registrati
   title: Registrazione
-  topbar: Prendi parte!
+  topbar: Prendi parte
 store_status_impact_explanation: "Dopo ogni contatto aziendale (<a href=\"https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste\"\
   \ target=\"_blank\"> Wiki: Cooperation Development - Checklist </a>) lo stato (<a\
   \ href = \"https : //wiki.foodsharing.de/Betrieb \"target =\" _ blank \"> Wiki:\
@@ -489,31 +488,32 @@ gender:
   m: Uomo
 login:
   pwreset:
-    mismatch: Sorry, il password non corrispondono.
-    error: Sorry, c'è un problema con i tuoi dati.
-    expired: Scusa, hai aspettato un po 'troppo a lungo. Richiedi di nuovo un nuovo
-      password!
-    tooShort: Sorry, il passwort scelto è troppo corte.
+    mismatch: Spiacente, le password non corrispondono.
+    error: Spiacente, c'è un problema con i tuoi dati.
+    expired: Scusa, hai aspettato un po' troppo. Si prega di richiedere nuovamente
+      una nuova password.
+    tooShort: Spiacente, la password che hai scelto è troppo corta.
     success: Ottimo, la tua password è stata modificata con successo. Ora puoi accedere.
-    mailSent: Bene! Ti è stato inviato un collegamento tramite e-mail per modificare
+    mailSent: Bene, ti è stato inviato un collegamento tramite e-mail per modificare
       la password.
-    wrongMail: Scusa! Hai fatto un errore nel tuo indirizzo email?
-    bread: Resetta il password
+    wrongMail: Purtroppo non riusciamo a trovare questo indirizzo e-mail, per favore
+      riprova.
+    bread: Reimposta la password
   logout: logout
-  success: <b> Buona giornata, {user_name}! </b> <br /> Hai effettuato correttamente
-    l'accesso e verrai reindirizzato immediatamente.
-  error_no_auth: L'indirizzo e-mail o il password non sono corretti
-  error_no_password: Per favore inserisci il password!
-  error_no_email: Inserisci il tuo indirizzo email!
-  steady_login: Rimani connesso (utilizza i cookie)
-  save_password: salva il password
-  login_button_label: Accesso
-  forgotten_password_label: dimenticato il password?
+  success: <b>Buona giornata, {user_name}!</b>
+  error_no_auth: Purtroppo non riusciamo a trovare questo indirizzo e-mail o la password,
+    per favore riprova.
+  error_no_password: Per favore inserisci la tua password.
+  error_no_email: Inserisci il tuo indirizzo e-mail.
+  steady_login: Rimani connesso/a (utilizza i cookie)
+  save_password: Salva la password
+  login_button_label: Accedi
+  forgotten_password_label: Password dimenticata?
   password: password
   email_address: Indirizzo e-mail
   form_title: registrare
-  topbar: Login
-  submit_btn: Login
+  topbar: Accedi
+  submit_btn: Accedi
 salutation:
   "3": Cara/o
   "2": Cara
@@ -560,13 +560,18 @@ fsp:
       count% divisore in %name%'
   info:
     manager: Sei responsabile di questo divisore e quindi obbligato a ricevere gli
-      aggiornamenti!
+      aggiornamenti.
     none: non di più
-    from: Aggiornamenti dal divisore "{name}"
+    from: Aggiornamenti dal divisore «{name}»
+    descSettings: Segui tutte le informazioni del condivisore «{name}». Come vuoi
+      ricevere queste notifiche?
+    descModal: Come vorresti essere avvisato/a degli aggiornamenti (come le consegne
+      di cibo)?
+    mail: Campanello e notifica via e-mail
   deleteSuccess: Il divisore è stato eliminato
   deleteConfirm: Vuoi davvero eliminare questo divisore?
   delete: Eliminare il divisore
-  noManager: Deve esserci almeno una persona responsabile di questo divisore!
+  noManager: Deve esserci almeno una persona responsabile di questo divisore.
   descLabel: Scrivi qui alcune informazioni di base sul divisore! Soprattutto quando
     è accessibile /aperto.
   addedBy: Aggiunto da
@@ -606,12 +611,12 @@ storeedit:
   store:
     status: stato
   team:
-    need-sm: Deve essere presente almeno una persona responsabile dell'agenzia!
+    need-sm: Deve essere presente almeno una persona responsabile dell'agenzia.
     empty: Il team non può essere vuota
-    cannot-leave: Sei ancora responsabile di questa azienda e quindi non puoi lasciarla!
+    cannot-leave: Sei ancora responsabile di questa azienda e quindi non puoi lasciarla.
     foodsaver: Foodsaver
   actions: Opzioni
-  bread: modificare l´agenzia
+  bread: Modifica l'agenzia
 store:
   request:
     to-nowhere: Rifiutare
@@ -653,12 +658,124 @@ storeview:
   frequency1: mattina
   cooperation: Cooperazione da {startTime}.
   teamInfo: Ci sono <strong>{active}</strong> attivi e <strong>{jumper}</strong> sostituti
-    del team.
-  info: Informationi
+    nella squadra.
+  info: Informazioni
   store: Azienda
 message_text_to_group_admin_workgroup: ''
 startpage:
   towns:
-    title: città di foodharing
+    title: Città foodharing
   donate:
-    title: Donazioni
+    title: Dona
+  welcome_text: Benvenuto/a a foodsharing
+  more_infos: Scopri di più
+  mission:
+    title: Missione
+  near_you:
+    text1:
+      part1: Sulla
+      part2: mappa
+    title: Vicino a te
+    text3:
+      part1: La comunità è organizzata in distretti.
+  how_we_work:
+    title: È così che funziona
+poll:
+  results:
+    option_text: Opzione
+language_chooser:
+  content: Scegli una lingua
+  title: Scegli la lingua
+email_template:
+  login: Accedi per rispondere
+foodsaver:
+  list:
+    inactive: ", che non hanno effettuato l'accesso da 6 mesi:"
+reports:
+  reason: Motivo
+  message: Descrizione
+  from: Di
+  from_first_name: Da nome
+  city: Città
+  all_reports: Tutte le segnalazioni
+  about_last_name: A proposito del cognome
+  about_first_name: A proposito del nome
+  about: Informazioni
+month:
+  short:
+    "12": dic.
+    "11": nov.
+    "10": ott.
+    "9": set.
+    "8": ago.
+    "7": lug.
+    "6": giu.
+    "5": mag.
+    "4": apr.
+    "3": marz.
+    "2": feb.
+    "1": gen.
+  "12": dicembre
+  "11": novembre
+  "10": ottobre
+  "9": settembre
+  "8": agosto
+  "7": luglio
+  "6": giugno
+  "5": maggio
+  "4": aprile
+  "3": marzo
+  "2": febbraio
+  "1": gennaio
+date_short:
+  Sunday: do
+  Saturday: sab
+  Friday: ven
+  Thursday: gio
+  Wednesday: mer
+  Tuesday: mar
+  Monday: lun
+date:
+  sunday: domenica
+  saturday: sabato
+  friday: venerdì
+  thursday: giovedì
+  wednesday: mercoledì
+  tuesday: martedì
+  monday: lunedì
+  -- Yesterday: Ieri
+  yesterday: ieri
+  tomorrow: domani
+  -- Tomorrow: Domani
+  today: oggi
+  Today: Oggi
+  time: '{time} ore'
+addresspicker:
+  label: Ricerca per indirizzo/località
+recipients:
+  done: Tutte le e-mail sono state inviate
+  unknown: sconosciuto
+  status: 'Invio delle e-mail… (indirizzo e-mail attuale: {current})'
+  permission: Non sei autorizzato/a a inviare e-mail
+  abort: annulla l'invio
+  continue: invia
+  pending: Ci sono ancora {count} e-mail da inviare
+  history: E-mail inviate da te
+  sent: L'e-mail è stata inviata con successo a {count} indirizzi e-mail
+  doublecheck: Tutto controllato? L'e-mail deve essere inviata al gruppo di destinazione
+    selezionato?
+  variable-info: "Per rendere l'e-mail più personale, puoi inserire <strong>{NAME}</strong>\
+    \ al posto del nome.\ne usa <strong>{ANREDE}</strong> per il saluto.\nPer esempio,\
+    \ <p>{ANREDE} {NOME} risulta in «Caro Giovanni».\n"
+  test_email_invalid: C'è qualcosa di sbagliato nell'indirizzo e-mail.
+  test_email_sent: L'e-mail è stata inviata.
+  testmail: Invia l'e-mail di prova
+  test: Prova il bollettino
+  confirm: Inviare l'e-mail?
+  body: Messaggio
+  send: Invia l'e-mail
+forum:
+  thread:
+    with_mail: Argomento aperto e tutti informati via e-mail
+  follow:
+    email: come e-mail
