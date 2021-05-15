@@ -130,14 +130,15 @@
     <b-row class="mt-3 ml-3 ml-md-5 mt-5">
       <b-col
         cols="12"
-        xl="3"
+        xl="4"
         class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.call_to_action.title') }}</h2>
       </b-col>
       <b-col
         cols="12"
-        xl="6"
+        xl="4"
+        class="ml-xl-5"
       >
         <p>
           {{ $i18n('startpage.call_to_action.text') }}
@@ -171,6 +172,7 @@
                     cols="10"
                     md="11"
                     xl="10"
+                    class="pl-0"
                   >
                     <h4>{{ $i18n('startpage.member.title') }}</h4>
                   </b-col>
@@ -232,6 +234,7 @@
                     cols="10"
                     md="11"
                     xl="10"
+                    class="pl-0"
                   >
                     <h4>{{ $i18n('startpage.store.title') }}</h4>
                   </b-col>
@@ -313,6 +316,7 @@
                   <b-col
                     cols="12"
                     xl="6"
+                    class="pl-0 mb-3"
                   >
                     <b-card-text>
                       {{ $i18n('startpage.near_you.text1.part1') }} <b-link
@@ -328,6 +332,7 @@
                   <b-col
                     cols="12"
                     xl="6"
+                    class="pl-0"
                   >
                     <b-card-text>
                       {{ $i18n('startpage.near_you.text2.part1') }} <b>{{ $i18n('startpage.near_you.text2.part2') }}</b>
@@ -383,10 +388,13 @@
         />
       </b-col>
     </b-row>
-    <b-row class="ml-md-5 mt-5">
+    <b-row
+      class="ml-md-5 mt-5"
+      align-v="center"
+    >
       <b-col
         cols="12"
-        xl="6"
+        md="6"
         class="mb-3"
       >
         <b-img
@@ -398,7 +406,7 @@
       </b-col>
       <b-col
         cols="12"
-        xl="4"
+        md="6"
       >
         <h2>{{ $i18n('startpage.towns.title') }}</h2>
         <br>
@@ -438,6 +446,7 @@
                   <b-col
                     cols="10"
                     md="11"
+                    class="pl-0"
                   >
                     <h4>{{ $i18n('startpage.donate.title') }}</h4>
                   </b-col>
