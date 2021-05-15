@@ -1869,7 +1869,7 @@ register:
   login_passwd2: Password repeat
   email_invalid: Your e-mail address is invalid.
   email_required: An e-mail address is required.
-  login_email: Your e-mail address
+  login_email: E-mail address
   login_surname: Your surname
   login_name: Your first name
   login_location: Your address
