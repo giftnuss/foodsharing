@@ -37,8 +37,8 @@ group:
   name: Nome
   show-all: Mostra tutto
   unique_function:
-    tooltip_function_region2287: Gli amministratori di questo AG possono modificare
-      il contenuto della pagina iniziale
+    tooltip_function_region2287: Gli amministratori di questo gruppo di lavoro possono
+      modificare il contenuto della pagina iniziale
     tooltip_function_region1811: Gli amministratori di questo gruppo di lavoro possono
       modificare le pagine «Partner», «Contatti» e «Team»
     tooltip_function_region432: Gli amministratori di questo gruppo di lavoro possono
@@ -49,7 +49,8 @@ group:
     tooltip_function_7: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
       speciali! Il team di segnalazione riceve questo
-    tooltip_function_9: Gli amministratori di questa AG non hanno altre autorizzazioni.
+    tooltip_function_9: Gli amministratori di questo gruppo di lavoro non hanno altre
+      autorizzazioni.
     tooltip_function_6: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
       speciali.
@@ -127,7 +128,7 @@ group:
     banana_count_errors:
       max: Per favore, non aspettarti più di {{limit}} fidati delle banane.
       min: Nessuno può avere meno di {{limit}} banane di fiducia.
-    banana_count: Di quante banane fiducia ha bisogno un membro?
+    banana_count: Di quante banane fiducia ha bisogno un candidato?
     fetch_count: Quanti prelievi avrebbe dovuto effettuare un richiedente?
     open: Chiunque può partecipare senza candidare.
     everybody: Tutti possono candidarsi.
@@ -142,6 +143,8 @@ bcard:
     verified: Devi essere verificato per poter generare il tuo biglietto da visita.
     phone: Devi aver fornito un numero di telefono valido per generare il tuo biglietto
       da visita.
+    length: Il tuo indirizzo è troppo lungo. Indirizzo, codice postale e città insieme
+      possono contenere un massimo di 49 caratteri.
   choose: Devi scegliere un'opzione
   desc: Scegli qui per quale distretto o per quale ruolo vorresti creare il tuo biglietto
     da visita.
@@ -236,7 +239,7 @@ fp: Punti di guasto
 text: Testo
 right: Valutazione
 week_num: Quante settimane avrebbe dovuto essere un candidato con noi?
-fetch_count: Quanti ritiri avrebbe dovuto effettuare un richiedente?
+fetch_count: Quanti ritiri dovrebbe aver effettuato un richiedente?
 banana_count: Di quante banane fiducia ha bisogno un membro?
 apply_type: Chi può registrarsi per questo gruppo?
 leader: Amministratori dei gruppi
@@ -299,7 +302,7 @@ about_me_public: Breve descrizione pubblica
 regions: Quartieri
 daterange: Periodo
 ort: Città / comune (automaticamente dalla mappa sopra)
-photo: Foto
+photo: foto
 info: Informazioni
 status: Stato attuale
 body: Messaggio
@@ -366,7 +369,7 @@ terminology:
   profile_picture: foto del profilo
   n_cooperating_stores: Una cooperazione in corso |% count% cooperazione in corso
   n_stores: Una azienda |% count% aziende
-  n_ambassadors: Un ambasciatore |% count% ambasciatori
+  n_ambassadors: Un ambasciatore|% count% ambasciatori
   n_sleeping: Un dormiglione|%count%dormiglione
   n_foodsaver: Un Foodsaver|%count% Foodsaver
   mailboxes: Cassette e-mail
@@ -477,11 +480,11 @@ register:
   title: Registrazione
   topbar: Prendi parte
 store_status_impact_explanation: "Dopo ogni contatto aziendale (<a href=\"https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste\"\
-  \ target=\"_blank\"> Wiki: Cooperation Development - Checklist </a>) lo stato (<a\
-  \ href = \"https : //wiki.foodsharing.de/Betrieb \"target =\" _ blank \"> Wiki:\
-  \ Betrieb </a>) dell'azienda, in modo che lo stato dell'indirizzo sia visibile a\
-  \ tutti. <br> <br> Solo aziende la disponibilità a collaborare verrà successivamente\
-  \ visualizzata nella parte superiore del menu operativo della barra di navigazione."
+  \ target=\"_blank\"> Wiki: Kooperationsaufbau - Checkliste</a>) lo stato (<a href=\"\
+  https ://wiki.foodsharing.de/Betrieb\"target=\"_blank\">Wiki: Betrieb</a>) dell'azienda,\
+  \ in modo che lo stato dell'indirizzo sia visibile a tutti.<br> <br>Solo aziende\
+  \ la disponibilità a collaborare verrà successivamente visualizzata nella parte\
+  \ superiore del menu operativo della barra di navigazione."
 gender:
   d: Entrambi o qualcos'altro
   f: Donna
@@ -576,7 +579,7 @@ fsp:
     è accessibile /aperto.
   addedBy: Aggiunto da
   addedOn: Aggiunto il
-  pic: Foto
+  pic: foto
   location: CAP / località
   street: Indirizzo
   address: Indirizzo
@@ -661,12 +664,15 @@ storeview:
     nella squadra.
   info: Informazioni
   store: Azienda
-message_text_to_group_admin_workgroup: ''
+message_text_to_group_admin_workgroup: 'La regione/gruppo di lavoro <b>{groupName}</b>
+  non <b>ha più </b> ambasciatori/amministratori.<br><br><br>Ha la seguente struttura
+  ID:<br>{idStructureList}<br><br> L''ID è:{groupId}<br><br>URL: "<a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum"
+  target="_blank">clica qui per andare alla regione/gruppo di lavoro</a>'
 startpage:
   towns:
-    title: Città foodharing
+    title: Città foodsharing
   donate:
-    title: Dona
+    title: Donazioni
   welcome_text: Benvenuto/a a foodsharing
   more_infos: Scopri di più
   mission:
