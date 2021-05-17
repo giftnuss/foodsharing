@@ -926,7 +926,7 @@ poll:
   new_poll:
     submit_question: The poll can be changed within one hour (until {date}). Do you
       really want to create it now?
-    option_texts_required: Please enter a text for each option.
+    option_texts_required: Please enter a unique text for each option.
     description_required: Please enter a description.
     description: Description
     time: Time

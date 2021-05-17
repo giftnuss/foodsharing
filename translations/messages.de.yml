@@ -2143,7 +2143,7 @@ poll:
     description_required: "Bitte gib eine Beschreibung ein."
     options: "Optionen, die zur Auswahl stehen sollen. Beim Abstimmen werden sie jeweils in einer zufälligen Reihenfolge angezeigt."
     option: "Option"
-    option_texts_required: "Bitte gib für jede Option einen Text ein."
+    option_texts_required: "Bitte gib für jede Option einen eindeutigen Text ein."
     submit: "Abstimmung speichern"
     submit_success: "Die Abstimmung wurde angelegt"
     missing_fields: "Es müssen alle Felder ausgefüllt werden"

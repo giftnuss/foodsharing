@@ -2078,7 +2078,7 @@ poll:
     missing_fields: Il faut remplir tous les champs
     submit_success: Ce vote a été publié
     submit: soumettre au vote
-    option_texts_required: Écris un texte pour chacune des options.
+    option_texts_required: Écris un texte univoque pour chacune des options.
     option: Option
     options: Options possibles. Lors du vote, elles seront affichées dans un ordre
       aléatoire.

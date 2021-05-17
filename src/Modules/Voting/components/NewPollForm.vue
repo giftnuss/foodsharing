@@ -273,6 +273,12 @@ function isAfterEditTime (dateTime) {
   return dateTime > new Date(new Date().getTime() + EDIT_TIME_HOURS * 60 * 60 * 1000)
 }
 
+// returns if the array does not contain duplicate entries
+function areEntriesUnique (array) {
+  const unique = [...new Set(array)]
+  return unique.length === array.length
+}
+
 export default {
   components: {
     BForm,
@@ -348,6 +354,7 @@ export default {
         required,
         minLength: minLength(1),
       },
+      areEntriesUnique,
     },
     startDateTime: { required, isAfterEditTime },
     endDateTime: { required, isAfterStart },

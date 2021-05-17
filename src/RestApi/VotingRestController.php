@@ -252,19 +252,26 @@ class VotingRestController extends AbstractFOSRestController
 		$options = array_map(function ($x) {
 			$o = new PollOption();
 			$o->text = trim($x);
-			if (empty($o->text)) {
-				throw new HttpException(400, 'option text must not be empty');
-			}
 
 			return $o;
 		}, $data);
 		if (empty($options)) {
 			throw new HttpException(400, 'poll does not have any options');
 		}
+
+		// check that no option text is empty
 		foreach ($options as $option) {
 			if (empty($option->text)) {
 				throw new HttpException(400, 'option text must not be empty');
 			}
+		}
+
+		// check that no two option texts are equal
+		$texts = array_map(function ($o) {
+			return $o->text;
+		}, $options);
+		if (sizeof(array_unique($texts)) != sizeof($texts)) {
+			throw new HttpException(400, 'poll options must not have the same text');
 		}
 
 		return $options;
