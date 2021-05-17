@@ -4,6 +4,7 @@
       @submit="showConfirmDialog"
     >
       <b-alert
+        :v-if="poll.shuffleOptions"
         show
         variant="dark"
         class="mt-5"
@@ -111,7 +112,7 @@ export default {
   },
   computed: {
     shuffledOptions: function () {
-      return shuffle(this.poll.options)
+      return this.poll.shuffleOptions ? shuffle(this.poll.options) : this.poll.options
     },
   },
   methods: {

@@ -25,6 +25,7 @@
 - Added a title name for social icons and replaced manitu logo in svg format to footer !1985 @chriswalg
 - Allow admins of the newsletter group to see the full list of regions !2011 @alex.simm
 - Enabled session cookie checkbox in login form and enabled persistent session for 1 day #956 !2013 @Morgy93
+- Allow authors of poll to decide if the options will be shown in a random order #975 !1986 @alex.simm
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm

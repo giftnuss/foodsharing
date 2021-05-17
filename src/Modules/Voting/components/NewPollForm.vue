@@ -168,16 +168,25 @@
           label-for="input-name"
           class="mb-4"
         >
-          <b-form-spinbutton
-            id="input-num-options"
-            v-model="numOptions"
-            min="2"
-            max="200"
-            class="m-1 mb-3 mr-3"
-            style="width:120px"
-            size="sm"
-            @input="updateNumOptions"
-          />
+          <b-form-row>
+            <b-form-spinbutton
+              id="input-num-options"
+              v-model="numOptions"
+              min="2"
+              max="200"
+              class="m-1 mb-3 mr-5"
+              style="width:120px"
+              size="sm"
+              @input="updateNumOptions"
+            />
+            <b-form-checkbox
+              id="shuffle-options-checkbox"
+              v-model="shuffleOptions"
+              class="mt-2 mb-3 ml-2"
+            >
+              {{ $i18n('poll.new_poll.shuffle_options') }}
+            </b-form-checkbox>
+          </b-form-row>
 
           <b-form-row
             v-for="index in numOptions"
@@ -251,6 +260,7 @@ import {
   BFormTimepicker,
   BFormTextarea,
   BFormSpinbutton,
+  BFormCheckbox,
   BButton,
   BFormRow,
   BCol,
@@ -289,6 +299,7 @@ export default {
     BFormTimepicker,
     BFormTextarea,
     BFormSpinbutton,
+    BFormCheckbox,
     BButton,
     BFormRow,
     BCol,
@@ -317,6 +328,7 @@ export default {
       endTime: null,
       description: '',
       numOptions: 3,
+      shuffleOptions: true,
       options: Array(3).fill(''),
       locale: locale,
       labelsTimepicker: {
@@ -408,7 +420,7 @@ export default {
       e.preventDefault()
       this.isLoading = true
       try {
-        const poll = await createPoll(this.region.id, this.name, this.description, this.startDateTime, this.endDateTime, this.scope, this.type, this.options, true)
+        const poll = await createPoll(this.region.id, this.name, this.description, this.startDateTime, this.endDateTime, this.scope, this.type, this.options, this.shuffleOptions, true)
         window.location = this.$url('poll', poll.id)
       } catch (e) {
         pulseError(i18n('error_unexpected') + ': ' + e.message)
