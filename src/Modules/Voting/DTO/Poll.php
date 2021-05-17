@@ -86,6 +86,11 @@ class Poll
 	 */
 	public array $options;
 
+	/**
+	 * If true, options should be shown in a random order by the frontend.
+	 */
+	public bool $shuffleOptions;
+
 	public function __construct()
 	{
 		$this->id = -1;
@@ -102,6 +107,7 @@ class Poll
 		$this->votes = null;
 		$this->eligibleVotesCount = 0;
 		$this->options = [];
+		$this->shuffleOptions = true;
 	}
 
 	public static function create(
@@ -118,7 +124,8 @@ class Poll
 		int $numValues,
 		?int $votes,
 		int $eligibleVotesCount,
-		array $options
+		array $options,
+		bool $shuffleOptions
 	) {
 		$poll = new Poll();
 		$poll->id = $id;
@@ -135,6 +142,7 @@ class Poll
 		$poll->votes = $votes;
 		$poll->eligibleVotesCount = $eligibleVotesCount;
 		$poll->options = $options;
+		$poll->shuffleOptions = $shuffleOptions;
 
 		return $poll;
 	}

@@ -141,6 +141,7 @@ class VotingRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="type", nullable=false, requirements="\d+")
 	 * @Rest\RequestParam(name="options", nullable=false)
 	 * @Rest\RequestParam(name="notifyVoters", nullable=false)
+	 * @Rest\RequestParam(name="shuffleOptions", default=true)
 	 */
 	public function createPollAction(ParamFetcher $paramFetcher): Response
 	{
@@ -181,6 +182,7 @@ class VotingRestController extends AbstractFOSRestController
 
 		// parse options and check that they are not empty
 		$poll->options = $this->parseOptions($paramFetcher->get('options'));
+		$poll->shuffleOptions = boolval($paramFetcher->get('shuffleOptions'));
 
 		// create poll
 		$this->votingTransactions->createPoll($poll, $paramFetcher->get('notifyVoters'));
