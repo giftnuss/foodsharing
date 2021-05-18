@@ -88,7 +88,7 @@ group:
     mediation: Mediazione
     report: Raporti
     stores: Aziende
-    fsp: Distributore/Fairteiler
+    fsp: Divisore
     voting: Sondaggio
     welcome: Benvenuto
     title: Funzione del gruppo di lavoro
@@ -391,7 +391,7 @@ terminology:
   mediationAdmins: Team di mediazione
   reportAdmins: Report team di elaborazione
   storesAdmins: Team di coordinamento delle operazioni
-  fspAdmins: Team del distributore
+  fspAdmins: Team del divisore
   votingAdmins: Squadra di voto
   welcomeAdmins: Team di benvenuto
   admins: Amministratori
