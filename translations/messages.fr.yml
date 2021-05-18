@@ -73,7 +73,7 @@ group:
     tooltip_function_region1811: Les admins de ce groupe de travail peuvent modifier
       les pages « partenaires », « contact » et « équipe »
     tooltip_function_region341: Les admins de ce groupe peuvent modifier les questions
-      liées aux Quiz
+      liées aux quiz
     tooltip_function_region331: Les admins de ce groupe peuvent envoyer des lettres
       d'information
     tooltip_function_region387: Les admins de ce groupe de travail peuvent retirer
@@ -693,8 +693,8 @@ fsp:
       mises à jour de celui-ci.
     descSettings: Tu suis toutes les informations du frigo solidaire « {name} ». Comment
       souhaites-tu recevoir les notifications qui lui sont liées ?
-    descModal: 'Comment souhaites-tu être informé·e des mises à jour (par ex. : livraisons)
-      ?'
+    descModal: 'Comment souhaites-tu être informé·e des mises à jour (par exemple
+      : livraisons) ?'
     none: plus du tout
     bell: seulement des informations internes à l'équipe (cloche)
     from: Mises à jour du frigo solidaire « {name} »
@@ -726,7 +726,7 @@ fsp:
   acceptName: mettre {name} en ligne
   accept: Mettre le frigo solidaire en ligne
   suggestSuccess: Le frigo solidaire a été proposé et doit maintenant être accepté
-    par un·e ambassadeur·ice ou un responsable des frigos solidaires.
+    par un·e ambassadeur·ice ou un·e responsable des frigos solidaires.
   suggest: Proposer un frigo solidaire
   add: Enregistrer le frigo solidaire
   addSuccess: Le frigo solidaire a été enregistré avec succès
@@ -735,7 +735,7 @@ fsp:
   new: Nouveau frigo solidaire
   description: Description
   followers: Follower
-  managers: Interlocuteur·ice
+  managers: Interlocuteur·ice·s
   unfollow: Ne plus suivre ce frigo solidaire
   followName: Suivre le frigo {name}
   follow: Suivre ce frigo solidaire
@@ -767,9 +767,9 @@ terminology:
   fspAdmins: Équipe en charge des frigos solidaires
   votingAdmins: Équipe en charge des votes
   welcomeAdmins: Équipe de bienvenue
-  admins: Administateur.rices
-  ambassador_forum: Forum des ambassadeur.rices
-  ambassadors: Ambassadeur
+  admins: Administateur·ice·s
+  ambassador_forum: Forum des ambassadeur·ice·s
+  ambassadors: Ambassadeur·ice·s
   orga:
     d: membre du groupe organisation
     f: Membre du groupe organisation
@@ -803,7 +803,7 @@ terminology:
   region: Secteur géographique
   n_cooperating_stores: Une coopération en cours|%count% Coopérations en cours
   n_stores: Une entreprise|%count% Entreprise
-  n_ambassadors: Un ambassadeur·ice
+  n_ambassadors: Un·e ambassadeur·ice|%count% ambassadeur·ice·s
   n_sleeping: Un membre en mode sommeil|%count% membres en mode sommeil
   n_foodsaver: Un collecteur.ice|%count% collecteur.ice
   fsp: Frigo solidaire
@@ -825,8 +825,8 @@ register:
   pass2: Renseigne à nouveau le mot de passe
   pass1: Nouveau mot de passe de ton choix
   change-password: Tu peux désormais changer ton mot de passe.
-  activation_failed: <strong>L'activation a échouée !</strong> Le lien renseigné est-il
-    correct ?
+  activation_failed: <strong>L'activation a échoué.</strong> Le lien renseigné est-il
+    correct ?
   account-exists: Tu es déjà inscrit·e. Pense à te déconnecter si tu veux t'inscrire
     à nouveau.
   error_birthdate: Exemple 25.03.2001 (JJ.MM.AAAA). Pour des raisons de protection
@@ -863,7 +863,7 @@ register:
   password_minLength: Le mot de passe doit contenir au minimum 8 caractères.
   password_required: Il faut renseigner un mot de passe.
   login_passwd2: nouvelle saisie du mot de passe
-  login_passwd1: Mot de passe (min. 8 caractères)
+  login_passwd1: Mot de passe (minimum 8 caractères)
   birthdate_hint: Tu trouveras plus d'informations dans la rubrique <a href="?page=legal"
     target="_blank">Datenschutzerklärung</a> au point 2d) Bei der Anmeldung als Foodsharer
     bzw. Foodsaver.
@@ -873,8 +873,8 @@ register:
   topbar: Rejoins-nous
 login:
   pwreset:
-    mailSent: Très bien ! Un lien vous a été envoyé par courriel pour modifier votre
-      mot de passe.
+    mailSent: Très bien, un lien t'a été envoyé par courriel pour modifier ton mot
+      de passe.
     wrongMail: Malheureusement, nous ne trouvons pas cette adresse courriel, veuillez
       réessayer.
     mismatch: Désolé, tes mots de passe sont différents.
@@ -882,9 +882,9 @@ login:
     expired: Désolé, tu as attendu un peu trop longtemps. Nous te prions de bien vouloir
       redemander un nouveau mot de passe.
     tooShort: Désolé, le mot de passe choisi est trop court.
-    success: Super ! Ton mot de passe a été changé avec succès. Tu peux maintenant
+    success: Super, ton mot de passe a été changé avec succès. Tu peux maintenant
       te reconnecter.
-    bread: Changer le mot de passe
+    bread: Réinitialiser le mot de passe
   error_no_auth: Malheureusement, nous ne trouvons pas cette adresse courriel ou ce
     mot de passe, veuillez réessayer.
   error_no_email: Entre ton adresse courriel s'il te plaît.
@@ -984,7 +984,7 @@ store:
     makeJumper: Nommer remplaçant(e)
     reallyRemove: Souhaites-tu vraiment retirer {name} de cette équipe ?
     removeFromTeam: Retirer de l'équipe
-    filterQuizSM: Test-RC réussi
+    filterQuizSM: Quiz pour responsable coopération réussi
     filterJumper: Remplaçants
     filterUnverified: Non-vérifé(e)s
     filter: 'Ne montrer qu''à :'
@@ -992,14 +992,14 @@ store:
     pickupDesc: Récent en premier
     pickupAsc: Récent en dernier
     byLastPickup: Trier suivant la dernière collecte
-    managementActions: Actions-RC
+    managementActions: Actions pour responsable coopération
     managementEffect: 'Trier suivant la dernière collecte :'
     managementToggleOff: Revenir à la version standard
-    managementToggleOn: Voir en tant que RC
+    managementToggleOn: Voir en tant que responsable coopération
     reloadPage: Recharger
     reloadRequired: "Aller à : modifier les infos de l'équipe"
     reallyDemote: Souhaites-tu réellement retirer {name} en tant que RM dans ce magasin ?
-    demoteAsManager: Retirer en tant que RM
+    demoteAsManager: Retirer en tant que responsable coopération
     promoteToManager: Rendre responsable
   springer_conversation_name: Replaçant(e) {name}
   team_conversation_name: Équipe {name}
@@ -1547,7 +1547,8 @@ storeedit:
   fetch:
     teamStatus2: Besoin de renforts urgent !
     teamStatus1: Ton aide est la bienvenue !
-    teamStatus0: Cette équipe est complète et n'a pas besoin d'aide supplémentaire.
+    teamStatus0: Cette équipe est complète et n'a pas besoin d'aide supplémentaire
+      pour le moment
     teamStatus: Statut de l'équipe
   store:
     status: Statut
