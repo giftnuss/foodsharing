@@ -131,7 +131,10 @@
                 data-placement="top"
                 :title="$i18n('footer.hosting_tooltip')"
               >
-                <img src="/img/footer/manitu_logo_at.png"></a>
+                <img
+                  height="25px"
+                  src="/img/footer/manitu_logo.svg"
+                ></a>
               <a
                 :href="$url('denns')"
                 target="_blank"
@@ -178,7 +181,10 @@
                 target="_blank"
                 :rel="externalLink"
               >
-                <img src="/img/footer/manitu_logo.png">
+                <img
+                  height="49px"
+                  src="/img/footer/manitu_logo.svg"
+                >
               </a>
             </b-col>
             <b-col
