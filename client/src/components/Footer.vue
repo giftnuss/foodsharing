@@ -183,6 +183,7 @@
               >
                 <img
                   height="49px"
+                  :alt="$i18n('footer.hosting_info')"
                   src="/img/footer/manitu_logo.svg"
                 >
               </a>
@@ -245,6 +246,7 @@
                 class="social_icons"
                 :href="twitterUrl"
                 target="_blank"
+                title="Twitter"
                 :rel="externalLink"
               >
                 <i class="fab fa-twitter-square pr-2" />
@@ -253,6 +255,7 @@
                 class="social_icons"
                 :href="facebookUrl"
                 target="_blank"
+                title="Facebook"
                 :rel="externalLink"
               >
                 <i class="fab fa-facebook-square pr-2" />
@@ -261,6 +264,7 @@
                 class="social_icons"
                 :href="instagramUrl"
                 target="_blank"
+                title="Instagram"
                 :rel="externalLink"
               >
                 <i class="fab fa-instagram-square pr-2" />
@@ -268,6 +272,7 @@
               <a
                 class="social_icons"
                 :href="linkedinUrl"
+                title="LinkedIn"
                 target="_blank"
                 :rel="externalLink"
               >
@@ -276,6 +281,7 @@
               <a
                 class="social_icons"
                 :href="youtubeUrl"
+                title="YouTube"
                 target="_blank"
                 :rel="externalLink"
               >
