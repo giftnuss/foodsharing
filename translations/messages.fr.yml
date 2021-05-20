@@ -671,7 +671,7 @@ forum:
     error: Ta contribution n'a pas pu être sauvegardée.
     success: Super ! Ta réponse a été sauvegardée.
   markdown_description: "Pour formater le texte en *<i>cursif</i>* ou **<b>gras</b>**,\
-    \ utilise  <a href=\"https://de.wikipedia.org/wiki/Markdown\" target=\"_blank\"\
+    \ utilise  <a href=\"https://fr.wikipedia.org/wiki/Markdown\" target=\"_blank\"\
     >Markdown</a>.\n<br />Attention : Si tu souhaites mettre une étoile au sein de\
     \ ton texte, il faudra ajouter un \\ avant l'étoile (\\*) pour que celle-ci soit\
     \ visible."
@@ -1830,7 +1830,7 @@ team:
   not-found: Page non trouvée
   ratelimit: Attends {minutes} minutes avant de pouvoir envoyer le prochain message.
   contacted: Ton message a bien été envoyé.
-  contact: '{name} par le formulaire de contact de foodsharing.fr'
+  contact: '{name} par le formulaire de contact de foodsharing.network'
   email: Adresse courriel
   name: Nom
   former: Ancien.ne
@@ -1992,12 +1992,14 @@ startpage:
         \ auprès d'autres foodsharers."
       part1: De plus il y a
     text1:
-      part3: tu trouveras les frigos solidaires ; ce sont du mobilier à usage public
-        (étagères avec ou sans réfrigérateur) dans lesquels tu peux apporter des denrées
-        (non périmées bien entendu) si tu pars en vacances par exemple et auprès desquels
-        tu peux aussi récupérer de la nourriture apportée par d'autres.
+      part3: tu trouveras
       part2: carte
       part1: Sur la
+      part5: ", ce sont du mobilier à usage public (étagères avec ou sans réfrigérateur)\
+        \ dans lesquels tu peux apporter des denrées (non périmées bien entendu) si\
+        \ tu pars en vacances par exemple et auprès desquels tu peux aussi récupérer\
+        \ de la nourriture apportée par d'autres."
+      part4: frigos solidaires
     title: À proximité
   how_we_work:
     text: "Tout le fonctionnement est sur la base du volontariat, est bénévole, indépendant\
@@ -2227,7 +2229,7 @@ base:
   keywords: foodsharing, denrées alimentaires, DLC, DLUO, gaspillage alimentaire,
     alimentation, jeter de la nourriture à la poubelle, donner, redistribuer, échange
     de nourriture
-  whatfor: Sur foodsharing.fr tu peux aider à sauver des denrées avant leur destruction
+  whatfor: Sur foodsharing.network tu peux aider à sauver des denrées avant leur destruction
     pour les redistribuer à des organisations locales ou à un tiers.
 sidenav:
   yourgroups: Tes groupes
