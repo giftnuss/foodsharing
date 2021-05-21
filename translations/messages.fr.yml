@@ -1561,7 +1561,7 @@ storeedit:
       \ étendus en tant qu'ambassadeur.ice.\n"
     note: 'Conseils :'
     unmanaged: "Il n'y a actuellement aucun(e) responsable coopération dans cette\
-      \ équipe.\nAjoute jusqu'à 3 RC pour gérer cette équipe.\n"
+      \ équipe.\nAjoute jusqu'à trois responsables magasin pour gérer cette équipe.\n"
     max-sm: Choisis au maximum 3 Responsables coopération (RC)
     need-sm: Il doit y avoir au minimum un(e) responsable pour ce magasin.
     empty: L'équipe ne peut pas être vide.
@@ -1966,6 +1966,7 @@ startpage:
       \ pour les dépenses liées au financement de manifestations, à l’assistance juridique,\
       \ aux assurances. Nous nous réjouissons de toute forme de soutien.\n"
     title: Faire un don
+    link: Soutenir foodsharing
   towns:
     text: "Les villes participantes diffèrent selon qu’elles sont en route vers la\
       \ limitation du gaspillage alimentaire ou qu’elles l'ont déjà atteinte.\nCe\
@@ -1985,10 +1986,11 @@ startpage:
     text3:
       part2: Trouve les secteurs autour de toi
       part1: La communauté s'organise en secteurs géographiques.
-    text2: "De plus, tu as la possibilité d'utiliser la fonction \"paniers solidaires\"\
-      \ sur le site ; ils permettent à ce que les autres partageur.euse.s viennent\
-      \ directement chez toi chercher les denrées que tu as à proposer (pas besoin\
-      \ de te déplacer vers un frigo solidaire).\n"
+    text2:
+      part2: Paniers solidaires
+      part3: "- ici tu peux partager tes propres denrées ou récupérer des denrées\
+        \ auprès d'autres foodsharers."
+      part1: De plus il y a
     text1:
       part3: tu trouveras les frigos solidaires ; ce sont du mobilier à usage public
         (étagères avec ou sans réfrigérateur) dans lesquels tu peux apporter des denrées
@@ -2177,7 +2179,8 @@ region:
     state: Région
     region: Département
     townpart: Quartier
-    bigcity: grande ville
+    bigcity: Grande ville (pas de possibilité de rejoindre, veuillez choisir un quartier
+      précis)
     city: Ville
   none: Aucun secteur géographique sélectionné
   delete: supprimer le secteur géographique
@@ -2219,7 +2222,7 @@ buddy:
   request_sent: Ta demande a été envoyée.
 base:
   jsrequired: Le site ne fonctionne pas sans JavaScript.
-  slogan: Nos denrées ont de la valeur, partageons-les au lieu de les jeter - foodsharing
+  slogan: Nos denrées alimentaires sont précieuses, partageons-les ! - foodsharing
     France
   keywords: foodsharing, denrées alimentaires, DLC, DLUO, gaspillage alimentaire,
     alimentation, jeter de la nourriture à la poubelle, donner, redistribuer, échange
