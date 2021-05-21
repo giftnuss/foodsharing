@@ -92,6 +92,13 @@ group:
     voting: Sondaggio
     welcome: Benvenuto
     title: Funzione del gruppo di lavoro
+    tooltip_function_5: gli amministratori di questo gruppo di lavoro possono visualizzare
+      le segnalazioni sui Foodsaver nel distretto. Non verrano mostrate segnalazioni
+      riguardanti gli amministratori stessi! L'ufficio arbitrale riceverà quest'ultime.
+    tooltip_function_4: gli amministratori di questo gruppo di lavoro possono visualizzare
+      e rielaborare le aziende nel distretto
+    tooltip_function_3: gli amministratori di questo gruppo di lavoro possono sia
+      abilitare i divisori del distretto sia rimuovere i contribuiti per il divisore
   delete_group_sure: Sei sicuro di voler eliminare il gruppo di lavoro / distretto
     {groupName}?
   quitting_home_district_warning: Sei sicuro di voler lasciare il tuo distretto di
@@ -594,6 +601,8 @@ fsp:
   followers: Follower
   managers: Referente
   unfollow: divisore equi non seguiere più
+  suggestSuccess: I divisori vengono proposti e devono poi essere confermati da un/a
+    ambasciatore/trice o responsabile del divisore.
 formatting:
   md: Puoi utilizzare <a href="http://markdown.de/"> Markdown </a> per la formattazione.
 day: Giorno
@@ -603,6 +612,9 @@ pickup:
   confirm: confermare
   call: chiamare
   dates: Date di ritiro
+  edit:
+    add: inserire orari di ritiro
+    bread: modificare gli orari di ritiro
 storeedit:
   milestone:
     statuschanged: Cambio di stato il {date}
@@ -677,15 +689,26 @@ startpage:
   more_infos: Scopri di più
   mission:
     title: Missione
+    text: Il nostro obiettivo a lungo termine è quello di diminuire la cultura dello
+      spreco del cibo e di altre risorse. Salviamo il cibo sia in case private che
+      in aziende- collettivamente, in modo sostenibile e dando valore. Ci consideriamo
+      come movimento di politica culturale.
   near_you:
     text1:
       part1: Sulla
       part2: mappa
+      part4: divisore
+      part3: tu trovi
     title: Vicino a te
     text3:
       part1: La comunità è organizzata in distretti.
   how_we_work:
     title: È così che funziona
+  member:
+    title: come membro
+  this_is_how_it_works: Funziona così
+  call_to_action:
+    title: Unisciti
 poll:
   results:
     option_text: Opzione
@@ -785,3 +808,4 @@ forum:
     with_mail: Argomento aperto e tutti informati via e-mail
   follow:
     email: come e-mail
+first_post: Primo inserimento nella bacheca
