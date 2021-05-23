@@ -304,11 +304,11 @@ pass2: Répétition du mot de passe
 pass1: Ton nouveau mot de passe
 orgateam: Organisation nationale
 dateend: Date de fin
-online_type: L'évènement aura-t-il lieu sur site ou en ligne ?
+online_type: L'évènement aura-t-il lieu sur site ou en ligne ?
 location_name: Lieu de réunion/Salle de conférence
 mailbox_id: Adresse courriel de l’expéditeur
 testemail: Adresse courriel de test
-bezirk_id: Pour quelle région l'article est-il pertinent ?
+bezirk_id: Pour quelle région l'article est-il pertinent ?
 lifetime: Combien de temps votre panier solidaire doit-il être valide ?
 fetchstate: Tout s'est bien passé ?
 food_art: De quel type de nourriture s'agit-il ?
