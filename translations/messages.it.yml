@@ -47,6 +47,8 @@ group:
       le domande del quiz
     tooltip_function_region331: Gli amministratori di questo gruppo di lavoro possono
       inviare newsletter
+    tooltip_function_region387: Gli amministratori di questo Gruppo di lavoro possono
+      cancellare le iscrizioni delle E-mail Bounceliste
   function:
     tooltip_function_7: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
@@ -590,6 +592,7 @@ fsp:
     descModal: Come vorresti essere avvisato/a degli aggiornamenti (come le consegne
       di cibo)?
     mail: Campanello e notifica via e-mail
+    bell: solo informazioni interne (campanella)
   deleteSuccess: Il divisore è stato eliminato
   deleteConfirm: Vuoi davvero eliminare questo divisore?
   delete: Eliminare il divisore
@@ -985,6 +988,9 @@ recipients:
   all: Tutti i Foodsaver al mondo
   recipients: Destinatario
   prepare: Preparare per spedire
+  newsletter_all: Tutti gli abbonati alle Newsletter (Foodsharer, Foodsaver, tutti)
+  newsletter: Tutti gli abbonati alla Newsletter (almeno Foodsaver)
+  bread: Mailing-list delle Newsletter
 forum:
   thread:
     with_mail: L'argomento è stato aperto e tutti ne sono stati informati tramite
@@ -1020,6 +1026,12 @@ forum:
   new_thread: Componi un nuovo agromento
   threads: Sogetti
   from: Di {name}
+  markdown_description: 'Per la formattazione da *<i>corsivo</i>* o **<b>grassetto</b>**
+    Puoi usare il testo <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a>
+    .<br />Attenzione: Se tu volessi utilizzare un *  nel testo, devi far precedere
+    un  . Per esempio nel genere della parola ambasciatore\*trice.'
+  hold_back_for_moderation: Il tema è stato salvato e verrà pubblicato in seguito
+    a conferma da parte di un ambasciatore/moderatore.
 first_post: Primo inserimento nella bacheca
 events:
   rsvp:
@@ -1086,6 +1098,10 @@ wall:
   delete: eliminare il post
   see-more: Mostra più post
   message_placeholder: Scrivere messaggio...
+  error-create: Non è stato possibile salvare la tua immissione in Bacheca.
+  created: Fantastico, la tua immissione in bacheca è stata salvata.
+  confirm-deletion: Cancellare definitivamente l'immissione in bacheca da parte di{nome}?
+  name: Bacheca
 chat:
   confirm_draft_discard: "Passi a una nuova conversazione. Il testo nel campo della\
     \ risposta viene scartato.\n\nSe interrompi questo dialogo, la tua bozza verrà\
@@ -1123,3 +1139,12 @@ calendar:
   labelCurrentMonth: Corrente mese
   labelPrevMonth: Lo scorso mese
   labelPrevYear: L'anno scorso
+  locale: de
+bell:
+  ft_update_title: '{nome}'
+  blog_new_check: '{titolo}'
+  blog_new_check_title: Nuovo articolo del Blog
+  forum_answer: '{utente} ti ha risposto'
+  forum_reply_title: '{forum}: {titolo}'
+  forum_answer_title: '{forum}'
+  no_bells: Non hai Notifiche al momento.
