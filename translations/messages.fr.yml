@@ -73,7 +73,7 @@ group:
     tooltip_function_region1811: Les admins de ce groupe de travail peuvent modifier
       les pages « partenaires », « contact » et « équipe »
     tooltip_function_region341: Les admins de ce groupe peuvent modifier les questions
-      liées aux Quiz
+      liées aux quiz
     tooltip_function_region331: Les admins de ce groupe peuvent envoyer des lettres
       d'information
     tooltip_function_region387: Les admins de ce groupe de travail peuvent retirer
@@ -304,11 +304,11 @@ pass2: Répétition du mot de passe
 pass1: Ton nouveau mot de passe
 orgateam: Organisation nationale
 dateend: Date de fin
-online_type: L'évènement aura-t-il lieu sur site ou en ligne ?
+online_type: L'évènement aura-t-il lieu sur site ou en ligne ?
 location_name: Lieu de réunion/Salle de conférence
 mailbox_id: Adresse courriel de l’expéditeur
 testemail: Adresse courriel de test
-bezirk_id: Pour quelle région l'article est-il pertinent ?
+bezirk_id: Pour quelle région l'article est-il pertinent ?
 lifetime: Combien de temps votre panier solidaire doit-il être valide ?
 fetchstate: Tout s'est bien passé ?
 food_art: De quel type de nourriture s'agit-il ?
@@ -671,7 +671,7 @@ forum:
     error: Ta contribution n'a pas pu être sauvegardée.
     success: Super ! Ta réponse a été sauvegardée.
   markdown_description: "Pour formater le texte en *<i>cursif</i>* ou **<b>gras</b>**,\
-    \ utilise  <a href=\"https://de.wikipedia.org/wiki/Markdown\" target=\"_blank\"\
+    \ utilise  <a href=\"https://fr.wikipedia.org/wiki/Markdown\" target=\"_blank\"\
     >Markdown</a>.\n<br />Attention : Si tu souhaites mettre une étoile au sein de\
     \ ton texte, il faudra ajouter un \\ avant l'étoile (\\*) pour que celle-ci soit\
     \ visible."
@@ -693,8 +693,8 @@ fsp:
       mises à jour de celui-ci.
     descSettings: Tu suis toutes les informations du frigo solidaire « {name} ». Comment
       souhaites-tu recevoir les notifications qui lui sont liées ?
-    descModal: 'Comment souhaites-tu être informé·e des mises à jour (par ex. : livraisons)
-      ?'
+    descModal: 'Comment souhaites-tu être informé·e des mises à jour (par exemple
+      : livraisons) ?'
     none: plus du tout
     bell: seulement des informations internes à l'équipe (cloche)
     from: Mises à jour du frigo solidaire « {name} »
@@ -726,7 +726,7 @@ fsp:
   acceptName: mettre {name} en ligne
   accept: Mettre le frigo solidaire en ligne
   suggestSuccess: Le frigo solidaire a été proposé et doit maintenant être accepté
-    par un·e ambassadeur·ice ou un responsable des frigos solidaires.
+    par un·e ambassadeur·ice ou un·e responsable des frigos solidaires.
   suggest: Proposer un frigo solidaire
   add: Enregistrer le frigo solidaire
   addSuccess: Le frigo solidaire a été enregistré avec succès
@@ -735,7 +735,7 @@ fsp:
   new: Nouveau frigo solidaire
   description: Description
   followers: Follower
-  managers: Interlocuteur·ice
+  managers: Interlocuteur·ice·s
   unfollow: Ne plus suivre ce frigo solidaire
   followName: Suivre le frigo {name}
   follow: Suivre ce frigo solidaire
@@ -767,9 +767,9 @@ terminology:
   fspAdmins: Équipe en charge des frigos solidaires
   votingAdmins: Équipe en charge des votes
   welcomeAdmins: Équipe de bienvenue
-  admins: Administateur.rices
-  ambassador_forum: Forum des ambassadeur.rices
-  ambassadors: Ambassadeur
+  admins: Administateur·ice·s
+  ambassador_forum: Forum des ambassadeur·ice·s
+  ambassadors: Ambassadeur·ice·s
   orga:
     d: membre du groupe organisation
     f: Membre du groupe organisation
@@ -803,7 +803,7 @@ terminology:
   region: Secteur géographique
   n_cooperating_stores: Une coopération en cours|%count% Coopérations en cours
   n_stores: Une entreprise|%count% Entreprise
-  n_ambassadors: Un ambassadeur·ice
+  n_ambassadors: Un·e ambassadeur·ice|%count% ambassadeur·ice·s
   n_sleeping: Un membre en mode sommeil|%count% membres en mode sommeil
   n_foodsaver: Un collecteur.ice|%count% collecteur.ice
   fsp: Frigo solidaire
@@ -825,8 +825,8 @@ register:
   pass2: Renseigne à nouveau le mot de passe
   pass1: Nouveau mot de passe de ton choix
   change-password: Tu peux désormais changer ton mot de passe.
-  activation_failed: <strong>L'activation a échouée !</strong> Le lien renseigné est-il
-    correct ?
+  activation_failed: <strong>L'activation a échoué.</strong> Le lien renseigné est-il
+    correct ?
   account-exists: Tu es déjà inscrit·e. Pense à te déconnecter si tu veux t'inscrire
     à nouveau.
   error_birthdate: Exemple 25.03.2001 (JJ.MM.AAAA). Pour des raisons de protection
@@ -863,7 +863,7 @@ register:
   password_minLength: Le mot de passe doit contenir au minimum 8 caractères.
   password_required: Il faut renseigner un mot de passe.
   login_passwd2: nouvelle saisie du mot de passe
-  login_passwd1: Mot de passe (min. 8 caractères)
+  login_passwd1: Mot de passe (minimum 8 caractères)
   birthdate_hint: Tu trouveras plus d'informations dans la rubrique <a href="?page=legal"
     target="_blank">Datenschutzerklärung</a> au point 2d) Bei der Anmeldung als Foodsharer
     bzw. Foodsaver.
@@ -873,8 +873,8 @@ register:
   topbar: Rejoins-nous
 login:
   pwreset:
-    mailSent: Très bien ! Un lien vous a été envoyé par courriel pour modifier votre
-      mot de passe.
+    mailSent: Très bien, un lien t'a été envoyé par courriel pour modifier ton mot
+      de passe.
     wrongMail: Malheureusement, nous ne trouvons pas cette adresse courriel, veuillez
       réessayer.
     mismatch: Désolé, tes mots de passe sont différents.
@@ -882,9 +882,9 @@ login:
     expired: Désolé, tu as attendu un peu trop longtemps. Nous te prions de bien vouloir
       redemander un nouveau mot de passe.
     tooShort: Désolé, le mot de passe choisi est trop court.
-    success: Super ! Ton mot de passe a été changé avec succès. Tu peux maintenant
+    success: Super, ton mot de passe a été changé avec succès. Tu peux maintenant
       te reconnecter.
-    bread: Changer le mot de passe
+    bread: Réinitialiser le mot de passe
   error_no_auth: Malheureusement, nous ne trouvons pas cette adresse courriel ou ce
     mot de passe, veuillez réessayer.
   error_no_email: Entre ton adresse courriel s'il te plaît.
@@ -984,7 +984,7 @@ store:
     makeJumper: Nommer remplaçant(e)
     reallyRemove: Souhaites-tu vraiment retirer {name} de cette équipe ?
     removeFromTeam: Retirer de l'équipe
-    filterQuizSM: Test-RC réussi
+    filterQuizSM: Quiz pour responsable coopération réussi
     filterJumper: Remplaçants
     filterUnverified: Non-vérifé(e)s
     filter: 'Ne montrer qu''à :'
@@ -992,14 +992,14 @@ store:
     pickupDesc: Récent en premier
     pickupAsc: Récent en dernier
     byLastPickup: Trier suivant la dernière collecte
-    managementActions: Actions-RC
+    managementActions: Actions pour responsable coopération
     managementEffect: 'Trier suivant la dernière collecte :'
     managementToggleOff: Revenir à la version standard
-    managementToggleOn: Voir en tant que RC
+    managementToggleOn: Voir en tant que responsable coopération
     reloadPage: Recharger
     reloadRequired: "Aller à : modifier les infos de l'équipe"
     reallyDemote: Souhaites-tu réellement retirer {name} en tant que RM dans ce magasin ?
-    demoteAsManager: Retirer en tant que RM
+    demoteAsManager: Retirer en tant que responsable coopération
     promoteToManager: Rendre responsable
   springer_conversation_name: Replaçant(e) {name}
   team_conversation_name: Équipe {name}
@@ -1547,7 +1547,8 @@ storeedit:
   fetch:
     teamStatus2: Besoin de renforts urgent !
     teamStatus1: Ton aide est la bienvenue !
-    teamStatus0: Cette équipe est complète et n'a pas besoin d'aide supplémentaire.
+    teamStatus0: Cette équipe est complète et n'a pas besoin d'aide supplémentaire
+      pour le moment
     teamStatus: Statut de l'équipe
   store:
     status: Statut
@@ -1560,7 +1561,7 @@ storeedit:
       \ étendus en tant qu'ambassadeur.ice.\n"
     note: 'Conseils :'
     unmanaged: "Il n'y a actuellement aucun(e) responsable coopération dans cette\
-      \ équipe.\nAjoute jusqu'à 3 RC pour gérer cette équipe.\n"
+      \ équipe.\nAjoute jusqu'à trois responsables magasin pour gérer cette équipe.\n"
     max-sm: Choisis au maximum 3 Responsables coopération (RC)
     need-sm: Il doit y avoir au minimum un(e) responsable pour ce magasin.
     empty: L'équipe ne peut pas être vide.
@@ -1829,7 +1830,7 @@ team:
   not-found: Page non trouvée
   ratelimit: Attends {minutes} minutes avant de pouvoir envoyer le prochain message.
   contacted: Ton message a bien été envoyé.
-  contact: '{name} par le formulaire de contact de foodsharing.fr'
+  contact: '{name} par le formulaire de contact de foodsharing.network'
   email: Adresse courriel
   name: Nom
   former: Ancien.ne
@@ -1965,6 +1966,7 @@ startpage:
       \ pour les dépenses liées au financement de manifestations, à l’assistance juridique,\
       \ aux assurances. Nous nous réjouissons de toute forme de soutien.\n"
     title: Faire un don
+    link: Soutenir foodsharing
   towns:
     text: "Les villes participantes diffèrent selon qu’elles sont en route vers la\
       \ limitation du gaspillage alimentaire ou qu’elles l'ont déjà atteinte.\nCe\
@@ -1984,17 +1986,20 @@ startpage:
     text3:
       part2: Trouve les secteurs autour de toi
       part1: La communauté s'organise en secteurs géographiques.
-    text2: "De plus, tu as la possibilité d'utiliser la fonction \"paniers solidaires\"\
-      \ sur le site ; ils permettent à ce que les autres partageur.euse.s viennent\
-      \ directement chez toi chercher les denrées que tu as à proposer (pas besoin\
-      \ de te déplacer vers un frigo solidaire).\n"
+    text2:
+      part2: Paniers solidaires
+      part3: "- ici tu peux partager tes propres denrées ou récupérer des denrées\
+        \ auprès d'autres foodsharers."
+      part1: De plus il y a
     text1:
-      part3: tu trouveras les frigos solidaires ; ce sont du mobilier à usage public
-        (étagères avec ou sans réfrigérateur) dans lesquels tu peux apporter des denrées
-        (non périmées bien entendu) si tu pars en vacances par exemple et auprès desquels
-        tu peux aussi récupérer de la nourriture apportée par d'autres.
+      part3: tu trouveras
       part2: carte
       part1: Sur la
+      part5: ", ce sont du mobilier à usage public (étagères avec ou sans réfrigérateur)\
+        \ dans lesquels tu peux apporter des denrées (non périmées bien entendu) si\
+        \ tu pars en vacances par exemple et auprès desquels tu peux aussi récupérer\
+        \ de la nourriture apportée par d'autres."
+      part4: frigos solidaires
     title: À proximité
   how_we_work:
     text: "Tout le fonctionnement est sur la base du volontariat, est bénévole, indépendant\
@@ -2176,7 +2181,8 @@ region:
     state: Région
     region: Département
     townpart: Quartier
-    bigcity: grande ville
+    bigcity: Grande ville (pas de possibilité de rejoindre, veuillez choisir un quartier
+      précis)
     city: Ville
   none: Aucun secteur géographique sélectionné
   delete: supprimer le secteur géographique
@@ -2218,12 +2224,12 @@ buddy:
   request_sent: Ta demande a été envoyée.
 base:
   jsrequired: Le site ne fonctionne pas sans JavaScript.
-  slogan: Nos denrées ont de la valeur, partageons-les au lieu de les jeter - foodsharing
+  slogan: Nos denrées alimentaires sont précieuses, partageons-les ! - foodsharing
     France
   keywords: foodsharing, denrées alimentaires, DLC, DLUO, gaspillage alimentaire,
     alimentation, jeter de la nourriture à la poubelle, donner, redistribuer, échange
     de nourriture
-  whatfor: Sur foodsharing.fr tu peux aider à sauver des denrées avant leur destruction
+  whatfor: Sur foodsharing.network tu peux aider à sauver des denrées avant leur destruction
     pour les redistribuer à des organisations locales ou à un tiers.
 sidenav:
   yourgroups: Tes groupes

@@ -98,7 +98,7 @@ group:
       of the reporting team. No reports are displayed in which the admins are involved;
       the reporting team receives them
   apply:
-    sent: The application was sent!
+    sent: The application was sent.
     send: Send application
     time:
       "5": 5 or more hours
@@ -123,7 +123,7 @@ group:
     send: Send message
     title: Contact {group}
     admins: '{count} contact person:'
-    sent: The message has been sent successfully!
+    sent: The message has been sent successfully.
     empty: Please write something first ;)
     disclaimer: "By sending a message to this workgroup\nall administrators of the\
       \ workgroup see your email address,\nwhich you have specified on your foodsharing\
@@ -204,6 +204,17 @@ settings:
     title: Your pickup calendar
     teaser: "You can integrate your collection calendar into a calendar program of\
       \ your choice.\nTo do this, subscribe to one of the two following calendar links.\n"
+    delete_token:
+      message: The current link will become invalid. Do you really want to delete
+        the token?
+      title: Delete token
+      button: Delete token
+    create_token:
+      message: You can only have one token. By generating a new one, the old link
+        will be overwritten and will become invalid. Do you really want to generate
+        it?
+      title: Generate a new token
+      button: Generate a new token
   saved: The changes were saved.
   changemail:
     done: Your e-mail address was changed!
@@ -549,6 +560,7 @@ forum:
       mail
     close: "Close thread"
     open: "Reopen thread"
+    closed: Closed thread
   post:
     delete: Delete post
     body: Message
@@ -648,6 +660,7 @@ pickup:
   kick_message: we have removed you from the {storeName} pickup on {date}.
   really_kick_user_info: "Do you really want to unsubscribe {name} from the pickup\
     \ on {date}?\n{name} will receive the following message about this:\n"
+  same_day_entry: '[{when}] {name}'
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -747,7 +760,7 @@ login:
     expired: Sorry, you waited a little too long. Please request a new password again!
     success: Great, your password has been changed successfully. You can now log in.
     mailSent: All right! A link to change your password has been emailed to you.
-    wrongMail: Sorry! Did you make a mistake in your email address?
+    wrongMail: Unfortunately we cannot find that e-mail address. Please try again.
   logout: Logout
   topbar: Log in
   submit_btn: Login
@@ -760,8 +773,7 @@ login:
   password: Password
   email_address: E-mail address
   form_title: Login
-  success: <b> Have a wonderful day, {user_name}! </b> <br /> You have successfully
-    logged in and will be redirected immediately.
+  success: <b> Have a wonderful day, {user_name}! </b>
   steady_login: Stay logged in (uses cookies)
 salutation:
   "3": Dear
@@ -963,7 +975,7 @@ poll:
   already_voted: You have already voted in this poll
   vote_success: You have successfully voted.
   submit_vote_warning: 'Caution: voting is anonymous. You can not change your choices
-    after submitting!'
+    after submitting.'
   type_description_3: Score voting with values between +3 (approval) and -3 (disapproval)
   type_description_2: Choosing between approval / neutral / disapproval
   scope_description_2: All store managers in the region, who are currently responsible
@@ -1040,7 +1052,7 @@ sidenav:
   countryspecific: Country-specific groups
   superregional: Supraregional groups
 password:
-  reset: Reset password
+  reset: Forgot your password?
   insertmail: Please enter your e-mail address here with which you are registered
     on foodsharing!
 tablesorter:
@@ -1240,6 +1252,7 @@ footer:
   hosting_tooltip: hosted carbon-neutral by manitu.
   hosting_info: hosted carbon-neutral at
   call_to_action: Participate
+  beta_testing_issues: Testing tasks of the beta version
 basket:
   is:
     gf: are gluten-free
@@ -1578,7 +1591,7 @@ pass:
     confirm: Sure?
     undo: Verification of {name} cancel
     do: Verify {name}'s account
-    checkPickups: Before de-verifying you have to check the pickup dates entered!
+    checkPickups: Before de-verifying you have to check the pickup dates entered.
     hasPickup: Still registered for pickups
     text: "Checked your personal data? <br/>\nHand over ID?\n"
   claim: Share foods instead of throw it away!
@@ -1609,7 +1622,7 @@ upload:
     image
   no_image_chosen: No file selected yet
   no_image_yet: No picture uploaded yet
-  no_image: The uploaded file is not a photo. Please choose another file!
+  no_image: The uploaded file is not a photo. Please choose another file.
 photo: Photo
 status: Current status
 title: Title
@@ -1719,11 +1732,13 @@ bcard:
     length: Your address is too long! Address, post code and city together may have
       a maximum of 49 characters.
   desc: Choose the region and role, for which you would like to generate your business
-    card!
+    card.
   claim: Generate, print and cut easily here ...
+  info:
+    address_shortened: Your address will be abbreviated on the business card.
 picture_upload_widget:
   picture_upload: Upload image
-  choose_picture: Choose a picture from your computer!
+  choose_picture: Choose a picture from your computer.
 image: Image
 wikilink: Link to wiki site
 fax: Fax
@@ -2217,6 +2232,8 @@ startpage:
       from companies.
   call_to_action:
     title: Join
+    text: We newly formed in 2012, by now we are an international movement existing
+      of over 200.000 users in Germany, Austia,  Switzerland and other European countries.
   mission:
     title: Mission
   call_to_action_button: Join
@@ -2226,6 +2243,11 @@ startpage:
   this_is_how_it_works: This is how it works
   more_infos: Learn more
   slogan: Together for more food appreciation
+  how_we_work:
+    title: This is how it goes
+  private:
+    text: Fight food-waste in your household. We are informing on events such as.
+    title: in private
 date_short:
   Sunday: Sun
   Saturday: Sat
