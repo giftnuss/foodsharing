@@ -661,6 +661,7 @@ pickup:
   really_kick_user_info: "Do you really want to unsubscribe {name} from the pickup\
     \ on {date}?\n{name} will receive the following message about this:\n"
   same_day_entry: '[{when}] {name}'
+  same_day_hint: 'On the {day} you have signed into the following pickups:'
 storeview:
   cooperation: Cooperation since {startTime}.
   store: Store
@@ -2221,9 +2222,14 @@ startpage:
         can leave or pick up food for free.
       part2: map
       part4: food-share-point
+      part5: which are shelves or fridges where you can pick up and bring food for
+        free.
+      part1: On the
     title: Close to you
     text2:
       part2: food baskets
+      part3: '- with these you can offer your surplus food and collect food from others.'
+      part1: Also, there are
   store:
     title: as a company
     text: Do you work in a supermarket, restaurant, canteen ...? Register your business
@@ -2247,6 +2253,11 @@ startpage:
   slogan: Together for more food appreciation
   how_we_work:
     title: This is how it goes
+    text: "All of this is built up voluntary and free of charge, independent and free\
+      \ of advertising. This platform is the heart\nof our community. It is the place\
+      \ where we coordinate ourselve locally and Europe-wide. The website and the\
+      \ beta app are \nopen source and they are based on the involvement and compassion\
+      \ of many. How you can participate in the IT department?\n"
   private:
     text: Fight food-waste in your household. We are informing on events such as.
     title: in private
