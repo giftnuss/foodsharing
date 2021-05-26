@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div class="rounded toggle-status p-2 mb-2">
     <span class="legend font-italic">
@@ -38,21 +39,23 @@
       <b-link
         v-if="mayModerate && isOpen"
         small
-        class="ml-2 fas fa-lock"
+        class="ml-2"
         data-toggle="tooltip"
         data-placement="bottom"
         @click="$emit('close')"
       >
+        <i class="fas fa-lock" :title="$i18n('forum.thread.closed')" />
         {{ $i18n('forum.thread.close') }}
       </b-link>
       <b-link
         v-if="mayModerate && !isOpen"
         small
-        class="ml-2 fas fa-lock-open"
+        class="ml-2"
         data-toggle="tooltip"
         data-placement="bottom"
         @click="$emit('open')"
       >
+        <i class="fas fa-lock-open" :title="$i18n('forum.thread.closed')" />
         {{ $i18n('forum.thread.open') }}
       </b-link>
     </div>

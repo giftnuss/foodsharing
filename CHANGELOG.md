@@ -4,7 +4,7 @@
 - Allow users to remove trust bananas on their own profile #592 !1920 @alex.simm
 - Added a button that allows removing users from the email bounce list !1927 @alex.simm
 - For unconfirmed pickup slots, explain in the popup text that a store manager still has to confirm it. !1949 @blinry
-- Forum threads can now be closed !1851 #724 @alex.simm
+- Forum threads can now be closed !1851 !1990 #724 @alex.simm
 - Add french translation to language chooser !1964 @alex.simm
 - Introduces Push Notifications for the Android App !1647 !1976 @dthulke
 - Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
