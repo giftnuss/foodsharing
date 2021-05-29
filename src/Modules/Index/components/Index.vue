@@ -339,6 +339,9 @@
           </b-col>
         </b-row>
       </div>
+      <div class="map-copyright">
+        Powered by Geoapify | © OpenStreetMap contributors
+      </div>
     </div>
     <b-row
       class="ml-md-5"
@@ -578,6 +581,11 @@ No media query since this is the default in Bootstrap because it is "mobile firs
   background: #fff url(/img/startpage/spenden-544.png) center center no-repeat;
   min-height: 22rem;
 }
+
+.map-copyright {
+  color: #333333;
+  text-align: center;
+}
 /*
 ####################################################
 M E D I A  Q U E R I E S
@@ -639,6 +647,10 @@ Bootstrap 4 breakpoints
   .teaser-donate {
     background: #fff url(/img/startpage/spenden-992.png) center center no-repeat;
     max-height: 14rem;
+  }
+
+  .map-copyright {
+    text-align: right;
   }
 }
 
