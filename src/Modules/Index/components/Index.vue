@@ -4,11 +4,7 @@
     class="bootstrap bg-white"
   >
     <div class="card text-white pb-5">
-      <img
-        class="card-img teaser-image"
-        src="/img/startpage/foto-header.png"
-        alt="Card image"
-      >
+      <div class="header-desktop" />
       <div class="card-img-overlay">
         <b-row class="ml-xl-5 mt-xl-5">
           <b-col
@@ -114,7 +110,7 @@
           aspect="16by9"
           controls
           allowfullscreen
-          poster="/img/startpage/intro.png"
+          poster="/img/startpage/Video-1200.png"
         >
           <source
             src="/img/startpage/intro.webm"
@@ -146,12 +142,7 @@
       </b-col>
     </b-row>
     <div class="card text-white pb-5 mt-5">
-      <img
-        class="card-img call-to-action-image"
-        src="/img/startpage/call-to-action-bg.png"
-        alt="Card image"
-        fluid
-      >
+      <div class="call-to-action-image" />
       <div class="card-img-overlay p-xl-5">
         <b-row class="p-xl-5">
           <b-col
@@ -286,12 +277,7 @@
       </b-col>
     </b-row>
     <div class="card text-white pb-5 mt-5">
-      <img
-        class="card-img teaser-map"
-        src="/img/startpage/map-bg.png"
-        alt="Card image"
-        fluid
-      >
+      <div class="teaser-map" />
       <div class="card-img-overlay p-xl-5">
         <b-row
           align-h="end"
@@ -397,7 +383,7 @@
         md="6"
         class="mb-3"
       >
-        <b-img
+        <div
           class="card-img teaser-towns"
           src="/img/startpage/foodsharing-staedte.png"
           alt="Card image"
@@ -422,12 +408,7 @@
       </b-col>
     </b-row>
     <div class="card text-white pb-5 mt-5">
-      <img
-        class="card-img teaser-donate"
-        src="/img/startpage/donate-bg.png"
-        alt="Card image"
-        fluid
-      >
+      <div class="teaser-donate" />
       <div class="card-img-overlay p-xl-5">
         <b-row class="p-xl-5">
           <b-col
@@ -534,11 +515,6 @@ svg {
   margin: 0 auto;
 }
 
-.teaser-image {
-  border-radius: 0px !important;
-  min-height: 23rem;
-}
-
 .teaser-towns {
   border-radius: 0px !important;
 }
@@ -581,17 +557,22 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 ::v-deep h3 {font-size:1rem;} /*1rem = 16px*/
 
 .call-to-action-image {
-  border-radius: 0px !important;
-  height: 48rem;
+  background: #fff url(/img/startpage/mach-mit-desktop-544.png) center center no-repeat;
+  height: 45rem;
+}
+
+.header-desktop {
+  background: #fff url(/img/startpage/header-desktop-544.png) center center no-repeat;
+  min-height: 23rem;
 }
 
 .teaser-map {
-  border-radius: 0px !important;
-  min-height: 33rem;
+  background: #fff url(/img/startpage/karte-544.png) center center no-repeat;
+  height: 32rem;
 }
 
 .teaser-donate {
-  border-radius: 0px !important;
+  background: #fff url(/img/startpage/spenden-544.png) center center no-repeat;
   min-height: 22rem;
 }
 /*
@@ -611,8 +592,23 @@ Bootstrap 4 breakpoints
   ::v-deep h3 {font-size:1.25rem;} /*1rem = 16px*/
 
   .call-to-action-image {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/mach-mit-desktop-786.png) center center no-repeat;
     height: 36rem;
+  }
+
+  .header-desktop {
+    background: #fff url(/img/startpage/header-desktop-789.png) center center no-repeat;
+    min-height: 23rem;
+  }
+
+  .teaser-map {
+    background: #fff url(/img/startpage/karte-786.png) center center no-repeat;
+    height: 32rem;
+  }
+
+  .teaser-donate {
+    background: #fff url(/img/startpage/spenden-786.png) center center no-repeat;
+    min-height: 22rem;
   }
 }
 
@@ -623,17 +619,22 @@ Bootstrap 4 breakpoints
   ::v-deep h3 {font-size:1.5rem;} /*1rem = 16px*/
 
   .call-to-action-image {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/mach-mit-desktop-992@1.5.png) center center no-repeat;
     height: 33.5rem;
   }
 
+  .header-desktop {
+    background: #fff url(/img/startpage/header-desktop-992.png) center center no-repeat;
+    min-height: 23rem;
+  }
+
   .teaser-map {
-    border-radius: 0px !important;
-    min-height: 20rem;
+    background: #fff url(/img/startpage/karte-992.png) center center;
+    height: 25rem;
   }
 
   .teaser-donate {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/spenden-992.png) center center no-repeat;
     max-height: 14rem;
   }
 }
@@ -645,8 +646,23 @@ Bootstrap 4 breakpoints
   ::v-deep h3 {font-size:1.75rem;} /*1rem = 16px*/
 
   .call-to-action-image {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/mach-mit-desktop-1200@1.5.png) center center no-repeat;
     height: 30rem;
+  }
+
+  .header-desktop {
+    background: #fff url(/img/startpage/header-desktop-1200.png) center center no-repeat;
+    min-height: 23rem;
+  }
+
+  .teaser-map {
+    background: #fff url(/img/startpage/karte-1200.png) center center;
+    height: 25rem;
+  }
+
+  .teaser-donate {
+    background: #fff url(/img/startpage/spenden-1200.png) center center no-repeat;
+    max-height: 14rem;
   }
 }
 
@@ -656,12 +672,22 @@ Bootstrap 4 breakpoints
   ::v-deep h2 {font-size:2rem;} /*1rem = 16px*/
 
   .call-to-action-image {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/mach-mit-desktop-1200@2x.png) center center no-repeat;
+    height: 25rem;
+  }
+
+  .header-desktop {
+    background: #fff url(/img/startpage/header-desktop-1200@2x.png) center center no-repeat;
+    min-height: 23rem;
+  }
+
+  .teaser-map {
+    background: #fff url(/img/startpage/karte-1200@2x.png) center center;
     height: 25rem;
   }
 
   .teaser-donate {
-    border-radius: 0px !important;
+    background: #fff url(/img/startpage/spenden-1200@2x.png) center center no-repeat;
     max-height: 23rem;
   }
 }
