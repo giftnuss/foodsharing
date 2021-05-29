@@ -386,12 +386,12 @@
         md="6"
         class="mb-3"
       >
-        <div
+        <img
           class="card-img teaser-towns"
           src="/img/startpage/foodsharing-staedte.png"
           alt="Card image"
           fluid
-        />
+        >
       </b-col>
       <b-col
         cols="12"
@@ -563,8 +563,8 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 ::v-deep h3 {font-size:1rem;} /*1rem = 16px*/
 
 .call-to-action-image {
-  background: #fff url(/img/startpage/mach-mit-desktop-544.png) center center no-repeat;
-  height: 45rem;
+  background: #fff url(/img/startpage/mach-mit-desktop-544@1.5.png) center center no-repeat;
+  height: 47rem;
 }
 
 .header-desktop {
@@ -573,7 +573,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 }
 
 .teaser-map {
-  background: #fff url(/img/startpage/karte-544.png) center center no-repeat;
+  background: #fff url(/img/startpage/karte-544@1.5.png) center center no-repeat;
   height: 32rem;
 }
 
