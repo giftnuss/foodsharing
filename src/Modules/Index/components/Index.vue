@@ -528,7 +528,8 @@ svg {
 h4 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
-  font-size: 1.375rem
+  font-size: 1.375rem;
+  letter-spacing: 0.05em;
 }
 
 ::v-deep h3 {
@@ -540,12 +541,14 @@ h4 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-weight: normal;
+  letter-spacing: 0.05em;
 }
 
 ::v-deep h1 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-weight: normal;
+  letter-spacing: 0.05em;
 }
 
 /*
