@@ -888,7 +888,7 @@ body .ui-tooltip {
 }
 
 .page.ui-padding.ui-widget-content.corner-all {
-  overflow: overlay;
+  overflow: auto;
 }
 
 .ui-widget-content a {
