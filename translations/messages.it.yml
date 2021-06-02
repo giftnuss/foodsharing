@@ -871,6 +871,36 @@ email_template:
 foodsaver:
   list:
     inactive: ", che non hanno effettuato l'accesso da 6 mesi:"
+    summary: '{conta} Foodsaver in {regione}'
+  kicked: Il Foodsaver è stato eliminato
+  upgrade:
+    amb_requested: Richiesta invita con successo.
+    fs_success: Grazie, ora sei un Foodsaver!
+    needs_publicinfo: La tua breve descrizione è vuota
+    needs_fs: Devi prima diventare un Foodsaver
+    to_fs: Diventa Foodsaver
+    ad_fs: Voglio fare il Foodsaver-Quiz ora e diventare Foodsaver!
+  manage:
+    remove: Elimina dal distretto
+    actions: Opzioni
+    last-login: Ultimo accesso
+    role: Ruolo
+    name: Nome
+    photo: Foto
+  url_error: C'è qualcosa che non va con l'URL della tua homepage
+  delete_own_account: Stai per cancellare il tuo account. Sei proprio sicuro?
+  your_account: a te
+  delete_account_now: Elimina account ora
+  delete_account_sure: Sei sicuro di voler eliminare l'account di {nome}?
+  delete_account: ⚠️ Elimina account
+  profileBack: Torna al profilo
+  edit_failure: Non è stato modificato nulla o le modifiche non sono state salvate
+  edit_success: Le modifiche sono state salvate
+  editName: '{nome} modifica'
+  edit: Foodsaver modifica
+  actions: Azioni
+  title: Foodsaver
+  bread: Tutti i Foodsaver
 reports:
   reason: Motivo
   message: Descrizione
@@ -1148,3 +1178,63 @@ bell:
   forum_reply_title: '{forum}: {titolo}'
   forum_answer_title: '{forum}'
   no_bells: Non hai Notifiche al momento.
+  workgroup_request_decline: Non sei stato accettato nel gruppo di lavoro.
+  workgroup_request_accept: Sei stato accettato nel gruppo di lavoro.
+  betrieb_fetch_title: '{attività commerciale}'
+  new_foodsaver_verified: Già verificato - può iniziare
+  new_foodsaver_verified_title: '{nome} nuovo a {distretto}'
+  new_foodsaver_title: '{nome} nuovo a {distretto}'
+  report_reason: '{ragione}'
+  workgroup_request_decline_title: '{nome}'
+  workgroup_request_accept_title: '{nome}'
+  passgen_failed: Per favore carica una foto, poi funzionerà.
+  buddy_request: '{nome} ti conosce.'
+  buddy_request_title: Conosci {nome}?
+  betrieb_fetch: '{conta} orari di ritiro non confermati'
+  new_quiz_comment: '{commento}'
+  store_wallpost_title: '{nome}'
+  poll_new: '{titolo}'
+  store_request_imposed_title: '{nome}'
+content:
+  edit: Modifica pagina
+  new_success: La pagina è stata creata
+  new: Crea una nuova pagina
+  actions: Azioni
+  bread: Tutte le pagine
+regionOptions:
+  save: Salvare opzioni
+  success: Opzioni salvate correttamente
+  header_page: Opzioni per {distretto}
+ageBandList:
+  NumberOfAgeband: Numero
+  ageBand: Fascia di età
+  district_tab: Distretto
+pickuplist:
+  unclear: Stato non chiaro
+  tryagain: Riprova dopo aver ricaricato.
+  error_whileSending: Errore durante l'invio del messaggio
+  error_kick: 'Rimozione non riuscita: '
+  error_confirm: 'Conferma non riuscita: '
+  tooslow: Purtroppo l'inserimento non ha funzionato. Probabilmente qualcun'altro
+    è stato più veloce.
+  NumberOfFoodSavers_table_header: Numero di Foodsaver
+  week_tab: Settimana
+  day_tab: Giorno
+  header_for_district: 'Distribuzione dei ritiri a {distretto} '
+  NumberOfAppointments_table_header: Numero di appuntamenti
+  time_table_header: Periodo
+  year_tab: Anno
+  month_tab: Mese
+genderlist:
+  number_table_header: Numero
+  gender_female: femmina
+  gender_male: maschio
+  gender_not_selected: non selezionato
+  header_for_district: Distribuzione dei Foodsaver per sesso a {distretto}
+  gender_table_header: Sesso
+  district_tab: Distretto
+memberlist:
+  header_for_workgroup: Foodsaver nel gruppo di lavoro {distretto}
+  header_for_district: Foodsaver nel distretto {distretto}
+list:
+  filter_for: Filtra per...
