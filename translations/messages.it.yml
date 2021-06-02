@@ -923,6 +923,8 @@ reports:
   time: Tempo
   report_id: ID rapporto
   from_last_name: per cognome
+  region: Distritto origine
+  store: Società assegnata
 month:
   short:
     "12": dic.
@@ -1021,6 +1023,7 @@ recipients:
   newsletter_all: Tutti gli abbonati alle Newsletter (Foodsharer, Foodsaver, tutti)
   newsletter: Tutti gli abbonati alla Newsletter (almeno Foodsaver)
   bread: Mailing-list delle Newsletter
+  newsletter_only_foodsharer: SOLO i Foodsharer tra tutti gli abbonati alla Newsletter
 forum:
   thread:
     with_mail: L'argomento è stato aperto e tutti ne sono stati informati tramite
@@ -1195,6 +1198,23 @@ bell:
   store_wallpost_title: '{nome}'
   poll_new: '{titolo}'
   store_request_imposed_title: '{nome}'
+  new_quiz_comment_title: Nuovo commento al quiz
+  fs_sleepmode: '{nome} {cognome} è ora inattivo'
+  store_cr_times: Gli orari di ritiro sono cambiati
+  store_cr_times_title: '{nome}'
+  store_wallpost: Nuova voce nella bacheca.
+  store_request_imposed: Sei stato aggiunto al team.
+  store_request_deny: La tua richiesta è stata respinta.
+  store_request_deny_title: '{nome}'
+  store_request_accept_wait: Ora sei nella lista d´attesa.
+  store_request_accept_wait_title: '{nome}'
+  store_request_accept: Sei stato accettato nel team.
+  store_request_accept_title: '{nome}'
+  store_new_request: Richiesta per {nome}
+  store_new_request_title: Nuova richiesta nel team
+  store_new: '{nome} è stato aggiunto'
+  store_new_title: Nuova Agenzia
+  ft_update: '{teaser}'
 content:
   edit: Modifica pagina
   new_success: La pagina è stata creata
