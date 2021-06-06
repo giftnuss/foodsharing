@@ -20,6 +20,7 @@
 - Harmonise the order of links to subpages in the header line and on the page of the work group (AG) and region (Bezirk) #1080 !1954 @andreasklumpp1
 - New pickupslots availability moved from midnight to actual pickuptime. #1024 @fs_k
 - Convert regular slots to manual slots as soon as someone joins an empty slot !1825 @ChrisOelmueller
+- Added a title name for social icons and replaced manitu logo in svg format to footer !1985 @chriswalg
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm
