@@ -619,8 +619,8 @@ fsp:
   suggestSuccess: I divisori vengono proposti e devono poi essere confermati da un/a
     ambasciatore/trice o responsabile del divisore.
   none: non sono ancora stati inseriti divisori
-  publicwall: Tieni presente, che i tuoi contributi sono visibili pubblicamente sull´albo
-    del divisore.
+  publicwall: Tieni presente, che i tuoi contributi sono visibili pubblicamente sulla
+    bacheca del divisore.
   editSuccess: Il divisore è stato elaborato con successo
   editName: modificare il divisore"{name}"
   edit: modificare il divisore
@@ -836,6 +836,7 @@ startpage:
     title: Città foodsharing
   donate:
     title: Donazioni
+    link: Sostieni foodsharing
   welcome_text: Benvenuto/a a foodsharing
   more_infos: Scopri di più
   mission:
@@ -1326,7 +1327,63 @@ menu:
     imprint: Impronta
     demands: Esigenze
     mark_as_read: Segna tutti come letti
+    options: Opzioni
+    language: Seleziona lingua
+    friendcircle: Cerchia di amici
+    selfservice: Selfservice
+    donations: Donazioni
+    conference: Videoconferenza
+    fs: Foodsaver
+    stores: Agenzie
+    release-notes: Cosa c'è di nuovo?
+    transparency: Trasparenza
+    statistics: Statistica
+    guide: Guida all'igiene
+    support: Aiuto & Supporto
+    background: Sfondo
+    partners: Partner
+    team: Team
+    blog: Blog
+    fundamentals: Principi
+    mission: Missione
+    aboutUs: Su di noi
+    workingGroupEdit: Gestisci gruppo
+    members: Membri
+    wall: Bacheca
+    forum: Forum
+    international: Internazionale
+    Swiss: Svizzera
+    Austria: Austria
+    Germany: Germania
+    regionalgroups: Gruppi locali
+    forcompanies: Per aziende
+    press: Stampa
+    mailbox: Casella di posta elettronica
+    fsfestival: Festival foodsharing
+    talksandworkshops: Conferenze e workshop
+    academy: Accademia
+    education: Formazione
+    pastcampaigns: Campagne passate
+    fscities: città di foodsharing
+    politics: Politica
+    contact: Contatto
+    notifications: Notifiche
+    administration: Amministrazione
+    your_stores: Le tue agenzie
+    your_account: Il tuo account
+    groups: Panoramica dei gruppi
+    your_groups: I tuoi gruppi
+    messages: Messaggi
+    all_messages: Tutti i messaggi
+    infos: Info
+    activities: Azioni
   reports: Messaggi
+  content: Modifica contenuti
+  manage_mailboxes: Gestire caselle di posta
+  email: Invia newsletter
+  quiz: Gestire il quiz
+  blog: Modifica i post del blog
+  manage_regions: Gestire distretti
 basket:
   published: Grazie, il cesto di cibo è stato pubblicato.
   publish_error: C'è stato un errore. Il cesto di cibo non poteva essere pubblicato.
@@ -1339,6 +1396,10 @@ basket:
     dry: Merce secca
     greens: Frutta & Verdura
     bread: Prodotti Panetteria
+    prepared: Cibi preparati
+    pet: Cibo per animali
+    frozen: Prodotti surgelati
+    dairy: Latticini
   valid:
     "21": tre settimane
     "14": due settimane
@@ -1402,6 +1463,16 @@ basket:
   my_list_empty: Non hai inserito nessun cesto di cibo
   description: Descrizione
   title: Cesti di cibo
+  no-desc: Si prega di inserire una descrizione.
+  public-info: Descrizione, foto, luogo di scambio e periodo sono visibili pubblicamente.
+  go-to-settings: Alle impostazioni
+  no-login: "Non sei loggato, forse la sessione è scaduta.\nEffettua il log in e invia\
+    \ nuovamente la richiesta.\n"
+  is:
+    gf: sono senza glutine
+    vegan: sono vegani
+    veggie: sono vegetariani
+    organic: sono Bio
 team:
   not-found: Pagina non trovata
   ratelimit: Si prega di attendere {minuti} finché non si può inviare il prossimo
@@ -1457,12 +1528,40 @@ dashboard:
   updates_title_some: la panoramica degli aggiornamenti ({0})
   updates_title_all: la panoramica degli aggiornamenti
   title: Dashboard
+  foodsharer_amount: Hai già salvato {weight} chili!
+  greeting: Ciao {name}! È bello averti qui.
+  chooseHomeRegion: Selezionare un distretto di origine.
+  homeRegion: Il tuo distretto di origine è {region}.
+  mail_activation_error_title: Indirizzo e-mail non confermato
+  mail_activation_error_body:
+    part_4: modifica il tuo indirizzo e-mail
+    part_3: oppure
+    part_2: Richiedi qui una nuova e-mail di attivazione
+    part_1: Conferma il tuo indirizzo e-mail cliccando sul link ricevuto nell'e-mail
+      di attivazione. In alternativa, puoi
+  activation_mail_failure: Non è stato possibile inviare un nuovo link di attivazione
+  activation_mail_sent: Link di attivazione inviato - controlla le tue e-mail
+  source_store: Agenzie {0}
+  source_mailbox: '{0}'
+  source_forum: Forum {0}
+  source_friendWall_own: La tua bacheca
+  source_friendWall: Bacheca di {0}
+  source_foodsharepoint: Divisore {0}
+  save_selection: Salva impostazioni
+  no_updates: Nessun aggiornamento
+  display_all: Tutti
 search:
   mystores: Le mie aziende
   mybuddies: I miei Buddies
   thread-title-only: Si cercano solo i titoli, non il testo dei post.
   forum: Cerca per titolo...
   placeholder: Cerca persone, gruppi, aziende, ...
+  persons: Persone
+  groups: Gruppi
+  myregions: I miei distretti
+  mygroups: I miei gruppi
+  noresults: Non è stato trovato alcun risultato
+  title: Ricerca
 profile:
   report:
     arbAdminAgainstRepAdmin: Sei un amministratore del collegio arbitrale e vuoi segnalare
@@ -1738,3 +1837,47 @@ messages:
   bread: Notizie
 map:
   title: Carta
+push_notifications:
+  test_notification_body: Ottimo, sembra che abbia funzionato :)
+storelist:
+  others: Altre agenzie di {region}
+  map: Cartina
+  nowaste: Non butta via nulla
+  notcooperating: Non vuole collaborare
+  cooperating: In collaborazione
+  inprogress: Trattative in corso
+  region: Distretto
+  added: Inserito
+  city: Città
+  address: Strada
+  name: Nome
+  status: Stato
+  entered: 'Inserito:'
+storestatus:
+  "7": L'agenzia non esiste più
+  "5": L'agenzia collabora con noi
+  "4": Non vuole collaborare
+  "3": L'agenzia è pronta a collaborare
+  "2": Trattative in corso
+  "1": Non c'è ancora alcun contatto
+  "0": Stato non chiaro
+footer:
+  it_devdocs: by foodsharing IT
+  donate_now: Dona ora
+  call_to_donate: "Vuoi sostenere \nfoodsharing?\n"
+  version: 'Versione: {version}'
+  statistics: Statistica
+  blog: Blog
+  press: Stampa
+  contact: Contatto
+  our_partner: I nostri partner
+  partner: Partner
+  infosPrivatePersons: Per privati
+  infosCompany: Per aziende
+  team: Team
+  about_us: Su di noi
+  call_to_action: Partecipare
+personal_data:
+  landline: Telefono fisso
+  mobile: Numero di cellulare
+  label: Contatto
