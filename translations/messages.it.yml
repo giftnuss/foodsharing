@@ -613,7 +613,7 @@ fsp:
   add: Inserisci divisori
   new: Nuovo divisore
   description: descrizione
-  followers: Follower
+  followers: Seguiti
   managers: Referenti
   unfollow: divisore equi non seguiere più
   suggestSuccess: I divisori vengono proposti e devono poi essere confermati da un/a
@@ -624,7 +624,7 @@ fsp:
   editSuccess: Il divisore è stato elaborato con successo
   editName: modificare il divisore"{name}"
   edit: modificare il divisore
-  rejectConfirm: Attenzione, se cancelli il divisore, non puoi più annullarlo. Continuare?
+  rejectConfirm: Attenzione, se cancelli il divisore, non puoi più annullare. Continuare?
   reject: rifiutare il divisore
   accept: Sbloccare il divisore
 formatting:
@@ -834,41 +834,214 @@ message_text_to_group_admin_workgroup: 'La regione/gruppo di lavoro <b>{groupNam
 startpage:
   towns:
     title: Città foodsharing
+    text: "Le città partecipanti si differenziano per il fatto di essere ancora in\
+      \ cammino o di essere già state designate come città del foodsharing.\nsono\
+      \ state designate come città del foodsharing. Quest'ultimo è il caso se, oltre\
+      \ a una squadra di foodsharing sul terreno\nuna dichiarazione di motivazione\
+      \ firmata dal comune come simbolo del partenariato tra il foodsharing e il settore\
+      \ pubblico.\nfoodsharing e il settore pubblico.\n"
   donate:
     title: Donazioni
     link: Sostieni foodsharing
-  welcome_text: Benvenuto/a a foodsharing
+    text: "Cerchiamo una sponsorizzazione per qualsiasi spesa. In alcuni casi, tuttavia,\
+      \ questo non è possibile o non è possibile\no non completamente, ad esempio\
+      \ per il finanziamento di eventi, consulenza legale o assicurazioni.\nSiamo\
+      \ felici di qualsiasi supporto.\n"
+  welcome_text: Benvenuti a foodsharing
   more_infos: Scopri di più
   mission:
     title: Missione
-    text: Il nostro obiettivo a lungo termine è quello di diminuire la cultura dello
-      spreco del cibo e di altre risorse. Salviamo il cibo sia in case private che
-      in aziende- collettivamente, in modo sostenibile e dando valore. Ci consideriamo
-      come movimento di politica culturale.
+    text: Il nostro obiettivo a lungo termine è quello di ridurre la cultura dello
+      spreco del cibo e di altre risorse. Salviamo il cibo sia nelle famiglie che
+      nelle aziende - in modo collaborativo, sostenibile e apprezzabile. Ci consideriamo
+      un movimento educativo.
   near_you:
     text1:
       part1: Sulla
-      part2: mappa
-      part4: divisore
+      part2: Mappa
+      part4: Divisore
       part3: tu trovi
+      part5: ', si tratta di scaffali o frigoriferi dove si può prendere o lasciare
+        il cibo gratuitamente.'
     title: Vicino a te
     text3:
       part1: La comunità è organizzata in distretti.
+      part2: Trova i distretti nei tuoi intorni
+    text2:
+      part3: '- qui è possibile offrire il proprio cibo in eccedenza e raccogliere
+        cibo da altri.'
+      part2: Cesto di cibo
+      part1: Inoltre ci sono
   how_we_work:
     title: È così che funziona
+    text: "Tutto questo viene fatto su base volontaria e gratuita, in modo indipendente\
+      \ e senza pubblicità. La piattaforma è il cuore\ndella nostra comunità. Qui\
+      \ facciamo rete e ci coordiniamo a livello locale e in tutta Europa. Il sito\
+      \ web e l'applicazione beta sono\nopen source e si basa sull'impegno e la passione\
+      \ di molti. Come puoi entrare nell'IT?\n"
   member:
     title: come membro
+    text: Condividi il tuo cibo in eccesso con la comunità del foodsharing o salva
+      il cibo dalle aziende.
   this_is_how_it_works: Funziona così
   call_to_action:
-    title: Unisciti
+    title: Partecipa
+    text: Siamo stati fondati nel 2012 e ora siamo un movimento internazionale con
+      oltre 200.000 utenti in Germania, Austria, Svizzera e altri paesi europei.
+  demands:
+    text: "Piano d'azione con l'aiuto ambientale tedesco\npubblicato in occasione\
+      \ del 6° compleanno del foodsharing il 12.12.2018. Per salvare la Germania da\
+      \ un'altra violazione della parola\n- come ha fatto con gli obiettivi di protezione\
+      \ del clima per il 2020 - foodsharing e Deutsche Umwelthilfe stanno delineando\
+      \ con un\npiano d'azione, senza il quale l'obiettivo di dimezzamento non può\
+      \ essere raggiunto.\n"
+    title: Pretese
+  store:
+    text: Lavori in un supermercato, un ristorante, una mensa...? Registra la tua
+      azienda e salva il cibo.
+    title: come azienda
+  private:
+    text: Combatti lo spreco di cibo nella tua famiglia. Forniamo informazioni in
+      occasione di fiere ed eventi come.
+    title: in privato
+  call_to_action_button: Partecipare
+  slogan: Insieme per apprezzare in più il cibo
 poll:
   results:
     option_text: Opzione
+    sum: Somma
+    votes: Voti
+    number_of_votes: Voti espressi
+  cancel:
+    question: Vuole davvero annullare questa votazione? Questo non può essere annullato.
+    title: Cancellare la riconciliazione
+  hint_random_order: L'ordine delle seguenti opzioni disponibili per la selezione
+    è casuale.
+  may_not_edit: Non hai i diritti per modificare questo sondaggio, o il periodo di
+    modifica è scaduto.
+  edit:
+    submit_question: Vuoi davvero salvare le modifiche al voto?
+    submit: Salvare il voto
+    title: Modificare la riconciliazione
+  eligible_votes_count: Numero di elettori
+  submit_vote_question: Davvero votare ora? La tua selezione non può essere cambiata
+    in seguito.
+  may_not_yet_vote: Questa votazione non è ancora iniziata.
+  may_not_vote: Non puoi votare in questo sondaggio.
+  already_voted: Hai già partecipato a questo sondaggio
+  begins_at: Inizio
+  ended_at: in corso fino a
+  new_poll:
+    submit_question: Il sondaggio può essere cambiato solo entro un'ora (fino a {data}).
+      Sei sicuro di volerlo creare ora?
+    missing_fields: Tutti i campi devono essere compilati
+    submit_success: La riconciliazione è stata creata
+    submit: Salvare il voto
+    option_texts_required: Inserisci un testo per ogni opzione.
+    option: Opzioni
+    options: Le opzioni devono essere disponibili per la selezione. Quando si vota,
+      vengono visualizzati ciascuno in un ordine casuale.
+    description_required: Si prega di inserire una descrizione.
+    description_placeholder: Che tipo di voto è questo?
+    description: Descrizione
+    end_date_required: Si prega di selezionare la fine della votazione che è dopo
+      l'inizio.
+    end_date: Fine della votazione
+    start_date_required: Seleziona l'inizio della votazione. Deve essere almeno un'ora
+      nel futuro.
+    start_date: Inizio della riconciliazione
+    time: Orario
+    type: Modalità di voto
+    scope: Chi può votare?
+    name_required: Inserisci un nome.
+    name: Nome della votazione
+    title: Nuova votazione
+  untraceable: Le informazioni su come avete votato per quale opzione non possono
+    essere rintracciate e quindi non possono più essere visualizzate qui.
+  vote_success: Hai votato con successo.
+  error_cannot_vote: Non puoi partecipare a questa votazione
+  submit_vote: Votare
+  submit_vote_warning: 'Attenzione: il voto è anonimo e non puoi cambiare la tua selezione
+    dopo il voto.'
+  type_2:
+    tooltip_positive: Consenso
+    tooltip_neutral: Astensioni
+    tooltip_negative: Rifiuto
+  type_description_3: Scelta di valutazione con valori compresi tra +3 (d'accordo)
+    e -3 (in disaccordo)
+  type_description_2: Opzioni in ogni caso consenso / astensione / rifiuto
+  type_description_1: Spuntare (si possono selezionare diverse opzioni)
+  type_description_0: Selezionare (solo una opzione può essere selezionata)
+  type: Natura della votazione
+  scope_description_4: Tutti i Foodsaver verificati con il distretto radicale del
+    voto
+  scope_description_3: Tutti gli ambasciatori del distretto/gruppo
+  scope_description_2: Tutti i responsabili di agiende del distretto che sono attualmente
+    responsabili di un'operazione
+  scope_description_1: Tutti i Foodsaver verificati del distretto/gruppo
+  scope_description_0: Tutti i Foodsaver verificati e non verificati del distretto/gruppo
+  allowed_voters: Diritto di voto
+  in_future: non ancora iniziato
+  in_past: finito
+  time_period: Periodo
+  not_available: Questo sondaggio non esiste o non puoi accedervi.
 language_chooser:
   content: Scegli una lingua
   title: Scegli la lingua
 email_template:
   login: Accedi per rispondere
+  foodbasket_request: Il tuo cesto di cibo è stato richiesto da %SENDER%
+  help_needed:
+    support_mail: it@foodsharing.network
+    or: o
+    link: https://devdocs.foodsharing.network/it-tasks.html
+    main: Per rivedere questa funzione, abbiamo bisogno del supporto di altri programmatori,
+      tester e aiutanti del vostro distretto.
+  manual_slots_get_ignored: Sfortunatamente, questa notifica è attualmente inviata
+    solo per gli appuntamenti di ritiro automatico. Gli slot creati manualmente, sovrascritti
+    o cancellati non sono quindi presi in considerazione.
+  information: Informazioni
+  find_someone: Per favore, coinvolgi qualcuno del tuo team operativo il prima possibile
+    in modo che il ritiro possa avvenire. Se non sei in grado di mobilitare nessuno,
+    sarebbe bello se poteste occuparvi della raccolta. Se questo non è possibile per
+    te, vi preghiamo di cancellare l'appuntamento con l'azienda in tempo utile.
+  you_responsible:
+    part2: Purtroppo, nessuno si è ancora iscritto per la prossima data di ritiro.
+    part1: Sei responsabile per
+  slot_empty: Nessuno si è ancora iscritto per il prossimo ritiro a %BETRIEB%
+  warning: Avviso
+  reply: Risposte
+  foodsharepoint: -- Divisore
+  confirm_BOT: presentare. Poiché sei un ambasciatore/moderatore di %BEZIRK%, devi
+    confermarlo prima che sia pubblicato.
+  confirm_link: vorrebbe che il tema
+  confirm_topic: "L'argomento deve essere confermato:"
+  in: a
+  yourFSteam: Tuo team foodsharing.
+  withlove: Tanti auguri,
+  unknown_email2: L'indirizzo e-mail %ADDRESS% non è noto.
+  unknown_email: Indirizzo e-mail sconosciuto
+  impress:
+    address: "foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Rappresentato\
+      \ da:\n\n Frank Bowinkelmann \n Contatto:\n E-Mail: info@foodsharing.de\n  Iscrizione\
+      \ al registro:\n\n  Iscrizione nel registro delle associazioni\n Tribunale del\
+      \ registro: Tribunale locale di Colonia\n Numero di registro: VR 17439\n Responsabile\
+      \ del contenuto secondo il § 55 Abs. 2 RStV:\n  Frank Bowinkelmann"
+    general_information_requirements: Informazioni secondo § 5 legge telemedia germania
+    title: Impronta
+  newsletter:
+    linktext: Clicca qui per annullare l'iscrizione.
+    unsubscribe: Non vuoi più ricevere la nostra newsletter?
+  dont_respond:
+    nomail: impostare quali e-mail ricevi.
+    notification: Notifiche
+    you_can: Puoi sotto
+    no_notification_link: Non vuoi più ricevere questo tipo di notifiche?
+    noreply: Si prega di non rispondere a questa e-mail. Questo messaggio è stato
+      inviato da un indirizzo dietro il quale non esiste una casella di posta.
+  to: a
+  from: -- Da
+  request_from: Richiesta di
 foodsaver:
   list:
     inactive: ", che non hanno effettuato l'accesso da 6 mesi:"
@@ -1379,6 +1552,11 @@ menu:
     activities: Azioni
     events: Appuntamenti
     BOTforum: Forum degli ambasciatori
+    fundraising: Fundraising
+    joinregion: Unirsi a un distretto
+    ids: Carte d'identità
+    dataprivacy: Protezione dei dati
+    wiki: Wiki
   reports: Messaggi
   content: Modifica contenuti
   manage_mailboxes: Gestire caselle di posta
@@ -1475,6 +1653,10 @@ basket:
     vegan: sono vegani
     veggie: sono vegetariani
     organic: sono Bio
+  no-address: "Per favore, includi il tuo indirizzo nelle {settings} per offrire un\
+    \ cesto di cibo attraverso il sito web.\n<br><br>\nQuesto è necessario per visualizzare\
+    \ un cestino di cibo sulla mappa usando un pin.\n<br><br>\nL'indirizzo postale\
+    \ del tuo indirizzo non è visibile per gli utenti del cesto alimentare.\n"
 team:
   not-found: Pagina non trovata
   ratelimit: Si prega di attendere {minuti} finché non si può inviare il prossimo
@@ -1552,6 +1734,8 @@ dashboard:
   save_selection: Salva impostazioni
   no_updates: Nessun aggiornamento
   display_all: Tutti
+  foodsaver_amount: "Hai raccolto <strong style=\"white-space:nowrap\">{pickups}&thinsp;x</strong>\
+    \ generi alimentari.\ne salvato <strong style=\"white-space:nowrap\">{weight}&thinsp;kg</strong>.\n"
 search:
   mystores: Le mie aziende
   mybuddies: I miei Buddies
@@ -1841,6 +2025,7 @@ map:
   title: Carta
 push_notifications:
   test_notification_body: Ottimo, sembra che abbia funzionato :)
+  test_notification_title: Notifiche push abilitate
 storelist:
   others: Altre agenzie di {region}
   map: Cartina
@@ -1855,6 +2040,13 @@ storelist:
   name: Nome
   status: Stato
   entered: 'Inserito:'
+  fetching: Agenzie da cui si ritira il cibo
+  managing: Aziende di cui è responsabile
+  emptyfilters: Filtro vuoto
+  nocontact: Nessun contatto ancora
+  geo: geo
+  zipcode: Codice postale
+  addressdata: Indirizzo
 storestatus:
   "7": L'agenzia non esiste più
   "5": L'agenzia collabora con noi
@@ -1863,6 +2055,7 @@ storestatus:
   "2": Trattative in corso
   "1": Non c'è ancora alcun contatto
   "0": Stato non chiaro
+  "6": Dona a Tafel ecc. e non butta via niente
 footer:
   it_devdocs: by foodsharing IT
   donate_now: Dona ora
@@ -1879,7 +2072,175 @@ footer:
   team: Team
   about_us: Su di noi
   call_to_action: Partecipare
+  beta_testing_issues: Compiti di prova della versione beta
+  lebensministerium_alt_text: Ministero della vita - Austria
+  wiener_tafel_alt_text: Wiener Tafel - Tavola di cibo a Vienna
+  denns_at_alt_text: Denns´s Bio-Markt
+  donate: Sostenere
+  hosting_tooltip: CO2-neutrale ospitato su manitu.
+  hosting_info: CO2-neutrale ospitata su
+  wiki: Wiki
+  guide: Guida all'igiene
+  dataprivacy: Protezione dei dati
+  imprint: Impronta
 personal_data:
   landline: Telefono fisso
   mobile: Numero di cellulare
   label: Contatto
+region:
+  hull:
+    closure: Inserisci {regione} come master per tutti i distretti affiliati
+    confirm: Iniziare davvero l'aggiornamento master?
+    start: Avviare l'aggiornamento master
+    title: Aggiornamento Master
+    parent: Distritto principale
+    parent-info: Tutti i Foodsaver sono automaticamente inclusi nel distretto principale,
+      se ne è stato specificato uno
+  type:
+    state: Stato federale
+    townpart: Distritto della cittá
+    workgroup: Gruppo di lavoro
+    country: Paese
+    region: Regione
+    district: Distretto
+    bigcity: Grande città (senza la possibilità di registrarsi)
+    city: Cittá
+    title: Tipo di distretto
+  noParent: Senza distretto di affiliazione
+  still_contains_elements: Il distretto non può essere cancellato perché contiene
+    ancora sottoregioni, siti o divisori.
+  edit_success: Il distretto è stato salvato.
+  cancel: No, niente affatto
+  save: Sì, salvare
+  confirm: Sei sicuro di voler salvare le modifiche al distretto?
+  mail:
+    sender: Nome del mittente
+    name-info: Attenzione, non cambiare arbitrariamente! Assicurati anche che questo
+      indirizzo non esista ancora in Manage Mailboxes.
+  none: Nessun distretto eletto ancora
+  delete: Cancellare il distretto
+  edit: Modifica distretto
+  created: '{regione} è stato creato'
+  new: Nuovo distretto
+  bread: Gestire i distretti
+  forum-redirect: Non c'è una bacheca per le regioni. Sei stato reindirizzato al forum.
+  restricted: Non hai il permesso di visualizzare questi dati.
+  not-member: Non fai parte di questa regione o gruppo di lavoro.
+  store_managers_cannot_leave: Non puoi lasciare il distretto perché sei ancora responsabile
+    di almeno un'operazione lì.
+  no-huge: Spiacente, non puoi selezionare un paese o uno stato come regione.
+  change: Cambiare distretto
+polls:
+  filter_by: Filtrare per
+  future: Votazioni futuri
+  ended: Votazioni passati
+  ongoing: Riconciliazioni in corso
+  new_poll: Creare un nuovo voto
+  end_date: al
+  start_date: dal
+  title: Titolo
+  hint_2: Le istruzioni su come utilizzare i sondaggi possono essere trovate nel wiki
+  hint: Il modulo di voto può essere testato nel gruppo di lavoro sovraregionale "Voting
+    - Test".
+buddy:
+  request_accepted: Ora vi conoscete.
+  request_sent: Richiesta inviata.
+tablesorter:
+  entriespp: Voci per pagina
+  from: da
+  page: Pagina
+conference:
+  join: Partecipa alla conferenza
+  join_title: Partecipa alla conferenza
+  privacy_notice: 'Nota: La videoconferenza si fa tramite il server di conferenza
+    del collettivo Living Utopia. Sarai loggato automaticamente con il tuo primo nome
+    inserito in foodsharing.'
+  description_text: Qui si può partecipare a una videoconferenza per il gruppo selezionato.
+    La videoconferenza apre BigBlueButton in una nuova finestra.
+stats:
+  leader:
+    users: Foodsaver più attivi
+    regions: Distretti più attivi
+  avg:
+    baskets: I cesti alimentari sono attualmente pubblicati online in media ogni settimana.
+    pickups: Le missioni di salvataggio sono attualmente in media al giorno.
+  total:
+    fsp: I divisori della fiera sono usati per scambiare il cibo.
+    baskets: I cesti alimentari sono stati messi online in totale.
+    pickups: I salvataggi di cibo sono stati padroneggiati dai nostri salvatori di
+      cibo.
+    foodsharer: I foodsharers sono attualmente registrati sul foodsharing e sono interessati
+      al nostro lavoro.
+    foodsaver: I Foodsaver sono impegnati in un mondo senza sprechi alimentari.
+    cooperations: Le aziende collaborano con noi continuamente e con soddisfazione.
+    weight: Cibo salvato con successo dal bidone.
+  title: Statistiche totali
+blog:
+  permissions:
+    delete: Non puoi cancellare questo articolo
+    edit: Non puoi modificare questo articolo
+    new: Non ti è permesso creare articoli
+  failure:
+    delete: L'articolo non può essere cancellato
+    edit: L'articolo non può essere salvato
+    new: L'articolo non può essere creato
+  success:
+    delete: Articolo cancellato
+    edit: L'articolo è stato salvato
+    new: L'articolo è stato creato
+  confirmDelete: Vuoi davvero che {nome} sia irrevocabilmente cancellato?
+  delete: cancellare l´articolo
+  status:
+    "1": pubblicato
+    "0": inattivo
+  last-editor: Ultima modifica di
+  author: Scritto da
+  content: Contenuto
+  publish-info: Lo stato di pubblicazione dell'articolo può essere regolato nella
+    pagina di panoramica.
+  newTitle: Nuovo articolo per {regione}
+  edit: Modifica voce del blog
+  new: Scrivere un nuovo articolo
+  all: Tutti i post del blog
+  actions: Azioni
+  empty: Non ci sono voci finora.
+  title: Articolo del blog
+  manage: Gestire le voci del blog
+  header: Notizie dal mondo del foodsharing
+  go: Al Blog
+  bread: Blog
+releases:
+  "2020-05": Release 'Apfelsine' (maggio 2020)
+  "2020-08": Release 'Birne' (agosto 2020)
+  "2020-10": Release 'Cranberry' (ottobre 2020)
+  "2020-12": Release 'Drachenfrucht' (dicembre 2020)
+  "2021-03": Release "Erdbeere" 🍓 (marzo 2021)
+base:
+  jsrequired: Sfortunatamente, qui non funziona nulla senza JavaScript.
+  slogan: Condividere il cibo invece di buttarlo via - foodsharing Germania
+  keywords: foodsharing, cibo, data di scadenza, spreco di cibo, buttare via il cibo,
+    donare, scambio di cibo
+  whatfor: Su foodsharing.de puoi dare il tuo cibo alle istituzioni sociali o ad altre
+    persone prima che vada sprecato
+becomeregion:
+  save: Salva
+  enterregion:
+    text2: Non siamo il punto centrale di contatto per le domande generali, ma possiamo
+      aiutarvi con domande sui distretti.
+    text1: ben fatto. Se vuoi iniziare il distretto o hai domande esplicite a cui
+      il wiki non risponde, mandaci un'email a
+    region_link_text: Creare o riattivare distretti
+    main: Puoi unirti al tuo primo distretto cliccando sul tuo distretto attraverso
+      la selezione 'Europa'.<br> Se non riusci a trovare un distretto per te, scegli
+      un livello superiore o unitevi al distretto più vicino. Se non hai l'opportunità
+      di formarti come foodsaver nella zona, puoi considerare di iniziare il tuo distretto.
+      In questo caso, leggi il wiki e specialmente l'articolo su
+  chooseregion: Seleziona il distretto in cui vuoi diventare attivo.
+sidenav:
+  yourgroups: Tuoi gruppi
+  countryspecific: Gruppi specifici per paese
+  localgroups: Gruppi locali
+  superregional: Gruppi sovraregionali
+password:
+  insertmail: Inserisci il tuo indirizzo e-mail per reimpostare la tua password.
+  reset: Password dimenticata?
