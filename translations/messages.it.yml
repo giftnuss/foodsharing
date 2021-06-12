@@ -2057,7 +2057,7 @@ storestatus:
   "0": Stato non chiaro
   "6": Dona a Tafel ecc. e non butta via niente
 footer:
-  it_devdocs: by foodsharing IT
+  it_devdocs: fatto dal gruppo informatico foodsharing
   donate_now: Dona ora
   call_to_donate: "Vuoi sostenere \nfoodsharing?\n"
   version: 'Versione: {version}'
@@ -2075,7 +2075,7 @@ footer:
   beta_testing_issues: Compiti di prova della versione beta
   lebensministerium_alt_text: Ministero della vita - Austria
   wiener_tafel_alt_text: Wiener Tafel - Tavola di cibo a Vienna
-  denns_at_alt_text: Denns´s Bio-Markt
+  denns_at_alt_text: Denns’s Bio-Markt
   donate: Sostenere
   hosting_tooltip: CO2-neutrale ospitato su manitu.
   hosting_info: CO2-neutrale ospitata su
