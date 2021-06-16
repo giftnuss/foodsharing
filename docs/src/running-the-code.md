@@ -93,7 +93,7 @@ cd foodsharing
 * Change to your target directory
 * Execute git download (you may need to add an ssh key from this environment)
 ```
-`git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
+git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 ```
 
 * Add the following to ~/.bashrc with editor (e.g. nano)
@@ -104,8 +104,8 @@ export DOCKER_BUILDKIT=1
 * Check in docker settings - Resources - WSL Integration your environment is active
 ```
 cd /foodsharing
-sudo./scripts/start
-sudo./scripts/seed
+sudo ./scripts/start
+sudo ./scripts/seed
 ```
 
 ## On WSL1
