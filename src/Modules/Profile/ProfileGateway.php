@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Profile;
 use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 final class ProfileGateway extends BaseGateway
 {
@@ -115,16 +116,38 @@ final class ProfileGateway extends BaseGateway
 
 		$stm = '
 			SELECT 	bz.`name`,
-					bz.`id`
+					bz.`id`,
+			        bz.type
 			FROM 	`fs_bezirk` bz,
 					fs_foodsaver_has_bezirk b
 			WHERE 	b.`bezirk_id` = bz.`id`
 			AND 	b.foodsaver_id = :fs_id
-			AND 	bz.type != 7
+			AND		bz.type != :type
 		';
-		if ($fs = $this->db->fetchAll($stm, [':fs_id' => $fsId])
+		if ($fs = $this->db->fetchAll($stm, [':fs_id' => $fsId, ':type' => Type::WORKING_GROUP])
 		) {
 			$data['foodsaver'] = $fs;
+		}
+
+		// find all working groups in which both the foodsaver and the viewer of the profile are members
+		$stm = '
+			SELECT 	bz.name,
+					bz.id
+			FROM 	fs_bezirk bz
+			JOIN    fs_foodsaver_has_bezirk b1
+			ON      b1.bezirk_id = bz.id
+			LEFT JOIN fs_foodsaver_has_bezirk b2
+			ON    	b1.bezirk_id = b2.bezirk_id
+			WHERE 	b1.foodsaver_id = :fs_id
+			AND 	b2.foodsaver_id = :viewerId
+			AND     bz.type = :type
+		';
+		if ($fs = $this->db->fetchAll($stm, [
+			':fs_id' => $fsId,
+			':viewerId' => $viewerId,
+			':type' => Type::WORKING_GROUP
+		])) {
+			$data['working_groups'] = $fs;
 		}
 
 		$stm = '

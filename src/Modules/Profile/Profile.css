@@ -16,9 +16,6 @@
   font-weight: bolder;
   margin-top: 5px;
 }
-.profile-infos dt::after {
-  content: ':';
-}
 .profile-infos dd {
   padding-bottom: 5px;
 }

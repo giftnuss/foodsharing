@@ -9,6 +9,7 @@
 - Introduces Push Notifications for the Android App !1647 !1976 @dthulke
 - Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
 - Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
+- Show membership in profile for workgroups !1988 @chriswalg
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg

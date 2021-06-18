@@ -370,7 +370,7 @@ class ProfileView extends View
 
 		$out = '<dl class="profile-infos profile-side">';
 		foreach ($infos as $info) {
-			$out .= '<dt>' . $info['name'] . '</dt>';
+			$out .= '<dt>' . $info['name'] . ':</dt>';
 			$out .= '<dd>' . $info['val'] . '</dd>';
 		}
 		$out .= '</dl>';
@@ -628,13 +628,23 @@ class ProfileView extends View
 		[$ambassador, $infos] = $this->renderAmbassadorInformation($infos);
 		$infos = $this->renderFoodsaverInformation($ambassador, $infos);
 		$infos = $this->renderOrgaTeamMemberInformation($infos);
+		if ($this->foodsaver['id'] != $this->session->id()) {
+			$infos = $this->renderFoodsaverTeamMemberInformation($infos);
+		}
 		$infos = $this->renderSleepingHatInformation($infos);
 		$infos = $this->renderAboutMeInternalInformation($infos);
 
 		$out = '<dl class="profile-infos profile-main">';
 		foreach ($infos as $info) {
-			$out .= '<dt>' . $info['name'] . '</dt>';
-			$out .= '<dd>' . $info['val'] . '</dd>';
+			$out .= '<dt>' . $info['name'];
+			if (!empty($info['val'])) {
+				$out .= ':';
+			}
+			$out .= '</dt>';
+
+			if (!empty($info['val'])) {
+				$out .= '<dd>' . $info['val'] . '</dd>';
+			}
 		}
 		$out .= '</dl>';
 
@@ -723,8 +733,32 @@ class ProfileView extends View
 				}
 			}
 			$infos[] = [
-				'name' => $this->translator->trans('profile.workgroups', ['{name}' => $this->foodsaver['name']]),
+				'name' => $this->translator->trans('profile.workgroups_admin', ['{name}' => $this->foodsaver['name']]),
 				'val' => implode(', ', $ambassador),
+			];
+		}
+
+		return $infos;
+	}
+
+	private function renderFoodsaverTeamMemberInformation(array $infos): array
+	{
+		// only display groups in which the user is not an admin
+		if (!empty($this->foodsaver['working_groups'])) {
+			$groups = $this->foodsaver['working_groups'];
+			$groupInfos = [];
+			foreach ($groups as $group) {
+				$groupInfos[$group['id']] = $group['name'];
+			}
+
+			$infos[] = [
+				'name' => $this->translator->trans('profile.workgroups_member', ['{name}' => $this->foodsaver['name']]),
+				'val' => implode(', ', $groupInfos),
+			];
+		} else {
+			$infos[] = [
+				'name' => $this->translator->trans('profile.no_common_workgroups', ['{name}' => $this->foodsaver['name']]),
+				'val' => null,
 			];
 		}
 
