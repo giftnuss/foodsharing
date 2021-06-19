@@ -6,36 +6,37 @@
     <div class="card text-white pb-5">
       <div class="header-desktop" />
       <div class="card-img-overlay">
-        <b-row class="ml-xl-5 mt-xl-5">
-          <b-col
-            lg="2"
-            class="d-none d-lg-block"
-          >
-            <Fork />
-          </b-col>
-          <b-col
-            lg="10"
-            xl="8"
-            cols="12"
-            class="text-center ml-xl-5 mt-md-5"
-          >
-            <b-card-title class="mt-4 mt-md-0">
-              <h1>{{ $i18n('startpage.welcome_text') }}</h1>
-            </b-card-title>
-            <b-card-text class="mt-4">
-              <h3>{{ $i18n('startpage.slogan') }}</h3>
-            </b-card-text>
-            <b-card-text class="mt-5 text-center">
-              <b-button
-                variant="secondary"
-                class="pl-5 pr-5"
-                :href="$url('joininfo')"
-              >
-                {{ $i18n('startpage.call_to_action_button') }}
-              </b-button>
-            </b-card-text>
-          </b-col>
-        </b-row>
+        <b-container>
+          <b-row>
+            <b-col
+              lg="2"
+              class="d-none d-lg-block"
+            >
+              <Fork />
+            </b-col>
+            <b-col
+              xl="8"
+              cols="12"
+              class="text-center mt-md-5"
+            >
+              <b-card-title class="mt-4 mt-md-0">
+                <h1>{{ $i18n('startpage.welcome_text') }}</h1>
+              </b-card-title>
+              <b-card-text class="mt-4">
+                <h3>{{ $i18n('startpage.slogan') }}</h3>
+              </b-card-text>
+              <b-card-text class="mt-5 text-center">
+                <b-button
+                  variant="secondary"
+                  class="pl-5 pr-5"
+                  :href="$url('joininfo')"
+                >
+                  {{ $i18n('startpage.call_to_action_button') }}
+                </b-button>
+              </b-card-text>
+            </b-col>
+          </b-row>
+        </b-container>
       </div>
     </div>
     <b-row
@@ -509,8 +510,8 @@ export default {
 }
 
 svg {
-  height: 15em;
-  width: 18em;
+  height: auto;
+  width: 14em;
 }
 
 .embed-responsive {
