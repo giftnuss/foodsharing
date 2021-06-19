@@ -524,6 +524,11 @@ svg {
   margin: 0 auto;
 }
 
+.img-news {
+  max-width: 55%;
+  height: auto;
+}
+
 .teaser-towns {
   border-radius: 0px !important;
 }
