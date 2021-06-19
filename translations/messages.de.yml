@@ -2176,7 +2176,8 @@ language_chooser:
 
 startpage:
   welcome_text: "Willkommen bei foodsharing"
-  slogan: "Gemeinsam für mehr Lebensmittelwertschätzung"
+  slogan_1: "gemeinschaftlich, nachhaltig & wertschätzend"
+  slogan_2: "foodsharing ist und bleibt kostenfrei."
   call_to_action_button: "Mitmachen"
   more_infos: Erfahre mehr
   this_is_how_it_works: So funktioniert's

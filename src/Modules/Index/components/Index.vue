@@ -23,7 +23,12 @@
                 <h1>{{ $i18n('startpage.welcome_text') }}</h1>
               </b-card-title>
               <b-card-text class="mt-4">
-                <h3>{{ $i18n('startpage.slogan') }}</h3>
+                <h3>{{ $i18n('startpage.slogan_1') }}</h3>
+                <h3
+                  class="d-none d-lg-block"
+                >
+                  {{ $i18n('startpage.slogan_2') }}
+                </h3>
               </b-card-text>
               <b-card-text class="mt-5 text-center">
                 <b-button
