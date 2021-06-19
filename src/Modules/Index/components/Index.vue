@@ -334,7 +334,7 @@
         </b-row>
       </div>
       <div class="map-copyright">
-        Powered by Geoapify | © OpenStreetMap contributors
+        <span v-html="MapAttribution" />
       </div>
     </div>
     <b-row
@@ -449,6 +449,7 @@
 
 <script>
 import Fork from './fork'
+import { MAP_ATTRIBUTION } from '@/consts'
 
 export default {
   components: {
@@ -472,6 +473,9 @@ export default {
     },
     contentBlockVisible () {
       return this.contentBlock1 && this.contentBlock2 && this.contentBlock1
+    },
+    MapAttribution () {
+      return MAP_ATTRIBUTION
     },
   },
 }
@@ -578,6 +582,7 @@ No media query since this is the default in Bootstrap because it is "mobile firs
 .map-copyright {
   color: #333333;
   text-align: center;
+  z-index: 1;
 }
 /*
 ####################################################
