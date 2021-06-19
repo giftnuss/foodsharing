@@ -510,11 +510,6 @@ svg {
   margin: 0 auto;
 }
 
-.bootstrap .img-news {
-  max-width: 55%;
-  height: auto;
-}
-
 .teaser-towns {
   border-radius: 0px !important;
 }
@@ -707,6 +702,11 @@ Bootstrap 4 breakpoints
 </style>
 
 <style>
+.bootstrap .img-news {
+  max-width: 55%;
+  height: auto;
+}
+
 div#main {
   min-height: unset !important;
   padding-bottom: unset !important;
