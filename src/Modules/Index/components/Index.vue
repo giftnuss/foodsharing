@@ -510,7 +510,7 @@ svg {
   margin: 0 auto;
 }
 
-.img-news {
+.bootstrap .img-news {
   max-width: 55%;
   height: auto;
 }
