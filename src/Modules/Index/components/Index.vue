@@ -173,12 +173,6 @@
                   >
                     <h4>{{ $i18n('startpage.member.title') }}</h4>
                   </b-col>
-                  <b-col
-                    cols="1"
-                    align-self="center"
-                  >
-                    <i class="fas fa-arrow-right" />
-                  </b-col>
                 </b-row>
                 <b-card-text>
                   {{ $i18n('startpage.member.text') }}
@@ -234,12 +228,6 @@
                     class="pl-0"
                   >
                     <h4>{{ $i18n('startpage.store.title') }}</h4>
-                  </b-col>
-                  <b-col
-                    cols="1"
-                    align-self="center"
-                  >
-                    <i class="fas fa-arrow-right" />
                   </b-col>
                 </b-row>
                 <b-card-text>
@@ -439,12 +427,6 @@
                     class="pl-0"
                   >
                     <h4>{{ $i18n('startpage.donate.title') }}</h4>
-                  </b-col>
-                  <b-col
-                    cols="1"
-                    align-self="center"
-                  >
-                    <i class="fas fa-arrow-right" />
                   </b-col>
                 </b-row>
                 <b-card-text>
