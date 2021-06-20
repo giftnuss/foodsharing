@@ -16,6 +16,7 @@
             </b-col>
             <b-col
               xl="8"
+              lg="10"
               cols="12"
               class="text-center mt-md-5"
             >
