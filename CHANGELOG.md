@@ -14,7 +14,7 @@
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg
 - Added a partners page for foodsharing.at !1931 @alex.simm
-- Redesign startpage !1778 !1982 !1991 @chriswalg
+- Redesign startpage !1778 !1982 !1991 !1997 @chriswalg
 - Edit Team in stores is no more, functionality moved to team management mode !1810 !1811 @ChrisOelmueller
 - Added a link in Footer.vue to our beta testing issues on beta and dev !1961 @chriswalg
 - Make the own personal address visible for the logged in user, as it is already for ORGA #994 !1957 @leonja
