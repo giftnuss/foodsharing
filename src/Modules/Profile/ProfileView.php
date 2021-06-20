@@ -628,7 +628,9 @@ class ProfileView extends View
 		[$ambassador, $infos] = $this->renderAmbassadorInformation($infos);
 		$infos = $this->renderFoodsaverInformation($ambassador, $infos);
 		$infos = $this->renderOrgaTeamMemberInformation($infos);
-		if ($this->foodsaver['id'] != $this->session->id()) {
+		if ($this->foodsaver['id'] != $this->session->id()
+			&& $this->foodsaver['rolle'] > Role::FOODSHARER
+			&& $this->session->may('fs')) {
 			$infos = $this->renderFoodsaverTeamMemberInformation($infos);
 		}
 		$infos = $this->renderSleepingHatInformation($infos);
