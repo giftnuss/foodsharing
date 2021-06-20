@@ -68,7 +68,6 @@
         cols="12"
         md="6"
         xl="4"
-        class="mt-3 align-self-end"
       >
         <span v-html="contentBlock3" />
       </b-col>
