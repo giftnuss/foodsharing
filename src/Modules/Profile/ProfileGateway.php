@@ -129,7 +129,7 @@ final class ProfileGateway extends BaseGateway
 			$data['foodsaver'] = $fs;
 		}
 
-		// find all working groups in which both the foodsaver and the viewer of the profile are members
+		// find all working groups in which both the foodsaver and the viewer of the profile are active members
 		$stm = '
 			SELECT 	bz.name,
 					bz.id
@@ -139,7 +139,9 @@ final class ProfileGateway extends BaseGateway
 			LEFT JOIN fs_foodsaver_has_bezirk b2
 			ON    	b1.bezirk_id = b2.bezirk_id
 			WHERE 	b1.foodsaver_id = :fs_id
+			AND     b1.active = 1
 			AND 	b2.foodsaver_id = :viewerId
+			AND     b2.active = 1
 			AND     bz.type = :type
 		';
 		if ($fs = $this->db->fetchAll($stm, [
