@@ -24,11 +24,6 @@
               </b-card-title>
               <b-card-text class="mt-4">
                 <h3>{{ $i18n('startpage.slogan_1') }}</h3>
-                <h3
-                  class="d-none d-lg-block"
-                >
-                  {{ $i18n('startpage.slogan_2') }}
-                </h3>
               </b-card-text>
               <b-card-text class="mt-5 text-center">
                 <b-button
@@ -39,6 +34,12 @@
                   {{ $i18n('startpage.call_to_action_button') }}
                 </b-button>
               </b-card-text>
+              <h4
+                class="d-none d-lg-block"
+              >
+                <b>{{ $i18n('startpage.slogan_2') }}</b><br>
+                {{ $i18n('startpage.slogan_3') }}
+              </h4>
             </b-col>
           </b-row>
         </b-container>
@@ -171,7 +172,7 @@
                     xl="10"
                     class="pl-0"
                   >
-                    <h4>{{ $i18n('startpage.member.title') }}</h4>
+                    <h5>{{ $i18n('startpage.member.title') }}</h5>
                   </b-col>
                 </b-row>
                 <b-card-text>
@@ -200,7 +201,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h4>{{ $i18n('startpage.private.title') }}</h4>
+                  <h5>{{ $i18n('startpage.private.title') }}</h5>
                 </b-card-text>
                 <b-card-text>
                   {{ $i18n('startpage.private.text') }}
@@ -227,7 +228,7 @@
                     xl="10"
                     class="pl-0"
                   >
-                    <h4>{{ $i18n('startpage.store.title') }}</h4>
+                    <h5>{{ $i18n('startpage.store.title') }}</h5>
                   </b-col>
                 </b-row>
                 <b-card-text>
@@ -290,7 +291,7 @@
                 class="p-4"
               >
                 <b-card-text>
-                  <h4>{{ $i18n('startpage.near_you.title') }}</h4>
+                  <h5>{{ $i18n('startpage.near_you.title') }}</h5>
                 </b-card-text>
                 <b-row>
                   <b-col
@@ -426,7 +427,7 @@
                     md="11"
                     class="pl-0"
                   >
-                    <h4>{{ $i18n('startpage.donate.title') }}</h4>
+                    <h5>{{ $i18n('startpage.donate.title') }}</h5>
                   </b-col>
                 </b-row>
                 <b-card-text>
@@ -520,11 +521,16 @@ svg {
   max-height: 451px;
 }
 
-h4 {
+h5 {
   font-family: "Alfa Slab One", serif;
   color: #333333;
   font-size: 1.375rem;
   letter-spacing: 0.05em;
+}
+
+::v-deep h4 {
+  color: #333333;
+  font-size: 1rem;
 }
 
 ::v-deep h3 {
