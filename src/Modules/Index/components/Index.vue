@@ -54,7 +54,6 @@
         cols="12"
         md="12"
         xl="3"
-        class="text-lg-right"
       >
         <span v-html="contentBlock1" />
       </b-col>
@@ -81,7 +80,6 @@
       <b-col
         cols="12"
         xl="3"
-        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.mission.title') }}</h2>
       </b-col>
@@ -105,7 +103,6 @@
     <b-row class="ml-3 ml-md-5 mr-5 mt-5">
       <b-col
         xl="4"
-        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.this_is_how_it_works') }}</h2>
       </b-col>
@@ -134,7 +131,6 @@
       <b-col
         cols="12"
         xl="4"
-        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.call_to_action.title') }}</h2>
       </b-col>
@@ -250,7 +246,6 @@
       <b-col
         cols="12"
         xl="3"
-        class="text-lg-right"
       >
         <h2>{{ $i18n('startpage.how_we_work.title') }}</h2>
       </b-col>
