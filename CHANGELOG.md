@@ -33,6 +33,7 @@
 - Fix link to wiki on the registration page !1992 @alex.simm
 - Fixed the link texts in the newsletter email template !1993 @alex.simm
 - Render HTML markings in subject line of email teplates #714 !1899 @alex.simm
+- Fixed profile badges hidden for foodsharers #1086 !1978 @andreasklumpp1
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
