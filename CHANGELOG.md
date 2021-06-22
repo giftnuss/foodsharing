@@ -34,6 +34,7 @@
 - Fixed the link texts in the newsletter email template !1993 @alex.simm
 - Render HTML markings in subject line of email teplates #714 !1899 @alex.simm
 - Fixed profile badges hidden for foodsharers #1086 !1978 @andreasklumpp1
+- Prevent stored to show up multiple times #1063 !1900 @bjarne.schindler
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
@@ -92,7 +93,7 @@
 - Hide map label in topbar only if displayed on mobile or user is a foodsaver !1869 @joanna-gabis
 - Added hasConference permission to Type::COUNTRY, Type::FEDERAL_STATE !1844 @chriswalg
 - Added LinkedIn and Youtube as social icon in footer !1850 @chriswalg
-- Remove active baskets if a user is deleted !1867 #983 @alex.simm 
+- Remove active baskets if a user is deleted !1867 #983 @alex.simm
 - Report and Mediation button is not visible against foodsharers !1874 @fs_k
 - Updated english translations !1875 @kingu @alex.simm
 - Redirect to previous page when logging in using the topbar #689 !1887 @alex.simm
@@ -101,7 +102,7 @@
 - special workgroup functions can only be edited by global workgroup creation team.
   report admins and arbitration admins can't report each other
   only new reports shown in report list. #1046 !1902
-- Regionoptions for profile mediation / report Buttons #1046 !1903 
+- Regionoptions for profile mediation / report Buttons #1046 !1903
 - Allow users to see their own registration date !1907 @alex.simm
 - activate all workgroup functions. Restrict certain functions in self-management (report, arbitration, fs-management) #1046 !1909 @fs_k
 - Sort list of past polls and allow filtering them #975 !1901 @alex.simm
@@ -182,7 +183,7 @@
 - Replaced in topbar donation page to twingle pages !1773 @chriswalg
 - Complete redesign of the footer !1769 !1805 !1834 @chriswalg
 - Allow editing of polls in the first hour !1786 #975 @alex.simm
-- Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm 
+- Restrict the search in a store's edit team dialog to people from the same region !1812 #1012 @alex.simm
 - Rewrite blogpost management list in Vue !1791 @ChrisOelmueller
 
 ## Bugfixes
@@ -285,7 +286,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Allow adding workgroup admins or members if none exist currently #896 !1637 @ChrisOelmueller
 - Fix server error when activating new email address that has already been activated #966 !1664 @alex.simm
 - Fix disappearing store traffic light when store name is long !1682 #984 @ChrisOelmueller
-- Fix last creation date in pass generation table when creating multiple passes !1684 #686 @alex.simm 
+- Fix last creation date in pass generation table when creating multiple passes !1684 #686 @alex.simm
 - Fix a page crash with unexpected URL parameters !1686 @ChrisOelmueller
 - Optimise the creation of many event invitations #958 !1710 @alex.simm
 
@@ -355,14 +356,14 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Only count pickups via the function getMyStore until the current day !1599 @chriswalg
 - Stop overwriting mailbox names if they contain unread mails #789 !1600 @ChrisOelmueller
 - Prevent page from jumping to top when deleting bells !1597 @ChrisOelmueller
-- Fix crashing "All my stores" page when user has no home district !1616 #936 @alex.simm 
+- Fix crashing "All my stores" page when user has no home district !1616 #936 @alex.simm
 - Fix creation and deletion of buddy bells !1618 #942 @alex.simm
 - Fix wrong viewer/session ID on profile page !1629 @alex.simm
 
 ## Refactoring
-- Move master-update function for regions to the rest controller !1547 @alex.simm 
+- Move master-update function for regions to the rest controller !1547 @alex.simm
 - Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
-- Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
+- Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm
 - Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
 - Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 !1597 @ChrisOelmueller
@@ -376,7 +377,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Rename "Helper" namespace to "Utility" @janopae !1475
 - REST API: file uploads with resizing of images in foodshare points !818 @alangecker
 - Removed dependency on old Db class from some classes !1598 #9 @alex.simm
-- Move sending of bananas to new REST endpoint !1617 #798 @alex.simm 
+- Move sending of bananas to new REST endpoint !1617 #798 @alex.simm
 - Remove jquery contextmenu, refactor some dashboard view code &22 !1606 @ChrisOelmueller
 - Refactor profile view, permissions, and pickup schedule overview !1604 @ChrisOelmueller
 - Rewrite store pickup history in Vue, using the Pickup components &9 &22 !1611 @ChrisOelmueller
@@ -394,7 +395,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Disabled report link on profile page and Xhr functions for sending reports !1610 @alex.simm
 
 # 2020-06-15 Hotfix
-- Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
+- Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm
 - Gender value for women and man is now fixed !1564 @chriswalg
 - Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
 - Update devdocs to recommend Docker Desktop for Win10 Home !1578 @\_fridtjof_
@@ -402,7 +403,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 
 # 2020-06-01 Hotfix
 
-## Bugfixes 
+## Bugfixes
 - Allow to accept privacy notice, so people can become store managers again !1551 @NerdyProjects
 
 # 2020-05-18 Hotfix
