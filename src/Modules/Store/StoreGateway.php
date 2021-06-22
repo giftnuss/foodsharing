@@ -322,15 +322,14 @@ class StoreGateway extends BaseGateway
 			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($addFromRegionId);
 			if (!empty($child_region_ids)) {
 				$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
-
-				$betriebe = $this->db->fetchAll($query . '
-					WHERE    bezirk_id IN(' . $placeholders . ')
-
-					ORDER BY r.name DESC
-				', $child_region_ids);
+				$betriebe = $this->db->fetchAll(
+					$query . ' WHERE bezirk_id IN(' . $placeholders . ') ORDER BY r.name DESC',
+					$child_region_ids
+				);
 
 				foreach ($betriebe as $b) {
 					if (!isset($already_in[$b['id']])) {
+						$already_in[$b['id']] = true;
 						if ($sortByOwnTeamStatus) {
 							$result['sonstige'][] = $b;
 						} else {
@@ -352,7 +351,7 @@ class StoreGateway extends BaseGateway
         			b.`betrieb_status_id`,
         			b.`bezirk_id`,
         			b.`plz`,
-        			b.`stadt`,
+    				b.`stadt`,
         			b.`lat`,
         			b.`lon`,
         			b.`kette_id`,
