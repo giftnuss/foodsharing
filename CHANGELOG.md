@@ -34,7 +34,7 @@
 - Fixed the link texts in the newsletter email template !1993 @alex.simm
 - Render HTML markings in subject line of email teplates #714 !1899 @alex.simm
 - Fixed profile badges hidden for foodsharers #1086 !1978 @andreasklumpp1
-- Prevent stored to show up multiple times #1063 !1900 @bjarne.schindler
+- Prevent stores to show up multiple times #1063 !1900 @bjarne.schindler
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
