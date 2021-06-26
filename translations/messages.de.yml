@@ -983,7 +983,7 @@ events:
 recipients:
   bread: "Newsletter-Verteiler"
   prepare: "Vorbereiten zum Versand"
-  recipients: "Empfänger"
+  recipients: "Empfänger*innen"
   all: "Alle Foodsaver weltweit"
   active_ambassadors: "Alle Botschafter*innen bundesweit"
   orga_team: "Orgateam bundesweit"
@@ -1327,7 +1327,7 @@ mailbox:
   reply: "Antworten"
   delete: "In die Tonne"
   sender: "Absender"
-  recipient: "Empfänger"
+  recipient: "Empfänger*in"
   date: "Datum"
   subject: "Betreff"
   actions: "Optionen"
@@ -1352,7 +1352,7 @@ mailbox:
   not-allowed: "Du hast nicht die nötigen Rechte, dies zu tun."
   okay: "E-Mail wurde erfolgreich versendet."
   failed: "Die E-Mail konnte nicht gesendet werden."
-  recipients: "Zu viele Empfänger"
+  recipients: "Zu viele Empfänger*innen"
   ratelimit: "Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick..."
   filetype: "Dieser Dateityp ist nicht erlaubt"
   filesize: "Sorry, die Datei ist zu groß."
@@ -1458,7 +1458,7 @@ settings:
     disabled: "Push-Benachrichtigungen erfolgreich deaktiviert"
 
 mail:
-  noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse."
+  noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfangsadresse."
 
 profile:
   title: "Profil"
