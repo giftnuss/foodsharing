@@ -238,7 +238,7 @@ class ReportGateway extends BaseGateway
 		return $query;
 	}
 
-	public function getReportsByReporteeRegions($regions, array $excludeReportsWithUsers, array $onlyReportsWithUsers = null)
+	public function getReportsByReporteeRegions($regions, ?array $excludeReportsWithUsers, ?array $onlyReportsWithUsers = null)
 	{
 		$query = $this->reportSelect();
 
@@ -250,12 +250,12 @@ class ReportGateway extends BaseGateway
 				return [];
 			}
 		}
-		if ($excludeReportsWithUsers !== null) {
+		if (!empty($excludeReportsWithUsers)) {
 			$in = str_repeat('?,', count($excludeReportsWithUsers) - 1) . '?';
 			$query = $query->where('r.reporter_id not in (' . $in . ')', $excludeReportsWithUsers);
 			$query = $query->where('r.foodsaver_id not in (' . $in . ')', $excludeReportsWithUsers);
 		}
-		if ($onlyReportsWithUsers !== null) {
+		if (!empty($onlyReportsWithUsers)) {
 			$in = str_repeat('?,', count($onlyReportsWithUsers) - 1) . '?';
 			$query = $query->where('r.reporter_id in (' . $in . ')', $onlyReportsWithUsers);
 			$query = $query->where('r.foodsaver_id in (' . $in . ')', $onlyReportsWithUsers, 'OR');
