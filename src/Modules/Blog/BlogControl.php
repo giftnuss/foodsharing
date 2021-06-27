@@ -80,7 +80,7 @@ class BlogControl extends Control
 
 	public function read(): void
 	{
-		if ($news = $this->blogGateway->getPost($_GET['id'])) {
+		if (!isset($_GET['id']) && is_int($_GET['id']) && $news = $this->blogGateway->getPost($_GET['id'])) {
 			$this->pageHelper->addBread($news['name']);
 			$this->pageHelper->addContent($this->view->newsPost($news));
 		}

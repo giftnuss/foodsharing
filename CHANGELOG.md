@@ -68,6 +68,7 @@
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
 - the function FoodsaverGateway:getOrgaTeam now factors in the user role Orga !2038 @fs_k
 - Set correct MIME type for attachments which are fetched via IMAP #1092 !2041 @Thylossus
+- Some checks for PHP data types in order to avoid Sentry errors !2001 @alex.simm  
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum
