@@ -109,8 +109,11 @@ class FoodSharePointControl extends Control
 			$regionId = $this->foodSharePoint['bezirk_id'];
 		}
 
-		if ((isset($regionId) || $regionId = $request->query->get('bid'))
-				&& $region = $this->regionGateway->getRegion($regionId)) {
+		if (!isset($regionId)) {
+			$regionId = $request->query->get('bid');
+		}
+
+		if (!empty($regionId) && is_int($regionId) && $region = $this->regionGateway->getRegion($regionId)) {
 			$this->regionId = $regionId;
 			$this->region = $region;
 			if ((int)$region['mailbox_id'] > 0) {
