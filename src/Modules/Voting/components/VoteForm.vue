@@ -4,7 +4,7 @@
       @submit="showConfirmDialog"
     >
       <b-alert
-        :v-if="poll.shuffleOptions"
+        v-if="poll.shuffleOptions"
         show
         variant="dark"
         class="mt-5"
