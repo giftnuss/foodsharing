@@ -291,7 +291,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			'about_me_intern' => 'hello!'
 		]);
 		$this->writeUser($userbot, $password, 'ambassador');
-		$I->addRegionAdmin(RegionIDs::IT_SUPPORT_GROUP, $userbot['id']);
+
 
 		$userbot2 = $I->createAmbassador($password, [
 			'email' => 'userbot2@example.com',
@@ -343,6 +343,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionMember($ag_aktive, $userbot['id']);
 
 		$I->addRegionMember($ag_testimonials, $user2['id']);
+
+		$I->addRegionAdmin(RegionIDs::IT_SUPPORT_GROUP, $userStoreManager2['id']);
+		$I->addRegionMember(RegionIDs::IT_SUPPORT_GROUP, $userStoreManager2['id']);
 
 		// Make ambassador responsible for all work groups in the region
 		$this->output->writeln('- make ambassador responsible for all work groups');
