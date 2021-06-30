@@ -102,8 +102,8 @@ class ProfilePermissions
 
 	public function mayDeleteBanana(int $recipientId): bool
 	{
-		// users can delete bananas that were given to them by someone else
-		return $this->session->id() == $recipientId;
+		// users , orga and admin of IT-Support can delete bananas that were given to them by someone else
+		return $this->session->isAdminFor(RegionIDs::IT_SUPPORT_GROUP) || $this->session->id() == $recipientId;
 	}
 
 	public function mayRemoveFromBounceList(int $userId): bool
