@@ -10,7 +10,6 @@
 - Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
 - Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
 - Show membership in profile for workgroups !1988 !1996 @chriswalg
-- Show membership in profile for workgroups !1988 @chriswalg
 - IT-Support Admins can delete bananas upon request over it@foodsharing.network. !2002 @fs_k
 
 ## Changes
