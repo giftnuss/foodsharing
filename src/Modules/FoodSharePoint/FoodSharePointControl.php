@@ -110,7 +110,7 @@ class FoodSharePointControl extends Control
 		}
 
 		if (!isset($regionId)) {
-			$regionId = $request->query->get('bid');
+			$regionId = intval($request->query->get('bid'));
 		}
 
 		if (!empty($regionId) && is_int($regionId) && $region = $this->regionGateway->getRegion($regionId)) {
