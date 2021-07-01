@@ -11,6 +11,8 @@ You can use the Docker Compose setup if you are using one of the following:
 
 If you are not using one of those, then try the Vagrant + Docker Compose setup.
 
+After running the code for the first time, when visiting the local website, you might get an error like `Unable to write to the "/app/var/cache/dev" directory`. Stopping and re-running the code should fix the problem. Otherwise, check the [Troubleshooting](troubleshooting.md).
+
 ## Linux
 
 Install
@@ -231,6 +233,8 @@ Du kannst das Docker Compose setup benutzen, falls du mit
 
 
 Falls du keines von denen nutzt, probiere es mit Vagrant + dem Docker Compose Setup.
+
+Wenn du den Code zum ersten Mal ausführst und die lokale Website öffnest, bekommst du möglicherweise einen Fehler wie `Unable to write to the "/app/var/cache/dev" directory`. Ein Stoppen und Neustarten des Codes sollte das Problem beheben. Falls nicht, schau in das [Problemlösungskapitel](troubleshooting.md).
 
 ## Linux
 
