@@ -24,7 +24,7 @@ It will give you some users that you can log in with:
 | `userbotreg2@example.com`   | `user`   | Ambassador    |
 | `userorga@example.com`      | `user`   | Orgateam      |
 
-Users with workgroup functionality
+Users with workgroup functionality in the region
 
 | Email                                  | Password | workgroup function |
 |----------------------------------------|----------|--------------------|
@@ -64,7 +64,13 @@ Users with workgroup functionality
 | `usermoderation3@example.com`          | `user`   | Moderation         |
 | `usermoderation4@example.com`          | `user`   | Moderation         |
 
-Please refer to the [User Roles and Permissions](#learn-user-roles.md) section for details on the different roles.  
+Some users have additional permissions by being admins of global working groups:
+
+| Email                                  | Password | workgroup function |
+|----------------------------------------|----------|--------------------|
+| `storemanager2@example.com`            | `user`   | Support            |
+
+Please refer to the [User Roles and Permissions](learn-user-roles.md) section for details on the different roles.  
 *Tip: You can use private browser windows to log in with multiple users at the same time!*
 
 The script also generates more dummy users and dummy data to fill the page with life (a bit at least).
