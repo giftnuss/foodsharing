@@ -1351,6 +1351,9 @@ profile:
     warning_2: changeant d'adresse courriel
     warning_1: Ton adresse courriel personnelle {email} est suspendue pour les communications
       avec foodsharing, en
+  no_common_workgroups: Tu n'es pas dans un groupe de travail commun avec {name}
+  workgroups_member: Tu es avec {name} dans les groupes de travail suivants
+  workgroups_admin: "{name} s'est engagé·e comme personne de contact pour les groupes"
 pickuplist:
   NumberOfAppointments_table_header: Nombre d'évènements
   unclear: Statut confus
@@ -2039,6 +2042,9 @@ startpage:
   call_to_action_button: Rejoindre
   slogan: Ensemble pour un plus grand respect de nos ressources alimentaires
   welcome_text: Bienvenue au sein de foodsharing
+  slogan_3: foodsharing est et restera gratuit.
+  slogan_2: collaboratif, durable et respectueux
+  slogan_1: Ensemble pour mieux apprécier la nourriture
 language_chooser:
   content: Choisis une langue
   title: Choisir la langue
