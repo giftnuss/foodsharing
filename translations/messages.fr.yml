@@ -640,7 +640,7 @@ recipients:
     tous)
   newsletter: Tous les abonnés à la lettre d'information (au min. Foodsaver)
   orga_team: Équipe Organisation (national)
-  active_ambassadors: Tous les ambassadeur.ice.s (national)
+  active_ambassadors: Tous les ambassadeur·ice·s (national)
   all: Tous les Foodsaver (international)
   recipients: Destinataires
   prepare: Préparer pour l'envoi
@@ -678,8 +678,8 @@ forum:
   sending_error: Une erreur est survenue lors de l'envoi
   no_threads: Aucune discussion
   no_posts: Aucune contribution à afficher
-  hold_back_for_moderation: La discussion a été enregistrée et sera publiée dès qu'un.e
-    ambassadeur.ice / un.e modérateur.ice l'aura acceptée.
+  hold_back_for_moderation: La discussion a été enregistrée et sera publiée dès qu'un·e
+    ambassadeur·ice / un·e modérateur·ice l'aura acceptée.
   post:
     body: Message
     delete: Supprimer la contribution
@@ -1505,7 +1505,7 @@ chat:
   confirm_draft_discard: "En changeant de conversation, le texte écrit jusqu'ici sera\
     \ automatiquement supprimé.\nEn interrompant cet échange, ton brouillon sera automatiquement\
     \ utilisé dans la nouvelle conversation.\n"
-  empty_recipients: Tu dois d'abord choisir un.e destinataire.
+  empty_recipients: Tu dois d'abord choisir un·e destinataire.
   empty_message: Tu dois d'abord écrire un message.
   error_sending_message: L'envoi du message a échoué.
   error_loading_messages: Le chargement des messages a échoué.
