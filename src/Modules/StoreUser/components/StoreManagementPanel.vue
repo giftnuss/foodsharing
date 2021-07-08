@@ -10,6 +10,7 @@
       :placeholder="$i18n('profile.infos.foodsaverId')"
       button-icon="fa-user-plus"
       :button-tooltip="$i18n('store.sm.makeRegularTeamMember')"
+      :filter="filterNotInTeam"
       @user-selected="addNewTeamMember"
     />
 
@@ -120,6 +121,7 @@ export default {
   props: {
     classes: { type: String, default: '' },
     storeId: { type: Number, required: true },
+    team: { type: Array, required: true },
   },
   data () {
     return {
@@ -138,6 +140,9 @@ export default {
       }
       // convince user to trigger page reload for server refresh of teamlist
       this.requireReload = true
+    },
+    filterNotInTeam (userId) {
+      return !this.team.some(x => x.id === userId)
     },
   },
 }

@@ -1,32 +1,30 @@
-<!-- input that field that allows searching for users and shows suggestions -->
+<!-- input field that allows searching for users and shows suggestions -->
 <template>
-  <div class="bootstrap">
-    <vue-typeahead-bootstrap
-      v-model="query"
-      input-class="with-border"
-      :data="searchResults"
-      :serializer="user => user.value"
-      :placeholder="placeholder"
-      @hit="userId = $event.id"
-      @input="delayedSearch"
-    >
-      <template slot="append">
-        <b-button
-          v-b-tooltip="buttonTooltip"
-          :disabled="userId <= 0"
-          variant="secondary"
-          type="submit"
-          size="sm"
-          @click.prevent="buttonClicked"
-        >
-          <i
-            class="fas fa-fw"
-            :class="buttonIcon"
-          />
-        </b-button>
-      </template>
-    </vue-typeahead-bootstrap>
-  </div>
+  <vue-typeahead-bootstrap
+    v-model="query"
+    input-class="with-border"
+    :data="searchResults"
+    :serializer="user => user.value"
+    :placeholder="placeholder"
+    @hit="userId = $event.id"
+    @input="delayedSearch"
+  >
+    <template slot="append">
+      <b-button
+        v-b-tooltip="buttonTooltip"
+        :disabled="userId <= 0"
+        variant="secondary"
+        type="submit"
+        size="sm"
+        @click.prevent="buttonClicked"
+      >
+        <i
+          class="fas fa-fw"
+          :class="buttonIcon"
+        />
+      </b-button>
+    </template>
+  </vue-typeahead-bootstrap>
 </template>
 
 <script>
@@ -41,6 +39,7 @@ export default {
     placeholder: { type: String, default: '' },
     buttonIcon: { type: String, required: true },
     buttonTooltip: { type: String, default: '' },
+    filter: { type: Function, default: null },
   },
   data () {
     return {
@@ -67,7 +66,13 @@ export default {
       const value = this.query
       if (value.length > 2) {
         try {
-          this.searchResults = await searchUser(this.query)
+          let users = await searchUser(this.query)
+          if (this.filter) {
+            // let the external function filter by user id
+            const filteredIds = users.map(x => x.id).filter(this.filter)
+            users = users.filter(x => filteredIds.includes(x.id))
+          }
+          this.searchResults = users
         } catch (e) {
           pulseError(i18n('error_unexpected'))
         }
