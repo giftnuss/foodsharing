@@ -5,26 +5,13 @@
   >
     <span class="text-muted">{{ $i18n('store.sm.makeRegularTeamMember') }}</span>
 
-    <b-input-group class="m-1 add-to-team">
-      <b-form-input
-        id="new-foodsaver-id"
-        v-model="newUserId"
-        class="with-border"
-        :placeholder="$i18n('profile.infos.foodsaverId')"
-      />
-      <b-input-group-append>
-        <b-button
-          v-b-tooltip="$i18n('store.sm.makeRegularTeamMember')"
-          :disabled="!newUserId.trim()"
-          variant="secondary"
-          type="submit"
-          size="sm"
-          @click.prevent="addNewTeamMember"
-        >
-          <i class="fas fa-fw fa-user-plus" />
-        </b-button>
-      </b-input-group-append>
-    </b-input-group>
+    <user-search-input
+      class="m-1"
+      :placeholder="$i18n('profile.infos.foodsaverId')"
+      button-icon="fa-user-plus"
+      :button-tooltip="$i18n('store.sm.makeRegularTeamMember')"
+      @user-selected="addNewTeamMember"
+    />
 
     <div v-if="requireReload">
       <span class="text-muted d-inline-block py-2">{{ $i18n('store.sm.reloadRequired') }}</span>
@@ -126,15 +113,16 @@
 import { addStoreMember } from '@/api/stores'
 import { reload, pulseError } from '@/script'
 import i18n from '@/i18n'
+import UserSearchInput from '@/components/UserSearchInput'
 
 export default {
+  components: { UserSearchInput },
   props: {
     classes: { type: String, default: '' },
     storeId: { type: Number, required: true },
   },
   data () {
     return {
-      newUserId: '',
       // active sorting controls
       // active filtering controls
       requireReload: false,
@@ -142,11 +130,9 @@ export default {
   },
   methods: {
     reload,
-    async addNewTeamMember () {
-      const userId = parseInt(this.newUserId)
+    async addNewTeamMember (userId) {
       try {
         await addStoreMember(this.storeId, userId)
-        this.newUserId = ''
       } catch (e) {
         pulseError(i18n('error_unexpected'))
       }
