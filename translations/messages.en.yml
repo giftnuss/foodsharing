@@ -832,7 +832,7 @@ bell:
   store_request_accept: You were accepted to the team.
   store_new_request_title: New team request
   blog_new_check_title: New blog article
-  no_bells: You have no notifications
+  no_bells: You have no notifications.
   passgen_failed_title: Your ID could not be created
   passgen_failed: Please load a photo! Then it will work.
   sharepoint_activate: '{name} has been listed'
@@ -869,7 +869,7 @@ reports:
   report_id: Report ID
   in-store: Does the message concern a specific store where {user} picks up?
   store: Assigned store
-  reportmessage: Please indicate how you can be reached if we have further questions!
+  reportmessage: Please indicate how you can be reached if we have further questions.
   info: ' !! Please specify the <b>date</b>, the <b>place</b> and the <b>time</b>
     of the incident !!! <br> Please check if you have tried the available communication
     channels to address the incident directly with the person and to clarify the facts.
@@ -888,8 +888,8 @@ recipients:
   permission: You do not have permission to send e-mails
   body: Message
   recipients: Recipient
-  test_email_invalid: Something is wrong with the e-mail address!
-  test_email_sent: E-mail was sent!
+  test_email_invalid: Something is wrong with the e-mail address.
+  test_email_sent: E-mail was sent.
   testmail: Send test e-mail
   confirm: Send e-mail?
   storemanagers_and_ambs: All store managers + ambassadors
@@ -901,10 +901,10 @@ recipients:
   empty-region: There are no foodsavers in the selected districts
   choose: Select districts manually
   region-hint: "<strong>Note:</strong>\nTo mark subordinate districts, you have to\
-    \ open the folder first!\nNo e-mails are sent to any of the invisible districts.\n"
+    \ open the folder first.\nNo e-mails are sent to any of the invisible districts.\n"
   doublecheck: Everything checked? Should the email be sent to the selected target
     group?
-  variable-info: "To make the mail more personal, you can insert <strong>{NAME}</strong>\
+  variable-info: "To make the e-mail more personal, you can insert <strong>{NAME}</strong>\
     \ instead of the name\nand use <strong>{ANREDE}</strong> for the salutation.\n\
     <p>For example, {ANREDE} {NAME} results in \"Dear Peter\"\n"
   variables: Salutation
@@ -991,15 +991,15 @@ poll:
   begins_at: begins at
   ended_at: ended at
 buddy:
-  request_accepted: Now you are buddies!
-  request_sent: Request was sent!
+  request_accepted: Now you are buddies.
+  request_sent: Request was sent.
 email_template:
   help_needed:
     support_mail: it@foodsharing.network
     or: or
     link: https://devdocs.foodsharing.network/it-tasks_EN.html
     main: To revise this function, we need the support of other programmers, testers
-      and helpers from your district
+      and helpers from your district.
   warning: Warning
   reply: Reply
   confirm_topic: 'Thread needs approval:'
@@ -1013,7 +1013,7 @@ email_template:
   dont_respond:
     noreply: Please do not respond to this e-mail. It was sent from an address, which
       does not correspond to a mailbox.
-    nomail: you can configure which mails you like to receive.
+    nomail: you can configure which e-mails you like to receive.
     notification: notification settings
     you_can: In the
     no_notification_link: Do you no longer want to receive these types of notifications?
@@ -1044,7 +1044,7 @@ email_template:
       \ Köln\n Register number: VR 17439\n Responsible for the content according to\
       \ § 55 section 2 RStV:\n  Frank Bowinkelmann"
   newsletter:
-    linktext: Click here to unsubscribe!
+    linktext: Click here to unsubscribe.
     unsubscribe: Do you want to unsubscribe from our newsletter?
   from: -- from
 sidenav:
@@ -1141,13 +1141,13 @@ blog:
   permissions:
     delete: You can not delete this article
     edit: You can not edit this article
-    new: You do not have permission to create articles!
+    new: You do not have permission to create articles
   failure:
     delete: Article could not be deleted
     edit: Article could not be saved
     new: Article could not be created
   success:
-    delete: Article deleted!
+    delete: Article deleted
     edit: Article was saved
     new: Article was created
   confirmDelete: Do you really want to delete {name} irrevocably?
@@ -1186,7 +1186,7 @@ region:
   created: '{region} was created'
   still_contains_elements: The region can not be removed because it still contains
     subregions, stores, or food-share-points.
-  edit_success: Region was saved!
+  edit_success: Region was saved.
   cancel: No, not really
   confirm: Are you sure you want to save the changes to the district?
   none: No district chosen yet
@@ -1986,7 +1986,7 @@ passcheck: Please confirm the change with your password
 online_type: Will this event be offline or online?
 addresspicker:
   label: Search for address/location
-  placeholder: Please look for the address here! If necessary, correct below afterwards.
+  placeholder: Please look for the address here. If necessary, correct below afterwards.
   infobox_profile: <a href="https://wiki.foodsharing.de/Foodsharer">Foodsharers</a>
     need the address in order to be able to offer food baskets on the website. In
     order to be able to participate in food rescues as a <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a>,
@@ -2182,7 +2182,7 @@ becomeregion:
       or join the nearest district. If you do not have the opportunity to train as
       a food saver in your area, you can consider starting your own district. In this
       case, please read the wiki and especially the article on
-  chooseregion: Select the district in which you want to be active!
+  chooseregion: Select the district in which you want to be active.
 push_notifications:
   test_notification_body: Great, that seems to have worked :)
   test_notification_title: Push notifications activated
