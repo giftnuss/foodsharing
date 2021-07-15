@@ -16,7 +16,7 @@ group:
     fetch_count: How many pickups does an applicant need to have done?
     banana_count: How many trust bananas must an applicant have?
     banana_count_errors:
-      min: Nobody can have less than {{ limit }} trust banans!
+      min: Nobody can have less than {{ limit }} trust bananas.
       max: Please do not expect more than {{ limit }} trust bananas!
     member_since_weeks: How many weeks does an applicant need to be registered on
       the platform?
@@ -1038,11 +1038,11 @@ email_template:
   impress:
     general_information_requirements: According to § 5 TMG
     title: Imprint
-    address: "foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n represented\
-      \ by:\n\n Frank Bowinkelmann \n Contact:\n e-mail: info@foodsharing.de\n Register\
-      \ entry:\n\n Entry in the register of associations\n Register court: Amtsgericht\
-      \ Köln\n Register number: VR 17439\n Responsible for the content according to\
-      \ § 55 section 2 RStV:\n  Frank Bowinkelmann"
+    address: "foodsharing e.V.\nNeven-DuMont-Str. 14 \n50667 Cologne \nRepresented\
+      \ by:\n\nFrank Bowinkelmann \nContact Details:\nE-Mail: info@foodsharing.de\n\
+      Register Entry:\n\nRegistration Court: District Court Cologne\nRegistration\
+      \ Number: VR 17439\nResponsible for the content according to § 55 Abs. 2 RStV:\n\
+      \  Frank Bowinkelmann"
   newsletter:
     linktext: Click here to unsubscribe.
     unsubscribe: Do you want to unsubscribe from our newsletter?
@@ -2235,12 +2235,12 @@ startpage:
       part1: Also, there are
   store:
     title: as a company
-    text: Do you work in a supermarket, restaurant, canteen ...? Register your business
-      and save food.
+    text: You are employed in a grocery store, restaurant or cafeteria...? Sign up
+      your company and rescue food.
   member:
     title: as a member
-    text: Share your surplus groceries with the foodsharing community or save groceries
-      from companies.
+    text: Share your surplus food with the foodsharing community or rescue food from
+      companies.
   call_to_action:
     title: Join
     text: We newly formed in 2012, by now we are an international movement existing
@@ -2256,7 +2256,7 @@ startpage:
   towns:
     title: foodsharing cities
   this_is_how_it_works: This is how it works
-  more_infos: Learn more
+  more_infos: Find out more
   slogan: Together for more food appreciation
   how_we_work:
     title: This is how it goes
