@@ -2206,6 +2206,9 @@ startpage:
   donate:
     title: Donate
     link: support foodsharing
+    text: "We seek sponsorship for any expenditure. In some cases, however, this does\
+      \ not work \nor not in full, e.g. for the financing of events, legal advice\
+      \ or insurances.\nWe would be delighted in receiving any support.\n"
   demands:
     title: Demands
     text: "Action plan with Deutsche Umwelthilfe\npublished on the 6th foodsharing\
@@ -2244,6 +2247,10 @@ startpage:
       of over 200.000 users in Germany, Austia,  Switzerland and other European countries.
   mission:
     title: Mission
+    text: Our long-term goal is to reduce the throw-away culture of food and other
+      resources. We save food in private households and businesses - collectively,
+      sustainably and respectfully. We see ourselves as both a political and an educational
+      movement.
   call_to_action_button: Join
   welcome_text: Welcome to foodsharing
   towns:
