@@ -9,15 +9,15 @@ group:
     region: e-mail inbox
   application_requirements:
     requirements: Who can enter this group?
-    nobody: Nobody (closed group)
-    requires_properties: Anybody fulfilling certain criteria
-    everybody: Everybody can apply
-    open: Anyone can join directly
+    nobody: Nobody (closed group).
+    requires_properties: Anybody fulfilling certain criteria.
+    everybody: Everybody can apply.
+    open: Anyone can join directly.
     fetch_count: How many pickups does an applicant need to have done?
     banana_count: How many trust bananas must an applicant have?
     banana_count_errors:
       min: Nobody can have less than {{ limit }} trust bananas.
-      max: Please do not expect more than {{ limit }} trust bananas!
+      max: Please do not expect more than {{ limit }} trust bananas.
     member_since_weeks: How many weeks does an applicant need to be registered on
       the platform?
     not_fulfilled: To apply for this group, you have to be registered for at least
@@ -30,7 +30,7 @@ group:
   member_count: '{0} No members|{1} One member| [2, Inf[ %count% members'
   admin_count: '{0} No administrators|{1} One administrator| [2, Inf[ %count% administrators'
   image: image for %name%
-  already_applied: You already applied for this group
+  already_applied: You already applied for this group.
   actions:
     contact: Contact group
     edit: Edit group
@@ -122,7 +122,7 @@ group:
   contact:
     send: Send message
     title: Contact {group}
-    admins: '{count} contact person:'
+    admins: '{count} contact persons:'
     sent: The message has been sent successfully.
     empty: Please write something first ;)
     disclaimer: "By sending a message to this workgroup\nall administrators of the\
@@ -131,7 +131,7 @@ group:
   edit: Edit {group}
   quitting_home_district_warning: Do you really want to leave your home district %name%?
     You will lose your verification and have to contact the ambassador team of your
-    new home district later!
+    new home district later.
   saved: Changes were saved
   unique_function:
     tooltip_function_region432: Admins of this work group can view messages
@@ -171,7 +171,7 @@ settings:
   sleep:
     temp: I am not available for following time period
     none: I am active and fully on board
-    missing-date: Please type in a start and end date for a time period!
+    missing-date: Please type in a start and end date for a time period.
     header: Sleepyhead function
     title: Sleepyhead
     saved: The settings were saved
@@ -199,7 +199,7 @@ settings:
     menu: Calendar
     sync: "Your calendar programme has to synchronise this calendar regularly.\nOnly\
       \ then new pick-up dates appear and cancelled dates disappear.\n"
-    token-warning: "Important: Keep the link secret!\nIt contains a key to access\
+    token-warning: "Important: Keep the link secret.\nIt contains a key to access\
       \ your account without a password.\n"
     title: Your pickup calendar
     teaser: "You can integrate your collection calendar into a calendar program of\
@@ -217,13 +217,13 @@ settings:
       button: Generate a new token
   saved: The changes were saved.
   changemail:
-    done: Your e-mail address was changed!
-    occupied: The e-mail address could not be changed because it is already in use!
+    done: Your e-mail address was changed.
+    occupied: The e-mail address could not be changed because it is already in use.
     domain: Please choose a different e-mail address, so that you will always be able
       to restore your password.
     invalid: Something is wrong with your e-mail address.
     passcheck: Please confirm the change with your password
-    sent: Now go to your <strong>new</strong> email inbox to confirm the address!
+    sent: Now go to your <strong>new</strong> email inbox to confirm the address.
     passfail: Your password is wrong, you made a mistake?
   chatmail: "If you receive an internal message on the foodsharing homepage,\nbut\
     \ you are not logged in at the moment, we can inform you by mail.\nDo you want\
@@ -318,7 +318,7 @@ profile:
     vouch: "So please only give trustbananas to people you know personally,\nwho adhere\
       \ to the rules of conduct and the legal agreement\nand you can vouch for their\
       \ reliability and commitment.\n"
-    alreadyGiven: '{name} has already received a banana from you!'
+    alreadyGiven: '{name} has already received a banana from you.'
     placeholder: at least 100 characters ...
     undo: Trust bananas cannot be changed or withdrawn.
     details: "Here you can describe in at least 100 characters why you would like\
@@ -426,7 +426,7 @@ profile:
   workgroups: '{name} is responsible for the following working groups'
   homeRegion: home district of {name}
   ambRegions: '{name} is {role} for'
-  online: '{name} is online!'
+  online: '{name} is online.'
   mailBounceWarning_3: will remove this block.
   mailBounceWarning_2: Changing the mail address
   mailBounceWarning_1: Your personal e-mail address {email} is blocked for foodsharing
@@ -441,6 +441,7 @@ profile:
     warning_2: changing the e-mail address
     warning_1: Your personal e-mail address {email} is blocked for foodsharing e-mail
       and communication. By
+  no_common_workgroups: You are not in any common group with {name}
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -467,7 +468,7 @@ mailbox:
   not-available: "You have to be {role} to access e-mail inboxes.\nSolve the {quiz}\
     \ here when you are ready.\n"
   new: New mailbox
-  filesize: Sorry! This file is too big.
+  filesize: Sorry, this file is too big.
   filetype: This file type is not allowed
   ratelimit: You can only send one email every 15 seconds, please wait a moment ...
   failed: The email could not be sent.
@@ -517,7 +518,7 @@ events:
     maybe: I can maybe
   notFound: Either this event does not exist or you can not access it.
   goto: Go to the event
-  edited: Event was changed successfully!
+  edited: Event was changed successfully.
   button:
     maybe: Maybe
     yes: I will join
@@ -532,7 +533,7 @@ events:
   invitedCount: '{count} invitations'
   maybeCount: '{count} may come'
   acceptedCount: '{count} take part'
-  created: Event was created successfully!
+  created: Event was created successfully.
   mumble:
     guide: 'Instructions: <strong><a href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></strong>'
     location: 'Our mumble server: <br><strong>mumble.foodsharing.de</strong>'
@@ -636,7 +637,7 @@ pickup:
       \ the maximum number of possible foodsavers with the company!\nAny additional\
       \ helpers required can wait with bicycle trailers or the like\nout of sight\
       \ of the store.\n"
-    added: Pickup date was added!
+    added: Pickup date was added.
   slot_remove: Delete slot
   slot_add: Add slot
   add_onetime_pickup: Add additional date
@@ -758,16 +759,17 @@ login:
     mismatch: Sorry, the passwords do not match.
     tooShort: Sorry, your chosen password is too short.
     error: Sorry, there is a problem with your data.
-    expired: Sorry, you waited a little too long. Please request a new password again!
+    expired: Sorry, you waited a little too long. Please request a new password again.
     success: Great, your password has been changed successfully. You can now log in.
     mailSent: All right! A link to change your password has been emailed to you.
     wrongMail: Unfortunately we cannot find that e-mail address. Please try again.
   logout: Logout
   topbar: Log in
   submit_btn: Login
-  error_no_auth: E-mail address or password are wrong
-  error_no_password: Please enter your password!
-  error_no_email: Please enter your e-mail address!
+  error_no_auth: Unfortunately we cannot find this e-mail address or password. Please
+    try again.
+  error_no_password: Please enter your password.
+  error_no_email: Please enter your e-mail address.
   save_password: Save password
   forgotten_password_label: Password forgotten?
   login_button_label: Login
@@ -1054,8 +1056,7 @@ sidenav:
   superregional: Supraregional groups
 password:
   reset: Forgot your password?
-  insertmail: Please enter your e-mail address here with which you are registered
-    on foodsharing!
+  insertmail: Enter your e-mail address here to reset your password.
 tablesorter:
   page: Page
   entriespp: entries per page
@@ -1289,20 +1290,19 @@ basket:
   description: Description
   where: Where?
   change-state: Conclude food basket request from {name}
-  taken: "<b>Unfortunately this food basket is no longer available!</b>\n<br><br>\n\
-    You are not yet registered as a foodsharer?\nThen click on <b>Join us!</b> above\
-    \ to get started or set up a food basket yourself!\n<br><br>\nYou may find other\
-    \ food baskets in your area on our map.\n"
+  taken: "<b>Unfortunately this food basket is no longer available.</b>\n<br><br>\n\
+    You are not yet registered as a foodsharer?\nThen click on <b>Join us</b> to get\
+    \ started or set up a food basket yourself.\n<br><br>\nYou may find other food\
+    \ baskets in your area on our map.\n"
   login: "You have to be logged in for detailed information.\nYou are not yet registered\
-    \ as a foodsharer?\nThen click on <b>Join us!</b> above and get started right\
-    \ away!\n"
+    \ as a foodsharer?\nThen click on <b>Join us</b> and get started right away.\n"
   howto: "<b>Information on the use of food baskets</b>\n<br>\nPlease use the green\
     \ button <b>\"Request food basket\"</b> to express your interest in this basket,\n\
-    or <b>\"Edit food basket\"</b> to edit your own basket afterwards!\n"
-  published: Thank you! The food basket was published!
+    or <b>\"Edit food basket\"</b> to edit your own basket afterwards.\n"
+  published: Thank you! The food basket was published.
   publish_error: An error has occurred. The food basket could not be published.
   not-allowed: You are not authorised to edit this food basket.
-  no-desc: Please enter a description!
+  no-desc: Please enter a description.
   public-info: Description, picture, transfer location and validity period are publicly
     visible.
   go-to-settings: to the settings
@@ -1312,11 +1312,11 @@ basket:
     \ address is not visible to food basket users.\n"
   no-login: "You are not logged in, maybe your session has expired.\nPlease log in\
     \ and resubmit your request.\n"
-  not_active: The food basket is no longer active!
+  not_active: The food basket is no longer active.
   request_denied: Your request was rejected by the food basket provider.
   not_found: The food basket no longer exists.
   error: Food basket could not be loaded.
-  image: Add a photo to the food basket!
+  image: Add a photo to the food basket.
   request_empty: Your request text cannot be empty.
   state:
     finished: Thank you! The process is finished.
@@ -1359,7 +1359,7 @@ content:
   bread: All pages
   actions: Activities
   delete_success: The page was deleted
-  edit_success: The page was saved!
+  edit_success: The page was saved.
   new_success: The page was created
   changelog: Latest changelog
   empty: No page has been entered yet.
@@ -1375,15 +1375,15 @@ foodsaver:
     needs_fs: You need to become a foodsaver first
     to_fs: Become a foodsaver
     to_amb: Become an ambassador
-    sm_success: Thank you! You are now qualified to manage stores
+    sm_success: Thank you! You are now qualified to manage stores!
     needs_fs_quiz: You can first take the Foodsaver quiz
     amb_success: Thank you for your motivation to take on more responsibility! The
       request will be processed by the global orga-team as quickly as possible.
-    amb_requested: Request sent successfully!
-    fs_success: Thank you! You are now a foodsaver
+    amb_requested: Request sent successfully.
+    fs_success: Thank you! You are now a foodsaver!
     quiz_error: 'Error! Quiz data for your role could not be loaded. Please contact
       IT support:'
-    needs_rv: You have to accept the legal agreement!
+    needs_rv: You have to accept the legal agreement.
     rv: Yes, I have read and understood the legal agreement and accept it.
     needs_region: Please select the district in which you would like to become an
       ambassador
@@ -1420,7 +1420,7 @@ foodsaver:
     \ team page</a>, if you belong to one of these groups.\nPeople listed there can\
     \ be viewed by everyone in the internet.\n"
   restricted: Unfortunately, you are not authorised to view this data.
-  mailchange_error: Activation of your new email address has failed. Please try again!
+  mailchange_error: Activation of your new email address has failed. Please try again.
   url_error: Something is wrong with your homepage URL
   delete_account_sure: Are you sure you want to delete {name}'s account?
   edit_failure: Nothing was changed or changes were not saved
@@ -1484,8 +1484,8 @@ store:
     jumper: Message to Jumper
   error: Store could not be loaded.
   noStores: There are no stores yet
-  may_not_referred_to_in_public: Please do not refer to this store in public (e.g.
-    in food baskets, on Facebook, or in the press)!
+  may_not_referred_to_in_public: Please do not refer to this store in public (for
+    example in food baskets, on Facebook, or in the press).
   memberSince: 'In team since: {date}'
   lastPickupShort: last {date}
   lastPickup: 'Last pickup: {date}'
@@ -1666,8 +1666,8 @@ storeedit:
     leave: Leave store
     bread: Edit team
     max-sm: Please choose three store managers maximum
-    cannot-leave: You are responsible for this store, so you can't leave it!
-    need-sm: There must be at least one responsible person per team!
+    cannot-leave: You are responsible for this store, so you can't leave it.
+    need-sm: There must be at least one responsible person per team.
     unmanaged: "This store doesn't have any responsible person at the moment!\nPlease\
       \ add up to three store managers that will manage the store in the future.\n"
     amb: "You are not responsible for this store.\nHowever, as an ambassador you have\
@@ -1788,7 +1788,7 @@ fsp:
     bell: only internal notification (bell)
     from: Updates from food-share-point ‘{name}’
     manager: You are responsible for this food-share-point and therefore obligated
-      to accept the updates!
+      to accept the updates.
     descSettings: You follow all information from the food-sharing-point ‘{name}’.
       How would you like to receive these notifications?
     descModal: How would you like to be informed about updates (e.g. food deliveries)?
@@ -1805,7 +1805,7 @@ fsp:
   addSuccess: Food-share-point was successfully added
   editSuccess: Food-share-point was successfully changed
   publicwall: Please remember that posts on a food-share-point's wall are public.
-  noManager: There must be at least one person responsible for this food-share-point!
+  noManager: There must be at least one person responsible for this food-share-point.
   addedOn: Added on
   rejectConfirm: Attention! If you delete this food-share-point, you won't be able
     to undo this. Proceed?
@@ -1867,7 +1867,7 @@ chat:
   new_message: New message
   open_chat: Write a message
   notification_unnamed_conversation: '{foodsaver} has sent you a message.'
-  placeholder: Write something!
+  placeholder: Write something.
   empty: No conversations yet
   empty_recipients: You need to select recipients.
   empty_message: You need to enter a message first.
@@ -1894,7 +1894,7 @@ register:
   password_minLength: The password needs to contain at least 8 symbols.
   login_passwd1: Password (at least 8 symbols)
   register_button_label: Register
-  topbar: Join!
+  topbar: Join
   pass2: Password repeat
   other: other
   woman: female
@@ -1976,7 +1976,7 @@ fs_id: foodsharing-ID
 options: Options
 geschlecht: gender
 anschrift: Street and house number (automatically from the map above, correct afterwards
-  if necessary!)
+  if necessary)
 handy: mobile number
 telefon: Landline number
 body: message
@@ -2055,7 +2055,7 @@ dashboard:
   foodsharer: Have fun saving!
   chooseHomeRegion: Please select a home district.
   homeRegion: Your home district is {region}.
-  checkAddress: Please check your address! The geographic coordinates could not be
+  checkAddress: Please check your address. The geographic coordinates could not be
     determined.
   mail_activation_error_title: Email address not confirmed
   activation_mail_failure: A new activation link could not be sent
@@ -2126,7 +2126,7 @@ team:
   current: Team
   former: Former
   ratelimit: Please wait {minutes} minutes before you can send the next message.
-  contacted: Your message was sent successfully!
+  contacted: Your message was sent successfully.
   contact: '{name} via foodsharing.de contact form'
 home:
   home: Home
@@ -2191,7 +2191,7 @@ index:
     in a new tab.
 mail:
   noreply_addresses_not_allowed: Emails to "noreply@…" cannot be delivered.<br Please
-    check the recipient address!
+    check the recipient address.
 regionOptions:
   enableMediationButton: Enable mediation request button on the profiles of the home
     users of this district.
