@@ -505,7 +505,10 @@ class XhrMethods
 
 	public function xhr_bezirkTree($data)
 	{
-		$region = $this->regionGateway->getBezirkByParent($data['p'], $this->session->may('orga'));
+		$region = $this->regionGateway->getBezirkByParent($data['p'],
+			$this->regionPermissions->mayAdministrateRegions()
+			|| $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()
+		);
 		if (!$region) {
 			$out = ['status' => 0];
 		} else {

@@ -23,6 +23,7 @@
 - New pickupslots availability moved from midnight to actual pickuptime. #1024 @fs_k
 - Convert regular slots to manual slots as soon as someone joins an empty slot !1825 @ChrisOelmueller
 - Added a title name for social icons and replaced manitu logo in svg format to footer !1985 @chriswalg
+- Allow admins of the newsletter group to see the full list of regions !2011 @alex.simm 
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm

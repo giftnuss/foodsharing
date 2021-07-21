@@ -267,6 +267,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->createWorkingGroup('Support', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::IT_SUPPORT_GROUP]);
 		$I->createWorkingGroup('Öffentlichkeitsarbeit - Partner + Teamseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP]);
 		$I->createWorkingGroup('Öffentlichkeitsarbeit - Startseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_START_PAGE]);
+		$I->createWorkingGroup('Newsletter', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::NEWSLETTER_WORK_GROUP]);
 
 		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 
@@ -345,6 +346,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$I->addRegionAdmin(RegionIDs::IT_SUPPORT_GROUP, $userStoreManager2['id']);
 		$I->addRegionMember(RegionIDs::IT_SUPPORT_GROUP, $userStoreManager2['id']);
+		$I->addRegionAdmin(RegionIDs::NEWSLETTER_WORK_GROUP, $user2['id']);
 
 		// Make ambassador responsible for all work groups in the region
 		$this->output->writeln('- make ambassador responsible for all work groups');
