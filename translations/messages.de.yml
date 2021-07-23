@@ -717,6 +717,7 @@ store:
     reallyDemote: "Möchtest du wirklich {name} die Verantwortung für diesen Betrieb entziehen?"
     reloadRequired: "Zum Aktualisieren der Team-Infos:"
     reloadPage: "Neu laden"
+    searchPlaceholder: "Name oder ID"
   request:
     request: "In diesem Team würde ich gerne helfen."
     got-it: "Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden."

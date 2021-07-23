@@ -11,6 +11,7 @@
 - Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
 - Show membership in profile for workgroups !1988 !1996 @chriswalg
 - IT-Support Admins can delete bananas upon request over it@foodsharing.network. !2002 @fs_k
+- Added a user search field to the store management panel !2007 @alex.simm 
 
 ## Changes
 - Profile storelist now shows store cooperation status !1828 !1935 @ChrisOelmueller @chriswalg

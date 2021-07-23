@@ -7,7 +7,7 @@
 
     <user-search-input
       class="m-1"
-      :placeholder="$i18n('profile.infos.foodsaverId')"
+      :placeholder="$i18n('store.sm.searchPlaceholder')"
       button-icon="fa-user-plus"
       :button-tooltip="$i18n('store.sm.makeRegularTeamMember')"
       :filter="filterNotInTeam"
@@ -112,7 +112,7 @@
 
 <script>
 import { addStoreMember } from '@/api/stores'
-import { reload, pulseError } from '@/script'
+import { reload, pulseError, showLoader, hideLoader } from '@/script'
 import i18n from '@/i18n'
 import UserSearchInput from '@/components/UserSearchInput'
 
@@ -133,11 +133,13 @@ export default {
   methods: {
     reload,
     async addNewTeamMember (userId) {
+      showLoader()
       try {
         await addStoreMember(this.storeId, userId)
       } catch (e) {
         pulseError(i18n('error_unexpected'))
       }
+      hideLoader()
       // convince user to trigger page reload for server refresh of teamlist
       this.requireReload = true
     },
