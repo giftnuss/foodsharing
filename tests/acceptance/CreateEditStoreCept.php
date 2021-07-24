@@ -2,6 +2,18 @@
 
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 
+/**
+ * Uses the search field in the store management panel to add a user to the team.
+ */
+function addToTeam(AcceptanceTester $I, array $user)
+{
+	$I->fillField('#new-foodsaver-search input', $user['name']);
+	$I->waitForActiveAPICalls();
+	$I->waitForElement('#new-foodsaver-search li.suggest-item');
+	$I->click('#new-foodsaver-search li.suggest-item');
+	$I->click('#new-foodsaver-search button[type="submit"]');
+}
+
 $I = new AcceptanceTester($scenario);
 
 $I->wantTo('create a store and manage it and my team');
@@ -72,19 +84,12 @@ $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
 $I->click('Ansicht für Betriebsverantwortliche aktivieren');
-$I->waitForElement('#new-foodsaver-id', 5);
+$I->waitForElement('#new-foodsaver-search', 5);
 
-$I->fillField('#new-foodsaver-id', $bibC['id']);
-$I->click('button[type="submit"]', '.add-to-team');
-
-$I->fillField('#new-foodsaver-id', $foodsaverD['id']);
-$I->click('button[type="submit"]', '.add-to-team');
-
-$I->fillField('#new-foodsaver-id', $foodsaverE['id']);
-$I->click('button[type="submit"]', '.add-to-team');
-
-$I->fillField('#new-foodsaver-id', $foodsaverF['id']);
-$I->click('button[type="submit"]', '.add-to-team');
+addToTeam($I, $bibC);
+addToTeam($I, $foodsaverD);
+addToTeam($I, $foodsaverE);
+addToTeam($I, $foodsaverF);
 
 $I->waitForActiveAPICalls();
 $I->seeInDatabase('fs_betrieb_team', [
