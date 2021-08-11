@@ -137,12 +137,7 @@ class Session
 		$cookieExpires = $this->isPersistent() ? strtotime('2 weeks') : 0;
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
 			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
-		} /* TODO: Disabled until there is a solution in issue 956
-			 elseif ($this->isPersistent() && isset($_COOKIE['CSRF_TOKEN']) && isset($_COOKIE['PHPSESSID'])) {
-			// Extend the duration of the cookies in every request
-			setcookie('CSRF_TOKEN', $_COOKIE['CSRF_TOKEN'], $cookieExpires, '/');
-			setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], $cookieExpires, '/');
-		} */
+		}
 	}
 
 	private function isPersistent(): bool
