@@ -65,6 +65,7 @@
 - Update chat dependencies !1962 !1751 @chriswalg
 - Added a foodsharing glossary to our dev docs !1936 @chriswalg
 - Delete links in docker compose yml files. It seems to work without it and podman does not work with it. !1972 @chriswalg
+- Add basic markdown linting features !2016 @Morgy93
 
 # 2021-04-09 Hotfix
 - Add permission checks to REST endpoints !1944 @alex.simm
