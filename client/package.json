@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "lint": "bin/eslint -c package.json",
+    "lint:markdown": "yarn run lint-markdown",
+    "lint-markdown": "markdownlint --config ../.markdownlint.json",
     "fix": "bin/eslint -c package.json --fix",
     "clean-assets": "shx rm -rf ../assets",
     "build": "yarn clean-assets && NODE_ENV=production webpack",
@@ -82,6 +84,7 @@
     "jsdom-global": "^3.0.2",
     "json-loader": "^0.5.7",
     "loader-utils": "^2.0.0",
+    "markdownlint-cli": "^0.28.1",
     "mini-css-extract-plugin": "^1.4.1",
     "mkdirp": "^1.0.4",
     "mocha": "^8.3.2",

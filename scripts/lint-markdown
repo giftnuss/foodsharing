@@ -1,0 +1,21 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -o errexit
+
+dir=$(dirname "$0")
+
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
+
+# default files
+files="../*.md ../docs/src/**/*.md"
+
+# use
+if [ -n "$1" ]; then
+    files="$1"
+fi
+
+echo "Linting markdown via client"
+run-in-container client yarn lint:markdown "$files"

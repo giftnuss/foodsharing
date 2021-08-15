@@ -11,3 +11,6 @@ source "$dir"/lint-php
 
 # shellcheck source=./lint-js
 source "$dir"/lint-js
+
+# shellcheck source=./lint-markdown
+source "$dir"/lint-markdown

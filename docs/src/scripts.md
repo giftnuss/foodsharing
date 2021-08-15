@@ -22,6 +22,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/initdb       | Create the database and run migrations |
 | ./scripts/lint         | runs all lintings scripts lint-... |
 | ./scripts/lint-js      | lints javascript and vue files: prints errors etc. |
+| ./scripts/lint-markdown [files\|directories\|globs] | lints markdown files: prints errors etc. NOTE: Custom args must originate from `client/` directory (e.g. `../README.md` for root file) |
 | ./scripts/lint-php     | lints php files: prints errors etc. |
 | ./scripts/mkdirs       | Create directories that need to be present (called by other scripts) |
 | ./scripts/mysql        | Run `mysql` command in correct context: `./scripts/mysql foodsharing "select * from fs_foodsaver"` |
