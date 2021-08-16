@@ -49,6 +49,10 @@ class Session
 
 	const DEFAULT_LOCALE = 'de';
 
+	const DEFAULT_NORMAL_SESSION_TIMESPAN = '24 hours';
+
+	const DEFAULT_PERSISTENT_SESSION_TIMESPAN = '1 day';
+
 	public function __construct(
 		Mem $mem,
 		BuddyGateway $buddyGateway,
@@ -111,7 +115,10 @@ class Session
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
-		fSession::setLength('24 hours', '2 weeks');
+		fSession::setLength(
+			static::DEFAULT_NORMAL_SESSION_TIMESPAN,
+			static::DEFAULT_PERSISTENT_SESSION_TIMESPAN
+		);
 
 		if ($rememberMe) {
 			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
@@ -134,7 +141,7 @@ class Session
 
 		fSession::open();
 
-		$cookieExpires = $this->isPersistent() ? strtotime('2 weeks') : 0;
+		$cookieExpires = $this->isPersistent() ? strtotime(static::DEFAULT_PERSISTENT_SESSION_TIMESPAN) : 0;
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
 			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
 		}
