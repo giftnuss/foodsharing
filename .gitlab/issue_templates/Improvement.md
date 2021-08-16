@@ -7,7 +7,7 @@ Before suggesting an improvement, make sure to search for any existing issues th
 
 https://gitlab.com/foodsharing-dev/foodsharing/issues
 
-Please understand we have very few developers who can work on features, so please don't expect any immediate response.
+Please understand that we have very few developers who can work on features, so please don't expect any immediate response.
 
 You are welcome to chat with the developers in slack:
 
