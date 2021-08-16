@@ -419,7 +419,7 @@ login:
   forgotten_password_label: "Passwort vergessen?"
   login_button_label: "Einloggen"
   save_password: "Passwort speichern"
-  steady_login: "Eingeloggt bleiben (verwendet Cookies)"
+  steady_login: "Für einen Tag eingeloggt bleiben (verwendet Cookies)"
   error_no_email: "Bitte gib deine E-Mail-Adresse an."
   error_no_password: "Bitte gib dein Passwort an."
   error_no_auth: "Leider finden wir diese E-Mail-Adresse oder Passwort nicht, bitte versuche es noch einmal."
