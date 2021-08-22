@@ -12,6 +12,7 @@ function addToTeam(AcceptanceTester $I, array $user)
 	$I->waitForElement('#new-foodsaver-search li.suggest-item');
 	$I->click('#new-foodsaver-search li.suggest-item');
 	$I->click('#new-foodsaver-search button[type="submit"]');
+	$I->waitForActiveAPICalls();
 }
 
 $I = new AcceptanceTester($scenario);
