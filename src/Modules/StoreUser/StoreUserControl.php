@@ -133,9 +133,19 @@ class StoreUserControl extends Control
 					];
 				}
 				if ($this->storePermissions->mayEditStore($storeId)) {
+					$this->view->u_legacy_teamEdit();
 					$menu[] = [
 						'name' => $this->translator->trans('storeedit.bread'),
 						'href' => '/?page=betrieb&a=edit&id=' . $storeId,
+					];
+					// ToDO (Deprecated): may be removed in one of the next releases, as the function has been incorporated in a new place.
+					$menu[] = [
+						'name' => $this->translator->trans('storeedit.team.bread'),
+						'click' => '$(\'#disabledteamedit\').dialog({'
+							. 'modal: true,'
+							. 'width: $(window).width() / 1.5,'
+							. 'title: \'' . $this->translator->trans('storeedit.team.bread') . '\''
+							. '});',
 					];
 					$menu[] = [
 						'name' => $this->translator->trans('pickup.edit.bread'),

@@ -74,6 +74,31 @@ class StoreUserView extends View
 		return $out;
 	}
 
+	// ToDO (Deprecated): may be removed in one of the next releases, as the function has been incorporated in a new place.
+	public function u_legacy_teamEdit()
+	{
+		$this->pageHelper->addJs('
+			$("#disabledteamedit-link").fancybox({
+				closeClick: false,
+				closeBtn: true,
+			});
+		');
+
+		$this->pageHelper->addHidden('
+			<div id="disabledteamedit" class="popbox bootstrap">
+				<p>
+					Das Hinzufügen, Ändern oder Entfernen von Team-Mitgliedern,
+					<br>
+					ist über die BV-Ansicht (grünes Zahnrad in der Teamliste) möglich.
+				</p>
+				<p>
+					Mehr Infos unter
+					<a href="?page=content&sub=releaseNotes">Was ist neu?</a>.
+				</p>
+			</div>
+		');
+	}
+
 	public function u_storeList($storeData, $title)
 	{
 		if (empty($storeData)) {
