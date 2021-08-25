@@ -32,7 +32,7 @@ changes, e.g. doc fixes and typos.
     - Optionally, add your GitLab handle or real name: ``89-inktrap-create-emails-for-invitations``
  - make the edits *only* in your new branch. Preferably commit in smaller intervals so that we can keep track of the progress and see what's happening.
  - Ensure the tests pass locally by calling ``./scripts/test``.
- - [create a MR](https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html). If your change requires multiple commits or is bigger, add the ``WIP:`` prefix to the name of the MR
+ - [create a MR](https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html). If your change requires multiple commits or is bigger, add the ``Draft:`` prefix to the name of the MR
  - Wait. Somebody will ask you some questions, and if everything goes well, will approve your merge request.
 
 Congratulations! You just contributed to foodsharing and made a good community better!

@@ -67,7 +67,7 @@ Damit hebst du die Dateien einzeln auf die Upload-Ebene.
 Sobald du anfängst, zu committen, lohnt es sich einen *Merge Request* zu erstellen.
 Den Merge Request erstellst du im GitLab selbst: <https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/new>
 Der MR sagt aus: "Ich arbeite daran und werde in absehbarer Zeit fertig".
-Solange es noch ein *Work in Progress* ist, solltest du den MR auch mit WIP am Anfang benennen.
+Solange es noch ein *Work in Progress* ist, solltest du den MR mit 'Draft: ' am Anfang benennen.
 Sobald der MR fertig ist, benennst du ihn um, bittest im Kanal um ein review, und wenn jemand gesagt hat: Yo, läuft, dann kann der Merge Request gemerged werden, also mit dem Master zusammengeführt werden.
 Dafür musst du in der Regel erst deinen Zweig lokal mit dem Master zusammenführen: *rebase*.
 Wenn ein MR übernommen ist, hat dein Code die **3. Ebene** erreicht und alle, die sich das Repository ziehen, haben ihn ebenfalls im Master.
@@ -112,7 +112,7 @@ git commit -m "Changed something in EditedFile.php"
 git push --set-upstream origin 123-fix-for-issue-123
 ```
 
-(Bündelt die Änderungen mit der öffentlichen Notiz "..." und lädt sie hoch. Es kann sein, dass ein Kommando vorschlägt, das noch zu geben ist. Insbesondere bietet es sich hier an, einen MR für den Branch zu erstellen und ihn als Work in Progress (WIP) zu markieren.)
+(Bündelt die Änderungen mit der öffentlichen Notiz "..." und lädt sie hoch. Es kann sein, dass ein Kommando vorschlägt, das noch zu geben ist. Insbesondere bietet es sich hier an, einen MR für den Branch zu erstellen und ihn als Draft zu markieren.)
 
 Anschließend weiterarbeiten
 

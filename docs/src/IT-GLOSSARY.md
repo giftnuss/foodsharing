@@ -11,6 +11,10 @@ Application Programming Interface
 
 Data Protection Policy
 
+## Draft
+
+Non-finished work (prefix for e.g. merge requests)
+
 ## DVCS
 
 Distributed Version Control System
@@ -61,4 +65,4 @@ Version Control System
 
 ## WIP
 
-Work In Progress (prefix for e.g. merge requests)
+Work In Progress (see [Draft](#draft))
