@@ -156,7 +156,7 @@ Je übersichtlicher und besser beschrieben der Merge Request (MR) ist, desto ein
 - Wenn es eine Änderung an der UI ist, füg gerne auch ein paar Screenshots ein.
 
 - Geh einmal die Checklist (ganz unten im Template) durch und schau, ob du alle Punkte beachtet hast, bzw. Punkte nicht zutreffen.
-  Beispielweise ist nicht immer ein Test notwendig oder möglich.
+  Beispielsweise ist nicht immer ein Test notwendig oder möglich.
   Die Ausnahme ist der letzte Punkt ("Once your MR has been merged...") der das Testen nach dem mergen betrifft (s.u.)
 
 - Gib dem MR noch ein paar Label, die ihn einordnen. Insbesondere ein "state"-Label hilft zu sehen, ob der MR fertig ist.
@@ -210,7 +210,7 @@ Dort gibt es dann noch einmal gegebenenfalls Rückmeldungen zu Fehlermeldungen.
 
 ... für einen Überblick über verschiedene Umgebungen: [Environments on GitLab](https://gitlab.com/foodsharing-dev/foodsharing/environments)
 
-Am Ende werden die beta-Änderungen auf die produktiv-Seite übernommen - und dein MR ist abgehakt.
+Am Ende werden die beta-Änderungen auf die Produktiv-Seite übernommen - und dein MR ist abgehakt.
 
 Und dann ... Zeit für eine neue Aufgabe ...?
 
