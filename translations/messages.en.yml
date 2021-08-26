@@ -1467,6 +1467,7 @@ store:
     reallyDemote: Do you really want to remove {name} as a manager for this store?
     demoteAsManager: Remove as store manager
     promoteToManager: Make store manager
+    searchPlaceholder: Name or ID
   address: Address
   may_referred_to_in_public: This store may be referred to in public.
   isNotVerified: Is not yet verified.
