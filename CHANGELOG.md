@@ -43,6 +43,7 @@
 - Prevent stores to show up multiple times #1063 !1900 @bjarne.schindler
 - Fix errors that occur for non-existing password reset keys !2004 @alex.simm
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
+- Fix that store team members and jumpers can open the group chats #1084 !2025 @alex.simm
 
 ## Refactoring
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm

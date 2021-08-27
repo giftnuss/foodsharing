@@ -286,16 +286,13 @@ class StorePermissions
 		if ($store['jumper']) {
 			return false;
 		}
-		if (!$store['verantwortlich']) {
-			return false;
-		}
 
 		return $store['team_conversation_id'] !== null;
 	}
 
 	public function mayChatWithJumperWaitingTeam(array $store): bool
 	{
-		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
+		return ($store['verantwortlich'] || $store['jumper']) && $store['springer_conversation_id'] !== null;
 	}
 
 	/**
