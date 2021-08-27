@@ -352,7 +352,10 @@ class StoreUserControl extends Control
 	 */
 	private function isResponsibleForThisStoreAnyways($storeId): bool
 	{
-		if ($this->storePermissions->mayEditStore($storeId)) {
+		if ($this->session->may('orga')) {
+			$extraResponsibility = true;
+			$extraMessageKey = 'storeedit.team.orga';
+		} elseif ($this->storePermissions->mayEditStore($storeId)) {
 			$extraResponsibility = true;
 			$extraMessageKey = '';
 
@@ -368,9 +371,6 @@ class StoreUserControl extends Control
 			} elseif ($this->session->isAdminFor($storeGroup)) {
 				$extraMessageKey = 'storeedit.team.coordinator';
 			}
-		} elseif ($this->session->may('orga')) {
-			$extraResponsibility = true;
-			$extraMessageKey = 'storeedit.team.orga';
 		} else {
 			$extraResponsibility = false;
 			$extraMessageKey = '';
