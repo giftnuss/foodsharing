@@ -79,24 +79,25 @@ group:
       be one store coordination team per region.
     restricted_workgroup_function: This working group function can only be edited
       by the transregional group ‘AG Anlegen’
-    tooltip_function_10: Admins of this work group can approve posts in moderated
+    tooltip_function_10: Administrators of this work group can approve posts in moderated
       forums.
-    tooltip_function_9: Admins of this work group have no special permissions.
-    tooltip_function_6: The email address of this work group is shown at the ‘Request
-      mediation’ button. The admins have no special permissions.
-    tooltip_function_5: Admins of this work group can see messages about foodsaver
-      in the region. No messages are shown in which the admins are involved! These
-      are received by the arbitration body.
-    tooltip_function_4: Admins of this work group can view and edit stores in the
-      district
-    tooltip_function_3: Admins of this work group can activate and edit fairteiler
+    tooltip_function_9: Administrators of this work group have no special permissions.
+    tooltip_function_6: The e-mail address of this work group is shown at the ‘Request
+      mediation’ button. The administrators have no special permissions.
+    tooltip_function_5: Administrators of this work group can see messages about foodsaver
+      in the region. No messages are shown in which the administrators are involved!
+      These are received by the arbitration body.
+    tooltip_function_4: Administrators of this work group can view and edit stores
+      in the district
+    tooltip_function_3: Administrators of this work group can activate and edit fairteiler
       of the district as well as remove fairteiler contributions
-    tooltip_function_1: Admins of this work group will be notified when new members
-      join the district
-    tooltip_function_2: Admins of this work group can create votes for the district
-    tooltip_function_7: Admins of this working group receive reports with the participation
-      of the reporting team. No reports are displayed in which the admins are involved;
-      the reporting team receives them
+    tooltip_function_1: Adminsistrators of this work group will be notified when new
+      members join the district
+    tooltip_function_2: Administrators of this work group can create votes for the
+      district
+    tooltip_function_7: Administrators of this working group receive reports with
+      the participation of the reporting team. No reports are displayed in which the
+      administrators are involved; the reporting team receives them
   apply:
     sent: The application was sent.
     send: Send application
@@ -134,15 +135,16 @@ group:
     new home district later.
   saved: Changes were saved
   unique_function:
-    tooltip_function_region432: Admins of this work group can view messages
-    tooltip_function_region2287: Admins of this work group can edit the contents of
-      the start page
-    tooltip_function_region1811: Admins of this work group can edit the pages ‘Partner’,
-      ‘Contact’ and ‘Team’
-    tooltip_function_region341: Admins of this work group can manage the quiz questions
-    tooltip_function_region331: Admins of this work group can send newsletters
-    tooltip_function_region387: "Admins of this group can remove entries from the\
-      \ e-mail bounce list"
+    tooltip_function_region432: Administrators of this work group can view messages
+    tooltip_function_region2287: Administrators of this work group can edit the contents
+      of the start page
+    tooltip_function_region1811: Administrators of this work group can edit the pages
+      ‘Partner’, ‘Contact’ and ‘Team’
+    tooltip_function_region341: Administrators of this work group can manage the quiz
+      questions
+    tooltip_function_region331: Administrators of this work group can send newsletters
+    tooltip_function_region387: "Administrators of this group can remove entries from\
+      \ the e-mail bounce list"
 settings:
   header: Your data and settings
 
@@ -714,7 +716,7 @@ terminology:
     f: Ambassador
     m: Ambassador
   n_stores: A store|%count% stores
-  n_ambassadors: An ambassador|%count% ambassadors
+  n_ambassadors: One ambassador|%count% ambassadors
   ambassador_forum: Ambassador forum
   orga:
     d: Orga person
@@ -775,9 +777,9 @@ login:
   login_button_label: Login
   password: Password
   email_address: E-mail address
-  form_title: Login
+  form_title: Welcome back
   success: <b> Have a wonderful day, {user_name}! </b>
-  steady_login: Stay logged in (uses cookies)
+  steady_login: Stay logged in for one day (uses cookies)
 salutation:
   "3": Dear
   "2": Dear
@@ -947,6 +949,7 @@ poll:
     description_placeholder: What is this poll about?
     options: Options that should be available for selection. They are displayed in
       a random order during voting.
+    shuffle_options: Show the options in random order when voting
   submit_vote: Submit vote
   type: Poll type
   scope_description_3: All ambassadors in the region / the group
@@ -1749,7 +1752,7 @@ info: Information
 rolle: User role
 active: Activated
 email: Email address
-leader: Group admins
+leader: Group administrators
 member: Members
 first_post: First wall post
 betrieb_status_id: Status
@@ -1808,13 +1811,13 @@ fsp:
   publicwall: Please remember that posts on a food-share-point's wall are public.
   noManager: There must be at least one person responsible for this food-share-point.
   addedOn: Added on
-  rejectConfirm: Attention! If you delete this food-share-point, you won't be able
+  rejectConfirm: Attention, if you delete this food-share-point, you won't be able
     to undo this. Proceed?
   addError: The food-share-point wasn't added. Did you fill out everything correctly?
   descLabel: Write some basic information about the food-share-point here! Especially
     when it is accessible/open.
   suggestSuccess: Food share point has been proposed and now needs to be confirmed
-    by an ambassador / food share responsible.
+    by an ambassador / responsible person.
 lifetime: How long will be basket be valid?
 contact_type: How would you like to be contacted?
 food_art: What kind of food is it?
@@ -1918,7 +1921,7 @@ register:
   set-password: Set new password
   pass1: Your new desired password
   change-password: Now you can change your password.
-  activation_failed: <strong> Activation failed! </strong> Is the entered link correct?
+  activation_failed: <strong> Activation failed.</strong> Is the entered link correct?
   activation_success: <strong> Activation successful. </strong> Now log in with your
     email address and your chosen password.
   account-exists: You're already registered. Please log out if you want to register
@@ -1938,7 +1941,7 @@ register:
   confirmPassword_sameAsPassword: The password must match.
   birthdate_hint: You can find more information in the <a href="?page=legal" target="_blank">
     privacy policy </a> in point 2d) when registering as a foodsharer or foodsaver.
-  mail_hint: IMPORTANT – Pay attention to the correct spelling!
+  mail_hint: 'Important: pay attention to the correct spelling!'
 bread:
   backToOverview: back to overview
 duration: Time to answer
@@ -2222,10 +2225,9 @@ startpage:
       part2: Find regions close to you
       part1: The community is organised in regions.
     text1:
-      part3: you can find foodsharepoints. Those are shelves or fridges where you
-        can leave or pick up food for free.
+      part3: you can find
       part2: map
-      part4: food-share-point
+      part4: food-share-points
       part5: which are shelves or fridges where you can pick up and bring food for
         free.
       part1: On the
