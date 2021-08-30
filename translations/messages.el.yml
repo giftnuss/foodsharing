@@ -63,3 +63,5 @@ polls:
   title: Τίτλος
 pass:
   name: Όνομα
+dashboard:
+  greeting: Γεια σου {name}! Χαίρομαι που είσαι εδώ.
