@@ -30,6 +30,7 @@
             type="email"
             name="login-email"
             class="form-control text-primary"
+            autofocus
             @keydown.enter="submit"
           >
         </div>
