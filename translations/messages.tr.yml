@@ -1,1 +1,2 @@
-{}
+dashboard:
+  greeting: Merhaba {name}! Burada olman güzel.
