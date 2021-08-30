@@ -50,6 +50,7 @@ dashboard:
     part_4: Cambiar tu correo electrónico
   save_selection: Guardar los ajustes
   title: el cuadro de mando
+  greeting: ¡Hola {name}! Es un placer tenerte aquí.
 search:
   persons: personas
   myregions: Mis distritos
