@@ -1,1 +1,2 @@
-{}
+dashboard:
+  greeting: Привет, {name}! Рад видеть вас здесь.
