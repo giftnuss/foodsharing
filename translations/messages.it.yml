@@ -764,6 +764,7 @@ store:
     managementEffect: "Ordinamento in base alla data dell'ultimo ritiro:"
     managementToggleOff: Torna alla visualizzazione standard
     managementToggleOn: Attivare la visualizzazione per i responsabili delle agenzie
+    searchPlaceholder: Nome o ID
   days_before: prima
   days: Giorni
   my_last_pickup: Il mio ultimo ritiro
@@ -906,6 +907,9 @@ startpage:
     title: in privato
   call_to_action_button: Partecipare
   slogan: Insieme per apprezzare in più il cibo
+  slogan_3: foodsharing è e rimane gratuito.
+  slogan_2: collaborativo, sostenibile e riconoscente
+  slogan_1: Insieme per apprezzare di più il cibo
 poll:
   results:
     option_text: Opzione
@@ -937,10 +941,9 @@ poll:
     missing_fields: Tutti i campi devono essere compilati
     submit_success: La riconciliazione è stata creata
     submit: Salvare il voto
-    option_texts_required: Inserisci un testo per ogni opzione.
+    option_texts_required: Inserisci un testo unico per ogni opzione.
     option: Opzioni
-    options: Le opzioni devono essere disponibili per la selezione. Quando si vota,
-      vengono visualizzati ciascuno in un ordine casuale.
+    options: Le opzioni devono essere disponibili per la selezione.
     description_required: Si prega di inserire una descrizione.
     description_placeholder: Che tipo di voto è questo?
     description: Descrizione
@@ -956,6 +959,7 @@ poll:
     name_required: Inserisci un nome.
     name: Nome della votazione
     title: Nuova votazione
+    shuffle_options: Mostra le opzioni in ordine casuale quando si vota
   untraceable: Le informazioni su come avete votato per quale opzione non possono
     essere rintracciate e quindi non possono più essere visualizzate qui.
   vote_success: Hai votato con successo.
@@ -1886,6 +1890,9 @@ profile:
     history: Cronologia del passaporto
     buddy: Conosco {nome}
     edit: Modifica profilo
+  no_common_workgroups: Non sei in un gruppo con {name}
+  workgroups_member: Sei con {name} nei seguenti gruppi
+  workgroups_admin: '{name} è la persona di contatto per i gruppi'
 mail:
   noreply_addresses_not_allowed: Le e-mail a indirizzi "noreply@" non sono consegnabili.<br>Si
     prega di controllare l'indirizzo del destinatario.
