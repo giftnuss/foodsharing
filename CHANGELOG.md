@@ -28,6 +28,7 @@
 - Enabled session cookie checkbox in login form and enabled persistent session for 1 day #956 !2013 @Morgy93
 - Allow authors of poll to decide if the options will be shown in a random order #975 !1986 @alex.simm
 - Notice as a popup in store for the menu item "Edit Team" where this new function is located !2020 @chriswalg
+- Let email input field of login page autofocus !2027 @iron9
 
 ## Bugfixes
 - Add permission checks to REST endpoints !1946 @alex.simm
