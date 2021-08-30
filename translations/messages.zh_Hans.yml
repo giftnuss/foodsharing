@@ -64,3 +64,5 @@ anschrift: 街道号及房号（在上面地图自动生成，然后手动矫正
 message: 信息
 subject: 标题
 add: 加入
+dashboard:
+  greeting: 你好 {name}! 很高兴你能来这里。
