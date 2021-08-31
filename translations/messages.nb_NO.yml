@@ -1,1 +1,695 @@
-{}
+startpage:
+  donate:
+    title: Donere
+  demands:
+    title: Krav
+  near_you:
+    text2:
+      part2: Matkurver
+  call_to_action:
+    title: Delta
+  mission:
+    title: Oppdrag
+  slogan_3: foodsharing er og forblir gratis.
+  slogan_2: samarbeidende, bærekraftig og takknemlig
+  slogan_1: Sammen for mer verdsettelse av mat
+  welcome_text: Velkommen til foodsharing
+language_chooser:
+  title: Velg språk
+poll:
+  results:
+    sum: Total
+    option_text: Alternativ
+    votes: Stemmer
+  new_poll:
+    option: Alternativ
+    time: Tid
+    start_date: Startdato
+    end_date: Sluttdato
+    description: Beskrivelse
+  submit_vote: Send inn stemme
+  in_past: fullført
+  time_period: Periode
+polls:
+  end_date: Sluttdato
+  start_date: Startdato
+  title: Tittel
+email_template:
+  help_needed:
+    support_mail: it@foodsharing.network
+    or: eller
+  information: Informasjon
+  warning: Advarsel
+base:
+  jsrequired: Denne siden vil ikke fungere skikkelig uten JavaScript.
+tablesorter:
+  from: av
+  page: Side
+stats:
+  title: Total statistikk
+blog:
+  bread: Blogg
+region:
+  cancel: Nei egentlig ikke
+  save: Ja, spar
+  mail:
+    sender: Avsenders navn
+  type:
+    workgroup: Arbeidsgruppe
+    country: Land
+    region: Provins
+    state: Stat
+    district: Region
+    townpart: Distrikt
+    bigcity: Stor by (uten registreringsalternativ)
+    city: By
+menu:
+  entry:
+    donations: Donasjoner
+    fundraising: Pengeinnsamling
+    conference: Video konferanse
+    fs: Foodsaver
+    release-notes: Hva er nytt?
+    dataprivacy: Personvernerklæring
+    transparency: Åpenhet
+    statistics: Statistikk
+    wiki: Wiki
+    support: Hjelp og støtte
+    background: Bakgrunn
+    partners: Partner
+    team: Team
+    blog: Blogg
+    fundamentals: Prinsipper
+    mission: Oppdrag
+    aboutUs: Om oss
+    members: Medlemmer
+    events: Arrangementer
+    wall: Oppslagstavle
+    BOTforum: Ambassadørforum
+    forum: Forum
+    international: Internasjonal
+    Swiss: Sveits
+    Austria: Østerrike
+    Germany: Tyskland
+    press: Presse
+    mailbox: Postkasse
+    fsfestival: foodsharing festival
+    talksandworkshops: Forelesninger og workshops
+    education: Utdanning
+    academy: Akademi
+    politics: Politikk
+    contact: Kontakt
+    administration: Administrasjon
+    your_account: Kontoen din
+    groups: Gruppeoversikt
+    all_messages: Alle meldinger
+    mark_as_read: Marker alle som lest
+    infos: Informasjon
+    options: Innstillinger
+    language: Velg språk
+    friendcircle: Vennesirkel
+    selfservice: Selvbetjening
+  content: Rediger innhold
+  email: Send nyhetsbrev
+personal_data:
+  landline: Hustelefon
+  mobile: Mobilnummer
+  label: Kontakt
+basket:
+  is:
+    gf: er glutenfrie
+    vegan: er veganske
+    veggie: er vegetariske
+    organic: er økologisk
+  has:
+    pet: dyrefôr
+    frozen: fryst mat
+    prepared: tilberedte måltider
+    dry: tørrmat
+    dairy: meieriprodukter
+    bread: bakverk
+    greens: frukt og grønnsaker
+  valid:
+    "21": tre uker
+    "14": to uker
+    "7": en uke
+    "3": tre dager
+    "2": to dager
+    "1": en dag
+  where: Hvor?
+  on: Matkurv fra {platform}
+  by: Matkurv fra {name}
+  mapsearch: Søk etter en adresse ...
+  nearby: matkurver i nærheten
+  recent: nyeste matkurver
+  all: alle matkurver
+  description: Beskrivelse
+  title: Matkurver
+team:
+  contacted: Meldingen din ble sendt.
+  email: Epostadresse
+  name: Navn
+  current: Team
+home:
+  home: Hjem
+  title: Hjemmeside
+dashboard:
+  quiz:
+    read: Fortsett å lese
+  foodsharer: Ha det gøy å redde!
+  mail_activation_error_body:
+    part_3: eller
+  source_mailbox: '{0}'
+  save_selection: lagre innstillinger
+  no_more_updates_all: Det er det!
+  no_updates: Ingen nyheter
+  display_all: alle
+  title: Dashboard
+  greeting: Hei {name}! Fint at du er her.
+search:
+  persons: personer
+  groups: grupper
+  forum: Søk etter tittel ...
+  placeholder: Søk etter personer, grupper, selskaper, ...
+  title: Søk
+profile:
+  public:
+    mayNot: ikke aktiv
+    may: aktiv
+    who: '{name} fra {from}'
+  signoutPickup: levere
+  ambRegions: '{name} er {role} for'
+  stats:
+    posts: Foruminnlegg
+    baskets: Matkurver
+    weight: lagret
+  infos:
+    buddycount1: '{name} kjenner {count} Foodsaver'
+    buddycount: '{name} kjenner {count} Foodsaver'
+    buddies: Venner
+    fsMail: Intern postkasse
+    privateMail: Privat e-postadresse
+    never: aldri
+    lastLogin: Siste innlogging
+    registrationDate: Registreringsdato
+    title: Informasjon
+  online: '{name} er online.'
+  notes:
+    title: Notater om {name}
+    bread: Merknader
+  history:
+    lostVerification: de-verifisert
+    wasVerified: verifisert
+    noData: Ingen data er tilgjengelige.
+  nav:
+    violations: Meldinger <strong>({count})</strong>
+    notes: Merknader <strong>({count})</strong>
+    buddy: Jeg kjenner {name}
+    edit: Rediger profil
+  banana:
+    remove:
+      confirm_title: Fjern bananen
+    sent: Bananen er sendt!
+    placeholder: minst 100 tegn ...
+    give: Gi {name} en banan
+  warning: Advarsel
+  title: Profil
+settings:
+  photo:
+    title: Bildet ditt
+  calendar:
+    link_title: 'ICS/ICAL/WebCal:'
+    menu: Kalender
+  notifications: Varsler
+mailbox:
+  date: Dato
+  recipient: Mottaker
+  sender: Avsender
+  trash: Søppel
+  sent: Sendt
+  inbox: Innboks
+  title: Postkasser
+  mail: E-post
+map:
+  title: Kart
+content:
+  content: innhold
+  bread: alle sider
+foodsaver:
+  manage:
+    actions: Alternativer
+    last-login: Siste innlogging
+    role: Rolle
+    name: Navn
+    photo: Bilde
+  delete_account_now: Slett kontoen nå
+  delete_account: ⚠️ Slett konto
+  edit_success: Endringer er lagret
+  title: Foodsaver
+ageBandList:
+  NumberOfAgeband: nummer
+  ageBand: Aldersgruppe
+  district_tab: distrikt
+pickuplist:
+  time_table_header: periode
+  year_tab: år
+  month_tab: måned
+  week_tab: uke
+  day_tab: dag
+genderlist:
+  number_table_header: Nummer
+  gender_female: kvinne
+  gender_male: mann
+  gender_divers: mangfoldig
+  gender_table_header: Kjønn
+  district_tab: distrikt
+memberlist:
+  some_in_all: ({some} av {all})
+bell:
+  report_reason: '{reason}'
+  workgroup_request_decline_title: '{name}'
+  workgroup_request_accept_title: '{name}'
+  buddy_request: '{name} kjenner deg.'
+  buddy_request_title: Kjenner du {name}?
+  betrieb_fetch_title: '{betrieb}'
+  new_foodsaver_verified_title: '{name} er ny i {bezirk}'
+  new_foodsaver_title: '{name} er ny i {bezirk}'
+  new_quiz_comment: '{comment}'
+  store_cr_times_title: '{name}'
+  store_wallpost_title: '{name}'
+  poll_new: '{title}'
+  store_request_imposed_title: '{name}'
+  store_request_deny_title: '{name}'
+  store_request_accept_wait_title: '{name}'
+  store_request_accept_title: '{name}'
+  ft_update: '{teaser}'
+  ft_update_title: '{name}'
+  blog_new_check: '{title}'
+  forum_reply_title: '{forum}: {title}'
+  forum_answer_title: '{forum}'
+reports:
+  when: Tid
+  time: Tid
+  city: By
+month:
+  short:
+    "12": des
+    "11": nov
+    "10": okt
+    "9": sep
+    "8": aug
+    "7": jul
+    "6": jun
+    "5": mai
+    "4": apr
+    "3": mar
+    "2": feb
+    "1": jan
+  "12": desember
+  "11": november
+  "10": oktober
+  "9": september
+  "8": august
+  "7": juli
+  "6": juni
+  "5": mai
+  "4": april
+  "3": mars
+  "2": februar
+  "1": januar
+date_short:
+  Sunday: Søn
+  Saturday: Lør
+  Friday: Fre
+  Thursday: Tor
+  Wednesday: Ons
+  Tuesday: Ti
+  Monday: Man
+register:
+  finish: Send inn registrering
+  next: videre
+  prev: tilbake
+  forgotten_password: Glemt passord?
+  phone_example: eksempel +4917912345678
+  login_surname: Ditt etternavn
+  login_name: Fornavnet ditt
+  login_location: Adressen din
+  login_mobile_phone: Mobilnummeret ditt
+  geb_datum: Fødselsdatoen din
+  login_passwd2: Gjenta passord
+  login_passwd1: Passord (minst 8 tegn)
+  login_email: Epostadresse
+  requiredFields: Obligatorisk felt
+  register_button_label: Registrering
+  title: Registrering
+  topbar: Bli med
+  other: mangfoldig
+  man: mann
+  woman: hunn
+geb_datum: Fødselsdatoen
+login:
+  pwreset:
+    bread: Tilbakestille passord
+  logout: Logg ut
+  save_password: Lagre passord
+  login_button_label: Logg Inn
+  forgotten_password_label: Glemt passord?
+  password: Passord
+  email_address: Epostadresse
+  form_title: Velkommen tilbake
+  topbar: Logg Inn
+  submit_btn: Logg Inn
+salutation:
+  "3": Kjære
+  "2": Kjære
+  "1": Kjære
+  "0": Kjære
+pronoun:
+  "3": han hun
+  "2": hun
+  "1": han
+  "0": han hun
+legal:
+  legal_agreement: Juridisk avtale
+  privacy_notice_agree:
+    acknowledge: Jeg er enig
+    select: Vennligst velg
+  privacy_notice: Databeskyttelsesinstruksjoner
+  actions:
+    safe: Bruk innstillinger
+  pp: Personvernerklæring
+group:
+  show-all: Vis alt
+  function:
+    moderation: Moderasjon
+    pr: Offentlig forhold
+    fsmanagement: Administrasjon
+    arbitration: Voldgiftsnemnda
+    mediation: Mekling
+    report: Meldingsgruppe
+    stores: Bedrifter
+    fsp: Matdelingspunkt
+    voting: Avstemninger
+    welcome: Velkomstgruppe
+    title: Arbeidsgruppefunksjon
+  quit: Forlate
+  quit_name_district: Forlate distriktet %name%
+  quit_name_workgroup: Forlate team %name%
+  actions:
+    safe: Lagre endringer
+  image: Bilde for %name%
+  administrators: Gruppeadministratorer
+  members: Medlemmer
+  apply:
+    time:
+      "5": 5 timer eller mer
+      "3": 3-4 timer
+      "2": 2-3 timer
+      "1": 1-2 timer
+  contact:
+    send: Sende melding
+  applications_for: Søknader for %name%
+  applications: Applikasjoner
+  photo: Bilde
+  description: Beskrivelse
+  name: Navn
+bcard:
+  generate: Lag visittkort
+  actions: Alternativer
+  for: '{role} i {region}'
+pass:
+  nav:
+    options: Alternativer
+  name: Navn
+  photo: Bilde
+button:
+  create: Skape
+  answer: Svare
+  send: Sende
+  cancel: Avbryt
+  delete: Slette
+  edit: Redigere
+  new: Ny
+  upload: Laste opp
+upload:
+  preview_image: Forhåndsvisning
+picture_upload_widget:
+  picture_upload: Opplasting av bilder
+image: Bilde
+explanation: Forklaring
+fp: Feilpoeng
+text: Tekst
+right: Poeng
+leader: Gruppeadministratorer
+member: Medlemmer
+fax: Faks
+betrieb_status_id: Status
+betrieb_kategorie_id: Kategori
+kette_id: Driftskjede
+homepage: Din nettside
+location_name: Spillested/konferanserom
+status: Nåværende status
+last_login: Siste innlogging
+rolle: Brukerrolle
+active: aktiviert
+stadt: Din by
+newsletter: Nyhetsbrev
+compose_body: Beskjed
+pass2: Passordrepetisjon
+infotype: Melding
+dateend: Sluttdato
+mailbox_id: Avsenderens epostadresse
+testemail: E-postadresse for testing
+opt: Alternativer
+teaser: Teaser
+weight: Estimert vekt
+about_me_intern: Kort beskrivelse
+about_me_public: Offentlig kort beskrivelse
+regions: Distrikter
+daterange: Periode
+ort: By / kommune (automatisk hentet fra kartet)
+photo: Bilde
+info: Informasjon
+body: Beskjed
+title: Overskrift
+bezirk: Distrikt
+lon: Breddegrad
+lat: Lengdegrad
+fs_id: foodsharing-ID
+picture: Bilde
+options: Alternativer
+botschafter: Ambassadør
+geschlecht: Kjønn
+anschrift: Gatenummer og husnummer (automatisk tatt fra kortet)
+handy: Mobilnummer
+telefon: Fasttelefonnummer
+attachement: Vedlegg
+email: Epostadresse
+plz: Postnummer (automatisk tatt fra kortet)
+description: Beskrivelse
+desc: Beskrivelse
+edit: redigere
+address: Adresse
+message: Beskjed
+nachname: Etternavn
+add: legge til
+name: Fornavn
+storelist:
+  geo: geo
+  region: distrikt
+  city: by
+  zipcode: postnummer
+  address: gate
+  name: navn
+  addressdata: adresse
+footer:
+  version: 'Versjon: {version}'
+  hosting_info: CO2-nøytral vert på
+  statistics: Statistikk
+  blog: Blogg
+  wiki: Wiki
+  press: Trykk
+  contact: Kontakt
+  team: Team
+  about_us: Om oss
+  call_to_action: Delta
+date:
+  sunday: søndag
+  saturday: lørdag
+  friday: fredag
+  thursday: Torsdag
+  wednesday: onsdag
+  tuesday: tirsdag
+  monday: mandag
+  yesterday: i går
+  -- Yesterday: i går
+  tomorrow: i morgen
+  -- Tomorrow: i morgen
+  today: i dag
+  Today: i dag
+  to: til
+  from: fra
+  time: '{time}'
+recipients:
+  unknown: ukjent
+  confirm: Send e-post?
+  send: Send e-post
+  body: Beskjed
+  manual: Manuell inngang
+  recipients: Mottakere
+events:
+  morePeople: … og {count} til
+  invitedCount: '{count} invitasjoner'
+  maybeCount: '{count} personer kan komme'
+  acceptedCount: '{count} personer deltar'
+  mumble:
+    guide: 'Bruksanvisning: <strong><a href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></strong>'
+  duration: 'Varighet: {duration}'
+  span: fra {from} til {until}
+  description: Beskrivelse
+  create:
+    endtime: Sluttid
+    starttime: Starttid
+  bread: Arrangementer
+chat:
+  conversations: Samtaler
+forum:
+  thread:
+    title: Tittel
+  post:
+    body: Beskjed
+timepicker:
+  labelNowButton: nå
+  labelCloseButton: Lukk
+  labelSeconds: sekunder
+  labelHours: timer
+  labelMinutes: minutter
+calendar:
+  labelCalendar: Kalender
+  labelToday: i dag
+  locale: no
+pickup:
+  edit:
+    bread: ''
+  history:
+    search: Vis pickups
+    title: Samlingshistorie
+  slot_remove: Slett spor
+  slot_add: Legg til spor
+  add_onetime_pickup: Angi tilleggsdato
+  take_empty_slot: Meld deg på her
+  join_agree: ja, registrer deg
+  join_cancel: helst ikke
+  same_day_entry: '[{when}] {name}'
+  join_title_date: Sikker?
+  signout_confirm: Er du sikker?
+  call: Anrop
+storeedit:
+  fetch:
+    teamStatus: lagstatus
+  store:
+    status: Status
+  team:
+    note: 'Merk:'
+    foodsaver: Foodsaver
+    bread: Rediger team
+  actions: Alternativer
+store:
+  sm:
+    searchPlaceholder: Navn eller ID
+    reloadPage: Last siden på nytt
+    removeFromTeam: Fjern fra laget
+    pickupReset: Standard sortering
+  address: Adresse
+  attribution: Attribusjon
+  unknownDate: ukjent
+  lastPickup: 'Siste henting: {date}'
+  lastPickupShort: siste {date}
+  teamName: '{storeTitle} team'
+  actions: Alternativer
+storeview:
+  status: Nåværende status
+  frequency4: om natten
+  frequency3: om kvelden
+  frequency2: midt på dagen/på ettermiddagen
+  frequency1: om morgenen
+  info: Informasjon
+  store: Drift
+fsp:
+  info:
+    none: ikke mer
+  pic: Bilde
+  location: Postnummer og by
+  street: Gate
+  address: Adresse
+  acceptName: Lås opp {name}
+  description: Beskrivelse
+  followers: Følgere
+  managers: Kontaktpersoner
+day: Dag
+time: Tid
+select: Vennligst velg
+notice: Merk!
+delete: Slett
+error_unexpected: Det har oppstått en feil
+success: Vellykket fullført
+back: tilbake
+no: Nei
+yes: Ja
+really_delete: Vil du virkelig slette?
+are_you_sure: Er du sikker?
+statistics:
+  kg_food_saved: '%count% kg mat lagret'
+terminology:
+  options: Alternativer
+  buddies: Venner
+  polls: Avstemning
+  message: Beskjed
+  homeRegion: Hjemregion
+  threads: Tråder
+  regions: Distrikter
+  region: Distrikt
+  profile_picture: Profilbilde
+  n_foodsaver: en foodsaver|%count% foodsavere
+  mailboxes: Postkasser
+  settings: Innstillinger
+  subgroups: Undergrupper
+  group: Arbeidsgruppe
+  groups: Arbeidsgrupper
+  baskets: Matkurver
+  basket: Matkurv
+  arbitration: Meldingsvisning (lokale voldgiftsnemnda)
+  reports: Meldingsvisning (lokal meldingsgruppe)
+  statistic: Statistikk
+  wall: Oppslagstavle
+  moderationAdmins: Moderasjonsteam
+  prAdmins: PR-team
+  fsManagementAdmins: Administrasjon
+  arbitrationAdmins: Voldgiftsnemnda
+  mediationAdmins: Formidlingsteam
+  reportAdmins: Meldingsbehandlingsteam
+  storesAdmins: Driftskoordineringsteam
+  votingAdmins: Avstemmingen teamet
+  welcomeAdmins: Velkommen team
+  admins: Administratorer
+  ambassador_forum: Ambassadørforum
+  ambassadors: Ambassadører
+  ambassador:
+    d: Ambassadør
+    f: Ambassadør
+    m: Ambassadør
+  foodsaver:
+    d: Foodsaver
+    f: Foodsaver
+    m: Foodsaver
+  foodsharer:
+    d: Foodsharer
+    f: Foodsharer
+    m: Foodsharer
+  stores: Bedrifter
+  events: Arrangementer
+  forum: Forum
+gender:
+  d: mangfoldig
+  f: Fru
+  m: Mann
