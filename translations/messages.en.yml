@@ -24,7 +24,7 @@ group:
       %weeks% weeks, have %bananas% trust bananas and helped %fetches% times picking
       up food.
   members: Members
-  administrators: Administrators
+  administrators: Group administrators
   title: foodsharing working groups
   subtitle: find help and or work…
   member_count: '{0} No members|{1} One member| [2, Inf[ %count% members'
@@ -290,7 +290,7 @@ menu:
     background: Background
     support: Help and support
     wiki: Wiki
-    guide: Guide
+    guide: Hygiene guide
     statistics: Statistics
     transparency: Transparency
     dataprivacy: Data privacy
@@ -368,8 +368,8 @@ profile:
     reportedAdminNoArbitration: You cannot submit a report to {name} because he*she
       is admin of the local reporting group in his*her district and there is no arbitration
       board there.
-    noReportGroup: You cannot use the reporting system since it is disabled for your
-      district at the moment.
+    noReportGroup: You cannot use the reporting system since it is not activated for
+      the foodsaver's district.
     reporterHasNoReportGroup: You cannot use the reporting system as there is no local
       reporting group in your district.
     oldReportButtonTextPart3: You can find more information about the reporting system
@@ -384,8 +384,12 @@ profile:
       how you can be reached best in case we have further questions.
     repAdminAgainstArbAdmin: You are an admin of the reporting team and want to report
       an admin of the arbitration board. This is not technically supported at the
-      moment. You can always submit a report by mail to the local responsible for
+      moment. You can always submit a report by email to the local responsible for
       this case.
+    arbAdminAgainstRepAdmin: You are an administrator of the arbitration board and
+      want to report an administrator of the report processing. This is not technically
+      supported at the moment. You can always submit a report by email to your local
+      responsible for this case.
   history:
     wasVerified: Verified
     lostVerification: De-verified
@@ -403,7 +407,7 @@ profile:
     bread: Notes
     info: "Please use this function carefully.\nIt should help to make processes visible\
       \ in order to save us work.\nPersonal or judgmental about a person has no place\
-      \ here.\nBe factual!\"\n"
+      \ here.\nBe factual.\"\n"
     title: Notes about {name}
   warning: Warning
   title: Profile
@@ -440,10 +444,12 @@ profile:
       e-mails and communication. You can remove the blocked status with the button.
     warning_4: this support article.
     warning_3: 'it will be unblocked. You can find more information in '
-    warning_2: changing the e-mail address
-    warning_1: Your personal e-mail address {email} is blocked for foodsharing e-mail
+    warning_2: changing the email address
+    warning_1: Your personal email address {email} is blocked for foodsharing e-mail
       and communication. By
   no_common_workgroups: You are not in any common group with {name}
+  workgroups_member: You and {name} are in the following working groups
+  workgroups_admin: '{name} is committed as a contact person for the working groups'
 test:
   plain: This is a nice translation
   vars: 'My name is {NAME} and I am {AGE} years old'
@@ -517,7 +523,7 @@ events:
     yes: Accept invitation
     options: Event options
     no: I can not
-    maybe: I can maybe
+    maybe: maybe I can
   notFound: Either this event does not exist or you can not access it.
   goto: Go to the event
   edited: Event was changed successfully.
@@ -891,7 +897,7 @@ recipients:
   status: 'Sending e-mails ... (current address: {current})'
   permission: You do not have permission to send e-mails
   body: Message
-  recipients: Recipient
+  recipients: Recipients
   test_email_invalid: Something is wrong with the e-mail address.
   test_email_sent: E-mail was sent.
   testmail: Send test e-mail
@@ -947,8 +953,7 @@ poll:
     submit_success: The poll was created
     option: Option
     description_placeholder: What is this poll about?
-    options: Options that should be available for selection. They are displayed in
-      a random order during voting.
+    options: Options that should be available for selection.
     shuffle_options: Show the options in random order when voting
   submit_vote: Submit vote
   type: Poll type
@@ -1041,7 +1046,7 @@ email_template:
   confirm_link: would like to publish the topic
   withlove: Lots of love,
   impress:
-    general_information_requirements: According to § 5 TMG
+    general_information_requirements: Information according to § 5 Telemediengesetz
     title: Imprint
     address: "foodsharing e.V.\nNeven-DuMont-Str. 14 \n50667 Cologne \nRepresented\
       \ by:\n\nFrank Bowinkelmann \nContact Details:\nE-Mail: info@foodsharing.de\n\
@@ -1063,7 +1068,7 @@ password:
 tablesorter:
   page: Page
   entriespp: entries per page
-  from: from
+  from: of
 page:
   presence:
     header: Festivals
@@ -1379,8 +1384,8 @@ foodsaver:
     to_fs: Become a foodsaver
     to_amb: Become an ambassador
     sm_success: Thank you! You are now qualified to manage stores!
-    needs_fs_quiz: You can first take the Foodsaver quiz
-    amb_success: Thank you for your motivation to take on more responsibility! The
+    needs_fs_quiz: You must first take the foodsaver quiz
+    amb_success: Thank you for your motivation to take on more responsibility. The
       request will be processed by the global orga-team as quickly as possible.
     amb_requested: Request sent successfully.
     fs_success: Thank you! You are now a foodsaver!
@@ -1439,7 +1444,7 @@ store:
     title: Requests for {storeTitle}
     withdraw: Withdraw request
     to-nowhere: Reject
-    to-team: Record
+    to-team: add to team
     withdrawn: The request was successfully withdrawn.
     orga-instead: The Orga-team is being informed.
     amb-instead: The ambassadors are being informed.
@@ -1454,16 +1459,16 @@ store:
     filterJumper: Jumper
     filterUnverified: Unverified
     pickupReset: Standard sorting
-    managementActions: BV actions
+    managementActions: Actions for store managers
     filter: 'Show only:'
     makeRegularTeamMember: Add to team
-    filterQuizSM: BV-quiz successfully passed
+    filterQuizSM: Successfully passed the quiz for store managers
     pickupAsc: Newest last
     pickupDesc: Newest first
     byLastPickup: Sort by last pick-up
     managementEffect: 'Sort by last pick-up date:'
     managementToggleOff: Back to standard view
-    managementToggleOn: Enable BV view
+    managementToggleOn: Toggle view for store managers
     makeJumper: add to jumper list
     reloadRequired: 'For updating the team information:'
     reloadPage: Reload page
@@ -1500,8 +1505,8 @@ store:
   springer_conversation_name: Jumper {name}
   my_last_pickup: My last pick-up
   average_collection_quantity: Pick-up quantity on average
-  mayManage: Passed the BOT quiz.
-  mayAmb: Passed the BOT quiz.
+  mayManage: Passed the quiz for store managers.
+  mayAmb: Passed the ambassador quiz.
   fetchCount: Picked up {count}× here.
   isJumper: Is on the jumper list.
   noPickup: Has never picked up here.
@@ -1509,14 +1514,14 @@ store:
   tooltip_red: Vacant pick-ups today or tomorrow
   tooltip_orange: Vacant pick-ups in the next three days
   pickup_slot_unavailable: This pick-up slot is further in the future than intended
-    by your BIEBs. So please try again at a later date.
+    by the responsibles. So please try again at a later date.
   appliedFor: Request made
 search:
   mygroups: My groups
   mybuddies: My buddies
   title: Search
   forum: Search for a title...
-  placeholder: Search...
+  placeholder: Search persons, groups, companies, ...
   persons: Persons
   groups: Groups
   myregions: My regions
@@ -1672,7 +1677,7 @@ storeedit:
     max-sm: Please choose three store managers maximum
     cannot-leave: You are responsible for this store, so you can't leave it.
     need-sm: There must be at least one responsible person per team.
-    unmanaged: "This store doesn't have any responsible person at the moment!\nPlease\
+    unmanaged: "This store doesn't have any responsible person at the moment.\nPlease\
       \ add up to three store managers that will manage the store in the future.\n"
     amb: "You are not responsible for this store.\nHowever, as an ambassador you have\
       \ extensive rights.\n"
@@ -1841,7 +1846,7 @@ pickuplist:
   error_kick: 'Failed to remove: '
   error_leave: 'Failed to leave: '
   error_loadingPickup: 'Loading of the pickup slots failed: '
-  NumberOfSlots_table_header: Number of pickup slots
+  NumberOfSlots_table_header: '# slots'
   NumberOfAppointments_table_header: Number of appointments
   unclear: Status unclear
   tryagain: Try again after reloading.
@@ -1873,7 +1878,7 @@ chat:
   notification_unnamed_conversation: '{foodsaver} has sent you a message.'
   placeholder: Write something.
   empty: No conversations yet
-  empty_recipients: You need to select recipients.
+  empty_recipients: You still have to select recipients.
   empty_message: You need to enter a message first.
   error_sending_message: Sending the message failed.
   error_loading_messages: Reloading of messages failed.
@@ -1906,7 +1911,7 @@ register:
   select_your_gender: For the salutation...
   join_error: Your registration was not successful.
   join_success: Your registration was successfull.
-  finish: Registration send
+  finish: Send registration
   next: next
   prev: previous
   have_read_the_legal_stuff1: I have the
@@ -2008,7 +2013,7 @@ dashboard:
     stores: You pick up groceries from
     waiting: You are on the jumper list at
   source_event: Appointment {0}
-  source_forum_bot: Amb. forum {0}
+  source_forum_bot: Ambassador forum {0}
   source_forum: Forum {0}
   source_friendWall_own: Your pinboard
   source_friendWall: Pinboard from {0}
@@ -2178,7 +2183,7 @@ becomeregion:
   enterregion:
     text2: We are not the central point of contact for general questions, but we can
       help you with questions about districts.
-    text1: carefully! If you want to start a district or have explicit questions that
+    text1: carefully. If you want to start a district or have explicit questions that
       the wiki does not answer, write us an email to
     region_link_text: establishing or reactivating districts
     main: You can join your first district by clicking through to your district starting
@@ -2258,6 +2263,11 @@ startpage:
   welcome_text: Welcome to foodsharing
   towns:
     title: foodsharing cities
+    text: "Participating cities differ in terms of whether they are still on the way\
+      \ or have already been designated as a\nfoodsharing city. The latter is the\
+      \ case if, in addition to a foodsharing team on the ground a declaration of\n\
+      motivation signed by the municipality as a symbol of the partnership between\
+      \ foodsharing and the public\nsector.\n"
   this_is_how_it_works: This is how it works
   more_infos: Find out more
   slogan: Together for more food appreciation
@@ -2271,11 +2281,14 @@ startpage:
   private:
     text: Fight food-waste in your household. We are informing on events such as.
     title: in private
+  slogan_3: foodsharing is and remains free of charge.
+  slogan_2: collaborative, sustainable & appreciative
+  slogan_1: Together for more food appreciation
 date_short:
   Sunday: Sun
   Saturday: Sat
-  Friday: Fr
-  Thursday: Wed
-  Wednesday: Thu
-  Tuesday: Tu
-  Monday: Mo
+  Friday: Fri
+  Thursday: Thu
+  Wednesday: Wed
+  Tuesday: Tue
+  Monday: Mon
