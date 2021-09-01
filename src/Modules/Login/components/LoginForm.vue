@@ -32,6 +32,7 @@
             class="form-control text-primary"
             autofocus
             @keydown.enter="submit"
+            @focus="focusLogin=true"
           >
         </div>
         <div
