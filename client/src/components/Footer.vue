@@ -374,7 +374,7 @@ export default {
       return 'https://www.youtube.com/user/foodsharingtv'
     },
     betaTestingIssues () {
-      return 'https://gitlab.com/foodsharing-dev/foodsharing-beta-testing/-/issues'
+      return 'https://beta.foodsharing.de/?page=bezirk&bid=734&sub=forum'
     },
     externalLink () {
       return 'nofollow noreferrer noopener'
