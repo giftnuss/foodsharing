@@ -28,7 +28,7 @@ Closes #____ (e.g. #230)
 - [ ] used "state:" labels to track this MR's state until it was beta tested
 - [ ] added an entry to `CHANGELOG.md`
 - [ ] added a short text that can be used in the release notes
-- [ ] Once your MR has been merged, you are responsible to create a testing issue in [Beta Testing Repo](https://gitlab.com/foodsharing-dev/foodsharing-beta-testing):
+- [ ] Once your MR has been merged, you are responsible to create a testing issue in the Beta Testing forum: <https://foodsharing.de/?page=bezirk&bid=734&sub=forum>
   - Consider writing a detailed description **in German**.
   - Describe in a few sentences, what should be tested from a **user perspective**.
   - Also mention different settings (e.g. **different browsers**, roles, ...) how this change can be tested.
