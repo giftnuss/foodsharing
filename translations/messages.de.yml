@@ -376,6 +376,7 @@ group:
     tooltip_function_region2287: "Administrator*innen dieser Arbeitsgruppe können die Inhalte der Startseite bearbeiten"
     tooltip_function_region432: "Administrator*innen dieser Arbeitsgruppe können Meldungen einsehen"
     tooltip_function_region387: "Administrator*innen dieser Arbeitsgruppe können Einträge von der E-Mail-Bounceliste entfernen"
+    tooltip_function_region327: "Administrator*innen dieser Arbeitsgruppe können Blogeinträge bearbeiten"
   show-all: "Alle anzeigen"
 
 legal:

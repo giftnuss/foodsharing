@@ -3,6 +3,7 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 final class BlogPermissions
 {
@@ -39,7 +40,6 @@ final class BlogPermissions
 			return true;
 		}
 
-		// return $this->session->isAdminFor(RegionIDs:: whichever workgroup wants this );
-		return false;
+		return $this->session->isAdminFor(RegionIDs::EDITORIAL_GROUP);
 	}
 }

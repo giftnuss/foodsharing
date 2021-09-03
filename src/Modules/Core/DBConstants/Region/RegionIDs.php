@@ -18,6 +18,7 @@ class RegionIDs
 	public const EUROPE_REPORT_TEAM = 432;
 	public const CREATING_WORK_GROUPS_WORK_GROUP = 1701;
 	public const IT_SUPPORT_GROUP = 387;
+	public const EDITORIAL_GROUP = 327;
 
 	// region and ambassador groups
 	public const EUROPE_BOT_GROUP = 881;
@@ -44,7 +45,8 @@ class RegionIDs
 		return in_array($regionId, [
 			self::NEWSLETTER_WORK_GROUP, self::QUIZ_AND_REGISTRATION_WORK_GROUP,
 			self::PR_PARTNER_AND_TEAM_WORK_GROUP, self::PR_START_PAGE,
-			self::EUROPE_REPORT_TEAM, self::IT_SUPPORT_GROUP
+			self::EUROPE_REPORT_TEAM, self::IT_SUPPORT_GROUP,
+			self::EDITORIAL_GROUP
 		]);
 	}
 
