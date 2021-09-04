@@ -362,7 +362,7 @@ class SettingsView extends View
 					$ftext = ' wurde leider falsch beantwortet.';
 					if (!$r['noco'] && $noclicked) {
 						$no_wrong_right_sort = true;
-						$ftext = ' wurde leider als falsch gewertet. Da Du nichts ausgewählt hast oder die Zeit abgelaufen ist.';
+						$ftext = ' wurde leider als falsch gewertet, da Du nichts ausgewählt hast oder die Zeit abgelaufen ist.';
 					}
 				} else {
 					$ftext = ' hast Du leider nur zu ' . (100 - $r['percent']) . ' % richtig beantwortet.';
@@ -397,7 +397,7 @@ class SettingsView extends View
 			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
 				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
-				$cnt = $this->v_utils->v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum Nichtbbestehen, wenn Du sie falsch beantwortest.');
+				$cnt = $this->v_utils->v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum Nichtbestehen, wenn Du sie falsch beantwortest.');
 			}
 
 			$out .= '
