@@ -143,8 +143,10 @@ class CalendarRestController extends AbstractFOSRestController
 		$start = Carbon::createFromTimestamp($pickup['date_ts']);
 
 		$summary = $pickup['betrieb_name'] . ' Abholung';
+		$status = 'CONFIRMED';
 		if (!$pickup['confirmed']) {
 			$summary .= ' (unbestätigt)';
+			$status = 'TENTATIVE';
 		}
 
 		$event = $this->icalFactory->createCalendarEvent();
@@ -154,6 +156,7 @@ class CalendarRestController extends AbstractFOSRestController
 		$event->setUid($userId . $pickup['date_ts'] . '@fetch.foodsharing.de');
 		$event->setDescription('foodsharing Abholung bei ' . $pickup['betrieb_name']);
 		$event->setUrl(BASE_URL . '/?page=fsbetrieb&id=' . $pickup['betrieb_id']);
+		$event->setStatus($status);
 
 		return $event;
 	}
