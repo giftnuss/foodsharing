@@ -177,6 +177,7 @@ class StoreUserControl extends Control
 						'team' => $this->getDisplayedStoreTeam($store),
 						'storeId' => $storeId,
 						'storeTitle' => $store['name'],
+						'regionId' => $store['bezirk_id'],
 					]),
 					CNT_LEFT
 				);

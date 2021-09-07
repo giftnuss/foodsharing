@@ -12,6 +12,7 @@
       button-icon="fa-user-plus"
       :button-tooltip="$i18n('store.sm.makeRegularTeamMember')"
       :filter="filterNotInTeam"
+      :region-id="regionId"
       @user-selected="addNewTeamMember"
     />
 
@@ -123,6 +124,7 @@ export default {
     classes: { type: String, default: '' },
     storeId: { type: Number, required: true },
     team: { type: Array, required: true },
+    regionId: { type: Number, required: true },
   },
   data () {
     return {

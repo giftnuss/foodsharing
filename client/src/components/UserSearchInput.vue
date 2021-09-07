@@ -49,6 +49,10 @@ export default {
     buttonIcon: { type: String, required: true },
     buttonTooltip: { type: String, default: '' },
     filter: { type: Function, default: null },
+    /**
+     * If not null, the search is restricted to this region.
+     */
+    regionId: { type: Number, default: null },
   },
   data () {
     return {
@@ -76,7 +80,7 @@ export default {
       let users = []
       if (query.length > 2) {
         try {
-          users = await searchUser(query)
+          users = await searchUser(query, this.regionId)
           if (this.filter) {
             // let the external function filter by user id
             const filteredIds = users.map(x => x.id).filter(this.filter)

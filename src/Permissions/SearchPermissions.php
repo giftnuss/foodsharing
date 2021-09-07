@@ -22,6 +22,15 @@ class SearchPermissions
 		return $this->session->isAmbassador();
 	}
 
+	public function maySearchInRegion(int $regionId): bool
+	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return in_array($regionId, $this->session->listRegionIDs());
+	}
+
 	public function maySeeUserAddress(): bool
 	{
 		return $this->session->may('orga');

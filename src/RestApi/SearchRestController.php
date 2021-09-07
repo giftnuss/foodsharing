@@ -11,6 +11,7 @@ use Foodsharing\Modules\Search\SearchGateway;
 use Foodsharing\Modules\Search\SearchHelper;
 use Foodsharing\Modules\Search\SearchIndexGenerator;
 use Foodsharing\Permissions\ForumPermissions;
+use Foodsharing\Permissions\SearchPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -25,19 +26,22 @@ class SearchRestController extends AbstractFOSRestController
 	private SearchIndexGenerator $searchIndexGenerator;
 	private SearchHelper $searchHelper;
 	private ForumPermissions $forumPermissions;
+	private SearchPermissions $searchPermissions;
 
 	public function __construct(
 		Session $session,
 		SearchGateway $searchGateway,
 		SearchIndexGenerator $searchIndexGenerator,
 		SearchHelper $searchHelper,
-		ForumPermissions $forumPermissions
+		ForumPermissions $forumPermissions,
+		SearchPermissions $searchPermissions
 	) {
 		$this->session = $session;
 		$this->searchGateway = $searchGateway;
 		$this->searchIndexGenerator = $searchIndexGenerator;
 		$this->searchHelper = $searchHelper;
 		$this->forumPermissions = $forumPermissions;
+		$this->searchPermissions = $searchPermissions;
 	}
 
 	/**
@@ -58,6 +62,7 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("search/user")
 	 * @Rest\QueryParam(name="q", description="Search query.")
+	 * @Rest\QueryParam(name="regionId", requirements="\d+", nullable=true, description="Restricts the search to a region")
 	 */
 	public function listUserResultsAction(ParamFetcher $paramFetcher, Session $session, FoodsaverGateway $foodsaverGateway, RegionGateway $regionGateway): Response
 	{
@@ -66,12 +71,18 @@ class SearchRestController extends AbstractFOSRestController
 		}
 
 		$q = $paramFetcher->get('q');
+		$regionId = $paramFetcher->get('regionId');
+		if (!empty($regionId) && !$this->searchPermissions->maySearchInRegion($regionId)) {
+			throw new HttpException(403);
+		}
 
 		if (preg_match('/^[0-9]+$/', $q) && $foodsaverGateway->foodsaverExists((int)$q)) {
 			$user = $foodsaverGateway->getFoodsaverName((int)$q);
 			$results = [['id' => (int)$q, 'value' => $user . ' (' . (int)$q . ')']];
 		} else {
-			if (in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs(), true) ||
+			if (!empty($regionId)) {
+				$regions = [$regionId];
+			} elseif (in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs(), true) ||
 				$this->session->may('orga')) {
 				$regions = null;
 			} else {

@@ -44,6 +44,7 @@
         :store-id="storeId"
         :team="team"
         classes="p-2 team-management"
+        :region-id="regionId"
       />
 
       <div class="card-body team-list">
@@ -223,6 +224,7 @@ export default {
     team: { type: Array, required: true },
     storeId: { type: Number, required: true },
     storeTitle: { type: String, default: '' },
+    regionId: { type: Number, required: true },
   },
   data () {
     return {
