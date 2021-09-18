@@ -34,6 +34,8 @@
 - Activate autocompletion for login form !2022 @iron9
 - Admins of Voting Workgroups are automatically member of a overall voting in praxis workgroup @fs_k
 - User with administrativ orga power are part of the orga koordination group @fs_k
+- Admins of Voting Workgroups are automatically member of a overall voting in praxis workgroup !2038 @fs_k
+- User with administrativ orga power are part of the orga koordination group !2038 @fs_k
 
 ## Bugfixes
 - Long links in the location field of events do not overflow the location box
@@ -50,6 +52,7 @@
 - Prevent stores to show up multiple times #1063 !1900 @bjarne.schindler
 - Fix errors that occur for non-existing password reset keys !2004 @alex.simm
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
+- getOrgaTeam factors in user role Orga !2038 @fs_k
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum

@@ -321,7 +321,7 @@ final class FoodsaverGateway extends BaseGateway
 			'email'
 		], [
 			'orgateam' => 1,
-			'rolle' => 4
+			'rolle' => ROLE::ORGA
 		]);
 	}
 
