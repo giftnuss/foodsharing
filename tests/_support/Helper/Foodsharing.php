@@ -38,13 +38,10 @@ class Foodsharing extends \Codeception\Module\Db
 			RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP,
 			RegionIDs::GLOBAL_WORKING_GROUPS,
 			RegionIDs::EUROPE,
-			RegionIDs::NEWSLETTER_WORK_GROUP,
 			RegionIDs::EUROPE_REPORT_TEAM,
 			RegionIDs::TEAM_BOARD_MEMBER,
 			RegionIDs::TEAM_ALUMNI_MEMBER,
 			RegionIDs::TEAM_ADMINISTRATION_MEMBER,
-			RegionIDs::PR_START_PAGE,
-			RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP,
 		]);
 
 		$tablesToSkip = implode(',', [

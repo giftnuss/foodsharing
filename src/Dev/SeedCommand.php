@@ -123,6 +123,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$user = $I->createStoreCoordinator($password, ['email' => 'uservoting' . $i . '@example.com', 'bezirk_id' => $region1]);
 			$I->addRegionMember($votingGroup['id'], $user['id']);
 			$I->addRegionAdmin($votingGroup['id'], $user['id']);
+			$I->addRegionMember(RegionIDs::VOTING_ADMIN_GROUP, $user['id']);
 			$this->votingAdmins[] = $user['id'];
 		}
 		$this->output->writeln(' done');
@@ -261,13 +262,16 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$ag_startpage = RegionIDs::PR_START_PAGE;
 		$ag_partnerandteam = RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP;
+
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
-		$CreateWorkgroupWG = $I->createWorkingGroup('AG Anlegen', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
+		$I->createWorkingGroup('AG Anlegen', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::CREATING_WORK_GROUPS_WORK_GROUP]);
 		$I->createWorkingGroup('Support', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::IT_SUPPORT_GROUP]);
 		$I->createWorkingGroup('Öffentlichkeitsarbeit - Partner + Teamseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP]);
 		$I->createWorkingGroup('Öffentlichkeitsarbeit - Startseite', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::PR_START_PAGE]);
 		$I->createWorkingGroup('Newsletter', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::NEWSLETTER_WORK_GROUP]);
+		$I->createWorkingGroup('Abstimmungs-AG Praxis', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::VOTING_ADMIN_GROUP]);
+		$I->createWorkingGroup('Orgarechte-Koordination', ['parent_id' => RegionIDs::GLOBAL_WORKING_GROUPS, 'id' => RegionIDs::ORGA_COORDINATION_GROUP]);
 
 		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 

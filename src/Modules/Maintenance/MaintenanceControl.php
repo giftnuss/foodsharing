@@ -6,6 +6,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
@@ -165,6 +166,16 @@ class MaintenanceControl extends ConsoleControl
 		self::info('updating Graz BIEB group');
 		$graz_biebs = $this->storeGateway->getStoreManagersOf(149);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1655, $graz_biebs, true);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
+
+		self::info('updating Voting Admin group');
+		$votingAdmins = $this->foodsaverGateway->getWorkgroupFunctionAdminIds(WorkgroupFunction::VOTING);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::VOTING_ADMIN_GROUP, $votingAdmins, true);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
+
+		self::info('updating orga Admin group');
+		$orga = $this->foodsaverGateway->getOrgaTeam();
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::ORGA_COORDINATION_GROUP, $orga, true);
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 	}
 

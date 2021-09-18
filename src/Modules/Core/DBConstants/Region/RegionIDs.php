@@ -25,6 +25,8 @@ class RegionIDs
 	public const AUSTRIA_BOT_GROUP = 761;
 	public const SWITZERLAND = 106;
 	public const SWITZERLAND_BOT_GROUP = 1763;
+	public const VOTING_ADMIN_GROUP = 2012; // NUMBER HAS TO BE ADJUSTED AS SOON AS GROUP EXISTS
+	public const ORGA_COORDINATION_GROUP = 3818;
 
 	// groups used for displaying team page:
 	public const TEAM_BOARD_MEMBER = 1373;

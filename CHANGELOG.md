@@ -32,6 +32,8 @@
 - Notice as a popup in store for the menu item "Edit Team" where this new function is located !2020 @chriswalg
 - Let email input field of login page autofocus !2027 @iron9
 - Activate autocompletion for login form !2022 @iron9
+- Admins of Voting Workgroups are automatically member of a overall voting in praxis workgroup @fs_k
+- User with administrativ orga power are part of the orga koordination group @fs_k
 
 ## Bugfixes
 - Long links in the location field of events do not overflow the location box
