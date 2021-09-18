@@ -33,6 +33,7 @@
 - Activate autocompletion for login form !2022 @iron9
 
 ## Bugfixes
+- Long links in the location field of events do not overflow the location box
 - Add permission checks to REST endpoints !1946 @alex.simm
 - Prevent a timeout when creating polls for many users !1893 @alex.simm
 - Allow orga to apply for working groups !1953 !1973 #1050 @alex.simm

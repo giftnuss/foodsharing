@@ -87,6 +87,7 @@ input, textarea, select, option {
 }
 
 .event-description,
+.event-location,
 .activity_feed_content_info p {
   margin: 0;
   overflow-wrap: break-word;

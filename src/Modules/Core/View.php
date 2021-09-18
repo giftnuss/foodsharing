@@ -102,7 +102,7 @@ class View
 			' . $location['zip'] . ' ' . $location['city'] . '
 		</p>
 
-		', 'Ort', ['class' => 'ui-padding']);
+		', 'Ort', ['class' => 'ui-padding event-location']);
 
 		return $out;
 	}
