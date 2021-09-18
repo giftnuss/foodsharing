@@ -67,13 +67,13 @@ class SearchRestController extends AbstractFOSRestController
 	public function listUserResultsAction(ParamFetcher $paramFetcher, Session $session, FoodsaverGateway $foodsaverGateway, RegionGateway $regionGateway): Response
 	{
 		if (!$session->id()) {
-			throw new HttpException(403);
+			throw new HttpException(403, 'not logged in');
 		}
 
 		$q = $paramFetcher->get('q');
 		$regionId = $paramFetcher->get('regionId');
 		if (!empty($regionId) && !$this->searchPermissions->maySearchInRegion($regionId)) {
-			throw new HttpException(403);
+			throw new HttpException(403, 'insufficient permissions to search in that region');
 		}
 
 		if (preg_match('/^[0-9]+$/', $q) && $foodsaverGateway->foodsaverExists((int)$q)) {
