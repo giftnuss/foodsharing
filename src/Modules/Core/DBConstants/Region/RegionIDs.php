@@ -34,6 +34,11 @@ class RegionIDs
 	public const TEAM_ADMINISTRATION_MEMBER = 1565;
 	public const WORKGROUP_ADMIN_CREATION_GROUP = 1701;
 
+	// Testregions
+	public const Testregion_Master 260;
+	public const Testregion_1 343;
+	public const Testregion_2 3113;
+
 	public static function hasSpecialPermission(int $regionId): bool
 	{
 		return in_array($regionId, [
@@ -42,4 +47,14 @@ class RegionIDs
 			self::EUROPE_REPORT_TEAM, self::IT_SUPPORT_GROUP
 		]);
 	}
+
+	public static function getTestRegions(): array
+	{
+		return [
+			self::Testregion_Master,
+			self::Testregion_1,
+			self::Testregion_2
+			];
+	}
+
 }
