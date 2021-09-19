@@ -35,9 +35,9 @@ class RegionIDs
 	public const WORKGROUP_ADMIN_CREATION_GROUP = 1701;
 
 	// Testregions
-	public const Testregion_Master 260;
-	public const Testregion_1 343;
-	public const Testregion_2 3113;
+	public const TESTREGION_MASTER = 260;
+	public const TESTREGION_1 = 343;
+	public const TESTREGION_2 = 3113;
 
 	public static function hasSpecialPermission(int $regionId): bool
 	{
@@ -51,10 +51,9 @@ class RegionIDs
 	public static function getTestRegions(): array
 	{
 		return [
-			self::Testregion_Master,
-			self::Testregion_1,
-			self::Testregion_2
+			self::TESTREGION_MASTER,
+			self::TESTREGION_1,
+			self::TESTREGION_2
 			];
 	}
-
 }

@@ -535,7 +535,7 @@ final class FoodsaverGateway extends BaseGateway
 				left outer join fs_region_function rf on b.bezirk_id = rf.region_id
 			where
 				rf.function_id = :wgFunctionId
-			and rf.target_id not in (' . RegionIDs::Testregion_1 . ',' . RegionIDs::Testregion_2 . ' )
+			and rf.target_id not in (' . RegionIDs::TESTREGION_1 . ',' . RegionIDs::TESTREGION_2 . ',' . RegionIDs::TESTREGION_MASTER . ' )
 		';
 
 		return $this->db->fetchAllValues(
