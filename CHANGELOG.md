@@ -67,6 +67,7 @@
 - Fix errors that occur for non-existing password reset keys !2004 @alex.simm
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
 - the function FoodsaverGateway:getOrgaTeam now factors in the user role Orga !2038 @fs_k
+- Set correct MIME type for attachments which are fetched via IMAP #1092 !2041 @Thylossus
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum

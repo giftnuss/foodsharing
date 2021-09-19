@@ -164,7 +164,7 @@ class MailsControl extends ConsoleControl
 									$attach[] = [
 										'filename' => $new_filename,
 										'origname' => $filename,
-										'mime' => null
+										'mime' => mime_content_type($path . $new_filename)
 									];
 								} catch (\Exception $e) {
 									self::error('Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n");
