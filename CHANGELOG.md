@@ -8,7 +8,7 @@
 - Add french and italian translation to language chooser !1964 !2039 @alex.simm
 - Introduces Push Notifications for the Android App !1647 !1976 @dthulke
 - Improve wording in German texts, to make the language more consistent, clear, and inclusive in some places. !1959 @blinry @Claraaa @alex.simm @fs_k
-- Display same-day pickups when confirming to sign into a pickup slot !1827 @ChrisOelmueller
+- Display same-day pickups when confirming to sign into a pickup slot !1827 !2040 @ChrisOelmueller
 - Show membership in profile for workgroups !1988 !1996 @chriswalg
 - IT-Support Admins can delete bananas upon request over it@foodsharing.network. !2002 @fs_k
 - Added a user search field to the store management panel !2007 !2033 @alex.simm
