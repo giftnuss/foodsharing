@@ -95,6 +95,7 @@
             v-for="pickup in sameDayPickups"
             :key="`${pickup.storeId}-${pickup.date}`"
             :href="$url('store', pickup.storeId)"
+            target="_blank"
             class="font-weight-bolder"
           >
             <i class="fas fa-fw" :class="[pickup.isConfirmed ? 'fa-check-circle text-secondary' : 'fa-clock text-danger']" />
