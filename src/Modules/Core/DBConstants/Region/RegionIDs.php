@@ -54,6 +54,6 @@ class RegionIDs
 			self::TESTREGION_MASTER,
 			self::TESTREGION_1,
 			self::TESTREGION_2
-			];
+		];
 	}
 }
