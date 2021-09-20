@@ -7,6 +7,13 @@ sentry:
     environment: '%kernel.environment%'
     release: !php/const SRC_REVISION #your app version
     send_default_pii: true
-    excluded_exceptions: #exclude validation errors
-      - Symfony\Component\Security\Core\Exception\AccessDeniedException
-      - Symfony\Component\HttpKernel\Exception\HttpException
+    integrations:
+      - 'Sentry\Integration\IgnoreErrorsIntegration'
+
+services:
+  Sentry\Integration\IgnoreErrorsIntegration:
+    arguments:
+      $options:
+        ignore_exceptions: #exclude validation errors
+          - Symfony\Component\Security\Core\Exception\AccessDeniedException
+          - Symfony\Component\HttpKernel\Exception\HttpException
