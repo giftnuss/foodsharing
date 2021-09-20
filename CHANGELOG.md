@@ -50,6 +50,7 @@
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
 
 ## Refactoring
+- Update documentation: Give more on information on how to post a testing task in the forum
 - Change DTOs for dashboard updates to use date objects !1926 @alex.simm
 - Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 - New look for event header panels and dashboard invitations including the event's region #992 !1717 #1079 !1940 #1075 !1943 @chriswalg @ChrisOelmueller @fs_k

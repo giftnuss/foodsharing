@@ -151,7 +151,9 @@ git push -f
 
 Je übersichtlicher und besser beschrieben der Merge Request (MR) ist, desto einfach ist es für andere, ihn zu reviewen. Das heißt:
 
-- Gib dem MR einen aussagekräftigen Namen, verwende bitte ein Template für die Beschreibung (`Default` aus der dropdown-Liste) und beschreibe, was die Änderung macht.
+- Gib dem MR einen aussagekräftigen Namen
+
+- Verwende bitte ein Template für die Beschreibung (`Default` aus der dropdown-Liste) und beschreibe, was die Änderung macht.
 
 - Wenn es eine Änderung an der UI ist, füg gerne auch ein paar Screenshots ein.
 
@@ -204,7 +206,16 @@ Bitte habe etwas Geduld, wenn das nicht sofort passiert.
 Sobald der/die Genehmigende deinen MR für fertig befindet, wird er ihn in den Master übernehmen.
 
 Der Master-Zweig wird automatisch auf beta.foodsharing.de bereitgestellt, wo er getestet werden kann.
-In der Arbeitsgruppe Beta Testing auf foodsharing.de solltest du jetzt im Forum einen Beitrag für ein Testszenario erstellen, so dass es von anderen ausführlich getestet werden kann.
+In der Arbeitsgruppe **Beta Testing** auf [foodsharing.de](https://foodsharing.de/) solltest du jetzt im Forum einen Beitrag für ein Testszenario erstellen, 
+so dass es von anderen ausführlich getestet werden kann. Der Beitrag sollte das Format haben: 
+- Titel: 
+  - Test-Aufgabe: Problem in einem Satz
+- Nachricht:
+  - Was ist das Problem?
+  - Wie kann man das Problem Schritt-für-Schritt reproduzieren?
+  - Was ist der Soll-Zustand?
+  - Deadline bis wann das Nachtesten fertig sein sollte
+  
 Dort gibt es dann noch einmal gegebenenfalls Rückmeldungen zu Fehlermeldungen.
 (Besser hier als auf foodsharing.de! :-) )
 
