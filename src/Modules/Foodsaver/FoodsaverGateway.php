@@ -522,7 +522,7 @@ final class FoodsaverGateway extends BaseGateway
 	 * Because the region data model holds both, <i>regions</i> <b>and</b> <i>work groups</i>,
 	 * one can decide which one to query via flag parameters.
 	 *
-	 * Testdistricts are exlcuded (343 Streuobstwiese,3113 Apfelbaum)
+	 * Testdistricts are excluded (343 Streuobstwiese,3113 Apfelbaum)
 	 *
 	 * @param int $wgFunction The workgroup functino ID
 	 */
