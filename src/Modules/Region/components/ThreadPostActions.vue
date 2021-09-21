@@ -25,21 +25,30 @@
         v-for="(users, key) in reactionsWithUsers"
         :key="key"
       >
-        <a
+        <span
           v-b-tooltip.hover
           :title="concatUsers(users)"
-          class="btn btn-sm"
-          :class="[gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary']"
-          @click="toggleReaction(key)"
         >
-          {{ users.length }}x <Emoji :name="key" />
-        </a>
+          <b-link
+            v-b-tooltip.hover
+            :title="concatUsers(users)"
+            class="btn btn-sm"
+            :class="[gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary']"
+            :disabled="!canGiveEmoji"
+            @click="toggleReaction(key)"
+          >
+            {{ users.length }}x <Emoji :name="key" />
+          </b-link>
+        </span>
       </span>
     </div>
 
-    <span class="divider text-black-50 mx-1" />
-
+    <span
+      v-if="mayReply || mayDelete"
+      class="divider text-black-50 mx-1"
+    />
     <a
+      v-if="mayReply"
       class="btn btn-sm btn-secondary"
       @click="$emit('reply')"
     >
@@ -84,14 +93,14 @@
 <script>
 import pickBy from 'lodash.pickby'
 
-import { BDropdown, BModal, VBTooltip } from 'bootstrap-vue'
+import { BDropdown, BModal, VBTooltip, BLink } from 'bootstrap-vue'
 
 import Emoji from '@/components/Emoji'
 import emojiList from '@/emojiList.json'
 import { user } from '@/server-data'
 
 export default {
-  components: { BDropdown, Emoji, BModal },
+  components: { BDropdown, Emoji, BModal, BLink },
   directives: { VBTooltip },
   props: {
     reactions: {
@@ -102,6 +111,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    /**
+     * Whether the user can write a reply or send emoji reactions. This is disabled in closed threads.
+     */
+    mayReply: { type: Boolean, default: true },
   },
   data () {
     return {
@@ -113,7 +126,7 @@ export default {
       return pickBy(this.reactions, users => users.length > 0)
     },
     canGiveEmoji () {
-      return Object.keys(this.emojisToGive).length > 0
+      return this.mayReply && Object.keys(this.emojisToGive).length > 0
     },
     emojisToGive () {
       return pickBy(this.emojis, (symbol, key) => !this.gaveIThisReaction(key))

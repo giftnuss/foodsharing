@@ -50,10 +50,10 @@
           />
           <div class="col text-right">
             <ThreadPostActions
-              v-if="mayReply"
               :reactions="reactions"
-              :may-delete="mayDelete"
+              :may-delete="mayReply && mayDelete"
               :may-edit="mayEdit"
+              :may-reply="mayReply"
               @delete="$emit('delete')"
               @reactionAdd="$emit('reactionAdd', $event)"
               @reactionRemove="$emit('reactionRemove', $event)"
