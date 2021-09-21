@@ -214,7 +214,7 @@ so dass es von anderen ausführlich getestet werden kann. Der Beitrag sollte das
   - Was ist das Problem?
   - Wie kann man das Problem Schritt-für-Schritt reproduzieren?
   - Was ist der Soll-Zustand?
-  - Deadline bis wann das Nachtesten fertig sein sollte
+  - Deadline (Zeitpunkt, bis zu dem das Testen erledigt sein sollte)
   
 Dort gibt es dann noch einmal gegebenenfalls Rückmeldungen zu Fehlermeldungen.
 (Besser hier als auf foodsharing.de! :-) )
