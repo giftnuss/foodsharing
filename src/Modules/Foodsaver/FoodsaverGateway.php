@@ -524,7 +524,7 @@ final class FoodsaverGateway extends BaseGateway
 	 *
 	 * Testdistricts are excluded (343 Streuobstwiese,3113 Apfelbaum)
 	 *
-	 * @param int $wgFunction The workgroup functino ID
+	 * @param int $wgFunction The workgroup function ID
 	 */
 	public function getWorkgroupFunctionAdminIds(int $wgFunction): array
 	{
