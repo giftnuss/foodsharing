@@ -7,6 +7,9 @@ sentry:
     environment: '%kernel.environment%'
     release: !php/const SRC_REVISION #your app version
     send_default_pii: true
+    # see https://docs.sentry.io/platforms/php/guides/symfony/configuration/sampling/#configuring-the-transaction-sample-rate
+    # we could also configure a function/callable here using `traces_sampler` to adjust the rate dynamically in some way
+    traces_sample_rate: !php/const SENTRY_TRACING_SAMPLE_RATE
     integrations:
       - 'Sentry\Integration\IgnoreErrorsIntegration'
 

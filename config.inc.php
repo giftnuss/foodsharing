@@ -38,6 +38,10 @@ if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
 }
 
+if (!defined('SENTRY_TRACING_SAMPLE_RATE')) {
+	define('SENTRY_TRACING_SAMPLE_RATE', 0); // disables tracing
+}
+
 if (!defined('CSP_REPORT_URI')) {
 	define('CSP_REPORT_URI', null);
 }
