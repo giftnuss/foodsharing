@@ -34,6 +34,10 @@ if (file_exists($revision_filename)) {
 	require_once $revision_filename;
 }
 
+if (!defined('FCM_KEY')) {
+	define('FCM_KEY', null);
+}
+
 if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
 }
