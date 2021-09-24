@@ -1,4 +1,4 @@
-# Release "Feige", Unreleased
+# Release "Feige", 2021-09-24
 
 ## Features
 - Allow users to remove trust bananas on their own profile #592 !1920 @alex.simm
