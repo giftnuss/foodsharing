@@ -54,7 +54,6 @@
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum
-- Change DTOs for dashboard updates to use date objects !1926 @alex.simm
 - Reimplement storelist in user profiles in Vue !1828 @ChrisOelmueller
 - New look for event header panels and dashboard invitations including the event's region #992 !1717 #1079 !1940 #1075 !1943 @chriswalg @ChrisOelmueller @fs_k
 - Use new upload API for profile photos !1916 !1929 !1932 !1933 !1994 @alex.simm
@@ -63,13 +62,11 @@
 - Use a new REST endpoint for deleting emails !1979 #798 @alex.simm
 
 ## Dev/Test/CI stuff
-- Update some frontend dependencies !1892 @chriswalg
 - Update mdbook to 0.4.7 !1938 @chriwalg
 - Update some frontend dependencies !1892 !1939 !1950 @chriswalg
 - Fixed restart behavior for some docker containers !1937 @\_fridtjof_
 - Update some backend dependencies !1942 @chriswalg
 - Update minishlink WebPush to version 6 !1745 @peter.toennies
-- Update chat dependencies !1962 @chriswalg
 - Remove obsolete code for picture uploads !1969 @alex.simm
 - Update chat dependencies !1962 !1751 @chriswalg
 - Added a foodsharing glossary to our dev docs !1936 @chriswalg
