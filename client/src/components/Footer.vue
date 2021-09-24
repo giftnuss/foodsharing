@@ -306,7 +306,7 @@
               v-else
               :href="$url('releaseNotes')"
             >
-              {{ $i18n('releases.2021-03') }}
+              {{ $i18n('releases.2021-09') }}
               <i class="fas fa-magic social_icons" />
             </a>
             <br>
