@@ -136,7 +136,7 @@ class RestNormalization
 		}
 		if (isset($data['verantwortlicher']) && is_array($data['verantwortlicher'])) {
 			$store['responsibleUserIds'] = array_map(function ($u) {
-				return (int)$u;
+				return (int)$u['id'];
 			}, $data['verantwortlicher']);
 		}
 
