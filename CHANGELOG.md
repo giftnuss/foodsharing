@@ -50,7 +50,7 @@
 - Prevent stores to show up multiple times #1063 !1900 @bjarne.schindler
 - Fix errors that occur for non-existing password reset keys !2004 @alex.simm
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
-- getOrgaTeam factors in user role Orga !2038 @fs_k
+- the function FoodsaverGateway:getOrgaTeam now factors in the user role Orga !2038 @fs_k
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum
