@@ -366,8 +366,9 @@ settings:
     link_title: 'ICS/ICAL/WebCal :'
     token-warning: "Important : le lien doit rester secret !\nIl contient une clé\
       \ pour accéder à ton compte sans mot de passe.\n"
-    teaser: "Tu peux ouvrir ton calendrier de collectes avec un programme.\nPour cela,\
-      \ abonne-toi à un des deux liens ci-dessous.\n"
+    teaser: "Tu peux visualiser le calendrier de collectes avec le programme de calendrier\
+      \ de ton choix.\nCrée d'abord un jeton, puis abonne-toi à l'un des deux liens\
+      \ de calendrier.\nTu trouveras plus d'informations dans le wiki à la rubrique\n"
     title: Ton calendrier de collectes
     menu: Calendrier
     delete_token:
@@ -1964,6 +1965,7 @@ releases:
   "2020-10": Version « Canneberge » (octobre 2020)
   "2020-12": Version « fruit du dragon » (décembre 2020)
   "2021-03": Version « fraise » 🍓 (mars 2021)
+  "2021-09": Version « Figue » 🥧 (septembre 2021)
 startpage:
   donate:
     text: "Nous nous efforçons de faire parrainer toutes nos dépenses. Cependant,\
