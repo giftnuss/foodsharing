@@ -12,7 +12,7 @@
 - Show membership in profile for workgroups !1988 !1996 @chriswalg
 - IT-Support Admins can delete bananas upon request over it@foodsharing.network. !2002 @fs_k
 - Added a user search field to the store management panel !2007 !2033 @alex.simm
-- New calendar API including token management #80 !1719 !2029 @alex.simm
+- New calendar API including token management #80 !1719 !2029 !2045 @alex.simm
 - Set iCalendar status for exported pickup events !2030 @iron9
 
 ## Changes

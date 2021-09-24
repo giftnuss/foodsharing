@@ -11,7 +11,7 @@
         {{ $i18n('settings.calendar.link_title') }}
       </h3>
       <div class="bootstrap">
-        <p> {{ $i18n('settings.calendar.teaser') }} </p>
+        <p> {{ $i18n('settings.calendar.teaser') }} <a :href="$url('calendarHints')" target="_blank">{{ $url('calendarHints') }}</a></p>
         <b-button
           class="my-2"
           @click="createToken"

@@ -18,6 +18,7 @@ const urls = {
   blogAdd: () => '/?page=blog&sub=add',
   blogEdit: (blogId) => `/?page=blog&sub=edit&id=${blogId}`,
   blogList: () => '/?page=blog&sub=manage',
+  calendarHints: () => 'https://wiki.foodsharing.de/Kalenderexport',
   changelog: () => '/?page=content&sub=changelog',
   claims: () => '/?page=content&sub=forderungen',
   communitiesAustria: () => '/?page=content&sub=communitiesAustria',

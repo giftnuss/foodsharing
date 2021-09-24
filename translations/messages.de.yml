@@ -1412,6 +1412,7 @@ settings:
     teaser: |
       Du kannst deinen Abholkalender mit einem Kalenderprogramm deiner Wahl ansehen.
       Erstelle dir dafür zunächst einen Token und abonniere dann einen der beiden Kalender-Links.
+      Weitere Informationen findest du im Wiki unter
     token-warning: |
       Wichtig: Halte den Link unbedingt geheim.
       Er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.
