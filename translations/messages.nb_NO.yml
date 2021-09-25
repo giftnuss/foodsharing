@@ -346,6 +346,10 @@ register:
   other: mangfoldig
   man: mann
   woman: hunn
+  set-password: Sett nytt passord
+  pass2: Gjenta passord
+  lastname_minLength: Etternavn må bestå av minst to tegn.
+  lastname_required: Skriv inn etternavnet ditt.
 geb_datum: Fødselsdatoen
 login:
   pwreset:
@@ -397,6 +401,10 @@ group:
   quit_name_workgroup: Forlate team %name%
   actions:
     safe: Lagre endringer
+    join: Ta del i denne gruppen
+    go: Besøk gruppeside
+    edit: Rediger gruppe
+    contact: Kontakt gruppe
   image: Bilde for %name%
   administrators: Gruppeadministratorer
   members: Medlemmer
@@ -406,13 +414,25 @@ group:
       "3": 3-4 timer
       "2": 2-3 timer
       "1": 1-2 timer
+    send: Send søknad
+    declined: Søknad avslått
+    accepted: Søknad godkjent
+    sent: Søknad sendt.
   contact:
     send: Sende melding
+    sent: Meldingen ble sendt.
   applications_for: Søknader for %name%
   applications: Applikasjoner
   photo: Bilde
   description: Beskrivelse
   name: Navn
+  no_groups: Det finnes ingen grupper i denne kategorien
+  application_requirements:
+    open: Alle kan ta del direkte.
+    everybody: Alle kan søke.
+    requires_properties: Alle som svarer til gitte krav.
+    nobody: Ingen (lukket gruppe).
+    requirements: Hvem kan ta del i denne gruppen?
 bcard:
   generate: Lag visittkort
   actions: Alternativer
@@ -716,6 +736,7 @@ terminology:
   stores: Bedrifter
   events: Arrangementer
   forum: Forum
+  n_stores: En butikk|%count% butikker
 gender:
   d: mangfoldig
   f: Fru
