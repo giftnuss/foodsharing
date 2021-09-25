@@ -473,8 +473,8 @@ class SettingsView extends View
 		return $this->v_utils->v_quickform($this->translator->trans('settings.header'), [
 			$regionPicker,
 			$this->latLonPicker('LatLng', $latLonOptions, '_profile'),
-			$this->v_utils->v_form_text('telefon'),
-			$this->v_utils->v_form_text('handy'),
+			$this->v_utils->v_form_text('telefon', ['placeholder' => $this->translator->trans('register.landline_example')]),
+			$this->v_utils->v_form_text('handy', ['placeholder' => $this->translator->trans('register.phone_example')]),
 			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (int)date('Y') - 120, 'yearRangeTo' => (int)date('Y') - 8]),
 			$communications,
 			$position,

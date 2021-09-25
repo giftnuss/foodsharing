@@ -2,7 +2,7 @@
 #
 # FORM DATA KEYS: Global
 # --
-geb_datum: "Geburtsdatum"
+geb_datum: "Geburtsdatum (JJJJ-MM-DD)"
 name: "Name"
 add: "hinzufügen" # StoreUserView
 nachname: "Nachname"
@@ -15,8 +15,8 @@ description: "Beschreibung"
 plz: "Postleitzahl (automatisch aus Karte oben)"
 email: "E-Mail-Adresse"
 attachement: "Anhang" # EmailControl
-telefon: "Festnetznummer"
-handy: "Handynummer"
+telefon: "Festnetznummer (inkl. Ländervorwahl, beginnt mit +)"
+handy: "Handynummer (inkl. Ländervorwahl, beginnt mit +)"
 anschrift: "Straße und Hausnummer (automatisch aus Karte oben, gegebenenfalls anschließend korrigieren)"
 geschlecht: "Geschlecht"
 botschafter: "Botschafter*in"
@@ -461,7 +461,8 @@ register:
   lastname_required: "Bitte gib deinen Nachnamen ein."
   lastname_minLength: "Der Nachname muss aus mindestens 2 Zeichen bestehen."
   login_phone_info: "Es kann hilfreich sein, deine Telefonnummer mit anderen Foodsharern zu teilen"
-  phone_example: "Beispiel +4917912345678"
+  phone_example: "Beispiel +49 179 12345678"
+  landline_example: "Beispiel +49 30 123456789"
   phone_not_valid: "Die eingegebene Telefonnummer ist nicht gültig."
   forgotten_password: "Passwort vergessen?"
   have_read_the_legal_stuff1: "Ich habe die"
