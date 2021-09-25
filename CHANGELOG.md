@@ -1,3 +1,13 @@
+# Release "Grapefruit", unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+
 # Release "Feige", 2021-09-24
 
 ## Features
