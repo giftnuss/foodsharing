@@ -339,8 +339,8 @@ options: Options
 botschafter: Ambassadeur·ice
 anschrift: Rue et numéro de rue (automatiquement complété par la carte ci-dessus,
   corrigez par la suite si nécessaire)
-handy: Numéro de téléphone portable
-telefon: Numéro de téléphone fixe
+handy: Numéro de téléphone mobile (y compris l'indicatif du pays, commençant par +)
+telefon: Numéro de ligne fixe (y compris l'indicatif du pays, commençant par +)
 attachement: Pièce jointe
 email: Adresse courriel
 plz: Code postal (automatiquement complété par la carte ci-dessus)
@@ -348,7 +348,7 @@ edit: modifier
 message: Message
 nachname: Nom
 add: ajouter
-geb_datum: Date de naissance
+geb_datum: Date de naissance (AAAA-MM-JJ)
 position: Position chez foodsharing (public)
 page:
   welcome_main_1: Nous sommes une initiative qui agit contre le gaspillage alimentaire.
@@ -848,7 +848,7 @@ register:
   have_read_the_legal_stuff1: Je l'ai
   forgotten_password: Mot de passe oublié ?
   phone_not_valid: Le numéro de téléphone renseigné est invalide.
-  phone_example: Exemple +331122334455
+  phone_example: Exemple +33 1 22 33 44 55
   login_phone_info: Partager ton numéro de téléphone avec les autres foodsharer peut
     être plus pratique
   lastname_minLength: Ton nom doit se composer d'au moins 2 caractères.
@@ -873,6 +873,7 @@ register:
   register_button_label: S'inscrire
   title: Inscription
   topbar: Rejoins-nous
+  landline_example: Exemple +33 1 22 33 44 55
 login:
   pwreset:
     mailSent: Très bien, un lien t'a été envoyé par courriel pour modifier ton mot
