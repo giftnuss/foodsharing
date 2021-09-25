@@ -325,6 +325,16 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
+	public function getOrgaTeamId(): array
+	{
+		return $this->db->fetchAllByCriteria('fs_foodsaver', [
+			'id'
+		], [
+			'orgateam' => 1,
+			'rolle' => ROLE::ORGA
+		]);
+	}
+
 	public function getFsMap(int $regionId): array
 	{
 		return $this->db->fetchAll('
