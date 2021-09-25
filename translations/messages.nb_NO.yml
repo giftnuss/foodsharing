@@ -420,8 +420,19 @@ bcard:
 pass:
   nav:
     options: Alternativer
+    title: Start
+    deselect: Ikke marker noe
+    select: Marker alle
   name: Navn
   photo: Bilde
+  verify:
+    failed: Et problem oppstod
+    confirm: Sikker?
+  claim: Del mat istedenfor å kaste den.
+  hint: Notater
+  verified: Bekreftet?
+  date: Sist opprettet
+  none: '- ikke opprettet enda -'
 button:
   create: Skape
   answer: Svare
@@ -431,8 +442,24 @@ button:
   edit: Redigere
   new: Ny
   upload: Laste opp
+  clear_filter: Tøm filter
+  apply: Bruk
+  yes_i_am_sure: Ja, jeg er sikker
+  permadelete: Slett for godt
+  rotate_right: roter med klokken
+  attach_image: Legg ved bilde
+  change_picture: Endre bilde
+  next: Neste
+  save: Lagre
 upload:
   preview_image: Forhåndsvisning
+  crop_dialog_title: Beskjær bilde
+  new_file: Last opp ny data
+  choose_file: Last opp data
+  file: Last opp fil
+  new_image: Last opp et nytt bilde
+  image: Last opp bilde
+  no_image_chosen: Ingen fil valgt enda
 picture_upload_widget:
   picture_upload: Opplasting av bilder
 image: Bilde
@@ -693,3 +720,25 @@ gender:
   d: mangfoldig
   f: Fru
   m: Mann
+lifetime: Hvor lenge skal kurven være gyldig?
+contact_type: Hvordan vil du kontaktes?
+fetchstate: Gikk alt bra?
+food_art: Hva slags mat er det?
+betrieb: Kooperativbedrift/er
+subject: Emne
+ui:
+  switch:
+    off: inaktiv
+    on: publisert
+bread:
+  backToOverview: tilbake til oversikt
+apply_type: Hvem kan melde seg inn i denne gruppen?
+public_time: Omtrentlig tid på dagen for henting
+public_info: Offentlig info for butikken
+besonderheiten: Spesialfunksjoner
+fetchercount: Antall innsamlere
+team_status: Lagstatus
+verantwortlicher: Ansvarlige medlemmer
+passcheck: Bekreft endringen med passordet ditt
+online_type: Vil hendelsen foregå frakoblet eller på nett?
+bezirk_id: Hvilken region er artikkelen relevant for?
