@@ -175,7 +175,7 @@ class MaintenanceControl extends ConsoleControl
 
 		self::info('updating orga Admin group');
 		$orga = $this->foodsaverGateway->getOrgaTeamId();
-		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::ORGA_COORDINATION_GROUP, $orga, true);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::ORGA_COORDINATION_GROUP, array_column($orga, 'id'), true);
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 	}
 
