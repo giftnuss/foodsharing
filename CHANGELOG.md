@@ -8,6 +8,10 @@
 
 ## Refactoring
 
+## Dev/Test/CI stuff
+
+- Update codeception to 4.1.22 because of a security fix !2055 @Morgy93
+
 # Release "Feige", 2021-09-24
 
 ## Features
