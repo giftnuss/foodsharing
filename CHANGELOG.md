@@ -11,6 +11,7 @@
 ## Dev/Test/CI stuff
 
 - Update codeception to 4.1.22 because of a security fix !2055 @Morgy93
+- Enable Gitlab dependency scanning !2056 @\_fridtjof_
 
 # Release "Feige", 2021-09-24
 
