@@ -1653,7 +1653,7 @@ address: Address
 message: Message
 subject: Subject
 add: add
-geb_datum: Date of birth
+geb_datum: Date of birth (YYYY-MM-DD)
 polls:
   future: Future polls
   ongoing: Ongoing polls
@@ -1989,8 +1989,8 @@ options: Options
 geschlecht: gender
 anschrift: Street and house number (automatically from the map above, correct afterwards
   if necessary)
-handy: mobile number
-telefon: Landline number
+handy: Mobile number (incl. country code, starting with +)
+telefon: Landline number (incl. country code, starting with +)
 body: message
 mailbox_name: Mailbox name
 betrieb: Cooperation company/ies
