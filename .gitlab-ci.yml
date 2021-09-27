@@ -3,6 +3,11 @@
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
 
+# to make the previous template work with kanthaus-runner, which expects these tags
+dependency_scanning:
+  tags:
+  - shared
+  - linux
 
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
