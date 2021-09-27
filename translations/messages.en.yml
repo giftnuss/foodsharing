@@ -124,7 +124,7 @@ group:
     send: Send message
     title: Contact {group}
     admins: '{count} contact persons:'
-    sent: Message sent.
+    sent: The message has been sent successfully.
     empty: Please write something first ;)
     disclaimer: "By sending a message to this workgroup\nall administrators of the\
       \ workgroup see your email address,\nwhich you have specified on your foodsharing\
@@ -205,7 +205,8 @@ settings:
       \ your account without a password.\n"
     title: Your pickup calendar
     teaser: "You can integrate your collection calendar into a calendar program of\
-      \ your choice.\nTo do this, subscribe to one of the two following calendar links.\n"
+      \ your choice.\nTo do this, subscribe to one of the two following calendar links.\n\
+      You can find further information in the wiki at\n"
     delete_token:
       message: The current link will become invalid. Do you really want to delete
         the token?
@@ -1917,7 +1918,7 @@ register:
   prev: previous
   have_read_the_legal_stuff1: I have the
   forgotten_password: Password forgotten?
-  phone_example: Example +4917912345678
+  phone_example: Example +49 179 12345678
   firstname_required: Please enter your first name.
   lastname_required: Please enter your last name.
   requiredFields: Required field
@@ -1948,6 +1949,7 @@ register:
   birthdate_hint: You can find more information in the <a href="?page=legal" target="_blank">
     privacy policy </a> in point 2d) when registering as a foodsharer or foodsaver.
   mail_hint: 'Important: pay attention to the correct spelling!'
+  landline_example: Example +49 30 123456789
 bread:
   backToOverview: back to overview
 duration: Time to answer
