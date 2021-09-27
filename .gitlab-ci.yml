@@ -1,7 +1,14 @@
+# this must come before the variables section,
+# so variables specified there can override defaults specified in the template
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+
+
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
   # https://gitlab.com/gitlab-org/gitlab-ce/issues/19971
   DOCKER_DRIVER: overlay
+
 
 .defaults: &defaults
   tags:
