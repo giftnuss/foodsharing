@@ -46,6 +46,7 @@ class MapView extends View
 								<li><a name="baskets" class="ui-corner-all baskets"><span class="fa-stack fa-lg" style="color: #72B026"><i class="fas fa-circle fa-stack-2x"></i><i class="fas fa-shopping-basket fa-stack-1x fa-inverse"></i></span><span>Essenskörbe</span></a></li>
 								' . $betriebe . '
 								<li><a name="fairteiler" class="ui-corner-all fairteiler"><span class="fa-stack fa-lg" style="color: #FFCA92"><i class="fas fa-circle fa-stack-2x"></i><i class="fas fa-recycle fa-stack-1x fa-inverse"></i></span><span>Fairteiler</span></a></li>
+								<li><a name="communities" class="ui-corner-all communities"><span class="fa-stack fa-lg" style="color: #FFCA92"><i class="fas fa-circle fa-stack-2x"></i><i class="fas fa-users fa-stack-1x fa-inverse"></i></span><span>Ortsgruppen</span></a></li>
 							</ul>
 						</div>
 					</div>

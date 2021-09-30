@@ -4,6 +4,7 @@
 
 - Set iCalendar location for exported pickup events #1139 !2072 @iron9
 
+- Display community pin for local foodsharing communities. #53 @fs_k 
 ## Changes
 - Allow admins of the working group "Redaktion" to edit blog posts #34 !2061 @alex.simm
 

@@ -47,6 +47,17 @@ class MapGateway extends BaseGateway
 		}, $markers);
 	}
 
+	public function getCommunityMarkers(): array
+	{
+		$markers = $this->db->fetchAllByCriteria('fs_region_pin', ['id', 'lat', 'lon', 'region_id'], [
+			'lat !=' => ''
+		]);
+
+		return array_map(function ($x) {
+			return MapMarker::create($x['id'], $x['lat'], $x['lon'], $x['region_id']);
+		}, $markers);
+	}
+
 	public function getStoreMarkers(array $excludedStoreTypes, array $teamStatus): array
 	{
 		$query = 'SELECT id, lat, lon FROM fs_betrieb WHERE lat != ""';

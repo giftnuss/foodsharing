@@ -48,6 +48,11 @@ const fIcon = L.AwesomeMarkers.icon({
   markerColor: 'beige',
 })
 
+const comIcon = L.AwesomeMarkers.icon({
+  icon: 'users',
+  markerColor: 'blue',
+})
+
 const map = {
   initiated: false,
   init: function () {
@@ -75,7 +80,7 @@ const map = {
       if ($('#map-control .foodsaver').length > 0) {
         items = ['betriebe']
       } else {
-        items = ['fairteiler', 'baskets']
+        items = ['fairteiler', 'baskets', 'communities']
       }
 
       if (GET('load') == undefined) {
@@ -188,16 +193,18 @@ async function loadMarker (types, loader) {
 
     markers = L.markerClusterGroup({ maxClusterRadius: 50 })
     markers.on('click', function (el) {
-      const fsid = (el.layer.options.id)
+      const id = (el.layer.options.id)
       const type = el.layer.options.type
 
       if (type === 'bk') {
-        ajreq('bubble', { app: 'basket', id: fsid })
+        ajreq('bubble', { app: 'basket', id: id })
       } else if (type === 'b') {
-        ajreq('bubble', { app: 'store', id: fsid })
+        ajreq('bubble', { app: 'store', id: id })
       } else if (type === 'f') {
         const bid = (el.layer.options.bid)
-        goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
+        goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${id}`)
+      } else if (type === 'c') {
+        ajreq('bubble', { app: 'communities', id: id })
       }
     })
 
@@ -224,16 +231,21 @@ async function loadMarker (types, loader) {
       $('#map-control li a.fairteiler').addClass('active')
       for (let i = 0; i < data.fairteiler.length; i++) {
         const a = data.fairteiler[i]
-        const marker = L.marker(new L.LatLng(a.lat, a.lon), {
-          id: a.id,
-          bid: a.regionId,
-          icon: fIcon,
-          type: 'f',
-        })
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, bid: a.regionId, icon: fIcon, type: 'f'})
 
         markers.addLayer(marker)
       }
     }
+
+    if (data.communities != undefined) {
+      $('#map-control li a.communities').addClass('active')
+      for (let i = 0; i < data.communities.length; i++) {
+        const a = data.communities[i]
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, icon: comIcon, type: 'c' })
+        markers.addLayer(marker)
+      }
+    }
+
     u_map.addLayer(markers)
   } catch (e) {
     console.error(e)
