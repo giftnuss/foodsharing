@@ -49,12 +49,12 @@ class MapGateway extends BaseGateway
 
 	public function getCommunityMarkers(): array
 	{
-		$markers = $this->db->fetchAllByCriteria('fs_region_pin', ['id', 'lat', 'lon', 'region_id'], [
+		$markers = $this->db->fetchAllByCriteria('fs_region_pin', ['region_id', 'lat', 'lon'], [
 			'lat !=' => ''
 		]);
 
 		return array_map(function ($x) {
-			return MapMarker::create($x['id'], $x['lat'], $x['lon'], $x['region_id']);
+			return MapMarker::create($x['region_id'], $x['lat'], $x['lon']);
 		}, $markers);
 	}
 
