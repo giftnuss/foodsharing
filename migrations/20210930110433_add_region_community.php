@@ -11,20 +11,12 @@ final class AddRegionCommunity extends AbstractMigration
 	{
 		$this->table('fs_region_pin', [
 			'id' => false,
-			'primary_key' => ['id'],
+			'primary_key' => ['region_id'],
 		])
-			->addColumn('id', 'integer', [
-				'null' => false,
-				'signed' => false,
-				'limit' => 10,
-				'identity' => 'enable',
-				'comment' => 'unique id of community pin'
-			])
 			->addColumn('region_id', 'integer', [
 				'null' => false,
 				'limit' => '10',
 				'signed' => false,
-				'after' => 'id',
 				'comment' => 'region id'
 			])
 			->addColumn('lat', 'string', [

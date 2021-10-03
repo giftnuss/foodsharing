@@ -793,6 +793,23 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function createCommunityPin($region_id, $extra_params = [])
+	{
+		$params = array_merge([
+			'region_id' => $region_id,
+			'lat' => $this->faker->latitude,
+			'lon' => $this->faker->longitude,
+			'desc' => $this->faker->realText(200),
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_region_pin', $params);
+
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+
 	public function createFoodbasket($user, $extra_params = [])
 	{
 		$params = array_merge([

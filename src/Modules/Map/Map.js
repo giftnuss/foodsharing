@@ -231,7 +231,7 @@ async function loadMarker (types, loader) {
       $('#map-control li a.fairteiler').addClass('active')
       for (let i = 0; i < data.fairteiler.length; i++) {
         const a = data.fairteiler[i]
-        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, bid: a.regionId, icon: fIcon, type: 'f'})
+        const marker = L.marker(new L.LatLng(a.lat, a.lon), { id: a.id, bid: a.regionId, icon: fIcon, type: 'f' })
 
         markers.addLayer(marker)
       }
