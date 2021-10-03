@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Region;
 
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -82,5 +83,29 @@ final class RegionXhr extends Control
 			'message' => $this->translator->trans('forum.quickreply.error'),
 		]);
 		exit();
+	}
+
+	public function bubble(): array
+	{
+		$region_id = $_GET['id'];
+		$pin = $this->regionGateway->getCommunityPin($region_id);
+		if (!$pin) {
+			return [
+				'status' => 1,
+				'script' => 'pulseError("' . $this->translator->trans('pin.error') . '");',
+			];
+		}
+		$region = $this->regionGateway->getRegionDetails($region_id);
+
+		$dia = new XhrDialog();
+
+		$dia->setTitle($this->translator->trans('terminology.community', ['{name}' => $region['name']]));
+		$dia->addContent($pin['desc']);
+
+		$dia->addOpt('modal', 'false');
+		$dia->addOpt('resizeable', 'false', false);
+		$dia->noOverflow();
+
+		return $dia->xhrout();
 	}
 }

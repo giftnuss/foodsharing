@@ -808,7 +808,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		return $params;
 	}
-	
+
 	public function createFoodbasket($user, $extra_params = [])
 	{
 		$params = array_merge([

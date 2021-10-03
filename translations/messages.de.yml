@@ -540,6 +540,7 @@ terminology:
   fsp: "Fairteiler"
   basket: "Essenskorb"
   baskets: "Essenskörbe"
+  community: "Ortsgruppe {name}"
   groups: "Arbeitsgruppen"
   group: "Arbeitsgruppe"
   subgroups: "Untergruppen"

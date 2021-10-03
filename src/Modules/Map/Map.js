@@ -204,7 +204,7 @@ async function loadMarker (types, loader) {
         const bid = (el.layer.options.bid)
         goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${id}`)
       } else if (type === 'c') {
-        ajreq('bubble', { app: 'communities', id: id })
+        ajreq('bubble', { app: 'bezirk', id: id })
       }
     })
 

@@ -653,4 +653,13 @@ class RegionGateway extends BaseGateway
 			'option_value' => $value,
 		]);
 	}
+
+	public function getCommunityPin(int $regionId): ?array
+	{
+		try {
+			return $this->db->fetchByCriteria('fs_region_pin', ['desc'], ['region_id' => $regionId]);
+		} catch (Exception $e) {
+			return null;
+		}
+	}
 }
