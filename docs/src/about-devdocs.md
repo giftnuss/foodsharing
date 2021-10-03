@@ -39,6 +39,8 @@ Here are some principles:
 
 The devdocs are written in [Markdown](https://docs.gitbook.com/editing-content/markdown) (md).
 
+For more info please see [Documentation](/documentation.html).
+
 ### Local setup
 
 The current devdocs available via [`localhost:3000`](http://localhost:3000) in your browser.

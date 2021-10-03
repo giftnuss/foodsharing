@@ -92,6 +92,7 @@
 - Update betaTestingIssues link !2028 @Morgy93
 - Update docs and MR template for latest beta testing guidelines !2019 @Morgy93
 - Update sentry-symfony to latest version !2042 !2047 @\_fridtjof_
+- Add docs about markdown and documentation in general
 
 # 2021-04-09 Hotfix
 - Add permission checks to REST endpoints !1944 @alex.simm
