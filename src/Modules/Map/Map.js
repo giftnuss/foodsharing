@@ -23,6 +23,8 @@ import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
 import { getMapMarkers } from '@/api/map'
+import { vueApply, vueRegister } from '@/vue'
+import CommunityBubble from './components/CommunityBubble'
 
 let u_map = null
 let markers = null
@@ -204,7 +206,9 @@ async function loadMarker (types, loader) {
         const bid = (el.layer.options.bid)
         goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${id}`)
       } else if (type === 'c') {
-        ajreq('bubble', { app: 'bezirk', id: id })
+        ajreq('bubble', { app: 'bezirk', id: id }).then(x => {
+          vueApply('#community-bubble')
+        })
       }
     })
 
@@ -292,3 +296,7 @@ $('#map-options input').on('change', function () {
 })
 
 init_bDialog()
+
+vueRegister({
+  CommunityBubble,
+})

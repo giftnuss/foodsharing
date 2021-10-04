@@ -100,7 +100,16 @@ final class RegionXhr extends Control
 		$dia = new XhrDialog();
 
 		$dia->setTitle($this->translator->trans('terminology.community', ['{name}' => $region['name']]));
-		$dia->addContent($pin['desc']);
+		$dia->addContent($this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'community-bubble',
+			'component' => 'CommunityBubble',
+			'props' => [
+				'regionId' => $region['id'],
+				'name' => $region['name'],
+				'desc' => $pin['desc']
+			],
+			'initialData' => [],
+		]));
 
 		$dia->addOpt('modal', 'false');
 		$dia->addOpt('resizeable', 'false', false);
