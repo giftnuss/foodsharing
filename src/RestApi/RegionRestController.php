@@ -217,7 +217,7 @@ class RegionRestController extends AbstractFOSRestController
 		}
 
 		$params = $paramFetcher->all();
-		$this->regionGateway->setRegionPin($regionId, $params['lat'],$params['lon'], $params['desc']);
+		$this->regionGateway->setRegionPin($regionId, $params['lat'], $params['lon'], $params['desc']);
 
 		return $this->handleView($this->view([], 200));
 	}

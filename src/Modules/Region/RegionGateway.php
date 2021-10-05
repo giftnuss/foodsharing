@@ -657,7 +657,7 @@ class RegionGateway extends BaseGateway
 	public function getRegionPin(int $regionId): ?array
 	{
 		try {
-			return $this->db->fetchByCriteria('fs_region_pin', ['desc','lat','lon'], ['region_id' => $regionId]);
+			return $this->db->fetchByCriteria('fs_region_pin', ['desc', 'lat', 'lon'], ['region_id' => $regionId]);
 		} catch (Exception $e) {
 			return null;
 		}
