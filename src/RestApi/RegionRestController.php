@@ -35,6 +35,11 @@ class RegionRestController extends AbstractFOSRestController
 	private SettingsGateway $settingsGateway;
 	private GroupFunctionGateway $groupFunctionGateway;
 
+	// literal constants
+	private const LAT = 'lat';
+	private const LON = 'lon';
+	private const DESC = 'desc';
+
 	public function __construct(
 		SettingsGateway $settingsGateway,
 		BellGateway $bellGateway,
@@ -194,6 +199,12 @@ class RegionRestController extends AbstractFOSRestController
 		return $this->handleView($this->view([], 200));
 	}
 
+	private function isValidNumber($value, float $lowerBound, float $upperBound): bool
+	{
+		return !is_null($value) && !is_nan($value)
+			&& ($lowerBound <= $value) && ($upperBound >= $value);
+	}
+
 	/**
 	 * Sets the pin for region.
 	 *
@@ -212,12 +223,23 @@ class RegionRestController extends AbstractFOSRestController
 		if (!$this->session->may()) {
 			throw new HttpException(401);
 		}
+
+		if ($regionId < 0 ) {
+			throw new HttpException(403);
+		}
+
 		if (!$this->regionPermissions->maySetRegionPin($regionId)) {
 			throw new HttpException(403);
 		}
 
-		$params = $paramFetcher->all();
-		$this->regionGateway->setRegionPin($regionId, $params['lat'], $params['lon'], $params['desc']);
+		$lat = $paramFetcher->get(self::LAT);
+		$lon = $paramFetcher->get(self::LON);
+		$desc = $paramFetcher->get(self::DESC);
+		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
+			throw new HttpException(400, 'Invalid Latitude or Longitude');
+		}
+
+		$this->regionGateway->setRegionPin($regionId, $lat, $lon, $desc);
 
 		return $this->handleView($this->view([], 200));
 	}
