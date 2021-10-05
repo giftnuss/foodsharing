@@ -7,20 +7,26 @@
         </h4>
       </div>
       <div class="rounded pa-3">
-        <b-form-input
-          id="inlat"
+        <b-form-group
+          id="input-group-lat"
+          label="Längengrad"
+          label-for="input_lat"
         >
-          {{ $i18n('regionPin.lat') }}
-        </b-form-input>
+          <b-form-input
+            id="input_lat"
+            v-model="inlat"
+            required
+          />
+        </b-form-group>
+
         <b-form-input
-          id="inlon"
-          :state="lon ? false : null"
-        >
-          {{ $i18n('regionPin.lon') }}
-        </b-form-input>
+          id="input_lon"
+          v-model="inlon"
+        />
+        {{ $i18n('regionPin.desc') }}
         <b-form-textarea
-          id="tadesc"
-          v-model="text"
+          id="text_description"
+          v-model="tadesc"
           placeholder="Hier eine Beschreibung des Ortsgruppe angeben. Diese wird auf der Karte angezeigt..."
           rows="6"
           max-rows="9"
@@ -30,7 +36,7 @@
           class="text-right mt-2"
           variant="secondary"
           size="sm"
-          @click="trySendOptions"
+          @click="trySendPin"
         >
           {{ $i18n('regionPin.save') }}
         </b-button>
@@ -73,11 +79,11 @@ export default {
     }
   },
   methods: {
-    async trySendOptions () {
+    async trySendPin () {
       showLoader()
       try {
-        await setRegionPin(this.regionId, this.lat, this.lon, this.desc)
-        pulseInfo(i18n('regionOptions.success'))
+        await setRegionPin(this.regionId, this.inlat, this.inlon, this.tadesc)
+        pulseInfo(i18n('regionPin.success'))
       } catch (err) {
         console.error(err)
         pulseError(i18n('error_unexpected'))
