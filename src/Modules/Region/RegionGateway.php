@@ -654,12 +654,22 @@ class RegionGateway extends BaseGateway
 		]);
 	}
 
-	public function getCommunityPin(int $regionId): ?array
+	public function getRegionPin(int $regionId): ?array
 	{
 		try {
-			return $this->db->fetchByCriteria('fs_region_pin', ['desc'], ['region_id' => $regionId]);
+			return $this->db->fetchByCriteria('fs_region_pin', ['desc','lat','lon'], ['region_id' => $regionId]);
 		} catch (Exception $e) {
 			return null;
 		}
+	}
+
+	public function setRegionPin(int $regionId, string $lat, string $lon, string $desc): void
+	{
+		$this->db->insertOrUpdate('fs_region_options', [
+			'region_id' => $regionId,
+			'lat' => $lat,
+			'lon' => $lon,
+			'desc' => $desc,
+		]);
 	}
 }

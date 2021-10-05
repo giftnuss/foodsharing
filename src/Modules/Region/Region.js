@@ -18,6 +18,7 @@ import AgeBandList from './components/AgeBandList'
 import ThreadList from './components/ThreadList'
 import PollList from './components/PollList'
 import Options from './components/Options'
+import Pin from './components/Pin'
 import { leaveRegion } from '@/api/regions'
 // Wallpost
 import '../WallPost/WallPost.css'
@@ -93,5 +94,10 @@ $(document).ready(() => {
       Options,
     })
     vueApply('#vue-options')
+  } else if (GET('sub') === 'pin') {
+    vueRegister({
+      Pin,
+    })
+    vueApply('#vue-pin')
   }
 })

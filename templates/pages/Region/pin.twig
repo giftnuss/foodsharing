@@ -1,0 +1,15 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-pin',
+        component: 'pin',
+        props: {
+            regionId : region.id,
+            regionName : region.name,
+            lat : lat,
+            lon : lon,
+            desc : desc
+        }
+    } %}
+{% endblock %}

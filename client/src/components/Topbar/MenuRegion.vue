@@ -129,6 +129,14 @@
           <i class="fas fa-tools" />{{ $i18n('menu.entry.options') }}
         </a>
         <a
+          v-if="region.maySetRegionPin"
+          :href="$url('pin', region.id)"
+          role="menuitem"
+          class="dropdown-item sub"
+        >
+          <i class="fas fa-users" />{{ $i18n('menu.entry.pin') }}
+        </a>
+        <a
           v-if="region.mayAccessReportGroupReports"
           :href="$url('reports', region.id)"
           role="menuitem"

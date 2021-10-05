@@ -560,6 +560,7 @@ terminology:
   polls: "Abstimmungen"
   buddies: "Bekannte"
   options: "Optionen"
+  pin: "Ortsgruppenbeschreibung"
 
 statistics:
   kg_food_saved: "%count% kg Lebensmittel gerettet"
@@ -1242,6 +1243,14 @@ regionOptions:
   enableReportButton: "Technische Unterstützung für Meldungen durch einen Meldungsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren."
   enableMediationButton: "Technische Unterstützung für Mediationen durch einen Medationsknopf auf den Profilen der Stammfoodsaver des Bezirkes aktivieren."
 
+regionPin:
+  header_page: "Öffentliche Ortsgruppenbeschreibung für {bezirk}"
+  lat: "Längengrad"
+  lon: "Breitengrad"
+  desc: "Beschreibung"
+  success: "Erfolgreich gespeichert"
+  save: "speichern"
+
 foodsaver:
   bread: "Alle Foodsaver"
   title: "Foodsaver"
@@ -1847,6 +1856,7 @@ menu:
     friendcircle: "Freundeskreis"
     language: "Sprache wählen"
     options: "Optionen"
+    pin: "Ortsgruppenbeschreibung"
 
 footer:
   call_to_action: "Mitmachen"

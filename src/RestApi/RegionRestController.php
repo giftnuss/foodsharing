@@ -195,6 +195,39 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Sets the pin for region.
+	 *
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="which region to set pin for")
+	 * @OA\Response(response="200", description="Success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Insufficient permissions")
+	 * @Rest\Post("region/{regionId}/pin", requirements={"regionId" = "\d+"})
+	 * @Rest\RequestParam(name="lat")
+	 * @Rest\RequestParam(name="lon")
+	 * @Rest\RequestParam(name="desc")
+	 */
+	public function setRegionPin(ParamFetcher $paramFetcher, int $regionId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+		if (!$this->regionPermissions->maySetRegionPin($regionId)) {
+			throw new HttpException(403);
+		}
+
+		$params = $paramFetcher->all();
+		/*		if (isset($params['lat'])) {
+					$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_REPORT_BUTTON, strval(intval($params['enableReportButton'])));
+				}
+				if (isset($params['lon'])) {
+					$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_MEDIATION_BUTTON, strval(intval($params['enableMediationButton'])));
+				}
+		*/
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Returns a list of all subregions including working groups of a region. The result is empty if the
 	 * region does not exist.
 	 *

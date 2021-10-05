@@ -88,7 +88,7 @@ final class RegionXhr extends Control
 	public function bubble(): array
 	{
 		$region_id = $_GET['id'];
-		$pin = $this->regionGateway->getCommunityPin($region_id);
+		$pin = $this->regionGateway->getRegionPin($region_id);
 		if (!$pin) {
 			return [
 				'status' => 1,

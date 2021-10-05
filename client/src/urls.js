@@ -62,6 +62,7 @@ const urls = {
   partner: () => '/partner',
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
   passwordReset: () => '/?page=login&sub=passwordReset',
+  pin: (regionId) => `/?page=bezirk&bid=${regionId}&sub=pin`,
   poll: (pollId) => `/?page=poll&id=${pollId}`,
   pollEdit: (pollId) => `/?page=poll&id=${pollId}&sub=edit`,
   pollNew: (regionId) => `/?page=poll&bid=${regionId}&sub=new`,

@@ -234,6 +234,7 @@ final class PageHelper
 				$group['mayAccessReportGroupReports'] = $this->reportPermissions->mayAccessReportGroupReports($groupId);
 				$group['mayAccessArbitrationGroupReports'] = $this->reportPermissions->mayAccessArbitrationReports($groupId);
 				$group['maySetRegionOptions'] = $this->regionPermissions->maySetRegionOptions($groupId);
+				$group['maySetRegionPin'] = $this->regionPermissions->maySetRegionPin($groupId);
 				$regions[] = $group;
 			} else {
 				$group['isAdmin'] = $this->workGroupPermissions->mayEdit($group);

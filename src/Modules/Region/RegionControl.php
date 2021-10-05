@@ -118,6 +118,10 @@ final class RegionControl extends Control
 			$menu['options'] = ['name' => 'terminology.options', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=options'];
 		}
 
+		if (!$isWorkGroup && $this->regionPermissions->maySetRegionPin($regionId)) {
+			$menu['options'] = ['name' => 'terminology.pin', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=pin'];
+		}
+
 		if ($isWorkGroup) {
 			$menu['wall'] = ['name' => 'menu.entry.wall', 'href' => '?page=bezirk&bid=' . $regionId . '&sub=wall'];
 			if ($region['has_children'] === 1) {
@@ -235,6 +239,7 @@ final class RegionControl extends Control
 			['key' => 'arbitration', 'position' => 17],
 			['key' => 'subgroups', 'position' => 18],
 			['key' => 'options', 'position' => 19],
+			['key' => 'pin', 'position' => 20],
 		];
 
 		$orderedMenu = [];
@@ -317,6 +322,13 @@ final class RegionControl extends Control
 					$this->routeHelper->go($this->forumTransactions->url($region_id, false));
 				}
 				$this->options($request, $response, $region);
+				break;
+			case 'pin':
+				if (!$this->regionPermissions->maySetRegionPin($region_id)) {
+					$this->flashMessageHelper->info($this->translator->trans('region.restricted'));
+					$this->routeHelper->go($this->forumTransactions->url($region_id, false));
+				}
+				$this->pin($request, $response, $region);
 				break;
 			default:
 				if ($this->isWorkGroup($region)) {
@@ -475,5 +487,17 @@ final class RegionControl extends Control
 		$viewdata['isReportButtonEnabled'] = empty($isReportButtonEnabled) ? false : true;
 		$viewdata['isMediationButtonEnabled'] = empty($isMediationButtonEnabled) ? false : true;
 		$response->setContent($this->render('pages/Region/options.twig', $viewdata));
+	}
+
+	private function pin(Request $request, Response $response, array $region): void
+	{
+		$this->pageHelper->addBread($this->translator->trans('terminology.pin'), '/?page=bezirk&bid=' . $region['id'] . '&sub=pin');
+		$this->pageHelper->addTitle($this->translator->trans('terminology.pin'));
+		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
+		$result = $this->gateway->getRegionPin($region['id']);
+		$viewdata['lat'] = $result['lat'];
+		$viewdata['lon'] = $result['lon'];
+		$viewdata['desc'] = $result['desc'];
+		$response->setContent($this->render('pages/Region/pin.twig', $viewdata));
 	}
 }
