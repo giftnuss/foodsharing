@@ -665,7 +665,7 @@ class RegionGateway extends BaseGateway
 
 	public function setRegionPin(int $regionId, string $lat, string $lon, string $desc): void
 	{
-		$this->db->insertOrUpdate('fs_region_options', [
+		$this->db->insertOrUpdate('fs_region_pin', [
 			'region_id' => $regionId,
 			'lat' => $lat,
 			'lon' => $lon,

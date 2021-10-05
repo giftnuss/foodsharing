@@ -217,13 +217,8 @@ class RegionRestController extends AbstractFOSRestController
 		}
 
 		$params = $paramFetcher->all();
-		/*		if (isset($params['lat'])) {
-					$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_REPORT_BUTTON, strval(intval($params['enableReportButton'])));
-				}
-				if (isset($params['lon'])) {
-					$this->regionGateway->setRegionOption($regionId, RegionOptionType::ENABLE_MEDIATION_BUTTON, strval(intval($params['enableMediationButton'])));
-				}
-		*/
+		$this->regionGateway->setRegionPin($regionId, $params['lat'],$params['lon'], $params['desc']);
+
 		return $this->handleView($this->view([], 200));
 	}
 

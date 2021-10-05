@@ -6,41 +6,59 @@
           {{ $i18n('regionPin.header_page', { bezirk: regionName }) }}
         </h4>
       </div>
-      <div class="rounded pa-3">
-        <b-form-group
-          id="input-group-lat"
-          label="Längengrad"
-          label-for="input_lat"
-        >
-          <b-form-input
-            id="input_lat"
-            v-model="inlat"
-            required
-          />
-        </b-form-group>
+      <b-form
+        :class="{'card-body': true}"
+      >
+        <div class="rounded pa-3">
+          <b-form-group
+            id="input-group-lat"
+            :label="$i18n('regionPin.lat')"
+            label-for="input_lat"
+          >
+            <b-form-input
+              id="input_lat"
+              v-model="inlat"
+              required
+            />
+          </b-form-group>
 
-        <b-form-input
-          id="input_lon"
-          v-model="inlon"
-        />
-        {{ $i18n('regionPin.desc') }}
-        <b-form-textarea
-          id="text_description"
-          v-model="tadesc"
-          placeholder="Hier eine Beschreibung des Ortsgruppe angeben. Diese wird auf der Karte angezeigt..."
-          rows="6"
-          max-rows="9"
-        />
+          <b-form-group
+            id="input-group-lon"
+            :label="$i18n('regionPin.lon')"
+            label-for="input_lon"
+          >
+            <b-form-input
+              id="input_lon"
+              v-model="inlon"
+            />
+          </b-form-group>
 
-        <b-button
-          class="text-right mt-2"
-          variant="secondary"
-          size="sm"
-          @click="trySendPin"
-        >
-          {{ $i18n('regionPin.save') }}
-        </b-button>
-      </div>
+          <b-form-group
+            id="input-group-lon"
+            :label="$i18n('regionPin.desc')"
+            label-for="text_description"
+          >
+            <div
+              class="mb-2 ml-2"
+              v-html="$i18n('forum.markdown_description')"
+            />
+            <b-form-textarea
+              id="text_description"
+              v-model="tadesc"
+              placeholder="Hier eine Beschreibung des Ortsgruppe angeben. Diese wird auf der Karte angezeigt..."
+              rows="6"
+              max-rows="9"
+            />
+          </b-form-group>
+
+          <b-button
+            class="text-right mt-2"
+            @click="trySendPin"
+          >
+            {{ $i18n('regionPin.save') }}
+          </b-button>
+        </div>
+      </b-form>
     </div>
   </div>
 </template>
