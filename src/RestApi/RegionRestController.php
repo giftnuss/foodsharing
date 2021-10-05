@@ -224,7 +224,7 @@ class RegionRestController extends AbstractFOSRestController
 			throw new HttpException(401);
 		}
 
-		if ($regionId < 0 ) {
+		if ($regionId < 0) {
 			throw new HttpException(403);
 		}
 
