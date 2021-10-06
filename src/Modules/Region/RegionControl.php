@@ -495,9 +495,9 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('terminology.pin'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$result = $this->gateway->getRegionPin($region['id']);
-		$viewdata['lat'] = $result['lat'];
-		$viewdata['lon'] = $result['lon'];
-		$viewdata['desc'] = $result['desc'];
+		$viewdata['lat'] = $result['lat'] ?? null;
+		$viewdata['lon'] = $result['lon'] ?? null;
+		$viewdata['desc'] = $result['desc'] ?? null;
 		$response->setContent($this->render('pages/Region/pin.twig', $viewdata));
 	}
 }
