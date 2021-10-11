@@ -33,7 +33,7 @@ final class AddRegionCommunity extends AbstractMigration
 			])
 			->addColumn('desc', 'string', [
 				'null' => false,
-				'limit' => MysqlAdapter::TEXT_SMALL,
+				'limit' => MysqlAdapter::TEXT_REGULAR,
 				'after' => 'lat',
 				'comment' => 'description'
 			])

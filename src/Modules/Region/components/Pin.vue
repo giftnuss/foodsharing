@@ -46,8 +46,7 @@
               id="text_description"
               v-model="tadesc"
               placeholder="Hier eine Beschreibung des Ortsgruppe angeben. Diese wird auf der Karte angezeigt..."
-              rows="6"
-              max-rows="9"
+              rows="12"
             />
           </b-form-group>
 

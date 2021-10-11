@@ -111,7 +111,7 @@ final class RegionXhr extends Control
 			'initialData' => [],
 		]));
 
-		$dia->addOpt('modal', 'false');
+		$dia->addOpt('modal', 'false', false);
 		$dia->addOpt('resizeable', 'false', false);
 		$dia->noOverflow();
 
