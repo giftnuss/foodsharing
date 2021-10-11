@@ -6,17 +6,20 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Group\GroupFunctionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 final class RegionPermissions
 {
 	private RegionGateway $regionGateway;
 	private Session $session;
+	private GroupFunctionGateway $groupFunctionGateway;
 
-	public function __construct(RegionGateway $regionGateway, Session $session)
+	public function __construct(RegionGateway $regionGateway, Session $session, GroupFunctionGateway $groupFunctionGateway)
 	{
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+		$this->groupFunctionGateway = $groupFunctionGateway;
 	}
 
 	public function mayJoinRegion(int $regionId): bool
@@ -71,6 +74,14 @@ final class RegionPermissions
 	{
 		if ($this->session->may('orga')) {
 			return true;
+		}
+
+		if ($this->groupFunctionGateway->existRegionFunctionGroup($regionId, WorkgroupFunction::PR)) {
+			if ($this->groupFunctionGateway->isRegionFunctionGroupAdmin($regionId, WorkgroupFunction::PR, $this->session->id())) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		return $this->session->isAmbassadorForRegion([$regionId], false, false);
