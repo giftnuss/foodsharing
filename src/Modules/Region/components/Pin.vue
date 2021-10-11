@@ -7,7 +7,7 @@
         </h4>
       </div>
       <b-form
-        :class="{'card-body': true}"
+        :class="{disabledLoading: isLoading,'card-body': true}"
       >
         <div class="rounded pa-3">
           <b-form-group
@@ -65,7 +65,7 @@
 <script>
 import { BFormInput, BButton, BFormTextarea } from 'bootstrap-vue'
 import { setRegionPin } from '@/api/regions'
-import { hideLoader, pulseError, pulseInfo, showLoader } from '@/script'
+import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
 
 export default {
@@ -91,6 +91,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       inlat: this.lat,
       inlon: this.lon,
       tadesc: this.desc,
@@ -98,7 +99,7 @@ export default {
   },
   methods: {
     async trySendPin () {
-      showLoader()
+      this.isLoading = true
       try {
         await setRegionPin(this.regionId, this.inlat, this.inlon, this.tadesc)
         pulseInfo(i18n('regionPin.success'))
@@ -106,7 +107,7 @@ export default {
         console.error(err)
         pulseError(i18n('error_unexpected'))
       }
-      hideLoader()
+      this.isLoading = false
     },
   },
 }

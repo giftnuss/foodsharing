@@ -36,7 +36,9 @@ export function vueApply (selector, disableElNotFoundException = false) {
   }
   elements.forEach((el, index) => {
     const componentName = el.getAttribute('data-vue-component')
-    const props = JSON.parse(el.getAttribute('data-vue-props')) || {}
+    let propsStr = el.getAttribute('data-vue-props')
+    propsStr = propsStr.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t')
+    const props = JSON.parse(propsStr) || {}
     const initialData = JSON.parse(el.getAttribute('vue-initial-data')) || {}
 
     if (!componentName) {
