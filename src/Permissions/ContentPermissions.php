@@ -95,15 +95,15 @@ final class ContentPermissions
 			return true;
 		}
 		if ($this->session->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)
-			&& in_array($id, $this->QUIZ_CONTENT_IDS['id'])) {
+			&& in_array($id, $this->QUIZ_CONTENT_IDS)) {
 			return true;
 		}
 		if ($this->session->isAdminFor(RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP)
-			&& in_array($id, $this->PR_PARTNER_AND_TEAM_CONTENT_IDS['id'])) {
+			&& in_array($id, $this->PR_PARTNER_AND_TEAM_CONTENT_IDS)) {
 			return true;
 		}
 		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)
-			&& in_array($id, $this->START_CONTENT_IDS['id'])) {
+			&& in_array($id, $this->START_CONTENT_IDS)) {
 			return true;
 		}
 
