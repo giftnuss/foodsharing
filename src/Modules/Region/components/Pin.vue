@@ -45,7 +45,7 @@
             <b-form-textarea
               id="text_description"
               v-model="tadesc"
-              placeholder="Hier eine Beschreibung des Ortsgruppe angeben. Diese wird auf der Karte angezeigt..."
+              :placeholder="$i18n('regionPin.text_desc')"
               rows="12"
             />
           </b-form-group>

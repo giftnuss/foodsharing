@@ -1250,6 +1250,7 @@ regionPin:
   desc: "Beschreibung"
   success: "Erfolgreich gespeichert"
   save: "speichern"
+  text_desc: "Hier bitte eine Beschreibung des Ortsgruppe bzw. Kontaktmöglichkeit angeben. Diese wird in dem Popup des Pins von der Karte angezeigt..."
 
 foodsaver:
   bread: "Alle Foodsaver"
