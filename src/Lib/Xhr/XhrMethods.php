@@ -539,6 +539,7 @@ class XhrMethods
 			$this->storeGateway->setStoreTeamStatus($storeId, $teamStatus);
 		}
 		$out = ['status' => 0];
+
 		return json_encode($out);
 	}
 
