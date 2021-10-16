@@ -538,6 +538,8 @@ class XhrMethods
 		if ($this->storePermissions->mayEditStore($storeId) && TeamStatus::isValidStatus($teamStatus)) {
 			$this->storeGateway->setStoreTeamStatus($storeId, $teamStatus);
 		}
+		$out = ['status' => 0];
+		return json_encode($out);
 	}
 
 	public function xhr_getBezirk($data)

@@ -7,6 +7,7 @@
 ## Bugfixes
 - Fixed the list of responsible store members in REST responses !2033 #1124 @alex.simm
 - Fixed for content edit !2062 @fs_k
+- Fix for store change @fs_k
 
 ## Refactoring
 
