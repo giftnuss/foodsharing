@@ -637,7 +637,7 @@ class Database
 		} catch (\PDOException $exception) {
 			throw new \Exception("Query '$query' can't be prepared.", $exception->getCode());
 		}
-		if ($statement === false) {
+		if (empty($statement)) {
 			// PDO did not throw an exception, but returned false.
 			// For consistency, we throw one ourselves.
 			$errorInfo = $this->pdo->errorInfo();
