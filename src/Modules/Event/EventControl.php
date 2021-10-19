@@ -29,6 +29,10 @@ class EventControl extends Control
 		$this->eventPermissions = $eventPermissions;
 
 		parent::__construct();
+
+		if (!$this->session->may()) {
+			$this->routeHelper->goLogin();
+		}
 	}
 
 	public function index()
