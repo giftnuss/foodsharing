@@ -10,7 +10,7 @@
 - Fixed the list of responsible store members in REST responses !2033 #1124 @alex.simm
 - Fixed for content edit !2062 @fs_k
 - Fix for store change !2065 @fs_k
-- Fix for future timeslot visibility to use Europe/Berlin timezone @fs_k 
+- Fix for future timeslot visibility to use Europe/Berlin timezone !2070 @fs_k 
 
 ## Refactoring
 
