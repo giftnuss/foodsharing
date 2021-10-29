@@ -26,9 +26,10 @@ Closes #____ (e.g. #230)
 - [ ] asked someone for a code review
 - [ ] set a "for:" label to indicate who will be affected by this change
 - [ ] used "state:" labels to track this MR's state until it was beta tested
+- [ ] added to the next milestone (see https://gitlab.com/foodsharing-dev/foodsharing/-/milestones, unless it has a "for:Dev" label)
 - [ ] added an entry to `CHANGELOG.md`
 - [ ] added a short text that can be used in the release notes
-- [ ] Once your MR has been merged, you are responsible to create a testing issue in the Beta Testing forum: <https://foodsharing.de/?page=bezirk&bid=734&sub=forum>
+- [ ] Once your MR has been merged, you are responsible to create a testing issue in the Beta Testing forum: <https://foodsharing.de/?page=bezirk&bid=734&sub=forum>. Please change the MRs label to "state:Beta testing".
   - Consider writing a detailed description **in German**.
   - Describe in a few sentences, what should be tested from a **user perspective**.
   - Also mention different settings (e.g. **different browsers**, roles, ...) how this change can be tested.
