@@ -338,8 +338,8 @@ geschlecht: Genere
 anschrift: Via e numero civico (automaticamente dalla mappa sopra, correggere successivamente
   se necessario)
 last_login: Ultimo accesso
-handy: Numero di cellulare
-telefon: Numero di rete fissa
+handy: Numero di cellulare (incluso il prefisso internazionale, inizia con +)
+telefon: Numero di rete fissa (incluso il prefisso internazionale, inizia con +)
 attachement: Allegato
 email: Indirizzo e-mail
 plz: Codice postale (automaticamente dalla mappa sopra)
@@ -352,7 +352,7 @@ subject: Oggetto
 nachname: Cognome
 add: aggiungi
 name: Nome
-geb_datum: Data di nascita
+geb_datum: Data di nascita (AAAA-MM-GG)
 validate:
   required: '{it} non può essere vuoto'
 notice: Nota!
@@ -468,7 +468,7 @@ register:
   have_read_the_legal_stuff1: io ho la
   forgotten_password: Password dimenticata?
   phone_not_valid: Il numero di telefono inserito non è valido.
-  phone_example: Esempio +3917912345678
+  phone_example: Esempio +49 179 12345678
   login_phone_info: Può essere utile condividere il tuo numero di telefono con altre
     persone di foodsharing
   lastname_minLength: Il cognome deve essere composto da almeno 2 lettere.
@@ -497,6 +497,7 @@ register:
   register_button_label: Registrati
   title: Registrazione
   topbar: Prendi parte
+  landline_example: Esempio +49 30 12345678
 store_status_impact_explanation: "Dopo ogni contatto aziendale (<a href=\"https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste\"\
   \ target=\"_blank\"> Wiki: Kooperationsaufbau - Checkliste</a>) lo stato (<a href=\"\
   https ://wiki.foodsharing.de/Betrieb\"target=\"_blank\">Wiki: Betrieb</a>) dell'azienda,\
@@ -2222,6 +2223,7 @@ releases:
   "2020-10": Release 'Cranberry' (ottobre 2020)
   "2020-12": Release 'Drachenfrucht' (dicembre 2020)
   "2021-03": Release "Erdbeere" 🍓 (marzo 2021)
+  "2021-09": Versione "fig" 🥧 (settembre 2021)
 base:
   jsrequired: Sfortunatamente, qui non funziona nulla senza JavaScript.
   slogan: Condividere il cibo invece di buttarlo via - foodsharing Germania

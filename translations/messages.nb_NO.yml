@@ -421,6 +421,8 @@ group:
   contact:
     send: Sende melding
     sent: Meldingen ble sendt.
+    title: Kontakt {group}
+    empty: Skriv noe først ;)
   applications_for: Søknader for %name%
   applications: Applikasjoner
   photo: Bilde
@@ -440,7 +442,7 @@ bcard:
 pass:
   nav:
     options: Alternativer
-    title: Start
+    title: La oss gå!
     deselect: Ikke marker noe
     select: Marker alle
   name: Navn
@@ -448,11 +450,13 @@ pass:
   verify:
     failed: Et problem oppstod
     confirm: Sikker?
-  claim: Del mat istedenfor å kaste den.
+  claim: Del mat istedenfor å kaste den!
   hint: Notater
   verified: Bekreftet?
   date: Sist opprettet
   none: '- ikke opprettet enda -'
+  button:
+    verify: Bekrefte
 button:
   create: Skape
   answer: Svare

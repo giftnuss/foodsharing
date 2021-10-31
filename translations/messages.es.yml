@@ -40,7 +40,7 @@ compose_body: Mensaje
 pass1: Tu nueva contraseña deseada
 infotype: Notificación
 dateend: Fecha de fin
-online_type: Este evento tendrá lugar fuera de línea o en línea?
+online_type: ¿Ocurre el evento fuera de línea o en línea?
 opt: Opciones
 dashboard:
   checkAddress: Por favor, comprueba tu dirección! Las coordenadas no se han podido
@@ -70,3 +70,22 @@ month:
     "6": junio
 newmail: Introduzca aquí su nueva dirección de correo electrónico
 mailbox_id: Correo electrónico del remitente
+leader: Administrador de grupos
+fax: Número de fax
+verantwortlicher: Miembros responsables
+betrieb_kategorie_id: Categoría
+betrieb_status_id: Estado
+begin: Inicio de la cooperación
+first_post: Primer anuncio
+member: Miembros
+apply_type: ¿Quién puede registrarse en este grupo?
+weight: Peso estimado
+food_type: ¿Qué tipo de alimentos están incluidos?
+food_art: ¿Qué se aplica a la comida?
+bezirk_id: ¿Para qué región es el artículo relevante?
+orgateam: Organización nacional
+pass2: Confirmar contraseña
+sleep_status: Tu estado actual
+homepage: Su página web
+fs_id: foodsharing-ID
+about_me_public: Resumen público

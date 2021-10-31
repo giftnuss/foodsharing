@@ -1,1 +1,2 @@
-{}
+dashboard:
+  greeting: مرحبًا {name}! سعيد بوجودك هناك.

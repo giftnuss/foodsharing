@@ -78,6 +78,8 @@ group:
       d'information
     tooltip_function_region387: Les admins de ce groupe de travail peuvent retirer
       des entrées dans la liste de diffusion
+    tooltip_function_region327: Les administrateur·rice·s de ce groupe de travail
+      peuvent modifier les entrées du blog
   function:
     tooltip_function_10: Les admins de ce groupe peuvent accepter des contributions
       dans les forums déjà modérés.
