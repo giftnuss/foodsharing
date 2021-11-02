@@ -16,7 +16,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/docker-compose | Docker-compose with the correct options set for the environment |
 | ./scripts/dropdb       | Drop the database |
 | ./scripts/fix          | runs all fixing - code stuff (php) |
-| ./scripts/fix-codestyle-local | fix php code style, [see php Code style](setting-things-up.md) |
+| ./scripts/fix-codestyle-local | fix php code style, [see php Code style](setting-things-up.md#php-code-style) |
 | ./scripts/generate-revision.sh | |
 | ./scripts/inc.sh       | defines functions needed in other scripts |
 | ./scripts/initdb       | Create the database and run migrations |
