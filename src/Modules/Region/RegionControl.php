@@ -498,6 +498,7 @@ final class RegionControl extends Control
 		$viewdata['lat'] = $result['lat'] ?? null;
 		$viewdata['lon'] = $result['lon'] ?? null;
 		$viewdata['desc'] = $result['desc'] ?? null;
+		$viewdata['status'] = $result['status'] ?? null;
 		$response->setContent($this->render('pages/Region/pin.twig', $viewdata));
 	}
 }

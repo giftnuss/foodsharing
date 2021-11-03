@@ -37,6 +37,14 @@ final class AddRegionCommunity extends AbstractMigration
 				'after' => 'lat',
 				'comment' => 'description'
 			])
+			->addColumn('status', 'string', [
+				'null' => false,
+				'default' => 0,
+				'limit' => MysqlAdapter::INT_TINY,
+				'signed' => false,
+				'after' => 'desc',
+				'comment' => 'state of the pin'
+			])
 			->addForeignKey('region_id', 'fs_bezirk', 'id', [
 				'delete' => 'CASCADE',
 				'update' => 'CASCADE',

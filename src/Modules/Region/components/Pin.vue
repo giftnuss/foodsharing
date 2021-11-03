@@ -10,6 +10,14 @@
         :class="{disabledLoading: isLoading,'card-body': true}"
       >
         <div class="rounded pa-3">
+          <b-form-checkbox
+            id="pin-active-check"
+            v-model="isActive"
+            class="ml-1 mt-2 mb-3"
+          >
+            {{ $i18n('regionPin.pin_visible') }}
+          </b-form-checkbox>
+
           <b-form-group
             id="input-group-lat"
             :label="$i18n('regionPin.lat')"
@@ -67,6 +75,9 @@ import { setRegionPin } from '@/api/regions'
 import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
 
+const STATUS_INACTIVE = 0
+const STATUS_ACTIVE = 1
+
 export default {
   components: { BFormInput, BButton, BFormTextarea },
   props: {
@@ -82,6 +93,7 @@ export default {
       type: String,
       default: '',
     },
+    pinStatus: { type: Number, default: STATUS_INACTIVE },
     regionId: { type: Number, required: true },
     regionName: {
       type: String,
@@ -94,13 +106,15 @@ export default {
       inlat: this.lat,
       inlon: this.lon,
       tadesc: this.desc,
+      isActive: this.pinStatus === STATUS_ACTIVE,
     }
   },
   methods: {
     async trySendPin () {
       this.isLoading = true
+      const status = this.isActive ? STATUS_ACTIVE : STATUS_INACTIVE
       try {
-        await setRegionPin(this.regionId, this.inlat, this.inlon, this.tadesc)
+        await setRegionPin(this.regionId, this.inlat, this.inlon, this.tadesc, status)
         pulseInfo(i18n('regionPin.success'))
       } catch (err) {
         console.error(err)

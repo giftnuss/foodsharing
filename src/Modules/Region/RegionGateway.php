@@ -657,19 +657,25 @@ class RegionGateway extends BaseGateway
 	public function getRegionPin(int $regionId): ?array
 	{
 		try {
-			return $this->db->fetchByCriteria('fs_region_pin', ['desc', 'lat', 'lon'], ['region_id' => $regionId]);
+			return $this->db->fetchByCriteria('fs_region_pin', ['desc', 'lat', 'lon', 'status'], ['region_id' => $regionId]);
 		} catch (Exception $e) {
 			return null;
 		}
 	}
 
-	public function setRegionPin(int $regionId, string $lat, string $lon, string $desc): void
+	/**
+	 * Updates the values of a region's map marker.
+	 *
+	 * @param int $status see {@link RegionPinStatus}
+	 */
+	public function setRegionPin(int $regionId, string $lat, string $lon, string $desc, int $status): void
 	{
 		$this->db->insertOrUpdate('fs_region_pin', [
 			'region_id' => $regionId,
 			'lat' => $lat,
 			'lon' => $lon,
 			'desc' => $desc,
+			'status' => $status
 		]);
 	}
 }

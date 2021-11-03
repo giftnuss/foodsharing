@@ -11,6 +11,7 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionPinStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus as STATUS;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
@@ -800,6 +801,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'lat' => $this->faker->latitude,
 			'lon' => $this->faker->longitude,
 			'desc' => $this->faker->realText(200),
+			'status' => RegionPinStatus::ACTIVE
 		], $extra_params);
 
 		$id = $this->haveInDatabase('fs_region_pin', $params);

@@ -7,6 +7,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Bell\BellType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionOptionType;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionPinStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Group\GroupFunctionGateway;
@@ -39,6 +40,7 @@ class RegionRestController extends AbstractFOSRestController
 	private const LAT = 'lat';
 	private const LON = 'lon';
 	private const DESC = 'desc';
+	private const STATUS = 'status';
 
 	public function __construct(
 		SettingsGateway $settingsGateway,
@@ -217,6 +219,7 @@ class RegionRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="lat")
 	 * @Rest\RequestParam(name="lon")
 	 * @Rest\RequestParam(name="desc")
+	 * @Rest\RequestParam(name="status", requirements="\d+")
 	 */
 	public function setRegionPin(ParamFetcher $paramFetcher, int $regionId): Response
 	{
@@ -235,11 +238,15 @@ class RegionRestController extends AbstractFOSRestController
 		$lat = $paramFetcher->get(self::LAT);
 		$lon = $paramFetcher->get(self::LON);
 		$desc = $paramFetcher->get(self::DESC);
+		$status = $paramFetcher->get(self::STATUS);
 		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
 			throw new HttpException(400, 'Invalid Latitude or Longitude');
 		}
+		if (!RegionPinStatus::isValid($status)) {
+			throw new HttpException(400, 'Invalid status');
+		}
 
-		$this->regionGateway->setRegionPin($regionId, $lat, $lon, $desc);
+		$this->regionGateway->setRegionPin($regionId, $lat, $lon, $desc, $status);
 
 		return $this->handleView($this->view([], 200));
 	}
