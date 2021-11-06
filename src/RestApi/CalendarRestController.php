@@ -9,6 +9,7 @@ use Foodsharing\Modules\Settings\SettingsGateway;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Jsvrcek\ICS\Model\CalendarEvent;
+use Jsvrcek\ICS\Model\Description\Location;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -149,6 +150,10 @@ class CalendarRestController extends AbstractFOSRestController
 			$status = 'TENTATIVE';
 		}
 
+		$full_address = $pickup['betrieb_anschrift'] . ', '
+			. $pickup['betrieb_plz'] . ' ' . $pickup['betrieb_stadt'];
+		$location = (new Location())->setName($full_address);
+
 		$event = $this->icalFactory->createCalendarEvent();
 		$event->setStart($start);
 		$event->setEnd($start->clone()->addMinutes(30));
@@ -157,6 +162,7 @@ class CalendarRestController extends AbstractFOSRestController
 		$event->setDescription('foodsharing Abholung bei ' . $pickup['betrieb_name']);
 		$event->setUrl(BASE_URL . '/?page=fsbetrieb&id=' . $pickup['betrieb_id']);
 		$event->setStatus($status);
+		$event->addLocation($location);
 
 		return $event;
 	}

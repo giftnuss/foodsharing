@@ -2,6 +2,8 @@
 
 ## Features
 
+- Set iCalendar location for exported pickup events #1139 !2072 @iron9
+
 ## Changes
 - Allow admins of the working group "Redaktion" to edit blog posts #34 !2061 @alex.simm
 

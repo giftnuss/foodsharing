@@ -301,7 +301,10 @@ final class ProfileGateway extends BaseGateway
 					b.name AS betrieb_name,
 					b.id AS betrieb_id,
 					b.bezirk_id AS bezirk_id,
-					confirmed AS confirmed
+					confirmed AS confirmed,
+					b.str AS betrieb_anschrift,
+					b.plz AS betrieb_plz,
+					b.stadt AS betrieb_stadt
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 
