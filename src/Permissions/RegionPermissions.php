@@ -79,9 +79,8 @@ final class RegionPermissions
 		if ($this->groupFunctionGateway->existRegionFunctionGroup($regionId, WorkgroupFunction::PR)) {
 			if ($this->groupFunctionGateway->isRegionFunctionGroupAdmin($regionId, WorkgroupFunction::PR, $this->session->id())) {
 				return true;
-			} else {
-				return false;
 			}
+			return false;
 		}
 
 		return $this->session->isAmbassadorForRegion([$regionId], false, false);

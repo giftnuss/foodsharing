@@ -363,7 +363,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 
 		// create Community Pin
-		$this->output->writeln('Create community oin');
+		$this->output->writeln('Create community pin');
 		$I->createCommunityPin($region1);
 
 		// Create store team conversations
