@@ -80,6 +80,7 @@ final class RegionPermissions
 			if ($this->groupFunctionGateway->isRegionFunctionGroupAdmin($regionId, WorkgroupFunction::PR, $this->session->id())) {
 				return true;
 			}
+
 			return false;
 		}
 
