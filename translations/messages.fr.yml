@@ -812,6 +812,7 @@ terminology:
   n_foodsaver: Un collecteur.ice|%count% collecteur.ice
   fsp: Frigo solidaire
   homeRegion: Secteur géographique favori
+  community: Groupe local {name}
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
