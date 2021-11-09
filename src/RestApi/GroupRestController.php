@@ -63,6 +63,8 @@ class GroupRestController extends AbstractFOSRestController
 	/**
 	 * Returns the join URL of a given groups conference.
 	 *
+	 * @OA\Tag(name="groups")
+	 *
 	 * @Rest\Get("groups/{groupId}/conference", requirements={"groupId" = "\d+"})
 	 * @Rest\QueryParam(name="redirect", default="false", description="Should the response perform a 301 redirect to the actual conference?")
 	 */

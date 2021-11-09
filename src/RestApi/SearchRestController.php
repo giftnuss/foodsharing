@@ -45,6 +45,8 @@ class SearchRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="search")
+	 *
 	 * @Rest\Get("search/legacyindex")
 	 */
 	public function getSearchLegacyIndexAction(): Response
@@ -60,6 +62,8 @@ class SearchRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="search")
+	 *
 	 * @Rest\Get("search/user")
 	 * @Rest\QueryParam(name="q", description="Search query.")
 	 * @Rest\QueryParam(name="regionId", requirements="\d+", nullable=true, description="Restricts the search to a region")
@@ -119,6 +123,8 @@ class SearchRestController extends AbstractFOSRestController
 
 	/**
 	 * General search endpoint that returns foodsavers, stores, and regions.
+	 *
+	 * @OA\Tag(name="search")
 	 *
 	 * @Rest\Get("search/all")
 	 * @Rest\QueryParam(name="q", description="Search query.")

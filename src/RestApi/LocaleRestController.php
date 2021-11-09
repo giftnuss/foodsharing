@@ -8,6 +8,7 @@ use Foodsharing\Modules\Settings\SettingsGateway;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -27,6 +28,8 @@ class LocaleRestController extends AbstractFOSRestController
 	/**
 	 * Returns the locale setting for the current session.
 	 *
+	 * @OA\Tag(name="locale")
+	 *
 	 * @Rest\Get("locale")
 	 */
 	public function getLocaleAction(): Response
@@ -42,6 +45,8 @@ class LocaleRestController extends AbstractFOSRestController
 
 	/**
 	 * Sets the locale for the current session.
+	 *
+	 * @OA\Tag(name="locale")
 	 *
 	 * @Rest\Post("locale")
 	 * @Rest\RequestParam(name="locale")

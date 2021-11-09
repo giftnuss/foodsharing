@@ -17,6 +17,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -49,6 +50,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Post("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 */
 	public function joinPickupAction(int $storeId, string $pickupDate, int $fsId): Response
@@ -76,6 +79,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 * @RequestParam(name="message", nullable=true, default="")
 	 */
@@ -127,6 +132,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 * @Rest\RequestParam(name="isConfirmed", nullable=true, default=null)
 	 */
@@ -158,6 +165,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+"})
 	 * @Rest\RequestParam(name="totalSlots", nullable=true, default=null)
 	 */
@@ -187,6 +196,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Get("stores/{storeId}/pickups", requirements={"storeId" = "\d+"})
 	 */
 	public function listPickupsAction(int $storeId): Response
@@ -208,6 +219,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="pickup")
+	 *
 	 * @Rest\Get("stores/{storeId}/history/{fromDate}/{toDate}", requirements={"storeId" = "\d+", "fromDate" = "[^/]+", "toDate" = "[^/]+"})
 	 */
 	public function listPickupHistoryAction(int $storeId, string $fromDate, string $toDate): Response

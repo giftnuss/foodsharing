@@ -77,6 +77,8 @@ class UserRestController extends AbstractFOSRestController
 	 * Checks if the user is logged in and lists the basic user information. Returns 200 and the user data, 404 if the
 	 * user does not exist, or 401 if not logged in.
 	 *
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Get("user/{id}", requirements={"id" = "\d+"})
 	 */
 	public function userAction(int $id): Response
@@ -97,6 +99,8 @@ class UserRestController extends AbstractFOSRestController
 	 * Checks if the user is logged in  and lists the basic user information. Returns 401 if not logged in or 200 and
 	 * the user data.
 	 *
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Get("user/current")
 	 */
 	public function currentUserAction(): Response
@@ -110,6 +114,8 @@ class UserRestController extends AbstractFOSRestController
 
 	/**
 	 * Lists the detailed profile of a user. Returns 403 if not allowed or 200 and the data.
+	 *
+	 * @OA\Tag(name="user")
 	 *
 	 * @Rest\Get("user/{id}/details", requirements={"id" = "\d+"})
 	 */
@@ -130,6 +136,8 @@ class UserRestController extends AbstractFOSRestController
 	/**
 	 * Lists the detailed profile of the current user. Returns 401 if not logged in or 200 and the data.
 	 *
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Get("user/current/details")
 	 */
 	public function currentUserDetailsAction(): Response
@@ -142,6 +150,8 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Post("user/login")
 	 * @Rest\RequestParam(name="email")
 	 * @Rest\RequestParam(name="password")
@@ -175,6 +185,8 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Post("user/logout")
 	 */
 	public function logoutAction(): Response
@@ -187,6 +199,8 @@ class UserRestController extends AbstractFOSRestController
 	/**
 	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
 	 * and a 'valid' parameter that indicates if the email address can be used for registration.
+	 *
+	 * @OA\Tag(name="user")
 	 *
 	 * @Rest\Post("user/isvalidemail")
 	 * @Rest\RequestParam(name="email", nullable=false)
@@ -205,6 +219,8 @@ class UserRestController extends AbstractFOSRestController
 
 	/**
 	 * Registers a new user.
+	 *
+	 * @OA\Tag(name="user")
 	 *
 	 * @Rest\Post("user")
 	 * @Rest\RequestParam(name="firstname", nullable=false)
@@ -275,6 +291,8 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="user")
+	 *
 	 * @Rest\Delete("user/{userId}", requirements={"userId" = "\d+"})
 	 */
 	public function deleteUserAction(int $userId): Response

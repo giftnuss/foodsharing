@@ -56,6 +56,8 @@ class StoreRestController extends AbstractFOSRestController
 	 * Returns details of the store with the given ID. Returns 200 and the
 	 * store, 404 if the store does not exist, or 401 if not logged in.
 	 *
+	 * @OA\Tag(name="stores")
+	 *
 	 * @Rest\Get("stores/{storeId}", requirements={"storeId" = "\d+"})
 	 */
 	public function getStoreAction(int $storeId): Response
@@ -77,6 +79,8 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="stores")
+	 *
 	 * @Rest\Get("user/current/stores")
 	 */
 	public function getFilteredStoresForUserAction(): Response
@@ -97,6 +101,8 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Get "wallposts" for store with given ID. Returns 200 and the comments,
 	 * 401 if not logged in, or 403 if you may not view this store.
+	 *
+	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Get("stores/{storeId}/posts", requirements={"storeId" = "\d+"})
 	 */
@@ -120,6 +126,8 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Write a new "wallpost" for the given store. Returns 200 and the created entry,
 	 * 401 if not logged in, or 403 if you may not view this store.
+	 *
+	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Post("stores/{storeId}/posts")
 	 * @Rest\RequestParam(name="text")
@@ -179,6 +187,8 @@ class StoreRestController extends AbstractFOSRestController
 	/**
 	 * Deletes a post from the wall of a store. Returns 200 upon successful deletion,
 	 * 401 if not logged in, or 403 if you may not remove this particular "wallpost".
+	 *
+	 * @OA\Tag(name="stores")
 	 *
 	 * @Rest\Delete("stores/{storeId}/posts/{postId}")
 	 */

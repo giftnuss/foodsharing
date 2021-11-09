@@ -23,6 +23,7 @@
 - Update codeception to 4.1.22 because of a security fix !2055 @Morgy93
 - Enable Gitlab dependency scanning !2056 @\_fridtjof_
 - Fix the return values of database functions !2067 #916 @alex.simm
+- All REST endpoints are sorted into categories !2079 #1144 @alex.simm
 
 # Release "Feige", 2021-09-24
 

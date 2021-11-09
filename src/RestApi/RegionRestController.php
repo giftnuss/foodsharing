@@ -65,6 +65,8 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="region")
+	 *
 	 * @Rest\Post("region/{regionId}/join", requirements={"regionId" = "\d+"})
 	 */
 	public function joinRegionAction(int $regionId): Response

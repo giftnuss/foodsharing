@@ -9,6 +9,7 @@ use Foodsharing\Modules\Message\MessageTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -32,6 +33,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Post("conversations/{conversationId}/read", requirements={"conversationId" = "\d+"})
 	 */
 	public function markConversationReadAction(int $conversationId): Response
@@ -46,6 +49,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Get("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", nullable=true, default=null, description="ID of oldest already known message")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="Number of messages to return")
@@ -76,6 +81,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="messagesLimit", requirements="\d+", default="20", description="How many messages to return.")
 	 */
@@ -121,6 +128,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Post("conversations")
 	 * @Rest\RequestParam(name="members", map=true, requirements="\d+", description="User ids of people to include in the conversation.")
 	 */
@@ -145,6 +154,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Get("conversations")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="How many conversations to return.")
 	 * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="Offset returned conversations.")
@@ -167,6 +178,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Post("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
 	 */
@@ -182,6 +195,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Patch("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="name", nullable=true, default=null)
 	 */
@@ -203,6 +218,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Delete("conversations/{conversationId}/members/{userId}", requirements={"conversationId" = "\d+", "userId" = "\d+"})
 	 */
 	public function removeMemberFromConversationAction(int $conversationId, int $userId): Response
@@ -223,6 +240,8 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="conversation")
+	 *
 	 * @Rest\Get("user/{userId}/conversation", requirements={"userId" = "\d+"})
 	 */
 	public function getUserConversationAction(int $userId): Response

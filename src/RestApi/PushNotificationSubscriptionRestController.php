@@ -7,6 +7,7 @@ use Foodsharing\Modules\PushNotification\Notification\TestPushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 
 class PushNotificationSubscriptionRestController extends AbstractFOSRestController
@@ -28,6 +29,8 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 	}
 
 	/**
+	 * @OA\Tag(name="pushnotification")
+	 *
 	 * @Rest\Get("pushnotification/{type}/server-information")
 	 */
 	public function getServerInformationAction(string $type)
@@ -42,6 +45,8 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 	}
 
 	/**
+	 * @OA\Tag(name="pushnotification")
+	 *
 	 * @Rest\Post("pushnotification/{type}/subscription")
 	 */
 	public function subscribeAction(Request $request, string $type)
@@ -65,6 +70,8 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 	}
 
 	/**
+	 * @OA\Tag(name="pushnotification")
+	 *
 	 * @Rest\Delete("pushnotification/{type}/subscription/{subscriptionId}", requirements={"subscriptionId" = "\d+"})
 	 */
 	public function unsubscribeAction(string $type, int $subscriptionId)

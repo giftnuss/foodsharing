@@ -36,7 +36,7 @@ class BuddyRestController extends AbstractFOSRestController
 	 * ))
 	 * @OA\Response(response="400", description="Already buddy with that user.")
 	 * @OA\Response(response="403", description="Insufficient permissions to send the request.")
-	 * @OA\Tag(name="tag")
+	 * @OA\Tag(name="buddy")
 	 *
 	 * @Rest\Put("buddy/{userId}", requirements={"userId" = "\d+"})
 	 */

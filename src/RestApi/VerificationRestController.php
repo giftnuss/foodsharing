@@ -45,6 +45,7 @@ class VerificationRestController extends AbstractFOSRestController
 	 * @OA\Response(response="403", description="Insufficient permissions to verify this user.")
 	 * @OA\Response(response="404", description="User not found.")
 	 * @OA\Response(response="422", description="Already verified.")
+	 * @OA\Tag(name="verification")
 	 *
 	 * @Rest\Patch("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */
@@ -79,6 +80,7 @@ class VerificationRestController extends AbstractFOSRestController
 	 * @OA\Response(response="403", description="Insufficient permissions to deverify this user.")
 	 * @OA\Response(response="404", description="User not found.")
 	 * @OA\Response(response="422", description="Already deverified.")
+	 * @OA\Tag(name="verification")
 	 *
 	 * @Rest\Delete("user/{userId}/verification", requirements={"userId" = "\d+"})
 	 */

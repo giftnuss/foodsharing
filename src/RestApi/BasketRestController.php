@@ -13,6 +13,7 @@ use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -74,6 +75,8 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * Returns 200 and a list of baskets or 401 if not logged in.
 	 *
+	 * @OA\Tag(name="basket")
+	 *
 	 * @Rest\Get("baskets")
 	 * @Rest\QueryParam(name="type", requirements="(mine|coordinates)", default="mine")
 	 */
@@ -101,6 +104,8 @@ final class BasketRestController extends AbstractFOSRestController
 	 * Does not include baskets created by the current user.
 	 *
 	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
+	 *
+	 * @OA\Tag(name="basket")
 	 *
 	 * @Rest\Get("baskets/nearby")
 	 * @Rest\QueryParam(name="lat", nullable=true)
@@ -190,6 +195,8 @@ final class BasketRestController extends AbstractFOSRestController
 	 * Returns details of the basket with the given ID. Returns 200 and the
 	 * basket, 500 if the basket does not exist, or 401 if not logged in.
 	 *
+	 * @OA\Tag(name="basket")
+	 *
 	 * @Rest\Get("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 */
 	public function getBasketAction(int $basketId): Response
@@ -264,6 +271,8 @@ final class BasketRestController extends AbstractFOSRestController
 	 * Adds a new basket. The description must not be empty. All other
 	 * parameters are optional. Returns the created basket.
 	 *
+	 * @OA\Tag(name="basket")
+	 *
 	 * @Rest\Post("baskets")
 	 * @Rest\RequestParam(name="description", nullable=false)
 	 * @Rest\RequestParam(name="contactTypes", nullable=true)
@@ -327,6 +336,8 @@ final class BasketRestController extends AbstractFOSRestController
 	 * of the user was found and deleted, 404 if no such basket was found, or
 	 * 401 if not logged in.
 	 *
+	 * @OA\Tag(name="basket")
+	 *
 	 * @Rest\Delete("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 */
 	public function removeBasketAction(int $basketId): ?Response
@@ -355,6 +366,8 @@ final class BasketRestController extends AbstractFOSRestController
 	/**
 	 * Updates the description of an existing basket. The description must not be empty. If the location
 	 * is not given or invalid it falls back to the user's home. Returns the updated basket.
+	 *
+	 * @OA\Tag(name="basket")
 	 *
 	 * @Rest\Put("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 * @Rest\RequestParam(name="description", nullable=false)
@@ -388,6 +401,8 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Sets a new picture for this basket.
+	 *
+	 * @OA\Tag(name="basket")
 	 *
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
@@ -435,6 +450,8 @@ final class BasketRestController extends AbstractFOSRestController
 	/**
 	 * Sets a new picture for this basket.
 	 *
+	 * @OA\Tag(name="basket")
+	 *
 	 * @Rest\Delete("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId ID of an existing basket
@@ -458,6 +475,8 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Requests a basket.
+	 *
+	 * @OA\Tag(name="basket")
 	 *
 	 * @Rest\Post("baskets/{basketId}/request", requirements={"basketId" = "\d+"})
 	 * @Rest\RequestParam(name="message", nullable=false)
@@ -496,6 +515,8 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Withdraw a basket request.
+	 *
+	 * @OA\Tag(name="basket")
 	 *
 	 * @Rest\Post("baskets/{basketId}/withdraw", requirements={"basketId" = "\d+"})
 	 *

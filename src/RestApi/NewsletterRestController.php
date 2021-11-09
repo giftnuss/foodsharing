@@ -9,6 +9,7 @@ use Foodsharing\Utility\EmailHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -40,6 +41,8 @@ final class NewsletterRestController extends AbstractFOSRestController
 	/**
 	 * Sends a test newsletter email to the given address. Returns 200 on success, 401 if the current user may not
 	 * send newsletters, or 500 if the email address is invalid.
+	 *
+	 * @OA\Tag(name="newsletter")
 	 *
 	 * @Rest\Post("newsletter/test")
 	 * @Rest\RequestParam(name="address")

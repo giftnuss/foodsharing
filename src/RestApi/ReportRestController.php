@@ -15,6 +15,7 @@ use Foodsharing\Permissions\ReportPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -50,6 +51,8 @@ class ReportRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="report")
+	 *
 	 * @param int $regionId for which region the reports should be returned
 	 * @Rest\Get("report/region/{regionId}", requirements={"regionId" = "\d+"})
 	 *
@@ -110,6 +113,8 @@ class ReportRestController extends AbstractFOSRestController
 
 	/**
 	 * Adds a new report. The reportedId must not be empty.
+	 *
+	 * @OA\Tag(name="report")
 	 *
 	 * @Rest\Post("report")
 	 * @Rest\RequestParam(name="reportedId", nullable=true)

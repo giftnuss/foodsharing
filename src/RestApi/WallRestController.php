@@ -8,6 +8,7 @@ use Foodsharing\Permissions\WallPostPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -43,6 +44,8 @@ class WallRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="wall")
+	 *
 	 * @Rest\Get("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 */
 	public function getPostsAction(string $target, int $targetId): Response
@@ -74,6 +77,8 @@ class WallRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="wall")
+	 *
 	 * @Rest\Post("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
 	 *
@@ -94,6 +99,8 @@ class WallRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @OA\Tag(name="wall")
+	 *
 	 * @Rest\Delete("wall/{target}/{targetId}/{id}", requirements={"targetId" = "\d+", "id" = "\d+"})
 	 */
 	public function delPostAction(string $target, int $targetId, int $id): Response
