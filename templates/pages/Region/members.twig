@@ -5,9 +5,12 @@
         id: 'vue-memberlist',
         component: 'member-list',
         props: {
+            userId: userId,
+            groupId: region.id,
             regionName: region.name,
             members: region.members,
-            isWorkGroup: region.isWorkGroup
+            isWorkGroup: region.isWorkGroup,
+            mayRemoveMembers: mayRemoveMembers
         }
     } %}
 {% endblock %}

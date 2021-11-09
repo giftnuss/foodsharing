@@ -226,6 +226,7 @@ class RegionGateway extends BaseGateway
 		$region = $this->db->fetch('
 			SELECT
 				b.`id`,
+			    b.parent_id,
 				b.`name`,
 				b.`email`,
 				b.`email_name`,

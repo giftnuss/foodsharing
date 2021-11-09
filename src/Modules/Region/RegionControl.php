@@ -14,6 +14,7 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\VotingPermissions;
+use Foodsharing\Permissions\WorkGroupPermissions;
 use Foodsharing\Utility\ImageHelper;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -38,6 +39,7 @@ final class RegionControl extends Control
 	private MailboxGateway $mailboxGateway;
 	private VotingGateway $votingGateway;
 	private VotingPermissions $votingPermissions;
+	private WorkGroupPermissions $workGroupPermission;
 
 	private const DisplayAvatarListEntries = 30;
 
@@ -63,7 +65,8 @@ final class RegionControl extends Control
 		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway,
 		VotingGateway $votingGateway,
-		VotingPermissions $votingPermissions
+		VotingPermissions $votingPermissions,
+		WorkGroupPermissions $workGroupPermissions
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -79,6 +82,7 @@ final class RegionControl extends Control
 		$this->mailboxGateway = $mailboxGateway;
 		$this->votingGateway = $votingGateway;
 		$this->votingPermissions = $votingPermissions;
+		$this->workGroupPermission = $workGroupPermissions;
 
 		parent::__construct();
 	}
@@ -192,6 +196,7 @@ final class RegionControl extends Control
 
 		$viewdata['region'] = [
 			'id' => $this->region['id'],
+			'parent_id' => $this->region['parent_id'],
 			'name' => $this->region['name'],
 			'isWorkGroup' => $isWorkGroup,
 			'isHomeDistrict' => $isHomeDistrict,
@@ -435,6 +440,8 @@ final class RegionControl extends Control
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 		$viewdata['region']['members'] = $this->foodsaverGateway->listActiveFoodsaversByRegion($region['id']);
+		$viewdata['mayRemoveMembers'] = $this->workGroupPermission->mayEdit($region);
+		$viewdata['userId'] = $this->session->id();
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
 

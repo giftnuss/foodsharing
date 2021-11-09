@@ -378,6 +378,9 @@ group:
     tooltip_function_region387: "Administrator*innen dieser Arbeitsgruppe können Einträge von der E-Mail-Bounceliste entfernen"
     tooltip_function_region327: "Administrator*innen dieser Arbeitsgruppe können Blogeinträge bearbeiten"
   show-all: "Alle anzeigen"
+  member_list:
+    remove_title: "Mitglied entfernen"
+    remove_text: "Möchtest du {name} ({id}) wirklich aus der Arbeitsgruppe entfernen?"
 
 legal:
   pp: "Datenschutzerklärung"

@@ -7,7 +7,7 @@
       >
         {{ $i18n('memberlist.header_for_workgroup', {bezirk: regionName}) }}
         <span>
-          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
+          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: memberList.length}) }}
         </span>
       </div>
       <div
@@ -16,12 +16,12 @@
       >
         {{ $i18n('memberlist.header_for_district', {bezirk: regionName}) }}
         <span>
-          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: members.length}) }}
+          {{ $i18n('memberlist.some_in_all', {some: membersFiltered.length, all: memberList.length}) }}
         </span>
       </div>
 
       <div
-        v-if="members.length"
+        v-if="memberList.length"
         class="card-body p-0"
       >
         <div class="form-row p-1 ">
@@ -58,6 +58,7 @@
         :current-page="currentPage"
         :per-page="perPage"
         :sort-compare="compare"
+        :busy="isBusy"
         small
         hover
         responsive
@@ -75,9 +76,25 @@
         <template #cell(userName)="row">
           <a
             :href="$url('profile', row.item.user.id)"
+            :title="row.item.user.id"
           >
             {{ row.item.user.name }}
           </a>
+        </template>
+        <template
+          v-if="isWorkGroup && mayRemoveMembers"
+          #cell(removeButton)="row"
+        >
+          <b-button
+            v-if="userId !== row.item.user.id"
+            v-b-tooltip="$i18n('group.member_list.remove_title')"
+            size="sm"
+            variant="danger"
+            :disabled="isBusy"
+            @click="showRemoveMemberConfirmation(row.item.user.id, row.item.user.name)"
+          >
+            <i class="fas fa-fw fa-user-times" />
+          </b-button>
         </template>
       </b-table>
       <div class="float-right p-1 pr-3">
@@ -95,11 +112,16 @@
 <script>
 import { optimizedCompare } from '@/utils'
 import { BTable, BPagination, VBTooltip } from 'bootstrap-vue'
+import { removeMember } from '@/api/groups'
+import { hideLoader, pulseError, showLoader } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   components: { BTable, BPagination },
   directives: { VBTooltip },
   props: {
+    userId: { type: Number, default: null },
+    groupId: { type: Number, required: true },
     regionName: {
       type: String,
       default: '',
@@ -112,6 +134,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    mayRemoveMembers: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -129,17 +152,24 @@ export default {
           label: this.$i18n('group.name'),
           sortable: false,
           class: 'align-middle',
+        }, {
+          key: 'removeButton',
+          label: '',
+          sortable: false,
+          class: 'button-column',
         },
       ],
+      memberList: this.members,
+      isBusy: false,
     }
   },
   computed: {
     membersFiltered () {
       if (!this.filterText.trim()) {
-        return this.members
+        return this.memberList
       }
       const filterText = this.filterText ? this.filterText.toLowerCase() : null
-      return this.members.filter((member) => {
+      return this.memberList.filter((member) => {
         return (
           !filterText || (member.user.name.toLowerCase().indexOf(filterText) !== -1
           )
@@ -154,6 +184,34 @@ export default {
       this.filterStatus = null
       this.filterText = ''
     },
+    async tryRemoveMember (memberId) {
+      showLoader()
+      this.isBusy = true
+      try {
+        await removeMember(this.groupId, memberId)
+        const index = this.memberList.findIndex(member => member.user.id === memberId)
+        if (index >= 0) {
+          this.memberList.splice(index, 1)
+        }
+      } catch (e) {
+        pulseError(i18n('error_unexpected'))
+      }
+      this.isBusy = false
+      hideLoader()
+    },
+    async showRemoveMemberConfirmation (memberId, memberName) {
+      const remove = await this.$bvModal.msgBoxConfirm(i18n('group.member_list.remove_text', { name: memberName, id: memberId }), {
+        modalClass: 'bootstrap',
+        title: i18n('group.member_list.remove_title'),
+        cancelTitle: i18n('button.cancel'),
+        okTitle: i18n('yes'),
+        headerClass: 'd-flex',
+        contentClass: 'pr-3 pt-3',
+      })
+      if (remove) {
+        this.tryRemoveMember(memberId)
+      }
+    },
   },
 }
 </script>
@@ -161,5 +219,11 @@ export default {
 <style lang="scss" scoped>
 .foto-table /deep/ .foto-column {
   width: 60px;
+}
+
+.foto-table /deep/ .button-column {
+  width: 50px;
+  vertical-align: middle;
+  text-align: center;
 }
 </style>

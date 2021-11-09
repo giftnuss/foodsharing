@@ -193,6 +193,23 @@ class WorkGroupGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * Removes an active member from the group.
+	 *
+	 * @throws Exception
+	 */
+	public function removeFromGroup(int $groupId, int $fsId): void
+	{
+		$this->db->delete(
+			'fs_foodsaver_has_bezirk',
+			[
+				'bezirk_id' => $groupId,
+				'foodsaver_id' => $fsId,
+				'active' => 1
+			]
+		);
+	}
+
 	public function listMemberGroups(int $fsId): array
 	{
 		return $this->db->fetchAll('
