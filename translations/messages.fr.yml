@@ -162,6 +162,9 @@ group:
   mail_link_title:
     region: Messagerie du district
     workgroup: Messagerie du groupe de travail
+  member_list:
+    remove_title: Retirer le membre
+    remove_text: Voulez-vous vraiment supprimer {name} ({id}) du groupe de travail ?
 bcard:
   generate: Créer une carte de visite
   error:
@@ -813,6 +816,7 @@ terminology:
   fsp: Frigo solidaire
   homeRegion: Secteur géographique favori
   community: Groupe local {name}
+  pin: Description du groupe local
 register:
   activation_success: <strong>Activation réussie.</strong> Connecte-toi maintenant
     avec ton adresse courriel et le mot de passe que tu as choisi.
@@ -1145,6 +1149,7 @@ menu:
     mark_as_read: Marquer comme lus
     infos: infos
     activities: actions
+    pin: Description du groupe local
   content: modifier les contenus
   manage_mailboxes: gérer les boîtes de réception
   email: envoyer la lettre d'information
@@ -2300,3 +2305,13 @@ blog:
 push_notifications:
   test_notification_body: Super, ça a fonctionné :)
   test_notification_title: activer les notifications push
+regionPin:
+  header_page: Description publique du groupe local pour {bezirk}
+  lat: Longitude
+  lon: Latitude
+  desc: Description
+  success: Enregistré avec succès
+  save: Enregistrer
+  text_desc: Veuillez saisir ici une description du groupe local ou ses coordonnées.
+    Ceci sera affiché dans la fenêtre contextuelle de l'épingle de la carte…
+  pin_visible: Épingle visible sur la carte
