@@ -145,6 +145,9 @@ group:
     tooltip_function_region331: Administrators of this work group can send newsletters
     tooltip_function_region387: "Administrators of this group can remove entries from\
       \ the e-mail bounce list"
+  member_list:
+    remove_title: Remove member
+    remove_text: Do you really want to remove {name} ({id}) from this group?
 settings:
   header: Your data and settings
 
@@ -2295,3 +2298,6 @@ date_short:
   Wednesday: Wed
   Tuesday: Tue
   Monday: Mon
+regionPin:
+  lat: ''
+  save: save
