@@ -81,7 +81,8 @@ group:
       by the transregional group ‘AG Anlegen’
     tooltip_function_10: Administrators of this work group can approve posts in moderated
       forums.
-    tooltip_function_9: Administrators of this work group have no special permissions.
+    tooltip_function_9: Administrators of this workgroup can edit the description
+      of the district in the map.
     tooltip_function_6: The e-mail address of this work group is shown at the ‘Request
       mediation’ button. The administrators have no special permissions.
     tooltip_function_5: Administrators of this work group can see messages about foodsaver
@@ -145,6 +146,7 @@ group:
     tooltip_function_region331: Administrators of this work group can send newsletters
     tooltip_function_region387: "Administrators of this group can remove entries from\
       \ the e-mail bounce list"
+    tooltip_function_region327: Administrators of this workgroup can edit blog entries
   member_list:
     remove_title: Remove member
     remove_text: Do you really want to remove {name} ({id}) from this group?
@@ -312,6 +314,7 @@ menu:
     friendcircle: circle of friends
     selfservice: Self service
     fundraising: Fundraising
+    pin: Description of district
 profile:
   banana:
     by: ' by '
@@ -766,6 +769,7 @@ terminology:
   options: Options
   reports: Reporting View (local reporting group)
   arbitration: Reporting View (LS)
+  pin: Description of the district
 login:
   pwreset:
     bread: Reset password
@@ -1055,7 +1059,7 @@ email_template:
     title: Imprint
     address: "foodsharing e.V.\nNeven-DuMont-Str. 14 \n50667 Cologne \nRepresented\
       \ by:\n\nFrank Bowinkelmann \nContact Details:\nE-Mail: info@foodsharing.de\n\
-      Register Entry:\n\nRegistration Court: District Court Cologne\nRegistration\
+      \n\nRegister Entry:\nRegistration Court: District Court Cologne\nRegistration\
       \ Number: VR 17439\nResponsible for the content according to § 55 Abs. 2 RStV:\n\
       \  Frank Bowinkelmann"
   newsletter:
@@ -2299,5 +2303,12 @@ date_short:
   Tuesday: Tue
   Monday: Mon
 regionPin:
-  lat: ''
+  lat: 'Latitude'
   save: save
+  text_desc: Please provide a description of the local group or contact option here.
+    This is shown in the popup of the pin from the map ...
+  header_page: Public description of the district {bezirk}
+  lon: Longitude
+  desc: Description
+  success: Saved successfully
+  pin_visible: Pin visible on map
