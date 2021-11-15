@@ -1,2 +1,7 @@
 dashboard:
   greeting: Привет, {name}! Рад видеть вас здесь.
+regionPin:
+  lon: Долгота
+  lat: Широта
+lat: Широта
+lon: Долгота
