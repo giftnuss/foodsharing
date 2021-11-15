@@ -6,6 +6,8 @@ startpage:
   near_you:
     text2:
       part2: Matkurver
+    text1:
+      part2: Kart
   call_to_action:
     title: Delta
   mission:
@@ -38,6 +40,7 @@ email_template:
   help_needed:
     support_mail: it@foodsharing.network
     or: eller
+    link: https://devdocs.foodsharing.network/it-tasks_EN.html
   information: Informasjon
   warning: Advarsel
 base:
@@ -49,6 +52,8 @@ stats:
   title: Total statistikk
 blog:
   bread: Blogg
+  status:
+    "1": publisert
 region:
   cancel: Nei egentlig ikke
   save: Ja, spar
@@ -193,6 +198,8 @@ profile:
     lastLogin: Siste innlogging
     registrationDate: Registreringsdato
     title: Informasjon
+    foodsharerId: Foodsharer ID
+    foodsaverId: Foodsaver ID
   online: '{name} er online.'
   notes:
     title: Notater om {name}
@@ -221,6 +228,7 @@ settings:
     link_title: 'ICS/ICAL/WebCal:'
     menu: Kalender
   notifications: Varsler
+  title: Innstillinger
 mailbox:
   date: Dato
   recipient: Mottaker
@@ -291,6 +299,8 @@ reports:
   when: Tid
   time: Tid
   city: By
+  message: Beskrivelse
+  reason: Årsaken
 month:
   short:
     "12": des
@@ -350,7 +360,7 @@ register:
   pass2: Gjenta passord
   lastname_minLength: Etternavn må bestå av minst to tegn.
   lastname_required: Skriv inn etternavnet ditt.
-geb_datum: Fødselsdatoen
+geb_datum: Fødselsdato (ÅÅÅÅ-MM-DD)
 login:
   pwreset:
     bread: Tilbakestille passord
@@ -435,6 +445,7 @@ group:
     requires_properties: Alle som svarer til gitte krav.
     nobody: Ingen (lukket gruppe).
     requirements: Hvem kan ta del i denne gruppen?
+  edit: Rediger {group}
 bcard:
   generate: Lag visittkort
   actions: Alternativer
@@ -532,8 +543,8 @@ options: Alternativer
 botschafter: Ambassadør
 geschlecht: Kjønn
 anschrift: Gatenummer og husnummer (automatisk tatt fra kortet)
-handy: Mobilnummer
-telefon: Fasttelefonnummer
+handy: Mobilnummer (inkludert landskode, starter med +)
+telefon: Fasttelefonnummer (inkludert landskode, starter med +)
 attachement: Vedlegg
 email: Epostadresse
 plz: Postnummer (automatisk tatt fra kortet)
@@ -552,6 +563,8 @@ storelist:
   address: gate
   name: navn
   addressdata: adresse
+  map: Kart
+  status: Status
 footer:
   version: 'Versjon: {version}'
   hosting_info: CO2-nøytral vert på
@@ -563,6 +576,9 @@ footer:
   team: Team
   about_us: Om oss
   call_to_action: Delta
+  dataprivacy: Data beskyttelse
+  guide: Hygieneguide
+  donate: Donere
 date:
   sunday: søndag
   saturday: lørdag
@@ -587,6 +603,7 @@ recipients:
   body: Beskjed
   manual: Manuell inngang
   recipients: Mottakere
+  bread: Nyhetsbrevs postliste
 events:
   morePeople: … og {count} til
   invitedCount: '{count} invitasjoner'
@@ -600,24 +617,43 @@ events:
   create:
     endtime: Sluttid
     starttime: Starttid
+    date: Dato
   bread: Arrangementer
+  button:
+    maybe: Kanskje
 chat:
   conversations: Samtaler
 forum:
   thread:
     title: Tittel
+    close: Lukk tråden
+    delete: Slett tråden
+    stick: Frys tråden
+    closed: lukket tråd
   post:
     body: Beskjed
+  threads: Tråder
 timepicker:
   labelNowButton: nå
   labelCloseButton: Lukk
   labelSeconds: sekunder
   labelHours: timer
   labelMinutes: minutter
+  labelIncrement: øke
+  labelDecrement: avta
+  labelSelected: Valgt tid
 calendar:
   labelCalendar: Kalender
   labelToday: i dag
   locale: no
+  labelNextMonth: neste måned
+  labelNextYear: neste år
+  labelNav: Kalendernavigering
+  labelPrevMonth: forrige måned
+  labelCurrentMonth: denne måneden
+  labelPrevYear: i fjor
+  labelNoDateSelected: Velg dato
+  labelSelected: Valgt dato
 pickup:
   edit:
     bread: ''
@@ -634,6 +670,10 @@ pickup:
   join_title_date: Sikker?
   signout_confirm: Er du sikker?
   call: Anrop
+  confirm: Bekrefte
+  leave: Forlate
+  copyNumber: Kopier telefonnummer
+  leave_pickup_message_team: Gi beskjed til teamet
 storeedit:
   fetch:
     teamStatus: lagstatus
@@ -657,6 +697,9 @@ store:
   lastPickupShort: siste {date}
   teamName: '{storeTitle} team'
   actions: Alternativer
+  request:
+    to-nowhere: Avslå
+  team_conversation_name: Team {name}
 storeview:
   status: Nåværende status
   frequency4: om natten
@@ -740,6 +783,10 @@ terminology:
   events: Arrangementer
   forum: Forum
   n_stores: En butikk|%count% butikker
+  orga:
+    d: Organisasjonsperson
+    f: Organisasjonsperson
+    m: Organisasjonsperson
 gender:
   d: mangfoldig
   f: Fru
@@ -766,3 +813,11 @@ verantwortlicher: Ansvarlige medlemmer
 passcheck: Bekreft endringen med passordet ditt
 online_type: Vil hendelsen foregå frakoblet eller på nett?
 bezirk_id: Hvilken region er artikkelen relevant for?
+regionPin:
+  lat: Breddegrad
+  lon: Lengdegrad
+  save: lagre
+addresspicker:
+  label: Søk på adresse/sted
+becomeregion:
+  save: Lagre
