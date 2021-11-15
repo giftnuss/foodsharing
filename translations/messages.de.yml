@@ -367,7 +367,7 @@ group:
     tooltip_function_5: "Administrator*innen dieser Arbeitsgruppe können Meldungen über Foodsaver im Bezirk sehen. Es werden keine Meldungen angezeigt, an denen die Administrator*innen beteiligt sind! Diese erhält die Schiedstelle."
     tooltip_function_6: "Die E-Mail-Adresse dieser Arbeitsgruppe wird beim \"Mediation anfragen\"-Knopf angezeigt. Die Administrator*innen haben keine besonderen Berechtigungen."
     tooltip_function_7: "Administrator*innen dieser Arbeitsgruppe bekommen Meldungen mit Beteiligung des Meldeteams angezeigt. Es werden keine Meldungen angezeigt, an denen die Administrator*innen beteiligt sind! Diese erhält das Meldeteam"
-    tooltip_function_9: "Administrator*innen dieser Arbeitsgruppe haben keine besonderen Berechtigungen."
+    tooltip_function_9: "Administrator*innen dieser Arbeitsgruppe können die Ortsgruppenbeschreibung für die Karte bearbeiten."
     tooltip_function_10: "Administrator*innen dieser Arbeitsgruppe können in moderierten Foren Beiträge freischalten."
   unique_function:
     tooltip_function_region331: "Administrator*innen dieser Arbeitsgruppe können Newsletter versenden"

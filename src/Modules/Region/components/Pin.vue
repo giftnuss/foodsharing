@@ -93,7 +93,7 @@ export default {
       type: String,
       default: '',
     },
-    pinStatus: { type: Number, default: STATUS_INACTIVE },
+    status: { type: Number, default: STATUS_INACTIVE },
     regionId: { type: Number, required: true },
     regionName: {
       type: String,
@@ -106,7 +106,7 @@ export default {
       inlat: this.lat,
       inlon: this.lon,
       tadesc: this.desc,
-      isActive: this.pinStatus === STATUS_ACTIVE,
+      isActive: this.status === STATUS_ACTIVE,
     }
   },
   methods: {

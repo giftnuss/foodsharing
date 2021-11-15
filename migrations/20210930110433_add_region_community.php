@@ -37,7 +37,7 @@ final class AddRegionCommunity extends AbstractMigration
 				'after' => 'lat',
 				'comment' => 'description'
 			])
-			->addColumn('status', 'string', [
+			->addColumn('status', 'integer', [
 				'null' => false,
 				'default' => 0,
 				'limit' => MysqlAdapter::INT_TINY,
