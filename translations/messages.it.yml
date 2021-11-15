@@ -2252,3 +2252,6 @@ sidenav:
 password:
   insertmail: Inserisci il tuo indirizzo e-mail per reimpostare la tua password.
   reset: Password dimenticata?
+regionPin:
+  lat: latitudine
+  lon: longitudine
