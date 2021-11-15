@@ -83,7 +83,8 @@ group:
   function:
     tooltip_function_10: Les admins de ce groupe peuvent accepter des contributions
       dans les forums déjà modérés.
-    tooltip_function_9: Les admins de ce groupe n'ont pas d'autorisations spéciales.
+    tooltip_function_9: Les administrateurs et administratrices de ce groupe de travail
+      peuvent modifier la description du groupe local pour la carte.
     tooltip_function_7: Les admins de ce groupe de travail reçoivent les signalements
       dont le groupe de signalements fait l'objet. Les signalements concernant les
       admins restent invisibles et seront directement envoyés au groupe en charge
