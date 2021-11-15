@@ -65,3 +65,6 @@ pass:
   name: Όνομα
 dashboard:
   greeting: Γεια σου {name}! Χαίρομαι που είσαι εδώ.
+regionPin:
+  lon: Γεωγραφικό μήκος
+  lat: Γεωγραφικό πλάτος
