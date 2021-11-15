@@ -89,3 +89,6 @@ sleep_status: Tu estado actual
 homepage: Su página web
 fs_id: foodsharing-ID
 about_me_public: Resumen público
+regionPin:
+  lat: Latitud
+  lon: Longitud
