@@ -1633,7 +1633,7 @@ upload:
   crop_dialog_title: Cut picture
   new_file: Upload new data
   choose_file: Upload data
-  image-problem: Your file seems to be out of order, it is best to use a normal jpg
+  image-problem: Your file seems to be out of order, it is best to use a normal JPG
     image
   no_image_chosen: No file selected yet
   no_image_yet: No picture uploaded yet
@@ -1643,7 +1643,7 @@ status: Current status
 title: Title
 last_login: Last login
 bezirk: Region
-lon: Longitude
+lon: Latitude
 lat: Latitude
 parent_id: Parent region
 picture: Picture
