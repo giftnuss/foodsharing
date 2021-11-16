@@ -1,2 +1,9 @@
 dashboard:
   greeting: Merhaba {name}! Burada olman güzel.
+geb_datum: Doğum tarihi (YYYY-AA-GG)
+add: ekle
+lat: Enlem
+lon: Boylam
+regionPin:
+  lat: Enlem
+  lon: Boylam
