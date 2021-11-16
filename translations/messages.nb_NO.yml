@@ -198,8 +198,8 @@ profile:
     lastLogin: Siste innlogging
     registrationDate: Registreringsdato
     title: Informasjon
-    foodsharerId: Foodsharer ID
-    foodsaverId: Foodsaver ID
+    foodsharerId: Matredder-ID
+    foodsaverId: Matredder-ID
   online: '{name} er online.'
   notes:
     title: Notater om {name}
@@ -254,6 +254,25 @@ foodsaver:
   delete_account: ⚠️ Slett konto
   edit_success: Endringer er lagret
   title: Foodsaver
+  upgrade:
+    needs_region: Velg distriktet du ønsker å bli ambassadør for
+    amb_requested: Forespørsel sendt.
+    rv: Ja, jeg har lest og forstått kontrakten og godtar den.
+    fs_success: Takk. Du er nå en matredder.
+    to_fs: Bli matredder
+    needs_fs: Du må bli matredder først
+    needs_sm: Du må bli butikksjef først
+    needs_fs_quiz: Du må ta matredder-quiz-en først.
+    to_sm: Bli butikksjef
+    to_amb: Bli ambassadør
+    amb_region: Hvilket område vil du bli ambassadør for?
+    needs_publicinfo: Din korte beskrivelse er tom
+    needs_rv: Du har godtatt kontrakten.
+    quiz_error: 'Feil: Quiz-data for din rolle kunne ikke innlastes. Kontakt IT-støtte:'
+    sm_success: Takk. Du er nå kvalifisert til å håndtere butikker.
+    amb_success: Takk for at du vil ta mer ansvar. Forespørselen vil bli behandlet
+      av det globale orga-laget så raskt som mulig.
+    ad_fs: Jeg vil ta matredder-quiz-en og bli en matredder.
 ageBandList:
   NumberOfAgeband: nummer
   ageBand: Aldersgruppe
@@ -300,7 +319,7 @@ reports:
   time: Tid
   city: By
   message: Beskrivelse
-  reason: Årsaken
+  reason: Årsak
 month:
   short:
     "12": des
@@ -392,6 +411,8 @@ legal:
   actions:
     safe: Bruk innstillinger
   pp: Personvernerklæring
+  are_you_sure_to_downgrade: 'Advarsel: Du har valgt å bli nedgradert til matredder.
+    Er du sikker?'
 group:
   show-all: Vis alt
   function:
@@ -495,8 +516,10 @@ upload:
   new_image: Last opp et nytt bilde
   image: Last opp bilde
   no_image_chosen: Ingen fil valgt enda
+  no_image_yet: Ingen bilder opplastet enda
 picture_upload_widget:
   picture_upload: Opplasting av bilder
+  choose_picture: Velg et bilde fra datamaskinen din.
 image: Bilde
 explanation: Forklaring
 fp: Feilpoeng
@@ -535,8 +558,8 @@ info: Informasjon
 body: Beskjed
 title: Overskrift
 bezirk: Distrikt
-lon: Lengdegrad
-lat: Breddegrad
+lon: Breddegrad
+lat: Lengdegrad
 fs_id: foodsharing-ID
 picture: Bilde
 options: Alternativer
@@ -576,9 +599,9 @@ footer:
   team: Team
   about_us: Om oss
   call_to_action: Delta
-  dataprivacy: Data beskyttelse
+  dataprivacy: Personvern
   guide: Hygieneguide
-  donate: Donere
+  donate: Doner
 date:
   sunday: søndag
   saturday: lørdag
@@ -603,7 +626,7 @@ recipients:
   body: Beskjed
   manual: Manuell inngang
   recipients: Mottakere
-  bread: Nyhetsbrevs postliste
+  bread: E-postliste for nyhetsbrev
 events:
   morePeople: … og {count} til
   invitedCount: '{count} invitasjoner'
@@ -629,7 +652,7 @@ forum:
     close: Lukk tråden
     delete: Slett tråden
     stick: Frys tråden
-    closed: lukket tråd
+    closed: Lukket tråd
   post:
     body: Beskjed
   threads: Tråder
@@ -639,8 +662,8 @@ timepicker:
   labelSeconds: sekunder
   labelHours: timer
   labelMinutes: minutter
-  labelIncrement: øke
-  labelDecrement: avta
+  labelIncrement: Øk
+  labelDecrement: Senk
   labelSelected: Valgt tid
 calendar:
   labelCalendar: Kalender
@@ -670,10 +693,10 @@ pickup:
   join_title_date: Sikker?
   signout_confirm: Er du sikker?
   call: Anrop
-  confirm: Bekrefte
-  leave: Forlate
+  confirm: Bekreft
+  leave: Forlat
   copyNumber: Kopier telefonnummer
-  leave_pickup_message_team: Gi beskjed til teamet
+  leave_pickup_message_team: Gi beskjed til laget
 storeedit:
   fetch:
     teamStatus: lagstatus
@@ -699,7 +722,7 @@ store:
   actions: Alternativer
   request:
     to-nowhere: Avslå
-  team_conversation_name: Team {name}
+  team_conversation_name: '{name}-laget'
 storeview:
   status: Nåværende status
   frequency4: om natten
@@ -814,10 +837,13 @@ passcheck: Bekreft endringen med passordet ditt
 online_type: Vil hendelsen foregå frakoblet eller på nett?
 bezirk_id: Hvilken region er artikkelen relevant for?
 regionPin:
-  lat: Breddegrad
-  lon: Lengdegrad
+  lat: Lengdegrad
+  lon: Breddegrad
   save: lagre
 addresspicker:
   label: Søk på adresse/sted
 becomeregion:
   save: Lagre
+pass1: Ditt nye forespurte passord
+answers: Hvilke svar er riktige?
+wikilink: Lenke til wiki-side
