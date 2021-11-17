@@ -29,9 +29,16 @@ poll:
     start_date: Startdato
     end_date: Sluttdato
     description: Beskrivelse
+    type: Stemmemodus
   submit_vote: Send inn stemme
   in_past: fullført
   time_period: Periode
+  type_2:
+    tooltip_neutral: Avholdenhet
+    tooltip_positive: Godkjenning
+    tooltip_negative: Avslag
+  begins_at: Begynnelse
+  allowed_voters: Stemmeberettiget
 polls:
   end_date: Sluttdato
   start_date: Startdato
@@ -43,6 +50,11 @@ email_template:
     link: https://devdocs.foodsharing.network/it-tasks_EN.html
   information: Informasjon
   warning: Advarsel
+  dont_respond:
+    notification: Varsler
+  to: på
+  reply: Svare
+  in: i
 base:
   jsrequired: Denne siden vil ikke fungere skikkelig uten JavaScript.
 tablesorter:
@@ -50,10 +62,18 @@ tablesorter:
   page: Side
 stats:
   title: Total statistikk
+  leader:
+    users: Mest aktive matreddere
+  total:
+    pickups: redningsoppdrag våre matreddere har mestret.
 blog:
   bread: Blogg
   status:
     "1": publisert
+    "0": inaktiv
+  title: Bloggartikkel
+  actions: Handlinger
+  content: Innhold
 region:
   cancel: Nei egentlig ikke
   save: Ja, spar
@@ -68,12 +88,13 @@ region:
     townpart: Distrikt
     bigcity: Stor by (uten registreringsalternativ)
     city: By
+    title: Distriktstype
 menu:
   entry:
     donations: Donasjoner
     fundraising: Pengeinnsamling
     conference: Video konferanse
-    fs: Foodsaver
+    fs: Matredder
     release-notes: Hva er nytt?
     dataprivacy: Personvernerklæring
     transparency: Åpenhet
@@ -114,8 +135,17 @@ menu:
     language: Velg språk
     friendcircle: Vennesirkel
     selfservice: Selvbetjening
+    regionalgroups: Lokale grupper
+    activities: Handlinger
+    notifications: Varsler
+    fscities: foodsharing byer
+    demands: Krav
+    guide: Hygienerådgiver
+    ids: Pass
+    pin: Lokal gruppebeskrivelse
   content: Rediger innhold
   email: Send nyhetsbrev
+  reports: Overtredelsesrapporter
 personal_data:
   landline: Hustelefon
   mobile: Mobilnummer
@@ -150,11 +180,14 @@ basket:
   all: alle matkurver
   description: Beskrivelse
   title: Matkurver
+  date: Opprettelsesdato
+  provider: Forsørger
 team:
   contacted: Meldingen din ble sendt.
   email: Epostadresse
   name: Navn
   current: Team
+  former: Tidligere
 home:
   home: Hjem
   title: Hjemmeside
@@ -171,6 +204,8 @@ dashboard:
   display_all: alle
   title: Dashboard
   greeting: Hei {name}! Fint at du er her.
+  settings_tooltip: Oversiktsinnstillinger
+  updates_title_all: Oppdateringsoversikt
 search:
   persons: personer
   groups: grupper
@@ -213,6 +248,8 @@ profile:
     notes: Merknader <strong>({count})</strong>
     buddy: Jeg kjenner {name}
     edit: Rediger profil
+    verificationHistory: Verifikasjonshistorikk
+    history: Pass historikk
   banana:
     remove:
       confirm_title: Fjern bananen
@@ -221,6 +258,7 @@ profile:
     give: Gi {name} en banan
   warning: Advarsel
   title: Profil
+  regions: '{name} er en matsparer'
 settings:
   photo:
     title: Bildet ditt
@@ -229,6 +267,10 @@ settings:
     menu: Kalender
   notifications: Varsler
   title: Innstillinger
+  account: Kontoalternativer
+  sleep:
+    title: Sovehette
+    header: Sovehettenfunksjon
 mailbox:
   date: Dato
   recipient: Mottaker
@@ -238,11 +280,16 @@ mailbox:
   inbox: Innboks
   title: Postkasser
   mail: E-post
+  reply: Svar
+  subject: Emne
+  actions: Alternativer
+  refresh: Forfriske
 map:
   title: Kart
 content:
   content: innhold
   bread: alle sider
+  actions: Handlinger
 foodsaver:
   manage:
     actions: Alternativer
@@ -250,29 +297,42 @@ foodsaver:
     role: Rolle
     name: Navn
     photo: Bilde
+    orga: er en del av det globale organisasjonsteamet
   delete_account_now: Slett kontoen nå
   delete_account: ⚠️ Slett konto
   edit_success: Endringer er lagret
-  title: Foodsaver
+  title: Matredder
   upgrade:
     needs_region: Velg distriktet du ønsker å bli ambassadør for
     amb_requested: Forespørsel sendt.
     rv: Ja, jeg har lest og forstått kontrakten og godtar den.
-    fs_success: Takk. Du er nå en matredder.
+    fs_success: Takk. Du er nå en matredder!
     to_fs: Bli matredder
     needs_fs: Du må bli matredder først
     needs_sm: Du må bli butikksjef først
-    needs_fs_quiz: Du må ta matredder-quiz-en først.
+    needs_fs_quiz: Du må ta matredder-quiz-en først
     to_sm: Bli butikksjef
     to_amb: Bli ambassadør
     amb_region: Hvilket område vil du bli ambassadør for?
     needs_publicinfo: Din korte beskrivelse er tom
     needs_rv: Du har godtatt kontrakten.
     quiz_error: 'Feil: Quiz-data for din rolle kunne ikke innlastes. Kontakt IT-støtte:'
-    sm_success: Takk. Du er nå kvalifisert til å håndtere butikker.
+    sm_success: Takk. Du er nå kvalifisert til å håndtere butikker!
     amb_success: Takk for at du vil ta mer ansvar. Forespørselen vil bli behandlet
       av det globale orga-laget så raskt som mulig.
-    ad_fs: Jeg vil ta matredder-quiz-en og bli en matredder.
+    ad_fs: Jeg vil ta matredder-quiz-en og bli en matredder!
+  kicked: Matredder er fjernet
+  bread: Alle matreddere
+  actions: Handlinger
+  url_error: Noe er galt med nettadressen til hjemmesiden din
+  edit: Rediger matredder
+  editName: Rediger {name}
+  profileBack: Tilbake til profilen
+  list:
+    summary: '{count} matsparere i distrikt {region}'
+    inactive: 'som ikke har logget på de siste seks månedene:'
+  delete_account_sure: Er du sikker på at du vil slette kontoen til {name}?
+  restricted: Du er ikke autorisert til å se disse dataene.
 ageBandList:
   NumberOfAgeband: nummer
   ageBand: Aldersgruppe
@@ -283,6 +343,7 @@ pickuplist:
   month_tab: måned
   week_tab: uke
   day_tab: dag
+  NumberOfFoodSavers_table_header: Antall matreddere
 genderlist:
   number_table_header: Nummer
   gender_female: kvinne
@@ -292,6 +353,8 @@ genderlist:
   district_tab: distrikt
 memberlist:
   some_in_all: ({some} av {all})
+  header_for_district: Matsparere i distrikt {bezirk}
+  header_for_workgroup: Matreddere i arbeidsgruppe {bezirk}
 bell:
   report_reason: '{reason}'
   workgroup_request_decline_title: '{name}'
@@ -314,12 +377,15 @@ bell:
   blog_new_check: '{title}'
   forum_reply_title: '{forum}: {title}'
   forum_answer_title: '{forum}'
+  new_foodsaver_verified: Allerede bekreftet - kan komme i gang
 reports:
   when: Tid
   time: Tid
   city: By
   message: Beskrivelse
   reason: Årsak
+  from: Fra
+  report_id: Meldings-ID
 month:
   short:
     "12": des
@@ -454,6 +520,7 @@ group:
     sent: Meldingen ble sendt.
     title: Kontakt {group}
     empty: Skriv noe først ;)
+    admins: '{count} kontaktpersoner:'
   applications_for: Søknader for %name%
   applications: Applikasjoner
   photo: Bilde
@@ -467,10 +534,15 @@ group:
     nobody: Ingen (lukket gruppe).
     requirements: Hvem kan ta del i denne gruppen?
   edit: Rediger {group}
+  mail_link_title:
+    region: Distriktspostkasse
+    workgroup: Arbeidsgruppepostkasse
+  title: foodsharing arbeidsgrupper
 bcard:
   generate: Lag visittkort
   actions: Alternativer
   for: '{role} i {region}'
+  title: Visittkortgenerator
 pass:
   nav:
     options: Alternativer
@@ -489,6 +561,8 @@ pass:
   none: '- ikke opprettet enda -'
   button:
     verify: Bekrefte
+    check: Sjekk datoer
+  bread: Pass generator
 button:
   create: Skape
   answer: Svare
@@ -588,6 +662,8 @@ storelist:
   addressdata: adresse
   map: Kart
   status: Status
+  entered: 'Registrert på:'
+  added: Registrert
 footer:
   version: 'Versjon: {version}'
   hosting_info: CO2-nøytral vert på
@@ -602,6 +678,7 @@ footer:
   dataprivacy: Personvern
   guide: Hygieneguide
   donate: Doner
+  partner: Partnere
 date:
   sunday: søndag
   saturday: lørdag
@@ -627,6 +704,9 @@ recipients:
   manual: Manuell inngang
   recipients: Mottakere
   bread: E-postliste for nyhetsbrev
+  newsletter_all: Alle nyhetsbrevabonnenter (matdelere, matreddere, alle)
+  all: Alle matreddere over hele verden
+  all_no_botschafter: Alle matsparere uten ambassadører
 events:
   morePeople: … og {count} til
   invitedCount: '{count} invitasjoner'
@@ -646,6 +726,8 @@ events:
     maybe: Kanskje
 chat:
   conversations: Samtaler
+  notification_unnamed_conversation: '{foodsaver} skrev til deg.'
+  notification_named_conversation: '{foodsaver} skrev i {conversation}.'
 forum:
   thread:
     title: Tittel
@@ -704,7 +786,7 @@ storeedit:
     status: Status
   team:
     note: 'Merk:'
-    foodsaver: Foodsaver
+    foodsaver: Matredder
     bread: Rediger team
   actions: Alternativer
 store:
@@ -713,6 +795,9 @@ store:
     reloadPage: Last siden på nytt
     removeFromTeam: Fjern fra laget
     pickupReset: Standard sortering
+    filterJumper: Hopper
+    pickupDesc: Nyeste først
+    pickupAsc: Nyeste sist
   address: Adresse
   attribution: Attribusjon
   unknownDate: ukjent
@@ -722,7 +807,15 @@ store:
   actions: Alternativer
   request:
     to-nowhere: Avslå
+    to-team: Ta med i laget
+    to-jumper: Hoppliste
   team_conversation_name: '{name}-laget'
+  appliedFor: Forespørsel fremsatt
+  bread: Alle virksomheter
+  days: dager
+  days_before: før
+  go: Til teamsiden
+  springer_conversation_name: Hopper {name}
 storeview:
   status: Nåværende status
   frequency4: om natten
@@ -742,6 +835,8 @@ fsp:
   description: Beskrivelse
   followers: Følgere
   managers: Kontaktpersoner
+  addedOn: Lagt til
+  addedBy: Lagt til av
 day: Dag
 time: Tid
 select: Vennligst velg
@@ -766,7 +861,7 @@ terminology:
   regions: Distrikter
   region: Distrikt
   profile_picture: Profilbilde
-  n_foodsaver: en foodsaver|%count% foodsavere
+  n_foodsaver: en matredder|%count% matreddere
   mailboxes: Postkasser
   settings: Innstillinger
   subgroups: Undergrupper
@@ -795,9 +890,9 @@ terminology:
     f: Ambassadør
     m: Ambassadør
   foodsaver:
-    d: Foodsaver
-    f: Foodsaver
-    m: Foodsaver
+    d: Matredder
+    f: Matredder
+    m: Matredder
   foodsharer:
     d: Foodsharer
     f: Foodsharer
@@ -810,6 +905,7 @@ terminology:
     d: Organisasjonsperson
     f: Organisasjonsperson
     m: Organisasjonsperson
+  pin: Lokal gruppebeskrivelse
 gender:
   d: mangfoldig
   f: Fru
@@ -840,6 +936,7 @@ regionPin:
   lat: Lengdegrad
   lon: Breddegrad
   save: lagre
+  desc: Beskrivelse
 addresspicker:
   label: Søk på adresse/sted
 becomeregion:
@@ -847,3 +944,8 @@ becomeregion:
 pass1: Ditt nye forespurte passord
 answers: Hvilke svar er riktige?
 wikilink: Lenke til wiki-side
+first_post: Første oppslagstavleoppføring
+wall:
+  name: Oppslagstavle
+sidenav:
+  localgroups: Lokale grupper
