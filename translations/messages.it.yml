@@ -434,6 +434,7 @@ terminology:
     f: Organizzatore
     m: Organizzatore
     d: organizzatore
+  community: Gruppo locale {name}
 register:
   woman: femmina
   signup_newsletter: Vorrei ricevere la newsletter di foodsharing circa una volta
@@ -1936,7 +1937,7 @@ settings:
       \ una chiave per accedere al tuo account senza password.\n"
     teaser: "Puoi visualizzare il tuo calendario di raccolta con un programma di calendario\
       \ di tua scelta.\nPrima crea un token e poi sottoscrivi uno dei due link del\
-      \ calendario.\n"
+      \ calendario.\nPuoi trovare maggiori informazioni nel wiki su\n"
     title: Il tuo calendario dei ritiri
     menu: Calendario
   photo:
@@ -2054,6 +2055,7 @@ storelist:
   nocontact: Nessun contatto ancora
   zipcode: Codice postale
   addressdata: Indirizzo
+  geo: geo
 storestatus:
   "7": L'agenzia non esiste più
   "5": L'agenzia collabora con noi
@@ -2255,3 +2257,6 @@ password:
 regionPin:
   lat: latitudine
   lon: longitudine
+  desc: Descrizione
+  save: salva
+  success: Salvato con successo
