@@ -1238,6 +1238,7 @@ storelist:
   name: Name
   status: Status
   entered: 'Created on:'
+  geo: geo
 releases:
   "2020-08": "'Pear' release (August 2020)"
   "2020-10": "'Cranberry' release (October 2020)"
@@ -1647,7 +1648,7 @@ status: Current status
 title: Title
 last_login: Last login
 bezirk: Region
-lon: Latitude
+lon: Longitude
 lat: Latitude
 parent_id: Parent region
 picture: Picture
