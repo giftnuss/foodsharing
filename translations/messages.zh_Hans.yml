@@ -54,8 +54,8 @@ mailbox_name: 邮箱名
 active: 已激活
 betrieb: 合作公司/会议记录
 stadt: 所在城市或乡镇
-lon: 纬度
-lat: 经度
+lon: 经度
+lat: 纬度
 fs_id: 分食号
 parent_id: 主属地区
 botschafter: 大使

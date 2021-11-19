@@ -524,8 +524,8 @@ info: Informasjon
 body: Beskjed
 title: Overskrift
 bezirk: Distrikt
-lon: Breddegrad
-lat: Lengdegrad
+lon: Lengdegrad
+lat: Breddegrad
 fs_id: foodsharing-ID
 picture: Bilde
 options: Alternativer
@@ -546,7 +546,6 @@ nachname: Etternavn
 add: legge til
 name: Fornavn
 storelist:
-  geo: geo
   region: distrikt
   city: by
   zipcode: postnummer

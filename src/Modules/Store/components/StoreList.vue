@@ -229,11 +229,6 @@ export default {
           sortable: true,
         },
         {
-          key: 'geo',
-          label: i18n('storelist.geo'),
-          sortable: false,
-        },
-        {
           key: 'actions',
           label: '',
           sortable: false,
@@ -275,8 +270,8 @@ export default {
       }))]
 
       const displayableFields = (window.innerWidth > 800 && window.innerHeight > 600)
-        ? ['region', 'geo', 'actions']
-        : ['region', 'geo', 'address', 'added', 'zipcode']
+        ? ['region', 'actions']
+        : ['region', 'address', 'added', 'zipcode']
 
       this.fields.forEach(field => {
         if ((field.key === 'region' && regions.length > 1) ||

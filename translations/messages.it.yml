@@ -327,8 +327,8 @@ betrieb: Società di cooperazione
 active: Attivato
 bezirk: Distretto
 stadt: La tua città o comune
-lon: latitudine
-lat: longitudine
+lon: longitudine
+lat: latitudine
 fs_id: foodsharing-ID
 parent_id: Distretto genitore
 picture: Immagine
@@ -2052,7 +2052,6 @@ storelist:
   managing: Aziende di cui è responsabile
   emptyfilters: Filtro vuoto
   nocontact: Nessun contatto ancora
-  geo: geo
   zipcode: Codice postale
   addressdata: Indirizzo
 storestatus:

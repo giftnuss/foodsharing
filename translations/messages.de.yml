@@ -24,8 +24,8 @@ options: "Optionen" # FoodSharePointControl FoodSharePointView foodSharePoint.tw
 picture: "Bild" # BlogView and maybe more
 parent_id: "Elternbezirk" # at least XhrMethods and RegionAdminControl
 fs_id: "foodsharing-ID"
-lat: "Längengrad"
-lon: "Breitengrad"
+lat: "Breitengrad"
+lon: "Längengrad"
 stadt: "Deine Stadt oder Gemeinde" # DashboardControl
 bezirk: "Bezirk"
 betrieb: "Kooperationsbetrieb/e"
@@ -1248,8 +1248,8 @@ regionOptions:
 
 regionPin:
   header_page: "Öffentliche Ortsgruppenbeschreibung für {bezirk}"
-  lat: "Längengrad"
-  lon: "Breitengrad"
+  lat: "Breitengrad"
+  lon: "Längengrad"
   desc: "Beschreibung"
   success: "Erfolgreich gespeichert"
   save: "speichern"

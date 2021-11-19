@@ -1935,7 +1935,6 @@ addresspicker:
 storelist:
   inprogress: Négociations en cours
   nocontact: Aucun contact pour le moment
-  geo: géo
   region: Secteur géographique
   added: inscrit
   city: Lieu

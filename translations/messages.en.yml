@@ -1218,7 +1218,6 @@ storelist:
   zipcode: Post code
   address: Street
   map: Map
-  geo: geo
   fetching: Stores from which you fetch groceries
   managing: Stores for which you are responsible
   emptyfilters: empty filters

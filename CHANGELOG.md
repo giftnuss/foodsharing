@@ -24,6 +24,7 @@
 - Enable Gitlab dependency scanning !2056 @\_fridtjof_
 - Fix the return values of database functions !2067 #916 @alex.simm
 - All REST endpoints are sorted into categories !2079 #1144 @alex.simm
+- exchange description for lat: lon: in translations so that it makes sense !2084 @jonathan_b
 
 # Release "Feige", 2021-09-24
 
