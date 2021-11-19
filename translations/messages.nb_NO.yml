@@ -632,8 +632,8 @@ info: Informasjon
 body: Beskjed
 title: Overskrift
 bezirk: Distrikt
-lon: Breddegrad
-lat: Lengdegrad
+lon: Lengdegrad
+lat: Breddegrad
 fs_id: foodsharing-ID
 picture: Bilde
 options: Alternativer
@@ -664,6 +664,7 @@ storelist:
   status: Status
   entered: 'Registrert på:'
   added: Registrert
+  geo: geo
 footer:
   version: 'Versjon: {version}'
   hosting_info: CO2-nøytral vert på
@@ -933,8 +934,8 @@ passcheck: Bekreft endringen med passordet ditt
 online_type: Vil hendelsen foregå frakoblet eller på nett?
 bezirk_id: Hvilken region er artikkelen relevant for?
 regionPin:
-  lat: Lengdegrad
-  lon: Breddegrad
+  lat: Breddegrad
+  lon: Lengdegrad
   save: lagre
   desc: Beskrivelse
 addresspicker:
