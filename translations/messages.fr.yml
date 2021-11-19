@@ -1959,6 +1959,7 @@ storelist:
   nowaste: ne jette rien à la poubelle
   notcooperating: ne souhaite pas coopérer
   cooperating: coopère
+  geo: géo
 storestatus:
   "7": Le magasin n'existe plus
   "6": Fait don de ses denrées alimentaires à la croix rouge, banques alimentaires...
@@ -2308,8 +2309,8 @@ push_notifications:
   test_notification_title: activer les notifications push
 regionPin:
   header_page: Description publique du groupe local pour {bezirk}
-  lat: Longitude
-  lon: Latitude
+  lat: Latitude
+  lon: Longitude
   desc: Description
   success: Enregistré avec succès
   save: Enregistrer
