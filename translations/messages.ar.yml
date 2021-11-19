@@ -1,2 +1,10 @@
 dashboard:
   greeting: مرحبًا {name}! سعيد بوجودك هناك.
+name: اسم
+nachname: الكنية
+lon: خط الطول
+regionPin:
+  lon: خط الطول
+  lat: خط العرض
+lat: خط العرض
+email: عنوان البريد الإلكتروني
