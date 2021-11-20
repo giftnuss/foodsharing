@@ -165,7 +165,7 @@ services:
 
   influxdb:
     container_name: foodsharing_test_influxdb
-    image: influxdb:latest
+    image: influxdb:1.8
     command: >
       influxd -config /etc/influxdb/influxdb.toml
     ports:
