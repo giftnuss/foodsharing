@@ -49,12 +49,14 @@ group:
       inviare newsletter
     tooltip_function_region387: Gli amministratori di questo Gruppo di lavoro possono
       cancellare le iscrizioni delle E-mail Bounceliste
+    tooltip_function_region327: Gli amministratori di questo gruppo di lavoro possono
+      modificare i post del blog
   function:
     tooltip_function_7: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
       speciali! Il team di segnalazione riceve questo
-    tooltip_function_9: Gli amministratori di questo gruppo di lavoro non hanno altre
-      autorizzazioni.
+    tooltip_function_9: Gli amministratori di questo gruppo di lavoro possono modificare
+      la descrizione del gruppo locale per la mappa.
     tooltip_function_6: L'indirizzo e-mail di questo gruppo di lavoro viene visualizzato
       sotto il pulsante «Richiedi mediazione». Gli amministratori non hanno diritti
       speciali.
@@ -148,6 +150,9 @@ group:
     requires_properties: Chiunque soddisfi determinati punti di fiducia.
     nobody: Nessuno (gruppo chiuso).
     requirements: Chi può registrarsi per questo gruppo?
+  member_list:
+    remove_title: Rimuovi membro
+    remove_text: Vuoi davvero rimuovere {name} ({id}) dal gruppo di lavoro?
 bcard:
   info:
     address_shortened: Il tuo indirizzo e / o codice postale + luogo verranno visualizzati
@@ -435,6 +440,7 @@ terminology:
     m: Organizzatore
     d: organizzatore
   community: Gruppo locale {name}
+  pin: Descrizione del gruppo locale
 register:
   woman: femmina
   signup_newsletter: Vorrei ricevere la newsletter di foodsharing circa una volta
@@ -1563,6 +1569,7 @@ menu:
     ids: Carte d'identità
     dataprivacy: Protezione dei dati
     wiki: Wiki
+    pin: Descrizione del gruppo locale
   reports: Messaggi
   content: Modifica contenuti
   manage_mailboxes: Gestire caselle di posta
@@ -2260,3 +2267,7 @@ regionPin:
   desc: Descrizione
   save: salva
   success: Salvato con successo
+  header_page: Descrizione pubblica del gruppo locale per il distretto {bezirk}
+  pin_visible: Pin visibile sulla mappa
+  text_desc: Si prega di fornire una descrizione del gruppo locale o dell'opzione
+    di contatto qui. Questo è mostrato nel popup del pin dalla mappa ...
