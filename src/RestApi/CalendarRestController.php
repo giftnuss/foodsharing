@@ -119,7 +119,6 @@ class CalendarRestController extends AbstractFOSRestController
 	 * @OA\Tag(name="calendar")
 	 *
 	 * @Rest\Get("calendar/{token}")
-	 * @Rest\QueryParam(name="token", description="Access token")
 	 */
 	public function listPickupDatesAction(string $token): Response
 	{
