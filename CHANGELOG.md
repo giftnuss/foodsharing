@@ -21,6 +21,7 @@
 - Fixed for content edit !2062 @fs_k
 - Fix for store change !2065 @fs_k
 - Fix for future timeslot visibility to use Europe/Berlin timezone !2070 @fs_k 
+- Unverified users who change their home region are not deverified again !2093 @alex.simm
 
 ## Refactoring
 - Get Members in MemberList.vue from Rest Api !2094 @chriswalg @alex.simm
