@@ -7,6 +7,8 @@
 
 ## Changes
 - Allow admins of the working group "Redaktion" to edit blog posts #34 !2061 @alex.simm
+- When using a blacklisted email domain the registration process is blocked #1059 @CarolineFischer
+
 - "New event" page requires login !2058 @Buntelrus
 - Add a button to the group member list for removing members !2073 @alex.simm @chriswalg
 

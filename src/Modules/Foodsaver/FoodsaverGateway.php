@@ -730,6 +730,16 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	/**
+	 * @throws \Exception
+	 */
+	public function emailDomainIsBlacklisted(string $email): bool
+	{
+		$emailDomain = explode('@', $email)[1];
+
+		return $this->db->exists('fs_email_blacklist', ['email' => $emailDomain]);
+	}
+
+	/**
 	 * 	Deletes the foodsaver from a region.
 	 *  If the foodsaver is also the actor and removes himself from his home region
 	 *  the verification is removed.

@@ -208,7 +208,9 @@ class UserRestController extends AbstractFOSRestController
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
 	{
 		$email = $paramFetcher->get('email');
-		if (empty($email) || !$this->emailHelper->validEmail($email)) {
+		if (empty($email)
+			|| !$this->emailHelper->validEmail($email)
+			|| $this->foodsaverGateway->emailDomainIsBlacklisted($email)) {
 			throw new HttpException(400, 'email is not valid');
 		}
 
@@ -244,7 +246,9 @@ class UserRestController extends AbstractFOSRestController
 
 		$data->email = trim($paramFetcher->get('email'));
 		if (empty($data->email) || !$this->emailHelper->validEmail($data->email)
-			|| !$this->isEmailValidForRegistration($data->email)) {
+			|| !$this->isEmailValidForRegistration($data->email)
+			|| $this->foodsaverGateway->emailDomainIsBlacklisted($data->email)
+		) {
 			throw new HttpException(400, 'email is not valid or already used');
 		}
 

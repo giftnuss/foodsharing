@@ -163,4 +163,21 @@ class RegisterCest
 			'handy' => $this->mobile_country_code . $this->mobile_number
 		]);
 	}
+
+	public function cannotRegisterNewUserWithBlacklistedEmailAddress(AcceptanceTester $I)
+	{
+		$I->wantTo('get an error when trying to register with a blacklisted email address');
+
+		$I->amOnPage('/');
+		$I->click('Mitmachen');
+		$I->click('Jetzt registrieren!');
+		$I->waitForElementVisible('#step1', 4);
+		$blacklistedEmailDomain = $I->grabFromDatabase('fs_email_blacklist', 'email', ['email like' => '%']);
+		$I->fillField('#email', 'something@' . $blacklistedEmailDomain);
+		$I->fillField('#password', $this->password);
+		$I->fillField('#confirmPassword', $this->password);
+		$I->click('weiter');
+
+		$I->see('Die E-Mail-Adresse ist ungültig.');
+	}
 }

@@ -474,6 +474,12 @@ class Foodsharing extends \Codeception\Module\Db
 		return $this->createRegion($name, $extra_params);
 	}
 
+	public function createBlacklistedEmailAddress(): void
+	{
+		$since = (new DateTime('2010-10-14 12:00:00'))->format('Y-m-d H:i:s');
+		$this->haveInDatabase('fs_email_blacklist', ['email' => 'bad.com', 'since' => $since, 'reason' => 'Disposable email addresses should not be used for registration.']);
+	}
+
 	public function createMailbox($name = null)
 	{
 		if ($name == null) {

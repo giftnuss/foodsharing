@@ -558,6 +558,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$this->output->writeln(' done');
 
+		$this->output->writeln('Create blacklisted emails');
+		$I->createBlacklistedEmailAddress();
+		$this->output->writeln(' done');
+
 		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);
 		$I->_getDbh()->commit();
 	}
