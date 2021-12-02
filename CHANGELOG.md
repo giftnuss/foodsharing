@@ -11,6 +11,8 @@
 
 - "New event" page requires login !2058 @Buntelrus
 - Add a button to the group member list for removing members !2073 @alex.simm @chriswalg
+- Add a button to the group member list for removing members !2075 @alex.simm @chriswalg
+- Add a management mode to group member list to add and remove members !2075 @chriswalg
 
 ## Bugfixes
 - Fixed the list of responsible store members in REST responses !2033 #1124 @alex.simm

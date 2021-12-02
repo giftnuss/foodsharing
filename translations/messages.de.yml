@@ -381,6 +381,9 @@ group:
   member_list:
     remove_title: "Mitglied entfernen"
     remove_text: "Möchtest du {name} ({id}) wirklich aus der Arbeitsgruppe entfernen?"
+    add_member: "In das Team aufnehmen"
+    admin_mode_on: "Ansicht für Administrator*innen aktivieren"
+    admin_mode_off: "Zurück zur Standard-Ansicht"
 
 legal:
   pp: "Datenschutzerklärung"
@@ -1605,6 +1608,8 @@ search:
   myregions: "Meine Bezirke"
   groups: "Gruppen"
   persons: "Personen"
+  user_search:
+    placeholder: "Name oder ID"
 
 dashboard:
   title: "Dashboard"
