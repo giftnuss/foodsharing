@@ -4,14 +4,33 @@
     <div class="px-1 month">
       {{ displayedMonth }}
     </div>
-    <div class="px-1 day">
+    <div
+      v-if="!isEventToday && !isEventTomorrow"
+      class="px-1 day"
+    >
       {{ displayedWeekday }} {{ displayedDay }}
+    </div>
+    <div
+      v-else-if="isEventToday"
+      class="px-1 day"
+      style="font-size: 100%"
+    >
+      {{ today }}
+    </div>
+    <div
+      v-else-if="isEventTomorrow"
+      class="px-1 day"
+      style="font-size: 100%"
+    >
+      {{ tomorrow }}
     </div>
   </div>
 </template>
 
 <script>
 import formatDate from 'date-fns/format'
+import isToday from 'date-fns/isToday'
+import isTomorrow from 'date-fns/isTomorrow'
 
 export default {
   props: {
@@ -27,6 +46,18 @@ export default {
     },
     displayedMonth () {
       return this.$i18n('month.' + formatDate(this.dateObject, 'M'))
+    },
+    isEventToday () {
+      return isToday(this.dateObject)
+    },
+    isEventTomorrow () {
+      return isTomorrow(this.dateObject)
+    },
+    today () {
+      return this.$i18n('date.Today')
+    },
+    tomorrow () {
+      return this.$i18n('date.-- Tomorrow')
     },
   },
 }
