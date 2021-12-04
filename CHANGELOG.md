@@ -30,6 +30,7 @@
 - All REST endpoints are sorted into categories !2079 #1144 @alex.simm
 - exchange description for lat: lon: in translations so that it makes sense !2084 @jonathan_b
 - Fix docker setup breaking down because of InfluxDB 2 !2086 @\_fridtjof_
+- Add triage bot to pipeline !2074 @iron9
 
 # Release "Feige", 2021-09-24
 
