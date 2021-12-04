@@ -64,7 +64,7 @@ group:
   photo: Photo
   description: Description
   name: Nom
-  subtitle: Ici tu trouveras de l'aide et bien d'autres choses ...
+  subtitle: Ici tu trouveras de l'aide et bien d'autres choses…
   show-all: Tout afficher
   unique_function:
     tooltip_function_region432: les admins de ce groupe peuvent voir les signalements
@@ -166,6 +166,9 @@ group:
   member_list:
     remove_title: Retirer le membre
     remove_text: Voulez-vous vraiment supprimer {name} ({id}) du groupe de travail ?
+    add_member: Intégrer dans l'équipe
+    admin_mode_on: Activer la vue pour les administrateur·rice·s
+    admin_mode_off: Retour à l'affichage standard
 bcard:
   generate: Créer une carte de visite
   error:
@@ -846,7 +849,7 @@ register:
   other: autre
   man: homme
   woman: femme
-  select_your_gender: Comment s'adresser à toi ...
+  select_your_gender: Comment s'adresser à toi…
   join_error: Ton inscription n'a pas pu être prise en compte.
   join_success: Ton inscription a été réalisée avec succès.
   finish: Envoyer l'inscription
@@ -1337,7 +1340,7 @@ profile:
     sent: Ta banane a été envoyée !
     details: "Écris au min. 100 caractères décrivant pourquoi {name} mérite une banane-confiance\
       \ de ta part.\n"
-    placeholder: min. 100 caractères...
+    placeholder: min. 100 caractères…
     vouch: "Donc offre tes bananes-confiance uniquement à des personnes que tu connais\
       \ bien,\nqui sont respectueuses, engagées, responsables et fiables.\n"
     undo: Les bananes-confiance ne peuvent pas être modifiées ou retirées.
@@ -1420,14 +1423,14 @@ pickup:
   join_title_date: Confirmer ?
   team_message_success: Le message a été envoyé à l'équipe avec succès
   team_message_send_and_leave: Envoyer et se retirer de la collecte
-  leave_team_message_template: Chers tou.te.s, le {date} ...
+  leave_team_message_template: Cher tout le monde, le {date}…
   leave_team_message_title: Envoyer un message à l'équipe
   leave_pickup_message_team: Notifier l'équipe
   leave_pickup_ok: J'ai déjà trouvé un(e) replaçant(e).
   really_leave_date: Tu es responsable de cette collecte, c'est ton rôle de trouver
     un(e) remplaçant(e).
   kick_message_footer: Amicalement, l'équipe des responsables coopération
-  kick_message_placeholder: 'Information complémentaires (optionnel) :'
+  kick_message_placeholder: 'Informations complémentaires (optionnel)…'
   kick_message: Nous t'avons retiré de la collecte du {date} dans le magasin {storeName}.
   really_kick_user_info: "Souhaites-tu vraiment retirer {name} de la collecte du {date}\
     \ ?\n{name} recevra le message suivant :\n"
@@ -1512,7 +1515,7 @@ wall:
   confirm-deletion: La contribution de {name} doit-elle être supprimée ?
   delete: Supprimer la contribution
   see-more: Voir plus de contributions
-  message_placeholder: Écrire un message
+  message_placeholder: Écrire un message…
   name: Mur
 chat:
   confirm_draft_discard: "En changeant de conversation, le texte écrit jusqu'ici sera\
@@ -1678,7 +1681,7 @@ basket:
   expires: Disponible jusqu'au <strong>{date}</strong>
   created: Publié le <strong>{date}</strong>
   date: Date de création
-  mapsearch: Recherche d'adresse ...
+  mapsearch: Recherche d'adresse…
   nearby-short: Autour de moi
   nearby: Paniers solidaires autour de moi
   recent: Nouveaux paniers solidaires
@@ -1726,9 +1729,11 @@ search:
   mybuddies: Mes potes
   noresults: Aucun résultat
   thread-title-only: La recherche a lieu dans les titres, pas dans les contributions.
-  forum: Rechercher par titre ...
-  placeholder: Recherche de personnes, groupes, entreprises, ...
+  forum: Rechercher par titre…
+  placeholder: Recherche de personnes, groupes, entreprises…
   title: Recherche
+  user_search:
+    placeholder: Nom ou identifiant
 index:
   confirm_open_video: Souhaites-tu regarder la vidéo sur YouTube ? La vidéo se lancera
     dans un nouvel onglet.
@@ -1786,7 +1791,7 @@ memberlist:
   header_for_workgroup: Foodsaver dans le GT {bezirk}
   header_for_district: Collecteur.ice dans le secteur géographique {bezirk}
 list:
-  filter_for: Filtrer suivant ...
+  filter_for: Filtrer suivant…
 bell:
   report_reason: '{reason}'
   new_report_title: Nouveau signalement à propos de {name}
@@ -2027,7 +2032,7 @@ startpage:
       \ en tant que développeur.euse ?\n"
     title: Fonctionnement
   store:
-    text: Tu travailles dans un supermarché, un restaurant, une cantine ... ? Inscris
+    text: Tu travailles dans un supermarché, un restaurant, une cantine ? Inscris
       ton entreprise en tant que magasin partenaire et aidons-nous mutuellement pour
       éviter le gaspillage.
     title: en tant que magasin partenaire
