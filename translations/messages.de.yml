@@ -1435,7 +1435,7 @@ settings:
       Weitere Informationen findest du im Wiki unter
     token-warning: |
       Wichtig: Halte den Link unbedingt geheim.
-      Er enthält einen Schlüssel, um ohne Passwort auf deinen Account zuzugreifen.
+      Er enthält einen Schlüssel, um ohne Passwort auf die persönlichen Daten deiner Abholungen zuzugreifen.
     sync: |
       Dein Kalenderprogramm muss diesen Kalender regelmäßig neu synchronisieren.
       Nur dann tauchen neue Abholtermine auf oder abgesagte Termine nicht mehr.
