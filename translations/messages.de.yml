@@ -247,7 +247,7 @@ pass:
 bcard:
   title: "Visitenkarten-Generator"
   card: "Deine foodsharing Visitenkarte"
-  claim: "Hier easy generieren, ausdrucken und ausschneiden..."
+  claim: "Hier easy generieren, ausdrucken und ausschneiden…"
   for: "{role} für {region}"
   actions: "Optionen"
   desc: "Wähle hier, für welchen Bezirk beziehungsweise für welche Rolle du deine Visitenkarte erstellen möchtest."
@@ -316,7 +316,7 @@ group:
   members: "Mitglieder"
   administrators: "Gruppen-Administrator*innen"
   title: "foodsharing-Arbeitsgruppen"
-  subtitle: "hier findest du Hilfe und viel zu tun..."
+  subtitle: "hier findest du Hilfe und viel zu tun…"
   member_count: "{0} Keine Mitwirkenden|{1} Ein*e Mitwirkende*r| [2, Inf[ %count% Mitwirkende"
   admin_count: "{0} Keine Administrator*innen|{1} Ein*e Administrator*in| [2, Inf[ %count% Administrator*innen"
   image: "Titelbild für %name%"
@@ -481,7 +481,7 @@ register:
   join_success_message: "Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner Email und deinem Passwort einloggen."
   join_error: "Deine Registrierung war nicht erfolgreich."
   check_mail: "Schau jetzt in dein E-Mail-Postfach, um die Anmeldung abzuschließen!"
-  select_your_gender: "Für die Anrede..."
+  select_your_gender: "Für die Anrede…"
   woman: "weiblich"
   man: "männlich"
   other: "divers"
@@ -798,13 +798,13 @@ pickup:
     Möchtest du {name} wirklich aus der Abholung am {date} austragen?
     {name} wird die folgende Nachricht dazu erhalten:
   kick_message: "wir haben dich aus der {storeName}-Abholung am {date} ausgetragen."
-  kick_message_placeholder: "Optional hier Informationen ergänzen..."
+  kick_message_placeholder: "Optional hier Informationen ergänzen…"
   kick_message_footer: "Liebe Grüße, deine Betriebsverantwortlichen"
   really_leave_date: "Du bist für diese Abholung verantwortlich. Bitte kümmere dich eigenständig um Ersatz."
   leave_pickup_ok: "Ich habe bereits Ersatz"
   leave_pickup_message_team: "Team benachrichtigen"
   leave_team_message_title: "Nachricht ans Team"
-  leave_team_message_template: "Ihr Lieben, {date} ..."
+  leave_team_message_template: "Ihr Lieben, {date} …"
   team_message_send_and_leave: "Senden und austragen"
   team_message_success: "Nachricht ans Team wurde erfolgreich versendet"
   join_title_date: "Sicher?"
@@ -921,7 +921,7 @@ chat:
 
 wall:
   name: "Pinnwand"
-  message_placeholder: "Nachricht schreiben..."
+  message_placeholder: "Nachricht schreiben…"
   see-more: "Mehr Beiträge anzeigen"
   delete: "Eintrag löschen"
   confirm-deletion: "Soll der folgende Pinnwand-Eintrag von {name} wirklich entfernt werden?"
@@ -1030,7 +1030,7 @@ recipients:
   continue: "Mit dem Senden weitermachen"
   abort: "Versand abbrechen"
   permission: "Du bist nicht berechtigt, E-Mails zu versenden"
-  status: "Versende E-Mails ... (aktuelle E-Mail-Adresse: {current})"
+  status: "Versende E-Mails … (aktuelle E-Mail-Adresse: {current})"
   unknown: "unbekannt"
   done: "Es wurden alle E-Mails verschickt"
 
@@ -1194,7 +1194,7 @@ bell:
   report_reason: "{reason}"
 
 list:
-  filter_for: "Filtern nach..."
+  filter_for: "Filtern nach…"
 
 memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
@@ -1256,7 +1256,7 @@ regionPin:
   desc: "Beschreibung"
   success: "Erfolgreich gespeichert"
   save: "speichern"
-  text_desc: "Hier bitte eine Beschreibung des Ortsgruppe bzw. Kontaktmöglichkeit angeben. Diese wird in dem Popup des Pins von der Karte angezeigt..."
+  text_desc: "Hier bitte eine Beschreibung des Ortsgruppe bzw. Kontaktmöglichkeit angeben. Diese wird in dem Popup des Pins von der Karte angezeigt…"
   pin_visible: "Pin auf Karte sichtbar"
 
 foodsaver:
@@ -1374,7 +1374,7 @@ mailbox:
   okay: "E-Mail wurde erfolgreich versendet."
   failed: "Die E-Mail konnte nicht gesendet werden."
   recipients: "Zu viele Empfänger*innen"
-  ratelimit: "Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick..."
+  ratelimit: "Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick…"
   filetype: "Dieser Dateityp ist nicht erlaubt"
   filesize: "Sorry, die Datei ist zu groß."
   mark_as_unread: "Als ungelesen markieren"
@@ -1505,7 +1505,7 @@ profile:
       Bitte vergib die Vertrauensbanane daher nur an dir persönlich bekannte Menschen,
       welche die Verhaltensregeln und die Rechtsvereinbarung einhalten
       und für deren Zuverlässigkeit und Engagement du einstehen kannst.
-    placeholder: "mindestens 100 Zeichen..."
+    placeholder: "mindestens 100 Zeichen…"
     sent: "Banane wurde gesendet!"
     messageTooShort: "Bitte gib mindestens einen 100 Zeichen langen Text zu deiner Banane ein."
     alreadyGiven: "{name} hat bereits eine Banane von dir erhalten."
@@ -1598,8 +1598,8 @@ profile:
     arbAdminAgainstRepAdmin: "Du bist Administrator*in der Schiedstelle und willst eine*n Administrator*in der Meldebearbeitung melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
 search:
   title: "Suche"
-  placeholder: "Suche Personen, Gruppen, Betriebe, ..."
-  forum: "Nach Titel suchen..."
+  placeholder: "Suche Personen, Gruppen, Betriebe, …"
+  forum: "Nach Titel suchen…"
   thread-title-only: "Es werden nur Titel durchsucht, nicht der Text von Beiträgen."
   noresults: "Es konnten keine Ergebnisse gefunden werden"
   mybuddies: "Meine Buddies"
@@ -1698,7 +1698,7 @@ basket:
   recent: "Neueste Essenskörbe"
   nearby: "Essenskörbe in deiner Nähe"
   nearby-short: "In deiner Nähe"
-  mapsearch: "Adresssuche..."
+  mapsearch: "Adresssuche…"
   go: "zum Essenskorb"
   by: "Essenskorb von {name}"
   on: "Essenskorb von {platform}"
@@ -2226,7 +2226,7 @@ startpage:
     text: "Sag Lebensmittelverschwendung im deinem Haushalt den Kampf an. Wir informieren auf Messen und bei Veranstaltungen wie."
   store:
     title: "als Betrieb"
-    text: "Du arbeitest in einem Supermarkt, Restaurant, Kantine...? Registriere deinen Betrieb und rette Lebensmittel."
+    text: "Du arbeitest in einem Supermarkt, Restaurant, Kantine…? Registriere deinen Betrieb und rette Lebensmittel."
   how_we_work:
     title: "So läuft's"
     text: |
