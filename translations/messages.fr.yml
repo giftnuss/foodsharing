@@ -373,8 +373,9 @@ settings:
       \ afin d'actualiser tes évènements.\n"
     event_link_desc: (évènements inclus)
     link_title: 'ICS/ICAL/WebCal :'
-    token-warning: "Important : le lien doit rester secret !\nIl contient une clé\
-      \ pour accéder à ton compte sans mot de passe.\n"
+    token-warning: "Important : garde absolument le lien secret.\nIl contient une\
+      \ clé qui permet d'accéder aux données personnelles de tes récupérations sans\
+      \ mot de passe.\n"
     teaser: "Tu peux visualiser le calendrier de collectes avec le programme de calendrier\
       \ de ton choix.\nCrée d'abord un jeton, puis abonne-toi à l'un des deux liens\
       \ de calendrier.\nTu trouveras plus d'informations dans le wiki à la rubrique\n"
