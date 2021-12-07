@@ -42,7 +42,7 @@ group:
   quit_name: Leave group %name%
   quit: Leave
   really_quit_name: Do you really want to quit the group %name%?
-  delete_group_sure: Do you really want to delete the group {groupName}?
+  delete_group_sure: Do you really want to delete the group/the district {groupName}?
 
   function:
     title: Working group function
@@ -136,7 +136,8 @@ group:
     new home district later.
   saved: Changes were saved
   unique_function:
-    tooltip_function_region432: Administrators of this work group can view messages
+    tooltip_function_region432: Administrators of this work group can view violation
+      reports
     tooltip_function_region2287: Administrators of this work group can edit the contents
       of the start page
     tooltip_function_region1811: Administrators of this work group can edit the pages
@@ -150,6 +151,9 @@ group:
   member_list:
     remove_title: Remove member
     remove_text: Do you really want to remove {name} ({id}) from this group?
+    add_member: add to team
+    admin_mode_on: Activate view for administrators
+    admin_mode_off: Back to the standard view
 settings:
   header: Your data and settings
 
@@ -207,7 +211,7 @@ settings:
     sync: "Your calendar programme has to synchronise this calendar regularly.\nOnly\
       \ then new pick-up dates appear and cancelled dates disappear.\n"
     token-warning: "Important: Keep the link secret.\nIt contains a key to access\
-      \ your account without a password.\n"
+      \ your pick-up dates without a password.\n"
     title: Your pickup calendar
     teaser: "You can integrate your collection calendar into a calendar program of\
       \ your choice.\nTo do this, subscribe to one of the two following calendar links.\n\
@@ -328,7 +332,7 @@ profile:
       \ to the rules of conduct and the legal agreement\nand you can vouch for their\
       \ reliability and commitment.\n"
     alreadyGiven: '{name} has already received a banana from you.'
-    placeholder: at least 100 characters ...
+    placeholder: at least 100 characters …
     undo: Trust bananas cannot be changed or withdrawn.
     details: "Here you can describe in at least 100 characters why you would like\
       \ to give {name} a trust banana.\n"
@@ -347,7 +351,7 @@ profile:
     textMay: and is therefore allowed to accept food on behalf of foodsharing.
   signoutAll: Sign out of all
   signoutPickup: sign out
-  regions: '{name} is a foodsaver'
+  regions: '{name} is a foodsaver in'
   stats:
     baskets: Food baskets
     weight: saved
@@ -372,7 +376,7 @@ profile:
     title: 'Reports about {name}'
     reporterAdminNoArbitration: You are admin of the local reporting group and since
       there is no local arbitration board, you cannot submit a report.
-    reportedAdminNoArbitration: You cannot submit a report to {name} because he*she
+    reportedAdminNoArbitration: You cannot submit a report about {name} because he*she
       is admin of the local reporting group in his*her district and there is no arbitration
       board there.
     noReportGroup: You cannot use the reporting system since it is not activated for
@@ -485,7 +489,7 @@ mailbox:
   new: New mailbox
   filesize: Sorry, this file is too big.
   filetype: This file type is not allowed
-  ratelimit: You can only send one email every 15 seconds, please wait a moment ...
+  ratelimit: You can only send one email every 15 seconds, please wait a moment…
   failed: The email could not be sent.
   okay: Email was successfully sent.
   not-allowed: You don't have the necessary authorization to do that.
@@ -658,11 +662,11 @@ pickup:
   add_onetime_pickup: Add additional date
   edit_recurring_pickups: Edit regular pickup dates
   really_delete_date: Do you really want to delete the pickup on {date}?
-  leave_team_message_template: Dear all, {date} ...
+  leave_team_message_template: Dear all, {date} …
   really_leave_date: You are responsible for this pickup. Please arrange a replacement
     independently.
   kick_message_footer: Best wishes, your store managers
-  kick_message_placeholder: Optionally add information here...
+  kick_message_placeholder: Optionally add information here…
   really_leave_date_title: Sign out for {date}?
   signout_info: All your pickup dates will be deleted.
   take_empty_slot: sign up here
@@ -903,7 +907,7 @@ recipients:
   history: E-mails sent by you
   sent: The e-mail was successfully sent to {count} addresses
   send: Send e-mail
-  status: 'Sending e-mails ... (current address: {current})'
+  status: 'Sending e-mails … (current address: {current})'
   permission: You do not have permission to send e-mails
   body: Message
   recipients: Recipients
@@ -1298,7 +1302,7 @@ basket:
     call: By phone
     write: By message
   nearby-short: Nearby
-  mapsearch: Search for an address...
+  mapsearch: Search for an address…
   nearby: Food baskets nearby
   recent: Newest food baskets
   all: All food baskets
@@ -1530,14 +1534,16 @@ search:
   mygroups: My groups
   mybuddies: My buddies
   title: Search
-  forum: Search for a title...
-  placeholder: Search persons, groups, companies, ...
+  forum: Search for a title…
+  placeholder: Search persons, groups, companies, …
   persons: Persons
   groups: Groups
   myregions: My regions
   mystores: My stores
   noresults: No results could be found
   thread-title-only: Only titles are searched, not the content of the threads.
+  user_search:
+    placeholder: Name or ID
 month:
   short:
     "12": Dec.
@@ -1587,7 +1593,7 @@ wall:
   error-delete: You can not remove this post.
   delete: Delete post
   see-more: Show more posts
-  message_placeholder: Write a message...
+  message_placeholder: Write a message…
   name: Wall
   info-somebody-else: This entry is older than a month. As a store manager you can
     remove it.
@@ -1625,7 +1631,7 @@ pass:
   none: '- not yet created -'
   hintVerify: "Foodsavers can be verified as soon as they were handed their ID card\
     \ and their personal data has been checked.\n"
-  notGenerated: Your passport could not be generated.
+  notGenerated: The passports could not be generated.
 ui:
   switch:
     on: published
@@ -1753,7 +1759,7 @@ bcard:
       a maximum of 49 characters.
   desc: Choose the region and role, for which you would like to generate your business
     card.
-  claim: Generate, print and cut easily here ...
+  claim: Generate, print and cut easily here …
   info:
     address_shortened: Your address will be abbreviated on the business card.
 picture_upload_widget:
@@ -1918,7 +1924,7 @@ register:
   other: other
   woman: female
   man: male
-  select_your_gender: For the salutation...
+  select_your_gender: For the salutation…
   join_error: Your registration was not successful.
   join_success: Your registration was successfull.
   finish: Send registration
@@ -2254,8 +2260,8 @@ startpage:
       part1: Also, there are
   store:
     title: as a company
-    text: You are employed in a grocery store, restaurant or cafeteria...? Sign up
-      your company and rescue food.
+    text: You are employed in a grocery store, restaurant or cafeteria…? Sign up your
+      company and rescue food.
   member:
     title: as a member
     text: Share your surplus food with the foodsharing community or rescue food from
@@ -2307,7 +2313,7 @@ regionPin:
   lat: 'Latitude'
   save: save
   text_desc: Please provide a description of the local group or contact option here.
-    This is shown in the popup of the pin from the map ...
+    This is shown in the popup of the pin from the map …
   header_page: Public description of the district {bezirk}
   lon: Longitude
   desc: Description
