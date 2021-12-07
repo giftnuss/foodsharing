@@ -131,7 +131,7 @@ group:
     amministratori'
   member_count: '{0} Nessun collaboratore | {1} Un collaboratore | [2, Inf [% count%
     collaboratori'
-  subtitle: qui troverai aiuto e tanto da fare ...
+  subtitle: qui troverai aiuto e tanto da fare …
   title: gruppi di lavoro-foodsharing
   administrators: amministratore del gruppo
   members: Membri
@@ -166,7 +166,7 @@ bcard:
   choose: Devi scegliere un'opzione
   desc: Scegli qui per quale distretto o per quale ruolo vorresti creare il tuo biglietto
     da visita.
-  claim: Genera, stampa e ritaglia facilmente ....
+  claim: Genera, stampa e ritaglia facilmente …
   generate: Creare biglietto da visita
   actions: opzione
   for: '{role} per {region}'
@@ -461,7 +461,7 @@ register:
   error: C'è stato un errore
   other: diversi
   man: mascile
-  select_your_gender: Per il saluto ...
+  select_your_gender: Per il saluto …
   check_mail: Controlla ora la tua casella di posta elettronica per completare la
     registrazione!
   join_error: La tua registrazione non era possibile.
@@ -679,14 +679,14 @@ pickup:
   join_title_date: Siccuro?
   team_message_success: Il messaggio al team è stato inviato con successo
   team_message_send_and_leave: Invia e annulla l'iscrizione
-  leave_team_message_template: Carissimi, {data} ...
+  leave_team_message_template: Carissimi, {data} …
   leave_team_message_title: Messaggio al team
   leave_pickup_message_team: Avvisa il team
   leave_pickup_ok: Ho già un sostituto
   really_leave_date: Sei responsabile di questo ritiro. Si prega di prendersi cura
     della propria sostituzione.
   kick_message_footer: Saluti, vostri responsabili delle agenzie
-  kick_message_placeholder: Facoltativamente, aggiungi informazioni qui ...
+  kick_message_placeholder: Facoltativamente, aggiungi informazioni qui …
   kick_message: ti abbiamo rimosso dal ritiro {storeName} il {date}.
   really_kick_user_info: "Vuoi davvero annullare l'iscrizione di {name} dalla raccolta\
     \ il {date}?\n{name} riceverà il seguente messaggio su questo:\n"
@@ -906,8 +906,8 @@ startpage:
       \ essere raggiunto.\n"
     title: Pretese
   store:
-    text: Lavori in un supermercato, un ristorante, una mensa...? Registra la tua
-      azienda e salva il cibo.
+    text: Lavori in un supermercato, un ristorante, una mensa…? Registra la tua azienda
+      e salva il cibo.
     title: come azienda
   private:
     text: Combatti lo spreco di cibo nella tua famiglia. Forniamo informazioni in
@@ -1344,7 +1344,7 @@ wall:
     puoi rimuoverla se necessario.
   delete: eliminare il post
   see-more: Mostra più post
-  message_placeholder: Scrivere messaggio...
+  message_placeholder: Scrivere messaggio…
   error-create: Non è stato possibile salvare la tua immissione in Bacheca.
   created: Fantastico, la tua immissione in bacheca è stata salvata.
   confirm-deletion: Cancellare definitivamente l'immissione in bacheca da parte di{nome}?
@@ -1506,7 +1506,7 @@ memberlist:
   header_for_district: Foodsaver nel distretto {distretto}
   some_in_all: ({some} da {all})
 list:
-  filter_for: Filtra per...
+  filter_for: Filtra per…
 menu:
   entry:
     imprint: Impronta
@@ -1647,7 +1647,7 @@ basket:
   on: Cestino di cibo da {piattaforma}
   by: Cesto alimentare da {nome}
   go: al cesto di cibo
-  mapsearch: Ricerca indirizzo...
+  mapsearch: Ricerca indirizzo…
   nearby-short: Vicino a te
   nearby: Cesti alimentari vicino a te
   recent: Ultimi cesti alimentari
@@ -1753,14 +1753,16 @@ search:
   mystores: Le mie aziende
   mybuddies: I miei Buddies
   thread-title-only: Si cercano solo i titoli, non il testo dei post.
-  forum: Cerca per titolo...
-  placeholder: Cerca persone, gruppi, aziende, ...
+  forum: Cerca per titolo…
+  placeholder: Cerca persone, gruppi, aziende, …
   persons: Persone
   groups: Gruppi
   myregions: I miei distretti
   mygroups: I miei gruppi
   noresults: Non è stato trovato alcun risultato
   title: Ricerca
+  user_search:
+    placeholder: Nome o ID
 profile:
   report:
     arbAdminAgainstRepAdmin: Sei un amministratore del collegio arbitrale e vuoi segnalare
@@ -1804,7 +1806,7 @@ profile:
     alreadyGiven: '{nome} ha già ricevuto una banana da te.'
     messageTooShort: Inserisci almeno 100 caratteri di testo sulla tua banana.
     sent: La banana è stata inviata!
-    placeholder: almeno 100 caratteri...
+    placeholder: almeno 100 caratteri…
     vouch: "Quindi, per favore, dai la banana della fiducia solo a persone che conosci\
       \ personalmente,\nche rispettano le regole di condotta e l'accordo legale\n\
       e di cui potete garantire l'affidabilità e l'impegno.\n"
@@ -2000,7 +2002,7 @@ mailbox:
   mark_as_unread: Contrassegnare come non letto
   filesize: Scusa, il file è troppo grande.
   filetype: Questo tipo di file non è permesso
-  ratelimit: Puoi inviare solo un'email ogni 15 secondi, per favore aspetta un momento....
+  ratelimit: Puoi inviare solo un'email ogni 15 secondi, per favore aspetta un momento…
   recipients: Troppi destinatari
   failed: L'e-mail non può essere inviata.
   okay: L'e-mail è stata inviata con successo.
@@ -2270,4 +2272,4 @@ regionPin:
   header_page: Descrizione pubblica del gruppo locale per il distretto {bezirk}
   pin_visible: Pin visibile sulla mappa
   text_desc: Si prega di fornire una descrizione del gruppo locale o dell'opzione
-    di contatto qui. Questo è mostrato nel popup del pin dalla mappa ...
+    di contatto qui. Questo è mostrato nel popup del pin dalla …
