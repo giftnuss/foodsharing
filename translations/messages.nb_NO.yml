@@ -1437,6 +1437,8 @@ fsp:
     from: Nyheter fra distribusjonsstasjon «{name}»
     descSettings: Du følger all informasjon fra distribusjonsstasjonen «{navn}». Hvordan
       vil du motta disse varslene?
+    bell: kun intern varsling (klokke)
+    mail: Klokke og e-postvarsel
   pic: Bilde
   location: Postnummer og by
   street: Gate
