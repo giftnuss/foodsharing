@@ -1030,7 +1030,7 @@ email_template:
   in: in
   to: to
   request_from: Request by
-  foodbasket_request: Your food basket was requested by %SENDER
+  foodbasket_request: Your food basket was requested by %SENDER%
   foodsharepoint: -- Food-share-point
   yourFSteam: Your foodsharing team.
   dont_respond:
@@ -1270,7 +1270,7 @@ footer:
   dataprivacy: Privacy
   imprint: Impressum
   team: Team
-  denns_at_alt_text: denn’s organic market
+  denns_at_alt_text: Denns BioMarkt
   wiener_tafel_alt_text: Wiener Tafel
   lebensministerium_alt_text: Federal Ministry of Agriculture, Regions and Tourism
   hosting_tooltip: hosted carbon-neutral by manitu.
@@ -2296,7 +2296,8 @@ startpage:
       \ beta app are \nopen source and they are based on the involvement and compassion\
       \ of many. How you can participate in the IT department?\n"
   private:
-    text: Fight food-waste in your household. We are informing on events such as.
+    text: Fight food-waste in your household. We provide information on how to do
+      this at trade fairs and events.
     title: in private
   slogan_3: foodsharing is and remains free of charge.
   slogan_2: collaborative, sustainable & appreciative
