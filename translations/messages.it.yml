@@ -153,6 +153,9 @@ group:
   member_list:
     remove_title: Rimuovi membro
     remove_text: Vuoi davvero rimuovere {name} ({id}) dal gruppo di lavoro?
+    add_member: Includere nel team
+    admin_mode_on: Attiva vista per amministratori
+    admin_mode_off: Torna alla visualizzazione standard
 bcard:
   info:
     address_shortened: Il tuo indirizzo e / o codice postale + luogo verranno visualizzati
@@ -1943,7 +1946,7 @@ settings:
       Solo allora appariranno nuovi appuntamenti di ritiro o gli appuntamenti cancellati\
       \ non appariranno più.\n"
     token-warning: "Importante: assicurati di mantenere il link segreto.\nContiene\
-      \ una chiave per accedere al tuo account senza password.\n"
+      \ una chiave per accedere alle date di ritiro senza password.\n"
     teaser: "Puoi visualizzare il tuo calendario di raccolta con un programma di calendario\
       \ di tua scelta.\nPrima crea un token e poi sottoscrivi uno dei due link del\
       \ calendario.\nPuoi trovare maggiori informazioni nel wiki su\n"
@@ -2093,7 +2096,7 @@ footer:
   beta_testing_issues: Compiti di prova della versione beta
   lebensministerium_alt_text: Ministero della vita - Austria
   wiener_tafel_alt_text: Wiener Tafel - Tavola di cibo a Vienna
-  denns_at_alt_text: Denns’s Bio-Markt
+  denns_at_alt_text: Denns BioMarkt
   donate: Sostenere
   hosting_tooltip: CO2-neutrale ospitato su manitu.
   hosting_info: CO2-neutrale ospitata su
