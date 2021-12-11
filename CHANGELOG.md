@@ -22,6 +22,7 @@
 - Fix for future timeslot visibility to use Europe/Berlin timezone !2070 @fs_k 
 
 ## Refactoring
+- Get Members in MemberList.vue from Rest Api !2094 @chriswalg @alex.simm
 
 ## Dev/Test/CI stuff
 

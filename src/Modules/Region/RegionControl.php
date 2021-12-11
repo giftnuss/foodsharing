@@ -439,7 +439,6 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
-		$viewdata['region']['members'] = $this->foodsaverGateway->listActiveFoodsaversByRegion($region['id']);
 		$viewdata['mayEditMembers'] = $this->workGroupPermission->mayEdit($region);
 		$viewdata['userId'] = $this->session->id();
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));

@@ -31,3 +31,7 @@ export function setRegionPin (regionId, lat, lon, desc, status) {
 export function listRegionChildren (regionId) {
   return get(`/region/${regionId}/children`)
 }
+
+export function listRegionMembers (regionId) {
+  return get(`/region/${regionId}/members`)
+}

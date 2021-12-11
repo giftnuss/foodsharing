@@ -146,6 +146,7 @@
 import { optimizedCompare } from '@/utils'
 import { BButton, BTable, BPagination, VBTooltip } from 'bootstrap-vue'
 import { removeMember, addMember } from '@/api/groups'
+import { listRegionMembers } from '@/api/regions'
 import { hideLoader, pulseError, showLoader } from '@/script'
 import i18n from '@/i18n'
 import UserSearchInput from '@/components/UserSearchInput'
@@ -159,10 +160,6 @@ export default {
     regionName: {
       type: String,
       default: '',
-    },
-    members: {
-      type: Array,
-      default: () => [],
     },
     isWorkGroup: {
       type: Boolean,
@@ -193,7 +190,7 @@ export default {
           class: 'button-column',
         },
       ],
-      memberList: this.members,
+      memberList: [],
       isBusy: false,
       managementModeEnabled: false,
     }
@@ -211,6 +208,18 @@ export default {
         )
       })
     },
+  },
+  async mounted () {
+    // fetch the member list from the server
+    showLoader()
+    this.isBusy = true
+    try {
+      this.memberList = await listRegionMembers(this.groupId)
+    } catch (e) {
+      pulseError(i18n('error_unexpected'))
+    }
+    this.isBusy = false
+    hideLoader()
   },
   methods: {
     compare: optimizedCompare,

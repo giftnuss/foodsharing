@@ -281,4 +281,29 @@ class RegionRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view($response, 200));
 	}
+
+	/**
+	 * Returns a list of all members for a region.
+	 *
+	 * @OA\Tag(name="region")
+	 * @OA\Parameter(name="regionId", in="path", @OA\Schema(type="integer"), description="ID of the region or 0 for the root region")
+	 * @OA\Response(response="200", description="success")
+	 * @OA\Response(response="401", description="Not logged in")
+	 * @OA\Response(response="403", description="Not in this region")
+	 * @Rest\Get("region/{regionId}/members", requirements={"regionId" = "\d+"})
+	 */
+	public function listMembersAction(int $regionId): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		if (!in_array($regionId, $this->session->listRegionIDs())) {
+			throw new HttpException(403);
+		}
+
+		$response = $this->foodsaverGateway->listActiveFoodsaversByRegion($regionId);
+
+		return $this->handleView($this->view($response, 200));
+	}
 }
