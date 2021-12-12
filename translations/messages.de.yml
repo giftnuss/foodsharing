@@ -344,7 +344,7 @@ group:
     stores: "Betriebe"
     report: "Meldungen"
     mediation: "Mediation"
-    arbitration: "Schiedstelle"
+    arbitration: "Schiedsstelle"
     fsmanagement: "Verwaltung"
     pr: "Öffentlichkeitsarbeit"
     moderation: "Moderation"
@@ -431,7 +431,7 @@ login:
   error_no_password: "Bitte gib dein Passwort an."
   error_no_auth: "Leider finden wir diese E-Mail-Adresse oder Passwort nicht, bitte versuche es noch einmal."
   success: "<b>Wunderschönen Tag dir, {user_name}!</b>"
-  logout: "Logout"
+  logout: "Abmelden"
   pwreset:
     bread: "Passwort zurücksetzen"
     wrongMail: "Leider finden wir diese E-Mail-Adresse nicht, bitte versuche es noch einmal."
@@ -478,7 +478,7 @@ register:
   next: "weiter"
   finish: "Anmeldung absenden"
   join_success: "Deine Registrierung war erfolgreich."
-  join_success_message: "Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner Email und deinem Passwort einloggen."
+  join_success_message: "Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen. Du kannst dich nun mit deiner E-Mail und deinem Passwort einloggen."
   join_error: "Deine Registrierung war nicht erfolgreich."
   check_mail: "Schau jetzt in dein E-Mail-Postfach, um die Anmeldung abzuschließen!"
   select_your_gender: "Für die Anrede…"
@@ -881,7 +881,7 @@ forum:
   thread:
     with_mail: "Thema eröffnet und alle per E-Mail darüber informiert"
     no_mail: "Das Thema wurde eröffnet, ohne E-Mails zu versenden"
-    too_big_to_mail: "Für das Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt."
+    too_big_to_mail: "Für das Thema wurden keine E-Mails versendet, da es sich um ein Land oder ein Bundesland handelt."
     activate: "Thema aktivieren"
     delete: "Thema löschen"
     inactive: |
@@ -1115,9 +1115,9 @@ reports:
   info: '
     <br>
     <br>
-    !! Bitte gebe das <b>Datum</b>, den <b>Ort</b> und die <b>Uhrzeit</b> des Vorfalles an !! <br>
-    Bitte überprüfe ob du die dir verfügbaren Kommunikationswege probiert hast um den Vorfall mit
-    bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an
+    !! Bitte gib das <b>Datum</b>, den <b>Ort</b> und die <b>Uhrzeit</b> des Vorfalls an !! <br>
+    Bitte überprüfe, ob du die dir verfügbaren Kommunikationswege probiert hast, um den Vorfall mit
+    bei der Person direkt anzusprechen und den Sachverhalt zu klären. Gib bitte an,
     wie du am besten für Rückfragen bei der Bearbeitung zu erreichen bist.'
 
   #|
@@ -1226,7 +1226,7 @@ pickuplist:
   NumberOfSlots_table_header: "Anzahl Slots"
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
   tooslow: "Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war."
-  tryagain: "Versuche es nach einem neu laden einfach noch mal."
+  tryagain: "Versuche es nach einem Neuladen einfach noch mal."
   error_loadingPickup: "Laden der Slots fehlgeschlagen: "
   error_leave: "Verlassen fehlgeschlagen: "
   error_kick: "Entfernen fehlgeschlagen: "
@@ -1557,7 +1557,7 @@ profile:
   homeRegion: "Stammbezirk von {name}"
   workgroups_admin: "{name} engagiert sich als Ansprechperson für die Gruppen"
   workgroups_member: "Du bist mit {name} gemeinsam in folgenden Arbeitsgruppen"
-  no_common_workgroups: "Du bist mit {name} in keiner gemeinsamen Arbeitsgruppe"
+  no_common_workgroups: "Du bist mit {name} in keiner gemeinsamen Arbeitsgruppe."
   sleeping: "{name} hat eine Schlafmütze auf unbestimmte Zeit"
   sleepinfo: "{name} hat eine Schlafmütze auf vom {from} bis {until}"
   about_me_intern: "Über sich selbst"
@@ -1594,8 +1594,8 @@ profile:
     noReportGroup: "Du kannst die technische Unterstützung des Meldesystems nicht nutzen, da für den Bezirk des Foodsaver diese nicht aktiviert ist."
     reportedAdminNoArbitration: "Du kannst keine Meldung gegen {name} absetzen, da diese*r Administrator*in der lokalen Meldungsgruppe des Bezirkes ist und dort keine Schiedstelle existiert."
     reporterAdminNoArbitration: "Du bist Administrator*in der lokalen Meldungsgruppe und da es keine lokale Schiedsstelle gibt, kannst du keine Meldung absetzen."
-    repAdminAgainstArbAdmin: "Du bist Administrator*in des Meldebearbeitungsteams und willst eine*n Administrator*in der Schiedsstelle melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
-    arbAdminAgainstRepAdmin: "Du bist Administrator*in der Schiedstelle und willst eine*n Administrator*in der Meldebearbeitung melden. Dies wird im moment technisch nicht untersützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
+    repAdminAgainstArbAdmin: "Du bist Administrator*in des Meldebearbeitungsteams und willst eine*n Administrator*in der Schiedsstelle melden. Dies wird im Moment technisch nicht unterstützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal Verantwortlichen für diesen Fall einreichen."
+    arbAdminAgainstRepAdmin: "Du bist Administrator*in der Schiedstelle und willst eine*n Administrator*in der Meldebearbeitung melden. Dies wird im Moment technisch nicht unterstützt. Du kannst jederzeit eine Meldung per E-Mail an die für euch lokal verantwortlichen für diesen Fall einreichen."
 search:
   title: "Suche"
   placeholder: "Suche Personen, Gruppen, Betriebe, …"
@@ -1896,7 +1896,7 @@ footer:
   it_devdocs: "by foodsharing IT"
   wiener_tafel_alt_text: "Wiener Tafel"
   lebensministerium_alt_text: "Lebensministerium"
-  denns_at_alt_text: "Denns´s Bio-Markt"
+  denns_at_alt_text: "Denn's Biomarkt"
 
 releases:
   "2021-09": "Release \"Feige\" 🥧 (September 2021)"
@@ -1926,7 +1926,6 @@ storelist:
  city: "Ort"
  added: "Eingetragen"
  region: "Bezirk"
- geo: "geo"
  nocontact: "Noch kein Kontakt"
  inprogress: "Verhandlungen laufen"
  cooperating: "In Kooperation"
@@ -2211,9 +2210,9 @@ startpage:
   this_is_how_it_works: So funktioniert's
   mission:
     title: "Mission"
-    text: "Unser langfristiges Ziel ist es die Wegwerfkultur von Lebensmitteln und anderen Ressourcen zu vermindern.
+    text: "Unser langfristiges Ziel ist es, die Wegwerfkultur von Lebensmitteln und anderen Ressourcen zu vermindern.
       Wir retten Lebensmittel in privaten Haushalten sowie von Betrieben - gemeinschaftlich, nachhaltig & wertschätzend.
-      Wir verstehen und als Bildungspolitische Bewegung."
+      Wir verstehen uns als bildungspolitische Bewegung."
   call_to_action:
     title: "Mach mit"
     text: "Wir entstanden 2012, mittlerweile sind wir eine internationale Bewegung  mit über 200.000 Nutzer*innen

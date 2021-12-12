@@ -14,6 +14,7 @@
 - Add a button to the group member list for removing members !2075 @alex.simm @chriswalg
 - Add a management mode to group member list to add and remove members !2075 @chriswalg
 - Add frontend functionality to display 'today' or 'tomorrow' in the event header instead of date !2069 #1120 @alexander-sav
+- change german wordings in translate file !2080 @Jonathan_B
 
 ## Bugfixes
 - Fixed the list of responsible store members in REST responses !2033 #1124 @alex.simm
