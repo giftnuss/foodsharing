@@ -113,7 +113,7 @@ class CalendarRestController extends AbstractFOSRestController
 	/**
 	 * Returns the user's future pickup dates as iCal.
 	 *
-	 * @OA\Parameter(name="token", in="path", @OA\Schema(type="string"), description="Access tken")
+	 * @OA\Parameter(name="token", in="path", @OA\Schema(type="string"), description="Access token")
 	 * @OA\Response(response="200", description="Success.")
 	 * @OA\Response(response="403", description="Insufficient permissions or invalid token.")
 	 * @OA\Tag(name="calendar")
