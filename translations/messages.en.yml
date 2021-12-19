@@ -458,7 +458,7 @@ profile:
     warning_2: changing the email address
     warning_1: Your personal email address {email} is blocked for foodsharing e-mail
       and communication. By
-  no_common_workgroups: You are not in any common group with {name}
+  no_common_workgroups: You are not in any common group with {name}.
   workgroups_member: You and {name} are in the following working groups
   workgroups_admin: '{name} is committed as a contact person for the working groups'
 test:
@@ -893,8 +893,8 @@ reports:
   in-store: Does the message concern a specific store where {user} picks up?
   store: Assigned store
   reportmessage: Please indicate how you can be reached if we have further questions.
-  info: ' !! Please specify the <b>date</b>, the <b>place</b> and the <b>time</b>
-    of the incident !!! <br> Please check if you have tried the available communication
+  info: ' <br> <br> !! Please specify the <b>date</b>, the <b>place</b> and the <b>time</b>
+    of the incident !! <br> Please check if you have tried the available communication
     channels to address the incident directly with the person and to clarify the facts.
     Please indicate how you can best be reached for queries during processing.'
 recipients:

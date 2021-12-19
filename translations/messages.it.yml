@@ -1904,7 +1904,7 @@ profile:
     history: Cronologia del passaporto
     buddy: Conosco {nome}
     edit: Modifica profilo
-  no_common_workgroups: Non sei in un gruppo con {name}
+  no_common_workgroups: Non sei in un gruppo con {name}.
   workgroups_member: Sei con {name} nei seguenti gruppi
   workgroups_admin: '{name} è la persona di contatto per i gruppi'
 mail:

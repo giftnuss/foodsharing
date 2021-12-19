@@ -655,7 +655,7 @@ profile:
     warning_3: 'fjernes denne blokkeringen. Du finner mer informasjon i '
     remove_button: Fjern fra avvisningslisten
   workgroups_admin: '{name} er kontaktperson for gruppene'
-  no_common_workgroups: Du er ikke i noen felles arbeidsgruppe med {name}
+  no_common_workgroups: Du er ikke i noen felles arbeidsgruppe med {name}.
   homeRegion: Hjemmedistriktet til {name}
   about_me_intern: Om meg
   pinboard: Statusoppdateringer fra {name}
