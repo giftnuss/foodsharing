@@ -5,7 +5,7 @@ name: 名称
 description: 描述
 desc: 描述
 edit: 更改
-nachname: 姓氏
+nachname: 姓名
 geb_datum: 生日日期
 handy: 手机号码
 telefon: 座机号码
@@ -57,7 +57,7 @@ stadt: 所在城市或乡镇
 lon: 经度
 lat: 纬度
 fs_id: 分食号
-parent_id: 主属地区
+parent_id: 关于地区
 botschafter: 大使
 geschlecht: 性别
 anschrift: 街道号及房号（在上面地图自动生成，然后手动矫正）
