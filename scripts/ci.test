@@ -35,46 +35,35 @@ echo $SECONDS seconds elapsed
 log-header "Running tests"
 failed=0
 SECONDS=0
-vendor/bin/codecept run --xml --html || failed=1
+vendor/bin/codecept run --xml=report-0.xml --html=report-0.html || failed=1
 echo $SECONDS seconds elapsed
 
-if [ $failed -eq 1 ]; then
+if [ $failed -eq 0 ] # first run succeeded, we can finish early
+then
+  log-header "Done!"
+  exit 0
+fi
+
+while [ $failed -le 3 ] # re-run failed tests 3 times
+do
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  grep -E '<error|<failure' tests/_output/report.xml || \
+  grep -E '<error|<failure' tests/_output/report-$((failed - 1)).xml || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  vendor/bin/codecept run --xml --html -g failed || failed=2
+  # create separate report files for each re-run so we don't overwrite the previous reports
+  if vendor/bin/codecept run --xml=report-$failed.xml --html=report-$failed.html -g failed;
+  then
+    log-header "Done!"
+    exit 0
+  else
+    ((failed++))
+  fi
   echo $SECONDS seconds elapsed
-fi
+done
 
-if [ $failed -eq 2 ]; then
-  log-header "Check for codeception errors"
-  # check if codeception generated a report file that contains failed tests
-  # Otherwise, codeception probably failed itself and the whole job should fail
-  grep -E '<error|<failure' tests/_output/report.xml || \
-    (echo "report.xml is incomplete, aborting" && false)
-
-  log-header "Rerunning failed tests"
-  SECONDS=0
-  vendor/bin/codecept run --xml --html -g failed || failed=3
-  echo $SECONDS seconds elapsed
-fi
-
-if [ $failed -eq 3 ]; then
-  log-header "Check for codeception errors"
-  # check if codeception generated a report file that contains failed tests
-  # Otherwise, codeception probably failed itself and the whole job should fail
-  grep -E '<error|<failure' tests/_output/report.xml || \
-    (echo "report.xml is incomplete, aborting" && false)
-
-  log-header "Rerunning failed tests"
-  SECONDS=0
-  vendor/bin/codecept run -g failed
-  echo $SECONDS seconds elapsed
-fi
-
-log-header "Done!"
+# maximum tries reached
+exit 1
