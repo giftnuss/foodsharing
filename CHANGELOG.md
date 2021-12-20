@@ -38,6 +38,7 @@
 - Add triage bot to pipeline !2074 @iron9
 - Remove wrong query parameter in the calendar API #1147 @alex.simm
 - added crossreferenced infos to devdocs #1149 !2082
+- Run tests for websocket server ("chat server") on CI again !2091 @janopae
 
 # Release "Feige", 2021-09-24
 

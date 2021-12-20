@@ -206,7 +206,7 @@ build:docs:
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
 
-test:
+test:backend:
   <<: *defaults
   interruptible: true
   variables:
@@ -258,6 +258,35 @@ test:
     # make the report available in Gitlab UI. see https://docs.gitlab.com/ee/ci/unit_test_reports.html
     reports:
       junit: tests/_output/report-*.xml
+
+test:backend-chat:
+  <<: *defaults
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'production'
+    - if: $CI_MERGE_REQUEST_ID
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+  interruptible: true
+  variables:
+    REDIS_HOST: redis
+  image: node:14.14.0-alpine3.12
+  services:
+    - name: redis:6.0.8-alpine
+      alias: redis
+  stage: test
+  dependencies:
+    - build:backend-chat
+  script:
+    - (cd chat && yarn test)
+  cache:
+    key: chat:build:v2
+    paths:
+      - chat/node_modules
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - chat/node_modules
+
 
 deploy:beta:
   <<: *deploy
