@@ -36,6 +36,7 @@
 - Fix docker setup breaking down because of InfluxDB 2 !2086 @\_fridtjof_
 - Add triage bot to pipeline !2074 @iron9
 - Remove wrong query parameter in the calendar API #1147 @alex.simm
+- added crossreferenced infos to devdocs #1149 !2082
 
 # Release "Feige", 2021-09-24
 
