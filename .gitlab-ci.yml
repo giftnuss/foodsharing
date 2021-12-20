@@ -56,12 +56,39 @@ stages:
 - test
 - deploy
 
+triage:dry-run:
+  image: ruby:2.7.2-alpine3.12
+  stage: triage
+  script:
+  - gem install gitlab-triage
+  - gitlab-triage --help
+  - gitlab-triage --dry-run --token $API_TOKEN --source-id $CI_PROJECT_PATH
+  when: manual
+  except:
+    - schedules
+  tags:
+  - shared
+  - linux
+
+triage:manual:
+  image: ruby:2.7.2-alpine3.12
+  stage: triage
+  script:
+  - gem install gitlab-triage
+  - gitlab-triage --token $API_TOKEN --source-id $CI_PROJECT_PATH
+  when: manual
+  except:
+    - schedules
+  tags:
+  - shared
+  - linux
+
 triage:
   image: ruby:2.7.2-alpine3.12
   stage: triage
   script:
   - gem install gitlab-triage
-  - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
+  - gitlab-triage --token $API_TOKEN --source-id $CI_PROJECT_PATH
   rules:
   - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB == "triage"
     when: always
