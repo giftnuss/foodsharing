@@ -9,6 +9,7 @@ import { pictureCrop, pictureReady, ifconfirm } from '@/script'
 import { expose } from '@/utils'
 import { vueApply, vueRegister } from '@/vue'
 import BlogOverview from './components/BlogOverview.vue'
+import FileUploadVForm from '@/components/upload/FileUploadVForm'
 
 expose({
   pictureCrop,
@@ -21,4 +22,9 @@ if (GET('sub') === 'manage') {
     BlogOverview,
   })
   vueApply('#vue-blog-overview') // BlogOverview
+} else if (GET('sub') === 'add' || GET('sub') === 'edit') {
+  vueRegister({
+    FileUploadVForm,
+  })
+  vueApply('#image-upload')
 }

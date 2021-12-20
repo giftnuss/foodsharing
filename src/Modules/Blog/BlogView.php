@@ -20,6 +20,13 @@ class BlogView extends View
 {
 	private BlogPermissions $blogPermissions;
 
+	// picture size on the blog post page and the upload form
+	private const PICTURE_FULL_WIDTH = 528;
+	private const PICTURE_FULL_HEIGHT = 285;
+	// picture size in the blog list
+	private const PICTURE_PREVIEW_WIDTH = 500;
+	private const PICTURE_PREVIEW_HEIGHT = 161;
+
 	public function __construct(
 		\Twig\Environment $twig,
 		Session $session,
@@ -71,7 +78,7 @@ class BlogView extends View
 			. '</span><span class="name"> von '
 			. $news['fs_name']
 			. '</span></p>'
-			. $this->getImage($news, 'crop_0_528_')
+			. $this->getImage($news, null, 'crop_0_528_')
 			. '<p>'
 			. $this->sanitizerService->purifyHtml($news['body'])
 			. '</p><div class="clear"></div></div>'
@@ -83,18 +90,28 @@ class BlogView extends View
 		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate(
 				$news['time_ts']
 			) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage(
-				$news
+				$news, [self::PICTURE_PREVIEW_WIDTH, self::PICTURE_PREVIEW_HEIGHT]
 			) . '<p>' . $this->routeHelper->autolink(
 				$news['teaser']
 			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div class="clear"></div></div>';
 	}
 
-	private function getImage(array $news, string $prefix = 'crop_1_528_'): string
+	private function getImage(array $news, array $size = null, string $prefix = 'crop_1_528_'): string
 	{
 		if (empty($news['picture'])) {
 			return '';
 		}
-		$src = '/images/' . str_replace('/', '/' . $prefix, $news['picture']);
+
+		if (strpos($news['picture'], '/api/uploads/') === 0) {
+			// path for pictures uploaded with the new API
+			$src = $news['picture'];
+			if (!empty($size)) {
+				$src .= '?w=' . $size[0] . '&h=' . $size[1];
+			}
+		} else {
+			// backward compatible path for old pictures
+			$src = '/images/' . str_replace('/', '/' . $prefix, $news['picture']);
+		}
 
 		return '<a href="/?page=blog&sub=read&id=' . $news['id'] . '">'
 			. '<img class="corner-all" src="' . $src . '" />'
@@ -113,14 +130,14 @@ class BlogView extends View
 		return '<p class="pager">' . $links . '</p>';
 	}
 
-	public function blog_entry_form(array $regions, bool $add = false): string
+	public function blog_entry_form(array $regions, array $data = null): string
 	{
 		if (count($regions) < 1) {
 			// TODO this is not supposed to happen, handle better
 			return '';
 		}
 
-		if ($add) {
+		if (is_null($data)) {
 			$title = $this->translator->trans('blog.new');
 		} else {
 			$title = $this->translator->trans('blog.edit');
@@ -136,6 +153,27 @@ class BlogView extends View
 			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $regions]);
 		}
 
+		// create picture upload component
+		$initialValue = '';
+		if (!is_null($data) && !empty($data['picture'])) {
+			if (strpos($data['picture'], '/api/uploads/') === 0) {
+				// path for pictures uploaded with the new API
+				$initialValue = $data['picture'];
+			} else {
+				// backward compatible path for old pictures
+				$initialValue = 'images/' . $data['picture'];
+			}
+		}
+		$uploadForm = $this->vueComponent('image-upload', 'file-upload-v-form', [
+			'inputName' => 'picture',
+			'isImage' => true,
+			'initialValue' => $initialValue,
+			'imgHeight' => self::PICTURE_FULL_WIDTH,
+			'imgWidth' => self::PICTURE_FULL_HEIGHT
+		]);
+
+		$this->dataHelper->setEditData($data);
+
 		return $this->v_utils->v_form('test', [
 			$this->v_utils->v_field(
 				$this->v_utils->v_info($this->translator->trans('blog.publish-info'))
@@ -144,7 +182,7 @@ class BlogView extends View
 				. $this->v_utils->v_form_textarea('teaser', [
 					'style' => 'height:75px;',
 				])
-				. $this->v_form_picture('picture', [250, 528], [(250 / 135), (528 / 170)]),
+				. $uploadForm,
 				$title,
 				['class' => 'ui-padding']
 			),
@@ -154,70 +192,5 @@ class BlogView extends View
 				'label' => $this->translator->trans('blog.content'),
 			]), $this->translator->trans('blog.content'))
 		]);
-	}
-
-	/**
-	 * @deprecated Use modern frontend code instead
-	 */
-	private function v_form_picture(string $id, array $resize, array $crop): string
-	{
-		$id = $this->identificationHelper->id($id);
-
-		$this->pageHelper->addJs('
-			$("#' . $id . '-link").fancybox({
-				minWidth: 600,
-				scrolling: "auto",
-				closeClick: false,
-				helpers: {
-					overlay: {closeClick: false}
-				}
-			});
-
-			$("#' . $id . '-opener").button().on("click", function () {
-				$("#' . $id . '-link").trigger("click");
-			});
-		');
-
-		$this->pageHelper->addHidden('
-		<div id="' . $id . '-fancy">
-			<div class="popbox">
-				<h3>' . $this->translator->trans('picture_upload_widget.picture_upload') . '</h3>
-				<p class="subtitle">' . $this->translator->trans('picture_upload_widget.choose_picture') . '</p>
-
-				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=1">
-
-					<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
-
-					<input type="hidden" id="' . $id . '-action" name="action" value="uploadPicture" />
-					<input type="hidden" id="' . $id . '-id" name="id" value="' . $id . '" />
-
-					<input type="hidden" id="' . $id . '-x" name="x" value="0" />
-					<input type="hidden" id="' . $id . '-y" name="y" value="0" />
-					<input type="hidden" id="' . $id . '-w" name="w" value="0" />
-					<input type="hidden" id="' . $id . '-h" name="h" value="0" />
-
-					<input type="hidden" id="' . $id . '-ratio" name="ratio" value="' . json_encode($crop) . '" />
-					<input type="hidden" id="' . $id . '-ratio-i" name="ratio-i" value="0" />
-					<input type="hidden" id="' . $id . '-ratio-val" name="ratio-val" value="[]" />
-					<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($resize) . '" />
-				</form>
-
-				<div id="' . $id . '-crop"></div>
-
-				<iframe src="" id="' . $id . '-iframe" name="' . $id . '-iframe" style="width: 1px; height: 1px; visibility: hidden;"></iframe>
-			</div>
-		</div>');
-
-		$thumb = '';
-
-		$pic = $this->dataHelper->getValue($id);
-		if (!empty($pic)) {
-			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
-		}
-		$out = '
-			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
-			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
-
-		return $this->v_utils->v_input_wrapper($this->translator->trans($id), $out);
 	}
 }

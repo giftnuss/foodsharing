@@ -15,6 +15,7 @@
 - Add a management mode to group member list to add and remove members !2075 @chriswalg
 - Add frontend functionality to display 'today' or 'tomorrow' in the event header instead of date !2069 #1120 @alexander-sav
 - change german wordings in translate file !2080 @Jonathan_B
+- Replace picture upload for blog posts with the new upload API #45 !2089 @alex.simm
 
 ## Bugfixes
 - Fixed the list of responsible store members in REST responses !2033 #1124 @alex.simm

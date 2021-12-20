@@ -169,47 +169,6 @@ class XhrMethods
 		$response->send();
 	}
 
-	public function xhr_uploadPicture($data)
-	{
-		$func = '';
-		$id = strtolower($data['id']);
-		$id = preg_replace('/[^a-z0-9_]/', '', $id);
-		if (isset($_FILES['uploadpic'])) {
-			if ($this->is_allowed($_FILES['uploadpic'])) {
-				$filename = str_replace('.jpeg', '.jpg', strtolower($_FILES['uploadpic']['name']));
-				$extension = strtolower(substr($filename, strlen($filename) - 4, 4));
-
-				$path = ROOT_DIR . 'images/' . $id;
-
-				if (!is_dir($path)) {
-					mkdir($path);
-				}
-
-				$newname = uniqid() . $extension;
-
-				move_uploaded_file($_FILES['uploadpic']['tmp_name'], $path . '/orig_' . $newname);
-
-				copy($path . '/orig_' . $newname, $path . '/' . $newname);
-				$image = new fImage($path . '/' . $newname);
-				$image->resize(600, 0);
-
-				$image->saveChanges();
-
-				if ($_GET['crop'] == 1) {
-					$func = 'pictureCrop';
-				} elseif (isset($_POST['resize'])) {
-					return $this->pictureResize([
-						'img' => $newname,
-						'id' => $id,
-						'resize' => $_POST['resize']
-					]);
-				}
-
-				return '<html><head></head><body onload="parent.' . $func . '(\'' . $id . '\',\'' . $newname . '\');"></body></html>';
-			}
-		}
-	}
-
 	public function xhr_pictureCrop($data)
 	{
 		/*
@@ -311,33 +270,6 @@ class XhrMethods
 				imagepng($dst_r, $new_path, 0);
 				break;
 		}
-	}
-
-	private function pictureResize($data)
-	{
-		$id = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
-		$img = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
-
-		$resize = json_decode($data['resize'], true);
-
-		if (is_array($resize) && count($resize) < 5) {
-			foreach ($resize as $r) {
-				if ($r < 1000) {
-					$r = (int)$r;
-					copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-					$image = new fImage(ROOT_DIR . 'images/' . $id . '/' . $r . '_' . $img);
-					$image->resize($r, 0);
-					$image->saveChanges();
-				}
-			}
-		}
-
-		copy(ROOT_DIR . 'images/' . $id . '/' . $img, ROOT_DIR . 'images/' . $id . '/thumb_' . $img);
-		$image = new fImage(ROOT_DIR . 'images/' . $id . '/thumb_' . $img);
-		$image->resize(150, 0);
-		$image->saveChanges();
-
-		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
 	public function xhr_continueMail($data)
