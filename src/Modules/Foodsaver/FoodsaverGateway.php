@@ -734,7 +734,7 @@ final class FoodsaverGateway extends BaseGateway
 	 */
 	public function emailDomainIsBlacklisted(string $email): bool
 	{
-		$emailDomain = explode('@', $email)[1];
+		$emailDomain = strtolower(explode('@', $email)[1]);
 
 		return $this->db->exists('fs_email_blacklist', ['email' => $emailDomain]);
 	}
