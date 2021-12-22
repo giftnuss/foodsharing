@@ -61,7 +61,7 @@ As already said, you can do some good advertising for our IT and send the link t
 1. Have a look around on our [blog](https://devblog.foodsharing.de "foodsharing developer's blog") or in our [Contribution Guide](https://devdocs.foodsharing.network/contributing.html "foodsharing contributer's guide").
 2. Have a look at the long list of our [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing issues on GitLab"). Some of them are specially marked for beginners.
 3. We are especially happy if you drop by in our [Slack Chat](https://slackin.yunity.org "programmer's chat") and we find together with you possible tasks and fields of activity in IT for you in the channel *#foodsharing-dev*.
-4. If you are unsure or don't understand the English programmer pages, you are welcome to send us an email or approach [Peter](https://foodsharing.de/profile/116481 "Peter's profile"). We'll try to help you. 
+4. If you are unsure or don't understand the English programmer pages, you are welcome to send us an email or approach [Jonathan](https://foodsharing.de/profile/132347 "Jonathan's profile"). We'll try to help you. 
 
 We would also be happy to receive an email to [it@foodsharing.network](mailto:it@foodsharing.network) and to talk about how you can get involved.
 
