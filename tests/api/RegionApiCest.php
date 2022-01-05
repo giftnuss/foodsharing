@@ -5,12 +5,14 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 class RegionApiCest
 {
 	private $user;
+	private $userOrga;
 	private $region;
 
 	public function _before(ApiTester $I)
 	{
 		$this->tester = $I;
 		$this->user = $I->createFoodsaver();
+		$this->userOrga = $I->createOrga();
 		$this->region = $I->createRegion();
 	}
 
@@ -146,5 +148,29 @@ class RegionApiCest
 		$I->login($coordinator['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::CONFLICT);
+	}
+
+	public function canOnlyListRegionMembersAsMember(ApiTester $I)
+	{
+		// test before being a member
+		$I->login($this->user['email']);
+		$I->sendGET('api/region/' . $this->region['id'] . '/members');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
+
+		// test when being a member
+		$I->addRegionMember($this->region['id'], $this->user['id']);
+		$I->login($this->user['email']); // relogin needed to initialise the session
+		$I->sendGET('api/region/' . $this->region['id'] . '/members');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->seeResponseContainsJson(['id' => $this->user['id']]);
+	}
+
+	public function canListRegionMembersAsOrga(ApiTester $I)
+	{
+		$I->login($this->userOrga['email']);
+		$I->sendGET('api/region/' . $this->region['id'] . '/members');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
 	}
 }

@@ -298,7 +298,7 @@ class RegionRestController extends AbstractFOSRestController
 			throw new HttpException(401);
 		}
 
-		if (!in_array($regionId, $this->session->listRegionIDs())) {
+		if (!$this->regionPermissions->maySeeRegionMembers($regionId)) {
 			throw new HttpException(403);
 		}
 

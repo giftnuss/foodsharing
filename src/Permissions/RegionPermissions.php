@@ -96,4 +96,13 @@ final class RegionPermissions
 	{
 		return $this->mayHandleFoodsaverRegionMenu($regionId);
 	}
+
+	public function maySeeRegionMembers(int $regionId): bool
+	{
+		if ($this->session->may('orga')) {
+			return true;
+		}
+
+		return in_array($regionId, $this->session->listRegionIDs());
+	}
 }
