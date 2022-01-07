@@ -16,16 +16,18 @@ import { get } from './base'
 //   teaser?: string
 //   image?: string
 // }
+import i18n from '@/i18n'
+// imports the translations file
 
 function mapOldResponseToNewFormat (data) {
   const mapping = {
-    Foodsaver: 'users',
-    Bezirk: 'regions',
-    'Kooperationsbetrieb/e': 'stores',
-    'Deine Gruppen': 'myGroups',
-    'Deine Betriebe': 'myStores',
-    'Deine Bezirke': 'myRegions',
-    'Menschen die Du kennst': 'myBuddies',
+    [i18n('dashboard.my.users')]: 'users',
+    [i18n('storelist.region')]: 'regions',
+    [i18n('betrieb')]: 'stores',
+    [i18n('menu.entry.your_groups')]: 'myGroups',
+    [i18n('menu.entry.your_stores')]: 'myStores',
+    [i18n('dashboard.my.regions')]: 'myRegions',
+    [i18n('dashboard.my.buddies')]: 'myBuddies',
   }
   return data.reduce((o, el) => {
     const key = mapping[el.title]

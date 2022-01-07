@@ -10,6 +10,8 @@ import PhoneNumber from 'awesome-phonenumber'
 import { ajreq } from '@/script'
 
 import serverData from '@/server-data'
+import i18n from '@/i18n'
+// this last call imports the text in the respective languages
 
 export function getBrowserLocation (success) {
   if (serverData.location) return success(serverData.location)
@@ -49,13 +51,14 @@ export function dateFormat (date, format = 'full-long') {
         return dateFormat(date, 'HH:mm')
       case 'full-long':
         if (dateFnsIsSameDay(date, new Date())) {
-          return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")
+          return dateFormat(date, `'${i18n('calendar.labelToday')}', cccc, HH:mm '${i18n('date.clock')}'`)
+          // this should render the format: date, heute, cccc, HH:mm Uhr
         } else if (dateFnsIsSameDay(date, dateFnsAddDays(new Date(), 1))) {
-          return dateFormat(date, "'morgen', cccc, HH:mm 'Uhr'")
+          return dateFormat(date, `'${i18n('date.tomorrow')}', cccc, HH:mm '${i18n('date.clock')}'`)
         } else if (dateFnsIsSameYear(date, new Date())) {
-          return dateFormat(date, "cccc, do MMM, HH:mm 'Uhr'")
+          return dateFormat(date, `cccc, do MMM, HH:mm '${i18n('date.clock')}'`)
         } else {
-          return dateFormat(date, "cccccc, do MMM yyyy, HH:mm 'Uhr'")
+          return dateFormat(date, `cccccc, do MMM, HH:mm '${i18n('date.clock')}'`)
         }
       case 'full-short':
         if (dateFnsIsSameYear(date, new Date())) {

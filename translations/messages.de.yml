@@ -1042,6 +1042,7 @@ addresspicker:
 
 date:
   time: "{time} Uhr"
+  clock: "Uhr"
   from: "von"
   to: "bis"
   Today: "Heute"
@@ -1661,6 +1662,8 @@ dashboard:
     waiting: "Du bist auf der Springerliste bei"
     managing: "Du bist verantwortlich für"
     no-stores: "Du bist bis jetzt in keinem Betriebsteam."
+    users: "Foodsaver*innen"
+    buddies: "Menschen, die Du kennst"
   invitations: "Du wurdest eingeladen"
   event: "Nächstes Event"
   events: "Nächste Events ({count})"

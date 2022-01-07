@@ -19,6 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Definition: "render controller"
@@ -58,9 +59,13 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 	// needs to be persisted between onKernelController and onKernelResponse
 	private Caching $cache;
 
-	public function __construct(ContainerInterface $container)
+	// TODO: this can be removed once the 'dialog-confirm' in onKernelController is removed
+	private TranslatorInterface $translator;
+
+	public function __construct(ContainerInterface $container, TranslatorInterface $translator)
 	{
 		$this->fullServiceContainer = $container;
+		$this->translator = $translator;
 	}
 
 	public static function getSubscribedEvents()
@@ -139,7 +144,9 @@ class RenderControllerSetupSubscriber implements EventSubscriberInterface
 		$pageHelper = $this->get(PageHelper::class);
 		$pageHelper->addHidden('<ul id="hidden-info"></ul>');
 		$pageHelper->addHidden('<ul id="hidden-error"></ul>');
-		$pageHelper->addHidden('<div id="dialog-confirm" title="Wirklich l&ouml;schen?"><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
+		$pageHelper->addHidden('<div id="dialog-confirm" title='
+		. $this->translator->trans('really_delete')
+		. '><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog-confirm-msg"></span><input type="hidden" value="" id="dialog-confirm-url" /></p></div>');
 
 		$contentGateway = $this->get(ContentGateway::class);
 		global $g_broadcast_message;
