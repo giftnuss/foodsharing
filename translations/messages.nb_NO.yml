@@ -1186,6 +1186,9 @@ legal:
   agree_privacy_notice: Jeg ble informert om taushetsplikten for personopplysninger
     og den resulterende oppførselen. Jeg vil motta en bekreftelse på dette på e-post
     til den adressen jeg har oppgitt.
+  if_delete:
+    this_doesnt_get_deleted_name: <ul><li>Ditt navn</ul></li>
+    this_doesnt_get_deleted_address: <ul><li>Din adresse</ul></li>
 group:
   show-all: Vis alt
   function:
