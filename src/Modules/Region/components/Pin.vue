@@ -18,31 +18,16 @@
             {{ $i18n('regionPin.pin_visible') }}
           </b-form-checkbox>
 
-          <b-form-group
-            id="input-group-lat"
-            :label="$i18n('regionPin.lat')"
-            label-for="input_lat"
-          >
-            <b-form-input
-              id="input_lat"
-              v-model="inlat"
-              required
-            />
-          </b-form-group>
+          <LeafletLocationPicker
+            :zoom="6"
+            :coordinates="[lat, lon]"
+            :icon="locationPickerIcon"
+            @coordinates-change="updateCoordinates"
+          />
 
           <b-form-group
             id="input-group-lon"
-            :label="$i18n('regionPin.lon')"
-            label-for="input_lon"
-          >
-            <b-form-input
-              id="input_lon"
-              v-model="inlon"
-            />
-          </b-form-group>
-
-          <b-form-group
-            id="input-group-lon"
+            class="mt-4"
             :label="$i18n('regionPin.desc')"
             label-for="text_description"
           >
@@ -70,16 +55,20 @@
   </div>
 </template>
 <script>
-import { BFormInput, BButton, BFormTextarea } from 'bootstrap-vue'
+import { BButton, BFormTextarea } from 'bootstrap-vue'
 import { setRegionPin } from '@/api/regions'
 import { pulseError, pulseInfo } from '@/script'
 import i18n from '@/i18n'
+import L from 'leaflet'
+import LeafletLocationPicker from '@/components/map/LeafletLocationPicker'
+import 'leaflet.awesome-markers'
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
 
 const STATUS_INACTIVE = 0
 const STATUS_ACTIVE = 1
 
 export default {
-  components: { BFormInput, BButton, BFormTextarea },
+  components: { BButton, BFormTextarea, LeafletLocationPicker },
   props: {
     lat: {
       type: String,
@@ -107,6 +96,7 @@ export default {
       inlon: this.lon,
       tadesc: this.desc,
       isActive: this.status === STATUS_ACTIVE,
+      locationPickerIcon: L.AwesomeMarkers.icon({ icon: 'users', markerColor: 'green' }),
     }
   },
   methods: {
@@ -121,6 +111,10 @@ export default {
         pulseError(i18n('error_unexpected'))
       }
       this.isLoading = false
+    },
+    updateCoordinates (coords) {
+      this.inlat = coords[0]
+      this.inlon = coords[1]
     },
   },
 }

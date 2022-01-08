@@ -1266,8 +1266,6 @@ regionOptions:
 
 regionPin:
   header_page: "Öffentliche Ortsgruppenbeschreibung für {bezirk}"
-  lat: "Breitengrad"
-  lon: "Längengrad"
   desc: "Beschreibung"
   success: "Erfolgreich gespeichert"
   save: "speichern"

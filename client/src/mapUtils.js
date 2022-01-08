@@ -4,6 +4,9 @@ import 'mapbox-gl-leaflet'
 import { MAP_TILES_URL, MAP_RASTER_TILES_URL, MAP_ATTRIBUTION } from '@/consts'
 import { isWebGLSupported } from '@/utils'
 
+/**
+ * @deprecated use the Vue component @/components/map/LeafletMap instead
+ */
 export function initMap (element, center, zoom, maxZoom = 20) {
   const map = L.map(element, { maxZoom: maxZoom }).setView(center, zoom)
 

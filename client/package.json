@@ -50,6 +50,7 @@
     "typeface-alfa-slab-one": "^1.1.13",
     "underscore": "^1.13.0",
     "vue": "~2.6.12",
+    "vue2-leaflet": "^2.7.1",
     "vue-croppie": "^2.0.1",
     "vue-infinite-loading": "^2.4.5",
     "vue-simple-suggest": "^1.11.1",
