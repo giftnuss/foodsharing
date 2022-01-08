@@ -8,8 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Search\SearchGateway;
-use Foodsharing\Modules\Search\SearchHelper;
-use Foodsharing\Modules\Search\SearchIndexGenerator;
+use Foodsharing\Modules\Search\SearchTransactions;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\SearchPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -23,23 +22,20 @@ class SearchRestController extends AbstractFOSRestController
 {
 	private Session $session;
 	private SearchGateway $searchGateway;
-	private SearchIndexGenerator $searchIndexGenerator;
-	private SearchHelper $searchHelper;
+	private SearchTransactions $searchTransactions;
 	private ForumPermissions $forumPermissions;
 	private SearchPermissions $searchPermissions;
 
 	public function __construct(
 		Session $session,
 		SearchGateway $searchGateway,
-		SearchIndexGenerator $searchIndexGenerator,
-		SearchHelper $searchHelper,
+		SearchTransactions $searchTransactions,
 		ForumPermissions $forumPermissions,
 		SearchPermissions $searchPermissions
 	) {
 		$this->session = $session;
 		$this->searchGateway = $searchGateway;
-		$this->searchIndexGenerator = $searchIndexGenerator;
-		$this->searchHelper = $searchHelper;
+		$this->searchTransactions = $searchTransactions;
 		$this->forumPermissions = $forumPermissions;
 		$this->searchPermissions = $searchPermissions;
 	}
@@ -47,14 +43,14 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * @OA\Tag(name="search")
 	 *
-	 * @Rest\Get("search/legacyindex")
+	 * @Rest\Get("search/index")
 	 */
 	public function getSearchLegacyIndexAction(): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(403);
 		}
-		$data = $this->searchIndexGenerator->generateIndex($this->session->id());
+		$data = $this->searchTransactions->generateIndex();
 
 		$view = $this->view($data, 200);
 
@@ -140,7 +136,7 @@ class SearchRestController extends AbstractFOSRestController
 			throw new HttpException(400);
 		}
 
-		$results = $this->searchHelper->search($q);
+		$results = $this->searchTransactions->search($q);
 
 		return $this->handleView($this->view($results, 200));
 	}

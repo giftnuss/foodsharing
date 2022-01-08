@@ -68,4 +68,14 @@ class SearchApiCest
 		$I->seeResponseCodeIs(HttpCode::OK);
 		$I->canSeeResponseContainsJson(['id' => $this->user2['id']]);
 	}
+
+	public function canGenerateSearchIndex(ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendGET('api/search/index');
+		$I->seeResponseCodeIs(HttpCode::OK);
+		$I->seeResponseContainsJson([
+			'myRegions' => ['id' => $this->region1['id']]
+		]);
+	}
 }
