@@ -46,6 +46,7 @@ export default {
         { value: 'en', text: 'English' },
         { value: 'fr', text: 'Français' },
         { value: 'it', text: 'Italiano' },
+        { value: 'nb_NO', text: 'Norsk (Bokmål)' },
       ],
       loading: true,
     }
