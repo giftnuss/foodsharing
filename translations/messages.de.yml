@@ -392,6 +392,20 @@ legal:
   dont_agree: "Ich bin nicht einverstanden mit der Verarbeitung meiner Daten und"
   agree_privacy_policy: "Ich habe die Datenschutzvereinbarung zur Kenntnis genommen."
   delete_account: "Ich möchte meinen Account löschen."
+  if_delete:
+    legal_1: "Hier ist <a href=\"https://foodsharing.de/?page=legal\" target=\"_blank\">unsere derzeitige Datenschutz-Vereinbarung.</a>"
+    legal_2: "Hier findest Du, <a href=\"https://www.dsgvo.tools/aufbewahrungsfristen/\" target=\"_blank\">wie sich die Gesetze aufeinander beziehen. (Seite auf Deutsch)</a>"
+    this_gets_deleted_main: "Folgende informationen werden von dir gelöscht und können nicht wiederhergestellt werden:"
+    this_gets_deleted_stores: "<ul><li>Betriebe denen du beigetreten warst.</ul></li>"
+    this_gets_deleted_quiz: "<ul><li>Dein foodsaver-Quiz wird entfernt.</ul></li>"
+    this_gets_deleted_verify: "<ul><li>Deine Verifzierung wird entfernt.</ul></li>"
+    this_gets_deleted_friendlist: "<ul><li>Deine Freundesliste wird entfernt.</ul></li>"
+    this_gets_deleted_trustbananas: "<ul><li>Bananen, die du vergeben hast, werden entfernt.</ul></li>"
+    this_doesnt_get_deleted: "Folgende Informationen sind nicht mehr im aktiven System verfügbar, werden aber seperat archiviert auf Grund von §17 DSGVO:"
+    this_doesnt_get_deleted_name: "<ul><li>Dein Name</ul></li>"
+    this_doesnt_get_deleted_address: "<ul><li>Deine Addresse</ul></li>"
+    this_doesnt_get_deleted_history: "<ul><li>Historie deiner Verifizierung</ul></li>"
+
   actions:
     safe: "Einstellungen übernehmen"
   must_accept_pp: "Um bei foodsharing mitzumachen, musst du den Datenschutzbedingungen zustimmen."
