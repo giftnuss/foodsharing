@@ -24,6 +24,7 @@
 - Fix for store change !2065 @fs_k
 - Fix for future timeslot visibility to use Europe/Berlin timezone !2070 @fs_k 
 - Unverified users who change their home region are not deverified again !2093 @alex.simm
+- Some checks for PHP data types in order to avoid Sentry errors !2001 !2099 @alex.simm
 
 ## Refactoring
 - Get Members in MemberList.vue from Rest Api !2094 !2111 @chriswalg @alex.simm
@@ -99,8 +100,7 @@
 - Fix errors that occur for non-existing password reset keys !2004 @alex.simm
 - Text overflow fixed !2008 #1105 #1106 @YertleTurtleGit
 - the function FoodsaverGateway:getOrgaTeam now factors in the user role Orga !2038 @fs_k
-- Set correct MIME type for attachments which are fetched via IMAP #1092 !2041 @Thylossus
-- Some checks for PHP data types in order to avoid Sentry errors !2001 @alex.simm  
+- Set correct MIME type for attachments which are fetched via IMAP #1092 !2041 @Thylossus  
 
 ## Refactoring
 - Update documentation: Give more on information on how to post a testing task in the forum
