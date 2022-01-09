@@ -127,6 +127,12 @@ export default {
 
   .bell-text {
     font-size: 0.8em;
+    /* Global fallback */
+    overflow-wrap: break-word;
+    /* Safari / Edge compat: */
+    word-break: break-word;
+    /* Desired behavior: */
+    overflow-wrap: anywhere;
   }
 
   .bell-body {
