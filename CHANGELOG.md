@@ -47,6 +47,7 @@
 - added crossreferenced infos to devdocs #1149 !2082
 - Run tests for websocket server ("chat server") on CI again !2091 @janopae
 - exchanged name of active dev in the devdocs !2103 @Jonathan_B
+- Fix warning about mkdir in upload controller !2117 @alex.simm
 
 # Release "Feige", 2021-09-24
 

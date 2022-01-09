@@ -210,7 +210,7 @@ class UploadsRestController extends AbstractFOSRestController
 			$dir = dirname($path);
 
 			// create parent directories if they don't exist yeted
-			if (!mkdir($dir, 0775, true) && !is_dir($dir)) {
+			if (!file_exists($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
 				throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
 			}
 
