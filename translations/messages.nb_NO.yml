@@ -527,6 +527,8 @@ dashboard:
     managing: Du er ansvarlig for
     waiting: Du er på hoppelisten på
     no-stores: Du er ikke i noe lag ennå.
+    users: Matreddere
+    buddies: Folk du kjenner
   homeRegion: Ditt hjemdistrikt er {region}.
   chooseHomeRegion: Velg et hjemdistrikt.
   updates_title_some: Oppdateringsoversikt ({0})
@@ -1189,6 +1191,16 @@ legal:
   if_delete:
     this_doesnt_get_deleted_name: <ul><li>Ditt navn</ul></li>
     this_doesnt_get_deleted_address: <ul><li>Din adresse</ul></li>
+    legal_1: Her er <a href="https://foodsharing.de/?page=legal" target="_blank">vår
+      nåværende databeskyttelsesavtale.</a>
+    this_gets_deleted_main: 'Følgende informasjon vil bli slettet fra deg og kan ikke
+      gjenopprettes:'
+    this_gets_deleted_trustbananas: <ul><li>Bananer du har gitt til andre vil bli
+      fjernet.</ul></li>
+    this_gets_deleted_friendlist: <ul><li>Vennelisten din vil bli fjernet.</ul></li>
+    this_gets_deleted_verify: <ul><li>Bekreftelsen din vil bli fjernet.</ul></li>
+    this_gets_deleted_quiz: <ul><li>Din matsparingsquiz vil bli fjernet.</ul></li>
+    this_doesnt_get_deleted_history: <ul><li>Bekreftelsesloggen din</ul></li>
 group:
   show-all: Vis alt
   function:
@@ -1386,7 +1398,7 @@ pass:
     verify: Bekrefte
     check: Sjekk datoer
   bread: Pass generator
-  hintSelect: "Med et klikk på opprettelsesdatoen merkes alle Foodsavers med samme\
+  hintSelect: "Med et klikk på opprettelsesdatoen merkes alle matreddere med samme\
     \ dato eller uten opprettelsesdato.\n"
   noPhoto: 'Følgende personer har ikke lastet opp et bilde ennå:'
   notGenerated: Passene kunne ikke genereres.
