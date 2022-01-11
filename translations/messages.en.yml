@@ -1746,6 +1746,17 @@ legal:
   if_delete:
     legal_1: Here is <a href="https://foodsharing.de/?page=legal" target="_blank">our
       current data protection agreement.</a>
+    this_gets_deleted_main: 'The following information will be deleted from you and
+      cannot be recovered:'
+    this_gets_deleted_stores: <ul><li>Stores you had joined.</ul></li>
+    this_gets_deleted_quiz: <ul><li>Your foodsaver-Quiz will be removed.</ul></li>
+    this_gets_deleted_trustbananas: <ul><li>Bananas that you gave to others will be
+      removed.</ul></li>
+    this_doesnt_get_deleted_name: <ul><li>Your Name</ul></li>
+    this_doesnt_get_deleted_address: <ul><li>Your Address</ul></li>
+    this_doesnt_get_deleted_history: <ul><li>Your verification history</ul></li>
+    this_gets_deleted_verify: <ul><li>Your verification will be removed.</ul></li>
+    this_gets_deleted_friendlist: <ul><li>Your friends list will be removed.</ul></li>
 answers: Which answers are correct?
 name: Name
 bcard:
@@ -2032,6 +2043,8 @@ dashboard:
     pending: Requests have been made to
     stores: You pick up groceries from
     waiting: You are on the jumper list at
+    buddies: People you know
+    users: foodsavers
   source_event: Appointment {0}
   source_forum_bot: Ambassador forum {0}
   source_forum: Forum {0}
