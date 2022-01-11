@@ -943,6 +943,21 @@ legal:
     lire et accepter les conditions d'utilisations de celle-ci.
   acknowledge: Acceptes-tu les conditions ?
   pp: Politique de confidentialité
+  if_delete:
+    legal_1: Voici <a href="https://foodsharing.de/?page=legal" target="_blank">notre
+      accord actuel sur la protection des données.</a>
+    legal_2: Ici, vous trouverez <a href="https://www.dsgvo.tools/aufbewahrungsfristen/"
+      target="_blank">comment les lois se rapportent les unes aux autres. (Page en
+      allemand)</a>
+    this_gets_deleted_main: 'Les informations suivantes seront supprimées par toi
+      et ne pourront pas être récupérées :'
+    this_gets_deleted_stores: <ul><li>Entreprises auxquelles tu avais adhéré.</ul></li>
+    this_doesnt_get_deleted: 'Les informations suivantes ne sont plus disponibles
+      dans le système actif, mais sont archivées séparément sur la base du §17 du
+      RGPD :'
+    this_doesnt_get_deleted_address: <ul><li>Ton adresse</ul></li>
+    this_doesnt_get_deleted_history: <ul><li>Historique de ta vérification</ul></li>
+    this_doesnt_get_deleted_name: <ul><li>Ton nom</ul></li>
 message_text_to_group_admin_workgroup: "La région/le groupe de travail<b>{groupName}</b>\
   \ n'a<b>plus</b> d'ambassadeur.rice/d'admin.<br><br><br>Elle possède la structure\
   \ ID ci-contre :<br>{idStructureList}<br><br>l'ID est : {groupId}<br><br>URL : \"\
