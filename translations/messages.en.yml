@@ -1743,6 +1743,9 @@ legal:
   not_acknowledge_pp_description: In order to be able to use the foodsharing platform,
     you must take note of the data protection declaration described.
   acknowledge: Do you take note of the agreement?
+  if_delete:
+    legal_1: Here is <a href="https://foodsharing.de/?page=legal" target="_blank">our
+      current data protection agreement.</a>
 answers: Which answers are correct?
 name: Name
 bcard:
