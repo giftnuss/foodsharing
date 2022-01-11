@@ -14,7 +14,7 @@
 
 - "New event" page requires login !2058 @Buntelrus
 - Add a button to the group member list for removing members !2073 @alex.simm @chriswalg
-- Add a management mode to group member list to add and remove members !2075 @chriswalg
+- Add a management mode to group member list to add and remove members !2075 !2119 @chriswalg
 - Add frontend functionality to display 'today' or 'tomorrow' in the event header instead of date !2069 #1120 @alexander-sav
 - change german wordings in translate file !2080 @Jonathan_B
 - Replace picture upload for blog posts with the new upload API #45 !2089 @alex.simm
@@ -30,7 +30,6 @@
 
 ## Refactoring
 - Get Members in MemberList.vue from Rest Api !2094 !2111 @chriswalg @alex.simm
-- Get Members in MemberList.vue from Rest Api !2094 @chriswalg @alex.simm
 - move more hardcoded language to language files !2108 @jonathan_b
 - Refactored the format of the quick search index !2115 @alex.simm 
 

@@ -439,7 +439,8 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
-		$viewdata['mayEditMembers'] = $this->workGroupPermission->mayEdit($region);
+		// for now, the admin mode of the members list is only available in working groups
+		$viewdata['mayEditMembers'] = $region['type'] === Type::WORKING_GROUP && $this->workGroupPermission->mayEdit($region);
 		$viewdata['userId'] = $this->session->id();
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
