@@ -35,6 +35,7 @@
               :placeholder="$i18n('search.user_search.placeholder')"
               button-icon="fa-user-plus"
               :button-tooltip="$i18n('group.member_list.add_member')"
+              :filter="notContainsMember"
               @user-selected="addNewTeamMember"
             />
           </div>
@@ -86,7 +87,7 @@
 
         <b-table
           :fields="fields"
-          :items="membersFiltered"
+          :items="membersFilteredSorted"
           :current-page="currentPage"
           :per-page="perPage"
           :sort-compare="compare"
@@ -98,19 +99,19 @@
         >
           <template #cell(imageUrl)="row">
             <div>
-              <img
-                :src="row.value"
-                :alt="$i18n('terminology.profile_picture')"
-                class="user_pic_width"
-              >
+              <avatar
+                :url="row.item.avatar"
+                :sleep-status="row.item.sleepStatus"
+                :size="50"
+              />
             </div>
           </template>
           <template #cell(userName)="row">
             <a
-              :href="$url('profile', row.item.user.id)"
-              :title="row.item.user.id"
+              :href="$url('profile', row.item.id)"
+              :title="row.item.id"
             >
-              {{ row.item.user.name }}
+              {{ row.item.name }}
             </a>
           </template>
           <template
@@ -118,12 +119,12 @@
             #cell(removeButton)="row"
           >
             <b-button
-              v-if="userId !== row.item.user.id"
+              v-if="userId !== row.item.id"
               v-b-tooltip="$i18n('group.member_list.remove_title')"
               size="sm"
               variant="danger"
               :disabled="isBusy"
-              @click="showRemoveMemberConfirmation(row.item.user.id, row.item.user.name)"
+              @click="showRemoveMemberConfirmation(row.item.id, row.item.name)"
             >
               <i class="fas fa-fw fa-user-times" />
             </b-button>
@@ -150,9 +151,10 @@ import { listRegionMembers } from '@/api/regions'
 import { hideLoader, pulseError, showLoader } from '@/script'
 import i18n from '@/i18n'
 import UserSearchInput from '@/components/UserSearchInput'
+import Avatar from '@/components/Avatar'
 
 export default {
-  components: { BButton, BTable, BPagination, UserSearchInput },
+  components: { Avatar, BButton, BTable, BPagination, UserSearchInput },
   directives: { VBTooltip },
   props: {
     userId: { type: Number, default: null },
@@ -203,9 +205,16 @@ export default {
       const filterText = this.filterText ? this.filterText.toLowerCase() : null
       return this.memberList.filter((member) => {
         return (
-          !filterText || (member.user.name.toLowerCase().indexOf(filterText) !== -1
+          !filterText || (member.name.toLowerCase().indexOf(filterText) !== -1
           )
         )
+      })
+    },
+    membersFilteredSorted () {
+      // sorts the member list alphabetically
+      const copy = this.membersFiltered
+      return copy.sort(function (a, b) {
+        return a.name.localeCompare(b.name)
       })
     },
   },
@@ -233,7 +242,7 @@ export default {
       this.isBusy = true
       try {
         await removeMember(this.groupId, memberId)
-        const index = this.memberList.findIndex(member => member.user.id === memberId)
+        const index = this.memberList.findIndex(member => member.id === memberId)
         if (index >= 0) {
           this.memberList.splice(index, 1)
         }
@@ -260,7 +269,10 @@ export default {
       this.managementModeEnabled = !this.managementModeEnabled
     },
     containsMember (memberId) {
-      return this.memberList.find(member => member.user.id === memberId) !== undefined
+      return this.memberList.some(member => member.id === memberId)
+    },
+    notContainsMember (memberId) {
+      return !this.containsMember(memberId)
     },
     async addNewTeamMember (userId) {
       showLoader()
@@ -270,13 +282,7 @@ export default {
 
         // the backend doesn't care if the user was already in the group, so we have to check here
         if (!this.containsMember(userId)) {
-          // add the user to the local member list
-          const userData = { id: addedUser.id, name: addedUser.name, sleep_status: addedUser.sleepStatus }
-          this.memberList.push({
-            user: userData,
-            size: 50,
-            imageUrl: addedUser.avatar ?? '/img/50_q_avatar.png',
-          })
+          this.memberList.push(addedUser)
         }
       } catch (e) {
         pulseError(i18n('error_unexpected'))

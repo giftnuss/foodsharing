@@ -64,6 +64,9 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
+	/**
+	 * @return Profile[]
+	 */
 	public function listActiveFoodsaversByRegion(int $regionId): array
 	{
 		$res = $this->db->fetchAll('
@@ -86,17 +89,7 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 
 		return array_map(function ($fs) {
-			$image = $this->imageHelper->img($fs['photo'], '50', 'q');
-
-			return [
-				'user' => [
-					'id' => $fs['id'],
-					'name' => $fs['name'],
-					'sleep_status' => $fs['sleep_status']
-				],
-				'size' => 50,
-				'imageUrl' => $image
-			];
+			return new Profile($fs['id'], $fs['name'], $fs['photo'], $fs['sleep_status']);
 		}, $res);
 	}
 
