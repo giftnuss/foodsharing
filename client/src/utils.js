@@ -58,7 +58,7 @@ export function dateFormat (date, format = 'full-long') {
         } else if (dateFnsIsSameYear(date, new Date())) {
           return dateFormat(date, `cccc, do MMM, HH:mm '${i18n('date.clock')}'`)
         } else {
-          return dateFormat(date, `cccccc, do MMM, HH:mm '${i18n('date.clock')}'`)
+          return dateFormat(date, `cccccc, do MMM yyyy, HH:mm '${i18n('date.clock')}'`)
         }
       case 'full-short':
         if (dateFnsIsSameYear(date, new Date())) {

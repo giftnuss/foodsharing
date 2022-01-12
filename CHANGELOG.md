@@ -30,7 +30,7 @@
 
 ## Refactoring
 - Get Members in MemberList.vue from Rest Api !2094 !2111 @chriswalg @alex.simm
-- move more hardcoded language to language files !2108 @jonathan_b
+- move more hardcoded language to language files !2108 !2122 @jonathan_b
 - Refactored the format of the quick search index !2115 @alex.simm 
 
 ## Dev/Test/CI stuff
