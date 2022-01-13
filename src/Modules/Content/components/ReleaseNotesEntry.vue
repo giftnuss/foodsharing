@@ -73,6 +73,9 @@ export default {
   border-width: 0.5rem;
   font-weight: bolder;
 
+  // Grapefruit
+  &[data-id="2022-01"] { border-color: #CC4D46; }
+
   // Feige
   &[data-id="2021-09"] { border-color: #c2d8bc; }
 
