@@ -1,17 +1,15 @@
-# Release "Grapefruit", unreleased
+# Release "Grapefruit", 2022-01-13
 
 ## Features
 
 - Set iCalendar location for exported pickup events #1139 !2072 @iron9
 - Display community pin for local foodsharing communities. #53 !2060 !2081 @fs_k 
 - Added norwegian translation !2107 @alex.simm
-- Display community pin for local foodsharing communities. #53 !2060 !2081 @fs_k
 - Select the community pin on a map !2102 @alex.simm 
 
 ## Changes
 - Allow admins of the working group "Redaktion" to edit blog posts #34 !2061 @alex.simm
 - When using a blacklisted email domain the registration process is blocked #1059 @CarolineFischer
-
 - "New event" page requires login !2058 @Buntelrus
 - Add a button to the group member list for removing members !2073 @alex.simm @chriswalg
 - Add a management mode to group member list to add and remove members !2075 !2119 @chriswalg
@@ -29,10 +27,8 @@
 - Some checks for PHP data types in order to avoid Sentry errors !2001 !2099 @alex.simm
 
 ## Refactoring
-- Get Members in MemberList.vue from Rest Api !2094 !2111 @chriswalg @alex.simm
 - move more hardcoded language to language files !2108 !2122 @jonathan_b
 - Get Members in MemberList.vue from Rest Api !2094 !2111 !2123 @chriswalg @alex.simm
-- move more hardcoded language to language files !2108 @jonathan_b
 - Refactored the format of the quick search index !2115 @alex.simm 
 
 ## Dev/Test/CI stuff
