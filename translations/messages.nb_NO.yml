@@ -620,7 +620,7 @@ profile:
     noData: Ingen data er tilgjengelige.
     noActor: Det er ingen informasjon om skaperen
   nav:
-    violations: Meldinger <strong>({count})</strong>
+    violations: Klager <strong>({count})</strong>
     notes: Merknader <strong>({count})</strong>
     buddy: Jeg kjenner {name}
     edit: Rediger profil
@@ -661,7 +661,7 @@ profile:
   homeRegion: Hjemmedistriktet til {name}
   about_me_intern: Om meg
   pinboard: Statusoppdateringer fra {name}
-  reportRequest: Sende inn rapport
+  reportRequest: Sende inn klage
   mediationRequest: Be om mekling
   mediation:
     title: Meklingsforespørsel for {name}
@@ -1549,7 +1549,7 @@ date:
   sunday: søndag
   saturday: lørdag
   friday: fredag
-  thursday: Torsdag
+  thursday: torsdag
   wednesday: onsdag
   tuesday: tirsdag
   monday: mandag
