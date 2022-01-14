@@ -1,3 +1,15 @@
+# Release "H", unreleased
+
+## Features
+
+## Changes
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # Release "Grapefruit", 2022-01-13
 
 ## Features
