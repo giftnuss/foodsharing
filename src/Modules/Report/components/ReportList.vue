@@ -6,9 +6,10 @@
           ({{ reports.length }})
         </span>
       </div>
-      <div card-body>
-        Hinweise zur Bearbeitung einer Meldung könnt ihr hier nachlesen : <a href="https://wiki.foodsharing.de/Regelverletzungen_-_Konsequenzen_und_Bearbeitung#D.29_Bearbeitung_einer_Meldung"> Bearbeitung einer Meldung</a>
-      </div>
+      <div
+        card-body
+        v-html="$i18n('profile.report.readup')"
+      />
       <div
         v-if="reports.length"
         class="card-body p-0"

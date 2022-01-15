@@ -167,7 +167,7 @@ export default {
         if (e.code === 404) {
           pulseError(i18n('basket.not_found'))
         } else {
-          pulseError('Withdrawing basket request failed: ' + e)
+          pulseError(i18n('basket.not_withdrawn') + e)
         }
       }
       this.isLoading = false

@@ -39,7 +39,7 @@ class RegisterCest
 		// click signup, then press next on the first dialog
 
 		$I->click('Mitmachen');
-		$I->click('Jetzt registrieren!');
+		$I->click('Jetzt registrieren');
 		$I->waitForElementVisible('#step1', 4);
 		$I->fillField('#email', $this->email);
 		$I->fillField('#password', $this->password);
@@ -107,7 +107,7 @@ class RegisterCest
 		// click signup, then press next on the first dialog
 
 		$I->click('Mitmachen');
-		$I->click('Jetzt registrieren!');
+		$I->click('Jetzt registrieren');
 		$I->waitForElementVisible('#step1', 4);
 		$I->fillField('#email', $this->email);
 		$I->fillField('#password', $this->password);
@@ -170,7 +170,7 @@ class RegisterCest
 
 		$I->amOnPage('/');
 		$I->click('Mitmachen');
-		$I->click('Jetzt registrieren!');
+		$I->click('Jetzt registrieren');
 		$I->waitForElementVisible('#step1', 4);
 		$blacklistedEmailDomain = $I->grabFromDatabase('fs_email_blacklist', 'email', ['email like' => '%']);
 		$I->fillField('#email', 'something@' . $blacklistedEmailDomain);

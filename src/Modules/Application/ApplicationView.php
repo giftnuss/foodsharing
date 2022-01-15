@@ -18,15 +18,15 @@ class ApplicationView extends View
 	public function applicationMenu($application)
 	{
 		return $this->v_utils->v_menu([
-			['click' => 'tryAcceptApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => 'Ja'],
-			['click' => 'tryDeclineApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => 'Nein']
-		], 'Bewerbung annehmen');
+			['click' => 'tryAcceptApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => $this->translator->trans('yes')],
+			['click' => 'tryDeclineApplication(' . (int)$this->bezirk_id . ',' . (int)$application['id'] . ');return false;', 'name' => $this->translator->trans('no')]
+		], $this->translator->trans('group.apply.accept'));
 	}
 
 	public function application($application)
 	{
 		$out = $this->headline(
-			'Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'],
+			$this->translator->trans('group.application_region') . $this->bezirk['name'] . ' ' . $this->translator->trans('group.application_from') . ' ' . $application['name'],
 			$application['photo'],
 			$application['id']
 		);
@@ -36,7 +36,7 @@ class ApplicationView extends View
 		$cnt = $this->v_utils->v_input_wrapper($application['name'], $cnt);
 		$cnt .= '<div class="clear"></div>';
 
-		$out .= $this->v_utils->v_field($cnt, 'Motivations-Text', ['class' => 'ui-padding']);
+		$out .= $this->v_utils->v_field($cnt, $this->translator->trans('group.motivation'), ['class' => 'ui-padding']);
 
 		return $out;
 	}

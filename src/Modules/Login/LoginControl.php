@@ -33,11 +33,11 @@ class LoginControl extends Control
 
 	public function unsubscribe()
 	{
-		$this->pageHelper->addTitle('Newsletter Abmeldung');
-		$this->pageHelper->addBread('Newsletter Abmeldung');
+		$this->pageHelper->addTitle($this->translator->trans('logincontrol.title'));
+		$this->pageHelper->addBread($this->translator->trans('logincontrol.bread'));
 		if (isset($_GET['e']) && $this->emailHelper->validEmail($_GET['e'])) {
 			$this->settingsGateway->unsubscribeNewsletter($_GET['e']);
-			$this->pageHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
+			$this->pageHelper->addContent($this->v_utils->v_info($this->translator->trans('logincontrol.nomorenewsletter'), $this->translator->trans('logincontrol.success')));
 		}
 	}
 

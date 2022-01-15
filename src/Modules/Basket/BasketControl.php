@@ -17,7 +17,7 @@ class BasketControl extends Control
 
 		parent::__construct();
 
-		$this->pageHelper->addBread('Essenskörbe');
+		$this->pageHelper->addBread($this->translator->trans('terminology.baskets'));
 	}
 
 	public function index(): void

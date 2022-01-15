@@ -24,136 +24,136 @@ class ReportView extends View
 	// TODO Modernisieren
 	public function reportDialog(): string
 	{
-		return $this->v_utils->v_input_wrapper('Warum möchtest Du ' . $this->foodsaver['name'] . ' melden?', '
+		return $this->v_utils->v_input_wrapper($this->translator->trans('profile.report.view.why') . ' -> ' . $this->foodsaver['name'], '
 
 			' . $this->v_utils->v_form_select('reportreason', ['required' => true, 'nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'Ist zu spät zum Abholen gekommen'],
+					'name' => $this->translator->trans('profile.report.view.tardy')],
 				[
 					'id' => 2,
-					'name' => 'Ist gar nicht zum Abholen gekommen'],
+					'name' => $this->translator->trans('profile.report.view.noshow')],
 				/*[
 					'id' => 3,
-					'name' => 'Hat sich unhöflich oder respektlos verhalten'],
+					'name' => $this->translator->trans('profile.report.view.respect')],
 				[
 					'id' => 4,
-					'name' => 'Hat den Abholort nicht sauber hinterlassen'],
+					'name' => $this->translator->trans('profile.report.view.dirty')],
 				[
 					'id' => 5,
-					'name' => 'Hat sich nicht gemeinschaftlich und sozial beim Abholen verhalten'],
+					'name' => $this->translator->trans('profile.report.view.social')],
 				[
 					'id' => 6,
-					'name' => 'Hat sich fordernd/übergriffig verhalten'],
+					'name' => $this->translator->trans('profile.report.view.bossy')],
 				[
 					'id' => 7,
-					'name' => 'Hat Vorwürfe gemacht'],
+					'name' => $this->translator->trans('profile.report.view.complaints')],
 				[
 					'id' => 8,
-					'name' => 'Hat Sachen mitgenommen die nicht für ihn/sie bestimmt waren'],
+					'name' => $this->translator->trans('profile.report.view.thief')],
 				[
 					'id' => 9,
-					'name' => 'Hat Pfandflaschen/-kisten etc. nicht zurückgebracht'],*/
+					'name' => $this->translator->trans('profile.report.view.returned')],*/
 				[
 					'id' => 10,
-					'name' => 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche'], /*
+					'name' => $this->translator->trans('profile.report.view.unreliable')], /*
 				[
 					'id' => 12,
-					'name' => 'Schmeißt gerettete Lebensmittel weg'],
+					'name' => $this->translator->trans('profile.report.view.trasher')],
 				[
 					'id' => 13,
-					'name' => 'Nimmt nicht alle zur Abholung vorgesehenen Lebensmittel mit'],
+					'name' => $this->translator->trans('profile.report.view.picky')],
 				[
 					'id' => 14,
-					'name' => 'Hat sich außerhalb seiner/ihrer Abholzeit beim Betrieb zu rettende Lebensmittel genommen oder nachgefragt'],*/
+					'name' => $this->translator->trans('profile.report.view.additional')],*/
 				[
 					'id' => 15,
-					'name' => 'Verkauft gerettete Lebensmittel']/*,
+					'name' => $this->translator->trans('profile.report.view.sells')]/*,
 				[
 					'id' => 16,
-					'name' => 'Hat gegen andere Verhaltensregeln verstoßen (alles andere)']*/]
+					'name' => $this->translator->trans('profile.report.view.other')]*/]
 			]) . '<br />
 			<div id="reportreason_3" class="cb" style="margin:5px 0;">
 			' . $this->v_utils->v_form_checkbox('reportreason_3', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'gegenüber Foodsavern'],
+					'name' => $this->translator->trans('profile.report.view.vsfs')],
 				[
 					'id' => 2,
-					'name' => 'gegenüber BetriebsmitarbeiterInnen']
+					'name' => $this->translator->trans('profile.report.view.vsstore')]
 			]
 			]) . '
 			</div>
 			' . $this->v_utils->v_form_select('reportreason_3_sub', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'beleidigende Äußerungen'],
+					'name' => $this->translator->trans('profile.report.view.what.hurtful')],
 				[
 					'id' => 2,
-					'name' => 'rassistische Äußerungen'],
+					'name' => $this->translator->trans('profile.report.view.what.racist')],
 				[
 					'id' => 3,
-					'name' => 'sexistische Äußerungen'],
+					'name' => $this->translator->trans('profile.report.view.what.sexist')],
 				[
 					'id' => 4,
-					'name' => 'homophobe Äußerungen'],
+					'name' => $this->translator->trans('profile.report.view.what.homophobe')],
 				[
 					'id' => 5,
-					'name' => 'Gewalttätigkeit und Drohung'],
+					'name' => $this->translator->trans('profile.report.view.what.brutal')],
 				[
 					'id' => 6,
-					'name' => 'Andere unangebrachte Äußerungen und Verhalten']]
+					'name' => $this->translator->trans('profile.report.view.what.other')]]
 			]) . '
 			<div id="reportreason_6" class="cb">
 			' . $this->v_utils->v_form_checkbox('reportreason_6', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
+					'name' => $this->translator->trans('profile.report.view.vsstore')],
 				[
 					'id' => 2,
-					'name' => 'gegenüber Foodsavern'],
+					'name' => $this->translator->trans('profile.report.view.vsfs')],
 				[
 					'id' => 3,
-					'name' => 'gegenüber Kunden']]
+					'name' => $this->translator->trans('profile.report.view.vsclients')]]
 			]) . '
 			</div>
 			<div id="reportreason_5" class="cb">
 			' . $this->v_utils->v_form_checkbox('reportreason_5', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'vor BetriebsmitarbeiterInnen'],
+					'name' => $this->translator->trans('profile.report.view.nearstore')],
 				[
 					'id' => 2,
-					'name' => 'vor Foodsavern'],
+					'name' => $this->translator->trans('profile.report.view.nearfs')],
 				[
 					'id' => 3,
-					'name' => 'vor Kunden']]
+					'name' => $this->translator->trans('profile.report.view.nearclients')]]
 			]) . '
 			</div>
 			<div id="reportreason_7" class="cb">
 			' . $this->v_utils->v_form_checkbox('reportreason_7', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'gegenüber BetriebsmitarbeiterInnen'],
+					'name' => $this->translator->trans('profile.report.view.nearstore')],
 				[
 					'id' => 2,
-					'name' => 'gegenüber Foodsavern'],
+					'name' => $this->translator->trans('profile.report.view.nearfs')],
 				[
 					'id' => 3,
-					'name' => 'gegenüber Kunden']]
+					'name' => $this->translator->trans('profile.report.view.nearclients')]]
 			]) . '
 			</div>
 			<div id="reportreason_8" class="cb">
 			' . $this->v_utils->v_form_checkbox('reportreason_8', ['nowrapper' => true, 'value' => 1, 'values' => [
 				[
 					'id' => 1,
-					'name' => 'von BetriebsmitarbeiterInnen'],
+					'name' => $this->translator->trans('profile.report.view.ofstore')],
 				[
 					'id' => 2,
-					'name' => 'von Foodsavern'],
+					'name' => $this->translator->trans('profile.report.view.offs')],
 				[
 					'id' => 3,
-					'name' => 'von Kunden']]
+					'name' => $this->translator->trans('profile.report.view.ofclients')]]
 			]) . '
 			</div>');
 	}
@@ -161,8 +161,8 @@ class ReportView extends View
 	public function statsMenu($stats): string
 	{
 		$menu = [
-			['name' => 'Neue Meldungen (' . $stats['new'] . ')', 'href' => '/?page=report&sub=uncom'],
-			['name' => 'Zugestellte (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
+			['name' => $this->translator->trans('profile.report.view.newreport') . ' (' . $stats['new'] . ')', 'href' => '/?page=report&sub=uncom'],
+			['name' => $this->translator->trans('profile.report.view.delivered') . ' (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
 		];
 
 		$active = 'uncom';
@@ -187,7 +187,7 @@ class ReportView extends View
 
 		$out .= '</ul>';
 
-		return $this->v_utils->v_field($out, 'Alle Meldungen');
+		return $this->v_utils->v_field($out, $this->translator->trans('reports.all_reports'));
 	}
 
 	public function listReports($reports): string
@@ -214,12 +214,12 @@ class ReportView extends View
 		}
 
 		$table = $this->v_utils->v_tablesorter([
-			['name' => 'Über', 'width' => 40],
-			['name' => 'Von', 'width' => 40],
+			['name' => $this->translator->trans('reports.about'), 'width' => 40],
+			['name' => $this->translator->trans('reports.from'), 'width' => 40],
 			['name' => $this->translator->trans('reportmessage')],
 			['name' => $this->translator->trans('reports.when'), 'width' => 80],
-			['name' => 'FS Wohnort', 'width' => 80],
-			['name' => 'Stammbezirk', 'width' => 40]
+			['name' => $this->translator->trans('profile.report.view.residence'), 'width' => 80],
+			['name' => $this->translator->trans('terminology.homeregion'), 'width' => 40]
 		], $rows, ['pager' => true]);
 
 		return $table;

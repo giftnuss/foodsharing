@@ -150,7 +150,7 @@ function mb_clearEditor () {
   $('#edit-body').val('')
   $('#edit-reply').val('0')
   $('#message-editor').dialog('option', {
-    title: 'Neue Nachricht',
+    title: i18n('chat.new_message'),
   })
   mb_reset()
 }
@@ -183,7 +183,7 @@ function mb_send_message () {
   console.log(an, $('.edit-an'))
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
-    pulseInfo('Du musst einen Empfänger angeben')
+    pulseInfo(i18n('chat.receivermissing'))
   } else if (an.indexOf('noreply') !== -1) {
     $('.edit-an')[0].focus()
     pulseInfo(i18n('mail.noreply_addresses_not_allowed'))
@@ -250,7 +250,7 @@ function u_addTypeHead () {
   }).on('blur', function () {
     const $this = this
     if ($this.value != '' && !checkEmail($this.value)) {
-      pulseError('Diese E-Mail-Adresse ist nicht korrekt')
+      pulseError(i18n('chat.incorrect_address'))
       $this.focus()
     } else if ($this.value != '') {
       window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)

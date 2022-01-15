@@ -11,7 +11,7 @@ class TeamView extends View
 		$socials = '';
 
 		if ($user['homepage'] != '') {
-			$socials .= '<li><a title="Homepage" href="' . $user['homepage'] . '" target="_blank"><i class="fas fa-globe"></i></a></li>';
+			$socials .= '<li><a title="' . $this->translator->trans('terminology.homepage') . '" href="' . $user['homepage'] . '" target="_blank"><i class="fas fa-globe"></i></a></li>';
 		}
 
 		if (!empty($socials)) {
@@ -22,15 +22,15 @@ class TeamView extends View
 		}
 
 		$out = '
-				
+
 		<div id="team-user" class="corner-all">
 			<span class="img" style="background-image:url(/images/' . $user['photo'] . ');"></span>
 			<h1>' . $user['name'] . '</h1>
 			<small>' . $user['position'] . '</small>
 			<p>' . nl2br($user['desc']) . '</p>
-					
+
 			<span class="foot corner-bottom">
-				' . $socials . '					
+				' . $socials . '
 			</span>
 		</div>';
 
@@ -68,7 +68,7 @@ class TeamView extends View
 						' . $this->sanitizerService->tt($t['desc'], 240) . '
 					</span>
 					<span class="foot corner-bottom">
-						' . $socials . '	
+						' . $socials . '
 					</span>
 				</a>
 			</li>';

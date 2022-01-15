@@ -44,12 +44,12 @@ class ApplicationControl extends Control
 			return;
 		}
 		$this->pageHelper->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
-		$this->pageHelper->addBread('Bewerbung von ' . $application['name'], '');
+		$this->pageHelper->addBread($this->translator->trans('group.application_from') . $application['name'], '');
 		$this->pageHelper->addContent($this->view->application($application));
 
 		$this->pageHelper->addContent($this->v_utils->v_field(
 			$this->wallposts('application', $application['id']),
-			'Statusnotizen'
+			$this->translator->trans('storeview.status_notes')
 		));
 
 		$this->pageHelper->addContent($this->view->applicationMenu($application), CNT_LEFT);

@@ -126,9 +126,9 @@ class MailboxXhr extends Control
 			}
 
 			$fromToTitles = [
-				MailboxFolder::FOLDER_INBOX => 'Von',
-				MailboxFolder::FOLDER_SENT => 'An',
-				MailboxFolder::FOLDER_TRASH => 'Von/An'
+				MailboxFolder::FOLDER_INBOX => $this->translator->trans('mailbox.from'),
+				MailboxFolder::FOLDER_SENT => $this->translator->trans('mailbox.to'),
+				MailboxFolder::FOLDER_TRASH => $this->translator->trans('mailbox.fromto')
 			];
 			$mailbox = $this->mailboxGateway->getMailbox($mb_id);
 			$currentMailboxName = isset($mailbox['email_name']) ? $mailbox['email_name'] : $mailbox['name'];

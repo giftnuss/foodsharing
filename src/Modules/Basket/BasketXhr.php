@@ -362,9 +362,9 @@ class BasketXhr extends Control
 		$dia->addContent(
 			'<div>
 				<img src="' . $this->imageService->img($request['fs_photo']) . '" style="float: left; margin-right: 10px;">
-				<p>' . $this->translator->trans('Anfragezeitpunkt:', [
-					'{time}' => $this->timeHelper->niceDate($request['time_ts']),
-				]) . '</p>
+				<p>' . $this->translator->trans('request_time') . ' '
+				. $this->timeHelper->niceDate($request['time_ts'])
+				. '</p>
 				<div class="clear"></div>
 			</div>'
 			. $this->v_utils->v_form_radio('fetchstate', [

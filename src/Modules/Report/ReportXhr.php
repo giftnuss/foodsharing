@@ -63,13 +63,13 @@ class ReportXhr extends Control
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
-			$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
+			$dialog->setTitle($this->translator->trans('profile.report.xhr.reporting') . ' ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
 
-			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
-			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
+			$content = $this->v_utils->v_input_wrapper($this->translator->trans('profile.report.xhr.Report ID'), $report['id']);
+			$content .= $this->v_utils->v_input_wrapper($this->translator->trans('reports.time'), $this->timeHelper->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
-				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');
+				$content .= $this->v_utils->v_input_wrapper($this->translator->trans('reports.store'), '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');
 			}
 
 			if (\is_array($reason)) {
@@ -79,23 +79,23 @@ class ReportXhr extends Control
 				}
 				$out .= '</ul>';
 
-				$content .= $this->v_utils->v_input_wrapper('Grund', $out);
+				$content .= $this->v_utils->v_input_wrapper($this->translator->trans('reports.reason'), $out);
 			}
 
 			if (!empty($report['msg'])) {
-				$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->plainToHtml($report['msg']));
+				$content .= $this->v_utils->v_input_wrapper($this->translator->trans('basket.description'), $this->sanitizerService->plainToHtml($report['msg']));
 			}
 
-			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
+			$content .= $this->v_utils->v_input_wrapper($this->translator->trans('profile.report.xhr.reportee'), '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
 			$dialog->addContent($content);
 			$dialog->addOpt('width', '$(window).width()*0.9');
 
-			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
+			$dialog->addButton($this->translator->trans('profile.report.xhr.allofthem') . ' ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
 			if ($report['committed'] === 0) {
-				$dialog->addButton('Meldung zugestellt', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
+				$dialog->addButton($this->translator->trans('profile.report.xhr.delivered'), 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
 			}
-			$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
+			$dialog->addButton($this->translator->trans('button.delete'), 'if(confirm(' . $this->translator->trans('profile.report.xhr.plsconfirm') . ')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
 
 			return $dialog->xhrout();
 		}
@@ -107,7 +107,7 @@ class ReportXhr extends Control
 	{
 		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
+			$this->flashMessageHelper->info($this->translator->trans('profile.report.xhr.confirmed'));
 
 			return [
 				'status' => 1,
@@ -122,7 +122,7 @@ class ReportXhr extends Control
 	{
 		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->flashMessageHelper->success('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->success($this->translator->trans('profile.report.xhr.xxx'));
 
 			return [
 				'status' => 1,

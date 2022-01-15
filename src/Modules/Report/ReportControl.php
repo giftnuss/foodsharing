@@ -44,7 +44,7 @@ class ReportControl extends Control
 				$this->routeHelper->go('/?page=report&sub=uncom');
 			}
 			if ($this->reportPermissions->mayHandleReports()) {
-				$this->pageHelper->addBread('Meldungen', '/?page=report');
+				$this->pageHelper->addBread($this->translator->trans('menu.reports'), '/?page=report');
 			} else {
 				$this->routeHelper->go('/?page=dashboard');
 			}
@@ -66,7 +66,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(0)) {
 				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageHelper->addContent($this->view->topbar('Neue Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar($this->translator->trans('profile.report.control.newreports'), \count($reports) . ' ' . $this->translator->trans('profile.report.control.total'), '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
@@ -78,7 +78,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(1)) {
 				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageHelper->addContent($this->view->topbar('Zugestellte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar($this->translator->trans('profile.report.control.delivered'), \count($reports) . ' ' . $this->translator->trans('profile.report.control.total'), '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 
@@ -87,7 +87,7 @@ class ReportControl extends Control
 		if ($this->reportPermissions->mayHandleReports()) {
 			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
 				$this->pageHelper->addBread(
-					'Meldungen',
+					$this->translator->trans('menu.reports'),
 					'/?page=report&sub=foodsaver&id=' . (int)$foodsaver['id']
 				);
 				$this->pageHelper->addJs(
@@ -100,8 +100,8 @@ class ReportControl extends Control
 				);
 				$this->pageHelper->addContent(
 					$this->view->topbar(
-						'Meldungen von <a href="/profile/' . (int)$foodsaver['id'] . '">' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . '</a>',
-						\count($foodsaver['reports']) . ' gesamt',
+						$this->translator->trans('profile.report.control.from') . ' <a href="/profile/' . (int)$foodsaver['id'] . '">' . $foodsaver['name'] . ' ' . $foodsaver['nachname'] . '</a>',
+						\count($foodsaver['reports']) . ' ' . $this->translator->trans('profile.report.control.tot'),
 						$this->imageService->avatar($foodsaver, 50)
 					),
 					CNT_TOP
@@ -109,7 +109,7 @@ class ReportControl extends Control
 				$this->pageHelper->addContent(
 					$this->v_utils->v_field(
 						$this->wallposts('fsreport', (int)$_GET['id']),
-						'Notizen und Entscheidungen'
+						$this->translator->trans('profile.report.control.notes')
 					)
 				);
 				$this->pageHelper->addContent(

@@ -5,7 +5,7 @@
         v-if="canGiveEmoji"
         ref="emojiSelector"
         v-b-tooltip.hover
-        title="Eine Reaktion hinzufügen"
+        :title="$i18n('addreaction')"
         text="+"
         class="emoji-dropdown"
         size="sm"
@@ -57,7 +57,7 @@
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
-      title="Beitrag löschen"
+      :title="$i18n('forum.post.delete')"
       class="btn btn-sm btn-danger"
       @click="$refs.confirmDelete.show()"
     >

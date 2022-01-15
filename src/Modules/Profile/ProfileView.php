@@ -154,8 +154,7 @@ class ProfileView extends View
 	{
 		$out = '<div class="bootstrap">';
 
-		if ($this->session->may('orga')) {
-			$out .= '<a class="btn btn-sm btn-danger cancel-all-button" href="#" onclick="'
+		$out .= '<a class="btn btn-sm btn-danger cancel-all-button" href="#" onclick="'
 				. 'if(confirm(\''
 					. $this->translator->trans('profile.signoutAllConfirmation', ['{name}' => $this->foodsaver['name']])
 				. '\')){'
@@ -164,7 +163,6 @@ class ProfileView extends View
 				. ')};return false;">'
 					. $this->translator->trans('profile.signoutAll')
 				. '</a>';
-		}
 
 		$out .= '
 <div class="clear datelist">';
@@ -559,7 +557,7 @@ class ProfileView extends View
 			return '';
 		}
 
-		$storeListOptions = [['value' => null, 'text' => 'Bitte den betroffene Betrieb auswählen']];
+		$storeListOptions = [['value' => null, 'text' => $this->translator->trans('profile.choosestore')]];
 		foreach ($userStores as $store) {
 			$storeListOptions[] = ['value' => $store['id'], 'text' => $store['name']];
 		}

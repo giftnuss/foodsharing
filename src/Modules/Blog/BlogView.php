@@ -93,7 +93,9 @@ class BlogView extends View
 				$news, [self::PICTURE_PREVIEW_WIDTH, self::PICTURE_PREVIEW_HEIGHT]
 			) . '<p>' . $this->routeHelper->autolink(
 				$news['teaser']
-			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div class="clear"></div></div>';
+			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">
+			' . $this->translator->trans('blog.read') . '
+			</a></p><div class="clear"></div></div>';
 	}
 
 	private function getImage(array $news, array $size = null, string $prefix = 'crop_1_528_'): string

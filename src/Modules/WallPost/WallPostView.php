@@ -68,7 +68,7 @@ class WallPostView extends View
 						' . $gallery . '
 					</span>
 					<div class="foot">
-						<span class="time">' . $this->timeHelper->niceDate($p['time_ts']) . ' von ' . $p['name'] . '</span>' . $del . '
+						<span class="time">' . $this->timeHelper->niceDate($p['time_ts']) . ' ' . $this->translator->trans('tablesorter.from') . ' ' . $p['name'] . '</span>' . $del . '
 					</div>
 					</td>
 				</tr>';

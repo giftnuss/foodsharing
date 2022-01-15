@@ -19,7 +19,7 @@ class IndexControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addTitle('Rette mit!');
+		$this->pageHelper->addTitle($this->translator->trans('savewithus'));
 
 		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
 		if (strpos($host, 'foodsharing.at') !== false) {

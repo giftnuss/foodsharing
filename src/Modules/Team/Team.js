@@ -9,6 +9,7 @@ import {
   goTo,
 } from '@/script'
 import './Team.css'
+import i18n from '@/i18n'
 
 const $form = $('#contactform-form')
 if ($form.length > 0) {
@@ -25,7 +26,7 @@ if ($form.length > 0) {
     const $el = $(this)
     if (!checkEmail($el.val())) {
       $email.addClass('input-error')
-      pulseError('Mit Deiner E-Mail-Adressse stimmt etwas nicht.')
+      pulseError(i18n('teamjs.wrongmail'))
     }
   })
 
@@ -34,7 +35,7 @@ if ($form.length > 0) {
     if (!checkEmail($email.val())) {
       $email.trigger('select')
       $email.addClass('input-error')
-      pulseError('Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!')
+      pulseError(i18n('teamjs.entermail'))
     } else {
       ajax.req('team', 'contact', {
         data: $form.serialize(),

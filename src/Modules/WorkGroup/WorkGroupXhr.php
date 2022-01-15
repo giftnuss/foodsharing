@@ -97,12 +97,11 @@ class WorkGroupXhr extends Control
 		$zeit = strip_tags($output['zeit']);
 		$zeit = substr($zeit, 0, 300);
 
-		// TODO translator
 		$content = [
-			'Motivation:' . "\n===========\n" . trim($motivation),
-			'Fähigkeiten:' . "\n============\n" . trim($fahig),
-			'Erfahrung:' . "\n==========\n" . trim($erfahrung),
-			'Zeit:' . "\n=====\n" . trim($zeit),
+			$this->translator->trans('group.entermotivation') . "\n===========\n" . trim($motivation),
+			$this->translator->trans('group.enterskills') . "\n============\n" . trim($fahig),
+			$this->translator->trans('group.enterxp') . "\n==========\n" . trim($erfahrung),
+			$this->translator->trans('group.entertime') . "\n=====\n" . trim($zeit),
 		];
 
 		$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));

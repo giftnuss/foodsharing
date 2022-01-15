@@ -218,11 +218,17 @@ class SettingsView extends View
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
 		if ($session['fp'] <= $session['maxfp']) {
-			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
+			$infotext = $this->v_utils->v_success($this->translator->trans('quiz.congrats_details', [
+				'{points}' => $session['fp'],
+				'{max_points}' => $session['maxfp']
+			]));
 		} else {
-			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden.</p>');
+			$infotext = $this->v_utils->v_error($this->translator->trans('quiz.not_passed_details', [
+				'{points}' => $session['fp'],
+				'{max_points}' => $session['maxfp']
+			]));
 		}
-		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . '-Quiz', '', '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . $this->translator->trans('quiz.type'), '', '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -231,17 +237,17 @@ class SettingsView extends View
 			$btn = '';
 			switch ($session['quiz_id']) {
 				case 1:
-					$btn = '<a href="/?page=settings&sub=up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=up_fs" class="button">' . $this->translator->trans('quiz.finishnow.fs') . '</a>';
 					break;
 
 				case 2:
-					$btn = '<a href="/?page=settings&sub=up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=up_bip" class="button">' . $this->translator->trans('quiz.finishnow.bv') . '</a>';
 					break;
 
 				default:
 					break;
 			}
-			$out .= $this->v_utils->v_field('<p>Herzlichen Glückwunsch, Du hast es geschafft!</p><p>Die Auswertung findest Du unten.</p><p style="padding:15px;text-align:center;">' . $btn . '</p>', 'Geschafft!', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field('<p>' . $this->translator->trans('quiz.finished') . '</p><p>' . $this->translator->trans('quiz.resultsbelow') . '</p><p style="padding:15px;text-align:center;">' . $btn . '</p>', $this->translator->trans('quiz.heavysigh'), ['class' => 'ui-padding']);
 		} else {
 			/*
 			 * get the specific text from content table
@@ -282,11 +288,11 @@ class SettingsView extends View
 				$was_a_ko_question = true;
 			}
 
-			$ftext = 'hast Du komplett richtig beantwortet. Prima!';
+			$ftext = $this->translator->trans('quiz.donecorrectly');
 			++$i;
 			$cnt = '<div class="question">' . $r['text'] . '</div>';
 
-			$cnt .= $this->v_utils->v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" href="' . $r['wikilink'] . '">' . $r['wikilink'] . '</a>');
+			$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.wikilink'), '<a target="_blank" href="' . $r['wikilink'] . '">' . $r['wikilink'] . '</a>');
 
 			$right_answers = '';
 			$wrong_answers = '';
@@ -310,22 +316,22 @@ class SettingsView extends View
 				} elseif ($a['user_say'] == true && $a['right'] == AnswerRating::CORRECT && !$r['noco']) {
 					$right = 'green';
 					if ($a['right']) {
-						$atext = ' ist richtig!';
+						$atext = ' ' . $this->translator->trans('quiz.choice.correcta');
 						$sort_right = 'right';
 					} else {
-						$atext = ' ist falsch. Das hast Du richtig erkannt!';
+						$atext = ' ' . $this->translator->trans('quiz.choice.correctb');
 						$sort_right = 'right';
 					}
 				} elseif ($a['right'] == AnswerRating::NEUTRAL) {
-					$atext = ' ist neutral und daher ohne Wertung.';
+					$atext = ' ' . $this->translator->trans('quiz.choice.neut');
 					$right = 'neutral';
 					$sort_right = 'neutral';
 				} else {
 					if ($a['right']) {
-						$atext = ' wäre auch richtig gewesen.';
+						$atext = ' ' . $this->translator->trans('quiz.choice.wronga');
 						$sort_right = 'false';
 					} else {
-						$atext = ' stimmt so nicht!';
+						$atext = ' ' . $this->translator->trans('quiz.choice.wrongb');
 						$sort_right = 'false';
 					}
 				}
@@ -333,22 +339,22 @@ class SettingsView extends View
 				if ($sort_right == 'right') {
 					$right_answers .= '
 					<div class="answer q-' . $right . '">
-						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
-						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.answer') . ' ' . $ai . $atext, $a['text']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('explanation'), $a['explanation']) . '
 
 					</div>';
 				} elseif ($sort_right == 'neutral') {
 					$neutral_answers .= '
 					<div class="answer q-' . $right . '">
-						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
-						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.answer') . ' ' . $ai . $atext, $a['text']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('explanation'), $a['explanation']) . '
 
 					</div>';
 				} elseif ($sort_right == 'false') {
 					$wrong_answers .= '
 					<div class="answer q-' . $right . '">
-						' . $this->v_utils->v_input_wrapper('Antwort ' . $ai . $atext, $a['text']) . '
-						' . $this->v_utils->v_input_wrapper('Erklärung', $a['explanation']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.answer') . ' ' . $ai . $atext, $a['text']) . '
+						' . $this->v_utils->v_input_wrapper($this->translator->trans('explanation'), $a['explanation']) . '
 
 					</div>';
 				}
@@ -357,52 +363,52 @@ class SettingsView extends View
 			$no_wrong_right_sort = false;
 
 			if ($r['userfp'] > 0) {
-				$cnt .= $this->v_utils->v_input_wrapper('gesammelte Fehlerpunkte', $r['userfp']);
+				$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.fpsum'), $r['userfp']);
 				if ($r['percent'] == 100) {
-					$ftext = ' wurde leider falsch beantwortet.';
+					$ftext = ' ' . $this->translator->trans('quiz.choice.sadlywrong');
 					if (!$r['noco'] && $noclicked) {
 						$no_wrong_right_sort = true;
-						$ftext = ' wurde leider als falsch gewertet, da Du nichts ausgewählt hast oder die Zeit abgelaufen ist.';
+						$ftext = ' ' . $this->translator->trans('quiz.choice.alsowrong');
 					}
 				} else {
-					$ftext = ' hast Du leider nur zu ' . (100 - $r['percent']) . ' % richtig beantwortet.';
+					$ftext = ' ' . $this->translator->trans('quiz.choice.percenta') . ' ' . (100 - $r['percent']) . ' ' . $this->translator->trans('quiz.choice.percentb');
 				}
 			}
 
 			if ($no_wrong_right_sort) {
-				$cnt .= $this->v_utils->v_input_wrapper('Antworten', $wrong_answers . $right_answers, false, ['collapse' => true]);
+				$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.responses'), $wrong_answers . $right_answers, false, ['collapse' => true]);
 			} else {
 				if (!empty($right_answers)) {
-					$cnt .= $this->v_utils->v_input_wrapper('Richtige Antworten', $right_answers, false, ['collapse' => true]);
+					$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.cresponses'), $right_answers, false, ['collapse' => true]);
 				}
 				if (!empty($wrong_answers)) {
-					$cnt .= $this->v_utils->v_input_wrapper('Falsche Antworten', $wrong_answers, false, ['collapse' => true]);
+					$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.wresponses'), $wrong_answers, false, ['collapse' => true]);
 				}
 				if (!empty($neutral_answers)) {
-					$cnt .= $this->v_utils->v_input_wrapper('Neutrale Antworten', $neutral_answers, false, ['collapse' => true]);
+					$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.nresponses'), $neutral_answers, false, ['collapse' => true]);
 				}
 			}
 
-			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . $this->v_utils->v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">Absenden</a>', false, ['collapse' => true]) . '</div>';
+			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . $this->v_utils->v_input_wrapper($this->translator->trans('quiz.choice.writecomment'), '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">' . $this->translator->trans('quiz.choice.send') . '</a>', false, ['collapse' => true]) . '</div>';
 
 			/*
 			 * If the question was a joke question lets display it to the user!
 			 */
 			if ($was_a_joke) {
-				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="far fa-smile"></i>';
+				$ftext = $this->translator->trans('quiz.choice.joke') . ' <i class="far fa-smile"></i>';
 			}
 
 			/*
 			 * If the question is k.o. question and the user has error display a message to the user
 			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
-				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
-				$cnt = $this->v_utils->v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum Nichtbestehen, wenn Du sie falsch beantwortest.');
+				$ftext = $this->translator->trans('quiz.choice.koquestion');
+				$cnt = $this->v_utils->v_info($this->translator->trans('quiz.choice.whatisko'));
 			}
 
 			$out .= '
 					<div class="quizsession">' .
-				$this->v_utils->v_field($cnt, 'Frage ' . $i . ' ' . $ftext, ['class' => 'ui-padding']) . '
+				$this->v_utils->v_field($cnt, $this->translator->trans('quiz.question') . ' ' . $i . ' ' . $ftext, ['class' => 'ui-padding']) . '
 					</div>';
 		}
 
@@ -417,7 +423,7 @@ class SettingsView extends View
 	public function changemail3($email)
 	{
 		return
-			$this->v_utils->v_info('E-Mail-Adresse wirklich zu <strong>' . $email . '</strong> ändern?') .
+			$this->v_utils->v_info($this->translator->trans('settings.changemail.question') . ' <strong>' . $email . '</strong> ?') .
 			$this->v_utils->v_form_passwd('passcheck');
 	}
 
@@ -508,9 +514,9 @@ class SettingsView extends View
 
 	public function pause($days_to_wait)
 	{
-		$out = $this->v_utils->v_input_wrapper('Du hast das Quiz 3x nicht bestanden', 'In ' . $days_to_wait . ' Tagen kannst Du es noch einmal probieren');
+		$out = $this->v_utils->v_input_wrapper($this->translator->trans('quiz.threestrikes'), $this->translator->trans('quiz.waitxdays') . $days_to_wait . $this->translator->trans('quiz.days') . '.');
 
-		$out = $this->v_utils->v_field($out, 'Lernpause', ['class' => 'ui-padding']);
+		$out = $this->v_utils->v_field($out, $this->translator->trans('quiz.learnbreak'), ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -519,30 +525,30 @@ class SettingsView extends View
 	{
 		$out = '';
 
-		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem. Deine Sitzung wurde gespeichert. Du kannst jederzeit die Beantwortung fortführen.');
+		$out .= $this->v_utils->v_input_wrapper($this->translator->trans('quiz.notfinishedyet'), $this->translator->trans('quiz.safeandsound'));
 
 		$out .= $quiz['desc'];
 
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt weiter beantworten!</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.continuenow') . '</a></p>';
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] . '-Quiz fortführen', ['class' => 'ui-padding']);
+		$out = $this->v_utils->v_field($out, $quiz['name'] . $this->translator->trans('quiz.continuetype'), ['class' => 'ui-padding']);
 
 		return $out;
 	}
 
 	public function quizRetry($quiz, $failed_count, $max_failed_count)
 	{
-		$out = $this->v_utils->v_input_wrapper(($failed_count + 1) . '. Versuch', '<p>Du hast das Quiz bereits ' . $failed_count . 'x nicht geschafft, hast aber noch ' . ($max_failed_count - $failed_count) . ' Versuche</p><p>Viel Glück!</p>');
+		$out = $this->v_utils->v_input_wrapper($this->translator->trans('quiz.trynumber') . ' ' . ($failed_count + 1), '<p>' . $failed_count . $this->translator->trans('quiz.failedbeforebut') . ' ' . ($max_failed_count - $failed_count) . '</p><p>' . $this->translator->trans('quiz.failedbeforebut') . '</p>');
 
 		$out .= $quiz['desc'];
 
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.timedstart') . '</a></p>';
 
 		if ($quiz['id'] == 1) {
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.regstart') . '</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', ['class' => 'ui-padding']);
+		$out = $this->v_utils->v_field($out, $quiz['name'] . $this->translator->trans('quiz.quizleft'), ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -604,13 +610,13 @@ class SettingsView extends View
 		$out .= nl2br($quiz['desc']);
 
 		if ($quiz['id'] == 1) {
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.timedstart') . '</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.regstart') . '</a></p>';
 		} else {
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">' . $this->translator->trans('quiz.nownownow') . '</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', ['class' => 'ui-padding']);
+		$out = $this->v_utils->v_field($out, $quiz['name'] . $this->translator->trans('quiz.quizleft'), ['class' => 'ui-padding']);
 
 		return $out;
 	}

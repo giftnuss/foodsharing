@@ -77,12 +77,12 @@ class ProfileXhr extends Control
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);
-				$dia->setTitle('Verifizierungshistorie');
+				$dia->setTitle($this->translator->trans('profile.nav.verificationHistory'));
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
 			if ($_GET['type'] == 1) {
 				$history = $this->profileGateway->getPassHistory($_GET['fsid']);
-				$dia->setTitle('Passhistorie');
+				$dia->setTitle($this->translator->trans('profile.nav.history'));
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
 			$dia->noOverflow();
@@ -100,14 +100,14 @@ class ProfileXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-				pulseSuccess("Alle Termine gelöscht");
+				pulseSuccess(\'' . $this->translator->trans('profile.alldatesdeleted') . '\');
 				reload();',
 			];
 		}
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("Du kannst nicht alle Termine löschen!");',
+			'script' => 'pulseError(\'' . $this->translator->trans('profile.cantdeleteall') . '\');',
 		];
 	}
 
@@ -146,7 +146,7 @@ class ProfileXhr extends Control
 				return [
 					'status' => 1,
 					'script' => '
-					pulseSuccess("Einzeltermin gelöscht");
+					pulseSuccess(\'' . $this->translator->trans('profile.deletesuccess') . '\');
 					reload();',
 				];
 			}
@@ -154,7 +154,7 @@ class ProfileXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");',
+			'script' => 'pulseError(\'' . $this->translator->trans('profile.cantdeletethis') . '\');',
 		];
 	}
 }

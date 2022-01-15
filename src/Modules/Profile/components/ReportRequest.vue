@@ -13,7 +13,7 @@
         </p>
         <p>
           {{ $i18n('profile.report.oldReportButtonTextPart3') }}
-          <a href="https://foodsharing.de/?page=blog&amp;sub=read&amp;id=255">in diesem Blogeintrag</a>
+          <a href="https://foodsharing.de/?page=blog&amp;sub=read&amp;id=255">{{ $i18n('profile.report.inthisblog') }}</a>
         </p>
       </div>
     </div>
@@ -135,11 +135,11 @@ export default {
       reportReason: null,
       storeList: null,
       reportReasonOptions: [
-        { value: null, text: 'Bitte wähle die Art der Meldung' },
-        { value: '1', text: 'Ist zu spät gekommen' },
-        { value: '2', text: 'Ist nicht zum abholen erschienen' },
-        { value: '10', text: 'Häufiges kurzfristiges Absagen der Abholungen ohne Ersatzsuche' },
-        { value: '15', text: 'Verkauft gerettete Lebensmittel' },
+        { value: null, text: this.$i18n('profile.report.kindofreport') },
+        { value: '1', text: this.$i18n('profile.report.late') },
+        { value: '2', text: this.$i18n('profile.report.noshow') },
+        { value: '10', text: this.$i18n('profile.report.cancellation') },
+        { value: '15', text: this.$i18n('profile.report.sells') },
       ],
     }
   },

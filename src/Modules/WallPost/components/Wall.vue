@@ -25,7 +25,7 @@
         Sending...
       </span>
       <span v-if="error">
-        Es ist ein Fehler aufgetreten
+        {{ $i18n('error_unexpected') }}
       </span>
     </div>
     <div class="wall-posts">
@@ -54,7 +54,7 @@
               </span>
               <div class="foot">
                 <span class="time">
-                  {{ post.createdAt }} Uhr von {{ post.author.name }}
+                  {{ post.createdAt }} {{ $i18n('time_from') }} {{ post.author.name }}
                 </span>
                 <button
                   v-if="mayDelete"

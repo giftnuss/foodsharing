@@ -48,7 +48,7 @@
           v-if="isTruncatable"
           @click="isTruncatedText = !isTruncatedText"
         >
-          {{ isTruncatedText ? 'alles zeigen' : 'weniger' }}
+          {{ isTruncatedText ? $i18n('activitypost.showeverything') : $i18n('activitypost.less') }}
           <i
             :class="{ 'fa-rotate-180': !isTruncatedText }"
             class="fas fa-fw fa-angle-down"
@@ -64,7 +64,7 @@
         v-model="quickreplyValue"
         name="quickreply"
         class="quickreply"
-        placeholder="Schreibe eine Antwort..."
+        :placeholder="$i18n('activitypost.write')"
         @keyup.enter="sendQuickreply"
       />
       <span v-else class="loader">

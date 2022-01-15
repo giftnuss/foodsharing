@@ -102,7 +102,7 @@ class ContentControl extends Control
 						['name' => $this->translator->trans('content.actions'), 'sort' => false, 'width' => 50]
 					], $rows);
 
-					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
+					$this->pageHelper->addContent($this->v_utils->v_field($table, $this->translator->trans('edit_websites')));
 				} else {
 					$this->flashMessageHelper->info($this->translator->trans('content.empty'));
 				}
@@ -307,8 +307,8 @@ class ContentControl extends Control
 
 	public function joininfo(): void
 	{
-		$this->pageHelper->addBread('Mitmachen');
-		$this->pageHelper->addTitle('Mitmachen - Unsere Regeln');
+		$this->pageHelper->addBread($this->translator->trans('startpage.join'));
+		$this->pageHelper->addTitle($this->translator->trans('startpage.join_rules'));
 		$this->pageHelper->addContent($this->view->joininfo());
 	}
 
@@ -404,8 +404,10 @@ class ContentControl extends Control
 		$this->pageHelper->addContent($this->view->simple($cl));
 	}
 
-	private function content_form($title = 'Content Management')
+	private function content_form($titleKey = 'contentmanagement')
 	{
+		$title = $this->translator->trans($titleKey);
+
 		return $this->v_utils->v_form('faq', [
 			$this->v_utils->v_field(
 				$this->v_utils->v_form_text('name', ['required' => true]) .
