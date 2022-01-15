@@ -4,33 +4,22 @@ namespace Foodsharing\Modules\Message;
 
 class Conversation
 {
-	/**
-	 * @var int
-	 */
-	public $id;
+	public int $id;
+	public ?string $title;
+	public ?int $storeId;
+	public bool $hasUnreadMessages;
+	public array $members;
+	public ?Message $lastMessage;
+	public ?array $messages = [];
 
-	/**
-	 * @var string
-	 */
-	public $title;
-
-	/**
-	 * @var bool
-	 */
-	public $hasUnreadMessages;
-
-	/**
-	 * @var array
-	 */
-	public $members;
-
-	/**
-	 * @var ?Message
-	 */
-	public $lastMessage;
-
-	/**
-	 * @var ?array
-	 */
-	public $messages;
+	public function __construct()
+	{
+		$this->id = 0;
+		$this->title = null;
+		$this->storeId = null;
+		$this->hasUnreadMessages = false;
+		$this->members = [];
+		$this->lastMessage = null;
+		$this->messages = null;
+	}
 }

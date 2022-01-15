@@ -126,7 +126,7 @@
   margin: 0 0 -4px 0;
 }
 
-#msg-conversation-title a {
+#msg-conversation-title a.member-img {
   display: inline-block;
   width: 22px;
   height: 22px;
@@ -156,7 +156,6 @@ ul.conversation-list > li.unread-1 {
   #msg-conversation-wrapper {
     max-height: 100vh;
     margin: 0;
-    padding-top: 30px;
   }
 
   #msg-conversation {
@@ -194,29 +193,31 @@ ul.conversation-list > li.unread-1 {
     padding: 0.5rem 0.75rem;
   }
   #msg-conversation-wrapper .field .ui-widget-content {
-    padding: 15px 0;
+    padding: 15px 0 45px 0;
   }
 
   #msg-conversation-wrapper .field .head {
     position: fixed;
     top: 40px;
     left: 0;
-    width: 100%;
+    width: 100vw;
     z-index: 11;
-    background-color: #dbd7d1;
     border-radius: 0;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.45);
   }
 
   #msg-conversation-wrapper .field .head .images {
-    padding-right: 0.75rem;
-    max-width: 48px;
-    overflow: hidden;
-    height: 22px;
+    overflow: auto;
+    max-height: 46px;
+    max-width: 100vw;
   }
 
   #msg-conversation-title {
     color: var(--fs-brown);
+  }
+
+  #msg-conversation-wrapper {
+    border-radius: 0;
   }
 
   #msg_answer {

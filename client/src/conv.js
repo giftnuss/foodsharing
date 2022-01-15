@@ -10,10 +10,11 @@ import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
 import profileStore from '@/stores/profiles'
 import * as api from '@/api/conversations'
-
+import { url } from '@/urls'
 import {
   plainToHtml,
 } from '@/utils'
+
 const conv = {
 
   initiated: false,
@@ -283,16 +284,26 @@ const conv = {
    * append an chat message to chat window with given array index attention not conversation id ;)
    */
   append: function (key, message) {
-  /**
-  * adding a class 'my-message' to current user's own messages
-  */
-    let ownMessageClass = ''
-    if (message.authorId === serverData.user.id) { ownMessageClass = ' my-message' }
+    const msgclass = (message.authorId === serverData.user.id) ? 'chatboxmessage my-message' : 'chatboxmessage'
+
     if (key >= 0 && conv.chatboxes[key] !== undefined) {
       conv.chatboxes[key].last_mid = parseInt(message.id)
-      conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(
-        `<div title="${profileStore.profiles[message.authorId].name}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time" title="${message.sentAt}">${dateFormat(message.sentAt)}</span></span><div class="clear"></div></div>`,
-      )
+      conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`
+        <div title="${profileStore.profiles[message.authorId].name}" class="${msgclass}">
+        <span class="chatboxmessagefrom">
+          <a class="photo" href="${url('profile', message.authorId)}">
+            <img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}">
+          </a>
+        </span>
+        <span class="chatboxmessagecontent">
+          ${plainToHtml(message.body)}
+          <span class="time" title="${message.sentAt}">
+            ${dateFormat(message.sentAt)}
+          </span>
+        </span>
+        <div class="clear"></div>
+      </div>
+      `)
     }
   },
 
@@ -312,29 +323,39 @@ const conv = {
       */
       conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
 
-      /*
-       * first make a title with all the usernames
-       */
-
+      // first build a title from all the usernames
       let title = conversation.title
       if (title == null) {
         title = []
-        for (const m of conversation.members) {
-          if (m == serverData.user.id || profileStore.profiles[m].name === null) {
+        for (const memberId of conversation.members) {
+          if (memberId === serverData.user.id || profileStore.profiles[memberId].name === null) {
             continue
           }
-          title.push(`<a href="/profile/${m}">${plainToHtml(profileStore.profiles[m].name)}</a>`)
+          title.push(`
+            <a href="${url('profile', memberId)}">
+              ${plainToHtml(profileStore.profiles[memberId].name)}
+            </a>
+          `)
         }
         title = title.join(', ')
+      } else if (conversation.storeId) {
+        title = `
+          <a href="${url('store', conversation.storeId)}">
+            ${plainToHtml(title)}
+          </a>
+        `
+      } else {
+        title = plainToHtml(title)
       }
 
       if (key >= 0 && conv.chatboxes[key] !== undefined) {
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
+        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`
+        <i class="fas fa-fw fa-comment fa-flip-horizontal"></i>
+        ${title}
+      `)
       }
 
-      /*
-       * now append all arrived messages
-       */
+      // now append all arrived messages
       Object.values(conversation.messages).forEach((m) => conv.append(key, m))
       conv.scrollBottom(cid)
     } catch (e) {
@@ -350,7 +371,10 @@ const conv = {
     try {
       await api.renameConversation(cid, newName)
       const key = this.getKey(cid)
-      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${plainToHtml(newName)}`)
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`
+        <i class="fas fa-fw fa-comment fa-flip-horizontal"></i>
+        ${plainToHtml(newName)}
+      `)
     } catch (e) {
       pulseError('Fehler beim Umbenennen der Unterhaltung')
       console.error(e)
@@ -374,13 +398,34 @@ const conv = {
     if (conv.getKey(cid) === -1) {
       const right = 20 + (this.chatCount * 285)
 
-      const options = `<li><a href="/?page=msg&cid=${cid}">Alle Nachrichten</a></li>`
-
-      // I did not find out where name is supposed to be assigned, so I just set it to empty thing to avoid an error
-      const name = ''
-
-      const $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
-      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${plainToHtml(name)}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
+      const $el = $(`
+        <div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>
+      `).appendTo('body')
+      $el.html(`
+        <div class="chatboxhead ui-corner-top">
+          <div class="chatboxtitle" onclick="conv.togglebox(${cid});">
+            <i class="fas fa-fw fa-spinner fa-spin"></i>
+          </div>
+          <ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">
+            <li>
+              <a href="${url('conversations', cid)}">Alle Nachrichten</a>
+            </li>
+          </ul>
+          <div class="chatboxoptions">
+            <a href="#" title="Einstellungen" onclick="conv.settings(${cid});return false;">
+              <i class="fas fa-fw fa-cog"></i>
+            </a>
+            <a title="schließen" href="#" onclick="conv.close(${cid});return false;">
+              <i class="fas fa-fw fa-times"></i>
+            </a>
+          </div>
+          <br clear="all"/>
+        </div>
+        <div class="chatboxcontent"></div>
+        <div class="chatboxinput">
+          <textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea>
+        </div>
+      `)
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()

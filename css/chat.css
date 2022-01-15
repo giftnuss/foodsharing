@@ -181,16 +181,17 @@
 .chatboxmessagefrom .photo {
   display: block;
   margin-right: 4px;
-  border-radius: 6px;
 }
 
+#msg-conversation .img img,
+.chatboxmessagecontent,
+.chatboxmessagefrom .photo,
 .chatboxmessagefrom .photo img {
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .chatboxmessagecontent {
   background: none repeat scroll 0 0 #e1e1db;
-  border-radius: 6px;
   color: var(--fs-brown);
   display: block;
   font-size: 12px;
@@ -211,22 +212,19 @@
 
 .chatboxoptions {
   float: right;
+  margin-right: 5px;
 }
 
 .chatboxoptions a {
-  border-radius: 6px;
   background-color: transparent;
   color: white;
   display: inline-block;
-  font-size: 16px;
   font-weight: bold;
-  height: 16px;
-  margin: 5px 5px 0 0;
+  margin: 0;
   outline: 0 none;
-  padding: 3px;
+  padding-top: 7px;
   text-align: center;
   text-decoration: none;
-  width: 16px;
 }
 
 .chatboxoptions a:hover {
@@ -355,25 +353,26 @@
 }
 
 .conversation-list .unread-1 .pics {
-  border: 1px solid black;
-  border-radius: 4px;
-  overflow: hidden;
+  border: 1px solid var(--dark);
+}
+.conversation-list .unread-1 .time {
+  color: var(--dark);
 }
 
 ul.conversation-list li.unread-1 > a::before {
-  content: " ";
-  height: 10px;
-  width: 10px;
+  position: absolute;
   top: 0px;
   right: 0px;
-  padding: 3px;
-  border: 2px solid #f9f5e0;
+  height: 10px;
+  width: 10px;
+  padding: 2px;
+  border: 3px solid var(--fs-white);
   border-radius: 10px;
   display: flex;
+  content: " ";
   justify-content: center;
-  background: #f44336;
-  position: absolute;
-  color: #f9f5e0;
+  background: var(--danger);
+  color: var(--fs-beige);
   font-family: 'Open Sans', sans-serif;
   z-index: 1;
 }

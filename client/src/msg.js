@@ -21,7 +21,7 @@ import {
   pulseError,
   shuffle,
 } from '@/script'
-
+import { url } from '@/urls'
 import {
   dateDistanceInWords, dateFormat,
   plainToHtml,
@@ -217,13 +217,23 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    /*
-     * set a class 'my-message' to active user's own messages
-     */
-    let ownMessageClass = ''
     const author = profileStore.profiles[message.authorId]
-    if (message.authorId === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
-    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${plainToHtmlAttribute(author.name)}" href="/profile/${message.authorId}"><img height="35" src="${img(author.avatar, 'mini')}" /></a></span><span class="body">${plainToHtml(message.body)}<span class="time">${dateFormat(message.sentAt)}</span></span><span class="clear"></span></li>`)
+    const ownMessageClass = (message.authorId === serverData.user.id) ? 'my-message' : ''
+
+    return $(`
+      <li id="msg-${message.id}" class="${ownMessageClass}" style="display: none;">
+        <span class="img">
+          <a title="${plainToHtmlAttribute(author.name)}" href="${url('profile', message.authorId)}">
+            <img height="35" src="${img(author.avatar, 'mini')}" />
+          </a>
+        </span>
+        <span class="body">
+          ${plainToHtml(message.body)}
+          <span class="time">${dateFormat(message.sentAt)}</span>
+        </span>
+        <span class="clear"></span>
+      </li>
+    `)
   },
 
   getRecipients: function () {
@@ -276,17 +286,26 @@ const msg = {
 
     const otherMembers = conversation.members.filter(m => m != msg.fsid)
 
-    const titleText = conversation.title || `Unterhaltung mit ${otherMembers.map(member => profileStore.profiles[member].name).join(', ')}`
+    const conversationTitle = conversation.title || `Unterhaltung mit ${otherMembers.map(member => profileStore.profiles[member].name).join(', ')}`
+
+    let titleText = plainToHtml(conversationTitle)
+    if (conversation.storeId) {
+      titleText = `<a href="${url('store', conversation.storeId)}">${titleText}</a>`
+    }
 
     const title = `
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
-          <a title="${plainToHtmlAttribute(profileStore.profiles[member].name)}" href="/profile/${profileStore.profiles[member].id}">
+          <a
+            class="member-img"
+            title="${plainToHtmlAttribute(profileStore.profiles[member].name)}"
+            href="${url('profile', profileStore.profiles[member].id)}"
+          >
             <img src="${img(profileStore.profiles[member].avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
           </a>
         `).slice(0, 25).join('')}
       </div>
-      ${plainToHtml(titleText)}
+      ${titleText}
       <div class="clear"></div>
     `
 

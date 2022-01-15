@@ -33,14 +33,14 @@ final class MessageGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
 	}
 
-	public function createConversation(array $fsIds, bool $locked = false): int
+	public function createConversation(array $fsIds, bool $locked = false, ?int $storeId = null): int
 	{
 		$this->db->beginTransaction();
 
 		$conversationId = $this->db->insert('fs_conversation', [
 			'locked' => $locked ? 1 : 0,
+			'store_id' => $storeId,
 		]);
-
 		foreach ($fsIds as $fsId) {
 			$this->db->insert('fs_foodsaver_has_conversation', [
 				'foodsaver_id' => $fsId,
@@ -192,6 +192,7 @@ final class MessageGateway extends BaseGateway
 				c.`last_message_id`,
 				hc.unread as has_unread_messages,
 				c.name,
+				c.store_id,
 				c.last_message_is_htmlentity_encoded
 
 			FROM
@@ -227,8 +228,9 @@ final class MessageGateway extends BaseGateway
 		$res = [];
 		foreach ($conversations as $c) {
 			$conversation = new Conversation();
-			$conversation->title = $c['name'];
 			$conversation->id = $c['id'];
+			$conversation->title = $c['name'];
+			$conversation->storeId = $c['store_id'] ?? null;
 			$conversation->hasUnreadMessages = (bool)$c['has_unread_messages'];
 
 			if ($c['last_message_id']) {
