@@ -1184,7 +1184,8 @@ reports:
   about: "Über" #also in ReportView
   about_first_name: "Über Name"
   about_last_name: "Über Nachname"
-  all_reports: "Alle Meldungen" #also in ReportView
+  about_email: "Über E-Mail"
+  all_reports: "Alle Meldungen"
   city: "Stadt"
   from: "Von" #also in Reportview
   from_first_name: "Von Name"

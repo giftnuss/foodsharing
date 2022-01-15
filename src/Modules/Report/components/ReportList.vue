@@ -148,6 +148,11 @@ export default {
           sortable: true,
         },
         {
+          key: 'fs_email',
+          label: this.$i18n('reports.about_email'),
+          sortable: true,
+        },
+        {
           key: 'rp_name',
           label: this.$i18n('reports.from_first_name'),
           sortable: true,

@@ -3,10 +3,12 @@
 ## Features
 
 ## Changes
+- Add E-Mail of reported user in overview !2120 @fs_k
 
 ## Bugfixes
 
 ## Refactoring
+- move even more hardcoded language to language files !2109 @jonathan_b
 
 ## Dev/Test/CI stuff
 
@@ -43,7 +45,6 @@
 - Get Members in MemberList.vue from Rest Api !2094 !2111 !2123 @chriswalg @alex.simm
 - Refactored the format of the quick search index !2115 @alex.simm 
 - Get Members in MemberList.vue from Rest Api !2094 @chriswalg @alex.simm
-- move even more hardcoded language to language files !2109 @jonathan_b
 
 ## Dev/Test/CI stuff
 

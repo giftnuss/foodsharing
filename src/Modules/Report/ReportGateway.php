@@ -221,6 +221,7 @@ class ReportGateway extends BaseGateway
 				fs.name AS fs_name,
 				fs.nachname AS fs_nachname,
 				fs.photo AS fs_photo,
+				fs.email AS fs_email,
 				fs.stadt AS fs_stadt,
 
 				rp.id AS rp_id,
