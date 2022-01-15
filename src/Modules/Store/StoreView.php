@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\View;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\NumberHelper;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -27,6 +28,7 @@ class StoreView extends View
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
 		ImageHelper $imageService,
+		NumberHelper $numberHelper,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		Sanitizer $sanitizerService,
@@ -43,6 +45,7 @@ class StoreView extends View
 			$dataHelper,
 			$identificationHelper,
 			$imageService,
+			$numberHelper,
 			$pageHelper,
 			$routeHelper,
 			$sanitizerService,

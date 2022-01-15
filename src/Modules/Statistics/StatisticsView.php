@@ -21,12 +21,12 @@ class StatisticsView extends View
 				<td class="name">
 					<h4>' . $r['name'] . '</h4>
 					<p class="fetchweight">'
-					. number_format($r['fetchweight'], 0, ',', '.')
+				. $this->numberHelper->format_number($r['fetchweight'])
 					. '<span style="white-space: nowrap;">&thinsp;</span>kg '
 					. $this->translator->trans('profile.stats.weight')
 					. '</p>
 					<p class="fetchcount">'
-					. number_format($r['fetchcount'], 0, ',', '.')
+				. $this->numberHelper->format_number($r['fetchcount'])
 					. '<span style="white-space: nowrap;">&thinsp;</span>x '
 					. $this->translator->trans('profile.stats.count')
 					. '</p>
@@ -53,7 +53,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['fetchweight'], 0, ',', '.') . '<span style="white-space: nowrap;">&thinsp;</span>kg</h4>
+				<h4>' . $this->numberHelper->format_number($stat['fetchweight']) . '<span style="white-space: nowrap;">&thinsp;</span>kg</h4>
 				<p>' . $this->translator->trans('stats.total.weight') . '</p>
 			</div>
 		</div>
@@ -64,7 +64,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['cooperationscount'], 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($stat['cooperationscount']) . '</h4>
 				<p>' . $this->translator->trans('stats.total.cooperations') . '</p>
 			</div>
 		</div>
@@ -76,7 +76,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['fscount'], 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($stat['fscount']) . '</h4>
 				<p>' . $this->translator->trans('stats.total.foodsaver') . '</p>
 			</div>
 		</div>
@@ -87,7 +87,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($foodsharerCount, 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($foodsharerCount) . '</h4>
 				<p>' . $this->translator->trans('stats.total.foodsharer') . '</p>
 			</div>
 		</div>
@@ -99,7 +99,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['fetchcount'], 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($stat['fetchcount']) . '</h4>
 				<p>' . $this->translator->trans('stats.total.pickups') . '</p>
 			</div>
 		</div>
@@ -110,7 +110,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($avgDailyFetchCount, 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($avgDailyFetchCount) . '</h4>
 				<p>' . $this->translator->trans('stats.avg.pickups') . '</p>
 			</div>
 		</div>
@@ -122,7 +122,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['totalBaskets'], 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($stat['totalBaskets']) . '</h4>
 				<p>' . $this->translator->trans('stats.total.baskets') . '</p>
 			</div>
 		</div>
@@ -136,7 +136,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($stat['avgWeeklyBaskets'], 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($stat['avgWeeklyBaskets']) . '</h4>
 				<p>' . $this->translator->trans('stats.avg.baskets') . '</p>
 			</div>
 		</div>
@@ -148,7 +148,7 @@ class StatisticsView extends View
 				</div>
 			</div>
 			<div class="stat_text">
-				<h4>' . number_format($foodSharePointsCount, 0, ',', '.') . '</h4>
+				<h4>' . $this->numberHelper->format_number($foodSharePointsCount) . '</h4>
 				<p>' . $this->translator->trans('stats.total.fsp') . '</p>
 			</div>
 		</div>
@@ -172,12 +172,12 @@ class StatisticsView extends View
 				<td class="name">
 					<h4>' . $fs['name'] . '</h4>
 					<p class="fetchweight">'
-					. number_format($fs['fetchweight'], 0, ',', '.')
+				. $this->numberHelper->format_number($fs['fetchweight'])
 					. '<span style="white-space: nowrap;">&thinsp;</span>kg '
 					. $this->translator->trans('profile.stats.weight')
 					. '</p>
 					<p class="fetchcount">'
-					. number_format($fs['fetchcount'], 0, ',', '.')
+				. $this->numberHelper->format_number($fs['fetchcount'])
 					. '<span style="white-space: nowrap;">&thinsp;</span>x '
 					. $this->translator->trans('profile.stats.count')
 					. '</p>

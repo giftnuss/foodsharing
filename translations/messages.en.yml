@@ -2320,3 +2320,8 @@ regionPin:
   desc: Description
   success: Saved successfully
   pin_visible: Pin visible on map
+numbers:
+  decimal_separator: "."
+  thousands_separator: ","
+  million_abbreviation: " mio."
+  billion_abbreviation: " bn."

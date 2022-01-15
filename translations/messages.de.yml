@@ -2474,3 +2474,9 @@ teamjs:
   entermail: "Bitte gib eine gültige E-Mail-Adresse ein, damit wir Dir antworten können!"
 
 timefrom: "Uhr von"
+
+numbers:
+  decimal_separator: ","
+  thousands_separator: "."
+  million_abbreviation: " Mio."
+  billion_abbreviation: " Mrd."

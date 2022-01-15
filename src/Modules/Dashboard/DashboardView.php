@@ -36,7 +36,7 @@ class DashboardView extends View
 		$basketId = intval($basket['id']);
 		$by = $this->translator->trans('basket.by', ['{name}' => $basket['fs_name']]);
 		if ($nearby && $basket['distance']) {
-			$by .= ' (' . $this->distance($basket['distance']) . ')';
+			$by .= ' (' . $this->numberHelper->format_distance($basket['distance']) . ')';
 		}
 
 		if ($basket['picture'] && file_exists(ROOT_DIR . 'images/basket/50x50-' . $basket['picture'])) {
@@ -138,11 +138,11 @@ class DashboardView extends View
 		$list = '<ul class="linklist">';
 		foreach ($storeList as $store) {
 			$list .=
-			'<li>' .
+				'<li>' .
 				'<a class="ui-corner-all" href="/?page=fsbetrieb&id=' . $store['id'] . '">' .
-					$store['name'] .
+				$store['name'] .
 				'</a>' .
-			'</li>';
+				'</li>';
 		}
 		$list .= '</ul>';
 
@@ -175,8 +175,8 @@ class DashboardView extends View
 
 					<div>
 						<a href="/?page=event&id=' . $eventId . '" class="button">'
-						. $this->translator->trans('events.goto') .
-						'</a>
+				. $this->translator->trans('events.goto') .
+				'</a>
 					</div>
 				</div>
 

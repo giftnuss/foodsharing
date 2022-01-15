@@ -12,6 +12,7 @@ use Foodsharing\Permissions\BasketPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\NumberHelper;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -30,6 +31,7 @@ class BasketView extends View
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
 		ImageHelper $imageService,
+		NumberHelper $numberHelper,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		Sanitizer $sanitizerService,
@@ -46,6 +48,7 @@ class BasketView extends View
 			$dataHelper,
 			$identificationHelper,
 			$imageService,
+			$numberHelper,
 			$pageHelper,
 			$routeHelper,
 			$sanitizerService,
@@ -100,7 +103,7 @@ class BasketView extends View
 				$img = '/images/basket/thumb-' . $b['picture'];
 			}
 
-			$distance = $this->distance($b['distance']);
+			$distance = $this->numberHelper->format_distance($b['distance']);
 
 			$out .= '<li>
 				<a class="ui-corner-all" onclick="ajreq(\'bubble\','

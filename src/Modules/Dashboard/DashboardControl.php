@@ -15,6 +15,7 @@ use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\NumberHelper;
 use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
@@ -31,6 +32,7 @@ class DashboardControl extends Control
 	private ProfileGateway $profileGateway;
 	private Sanitizer $sanitizerService;
 	private ImageHelper $imageService;
+	private NumberHelper $numberHelper;
 	private QuizSessionGateway $quizSessionGateway;
 
 	public function __construct(
@@ -46,6 +48,7 @@ class DashboardControl extends Control
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
+		NumberHelper $numberHelper,
 		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
@@ -60,6 +63,7 @@ class DashboardControl extends Control
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
+		$this->numberHelper = $numberHelper;
 		$this->quizSessionGateway = $quizSessionGateway;
 
 		parent::__construct();
@@ -345,15 +349,7 @@ class DashboardControl extends Control
 					$img = 'images/basket/thumb-' . $b['picture'];
 				}
 
-				$distance = round($b['distance'], 1);
-
-				if ($distance == 1.0) {
-					$distance = '1 km';
-				} elseif ($distance < 1) {
-					$distance = ($distance * 1000) . ' m';
-				} else {
-					$distance = number_format($distance, 1, ',', '.') . ' km';
-				}
+				$distance = $this->numberHelper->format_distance($b['distance']);
 
 				$out .= '
 				<li>

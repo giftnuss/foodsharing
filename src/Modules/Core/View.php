@@ -7,6 +7,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\NumberHelper;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -24,6 +25,7 @@ class View
 	protected DataHelper $dataHelper;
 	protected IdentificationHelper $identificationHelper;
 	protected ImageHelper $imageService;
+	protected NumberHelper $numberHelper;
 	protected PageHelper $pageHelper;
 	protected RouteHelper $routeHelper;
 	protected Sanitizer $sanitizerService;
@@ -38,6 +40,7 @@ class View
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
 		ImageHelper $imageService,
+		NumberHelper $numberHelper,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		Sanitizer $sanitizerService,
@@ -51,6 +54,7 @@ class View
 		$this->dataHelper = $dataHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->imageService = $imageService;
+		$this->numberHelper = $numberHelper;
 		$this->pageHelper = $pageHelper;
 		$this->routeHelper = $routeHelper;
 		$this->sanitizerService = $sanitizerService;
@@ -76,21 +80,6 @@ class View
 			' . $subtitle . '
 			<div class="clear"></div>
 		</div>';
-	}
-
-	public function distance($distance)
-	{
-		$distance = round($distance, 1);
-
-		if ($distance == 1.0) {
-			$distance = '1 km';
-		} elseif ($distance < 1) {
-			$distance = ($distance * 1000) . ' m';
-		} else {
-			$distance = number_format($distance, 1, ',', '.') . ' km';
-		}
-
-		return $distance;
 	}
 
 	public function location($location)

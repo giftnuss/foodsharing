@@ -15,6 +15,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\NumberHelper;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -34,6 +35,7 @@ class SettingsView extends View
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
 		ImageHelper $imageService,
+		NumberHelper $numberHelper,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		Sanitizer $sanitizerService,
@@ -50,6 +52,7 @@ class SettingsView extends View
 			$dataHelper,
 			$identificationHelper,
 			$imageService,
+			$numberHelper,
 			$pageHelper,
 			$routeHelper,
 			$sanitizerService,
@@ -194,7 +197,7 @@ class SettingsView extends View
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', [
 			$this->v_utils->v_input_wrapper(
 				$this->translator->trans('settings.push.title'),
-					'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
+				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
 					<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
 			),
 			$this->v_utils->v_form_radio('newsletter', [
@@ -444,19 +447,19 @@ class SettingsView extends View
 			. '</button>'
 			. $this->v_utils->v_info(
 				$this->translator->trans('foodsaver.delete_own_account')
-				. $this->translator->trans('notice') . '<br/>'
-				. $this->translator->trans('legal.if_delete.legal_1') . '<br/>'
-				. $this->translator->trans('legal.if_delete.legal_2') . '<br/><br/>'
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_main')
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_stores')
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_quiz')
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_verify')
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_friendlist')
-				. $this->translator->trans('legal.if_delete.this_gets_deleted_trustbananas') . '<br/><br/>'
-				. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted') . '<br/>'
-				. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_name')
-				. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_address')
-				. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_history')
+					. $this->translator->trans('notice') . '<br/>'
+					. $this->translator->trans('legal.if_delete.legal_1') . '<br/>'
+					. $this->translator->trans('legal.if_delete.legal_2') . '<br/><br/>'
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_main')
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_stores')
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_quiz')
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_verify')
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_friendlist')
+					. $this->translator->trans('legal.if_delete.this_gets_deleted_trustbananas') . '<br/><br/>'
+					. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted') . '<br/>'
+					. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_name')
+					. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_address')
+					. $this->translator->trans('legal.if_delete.this_doesnt_get_deleted_history')
 			);
 
 		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding bootstrap']);
