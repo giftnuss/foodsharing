@@ -4,7 +4,7 @@
 
 ## Changes
 - Add E-Mail of reported user in overview !2120 @fs_k
-- Store-related conversations include a link to their store now !1807 @ChrisOelmueller
+- Store-related conversations include a link to their store now !1807 !2134 @ChrisOelmueller
 
 ## Bugfixes
 

@@ -33,13 +33,12 @@ final class MessageGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
 	}
 
-	public function createConversation(array $fsIds, bool $locked = false, ?int $storeId = null): int
+	public function createConversation(array $fsIds, bool $locked = false): int
 	{
 		$this->db->beginTransaction();
 
 		$conversationId = $this->db->insert('fs_conversation', [
-			'locked' => $locked ? 1 : 0,
-			'store_id' => $storeId,
+			'locked' => $locked ? 1 : 0
 		]);
 		foreach ($fsIds as $fsId) {
 			$this->db->insert('fs_foodsaver_has_conversation', [
@@ -192,7 +191,6 @@ final class MessageGateway extends BaseGateway
 				c.`last_message_id`,
 				hc.unread as has_unread_messages,
 				c.name,
-				c.store_id,
 				c.last_message_is_htmlentity_encoded
 
 			FROM
@@ -230,8 +228,11 @@ final class MessageGateway extends BaseGateway
 			$conversation = new Conversation();
 			$conversation->id = $c['id'];
 			$conversation->title = $c['name'];
-			$conversation->storeId = $c['store_id'] ?? null;
 			$conversation->hasUnreadMessages = (bool)$c['has_unread_messages'];
+
+			// add the storeId, if this is the team conversation of a store
+			$store = $this->storeGateway->getStoreByConversationId($c['id']);
+			$conversation->storeId = $store['id'] ?? null;
 
 			if ($c['last_message_id']) {
 				$message = new Message(
