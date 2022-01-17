@@ -13,6 +13,7 @@
 
 ## Dev/Test/CI stuff
 - removed the "request" package !2136 @peter.toennies
+- Upgraded deployer to the last version (v7-rc4) !2139 @\_fridtjof_
 
 # Release "Grapefruit", 2022-01-13
 
