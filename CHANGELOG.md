@@ -12,6 +12,7 @@
 - move even more hardcoded language to language files !2109 @jonathan_b
 
 ## Dev/Test/CI stuff
+- removed the "request" package !2136 @peter.toennies
 
 # Release "Grapefruit", 2022-01-13
 
