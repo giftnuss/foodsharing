@@ -14,6 +14,7 @@
 ## Dev/Test/CI stuff
 - removed the "request" package !2136 @peter.toennies
 - Upgraded deployer to the last version (v7-rc4) !2139 !2140 @\_fridtjof_
+Bump "babel" to reduce vulnerabilities !2137 @peter.toennies
 
 # Release "Grapefruit", 2022-01-13
 
