@@ -7,7 +7,13 @@
       "php": "7.4.11"
     },
     "sort-packages": true
-  },
+  },        
+  "repositories: [
+        {
+            "type": "vcs",
+            "url": "https://github.com/giftnuss/icalBundle"
+        }
+  ],
   "require-dev": {
     "codeception/codeception": "4.1.22",
     "codeception/module-asserts": "1.3.1",
@@ -83,7 +89,7 @@
     "twig/intl-extra": "3.3.0",
     "twig/twig": "3.3.0",
     "voku/bounce-mail-handler": "6.0.3",
-    "welp/ical-bundle": "1.0.1"
+    "welp/ical-bundle": "dev-main"
   },
   "autoload": {
     "psr-4": {
