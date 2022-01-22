@@ -25,7 +25,12 @@ class SetupCommand extends Command
 
 	private function mkdirs(): void
 	{
-		$dirs = ['images', 'images/basket', 'images/wallpost', 'images/picture', 'images/workgroup', 'data/attach', 'data/mailattach', 'data/mailattach/tmp', 'data/pass', 'data/visite', 'cache/searchindex', 'tmp'];
+		$dirs = [
+		            'images', 'images/basket', 'images/wallpost', 'images/picture', 'images/workgroup',
+			    'data/attach', 'data/mailattach', 'data/mailattach/tmp', 'data/pass', 'data/visite',
+			    'cache/searchindex',
+			    'tmp'
+			];
 		umask(0);
 		foreach ($dirs as $dir) {
 			if (!file_exists($dir)) {
