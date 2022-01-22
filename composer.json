@@ -8,7 +8,7 @@
     },
     "sort-packages": true
   },        
-  "repositories: [
+  "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/giftnuss/icalBundle"
