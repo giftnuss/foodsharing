@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Flourish\fImage;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
@@ -167,57 +166,6 @@ class XhrMethods
 		}
 
 		$response->send();
-	}
-
-	public function xhr_pictureCrop($data)
-	{
-		/*
-		 * [ratio-val] => [{"x":37,"y":87,"w":500,"h":281},{"x":64,"y":0,"w":450,"h":450}]
-		 * [resize] => [250,528]
-		 */
-
-		$ratio = json_decode($_POST['ratio-val'], true);
-		$resize = json_decode($_POST['resize']);
-
-		// prevent path traversal
-		$data['id'] = preg_replace('/[^a-z0-9\-_]/', '', $data['id']);
-		$data['img'] = preg_replace('/[^a-z0-9\-_\.]/', '', $data['img']);
-
-		if (is_array($ratio) && is_array($resize) && count($resize) < 5) {
-			foreach ($ratio as $i => $r) {
-				$i = preg_replace('/%/', '', $i);
-				$i = preg_replace('/\.+/', '.', $i);
-				$this->cropImg(
-					ROOT_DIR . 'images/' . $data['id'],
-					$data['img'],
-					// @phpstan-ignore-next-line ($i = expects int, string|null given)
-					$i,
-					$r['x'], $r['y'],
-					$r['w'], $r['h']
-				);
-
-				foreach ($resize as $r) {
-					if ($r < 1000) {
-						$oldPath = ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $data['img'];
-						$newPath = ROOT_DIR . 'images/' . $data['id'] . '/crop_' . $i . '_' . $r . '_' . $data['img'];
-						copy($oldPath, $newPath);
-						$image = new fImage($newPath);
-						$image->resize($r, 0);
-						$image->saveChanges();
-					}
-				}
-			}
-
-			$oldPath = ROOT_DIR . 'images/' . $data['id'] . '/' . $data['img'];
-			$newPath = ROOT_DIR . 'images/' . $data['id'] . '/thumb_' . $data['img'];
-			copy($oldPath, $newPath);
-
-			$image = new fImage($newPath);
-			$image->resize(150, 0);
-			$image->saveChanges();
-
-			return '<html><head></head><body onload="parent.pictureReady(\'' . $data['id'] . '\',\'' . $data['img'] . '\');"></body></html>';
-		}
 	}
 
 	private function cropImg($path, $img, int $i, int $x, int $y, int $w, int $h)

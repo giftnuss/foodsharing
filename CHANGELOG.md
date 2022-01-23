@@ -18,6 +18,7 @@
 - Bump "mocha" to v9 and "jsdom" to v19 to reduce vulnerabilities !2144 @peter.toennies
 - bump symfony to 5.4, codeception modules to 2 !2142 @peter.toennies
 - replace fzaninott/faker by fakperphp/faker !2142 @peter.toennies
+- Removed old code that handled picture upload !2128 @alex.simm
 
 # Release "Grapefruit", 2022-01-13
 

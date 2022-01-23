@@ -7,11 +7,6 @@ import 'jquery-jcrop'
 import { attachAddressPicker } from '@/addressPicker'
 import { vueApply, vueRegister } from '@/vue'
 import FileUploadVForm from '@/components/upload/FileUploadVForm'
-import {
-  pictureCrop,
-  pictureReady,
-} from '@/script'
-import { expose } from '@/utils'
 import { GET } from '@/browser'
 
 import './FoodSharePoint.css'
@@ -22,11 +17,6 @@ import { initWall } from '@/wall'
 
 vueRegister({
   FileUploadVForm,
-})
-
-expose({
-  pictureCrop,
-  pictureReady,
 })
 
 const sub = GET('sub')

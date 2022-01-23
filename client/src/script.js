@@ -336,58 +336,6 @@ export function closeBox () {
   $.fancybox.close()
 }
 
-export function pictureReady (id, img) {
-  $(`#${id}-preview`).html(`<img src="images/${id}/thumb_${img}" />`)
-  $(`#${id}`).val(`${id}/${img}`)
-
-  $.fancybox.close()
-  hideLoader()
-}
-
-export function pictureCrop (id, img) {
-  const ratio = $.parseJSON($(`#${id}-ratio`).val())
-  const ratio_val = $.parseJSON($(`#${id}-ratio-val`).val())
-
-  const ratio_i = parseInt($(`#${id}-ratio-i`).val())
-
-  if (ratio[ratio_i] != undefined) {
-    $(`#${id}-ratio-i`).val((ratio_i + 1))
-    $(`#${id}-crop`).html(`<img src="images/${id}/${img}" /><br /><span id="${id}-crop-save">Speichern</span>`)
-    $(`#${id}-crop img`).Jcrop({
-      setSelect: [100, 0, 400, 400],
-      aspectRatio: ratio[ratio_i],
-      onSelect: function (c) {
-        $(`#${id}-x`).val(c.x)
-        $(`#${id}-y`).val(c.y)
-        $(`#${id}-w`).val(c.w)
-        $(`#${id}-h`).val(c.h)
-      },
-    })
-    hideLoader()
-    setTimeout(function () {
-      $.fancybox.update()
-      $.fancybox.reposition()
-      $.fancybox.toggle()
-    }, 200)
-
-    $(`#${id}-crop-save`).button().on('click', function () {
-      ratio_val[ratio_val.length] = {
-        x: Math.round($(`#${id}-x`).val()),
-        y: Math.round($('#' + id + '-y').val()),
-        w: Math.round($('#' + id + '-w').val()),
-        h: Math.round($('#' + id + '-h').val()),
-      }
-      $(`#${id}-ratio-val`).val(JSON.stringify(ratio_val))
-
-      pictureCrop(id, img)
-    })
-  } else {
-    showLoader()
-    $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
-    $(`#${id}-form`).trigger('submit')
-  }
-}
-
 export function u_loadCoords (addressdata, func) {
   let anschrift = ''
   if (addressdata.str != undefined) {
