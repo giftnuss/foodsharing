@@ -47,7 +47,7 @@ class AcceptanceTester extends Codeception\Actor
 		$I->seeMatches('/Willkommen|Hallo/'); // depends on user type
 	}
 
-	public function logout()
+	public function logMeOut()
 	{
 		$this->amOnPage('/?page=logout');
 		$this->waitForPageBody();

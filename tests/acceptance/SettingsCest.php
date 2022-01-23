@@ -10,7 +10,7 @@ class SettingsCest
 	private $fspAdmin;
 	private $foodsaver;
 
-	public function _before(AcceptanceTester $I)
+	final public function _before(AcceptanceTester $I): void
 	{
 		$this->foodsaver = $I->createFoodsaver();
 		$this->fspAdmin = $I->createFoodsaver();
@@ -24,12 +24,12 @@ class SettingsCest
 	 * @example["infomail_message", false]
 	 * @example["infomail_message", true]
 	 */
-	public function userCanChangeGeneralSubscriptions(AcceptanceTester $I, Codeception\Example $example)
+	final public function userCanChangeGeneralSubscriptions(AcceptanceTester $I, Codeception\Example $example): void
 	{
 		$field = $example[0];
 		$selector = $this->createSelector($field);
-		$targetValue = $example[1] ? 1 : 0;
-		$initValue = $example[1] ? 0 : 1;
+		$targetValue = (string)($example[1] ? 1 : 0);
+		$initValue = (string)($example[1] ? 0 : 1);
 		$this->foodsaver = $I->createFoodsaver(null, [$field => $initValue]);
 
 		$I->login($this->foodsaver['email']);
@@ -43,7 +43,7 @@ class SettingsCest
 		$I->seeOptionIsSelected($selector, $targetValue);
 	}
 
-	public function userCanFollowAFoodsharepoint(AcceptanceTester $I)
+	final public function userCanFollowAFoodsharepoint(AcceptanceTester $I): void
 	{
 		$newFsp = $I->createFoodSharePoint($this->fspAdmin['id'], $this->region['id']);
 
@@ -61,7 +61,7 @@ class SettingsCest
 		$I->see('Updates vom Fairteiler "' . $newFsp['name'] . '"');
 	}
 
-	public function userCanUnfollowAFoodsharepoint(AcceptanceTester $I)
+	final public function userCanUnfollowAFoodsharepoint(AcceptanceTester $I): void
 	{
 		$I->addFoodSharePointFollower($this->foodsaver['id'], $this->foodSharePoint['id']);
 
@@ -79,43 +79,43 @@ class SettingsCest
 	 * @example[1, "EMAIL"]
 	 * @example[2, "BELL"]
 	 */
-	public function userCanChangeFoodsharepointSubscriptions(AcceptanceTester $I, Codeception\Example $example)
+	final public function userCanChangeFoodsharepointSubscriptions(AcceptanceTester $I, Codeception\Example $example): void
 	{
-		$targetValue = $example[0];
+		$targetValue = (string)$example[0];
 		$selector = $this->createSelector('fairteiler_' . $this->foodSharePoint['id']);
 		$I->addFoodSharePointFollower($this->foodsaver['id'], $this->foodSharePoint['id']);
 
 		$I->login($this->foodsaver['email']);
 		$I->amOnPage('/?page=settings&sub=info');
 		$I->waitForPageBody();
-		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
+		$I->seeOptionIsSelected($selector, (string)InfoType::EMAIL);
 		$I->selectOption($selector, $targetValue);
 		$I->click('Speichern');
 
 		$I->waitForPageBody();
-		if ($targetValue == InfoType::NONE) {
+		if ($targetValue === (string)InfoType::NONE) {
 			$I->dontSeeElement($selector);
 		} else {
 			$I->seeOptionIsSelected($selector, $targetValue);
 		}
 	}
 
-	public function managerCanNotChangeFoodsharepointSubscriptions(AcceptanceTester $I)
+	final public function managerCanNotChangeFoodsharepointSubscriptions(AcceptanceTester $I): void
 	{
 		$selector = $this->createSelector('fairteiler_' . $this->foodSharePoint['id']);
 
 		$I->login($this->fspAdmin['email']);
 		$I->amOnPage('/?page=settings&sub=info');
 		$I->waitForPageBody();
-		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
-		$I->selectOption($selector, InfoType::BELL);
+		$I->seeOptionIsSelected($selector, (string)InfoType::EMAIL);
+		$I->selectOption($selector, (string)InfoType::BELL);
 		$I->click('Speichern');
 
 		$I->waitForPageBody();
-		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
+		$I->seeOptionIsSelected($selector, (string)InfoType::EMAIL);
 	}
 
-	public function canEditInternalSelfDescription(AcceptanceTester $I)
+	final public function canEditInternalSelfDescription(AcceptanceTester $I): void
 	{
 		$newSelfDesc = 'This is a new self description!';
 		$I->login($this->foodsaver['email']);
@@ -130,7 +130,7 @@ class SettingsCest
 		$I->see($newSelfDesc);
 	}
 
-	private function createSelector(string $field)
+	private function createSelector(string $field): string
 	{
 		return '#' . $field . '-wrapper input[name="' . $field . '"]';
 	}

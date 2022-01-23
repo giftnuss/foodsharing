@@ -2,9 +2,11 @@
 
 namespace Helper;
 
+use Codeception\Module\Db;
+
 require_once __DIR__ . '/../../../includes/setup.php';
 
-class Container extends \Codeception\Module\Db
+class Container extends Db
 {
 	private $di;
 
@@ -13,7 +15,7 @@ class Container extends \Codeception\Module\Db
 		parent::__construct($moduleContainer, $config);
 	}
 
-	public function _initialize()
+	final public function _initialize(): void
 	{
 		parent::_initialize();
 		global $container;

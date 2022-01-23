@@ -21,7 +21,7 @@ class LegalControlCest
 		$I->click('Einstellungen übernehmen');
 		$I->waitForText('schön, dass Du dabei bist und Dich gegen die Lebensmittelverschwendung');
 		$I->dontSee('Datenschutzerklärung');
-		$I->logout();
+		$I->logMeOut();
 		$I->resetThePrivacyPolicyDate($lastModified);
 	}
 
@@ -35,7 +35,7 @@ class LegalControlCest
 		$I->uncheckOption('#legal_form_privacyPolicyAcknowledged');
 		$I->click('Einstellungen übernehmen');
 		$I->see('Nimmst du die Vereinbarung zur Kenntnis?');
-		$I->logout();
+		$I->logMeOut();
 		$I->resetThePrivacyPolicyDate($lastModified);
 	}
 
@@ -48,7 +48,7 @@ class LegalControlCest
 		$I->see('Datenschutzerklärung');
 		$I->click('Ich möchte meinen Account löschen.');
 		$I->amOnPage('/?page=settings&sub=deleteaccount');
-		$I->logout();
+		$I->logMeOut();
 		$I->resetThePrivacyPolicyDate($lastModified);
 	}
 
@@ -70,7 +70,7 @@ class LegalControlCest
 		$I->dontSee('Datenschutzerklärung');
 
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
-		$I->logout();
+		$I->logMeOut();
 		$I->resetThePrivacyPolicyDate($lastModifiedpp);
 	}
 
@@ -92,7 +92,7 @@ class LegalControlCest
 		$I->acceptPopup();
 		$I->waitForText('Dein Stammbezirk ist');
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 1]);
-		$I->logout();
+		$I->logMeOut();
 		$I->resetThePrivacyPolicyDate($lastModified);
 	}
 }

@@ -55,9 +55,9 @@ $I->fillField('#first_post', 'A first wallpost entry on the store');
 $I->click('Senden');
 
 /* See my mobile number because I am responsible */
-$I->waitForText($storeStreet, null, '#inputAdress');
-$I->waitForText($storePostcode, null, '#inputAdress');
-$I->waitForText($storeCity, null, '#inputAdress');
+$I->waitForText($storeStreet, 10, '#inputAdress');
+$I->waitForText($storePostcode, 10, '#inputAdress');
+$I->waitForText($storeCity, 10, '#inputAdress');
 $I->see($bibA['handy']);
 
 $teamConversationId = $I->grabFromDatabase('fs_betrieb', 'team_conversation_id', ['name' => $storeName]);

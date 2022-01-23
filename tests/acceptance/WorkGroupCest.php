@@ -137,7 +137,7 @@ class WorkGroupCest
 			$I->see('Bewerbung annehmen');
 			$I->click('Ja');
 		});
-		$I->logout();
+		$I->logMeOut();
 		$I->login($this->regionMember['email']);
 		$I->amOnPage($I->forumUrl($this->testGroupApply['id']));
 		$I->see($this->testGroupApply['name']);

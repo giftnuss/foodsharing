@@ -16,6 +16,8 @@
 - Upgraded deployer to the last version (v7-rc4) !2139 !2140 @\_fridtjof_
 - Bump "babel" to reduce vulnerabilities !2137 @peter.toennies
 - Bump "mocha" to v9 and "jsdom" to v19 to reduce vulnerabilities !2144 @peter.toennies
+- bump symfony to 5.4, codeception modules to 2 !2142 @peter.toennies
+- replace fzaninott/faker by fakperphp/faker !2142 @peter.toennies
 
 # Release "Grapefruit", 2022-01-13
 

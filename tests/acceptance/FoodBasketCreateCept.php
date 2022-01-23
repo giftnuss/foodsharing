@@ -99,6 +99,6 @@ $I->moveMouseOver(['css' => '.topbar-baskets .food-basket-create-test-class']);
 $I->click('button[title="Essenskorbanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
-$I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 2);
+$I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', '2');
 $I->click('Weiter');
 $I->waitForText('Danke');

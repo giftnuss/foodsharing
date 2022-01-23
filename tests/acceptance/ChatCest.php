@@ -33,7 +33,7 @@ class ChatCest
 			'id' => $this->foodsaver2['id'],
 			'infomail_message' => '1'
 		]);
-		$I->logout();
+		$I->logMeOut();
 
 		$I->login($this->foodsaver1['email']);
 

@@ -274,7 +274,7 @@ class FoodSharePointControl extends Control
 		}
 	}
 
-	public function ft(Request $request): void
+	public function ft(): void
 	{
 		$this->pageHelper->addBread($this->foodSharePoint['name']);
 		$this->pageHelper->addTitle($this->foodSharePoint['name']);
@@ -363,7 +363,7 @@ class FoodSharePointControl extends Control
 			return false;
 		}
 
-		$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('fspmanagers'));
+		$fspManager = $this->sanitizerService->tagSelectIds((array)$request->request->get('fspmanagers'));
 		$this->foodSharePointGateway->updateFSPManagers($this->foodSharePoint['id'], $fspManager);
 
 		return $this->foodSharePointGateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);

@@ -28,7 +28,7 @@ class ForumApiCest
 		$this->moderatedRegion = $I->createRegion(null, ['type' => Type::CITY, 'moderated' => true]);
 		$I->addRegionMember($this->moderatedRegion['id'], $this->user['id']);
 		$I->addRegionAdmin($this->moderatedRegion['id'], $this->ambassador['id']);
-		$this->inactiveThread = $I->addForumThread($this->moderatedRegion['id'], $this->user['id'], null, ['active' => false]);
+		$this->inactiveThread = $I->addForumThread($this->moderatedRegion['id'], $this->user['id'], false, ['active' => false]);
 
 		$this->faker = Faker\Factory::create('de_DE');
 	}

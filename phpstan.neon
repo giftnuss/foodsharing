@@ -31,13 +31,3 @@ parameters:
       message: '#expects (DateTime|Carbon\\Carbon)(\|null)?, (DateTimeInterface|Carbon\\CarbonInterface)(\|null)? given#'
       paths:
         - src/Modules/Store/StoreTransactions.php
-    # LEVEL 5+ Weirdness with InputBag / ParameterBag, see https://github.com/symfony/symfony/issues/37100
-    -
-      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Symfony\\Component\\HttpFoundation\\InputBag::get\(\) expects string\|null, int given#'
-      paths:
-        - src/Modules/FoodSharePoint/FoodSharePointControl.php
-    # LEVEL 5+ imap and the MessageIterator in disguise, see https://github.com/ddeboer/imap/issues/389
-    -
-      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of function count expects array\|Countable, Ddeboer\\Imap\\MessageIteratorInterface given#'
-      paths:
-        - src/Modules/Mails/MailsControl.php
