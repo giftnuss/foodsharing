@@ -19,6 +19,7 @@
 - bump symfony to 5.4, codeception modules to 2 !2142 @peter.toennies
 - replace fzaninott/faker by fakperphp/faker !2142 @peter.toennies
 - Removed old code that handled picture upload !2128 @alex.simm
+- update webpack-dev-server to v4 !2130 @peter.toennies
 
 # Release "Grapefruit", 2022-01-13
 
