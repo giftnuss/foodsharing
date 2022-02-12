@@ -1,0 +1,5 @@
+tasks:
+  - init: |
+      scripts/start
+    command: |
+      echo 'TODO: start app'
